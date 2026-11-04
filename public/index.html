@@ -11354,7 +11354,7 @@
 
         const artTotals = computeAllArtifactsAndSetsBonuses();
         const curRarity = SaveState.artifactRarityFilter || 'all';
-        const wishTokens = typeof SaveState.wishTokens === 'number' ? SaveState.wishTokens : 999;
+        const wishTokens = typeof SaveState.wishTokens === 'number' ? SaveState.wishTokens : 0;
         SaveState.wishTokens = wishTokens;
         const pityCount = SaveState.wishPityCount || 0;
 
@@ -11880,7 +11880,8 @@
         } else {
           for (const it of WIKI_OTHER_ITEMS_META) {
             if (typeof SaveState.wikiOtherItems[it.id] !== 'number') {
-              SaveState.wikiOtherItems[it.id] = it.id === 'guild_gold' ? 25000 : 60;
+              // Người chơi mới: 0 vé/vật phẩm sự kiện.
+              SaveState.wikiOtherItems[it.id] = 0;
             }
           }
           // Keep wish_token synced with SaveState.wishTokens
@@ -11910,14 +11911,15 @@
         }
 
         if (!SaveState.wikiEventsState || typeof SaveState.wikiEventsState !== 'object') {
+          // Người chơi mới: chưa leo tháp, chưa đánh trùm, chưa xếp hạng.
           SaveState.wikiEventsState = {
-            skyTowerFloor: 125,
-            sealBossTotalDmg: 1485000,
-            arenaRankPts: 2450,
+            skyTowerFloor: 0,
+            sealBossTotalDmg: 0,
+            arenaRankPts: 0,
             monopolyPos: 0,
-            monopolyLaps: 3,
-            bingoGrid: [true, false, true, false, false, false, true, false, true, false, true, false, true, false, true, false, false, true, false, false, true, false, false, false, true],
-            bingoLines: 2,
+            monopolyLaps: 0,
+            bingoGrid: new Array(25).fill(false),
+            bingoLines: 0,
             lastEventLog: 'Sẵn sàng tham gia các phó bản & sự kiện chuẩn Archero 2 Wiki!'
           };
         }
@@ -14561,17 +14563,17 @@
         if (typeof ev.selectedCampaignChapter !== 'number') ev.selectedCampaignChapter = 1;
         if (!ev.campaignTierFilter) ev.campaignTierFilter = '1_25';
         if (!ev.campaignTypeFilter) ev.campaignTypeFilter = 'all';
-        if (!ev.campaignClaimedSteps || typeof ev.campaignClaimedSteps !== 'object') ev.campaignClaimedSteps = { 1: 5, 2: 5, 3: 5 };
+        if (!ev.campaignClaimedSteps || typeof ev.campaignClaimedSteps !== 'object') ev.campaignClaimedSteps = {};
 
-        if (typeof ev.skyTowerFloor !== 'number') ev.skyTowerFloor = 125;
+        if (typeof ev.skyTowerFloor !== 'number') ev.skyTowerFloor = 0;
         if (typeof ev.skyTowerSubFloor !== 'number') ev.skyTowerSubFloor = 0;
-        if (!Array.isArray(ev.skyTowerRunSkills)) ev.skyTowerRunSkills = ['Tracking Eye', 'Multi-Shot', 'Lightning Bolt'];
+        if (!Array.isArray(ev.skyTowerRunSkills)) ev.skyTowerRunSkills = [];
         if (typeof ev.skyTowerAdsToday !== 'number') ev.skyTowerAdsToday = 0;
-        if (!ev.skyTower25Claimed || typeof ev.skyTower25Claimed !== 'object') ev.skyTower25Claimed = { 25: true, 50: true, 75: true, 100: true };
+        if (!ev.skyTower25Claimed || typeof ev.skyTower25Claimed !== 'object') ev.skyTower25Claimed = {};
 
-        if (typeof ev.arenaRankPts !== 'number') ev.arenaRankPts = 2450;
-        if (!ev.selectedArenaRankTab) ev.selectedArenaRankTab = 'master';
-        if (typeof ev.arenaForceOpen !== 'boolean') ev.arenaForceOpen = true;
+        if (typeof ev.arenaRankPts !== 'number') ev.arenaRankPts = 0;
+        if (!ev.selectedArenaRankTab) ev.selectedArenaRankTab = 'bronze';
+        if (typeof ev.arenaForceOpen !== 'boolean') ev.arenaForceOpen = false;
         if (!Array.isArray(ev.arenaOpponents) || ev.arenaOpponents.length !== 5) {
           ev.arenaOpponents = generateArenaOpponents(ev.arenaRankPts);
         }
@@ -14579,7 +14581,7 @@
           ev.lastArenaBo3Log = 'Chọn 1 trong 5 đối thủ (±200 điểm) bên dưới để bắt đầu trận Đấu Trường Best-of-3 (3 Kỹ năng ngẫu nhiên mỗi hiệp + Kích hoạt Revive Rune)!';
         }
 
-        if (typeof ev.goldCaveDifficulty !== 'number') ev.goldCaveDifficulty = 15;
+        if (typeof ev.goldCaveDifficulty !== 'number') ev.goldCaveDifficulty = 1;
         if (typeof ev.goldCaveCurrentWave !== 'number') ev.goldCaveCurrentWave = 0;
         if (typeof ev.goldCaveAdClaimed !== 'boolean') ev.goldCaveAdClaimed = false;
         if (!ev.goldCaveLastRoulette) ev.goldCaveLastRoulette = 'Vượt 10 Đợt Quái Hang Vàng + Quay Roulette Xen Kẽ (Đợt 9 Boss • Đợt 10 Roulette Nhân Đôi Phần Thưởng)!';
@@ -14590,20 +14592,20 @@
 
         if (!ev.islandRotation) ev.islandRotation = 'key';
         if (typeof ev.islandDiceMultiplier !== 'number') ev.islandDiceMultiplier = 1;
-        if (typeof ev.islandPoints !== 'number') ev.islandPoints = 24500;
-        if (typeof ev.treasureCoins !== 'number') ev.treasureCoins = 18;
-        if (typeof ev.islandRollsCount !== 'number') ev.islandRollsCount = 85;
+        if (typeof ev.islandPoints !== 'number') ev.islandPoints = 0;
+        if (typeof ev.treasureCoins !== 'number') ev.treasureCoins = 0;
+        if (typeof ev.islandRollsCount !== 'number') ev.islandRollsCount = 0;
         if (typeof ev.islandGemPacksBought !== 'number') ev.islandGemPacksBought = 0;
         if (typeof ev.islandAdsWatched !== 'number') ev.islandAdsWatched = 0;
         if (!ev.islandTasksClaimed || typeof ev.islandTasksClaimed !== 'object') ev.islandTasksClaimed = {};
 
         if (!ev.fishingZoneId) ev.fishingZoneId = 'lakehouse';
-        if (typeof ev.fishingLures !== 'number') ev.fishingLures = 45;
-        if (typeof ev.fishingSilverTickets !== 'number') ev.fishingSilverTickets = 3600;
-        if (typeof ev.fishingGoldTickets !== 'number') ev.fishingGoldTickets = 16;
-        if (typeof ev.fishingKingShards !== 'number') ev.fishingKingShards = 12;
-        if (typeof ev.fishingSnappedLines !== 'number') ev.fishingSnappedLines = 4;
-        if (typeof ev.fishingTotalKg !== 'number') ev.fishingTotalKg = 640.5;
+        if (typeof ev.fishingLures !== 'number') ev.fishingLures = 0;
+        if (typeof ev.fishingSilverTickets !== 'number') ev.fishingSilverTickets = 0;
+        if (typeof ev.fishingGoldTickets !== 'number') ev.fishingGoldTickets = 0;
+        if (typeof ev.fishingKingShards !== 'number') ev.fishingKingShards = 0;
+        if (typeof ev.fishingSnappedLines !== 'number') ev.fishingSnappedLines = 0;
+        if (typeof ev.fishingTotalKg !== 'number') ev.fishingTotalKg = 0;
         if (typeof ev.fishingCastMultiplier !== 'number') ev.fishingCastMultiplier = 1;
         if (!ev.fishingPools || typeof ev.fishingPools !== 'object') {
           ev.fishingPools = {
@@ -14615,16 +14617,16 @@
           };
         }
         if (!ev.fishingHookedFish) {
-          ev.fishingHookedFish = { active: false, rarity: 'epic', name: 'Twilight Barracuda', kg: 18.4, tensionPct: 72, redCycles: 2, distanceM: 68 };
+          ev.fishingHookedFish = { active: false, rarity: null, name: null, kg: 0, tensionPct: 0, redCycles: 0, distanceM: 0 };
         }
         if (!ev.aquatlasClaimed || typeof ev.aquatlasClaimed !== 'object') ev.aquatlasClaimed = {};
 
-        if (typeof ev.elfPickaxes !== 'number') ev.elfPickaxes = 60;
-        if (typeof ev.beerBombs !== 'number') ev.beerBombs = 6;
-        if (typeof ev.gnomeDrills !== 'number') ev.gnomeDrills = 5;
-        if (typeof ev.shamrocks !== 'number') ev.shamrocks = 4500;
-        if (typeof ev.goldPots !== 'number') ev.goldPots = 2400;
-        if (typeof ev.worldTreeDepth !== 'number') ev.worldTreeDepth = 18;
+        if (typeof ev.elfPickaxes !== 'number') ev.elfPickaxes = 0;
+        if (typeof ev.beerBombs !== 'number') ev.beerBombs = 0;
+        if (typeof ev.gnomeDrills !== 'number') ev.gnomeDrills = 0;
+        if (typeof ev.shamrocks !== 'number') ev.shamrocks = 0;
+        if (typeof ev.goldPots !== 'number') ev.goldPots = 0;
+        if (typeof ev.worldTreeDepth !== 'number') ev.worldTreeDepth = 0;
         if (!ev.worldTreeTool) ev.worldTreeTool = 'pickaxe';
         if (!Array.isArray(ev.worldTreeGrid) || ev.worldTreeGrid.length !== 30) {
           ev.worldTreeGrid = createFreshWorldTreeGrid();
@@ -14632,22 +14634,22 @@
         if (!ev.worldTreeShopTab) ev.worldTreeShopTab = 'shamrock';
         if (!ev.worldTreePurchases || typeof ev.worldTreePurchases !== 'object') ev.worldTreePurchases = {};
 
-        if (typeof ev.demonSummonTickets !== 'number') ev.demonSummonTickets = 35;
-        if (typeof ev.eonCores !== 'number') ev.eonCores = 3;
-        if (typeof ev.clashBadges !== 'number') ev.clashBadges = 6800;
-        if (typeof ev.demonTotalSpins !== 'number') ev.demonTotalSpins = 45;
-        if (typeof ev.demonLuckMeter !== 'number') ev.demonLuckMeter = 45;
+        if (typeof ev.demonSummonTickets !== 'number') ev.demonSummonTickets = 0;
+        if (typeof ev.eonCores !== 'number') ev.eonCores = 0;
+        if (typeof ev.clashBadges !== 'number') ev.clashBadges = 0;
+        if (typeof ev.demonTotalSpins !== 'number') ev.demonTotalSpins = 0;
+        if (typeof ev.demonLuckMeter !== 'number') ev.demonLuckMeter = 0;
         if (typeof ev.demonStageCleared !== 'number') ev.demonStageCleared = 3;
         if (!ev.demonSpinMilestonesClaimed || typeof ev.demonSpinMilestonesClaimed !== 'object') ev.demonSpinMilestonesClaimed = {};
         if (!ev.demonPurchases || typeof ev.demonPurchases !== 'object') ev.demonPurchases = {};
 
         if (typeof ev.carnival1Day !== 'number') ev.carnival1Day = 1;
-        if (typeof ev.carnival1Points !== 'number') ev.carnival1Points = 240;
+        if (typeof ev.carnival1Points !== 'number') ev.carnival1Points = 0;
         if (!ev.carnival1ClaimedTasks || typeof ev.carnival1ClaimedTasks !== 'object') ev.carnival1ClaimedTasks = {};
         if (typeof ev.carnival1GrandClaimed !== 'boolean') ev.carnival1GrandClaimed = false;
 
         if (typeof ev.carnival2Day !== 'number') ev.carnival2Day = 1;
-        if (typeof ev.carnival2Points !== 'number') ev.carnival2Points = 180;
+        if (typeof ev.carnival2Points !== 'number') ev.carnival2Points = 0;
         if (!ev.carnival2ClaimedTasks || typeof ev.carnival2ClaimedTasks !== 'object') ev.carnival2ClaimedTasks = {};
         if (typeof ev.carnival2GrandClaimed !== 'boolean') ev.carnival2GrandClaimed = false;
       }
