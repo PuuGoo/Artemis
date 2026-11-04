@@ -163,14 +163,8 @@
   <!-- Stats -->
   <div class="grid g4" id="statsGrid" style="margin-bottom:16px"></div>
 
-  <!-- Top players -->
-  <div class="card" style="margin-bottom:16px">
-    <div class="card-title">🏆 Top 5 người chơi theo số quái hạ gục</div>
-    <div id="topList" style="display:flex;flex-direction:column;gap:7px;font-size:13px"></div>
-  </div>
-
   <!-- Players table -->
-  <div class="card">
+  <div class="card" style="margin-bottom:16px">
     <div class="card-title">👥 Quản lý người chơi</div>
     <div class="toolbar">
       <input type="text" id="searchBox" placeholder="Tìm theo tên đăng nhập…" />
@@ -203,6 +197,12 @@
       <span id="pageInfo">Trang 1</span>
       <button class="btn-ghost btn-sm" id="btnNext">▶</button>
     </div>
+  </div>
+
+  <!-- Top players -->
+  <div class="card">
+    <div class="card-title">🏆 Top 5 người chơi theo số quái hạ gục</div>
+    <div id="topList" style="display:flex;flex-direction:column;gap:7px;font-size:13px"></div>
   </div>
 </div>
 
@@ -332,11 +332,13 @@
       ? '<div style="color:var(--muted);font-size:12px">Chưa có người chơi nào.</div>'
       : top.map(function (p, i) {
           var medal = ["🥇", "🥈", "🥉", "4.", "5."][i] || (i + 1) + ".";
+          // Save cũ có thể chưa đếm runs; hiển thị phòng đã dọn thay vì "0 trận".
+          var second = p.runs > 0 ? num(p.runs) + " trận" : num(p.rooms || 0) + " phòng";
           return '<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:#0b1224;border-radius:10px">' +
             '<span style="width:26px;font-weight:900;color:var(--gold)">' + medal + "</span>" +
             '<b style="flex:1">' + esc(p.username || "?") + "</b>" +
             '<span class="mono" style="color:var(--red)">' + num(p.kills) + " kills</span>" +
-            '<span class="mono" style="color:var(--muted)">' + num(p.runs) + " trận</span>" +
+            '<span class="mono" style="color:var(--muted)">' + second + "</span>" +
             '<span class="mono" style="color:var(--gold)">' + num(p.gold) + " 🪙</span></div>";
         }).join("");
   }

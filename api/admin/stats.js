@@ -50,6 +50,7 @@ export async function GET(request) {
           playerId: 1,
           username: 1,
           kills: "$data.lifetimeStats.kills",
+          rooms: "$data.lifetimeStats.roomsCleared",
           runs: "$data.lifetimeStats.runs",
           wins: "$data.lifetimeStats.wins",
           gold: "$data.gold",
