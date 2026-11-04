@@ -1,11 +1,6 @@
 name: Apply temporary gear safety patch
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/gear-safety-patch.yml
-      - scripts/gear-safety-patch.mjs
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
