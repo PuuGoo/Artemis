@@ -1310,6 +1310,9 @@
               <button id="btnPauseGame" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition">
                 ⏸ Tạm dừng
               </button>
+              <button id="btnToggleGfx" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition" title="Bật/tắt hiệu ứng cao để tăng FPS">
+                ✨ HD
+              </button>
             </div>
           </div>
 
@@ -19785,6 +19788,18 @@
       const canvas = document.getElementById('battleCanvas');
       const ctx = canvas.getContext('2d');
 
+      // Che do hieu nang: chan shadowBlur/glow tren RIENG context cua game.
+      // Do that: bat shadow lam FPS tut 17 -> 11 tren GPU tich hop (Intel HD 4000).
+      const _shadowBlurDesc = Object.getOwnPropertyDescriptor(CanvasRenderingContext2D.prototype, 'shadowBlur');
+      Object.defineProperty(ctx, 'shadowBlur', {
+        configurable: true,
+        get() { return _shadowBlurDesc.get.call(this); },
+        set(v) {
+          // Khi lowGfx bat, moi gia tri shadow deu bi ep ve 0.
+          _shadowBlurDesc.set.call(this, (typeof Game !== 'undefined' && Game.lowGfx) ? 0 : v);
+        }
+      });
+
       const Game = {
         running: false,
         paused: false,
@@ -19820,6 +19835,13 @@
 
         // Entities & Ultra-HD Ray-Traced 2.5D Visual FX Layers
         ultraGfx: true,
+        // Che do hieu nang: tu dong ha cap hieu ung khi FPS tut.
+        // Do duoc tren may GPU tich hop: bat shadowBlur/glow lam FPS tut tu 17 -> 11.
+        perfMode: 'auto',        // 'auto' | 'high' | 'low'
+        lowGfx: false,           // true = tat shadow/glow toan cuc
+        _fpsSamples: [],
+        _fpsLowStreak: 0,
+        _fpsHighStreak: 0,
         player: null,
         pet: null,
         enemies: [],
@@ -19907,7 +19929,9 @@
           critRate: stats.baseCrit,
           gearDodge: stats.gearDodge || 0,
           goldBonus: stats.goldBonus || 0,
-          speed: 225 * stats.hero.bonusSpd,
+          // bonusSpd khong duoc dinh nghia trong HEROES -> 225 * undefined = NaN,
+          // lam p.x/p.y thanh NaN va nhan vat bien mat khoi man hinh khi di chuyen.
+          speed: 225 * (Number(stats.hero && stats.hero.bonusSpd) || 1),
           hero: stats.hero,
           weapon: stats.weapon,
           moving: false,
@@ -22875,10 +22899,15 @@
         }
 
         // 23. Subtle Atmospheric Vignette Frame
-        const vig = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.36, w / 2, h / 2, Math.max(w, h) * 0.72);
-        vig.addColorStop(0, 'rgba(0,0,0,0)');
-        vig.addColorStop(1, 'rgba(2, 6, 23, 0.45)');
-        ctx.fillStyle = vig;
+        // Cache gradient theo kich thuoc canvas: createRadialGradient + fill toan man hinh
+        // moi frame la chi phi rasterize rat lon (do duoc ~20 FPS tren may yeu).
+        if (!Game._vignetteCache || Game._vignetteCache.w !== w || Game._vignetteCache.h !== h) {
+          const vig = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.36, w / 2, h / 2, Math.max(w, h) * 0.72);
+          vig.addColorStop(0, 'rgba(0,0,0,0)');
+          vig.addColorStop(1, 'rgba(2, 6, 23, 0.45)');
+          Game._vignetteCache = { grad: vig, w, h };
+        }
+        ctx.fillStyle = Game._vignetteCache.grad;
         ctx.fillRect(0, 0, w, h);
 
         // 24. Cinematic Room / Boss Entrance Banner Overlay
@@ -24117,14 +24146,133 @@
         ctx.restore();
       }
 
+      // ==================== ADAPTIVE PERFORMANCE ====================
+      /**
+       * Dọn các entity có toạ độ không hợp lệ (NaN/Infinity).
+       * Canvas API ném lỗi khi nhận giá trị non-finite, làm chết cả frame.
+       */
+      function purgeInvalidEntities() {
+        const ok = (o) => o && isFinite(o.x) && isFinite(o.y);
+        const okRange = (o) => o && isFinite(o.startX) && isFinite(o.startY) && isFinite(o.targetX) && isFinite(o.targetY);
+
+        Game.enemies = (Game.enemies || []).filter(ok);
+        Game.playerBullets = (Game.playerBullets || []).filter(ok);
+        Game.enemyBullets = (Game.enemyBullets || []).filter(ok);
+        Game.drops = (Game.drops || []).filter(ok);
+        Game.particles = (Game.particles || []).filter(ok);
+        Game.shockwaves = (Game.shockwaves || []).filter(ok);
+        Game.meteors = (Game.meteors || []).filter(okRange);
+        Game.lightningBolts = (Game.lightningBolts || []).filter(okRange);
+        Game.afterimages = (Game.afterimages || []).filter(ok);
+        Game.muzzleFlashes = (Game.muzzleFlashes || []).filter(ok);
+        Game.skyLasers = (Game.skyLasers || []).filter(ok);
+        Game.shatterShards = (Game.shatterShards || []).filter(ok);
+        Game.floatTexts = (Game.floatTexts || []).filter(ok);
+
+        // Nhân vật / pet: nếu NaN thì đưa về giữa sàn, không để mất tích.
+        if (Game.player && (!isFinite(Game.player.x) || !isFinite(Game.player.y))) {
+          Game.player.x = Game.width / 2;
+          Game.player.y = Game.height * 0.78;
+          Game.player.moving = false;
+          console.warn('[Archero2] Reset vị trí nhân vật do toạ độ không hợp lệ.');
+        }
+        if (!isFinite(Game.player && Game.player.speed) || Game.player.speed <= 0) {
+          if (Game.player) Game.player.speed = 225;
+        }
+        if (Game.pet && (!isFinite(Game.pet.x) || !isFinite(Game.pet.y))) {
+          Game.pet.x = (Game.player?.x || Game.width / 2) - 36;
+          Game.pet.y = (Game.player?.y || Game.height * 0.78) + 16;
+        }
+      }
+
+      let _perfAccum = 0;
+      let _perfFrames = 0;
+      let _perfCooldown = 0;
+
+      function setLowGfx(on) {
+        if (Game.lowGfx === on) return;
+        Game.lowGfx = on;
+        Game.ultraGfx = !on;
+        if (on) {
+          // Ép shadow hiện tại về 0 ngay (property đã bị chặn ở trên).
+          try { ctx.shadowBlur = 0; } catch (e) {}
+          // Dọn bớt hiệu ứng nền đang tồn để giảm tải ngay.
+          Game.ambientMotes = (Game.ambientMotes || []).slice(0, 8);
+          Game.afterimages = [];
+          if (typeof showToast === 'function') {
+            showToast('⚡ Đã bật Chế Độ Hiệu Năng Cao (giảm hiệu ứng để game mượt hơn)');
+          }
+        } else {
+          if (typeof showToast === 'function') {
+            showToast('✨ Đã bật lại Đồ Hoạ Ultra HD');
+          }
+        }
+      }
+
+      function trackPerformance(dt, nowMs) {
+        if (Game.perfMode === 'high') { if (Game.lowGfx) setLowGfx(false); return; }
+        if (Game.perfMode === 'low') { if (!Game.lowGfx) setLowGfx(true); return; }
+
+        _perfAccum += dt;
+        _perfFrames++;
+        if (_perfCooldown > 0) _perfCooldown -= dt;
+        if (_perfAccum < 1.5) return; // lấy mẫu mỗi 1.5 giây
+
+        const fps = _perfFrames / _perfAccum;
+        _perfAccum = 0;
+        _perfFrames = 0;
+
+        if (_perfCooldown > 0) return;
+
+        // Ngưỡng: dưới 40 FPS liên tiếp -> hạ cấp; trên 55 FPS liên tiếp -> nâng cấp.
+        // (Máy yếu thường chỉ đạt 15-25 FPS khi đông quái, nên ngưỡng 40 bắt được sớm.)
+        if (fps < 40) {
+          Game._fpsLowStreak++;
+          Game._fpsHighStreak = 0;
+          if (Game._fpsLowStreak >= 2 && !Game.lowGfx) {
+            setLowGfx(true);
+            Game._fpsLowStreak = 0;
+            _perfCooldown = 12; // tránh nhấp nháy qua lại
+          }
+        } else if (fps > 55) {
+          Game._fpsHighStreak++;
+          Game._fpsLowStreak = 0;
+          if (Game._fpsHighStreak >= 4 && Game.lowGfx) {
+            setLowGfx(false);
+            Game._fpsHighStreak = 0;
+            _perfCooldown = 12;
+          }
+        } else if (!Game.lowGfx) {
+          // Chi reset streak khi DANG o che do HD va FPS trung binh.
+          // (Neu dang o che do Hieu Nang, giu streak de khong bi ket o muc 1.)
+          Game._fpsLowStreak = 0;
+          Game._fpsHighStreak = 0;
+        }
+      }
+
       function gameLoop(now) {
         if (!Game.running) return;
         const dt = Math.min(0.05, (now - Game.lastTime) / 1000);
         Game.lastTime = now;
 
         if (!Game.paused) {
-          updateGame(dt);
-          renderGame();
+          trackPerformance(dt, now);
+          // update/render KHÔNG ĐƯỢC phép giết game loop: một entity hỏng (NaN)
+          // từng làm cả trận đứng im vĩnh viễn (createLinearGradient non-finite throw).
+          try {
+            updateGame(dt);
+          } catch (err) {
+            console.error('[Archero2] updateGame error:', err);
+            Game._lastUpdateError = String(err && err.message || err);
+          }
+          try {
+            renderGame();
+          } catch (err) {
+            console.error('[Archero2] renderGame error:', err);
+            Game._lastRenderError = String(err && err.message || err);
+            // Don dep cac entity co toa do khong hop le de frame sau ve duoc.
+            try { purgeInvalidEntities(); } catch (e2) {}
+          }
         }
 
         Game.animId = requestAnimationFrame(gameLoop);
@@ -24419,6 +24567,24 @@
       });
 
       // Pause / Resume / Lobby / Play Again
+      // Bật/tắt hiệu ứng cao thủ công (người chơi tự chọn nếu máy yếu).
+      document.getElementById('btnToggleGfx').addEventListener('click', () => {
+        if (Game.lowGfx) {
+          Game.perfMode = 'high';
+          setLowGfx(false);
+        } else {
+          Game.perfMode = 'low';
+          setLowGfx(true);
+        }
+        const btn = document.getElementById('btnToggleGfx');
+        if (btn) {
+          btn.textContent = Game.lowGfx ? '⚡ Hiệu Năng' : '✨ HD';
+          btn.className = Game.lowGfx
+            ? 'px-2.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 border border-amber-300 text-xs font-extrabold text-white transition'
+            : 'px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition';
+        }
+      });
+
       document.getElementById('btnPauseGame').addEventListener('click', () => {
         if (!Game.running) return;
         Game.paused = true;
@@ -25003,6 +25169,8 @@
       window.Archero2FusionAPI = {
         GEAR_QUALITIES,
         reloadSaveFromStorage,
+        // Expose Game de debug/kiem thu hieu nang & vi tri nhan vat.
+        Game,
         GEAR_TEMPLATES,
         GEAR_SLOTS_META,
         FUSION_RECIPES,
