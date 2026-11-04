@@ -1,0 +1,27 @@
+name: Apply temporary gear safety patch
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/gear-safety-patch.yml
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Apply patch and verify JavaScript
+        run: node scripts/gear-safety-patch.mjs
+      - name: Commit verified changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "Protect tempered and gemmed gear from fusion and salvage"
+          git push origin HEAD:main
