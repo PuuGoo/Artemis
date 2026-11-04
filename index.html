@@ -1996,7 +1996,7 @@
         el.innerHTML=`<div class="font-black text-rose-300">♻️ Phân rã hàng loạt</div><p class="text-[10px] text-slate-400">Chỉ phân rã đồ trong túi; đồ đang mặc, khóa hoặc yêu thích luôn được bảo vệ.</p><div class="flex gap-2"><button id="salvageSelectAll" class="rounded bg-slate-700 px-2 py-1">Chọn tất cả hợp lệ</button><button id="salvageClear" class="rounded bg-slate-700 px-2 py-1">Bỏ chọn</button></div><div class="max-h-48 overflow-y-auto space-y-1">${eligible.map(i=>`<label class="flex items-center gap-2 rounded bg-slate-800 p-2"><input type="checkbox" class="salvage-check" value="${i.uid}"><span class="flex-1">${GEAR_TEMPLATES[i.templateId].name}</span><span class="text-amber-300">${i.quality} • Lv.${i.level}</span></label>`).join('')||'<p class="text-slate-500">Không có trang bị hợp lệ để phân rã.</p>'}</div><button id="confirmBulkSalvage" class="w-full rounded-xl bg-rose-600 py-2 font-black">Phân rã đã chọn</button><p class="text-[10px] text-slate-400">Nhận vàng theo phẩm chất/cấp và Mảnh Rèn.</p>`;
         document.getElementById('salvageSelectAll').onclick=()=>el.querySelectorAll('.salvage-check').forEach(c=>c.checked=true);
         document.getElementById('salvageClear').onclick=()=>el.querySelectorAll('.salvage-check').forEach(c=>c.checked=false);
-        document.getElementById('confirmBulkSalvage').onclick=()=>{const ids=[...el.querySelectorAll('.salvage-check:checked')].map(c=>c.value);if(!ids.length){showToast('Hãy chọn trang bị cần phân rã.');return;}const chosen=SaveState.gearBag.filter(i=>ids.includes(i.uid)&&!i.locked&&!i.favorite&&!getEquippedUidSet().has(i.uid));if(!chosen.length)return;const rewards=chosen.reduce((n,i)=>n+Math.round((GEAR_QUALITIES[i.quality]?.order||1)*35+(i.level||1)*8),0);SaveState.gearBag=SaveState.gearBag.filter(i=>!ids.includes(i.uid)||i.locked||i.favorite);SaveState.gold+=rewards;SaveState.salvageMaterials=(SaveState.salvageMaterials||0)+chosen.length*1;SaveState.save();renderLobbyUI();renderSalvageTool();showToast(`♻️ Đã phân rã ${chosen.length} món, nhận ${rewards} vàng và ${chosen.length} Mảnh Rèn.`);};
+        document.getElementById('confirmBulkSalvage').onclick=()=>{const ids=[...el.querySelectorAll('.salvage-check:checked')].map(c=>c.value);if(!ids.length){showToast('Hãy chọn trang bị cần phân rã.');return;}const selectedIds=new Set(ids);const equippedUids=getEquippedUidSet();const chosen=SaveState.gearBag.filter(i=>selectedIds.has(i.uid)&&!i.locked&&!i.favorite&&!equippedUids.has(i.uid));if(!chosen.length){showToast('⚠️ Các món đã chọn không còn đủ điều kiện phân rã.');renderSalvageTool();return;}const consumedUids=new Set(chosen.map(i=>i.uid));if(consumedUids.size!==chosen.length){showToast('⚠️ Phát hiện UID trang bị trùng lặp. Đã hủy phân rã để bảo vệ kho đồ.');return;}const nextBag=SaveState.gearBag.filter(i=>!consumedUids.has(i.uid));if(SaveState.gearBag.length-nextBag.length!==chosen.length){showToast('⚠️ Dữ liệu kho đồ không nhất quán. Đã hủy phân rã.');return;}const rewards=chosen.reduce((n,i)=>n+Math.round((GEAR_QUALITIES[i.quality]?.order||1)*35+(i.level||1)*8),0);SaveState.gearBag=nextBag;SaveState.gold+=rewards;SaveState.salvageMaterials=(SaveState.salvageMaterials||0)+chosen.length*1;SaveState.save();renderLobbyUI();renderSalvageTool();showToast(`♻️ Đã phân rã ${chosen.length} món, nhận ${rewards} vàng và ${chosen.length} Mảnh Rèn.`);};
       }
       // ==================== SAVED GEAR LOADOUT MANAGER ====================
       // Stores stable UIDs only; it never clones gear, so a saved build cannot duplicate items.
@@ -2019,10 +2019,13 @@
       function applyGearLoadout(id) {
         const preset = SaveState.gearLoadouts?.[id]; if (!preset) return;
         const owned = getAllOwnedGearByUid();
-        const missing = Object.entries(preset.slots || {}).filter(([slot, uid]) => !uid || !owned.has(uid) || GEAR_TEMPLATES[owned.get(uid)?.templateId]?.slot !== slot);
+        const presetSlots = preset.slots || {};
+        const presetUids = Object.values(presetSlots).filter(Boolean);
+        if (new Set(presetUids).size !== presetUids.length) { showToast('⚠️ Bộ lưu có trang bị trùng UID, không thể áp dụng an toàn.'); return; }
+        const missing = Object.entries(presetSlots).filter(([slot, uid]) => Boolean(uid) && (!owned.has(uid) || GEAR_TEMPLATES[owned.get(uid)?.templateId]?.slot !== slot));
         if (missing.length) { showToast(`⚠️ Không thể áp dụng: thiếu ${missing.map(([s])=>GEAR_SLOTS_META[s]?.label || s).join(', ')}. Bộ lưu không tạo bản sao trang bị.`); return; }
         if (!confirm(`Áp dụng bộ “${preset.name}”? Trang bị hiện tại sẽ được đổi vị trí, không mất món đồ.`)) return;
-        const wanted = new Set(Object.values(preset.slots));
+        const wanted = new Set(presetUids);
         const nextEquipped = {};
         const nextBag = [...(SaveState.gearBag || [])];
         // Return currently equipped items to the bag unless they are part of the selected build.
@@ -2031,7 +2034,8 @@
         }
         // Pull selected items from either current equipment or the bag.
         for (const slot of Object.keys(GEAR_SLOTS_META)) {
-          const uid = preset.slots[slot];
+          const uid = presetSlots[slot] || null;
+          if (!uid) { nextEquipped[slot] = null; continue; }
           const already = Object.values(SaveState.equippedGear || {}).find(x => x?.uid === uid);
           const picked = already || nextBag.find(x => x.uid === uid);
           if (!picked) { showToast('⚠️ Không tìm thấy trang bị trong kho.'); return; }
