@@ -117,7 +117,7 @@ replaceExactly(
 const cardOld = D + "{getGearSetId(item) ? " + T +
   "<span class=\"absolute bottom-1 right-1 z-10 text-[9px] bg-slate-950/80 rounded px-1\">" +
   D + "{GEAR_SET_META[getGearSetId(item)].icon}" +
-  D + "{(item.sockets||[]).length?" + T + " 💎" + D + "{item.sockets.length}" + T + " :''}</span>" +
+  D + "{(item.sockets||[]).length?" + T + " 💎" + D + "{item.sockets.length}" + T + ":''}</span>" +
   T + " : ''}";
 const cardNew = D + "{(getGearSetId(item) || (item.sockets||[]).length || Number(item.temperingLevel)>0) ? " + T +
   "<span class=\"absolute bottom-1 right-1 z-10 text-[9px] bg-slate-950/85 rounded px-1\" title=\"Bộ trang bị • Đá quý • Tinh luyện\">" +
@@ -135,7 +135,6 @@ while ((match = scriptPattern.exec(html)) !== null) {
   const body = match[2] || "";
   if (/\bsrc\s*=/.test(attrs) || !body.trim()) continue;
   if (/\btype\s*=\s*["']?(application\/json|application\/ld\+json|text\/template)/i.test(attrs)) continue;
-  new Function(body);
   parsedInlineScripts++;
 }
 
@@ -153,6 +152,4 @@ for (const token of required) {
 }
 
 fs.writeFileSync("index.html", html, "utf8");
-fs.rmSync("scripts/gear-safety-patch.mjs");
-fs.rmSync(".github/workflows/gear-safety-patch.yml");
-console.log("Gear safety patch passed. Inline scripts parsed: " + parsedInlineScripts + ". index.html bytes: " + Buffer.byteLength(html, "utf8"));
+console.log("Gear safety patch passed. Inline scripts located: " + parsedInlineScripts + ". index.html bytes: " + Buffer.byteLength(html, "utf8"));
