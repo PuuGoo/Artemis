@@ -39,7 +39,7 @@ async function req(path, { method = "GET", body } = {}) {
   return { status: res.status, data };
 }
 
-const ADMIN = process.env.TEST_ADMIN_USER || "web492972";
+const ADMIN = process.env.TEST_ADMIN_USER || "puugoo";
 const ADMIN_PW = process.env.TEST_ADMIN_PW || "matkhau123";
 const user = "adm_" + Math.random().toString(36).slice(2, 9);
 
@@ -69,12 +69,12 @@ const stats = r.data;
 
 console.log("\n=== 4. DANH SACH NGUOI CHOI ===");
 r = await req("/api/admin/players");
-check("lay danh sach -> 200", r.status === 200 && r.data?.ok === true);
+check("lay danh sach -> 200", r.status === 200 && r.data?.ok === true, "status=" + r.status + " " + JSON.stringify(r.data).slice(0, 150));
 check("co rows array", Array.isArray(r.data?.rows));
 check("co phan trang", typeof r.data?.pages === "number" && r.data.pages >= 1);
 check("khong lo passwordHash", !JSON.stringify(r.data).includes("passwordHash"));
-const target = r.data.rows.find(x => x.username === user);
-check("tim thay tai khoan vua tao trong danh sach", !!target, "tong rows=" + r.data.rows.length);
+const target = (r.data?.rows || []).find(x => x.username === user);
+check("tim thay tai khoan vua tao trong danh sach", !!target, "tong rows=" + (r.data?.rows || []).length);
 
 console.log("\n=== 5. TIM KIEM + SAP XEP ===");
 r = await req("/api/admin/players?q=" + encodeURIComponent(user));

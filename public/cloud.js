@@ -219,6 +219,17 @@
         loadCloudSave().then(function () {
           closeGate();
           enterGame();
+          // ===== Beginner Journey =====
+          // CHI tai khoan vua dang ky (mode === "register") moi duoc kich hoat.
+          // Tai khoan cu dang nhap (mode === "login") khong bao gio di qua day,
+          // nen tutorial khong bao gio tu bat tren du lieu da co.
+          if (mode === "register" && window.Archero2FusionAPI
+              && typeof window.Archero2FusionAPI.activateBeginnerJourney === "function") {
+            var activated = window.Archero2FusionAPI.activateBeginnerJourney();
+            if (activated && typeof window.Archero2FusionAPI.renderBeginnerJourneyUI === "function") {
+              window.Archero2FusionAPI.renderBeginnerJourneyUI();
+            }
+          }
           toast(mode === "login" ? "Chào mừng trở lại, " + (state.player.username || "") + "!" : "Tạo tài khoản thành công! Chúc may mắn!", "ok");
         });
       }).catch(function () {
