@@ -1,0 +1,38 @@
+name: Apply gear tempering upgrade
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - scripts/upgrade-gear-tempering.cjs
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Patch and validate the game
+        run: node scripts/upgrade-gear-tempering.cjs
+      - name: Commit the upgraded game
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No game changes were produced."
+          else
+            git commit -m "Add V4 gear tempering forge system"
+            git push origin main
+          fi
