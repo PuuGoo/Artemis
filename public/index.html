@@ -1310,7 +1310,7 @@
               <button id="btnPauseGame" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition">
                 ⏸ Tạm dừng
               </button>
-              <button id="btnToggleGfx" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition" title="Bật/tắt hiệu ứng cao để tăng FPS">
+              <button id="btnHudGfx" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition" title="Bật/tắt hiệu ứng cao để tăng FPS">
                 ✨ HD
               </button>
             </div>
@@ -24207,6 +24207,11 @@
             showToast('✨ Đã bật lại Đồ Hoạ Ultra HD');
           }
         }
+        // Đồng bộ nhãn nút HD trong HUD (có thể chưa tồn tại lúc mới nạp).
+        if (typeof syncHudGfxBtn === 'function') syncHudGfxBtn();
+        const modeLbl = document.getElementById('gfxModeLabel');
+        if (modeLbl) modeLbl.textContent = on ? '⚡ HIỆU NĂNG' : 'ULTRA HD';
+        try { canvas.classList.toggle('gfx-ultra', !on); } catch (e) {}
       }
 
       function trackPerformance(dt, nowMs) {
@@ -24567,22 +24572,22 @@
       });
 
       // Pause / Resume / Lobby / Play Again
-      // Bật/tắt hiệu ứng cao thủ công (người chơi tự chọn nếu máy yếu).
-      document.getElementById('btnToggleGfx').addEventListener('click', () => {
-        if (Game.lowGfx) {
-          Game.perfMode = 'high';
-          setLowGfx(false);
-        } else {
-          Game.perfMode = 'low';
-          setLowGfx(true);
-        }
-        const btn = document.getElementById('btnToggleGfx');
-        if (btn) {
-          btn.textContent = Game.lowGfx ? '⚡ Hiệu Năng' : '✨ HD';
-          btn.className = Game.lowGfx
-            ? 'px-2.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 border border-amber-300 text-xs font-extrabold text-white transition'
-            : 'px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition';
-        }
+      // Nút HD trong HUD trận đấu: bật/tắt chế độ hiệu năng.
+      function syncHudGfxBtn() {
+        const btn = document.getElementById('btnHudGfx');
+        if (!btn) return;
+        btn.textContent = Game.lowGfx ? '⚡ Hiệu Năng' : '✨ HD';
+        btn.className = Game.lowGfx
+          ? 'px-2.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 border border-amber-300 text-xs font-extrabold text-white transition'
+          : 'px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition';
+      }
+      document.getElementById('btnHudGfx').addEventListener('click', () => {
+        Game.perfMode = Game.lowGfx ? 'high' : 'low';
+        setLowGfx(!Game.lowGfx);
+        const lbl = document.getElementById('gfxModeLabel');
+        if (lbl) lbl.textContent = Game.lowGfx ? '⚡ HIỆU NĂNG' : 'ULTRA HD';
+        canvas.classList.toggle('gfx-ultra', !Game.lowGfx);
+        syncHudGfxBtn();
       });
 
       document.getElementById('btnPauseGame').addEventListener('click', () => {
@@ -24619,13 +24624,13 @@
         startNewRun();
       });
 
-      // Ultra HD Graphics Mode & Sound & Guide Modals
       document.getElementById('btnToggleGfx').addEventListener('click', () => {
-        Game.ultraGfx = !Game.ultraGfx;
+        Game.perfMode = Game.lowGfx ? 'high' : 'low';
+        setLowGfx(!Game.lowGfx);
         const lbl = document.getElementById('gfxModeLabel');
-        if (lbl) lbl.textContent = Game.ultraGfx ? 'ULTRA HD' : '60FPS';
-        canvas.classList.toggle('gfx-ultra', Game.ultraGfx);
-        showToast(Game.ultraGfx ? '✨ Đã bật Đồ Họa Siêu Đỉnh (Ultra HD Ray-Traced + Bloom)!' : '⚡ Đã chuyển sang chế độ Mượt 60FPS!');
+        if (lbl) lbl.textContent = Game.lowGfx ? '⚡ HIỆU NĂNG' : 'ULTRA HD';
+        canvas.classList.toggle('gfx-ultra', !Game.lowGfx);
+        syncHudGfxBtn();
       });
 
       document.getElementById('btnToggleSound').addEventListener('click', () => {
