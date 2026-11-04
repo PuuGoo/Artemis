@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - .github/workflows/gear-safety-patch.yml
+      - scripts/gear-safety-patch.mjs
 permissions:
   contents: write
 jobs:
