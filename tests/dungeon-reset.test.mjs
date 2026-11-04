@@ -56,7 +56,7 @@ const snrStart = src.indexOf("function startNewRun(reason = 'fresh')");
 const snrBody = src.slice(snrStart, snrStart + 900);
 check("startNewRun goi stopGameLoop TRUOC khi dung tran", snrBody.indexOf("stopGameLoop()") < snrBody.indexOf("clearRunState()"));
 check("startNewRun goi clearRunState", snrBody.includes("clearRunState()"));
-check("finishRun dung stopGameLoop (khong let animId cu)", src.includes("stopGameLoop();\n        // Kết thúc session"));
+check("finishRun dung stopGameLoop (khong let animId cu)", /finishRun\(isVictory\) \{[\s\S]{0,300}?stopGameLoop\(\);/.test(src));
 
 // ---------------------------------------------------------------- 4. Retry về màn 1
 console.log("\n=== 4. RETRY LUON BAT DAU MAN 1 ===");

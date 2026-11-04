@@ -87,7 +87,7 @@ check("van giu startedAt (khong kich hoat lai)", !skipBody.includes("startedAt =
 
 // ---------------------------------------------------------------- 7. Save / migration
 console.log("\n=== 7. SAVE & MIGRATION ===");
-check("SaveState co beginnerJourney mac dinh", src.includes("beginnerJourney: {\n          version: 1,"));
+check("SaveState co beginnerJourney mac dinh", /beginnerJourney: \{[\s\S]{0,80}?version: 1,/.test(src));
 check("save() ghi beginnerJourney", src.includes("beginnerJourney: this.beginnerJourney,"));
 check("load() migration tao object rong khi thieu",
   src.includes("if (!this.beginnerJourney || typeof this.beginnerJourney !== 'object')"));
