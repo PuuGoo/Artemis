@@ -3,8 +3,7 @@ import { json } from "../../lib/http.js";
 
 export const config = { runtime: "nodejs" };
 
-export default async function handler(request) {
-  if (request.method !== "POST") return json({ ok: false, error: "Chi ho tro POST." }, 405);
+export async function POST() {
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
     headers: {

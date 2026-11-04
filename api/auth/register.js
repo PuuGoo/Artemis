@@ -7,9 +7,7 @@ import { json, fail, readJsonBody, bumpRateLimit, clientIp } from "../../lib/htt
 
 export const config = { runtime: "nodejs" };
 
-export default async function handler(request) {
-  if (request.method !== "POST") return fail("Chi ho tro POST.", 405);
-
+export async function POST(request) {
   const body = await readJsonBody(request);
   if (!body.ok) return fail(body.error, body.status);
 

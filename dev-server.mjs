@@ -98,10 +98,14 @@ const server = http.createServer(async (req, res) => {
       // Luu y dev: ESM cache khong the xoa, nen sua file trong lib/* phai KHOI DONG LAI
       // dev-server. (Vercel tao process moi moi request nen khong gap van de nay.)
       const mod = await import(pathToFileURL(file).href + "?t=" + Date.now());
-      const handler = mod.default;
+      // Ho tro CA HAI kieu: named method export (GET/POST/PUT - kieu Vercel)
+      // va default handler(request) kieu cu.
+      const method = (req.method || "GET").toUpperCase();
+      const handler = mod[method] || mod.default;
       if (typeof handler !== "function") {
-        res.statusCode = 500;
-        res.end(JSON.stringify({ ok: false, error: "Handler khong hop le." }));
+        res.statusCode = 405;
+        res.setHeader("content-type", "application/json; charset=utf-8");
+        res.end(JSON.stringify({ ok: false, error: `Phuong thuc ${method} khong duoc ho tro.` }));
         return;
       }
       const webRes = await handler(toWebRequest(req));

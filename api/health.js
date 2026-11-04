@@ -1,10 +1,11 @@
-import { getMongoDb, COLLECTIONS } from "../lib/mongo.js";
-import { json, fail } from "../lib/http.js";
+import { getMongoDb } from "../lib/mongo.js";
+import { json } from "../lib/http.js";
 
 export const config = { runtime: "nodejs" };
 
-export default async function handler(request) {
-  if (request.method !== "GET") return fail("Chi ho tro GET.", 405);
+// Vercel ho tro "named method" export cho Web-standard Request/Response.
+// (Default export kieu (req,res) khong nhan Request Web, da gay loi 500/timeout.)
+export async function GET() {
   try {
     const db = await getMongoDb();
     await db.command({ ping: 1 });

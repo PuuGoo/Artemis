@@ -4,10 +4,7 @@ import { getMongoDb, COLLECTIONS } from "../../lib/mongo.js";
 
 export const config = { runtime: "nodejs" };
 
-export default async function handler(request) {
-  if (request.method !== "GET") {
-    return new Response(JSON.stringify({ ok: false, error: "Chi ho tro GET." }), { status: 405 });
-  }
+export async function GET(request) {
   const player = await getCurrentPlayer(request);
   if (!player) {
     return new Response(JSON.stringify({ ok: true, authenticated: false, player: null }), {
