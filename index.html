@@ -725,7 +725,6 @@
                 <button id="btnAutoBuildAdvanced" class="rounded-xl border border-emerald-400/50 bg-emerald-600/20 px-2 py-2 text-[11px] font-black text-emerald-200">⚡ Auto Build+</button>
                 <button id="btnGearLoadouts" class="rounded-xl border border-fuchsia-400/50 bg-fuchsia-600/20 px-2 py-2 text-[11px] font-black text-fuchsia-200 col-span-2 sm:col-span-4">🧰 Quản lý bộ trang bị đã lưu</button>
                 <button id="btnGearEvolution" class="rounded-xl border border-amber-300/60 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-fuchsia-500/20 px-2 py-2 text-[11px] font-black text-amber-100 col-span-2 sm:col-span-4 shadow-[0_0_18px_rgba(251,191,36,.16)]">✨ Tiến hóa & Lập kế hoạch cường hóa</button>
-                <button id="btnGearTempering" class="rounded-xl border border-cyan-300/60 bg-gradient-to-r from-cyan-500/20 via-sky-500/20 to-violet-500/20 px-2 py-2 text-[11px] font-black text-cyan-100 col-span-2 sm:col-span-4 shadow-[0_0_18px_rgba(34,211,238,.16)]">⚒️ Tinh luyện 10 bậc • +4% chỉ số mỗi bậc</button>
               </div>
               <div id="gearWorkshopContent" class="rounded-xl bg-slate-900/80 border border-slate-700 p-3 text-xs text-slate-200 space-y-2">
                 <p class="text-slate-400">Chọn một công cụ ở trên để quản lý và tối ưu kho trang bị.</p>
@@ -1712,9 +1711,6 @@
 
           // Required Backward-Compatible Normalization:
           item.awakening ??= 0;
-          item.temperingLevel ??= 0;
-          if (typeof item.temperingLevel !== 'number' || !Number.isFinite(item.temperingLevel)) item.temperingLevel = 0;
-          item.temperingLevel = Math.max(0, Math.min(10, Math.floor(item.temperingLevel)));
           item.locked ??= false;
           item.favorite ??= false;
 
@@ -1935,8 +1931,7 @@
         const lv = item.level || 1;
         const baseByLv = tpl.baseStat + (lv - 1) * tpl.perLv;
         const awkBonus = getAwakeningBonusRate(item.quality, item.awakening);
-        const temperingBonus = 1 + Math.max(0, Math.min(10, Number(item.temperingLevel) || 0)) * 0.04;
-        return Math.round(baseByLv * q.mult * (1 + awkBonus) * temperingBonus);
+        return Math.round(baseByLv * q.mult * (1 + awkBonus));
       }
 
       // ==================== EXPANDED EQUIPMENT SYSTEM ====================
@@ -1997,11 +1992,11 @@
       }
       function renderSalvageTool() {
         const el=document.getElementById('gearWorkshopContent');
-        const eligible=SaveState.gearBag.filter(i=>!isGearProtectedFromDestruction(i)&&!getEquippedUidSet().has(i.uid));
-        el.innerHTML=`<div class="font-black text-rose-300">♻️ Phân rã hàng loạt</div><p class="text-[10px] text-slate-400">Chỉ phân rã đồ trong túi; đồ đang mặc, khóa, yêu thích, đã tinh luyện hoặc đã khảm đá đều được bảo vệ.</p><div class="flex gap-2"><button id="salvageSelectAll" class="rounded bg-slate-700 px-2 py-1">Chọn tất cả hợp lệ</button><button id="salvageClear" class="rounded bg-slate-700 px-2 py-1">Bỏ chọn</button></div><div class="max-h-48 overflow-y-auto space-y-1">${eligible.map(i=>`<label class="flex items-center gap-2 rounded bg-slate-800 p-2"><input type="checkbox" class="salvage-check" value="${i.uid}"><span class="flex-1">${GEAR_TEMPLATES[i.templateId].name}</span><span class="text-amber-300">${i.quality} • Lv.${i.level}</span></label>`).join('')||'<p class="text-slate-500">Không có trang bị hợp lệ để phân rã.</p>'}</div><button id="confirmBulkSalvage" class="w-full rounded-xl bg-rose-600 py-2 font-black">Phân rã đã chọn</button><p class="text-[10px] text-slate-400">Nhận vàng theo phẩm chất/cấp và Mảnh Rèn.</p>`;
+        const eligible=SaveState.gearBag.filter(i=>!i.locked&&!i.favorite&&!getEquippedUidSet().has(i.uid));
+        el.innerHTML=`<div class="font-black text-rose-300">♻️ Phân rã hàng loạt</div><p class="text-[10px] text-slate-400">Chỉ phân rã đồ trong túi; đồ đang mặc, khóa hoặc yêu thích luôn được bảo vệ.</p><div class="flex gap-2"><button id="salvageSelectAll" class="rounded bg-slate-700 px-2 py-1">Chọn tất cả hợp lệ</button><button id="salvageClear" class="rounded bg-slate-700 px-2 py-1">Bỏ chọn</button></div><div class="max-h-48 overflow-y-auto space-y-1">${eligible.map(i=>`<label class="flex items-center gap-2 rounded bg-slate-800 p-2"><input type="checkbox" class="salvage-check" value="${i.uid}"><span class="flex-1">${GEAR_TEMPLATES[i.templateId].name}</span><span class="text-amber-300">${i.quality} • Lv.${i.level}</span></label>`).join('')||'<p class="text-slate-500">Không có trang bị hợp lệ để phân rã.</p>'}</div><button id="confirmBulkSalvage" class="w-full rounded-xl bg-rose-600 py-2 font-black">Phân rã đã chọn</button><p class="text-[10px] text-slate-400">Nhận vàng theo phẩm chất/cấp và Mảnh Rèn.</p>`;
         document.getElementById('salvageSelectAll').onclick=()=>el.querySelectorAll('.salvage-check').forEach(c=>c.checked=true);
         document.getElementById('salvageClear').onclick=()=>el.querySelectorAll('.salvage-check').forEach(c=>c.checked=false);
-        document.getElementById('confirmBulkSalvage').onclick=()=>{const ids=[...el.querySelectorAll('.salvage-check:checked')].map(c=>c.value);if(!ids.length){showToast('Hãy chọn trang bị cần phân rã.');return;}const chosen=SaveState.gearBag.filter(i=>ids.includes(i.uid)&&!isGearProtectedFromDestruction(i)&&!getEquippedUidSet().has(i.uid));if(!chosen.length)return;const rewards=chosen.reduce((n,i)=>n+Math.round((GEAR_QUALITIES[i.quality]?.order||1)*35+(i.level||1)*8),0);const chosenItems=new Set(chosen);SaveState.gearBag=SaveState.gearBag.filter(i=>!chosenItems.has(i));SaveState.gold+=rewards;SaveState.salvageMaterials=(SaveState.salvageMaterials||0)+chosen.length*1;SaveState.save();renderLobbyUI();renderSalvageTool();showToast(`♻️ Đã phân rã ${chosen.length} món, nhận ${rewards} vàng và ${chosen.length} Mảnh Rèn.`);};
+        document.getElementById('confirmBulkSalvage').onclick=()=>{const ids=[...el.querySelectorAll('.salvage-check:checked')].map(c=>c.value);if(!ids.length){showToast('Hãy chọn trang bị cần phân rã.');return;}const chosen=SaveState.gearBag.filter(i=>ids.includes(i.uid)&&!i.locked&&!i.favorite&&!getEquippedUidSet().has(i.uid));if(!chosen.length)return;const rewards=chosen.reduce((n,i)=>n+Math.round((GEAR_QUALITIES[i.quality]?.order||1)*35+(i.level||1)*8),0);SaveState.gearBag=SaveState.gearBag.filter(i=>!ids.includes(i.uid)||i.locked||i.favorite);SaveState.gold+=rewards;SaveState.salvageMaterials=(SaveState.salvageMaterials||0)+chosen.length*1;SaveState.save();renderLobbyUI();renderSalvageTool();showToast(`♻️ Đã phân rã ${chosen.length} món, nhận ${rewards} vàng và ${chosen.length} Mảnh Rèn.`);};
       }
       // ==================== SAVED GEAR LOADOUT MANAGER ====================
       // Stores stable UIDs only; it never clones gear, so a saved build cannot duplicate items.
@@ -2837,7 +2832,7 @@
               </div>
               <!-- Top-Right Lock / Favorite Badges -->
               ${buildCardStatusBadgesHTML(item)}
-              ${(getGearSetId(item) || (item.sockets||[]).length || Number(item.temperingLevel)>0) ? `<span class="absolute bottom-1 right-1 z-10 text-[9px] bg-slate-950/85 rounded px-1" title="Bộ trang bị • Đá quý • Tinh luyện">${getGearSetId(item) ? GEAR_SET_META[getGearSetId(item)].icon : ''}${(item.sockets||[]).length?` 💎${item.sockets.length}` :''}${Number(item.temperingLevel)>0 ? ` ⚒️+${Math.min(10, Math.floor(Number(item.temperingLevel)||0))}` :''}</span>` : ''}
+              ${getGearSetId(item) ? `<span class="absolute bottom-1 right-1 z-10 text-[9px] bg-slate-950/80 rounded px-1">${GEAR_SET_META[getGearSetId(item)].icon}${(item.sockets||[]).length?` 💎${item.sockets.length}`:''}</span>` : ''}
               <!-- Top Level Label -->
               <span class="a2-lv-text text-[10px] sm:text-[11px] absolute top-0.5 inset-x-0 text-center z-10 pointer-events-none">
                 ${isEquippedSlot || item.level > 1 ? `Lv.${item.level}` : ''}
@@ -2870,30 +2865,11 @@
         return set;
       }
 
-      // Gear with permanent investment must never be consumed accidentally.
-      // Protect locked/favorite items, tempered items and items holding valid gems.
-      function getGearProtectionReasons(item) {
-        if (!item || typeof item !== 'object') return [];
-        const reasons = [];
-        if (item.locked) reasons.push('đã khóa');
-        if (item.favorite) reasons.push('yêu thích');
-        const temperingLevel = Math.max(0, Math.min(10, Math.floor(Number(item.temperingLevel) || 0)));
-        if (temperingLevel > 0) reasons.push('tinh luyện +' + temperingLevel);
-        if (Array.isArray(item.sockets) && item.sockets.some(gemId => Boolean(GEM_META[gemId]))) {
-          reasons.push('đã khảm đá');
-        }
-        return reasons;
-      }
-
-      function isGearProtectedFromDestruction(item) {
-        return getGearProtectionReasons(item).length > 0;
-      }
-
-      // Check if an inventory item is eligible for Fusion.
+      // Check if an inventory item is eligible for Fusion (not equipped, not locked, not favorite, and has valid recipe)
       function isItemEligibleForFusion(item, equippedUids = getEquippedUidSet()) {
         if (!item || typeof item !== 'object') return false;
         if (equippedUids.has(item.uid)) return false;
-        if (isGearProtectedFromDestruction(item)) return false;
+        if (item.locked || item.favorite) return false;
         const recipe = getFusionRecipe(item.quality, item.awakening || 0);
         return Boolean(recipe);
       }
@@ -2943,7 +2919,7 @@
             };
           }
           groupsMap[key].allBagItems.push(item);
-          if (isGearProtectedFromDestruction(item)) {
+          if (item.locked || item.favorite) {
             groupsMap[key].protectedItems.push(item);
           } else {
             groupsMap[key].eligibleItems.push(item);
@@ -3315,7 +3291,7 @@
 
         // Update summary bar counts
         const equippedCount = getEquippedUidSet().size;
-        const protectedInBagCount = SaveState.gearBag.filter(i => i && isGearProtectedFromDestruction(i)).length;
+        const protectedInBagCount = SaveState.gearBag.filter(i => i && (i.locked || i.favorite)).length;
         const eligibleInBagCount = SaveState.gearBag.filter(i => isItemEligibleForFusion(i)).length;
 
         const readyEl = document.getElementById('bsReadyGroupsCount');
@@ -3323,7 +3299,7 @@
         const protEl = document.getElementById('bsProtectedCount');
         if (readyEl) readyEl.textContent = `${readyGroups.length} nhóm`;
         if (eligEl) eligEl.textContent = `${eligibleInBagCount} món`;
-        if (protEl) protEl.textContent = `${equippedCount + protectedInBagCount} món (${equippedCount} Mặc, ${protectedInBagCount} 🔒/❤️/⚒️/💎)`;
+        if (protEl) protEl.textContent = `${equippedCount + protectedInBagCount} món (${equippedCount} Mặc, ${protectedInBagCount} 🔒/❤️)`;
 
         // Sync active filter buttons styling
         document.querySelectorAll('.bs-slot-filter-btn').forEach(btn => {
@@ -3382,7 +3358,7 @@
           const toLabelFull = formatQualityWithStars(g.toQualityId, g.toAwakening, false);
           const shortTplName = g.template.name;
           const protectedNote = g.protectedItems.length > 0
-            ? `<span class="text-amber-300 ml-1">(+${g.protectedItems.length} món 🔒/❤️/⚒️/💎 được bảo vệ)</span>`
+            ? `<span class="text-amber-300 ml-1">(+${g.protectedItems.length} món 🔒/❤️ được bảo vệ)</span>`
             : '';
 
           // Visual slots for required materials (show owned items + empty missing slots if incomplete)
@@ -7746,133 +7722,6 @@
         });
       }
       document.getElementById('btnGearEvolution')?.addEventListener('click',renderGearEvolutionPlanner);
-
-function renderGearTemperingForge() {
-  const el = document.getElementById('gearWorkshopContent');
-  if (!el) return;
-  const equipped = Object.entries(SaveState.equippedGear || {}).filter(([, item]) => item);
-  const bag = (SaveState.gearBag || []).filter(Boolean);
-  const all = [
-    ...equipped.map(([slot, item]) => ({ item, label: 'Đang mặc • ' + (GEAR_TEMPLATES[item.templateId]?.name || item.templateId) })),
-    ...bag.map(item => ({ item, label: 'Kho đồ • ' + (GEAR_TEMPLATES[item.templateId]?.name || item.templateId) }))
-  ];
-  const opts = all.map(({ item, label }) =>
-    '<option value="' + item.uid + '">' + label + ' • ' +
-    formatQualityWithStars(item.quality, item.awakening || 0, true) +
-    ' • Tinh luyện ' + (item.temperingLevel || 0) + '/10</option>'
-  ).join('');
-
-  el.innerHTML =
-    '<div class="gear-v3-panel rounded-2xl p-3 sm:p-4 space-y-3">' +
-      '<div class="flex items-center justify-between gap-2">' +
-        '<div><div class="text-[10px] tracking-[.22em] font-black text-cyan-300">MASTER FORGE • V4</div>' +
-        '<h3 class="text-lg font-black text-cyan-100">⚒️ Lò Tinh Luyện Trang Bị</h3>' +
-        '<p class="text-[10px] text-slate-400">Mỗi bậc tăng vĩnh viễn 4% chỉ số món đồ. Tối đa 10 bậc (+40%).</p></div>' +
-        '<div class="text-3xl" style="filter:drop-shadow(0 0 12px rgba(34,211,238,.7))">🔱</div>' +
-      '</div>' +
-      '<div class="grid grid-cols-2 gap-2">' +
-        '<div class="rounded-xl bg-slate-950/70 border border-amber-400/20 p-3"><div class="text-[10px] text-slate-400">VÀNG</div><div class="text-xl font-black text-amber-300">' + (Number(SaveState.gold) || 0).toLocaleString('vi-VN') + ' 🪙</div></div>' +
-        '<div class="rounded-xl bg-slate-950/70 border border-cyan-400/20 p-3"><div class="text-[10px] text-slate-400">MẢNH RÈN</div><div class="text-xl font-black text-cyan-200">' + (Number(SaveState.salvageMaterials) || 0) + ' 🔩</div></div>' +
-      '</div>' +
-      '<label class="block text-[11px] font-bold text-slate-300">Chọn trang bị<select id="gearTemperItem" class="mt-1 w-full rounded-xl border border-slate-600 bg-slate-950 p-3 text-sm text-white">' +
-        (opts || '<option value="">Chưa có trang bị</option>') +
-      '</select></label>' +
-      '<div id="gearTemperPreview" class="rounded-xl border border-cyan-400/20 bg-slate-950/80 p-3 text-xs text-slate-300">Chọn trang bị để xem chi phí và chỉ số sau tinh luyện.</div>' +
-      '<button id="btnGearTemperExecute" class="w-full rounded-xl border border-cyan-200/50 bg-gradient-to-r from-cyan-400 via-sky-500 to-violet-500 py-3 text-sm font-black text-slate-950 shadow-[0_0_24px_rgba(34,211,238,.2)]">⚒️ Tinh luyện bậc tiếp theo</button>' +
-      '<p class="text-[10px] text-slate-500">Chi phí mỗi bậc: 200 + 130 × bậc + 35 × bậc² vàng; Mảnh Rèn tăng từ 1 đến 4 theo mốc bậc. Không có tỉ lệ thất bại, không mất trang bị.</p>' +
-    '</div>';
-
-  const select = document.getElementById('gearTemperItem');
-  const preview = document.getElementById('gearTemperPreview');
-  const button = document.getElementById('btnGearTemperExecute');
-  if (!select || !preview || !button) return;
-
-  const findItem = () => all.find(entry => entry.item.uid === select.value)?.item;
-  const getCost = nextLevel => ({
-    gold: 200 + 130 * nextLevel + 35 * nextLevel * nextLevel,
-    shards: 1 + Math.floor((nextLevel - 1) / 3)
-  });
-
-  const calc = () => {
-    const item = findItem();
-    if (!item) {
-      preview.innerHTML = '<p class="text-slate-400">Chưa có trang bị để tinh luyện.</p>';
-      button.disabled = true;
-      return;
-    }
-    const current = Math.max(0, Math.min(10, Number(item.temperingLevel) || 0));
-    const next = current + 1;
-    const currentStat = computeSingleItemStat(item);
-    const nextItem = { ...item, temperingLevel: next };
-    const nextStat = next <= 10 ? computeSingleItemStat(nextItem) : currentStat;
-    const cost = next <= 10 ? getCost(next) : { gold: 0, shards: 0 };
-    const enough = next <= 10 && Number(SaveState.gold || 0) >= cost.gold &&
-      Number(SaveState.salvageMaterials || 0) >= cost.shards;
-
-    preview.innerHTML =
-      '<div class="flex justify-between items-center gap-2 mb-2"><b class="text-cyan-100">' +
-        (GEAR_TEMPLATES[item.templateId]?.name || item.templateId) +
-      '</b><span class="text-amber-200">' + formatQualityWithStars(item.quality, item.awakening || 0, true) + '</span></div>' +
-      '<div class="flex items-center justify-between text-[11px] mb-1"><span class="font-bold text-cyan-200">Tinh luyện ' + current + '/10</span><b class="text-cyan-100">+' + (current * 4) + '% chỉ số</b></div>' +
-      '<div class="gear-v3-progress"><i style="width:' + (current * 10) + '%;background:linear-gradient(90deg,#06b6d4,#38bdf8,#a78bfa)"></i></div>' +
-      '<div class="grid grid-cols-2 gap-2 mt-3">' +
-        '<div class="rounded-lg bg-slate-900 p-2"><div class="text-[10px] text-slate-400">CHỈ SỐ HIỆN TẠI</div><div class="text-lg font-black text-slate-200">' + currentStat.toLocaleString('vi-VN') + '</div></div>' +
-        '<div class="rounded-lg bg-slate-900 p-2"><div class="text-[10px] text-slate-400">SAU TINH LUYỆN</div><div class="text-lg font-black text-emerald-300">' + (next <= 10 ? nextStat.toLocaleString('vi-VN') : 'MAX') + '</div></div>' +
-      '</div>' +
-      (next <= 10
-        ? '<div class="flex justify-between mt-3 text-[11px]"><span>Chi phí bậc ' + next + '</span><b class="text-amber-300">' + cost.gold.toLocaleString('vi-VN') + ' 🪙 + ' + cost.shards + ' 🔩</b></div>' +
-          '<div class="flex justify-between mt-1 text-[10px]"><span>Sau khi tinh luyện</span><span class="' + (enough ? 'text-emerald-300' : 'text-rose-300') + '">' +
-            Math.max(0, (Number(SaveState.gold) || 0) - cost.gold).toLocaleString('vi-VN') + ' 🪙 • ' +
-            Math.max(0, (Number(SaveState.salvageMaterials) || 0) - cost.shards) + ' 🔩</span></div>' +
-          (enough ? '<p class="mt-2 text-emerald-300 font-bold">✓ Đủ tài nguyên. Tinh luyện chắc chắn thành công.</p>' :
-            '<p class="mt-2 text-rose-300 font-bold">⚠️ Chưa đủ vàng hoặc Mảnh Rèn.</p>')
-        : '<p class="mt-3 text-center text-emerald-300 font-black">✦ Đã đạt TINH LUYỆN TỐI ĐA ✦</p>');
-
-    button.disabled = !enough;
-    button.style.opacity = enough ? '1' : '.45';
-    button.textContent = next <= 10 ? '⚒️ Tinh luyện lên bậc ' + next : '✦ Đã đạt tối đa';
-  };
-
-  select.addEventListener('change', calc);
-  button.addEventListener('click', () => {
-    const selected = findItem();
-    if (!selected) return;
-    const owned = [
-      ...Object.values(SaveState.equippedGear || {}),
-      ...(SaveState.gearBag || [])
-    ].find(item => item && item.uid === selected.uid);
-    if (!owned) {
-      showToast('⚠️ Không tìm thấy trang bị này trong kho.');
-      renderGearTemperingForge();
-      return;
-    }
-    const current = Math.max(0, Math.min(10, Number(owned.temperingLevel) || 0));
-    if (current >= 10) {
-      showToast('✦ Trang bị đã đạt tối đa 10 bậc tinh luyện.');
-      return;
-    }
-    const next = current + 1;
-    const cost = getCost(next);
-    if ((Number(SaveState.gold) || 0) < cost.gold ||
-        (Number(SaveState.salvageMaterials) || 0) < cost.shards) {
-      showToast('⚠️ Không đủ vàng hoặc Mảnh Rèn để tinh luyện.');
-      calc();
-      return;
-    }
-    SaveState.gold -= cost.gold;
-    SaveState.salvageMaterials -= cost.shards;
-    owned.temperingLevel = next;
-    SaveState.save();
-    SoundFX.levelUp();
-    StageHeroAnim.triggerPose();
-    renderLobbyUI();
-    showToast('⚒️ Tinh luyện thành công! ' + (GEAR_TEMPLATES[owned.templateId]?.name || owned.templateId) + ' đạt bậc ' + next + '/10 (+' + (next * 4) + '% chỉ số).');
-    renderGearTemperingForge();
-  });
-  calc();
-}
-
-document.getElementById('btnGearTempering')?.addEventListener('click', renderGearTemperingForge);
 
       // Open & Close Blacksmith Modal
       document.getElementById('btnOpenBlacksmith').addEventListener('click', () => {
