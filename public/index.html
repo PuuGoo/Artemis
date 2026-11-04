@@ -1425,7 +1425,7 @@
         </span>
         <h3 class="text-xl font-black text-white">Khế Ước Huyết Ma</h3>
         <p id="devilOfferDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-          Đổi <span class="text-rose-400 font-black">20% Máu Tối Đa</span> để nhận ngay kỹ năng Thần Thoại <span id="devilSkillName" class="text-amber-300 font-black">Liên Xạ + Tên Phía Trước</span>?
+          Đổi <span class="text-rose-400 font-black">20% Máu Tối Đa</span> để nhận ngay kỹ năng Thần Thoại <span class="text-amber-300 font-black">Liên Xạ + Tên Phía Trước</span>?
         </p>
         <div class="flex items-center gap-3 w-full mt-2">
           <button id="btnDeclineDevil" type="button" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-300 transition">
@@ -20425,22 +20425,39 @@
 
       function triggerDevilEncounter() {
         Game.paused = true;
-        const devilPool = ROGUE_SKILLS.filter(s => (s.providers || []).includes('devil'));
-        const pick = devilPool[Math.floor(Math.random() * devilPool.length)] || ROGUE_SKILLS[0];
-        const modal = document.getElementById('devilModal');
-        modal.setAttribute('data-devil-skill', pick.id);
-        // Exact Wiki Devil Max HP Cost: 30% for Legendary, 23% for Epic, 15% for Rare (0% if Seraph Divine Favor LV.3 is active!)
-        const seraphFree = Game.player && hasHeroSkillActive(Game.player, 'seraph');
-        const hpCostPct = seraphFree ? 0 : (pick.rarity === 'legend' ? 30 : (pick.rarity === 'epic' ? 23 : 15));
-        modal.setAttribute('data-devil-cost-pct', String(hpCostPct));
-        document.getElementById('devilSkillName').textContent = `${pick.icon} ${pick.name}`;
-        const descEl = document.getElementById('devilOfferDesc');
-        if (descEl) {
-          descEl.innerHTML = seraphFree
-            ? `Nhờ đặc quyền <span class="text-amber-300 font-black">Seraph [Divine Favor LV.3]</span>, bạn được nhận kỹ năng <span class="text-rose-400 font-black">${pick.icon} ${pick.name}</span> mà <span class="text-emerald-300 font-black">KHÔNG TỐN MÁU TỐI ĐA (0% Max HP)</span>!`
-            : `Đổi <span class="text-rose-400 font-black">${hpCostPct}% Máu Tối Đa Gốc</span> (Chuẩn Wiki: 15%/23%/30%) để nhận ngay kỹ năng <span class="text-amber-300 font-black">${pick.icon} ${pick.name}</span> (${pick.desc})?`;
+        try {
+          const devilPool = ROGUE_SKILLS.filter(s => (s.providers || []).includes('devil'));
+          const pick = devilPool[Math.floor(Math.random() * devilPool.length)] || ROGUE_SKILLS[0];
+          const modal = document.getElementById('devilModal');
+          if (!modal) throw new Error('Thiếu #devilModal trong DOM');
+          modal.setAttribute('data-devil-skill', pick.id);
+          // Exact Wiki Devil Max HP Cost: 30% for Legendary, 23% for Epic, 15% for Rare (0% if Seraph Divine Favor LV.3 is active!)
+          const seraphFree = Game.player && hasHeroSkillActive(Game.player, 'seraph');
+          const hpCostPct = seraphFree ? 0 : (pick.rarity === 'legend' ? 30 : (pick.rarity === 'epic' ? 23 : 15));
+          modal.setAttribute('data-devil-cost-pct', String(hpCostPct));
+
+          // KHÔNG dùng span con #devilSkillName nữa: khối dưới ghi đè innerHTML
+          // của #devilOfferDesc nên span đó bị xoá sau lần gặp trùm đầu tiên.
+          // Lần gặp thứ hai (phòng 10) getElementById trả null -> TypeError ->
+          // hàm chết giữa chừng trong khi Game.paused đã = true => game đứng
+          // vĩnh viễn, không modal, không lối thoát.
+          const skillLabel = `${pick.icon} ${pick.name}`;
+          const descEl = document.getElementById('devilOfferDesc');
+          if (descEl) {
+            descEl.innerHTML = seraphFree
+              ? `Nhờ đặc quyền <span class="text-amber-300 font-black">Seraph [Divine Favor LV.3]</span>, bạn được nhận kỹ năng <span class="text-rose-400 font-black">${skillLabel}</span> mà <span class="text-emerald-300 font-black">KHÔNG TỐN MÁU TỐI ĐA (0% Max HP)</span>!`
+              : `Đổi <span class="text-rose-400 font-black">${hpCostPct}% Máu Tối Đa Gốc</span> (Chuẩn Wiki: 15%/23%/30%) để nhận ngay kỹ năng <span class="text-amber-300 font-black">${skillLabel}</span> (${pick.desc})?`;
+          }
+
+          modal.classList.remove('hidden');
+        } catch (err) {
+          // Bất kỳ lỗi nào ở đây cũng phải nhả pause, nếu không người chơi
+          // mất luôn trận đang chơi (màn hình đứng, không bấm được gì).
+          console.error('[Archero2] triggerDevilEncounter error:', err);
+          Game._lastDevilError = String(err && err.message || err);
+          Game.paused = false;
+          Game.lastTime = performance.now();
         }
-        modal.classList.remove('hidden');
       }
 
       // ==================== COMBAT & PROJECTILE SPAWNING ====================
@@ -24356,6 +24373,27 @@
         const dt = Math.min(0.05, (now - Game.lastTime) / 1000);
         Game.lastTime = now;
 
+        // Chốt an toàn: game đang "paused" nhưng KHÔNG có modal nào mở nghĩa là
+        // đã có lỗi giữa chừng (hàm ném exception sau khi set paused = true).
+        // Trước đây tình huống này khiến màn hình đứng vĩnh viễn, không bấm được.
+        if (Game.paused) {
+          Game._pausedNoModalFrames = (Game._pausedNoModalFrames || 0) + 1;
+          if (Game._pausedNoModalFrames > 45) { // ~0.75s
+            const anyModalOpen = ['skillSelectModal', 'devilModal', 'summaryModal'].some(id => {
+              const el = document.getElementById(id);
+              return el && !el.classList.contains('hidden');
+            });
+            if (!anyModalOpen) {
+              console.warn('[Archero2] Phát hiện pause mồ côi (không modal) — tự phục hồi.');
+              Game._autoUnpaused = (Game._autoUnpaused || 0) + 1;
+              Game.paused = false;
+            }
+            Game._pausedNoModalFrames = 0;
+          }
+        } else {
+          Game._pausedNoModalFrames = 0;
+        }
+
         if (!Game.paused) {
           trackPerformance(dt, now);
           // update/render KHÔNG ĐƯỢC phép giết game loop: một entity hỏng (NaN)
@@ -25329,7 +25367,17 @@
         bumpLifetimeStat,
         setLifetimeStatMax,
         buildAchievementsPanelHtml,
-        renderVnCollectiblesTabUI
+        renderVnCollectiblesTabUI,
+        // ===== API gỡ lỗi (dùng cho kiểm thử tự động) =====
+        // Cho phép nhảy thẳng tới phòng bất kỳ và gây sát thương để tái hiện
+        // các lỗi chỉ xuất hiện ở phòng trùm (phòng 5, 10, 15) mà không phải
+        // chơi lại từ đầu.
+        setupRoom,
+        startNewRun,
+        damageEnemy,
+        grantAllRogueSkillsInRun,
+        triggerDevilEncounter,
+        updateGame
       };
 
       // Engrave Elemental Rune
