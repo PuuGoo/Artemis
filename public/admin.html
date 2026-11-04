@@ -64,13 +64,13 @@
   .stat-val.purple { color: var(--purple); }
 
   /* ---------- Table ---------- */
-  .table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
+  .table-wrap { overflow: auto; border-radius: 14px; border: 1px solid var(--border); max-height: 62vh; }
   table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 900px; }
-  thead { background: #0b1224; }
+  thead { background: #0b1224; position: sticky; top: 0; z-index: 10; }
   th {
     text-align: left; padding: 11px 12px; font-size: 10.5px; text-transform: uppercase;
     letter-spacing: .8px; color: var(--muted); font-weight: 900; white-space: nowrap; cursor: pointer;
-    user-select: none;
+    user-select: none; background: #0b1224; box-shadow: inset 0 -1px 0 var(--border);
   }
   th:hover { color: var(--gold); }
   td { padding: 10px 12px; border-top: 1px solid #1a2540; vertical-align: middle; }

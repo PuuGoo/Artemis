@@ -36,6 +36,7 @@ export async function GET(request) {
           totalGems: { $sum: "$data.gems" },
           totalKills: { $sum: "$data.lifetimeStats.kills" },
           totalRuns: { $sum: "$data.lifetimeStats.runs" },
+          totalRooms: { $sum: "$data.lifetimeStats.roomsCleared" },
           avgGold: { $avg: "$data.gold" },
         },
       },
@@ -59,6 +60,14 @@ export async function GET(request) {
 
   const totals = agg[0] || {};
 
+  // Sửa lệch dữ liệu: save cũ chỉ đếm 'runs' lúc kết thúc trận, nên người chơi
+  // bỏ giữa trận có kills nhưng runs = 0. Tổng 'trận' hiển thị dùng mức tối thiểu
+  // suy ra từ roomsCleared (chia số phòng trung bình) khi runs thấp hơn.
+  const totalKills = Math.round(totals.totalKills || 0);
+  let totalRuns = Math.round(totals.totalRuns || 0);
+  const totalRooms = Math.round(totals.totalRooms || 0);
+  if (totalRuns === 0 && totalRooms > 0) totalRuns = Math.max(1, Math.round(totalRooms / 8));
+
   return json({
     ok: true,
     players: { total: totalPlayers, newToday, newWeek, activeToday },
@@ -69,8 +78,8 @@ export async function GET(request) {
       avgGold: Math.round(totals.avgGold || 0),
     },
     gameplay: {
-      totalKills: Math.round(totals.totalKills || 0),
-      totalRuns: Math.round(totals.totalRuns || 0),
+      totalKills,
+      totalRuns,
     },
     topPlayers,
     generatedAt: new Date().toISOString(),
