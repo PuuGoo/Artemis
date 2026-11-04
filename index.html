@@ -408,6 +408,19 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.65);
     }
 
+  
+    /* PREMIUM GEAR VISUALS V3 */
+    @keyframes gearAuraPulse { 0%,100%{filter:drop-shadow(0 0 3px rgba(251,191,36,.16));} 50%{filter:drop-shadow(0 0 11px rgba(251,191,36,.42));} }
+    @keyframes gearShimmer { 0%{background-position:-220% 0} 100%{background-position:220% 0} }
+    .gear-v3-card{position:relative;isolation:isolate;border:1px solid rgba(251,191,36,.35);background:linear-gradient(145deg,rgba(30,41,59,.98),rgba(8,13,29,.98));box-shadow:inset 0 1px rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.28);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+    .gear-v3-card:before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(120deg,transparent,rgba(255,255,255,.28),transparent);background-size:220% 100%;animation:gearShimmer 5s linear infinite;pointer-events:none;z-index:-1;opacity:.45;}
+    .gear-v3-card:hover{transform:translateY(-3px) scale(1.025);border-color:rgba(251,191,36,.8);box-shadow:0 0 22px rgba(251,191,36,.18),0 14px 30px rgba(0,0,0,.4);}
+    .gear-v3-legendary{border-color:rgba(251,191,36,.75);animation:gearAuraPulse 3.2s ease-in-out infinite;}
+    .gear-v3-mythic{border-color:rgba(244,114,182,.8);box-shadow:0 0 18px rgba(217,70,239,.18),inset 0 0 18px rgba(217,70,239,.08);}
+    .gear-v3-progress{height:8px;border-radius:999px;background:rgba(15,23,42,.9);overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+    .gear-v3-progress>i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#f59e0b,#fde68a,#f472b6);box-shadow:0 0 12px rgba(251,191,36,.45);transition:width .3s ease}
+    .gear-v3-panel{background:radial-gradient(ellipse at top right,rgba(168,85,247,.18),transparent 48%),linear-gradient(145deg,rgba(15,23,42,.98),rgba(5,9,22,.98));border:1px solid rgba(251,191,36,.28);box-shadow:0 18px 55px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.06)}
+    @media(prefers-reduced-motion:reduce){.gear-v3-card,.gear-v3-card:before,.gear-v3-legendary{animation:none!important;transition:none!important}}
   </style>
 </head>
 <body class="flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
@@ -710,6 +723,8 @@
                 <button id="btnGemWorkshop" class="rounded-xl border border-violet-400/50 bg-violet-600/20 px-2 py-2 text-[11px] font-black text-violet-200">💎 Khảm đá</button>
                 <button id="btnBulkSalvage" class="rounded-xl border border-rose-400/50 bg-rose-600/20 px-2 py-2 text-[11px] font-black text-rose-200">♻️ Phân rã hàng loạt</button>
                 <button id="btnAutoBuildAdvanced" class="rounded-xl border border-emerald-400/50 bg-emerald-600/20 px-2 py-2 text-[11px] font-black text-emerald-200">⚡ Auto Build+</button>
+                <button id="btnGearLoadouts" class="rounded-xl border border-fuchsia-400/50 bg-fuchsia-600/20 px-2 py-2 text-[11px] font-black text-fuchsia-200 col-span-2 sm:col-span-4">🧰 Quản lý bộ trang bị đã lưu</button>
+                <button id="btnGearEvolution" class="rounded-xl border border-amber-300/60 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-fuchsia-500/20 px-2 py-2 text-[11px] font-black text-amber-100 col-span-2 sm:col-span-4 shadow-[0_0_18px_rgba(251,191,36,.16)]">✨ Tiến hóa & Lập kế hoạch cường hóa</button>
               </div>
               <div id="gearWorkshopContent" class="rounded-xl bg-slate-900/80 border border-slate-700 p-3 text-xs text-slate-200 space-y-2">
                 <p class="text-slate-400">Chọn một công cụ ở trên để quản lý và tối ưu kho trang bị.</p>
@@ -1787,6 +1802,7 @@
         gemInventory: { ruby: 3, sapphire: 3, amethyst: 2, emerald: 2, topaz: 2 },
         salvageMaterials: 0,
         presets: {},
+        gearLoadouts: {}, // Saved full equipment builds by stable item UID
         runes: {
           rune_flame: 1,
           rune_frost: 1,
@@ -1853,6 +1869,7 @@
                   this.gearBag = createDefaultBag();
                 }
                 this.normalizeLoadedGear();
+                if (!this.gearLoadouts || typeof this.gearLoadouts !== 'object') this.gearLoadouts = {};
                 if (!this.gemInventory || typeof this.gemInventory !== 'object') this.gemInventory = { ruby: 3, sapphire: 3, amethyst: 2, emerald: 2, topaz: 2 };
                 this.salvageMaterials = Math.max(0, Number(this.salvageMaterials) || 0);
                 if (!this.runes || typeof this.runes !== 'object') {
@@ -1867,6 +1884,7 @@
               }
             } else {
               this.normalizeLoadedGear();
+              if (!this.gearLoadouts || typeof this.gearLoadouts !== 'object') this.gearLoadouts = {};
             }
           } catch (e) {
             console.warn('[Archero2 SaveMigration] Failed to parse localStorage save, preserving current state safely:', e);
@@ -1894,6 +1912,7 @@
               gemInventory: this.gemInventory,
               salvageMaterials: this.salvageMaterials,
               presets: this.presets,
+              gearLoadouts: this.gearLoadouts,
               runes: this.runes,
               talents: this.talents,
               bestRooms: this.bestRooms
@@ -1979,6 +1998,67 @@
         document.getElementById('salvageClear').onclick=()=>el.querySelectorAll('.salvage-check').forEach(c=>c.checked=false);
         document.getElementById('confirmBulkSalvage').onclick=()=>{const ids=[...el.querySelectorAll('.salvage-check:checked')].map(c=>c.value);if(!ids.length){showToast('Hãy chọn trang bị cần phân rã.');return;}const chosen=SaveState.gearBag.filter(i=>ids.includes(i.uid)&&!i.locked&&!i.favorite&&!getEquippedUidSet().has(i.uid));if(!chosen.length)return;const rewards=chosen.reduce((n,i)=>n+Math.round((GEAR_QUALITIES[i.quality]?.order||1)*35+(i.level||1)*8),0);SaveState.gearBag=SaveState.gearBag.filter(i=>!ids.includes(i.uid)||i.locked||i.favorite);SaveState.gold+=rewards;SaveState.salvageMaterials=(SaveState.salvageMaterials||0)+chosen.length*1;SaveState.save();renderLobbyUI();renderSalvageTool();showToast(`♻️ Đã phân rã ${chosen.length} món, nhận ${rewards} vàng và ${chosen.length} Mảnh Rèn.`);};
       }
+      // ==================== SAVED GEAR LOADOUT MANAGER ====================
+      // Stores stable UIDs only; it never clones gear, so a saved build cannot duplicate items.
+      function gearTextSafe(value) { return String(value ?? '').replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch])); }
+      function getAllOwnedGearByUid() {
+        const all = [...Object.values(SaveState.equippedGear || {}), ...(SaveState.gearBag || [])];
+        return new Map(all.filter(Boolean).map(item => [item.uid, item]));
+      }
+      function saveCurrentGearLoadout() {
+        const name = (prompt('Đặt tên bộ trang bị (VD: Boss, Farm, Crit):', `Bộ ${Object.keys(SaveState.gearLoadouts || {}).length + 1}`) || '').trim();
+        if (!name) return;
+        const id = `loadout_${Date.now()}`;
+        const slots = {};
+        for (const slot of Object.keys(GEAR_SLOTS_META)) slots[slot] = SaveState.equippedGear?.[slot]?.uid || null;
+        SaveState.gearLoadouts = SaveState.gearLoadouts || {};
+        SaveState.gearLoadouts[id] = { id, name: name.slice(0, 32), slots, createdAt: Date.now() };
+        SaveState.save(); renderGearLoadoutManager();
+        showToast(`🧰 Đã lưu bộ trang bị “${name.slice(0,32)}”.`);
+      }
+      function applyGearLoadout(id) {
+        const preset = SaveState.gearLoadouts?.[id]; if (!preset) return;
+        const owned = getAllOwnedGearByUid();
+        const missing = Object.entries(preset.slots || {}).filter(([slot, uid]) => !uid || !owned.has(uid) || GEAR_TEMPLATES[owned.get(uid)?.templateId]?.slot !== slot);
+        if (missing.length) { showToast(`⚠️ Không thể áp dụng: thiếu ${missing.map(([s])=>GEAR_SLOTS_META[s]?.label || s).join(', ')}. Bộ lưu không tạo bản sao trang bị.`); return; }
+        if (!confirm(`Áp dụng bộ “${preset.name}”? Trang bị hiện tại sẽ được đổi vị trí, không mất món đồ.`)) return;
+        const wanted = new Set(Object.values(preset.slots));
+        const nextEquipped = {};
+        const nextBag = [...(SaveState.gearBag || [])];
+        // Return currently equipped items to the bag unless they are part of the selected build.
+        for (const [slot, item] of Object.entries(SaveState.equippedGear || {})) {
+          if (item && !wanted.has(item.uid)) nextBag.push(item);
+        }
+        // Pull selected items from either current equipment or the bag.
+        for (const slot of Object.keys(GEAR_SLOTS_META)) {
+          const uid = preset.slots[slot];
+          const already = Object.values(SaveState.equippedGear || {}).find(x => x?.uid === uid);
+          const picked = already || nextBag.find(x => x.uid === uid);
+          if (!picked) { showToast('⚠️ Không tìm thấy trang bị trong kho.'); return; }
+          nextEquipped[slot] = picked;
+        }
+        SaveState.gearBag = nextBag.filter(item => !wanted.has(item.uid));
+        SaveState.equippedGear = nextEquipped;
+        SaveState.save(); renderLobbyUI(); renderGearSetPanel(); renderGearLoadoutManager();
+        showToast(`⚔️ Đã áp dụng bộ “${preset.name}”.`);
+      }
+      function deleteGearLoadout(id) {
+        const preset = SaveState.gearLoadouts?.[id]; if (!preset) return;
+        if (!confirm(`Xóa bộ trang bị “${preset.name}”? Không ảnh hưởng đến trang bị trong túi.`)) return;
+        delete SaveState.gearLoadouts[id]; SaveState.save(); renderGearLoadoutManager();
+        showToast('Đã xóa bộ trang bị đã lưu.');
+      }
+      function renderGearLoadoutManager() {
+        const el = document.getElementById('gearWorkshopContent'); if (!el) return;
+        const entries = Object.values(SaveState.gearLoadouts || {}).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        const owned = getAllOwnedGearByUid();
+        el.innerHTML = `<div class="flex items-center justify-between gap-2"><div><div class="font-black text-fuchsia-300">🧰 Quản lý bộ trang bị</div><p class="text-[10px] text-slate-400">Lưu tối đa 12 cấu hình bằng ID trang bị thật, không nhân bản vật phẩm.</p></div><button id="btnSaveGearLoadout" class="rounded-lg bg-fuchsia-600 px-3 py-2 font-black text-white">＋ Lưu bộ hiện tại</button></div>
+          <div class="space-y-2 mt-3">${entries.map(p=>{const count=Object.values(p.slots||{}).filter(uid=>uid&&owned.has(uid)).length;const names=Object.entries(p.slots||{}).map(([slot,uid])=>{const item=owned.get(uid);return `${GEAR_SLOTS_META[slot]?.icon||'•'} ${item?GEAR_TEMPLATES[item.templateId]?.name||item.templateId:'Thiếu món'}`;}).join(' · ');return `<div class="rounded-xl border border-slate-700 bg-slate-950/70 p-3"><div class="flex items-center justify-between gap-2"><b class="text-white">${gearTextSafe(p.name||'Bộ trang bị')}</b><span class="text-[10px] ${count===6?'text-emerald-300':'text-amber-300'}">${count}/6 món còn tồn tại</span></div><p class="text-[10px] text-slate-400 mt-1">${gearTextSafe(names)}</p><div class="flex gap-2 mt-2"><button data-apply-loadout="${p.id}" class="flex-1 rounded-lg bg-emerald-600/90 py-2 font-bold">Áp dụng</button><button data-delete-loadout="${p.id}" class="rounded-lg bg-rose-600/80 px-3 py-2 font-bold">Xóa</button></div></div>`;}).join('') || '<p class="rounded-lg border border-dashed border-slate-700 p-4 text-center text-slate-400">Chưa có bộ trang bị nào. Hãy lưu cấu hình hiện tại để chuyển nhanh giữa build Boss, Farm hoặc Crit.</p>'}</div>`;
+        document.getElementById('btnSaveGearLoadout').onclick=()=>{if(entries.length>=12){showToast('⚠️ Đã đạt giới hạn 12 bộ. Hãy xóa một bộ cũ trước.');return;}saveCurrentGearLoadout();};
+        el.querySelectorAll('[data-apply-loadout]').forEach(b=>b.onclick=()=>applyGearLoadout(b.dataset.applyLoadout));
+        el.querySelectorAll('[data-delete-loadout]').forEach(b=>b.onclick=()=>deleteGearLoadout(b.dataset.deleteLoadout));
+      }
+
       function runAdvancedAutoBuild() {
         const current=SaveState.equippedGear||{}, bag=SaveState.gearBag||[]; let swaps=0;
         // Greedy score includes set-piece progress so near-complete sets are preferred when stats are close.
@@ -7599,6 +7679,49 @@
       document.getElementById('btnGemWorkshop').addEventListener('click',()=>openGearWorkshopTool('gems'));
       document.getElementById('btnBulkSalvage').addEventListener('click',()=>openGearWorkshopTool('salvage'));
       document.getElementById('btnAutoBuildAdvanced').addEventListener('click',runAdvancedAutoBuild);
+      document.getElementById('btnGearLoadouts').addEventListener('click',renderGearLoadoutManager);
+
+      // V3 Gear Evolution & Upgrade Planner — uses the existing live save state.
+      function renderGearEvolutionPlanner() {
+        const el = document.getElementById('gearWorkshopContent');
+        if (!el) return;
+        const equipped = Object.entries(SaveState.equippedGear || {}).filter(([, item]) => item);
+        const bag = (SaveState.gearBag || []).map(item => [item.uid, item]);
+        const all = [...equipped.map(([slot,item]) => ({item, label:`Đang mặc • ${GEAR_TEMPLATES[item.templateId]?.name || item.templateId}`})), ...bag.map(([,item]) => ({item,label:`Kho đồ • ${GEAR_TEMPLATES[item.templateId]?.name || item.templateId}`}))];
+        const opts = all.map(({item,label}) => `<option value="${item.uid}">${label} • ${formatQualityWithStars(item.quality,item.awakening||0,true)} • Lv.${item.level||1}</option>`).join('');
+        el.innerHTML = `<div class="gear-v3-panel rounded-2xl p-3 sm:p-4 space-y-3">
+          <div class="flex items-center justify-between gap-2"><div><div class="text-[10px] tracking-[.22em] font-black text-fuchsia-300">FORGE ASCENSION • V3</div><h3 class="text-lg font-black text-amber-100">✨ Tiến hóa trang bị</h3><p class="text-[10px] text-slate-400">Lập kế hoạch cường hóa dựa trên vàng hiện có, không tiêu tài nguyên khi xem trước.</p></div><div class="text-3xl animate-pulse">⚒️</div></div>
+          <div class="grid grid-cols-2 gap-2"><div class="rounded-xl bg-slate-950/70 border border-amber-400/20 p-3"><div class="text-[10px] text-slate-400">VÀNG HIỆN CÓ</div><div class="text-xl font-black text-amber-300">${(SaveState.gold||0).toLocaleString('vi-VN')} 🪙</div></div><div class="rounded-xl bg-slate-950/70 border border-fuchsia-400/20 p-3"><div class="text-[10px] text-slate-400">TRANG BỊ SỞ HỮU</div><div class="text-xl font-black text-fuchsia-200">${all.length} <span class="text-xs text-slate-400">món</span></div></div></div>
+          <label class="block text-[11px] font-bold text-slate-300">Chọn trang bị<select id="gearEvoItem" class="mt-1 w-full rounded-xl border border-slate-600 bg-slate-950 p-3 text-sm text-white">${opts || '<option value="">Chưa có trang bị</option>'}</select></label>
+          <div class="grid grid-cols-2 gap-2"><label class="text-[11px] font-bold text-slate-300">Cấp hiện tại<input id="gearEvoCurrent" readonly class="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 p-2 text-amber-200" value="—"></label><label class="text-[11px] font-bold text-slate-300">Cấp mục tiêu<input id="gearEvoTarget" type="number" min="1" max="100" value="20" class="mt-1 w-full rounded-xl border border-amber-400/40 bg-slate-950 p-2 text-white"></label></div>
+          <div id="gearEvoPreview" class="rounded-xl border border-slate-700 bg-slate-950/80 p-3 text-xs text-slate-300">Chọn trang bị để xem kế hoạch.</div>
+          <button id="btnGearEvoExecute" class="w-full rounded-xl border border-amber-200/50 bg-gradient-to-r from-amber-500 via-orange-500 to-fuchsia-600 py-3 text-sm font-black text-slate-950 shadow-[0_0_24px_rgba(245,158,11,.22)]">⚡ Thực hiện cường hóa</button>
+          <p class="text-[10px] text-slate-500">Công thức chi phí dùng cùng logic cường hóa hiện tại: 80 + cấp hiện tại × 45 vàng mỗi cấp. Không thay đổi phẩm chất hay ghép trang bị.</p>
+        </div>`;
+        const select = document.getElementById('gearEvoItem'), target = document.getElementById('gearEvoTarget');
+        const find = () => all.find(x => x.item.uid === select.value)?.item;
+        const calc = () => {
+          const item = find(); if (!item) return;
+          const current = Math.max(1, Number(item.level)||1), goal = Math.max(current, Math.min(100, Number(target.value)||current));
+          document.getElementById('gearEvoCurrent').value = `Lv.${current}`;
+          target.value = goal;
+          let cost = 0; for (let lv=current; lv<goal; lv++) cost += 80 + lv*45;
+          const pct = Math.min(100, Math.round(current/goal*100));
+          document.getElementById('gearEvoPreview').innerHTML = `<div class="flex justify-between mb-2"><b class="text-amber-200">${GEAR_TEMPLATES[item.templateId]?.name || item.templateId}</b><span class="text-fuchsia-200">${formatQualityWithStars(item.quality,item.awakening||0,true)}</span></div><div class="flex justify-between text-[11px]"><span>Lv.${current} → Lv.${goal}</span><b class="text-amber-300">${cost.toLocaleString('vi-VN')} 🪙</b></div><div class="gear-v3-progress mt-2"><i style="width:${pct}%"></i></div><div class="flex justify-between mt-2 text-[10px]"><span>Vàng còn lại sau nâng cấp</span><b class="${SaveState.gold>=cost?'text-emerald-300':'text-rose-300'}">${(SaveState.gold-cost).toLocaleString('vi-VN')} 🪙</b></div>${SaveState.gold<cost?'<p class="mt-2 text-rose-300 font-bold">⚠️ Không đủ vàng cho mục tiêu này.</p>':'<p class="mt-2 text-emerald-300">✓ Đủ vàng để thực hiện kế hoạch.</p>'}`;
+          document.getElementById('btnGearEvoExecute').disabled = SaveState.gold < cost || goal===current;
+          document.getElementById('btnGearEvoExecute').style.opacity = (SaveState.gold < cost || goal===current) ? '.45' : '1';
+        };
+        select.addEventListener('change',calc); target.addEventListener('input',calc); calc();
+        document.getElementById('btnGearEvoExecute').addEventListener('click',()=>{
+          const item=find(); if(!item)return;
+          const current=Math.max(1,Number(item.level)||1), goal=Math.max(current,Math.min(100,Number(target.value)||current));
+          let cost=0;for(let lv=current;lv<goal;lv++)cost+=80+lv*45;
+          if(goal===current||SaveState.gold<cost){showToast('⚠️ Không đủ vàng hoặc cấp mục tiêu không hợp lệ!');return;}
+          SaveState.gold-=cost;item.level=goal;SaveState.save();SoundFX.levelUp();StageHeroAnim.triggerPose();
+          renderLobbyUI();renderGearEvolutionPlanner();showToast(`✨ Tiến hóa hoàn tất! Trang bị đạt Lv.${goal}.`);
+        });
+      }
+      document.getElementById('btnGearEvolution')?.addEventListener('click',renderGearEvolutionPlanner);
 
       // Open & Close Blacksmith Modal
       document.getElementById('btnOpenBlacksmith').addEventListener('click', () => {
@@ -7675,6 +7798,8 @@
         getSetBonuses,
         getGemBonuses,
         runAdvancedAutoBuild,
+        renderGearLoadoutManager,
+        applyGearLoadout,
         renderLobbyUI
       };
 
