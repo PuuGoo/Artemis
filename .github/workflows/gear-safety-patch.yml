@@ -1,0 +1,22 @@
+name: One-time gear safety patch
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: contains(github.event.head_commit.message, 'Install one-time gear safety patch workflow')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply and commit guarded gear-system fixes
+        run: node scripts/patch-gear-safety-once.mjs
