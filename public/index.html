@@ -3465,8 +3465,13 @@
           SaveState.talents = {};
         }
         for (const t of TALENT_CARDS_DATA) {
-          if (typeof SaveState.talents[t.id] !== 'number' || SaveState.talents[t.id] > t.maxLv) {
-            SaveState.talents[t.id] = t.maxLv; // Default maxed 5★ (or 1★ for Glory & Tactics)
+          // Người chơi mới phải bắt đầu từ 0: talent chỉ tăng khi mở rương,
+          // rút thẻ hoặc sự kiện. Trước đây mặc định maxLv khiến tài khoản mới
+          // có ATK ~373k dù trang bị Lv.1 (bug full đồ).
+          if (typeof SaveState.talents[t.id] !== 'number' || SaveState.talents[t.id] < 0) {
+            SaveState.talents[t.id] = 0;
+          } else if (SaveState.talents[t.id] > t.maxLv) {
+            SaveState.talents[t.id] = t.maxLv;
           }
         }
         return SaveState.talents;
@@ -5649,11 +5654,13 @@
         }
       ];
 
+      // Người chơi mới bắt đầu với rune TRỐNG: rune phải kiếm qua chiến đấu/sự kiện.
+      // Danh sách cũ trang bị sẵn 12 rune, khiến ATK/Hp tăng vọt dù trang bị Lv.1.
       const DEFAULT_EQUIPPED_RUNE_SLOTS = {
-        etched:      ['echo_scythe', 'arrow_of_echoes', 'sword_strike_split'],
-        blessing:    ['rune_valkyrie', 'rabbits_foot'],
-        enhancement: ['sharp_arrow', 'dragonflight_sword', 'rune_flame', 'giant_meteor'],
-        ability:     ['arrow_rain', 'ring_of_agony', 'sword_of_time', 'star_of_fury']
+        etched:      [],
+        blessing:    [],
+        enhancement: [],
+        ability:     []
       };
 
       function getEquippedRuneSlots() {
@@ -6501,8 +6508,11 @@
       function getArtifactStarMap() {
         if (!SaveState.artifactStars || typeof SaveState.artifactStars !== 'object') {
           SaveState.artifactStars = {};
+          // Người chơi mới: 0 sao mọi artifact. Phải kiếm qua sự kiện/chiến đấu.
+          // Bản cũ tặng sẵn 15★ cho cả 46 artifact, đẩy ATK lên hàng trăm nghìn
+          // ngay từ trận đầu.
           for (const a of ARTIFACTS_DATA) {
-            SaveState.artifactStars[a.id] = 15; // Default maxed 15★ so player enjoys full power immediately!
+            SaveState.artifactStars[a.id] = 0;
           }
         }
         return SaveState.artifactStars;
@@ -6902,20 +6912,14 @@
                   this.runes = { rune_flame: 1, rune_frost: 1, rune_thunder: 1, rune_valkyrie: 1 };
                 }
                 if (!this.talents || typeof this.talents !== 'object') {
-                  this.talents = { might: 1, vitality: 1, alacrity: 1, healer: 1, greed: 0, valkyrie_favor: 0 };
+                  // 0 hết: talent kiếm được qua rương/rút thẻ/sự kiện.
+                  this.talents = {};
                 }
                 if (!this.bestRooms || typeof this.bestRooms !== 'object') {
-                  this.bestRooms = { 1: 15, 2: 12, 3: 10 };
-          this.heroStars = { artemis: 6, alex: 6, nyanja: 6, atreus: 6 };
-          this.heroShards = { artemis: 999, alex: 999, nyanja: 999, atreus: 999 };
-          this.heroSelectedSkins = { artemis: 2, alex: 2, nyanja: 2, atreus: 2 };
-          this.heroSkinIdx = 2;
-          this.unlockedSkins = {
-            artemis_default: true, artemis_celestial: true, artemis_seraphim: true,
-            alex_default: true, alex_paladin: true, alex_thunder: true,
-            nyanja_default: true, nyanja_kitsune: true, nyanja_tiger: true,
-            atreus_default: true, atreus_dragon: true, atreus_void: true
-          };
+                  // Người chơi mới: chưa mở chương nào, mọi thứ bắt đầu từ 0.
+                  // Trước đây khối này còn gán hero 6 sao + 999 mảnh + toàn bộ skin,
+                  // khiến tài khoản mới được "full đồ" ngay khi tạo.
+                  this.bestRooms = {};
                 }
                 if (parsed.maxedAllVersion !== 1) {
                   this.applyMaxAllSystems(false);
@@ -6926,39 +6930,39 @@
                   this.save();
                 }
                 if (parsed.wikiCharactersVersion !== 2) {
+                  // Chỉ nâng cấp cấu trúc dữ liệu, KHÔNG tặng sao/mảnh/skin.
+                  // Trước đây khối này gán 8 sao + 999 mảnh cho MỌI hero, nên
+                  // tài khoản mới lập tức có đủ 18 hero 8 sao.
                   this.wikiCharactersVersion = 2;
-                  if (!this.heroStars || typeof this.heroStars !== 'object') this.heroStars = {};
+                  if (!this.heroStars || typeof this.heroStars !== 'object') this.heroStars = { artemis: 1 };
                   if (!this.heroShards || typeof this.heroShards !== 'object') this.heroShards = {};
                   if (!this.heroSelectedSkins || typeof this.heroSelectedSkins !== 'object') this.heroSelectedSkins = {};
                   for (const h of HEROES) {
-                    this.heroStars[h.id] = 8;
-                    this.heroShards[h.id] = Math.max(this.heroShards[h.id] || 0, 999);
-                    this.heroSelectedSkins[h.id] = 2;
+                    if (typeof this.heroStars[h.id] !== 'number') this.heroStars[h.id] = 0;
+                    if (typeof this.heroShards[h.id] !== 'number') this.heroShards[h.id] = 0;
                   }
+                  this.heroStars.artemis = Math.max(this.heroStars.artemis || 0, 1);
                   if (!this.resonanceSlots || typeof this.resonanceSlots !== 'object') {
-                    this.resonanceSlots = { slot1: 'thor', slot2: 'wukong' };
+                    this.resonanceSlots = { slot1: null, slot2: null };
                   }
                   this.save();
                 }
                 if (!this.resonanceSlots || typeof this.resonanceSlots !== 'object') {
-                  this.resonanceSlots = { slot1: 'thor', slot2: 'wukong' };
+                  this.resonanceSlots = { slot1: null, slot2: null };
                 }
                 if (!this.heroStars || typeof this.heroStars !== 'object') {
-                  this.heroStars = { artemis: 6, alex: 5, nyanja: 5, atreus: 5 };
+                  // Người chơi mới chỉ có Artemis 1 sao; hero khác phải mở khoá.
+                  this.heroStars = { artemis: 1 };
                 }
                 if (!this.heroShards || typeof this.heroShards !== 'object') {
-                  this.heroShards = { artemis: 320, alex: 240, nyanja: 240, atreus: 240 };
+                  this.heroShards = {};
                 }
                 if (!this.heroSelectedSkins || typeof this.heroSelectedSkins !== 'object') {
-                  this.heroSelectedSkins = { artemis: 2, alex: 2, nyanja: 2, atreus: 2 };
+                  this.heroSelectedSkins = {};
                 }
                 if (!this.unlockedSkins || typeof this.unlockedSkins !== 'object') {
-                  this.unlockedSkins = {
-                    artemis_default: true, artemis_celestial: true, artemis_seraphim: true,
-                    alex_default: true, alex_paladin: true, alex_thunder: true,
-                    nyanja_default: true, nyanja_kitsune: true, nyanja_tiger: true,
-                    atreus_default: true, atreus_dragon: true, atreus_void: true
-                  };
+                  // Chỉ skin mặc định, skin khác phải mở bằng sự kiện/cửa hàng.
+                  this.unlockedSkins = { artemis_default: true };
                 }
                 // ---- Migration: hệ thống Thành Tựu (save cũ chưa có các trường này) ----
                 if (!this.lifetimeStats || typeof this.lifetimeStats !== 'object') {
@@ -7052,7 +7056,7 @@
               maxedAllVersion: this.maxedAllVersion || 1,
               artemisHeroVersion: this.artemisHeroVersion || 1,
               wikiCharactersVersion: this.wikiCharactersVersion || 2,
-              resonanceSlots: this.resonanceSlots || { slot1: 'thor', slot2: 'wukong' },
+              resonanceSlots: this.resonanceSlots || { slot1: null, slot2: null },
               gold: this.gold,
               gems: this.gems,
               stamina: this.stamina,
@@ -7918,7 +7922,7 @@
           SaveState.heroShards = {};
         }
         if (typeof SaveState.heroShards[heroId] !== 'number') {
-          SaveState.heroShards[heroId] = 999;
+          SaveState.heroShards[heroId] = 0;
         }
         return Math.max(0, Number(SaveState.heroShards[heroId]) || 0);
       }
@@ -8087,22 +8091,26 @@
       function getActiveResonanceHeroIds(mainHeroId = SaveState.selectedHeroId) {
         const star = getHeroStarLevel(mainHeroId);
         if (!SaveState.resonanceSlots || typeof SaveState.resonanceSlots !== 'object') {
-          SaveState.resonanceSlots = { slot1: 'thor', slot2: 'wukong' };
+          SaveState.resonanceSlots = { slot1: null, slot2: null };
         }
         const fallbackCandidates = ['thor', 'wukong', 'cleo', 'rolla', 'atreus', 'nezha', 'dracoola', 'otta'];
         let s1 = SaveState.resonanceSlots.slot1;
         let s2 = SaveState.resonanceSlots.slot2;
-        if (!s1 || s1 === mainHeroId || !HEROES.some(h => h.id === s1)) {
+        // Chỉ tự gán khi slot đã mở khoá (3★ / 6★). Với người chơi mới (1★),
+        // slot còn khoá nên không ghi gì vào save — tránh tặng hero miễn phí.
+        const slot1Open = star >= 3;
+        const slot2Open = star >= 6;
+        if (slot1Open && (!s1 || s1 === mainHeroId || !HEROES.some(h => h.id === s1))) {
           s1 = fallbackCandidates.find(id => id !== mainHeroId && id !== s2) || 'thor';
           SaveState.resonanceSlots.slot1 = s1;
         }
-        if (!s2 || s2 === mainHeroId || s2 === s1 || !HEROES.some(h => h.id === s2)) {
+        if (slot2Open && (!s2 || s2 === mainHeroId || s2 === s1 || !HEROES.some(h => h.id === s2))) {
           s2 = fallbackCandidates.find(id => id !== mainHeroId && id !== s1) || 'wukong';
           SaveState.resonanceSlots.slot2 = s2;
         }
         return {
-          slot1Unlocked: star >= 3,
-          slot2Unlocked: star >= 6,
+          slot1Unlocked: slot1Open,
+          slot2Unlocked: slot2Open,
           slot1Hero: HEROES.find(h => h.id === s1) || HEROES[0],
           slot2Hero: HEROES.find(h => h.id === s2) || HEROES[1]
         };
@@ -8114,7 +8122,7 @@
           showToast('⚠️ Không thể cộng hưởng trùng với Anh Hùng đang trực tiếp xuất chiến!');
           return;
         }
-        if (!SaveState.resonanceSlots) SaveState.resonanceSlots = { slot1: 'thor', slot2: 'wukong' };
+        if (!SaveState.resonanceSlots) SaveState.resonanceSlots = { slot1: null, slot2: null };
         if (slotNum === 1) {
           if (SaveState.resonanceSlots.slot2 === targetHeroId) {
             SaveState.resonanceSlots.slot2 = SaveState.resonanceSlots.slot1;
@@ -11832,54 +11840,43 @@
 
       function ensureWikiCurrencyAndItemsState() {
         if (!SaveState.gearScrolls || typeof SaveState.gearScrolls !== 'object') {
-          SaveState.gearScrolls = {
-            weapon: 999,
-            armor: 999,
-            helmet: 999,
-            ring: 999,
-            necklace: 999,
-            boots: 999
-          };
+          // Người chơi mới: 0 cuộn giấy, phải farm từ chiến đấu/sự kiện.
+          SaveState.gearScrolls = {};
+          for (const slotKey of Object.keys(WIKI_GEAR_SCROLLS_META)) {
+            SaveState.gearScrolls[slotKey] = 0;
+          }
         } else {
           for (const slotKey of Object.keys(WIKI_GEAR_SCROLLS_META)) {
             if (typeof SaveState.gearScrolls[slotKey] !== 'number') {
-              SaveState.gearScrolls[slotKey] = 999;
+              SaveState.gearScrolls[slotKey] = 0;
             }
           }
         }
 
         if (!SaveState.chestKeys || typeof SaveState.chestKeys !== 'object') {
+          // 0 chìa khóa: rương phải mở bằng chìa kiếm được trong game.
           SaveState.chestKeys = {
-            silver_chest_key: 150,
-            obsidian_chest_key: 120,
-            chromatic_chest_key: 99
+            silver_chest_key: 0,
+            obsidian_chest_key: 0,
+            chromatic_chest_key: 0
           };
         } else {
           for (const k of Object.keys(WIKI_CHEST_KEYS_META)) {
             if (typeof SaveState.chestKeys[k] !== 'number') {
-              SaveState.chestKeys[k] = 99;
+              SaveState.chestKeys[k] = 0;
             }
           }
         }
 
         if (typeof SaveState.wishTokens !== 'number') {
-          SaveState.wishTokens = 999;
+          SaveState.wishTokens = 0;
         }
 
         if (!SaveState.wikiOtherItems || typeof SaveState.wikiOtherItems !== 'object') {
-          SaveState.wikiOtherItems = {
-            shovel: 120,
-            promised_relic_shovel: 85,
-            gold_cave_ticket: 30,
-            seal_battle_ticket: 30,
-            arena_ticket: 45,
-            sky_tower_ticket: 40,
-            dice: 60,
-            guild_gold: 25000,
-            wish_token: SaveState.wishTokens,
-            balloon_ticket: 50,
-            enchantium: 250
-          };
+          // Người chơi mới: không có vé/vật phẩm sự kiện nào. Phải kiếm qua
+          // chiến đấu, sự kiện hoặc cửa hàng. Bản cũ tặng sẵn 120 xẻng, 85
+          // xẻng thánh tích, 30-50 vé mỗi loại... nên mở khoá toàn bộ nội dung.
+          SaveState.wikiOtherItems = {};
         } else {
           for (const it of WIKI_OTHER_ITEMS_META) {
             if (typeof SaveState.wikiOtherItems[it.id] !== 'number') {
