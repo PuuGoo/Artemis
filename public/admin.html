@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Artemis Admin — Quản Trị Hệ Thống</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #060911; --panel: #0f172a; --panel2: #131f38; --border: #253c78;
+    --text: #e2e8f0; --muted: #94a3b8; --gold: #fbbf24; --gold2: #f59e0b;
+    --green: #22c55e; --red: #ef4444; --blue: #38bdf8; --purple: #c084fc;
+  }
+  body {
+    font-family: Inter, -apple-system, "Segoe UI", system-ui, sans-serif;
+    background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg) 60%);
+    color: var(--text); min-height: 100vh; padding: 16px 16px 48px;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 20px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon { font-size: 30px; filter: drop-shadow(0 0 12px rgba(245,158,11,.6)); }
+  .brand h1 { font-size: 20px; font-weight: 900; letter-spacing: -.3px; }
+  .brand p { font-size: 11px; color: var(--gold); font-weight: 800; text-transform: uppercase; letter-spacing: 1.4px; }
+  .who { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+  .who b { color: var(--gold); }
+
+  /* ---------- Buttons ---------- */
+  button {
+    font-family: inherit; cursor: pointer; border: none; border-radius: 10px;
+    font-weight: 800; transition: filter .15s, transform .1s, background .15s;
+  }
+  button:active { transform: scale(.97); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .btn { padding: 9px 15px; font-size: 12.5px; background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #1c1917; }
+  .btn:hover:not(:disabled) { filter: brightness(1.1); }
+  .btn-ghost { padding: 9px 15px; font-size: 12.5px; background: #1e293b; color: var(--text); border: 1px solid #334155; }
+  .btn-ghost:hover:not(:disabled) { background: #273449; }
+  .btn-danger { background: #7f1d1d; color: #fecaca; border: 1px solid #b91c1c; }
+  .btn-danger:hover:not(:disabled) { background: #991b1b; }
+  .btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 8px; }
+
+  /* ---------- Cards ---------- */
+  .grid { display: grid; gap: 12px; }
+  .g4 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .card {
+    background: linear-gradient(165deg, rgba(15,23,42,.95), rgba(9,13,22,.98));
+    border: 1px solid var(--border); border-radius: 16px; padding: 16px;
+  }
+  .card-title { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+  .stat { display: flex; align-items: baseline; gap: 8px; }
+  .stat-val { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1.1; }
+  .stat-sub { font-size: 11px; color: var(--muted); font-weight: 700; margin-top: 4px; }
+  .stat-val.gold { color: var(--gold); }
+  .stat-val.green { color: var(--green); }
+  .stat-val.blue { color: var(--blue); }
+  .stat-val.purple { color: var(--purple); }
+
+  /* ---------- Table ---------- */
+  .table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 900px; }
+  thead { background: #0b1224; }
+  th {
+    text-align: left; padding: 11px 12px; font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: .8px; color: var(--muted); font-weight: 900; white-space: nowrap; cursor: pointer;
+    user-select: none;
+  }
+  th:hover { color: var(--gold); }
+  td { padding: 10px 12px; border-top: 1px solid #1a2540; vertical-align: middle; }
+  tbody tr:hover { background: rgba(37,60,120,.18); }
+  .mono { font-variant-numeric: tabular-nums; font-weight: 700; }
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 6px; font-size: 10px; font-weight: 900; }
+  .tag-ok { background: rgba(34,197,94,.18); color: #86efac; border: 1px solid rgba(34,197,94,.4); }
+  .tag-none { background: rgba(148,163,184,.15); color: #cbd5e1; border: 1px solid rgba(148,163,184,.35); }
+  .row-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  /* ---------- Inputs ---------- */
+  input[type=text], input[type=number], input[type=password], select {
+    font-family: inherit; background: #020617; border: 1.5px solid #334155; border-radius: 10px;
+    padding: 9px 12px; color: var(--text); font-size: 13px; font-weight: 600; outline: none;
+    transition: border-color .15s;
+  }
+  input:focus, select:focus { border-color: var(--gold); }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .toolbar input[type=text] { flex: 1; min-width: 200px; }
+
+  /* ---------- Modal ---------- */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(2,6,23,.85); backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100;
+  }
+  .overlay.show { display: flex; }
+  .modal {
+    background: linear-gradient(165deg, #131f38, #0a1020); border: 2px solid var(--border);
+    border-radius: 18px; padding: 20px; width: 100%; max-width: 460px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,.8);
+  }
+  .modal h2 { font-size: 16px; margin-bottom: 4px; }
+  .modal .sub { font-size: 11.5px; color: var(--muted); margin-bottom: 16px; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 11px; font-weight: 900; color: #cbd5e1; margin-bottom: 5px; letter-spacing: .4px; }
+  .field input, .field select { width: 100%; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+  .modal-actions button { flex: 1; }
+
+  /* ---------- Toast ---------- */
+  #toastRoot { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; align-items: center; z-index: 200; pointer-events: none; }
+  .toast { padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 800; color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.5); opacity: 0; transform: translateY(8px); transition: opacity .2s, transform .2s; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast-ok { background: #16a34a; } .toast-err { background: #dc2626; } .toast-info { background: #2563eb; }
+
+  /* ---------- Login gate ---------- */
+  #gate { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 0%, #1e1b4b, #060911 70%); z-index: 150; padding: 16px; }
+  #gate .box { width: 100%; max-width: 380px; text-align: center; }
+  #gate h1 { font-size: 22px; margin-bottom: 6px; }
+  #gate p { font-size: 12.5px; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
+  #gate .field { text-align: left; }
+  .err { background: rgba(220,38,38,.16); border: 1.5px solid rgba(248,113,113,.5); color: #fca5a5; font-size: 12px; font-weight: 700; padding: 9px 12px; border-radius: 10px; display: none; text-align: left; margin-bottom: 12px; }
+  .hidden { display: none !important; }
+  .pager { display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 14px; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN GATE ============ -->
+<div id="gate">
+  <div class="box card">
+    <div style="font-size:44px;margin-bottom:8px;filter:drop-shadow(0 0 14px rgba(245,158,11,.6))">🐴</div>
+    <h1>Artemis Admin</h1>
+    <p>Đăng nhập bằng tài khoản game có quyền quản trị<br>(thêm tên vào biến môi trường <code>ADMIN_USERNAMES</code>)</p>
+    <div class="err" id="gateErr"></div>
+    <div class="field"><label>TÊN ĐĂNG NHẬP</label><input type="text" id="gateUser" autocomplete="username" placeholder="username" /></div>
+    <div class="field"><label>MẬT KHẨU</label><input type="password" id="gatePass" autocomplete="current-password" placeholder="••••••••" /></div>
+    <button class="btn" style="width:100%;padding:12px" id="gateBtn">Đăng Nhập</button>
+  </div>
+</div>
+
+<!-- ============ MAIN ============ -->
+<div class="wrap hidden" id="main">
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🐴</div>
+      <div>
+        <h1>Artemis Admin</h1>
+        <p>Quản Trị Hệ Thống</p>
+      </div>
+    </div>
+    <div class="who">
+      <span>Xin chào, <b id="whoName">—</b></span>
+      <button class="btn-ghost btn-sm" id="btnRefresh">↻ Làm mới</button>
+      <button class="btn-danger btn-sm" id="btnLogout">Đăng xuất</button>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="grid g4" id="statsGrid" style="margin-bottom:16px"></div>
+
+  <!-- Top players -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">🏆 Top 5 người chơi theo số quái hạ gục</div>
+    <div id="topList" style="display:flex;flex-direction:column;gap:7px;font-size:13px"></div>
+  </div>
+
+  <!-- Players table -->
+  <div class="card">
+    <div class="card-title">👥 Quản lý người chơi</div>
+    <div class="toolbar">
+      <input type="text" id="searchBox" placeholder="Tìm theo tên đăng nhập…" />
+      <select id="sortSel">
+        <option value="recent">Mới nhất</option>
+        <option value="kills">Nhiều kills</option>
+        <option value="gold">Nhiều vàng</option>
+      </select>
+      <button class="btn-ghost btn-sm" id="btnSearch">Tìm</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tên đăng nhập</th>
+            <th>Vàng</th>
+            <th>Đá quý</th>
+            <th>Kills</th>
+            <th>Trận</th>
+            <th>Túi đồ</th>
+            <th>Lưu cuối</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="pager">
+      <button class="btn-ghost btn-sm" id="btnPrev">◀</button>
+      <span id="pageInfo">Trang 1</span>
+      <button class="btn-ghost btn-sm" id="btnNext">▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 id="modalTitle">—</h2>
+    <div class="sub" id="modalSub"></div>
+    <div id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="modalCancel">Huỷ</button>
+      <button class="btn" id="modalOk">Xác nhận</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastRoot"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var state = { page: 1, pages: 1, q: "", sort: "recent", rows: [], me: null };
+
+  // ---------- helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function num(n) { return Number(n || 0).toLocaleString("vi-VN"); }
+  function fmtDate(d) {
+    if (!d) return "—";
+    var t = new Date(d);
+    if (isNaN(t.getTime())) return "—";
+    return t.toLocaleString("vi-VN", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  }
+  function toast(msg, kind) {
+    var n = document.createElement("div");
+    n.className = "toast toast-" + (kind || "info");
+    n.textContent = msg;
+    $("toastRoot").appendChild(n);
+    requestAnimationFrame(function () { n.classList.add("show"); });
+    setTimeout(function () {
+      n.classList.remove("show");
+      setTimeout(function () { n.remove(); }, 250);
+    }, 3000);
+  }
+  function api(path, opts) {
+    opts = opts || {};
+    return fetch(path, {
+      method: opts.method || "GET",
+      headers: Object.assign({ "content-type": "application/json" }, opts.headers || {}),
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+      credentials: "same-origin",
+      cache: "no-store",
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (d) {
+        return { status: r.status, data: d };
+      });
+    });
+  }
+
+  // ---------- login ----------
+  function showGate(err) {
+    $("gate").classList.remove("hidden");
+    $("main").classList.add("hidden");
+    if (err) { $("gateErr").textContent = err; $("gateErr").style.display = "block"; }
+    else { $("gateErr").style.display = "none"; }
+  }
+
+  function doLogin() {
+    var u = $("gateUser").value.trim();
+    var p = $("gatePass").value;
+    if (!u || !p) { showGate("Nhập đủ tên đăng nhập và mật khẩu."); return; }
+    $("gateBtn").disabled = true;
+    $("gateBtn").textContent = "Đang đăng nhập…";
+    api("/api/auth/login", { method: "POST", body: { username: u, password: p } })
+      .then(function (r) {
+        if (!r.data || !r.data.ok) { showGate((r.data && r.data.error) || "Đăng nhập thất bại."); return; }
+        state.me = (r.data.player && r.data.player.username) || u;
+        return boot().then(function () { $("whoName").textContent = state.me; });
+      })
+      .catch(function () { showGate("Lỗi mạng. Thử lại."); })
+      .finally(function () {
+        $("gateBtn").disabled = false;
+        $("gateBtn").textContent = "Đăng Nhập";
+      });
+  }
+
+  $("gateBtn").addEventListener("click", doLogin);
+  $("gatePass").addEventListener("keydown", function (e) { if (e.key === "Enter") doLogin(); });
+
+  // ---------- boot ----------
+  function boot() {
+    return api("/api/admin/stats").then(function (r) {
+      if (r.status === 401 || r.status === 403) {
+        showGate(r.data && r.data.error ? r.data.error : "Tài khoản không có quyền quản trị.");
+        return;
+      }
+      if (!r.data || !r.data.ok) { showGate("Không tải được dữ liệu quản trị."); return; }
+      $("gate").classList.add("hidden");
+      $("main").classList.remove("hidden");
+      renderStats(r.data);
+      return loadPlayers();
+    });
+  }
+
+  // ---------- stats ----------
+  function renderStats(d) {
+    var cards = [
+      { t: "Tổng người chơi", v: num(d.players.total), s: "+" + num(d.players.newToday) + " hôm nay", c: "" },
+      { t: "Hoạt động 24h", v: num(d.players.activeToday), s: "+" + num(d.players.newWeek) + " trong 7 ngày", c: "green" },
+      { t: "Tổng vàng", v: num(d.economy.totalGold), s: "TB " + num(d.economy.avgGold) + " / người", c: "gold" },
+      { t: "Tổng đá quý", v: num(d.economy.totalGems), s: num(d.saves.total) + " bản lưu", c: "blue" },
+      { t: "Quái đã hạ", v: num(d.gameplay.totalKills), s: num(d.gameplay.totalRuns) + " trận đã chơi", c: "purple" },
+    ];
+    $("statsGrid").innerHTML = cards.map(function (c) {
+      return '<div class="card"><div class="card-title">' + esc(c.t) + '</div>' +
+        '<div class="stat"><span class="stat-val ' + c.c + '">' + esc(c.v) + '</span></div>' +
+        '<div class="stat-sub">' + esc(c.s) + '</div></div>';
+    }).join("");
+
+    var top = d.topPlayers || [];
+    $("topList").innerHTML = top.length === 0
+      ? '<div style="color:var(--muted);font-size:12px">Chưa có người chơi nào.</div>'
+      : top.map(function (p, i) {
+          var medal = ["🥇", "🥈", "🥉", "4.", "5."][i] || (i + 1) + ".";
+          return '<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:#0b1224;border-radius:10px">' +
+            '<span style="width:26px;font-weight:900;color:var(--gold)">' + medal + "</span>" +
+            '<b style="flex:1">' + esc(p.username || "?") + "</b>" +
+            '<span class="mono" style="color:var(--red)">' + num(p.kills) + " kills</span>" +
+            '<span class="mono" style="color:var(--muted)">' + num(p.runs) + " trận</span>" +
+            '<span class="mono" style="color:var(--gold)">' + num(p.gold) + " 🪙</span></div>";
+        }).join("");
+  }
+
+  // ---------- players ----------
+  function loadPlayers() {
+    $("tbody").innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Đang tải…</td></tr>';
+    var qs = "?page=" + state.page + "&sort=" + encodeURIComponent(state.sort) + (state.q ? "&q=" + encodeURIComponent(state.q) : "");
+    return api("/api/admin/players" + qs).then(function (r) {
+      if (!r.data || !r.data.ok) {
+        $("tbody").innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--red);padding:24px">' +
+          esc((r.data && r.data.error) || "Không tải được danh sách.") + "</td></tr>";
+        return;
+      }
+      state.rows = r.data.rows;
+      state.pages = r.data.pages;
+      $("pageInfo").textContent = "Trang " + r.data.page + " / " + r.data.pages + " • " + num(r.data.total) + " người chơi";
+      renderRows();
+    });
+  }
+
+  function renderRows() {
+    if (state.rows.length === 0) {
+      $("tbody").innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Không có người chơi nào.</td></tr>';
+      return;
+    }
+    $("tbody").innerHTML = state.rows.map(function (p) {
+      return "<tr>" +
+        '<td><b>' + esc(p.username) + "</b><br>" +
+          '<span style="font-size:10px;color:var(--muted)">' + fmtDate(p.createdAt) + "</span></td>" +
+        '<td class="mono" style="color:var(--gold)">' + num(p.gold) + "</td>" +
+        '<td class="mono" style="color:var(--blue)">' + num(p.gems) + "</td>" +
+        '<td class="mono">' + num(p.kills) + "</td>" +
+        '<td class="mono">' + num(p.runs) + "</td>" +
+        '<td class="mono">' + num(p.bagCount) + "</td>" +
+        "<td>" + (p.hasSave
+          ? '<span class="tag tag-ok">rev ' + p.revision + "</span>"
+          : '<span class="tag tag-none">chưa có</span>') + "</td>" +
+        '<td><div class="row-actions">' +
+          '<button class="btn btn-sm" data-act="grant" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Cộng</button>' +
+          '<button class="btn-ghost btn-sm" data-act="passwd" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Đổi MK</button>' +
+          '<button class="btn-ghost btn-sm" data-act="resetsave" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Xoá save</button>' +
+          '<button class="btn-danger btn-sm" data-act="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Xoá TK</button>' +
+        "</div></td></tr>";
+    }).join("");
+  }
+
+  $("tbody").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-act]");
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    var id = b.getAttribute("data-id");
+    var name = b.getAttribute("data-name");
+    if (act === "grant") openGrant(id, name);
+    else if (act === "passwd") openPasswd(id, name);
+    else if (act === "resetsave") openConfirm(id, name, "reset-save",
+      "Xoá tiến trình của " + name + "?",
+      "Người chơi sẽ mất toàn bộ trang bị, vàng, đá quý và thành tựu. Không thể hoàn tác.");
+    else if (act === "delete") openConfirm(id, name, "delete-player",
+      "Xoá tài khoản " + name + "?",
+      "Toàn bộ tài khoản và tiến trình sẽ bị xoá vĩnh viễn. Không thể hoàn tác.");
+  });
+
+  // ---------- modal ----------
+  var pending = null;
+
+  function openModal(title, sub, bodyHtml, onOk) {
+    $("modalTitle").textContent = title;
+    $("modalSub").textContent = sub || "";
+    $("modalBody").innerHTML = bodyHtml || "";
+    pending = onOk;
+    $("overlay").classList.add("show");
+  }
+  function closeModal() {
+    $("overlay").classList.remove("show");
+    pending = null;
+  }
+  $("modalCancel").addEventListener("click", closeModal);
+  $("overlay").addEventListener("click", function (e) { if (e.target === $("overlay")) closeModal(); });
+  $("modalOk").addEventListener("click", function () {
+    if (typeof pending === "function") pending();
+  });
+
+  function openGrant(id, name) {
+    openModal("Cộng tài nguyên", "Cộng thêm cho " + name,
+      '<div class="field"><label>VÀNG 🪙</label><input type="number" id="gGold" value="10000" min="0" /></div>' +
+      '<div class="field"><label>ĐÁ QUÝ 💎</label><input type="number" id="gGems" value="500" min="0" /></div>' +
+      '<div class="field"><label>NĂNG LƯỢNG ⚡</label><input type="number" id="gStam" value="0" min="0" /></div>',
+      function () {
+        var payload = {
+          gold: Number($("gGold").value) || 0,
+          gems: Number($("gGems").value) || 0,
+          stamina: Number($("gStam").value) || 0,
+        };
+        act(id, "grant", payload, "Đã cộng tài nguyên cho " + name + ".");
+      });
+  }
+
+  function openPasswd(id, name) {
+    openModal("Đặt lại mật khẩu", "Cho tài khoản " + name,
+      '<div class="field"><label>MẬT KHẨU MỚI (≥ 8 ký tự)</label><input type="password" id="pNew" placeholder="••••••••" /></div>',
+      function () {
+        var pw = $("pNew").value;
+        if (pw.length < 8) { toast("Mật khẩu phải có ít nhất 8 ký tự.", "err"); return; }
+        act(id, "reset-password", { password: pw }, "Đã đặt lại mật khẩu cho " + name + ".");
+      });
+  }
+
+  function openConfirm(id, name, action, title, sub) {
+    openModal(title, sub, "", function () {
+      act(id, action, {}, null, true);
+    });
+  }
+
+  function act(id, action, payload, successMsg, reloadAlways) {
+    $("modalOk").disabled = true;
+    api("/api/admin/players", { method: "PATCH", body: { playerId: id, action: action, payload: payload } })
+      .then(function (r) {
+        if (r.data && r.data.ok) {
+          toast(successMsg || r.data.message || "Thành công.", "ok");
+          closeModal();
+          return loadPlayers().then(refreshStats);
+        }
+        toast((r.data && r.data.error) || "Thao tác thất bại.", "err");
+      })
+      .catch(function () { toast("Lỗi mạng.", "err"); })
+      .finally(function () { $("modalOk").disabled = false; });
+  }
+
+  function refreshStats() {
+    return api("/api/admin/stats").then(function (r) {
+      if (r.data && r.data.ok) renderStats(r.data);
+    });
+  }
+
+  // ---------- toolbar ----------
+  $("btnSearch").addEventListener("click", function () {
+    state.q = $("searchBox").value.trim();
+    state.page = 1;
+    loadPlayers();
+  });
+  $("searchBox").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") $("btnSearch").click();
+  });
+  $("sortSel").addEventListener("change", function () {
+    state.sort = $("sortSel").value;
+    state.page = 1;
+    loadPlayers();
+  });
+  $("btnPrev").addEventListener("click", function () {
+    if (state.page > 1) { state.page--; loadPlayers(); }
+  });
+  $("btnNext").addEventListener("click", function () {
+    if (state.page < state.pages) { state.page++; loadPlayers(); }
+  });
+  $("btnRefresh").addEventListener("click", function () { loadPlayers().then(refreshStats); });
+  $("btnLogout").addEventListener("click", function () {
+    api("/api/auth/logout", { method: "POST" }).then(function () { location.reload(); });
+  });
+
+  // ---------- start ----------
+  api("/api/auth/me").then(function (r) {
+    if (r.data && r.data.ok && r.data.authenticated) {
+      var nm = (r.data.player && r.data.player.username) || "admin";
+      state.me = nm;
+      // boot() sẽ gán #whoName sau khi mở khung chính (phần tử phải hiển thị trước).
+      boot().then(function () { $("whoName").textContent = nm; });
+    } else {
+      showGate();
+    }
+  }).catch(function () { showGate("Không kết nối được máy chủ."); });
+})();
+</script>
+</body>
+</html>

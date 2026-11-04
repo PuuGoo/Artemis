@@ -149,10 +149,30 @@ const dirty = sanitizeSave({
   unlockedSkins: { a: "yes", b: false, c: true },
   __proto__: { hacked: true },
 });
-check("chestKeys loai gia tri khong phai so", dirty.data?.chestKeys?.silver_chest_key === undefined);
-check("chestKeys giu gia tri so hop le", dirty.data?.chestKeys?.obsidian_chest_key === 50);
+// sanitizeMixedRecord giu nguyen kieu goc (string duoc phep) de khong lam mat
+// du lieu long nhau nhu lastPullResults / gridRevealed. So van duoc giu dung.
+check("chestKeys giu gia tri so hop le", dirty.data?.chestKeys?.obsidian_chest_key === 50,
+  JSON.stringify(dirty.data?.chestKeys));
+check("chestKeys khong lam mat key", dirty.data?.chestKeys && "silver_chest_key" in dirty.data.chestKeys);
 check("unlockedSkins chi giu true", Object.keys(dirty.data?.unlockedSkins || {}).length === 1);
 check("khong bi prototype pollution", !({}).hacked);
+
+// Kiem tra long nhau: array phai duoc giu nguyen (loi lam shop/event trang)
+const nested = sanitizeSave({
+  chestGachaState: { epicPity: 3, sTierPity: 1, lastPullResults: [{ id: "a" }, { id: "b" }] },
+  runeRuinsState: { foundSturdyIcons: 2, gridRewards: 5, gridRevealed: [1, 0, 1, 1] },
+});
+check("lastPullResults giu ARRAY (khong thanh 0)",
+  Array.isArray(nested.data?.chestGachaState?.lastPullResults),
+  typeof nested.data?.chestGachaState?.lastPullResults);
+check("lastPullResults giu du 2 phan tu",
+  nested.data?.chestGachaState?.lastPullResults?.length === 2);
+check("gridRevealed giu ARRAY (khong undefined)",
+  Array.isArray(nested.data?.runeRuinsState?.gridRevealed),
+  typeof nested.data?.runeRuinsState?.gridRevealed);
+check("gridRevealed giu du 4 phan tu",
+  nested.data?.runeRuinsState?.gridRevealed?.length === 4);
+check("epicPity van la number", nested.data?.chestGachaState?.epicPity === 3);
 
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);
 process.exit(fail > 0 ? 1 : 0);

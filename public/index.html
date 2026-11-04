@@ -4416,6 +4416,92 @@
       };
 
       const GEAR_TEMPLATES = {
+        // ==================== 0. BỘ KHỞI ĐẦU (NORMAL Lv.1) — trang bị đầu tiên của người chơi mới ====================
+        rusty_bow: {
+          id: 'rusty_bow', slot: 'weapon', weaponArchetype: 'bow', isSTier: false, wikiSet: 'Starter Gear', archetypeLabel: '🏹 Khởi Đầu',
+          name: 'Cung Gỉ Sét (Rusty Bow)',
+          baseStat: 12, perLv: 3,
+          desc: 'Cây cung cũ kỹ nhặt được ở cửa hầm ngục. Yếu ớt nhưng là khởi đầu của mọi huyền thoại.',
+          wikiTiers: {
+            fine: 'ATK PWR +5%',
+            rare: 'CRIT Rate +3%',
+            epic: '+1 mũi tên mỗi loạt bắn',
+            legendary: 'ATK PWR +10%',
+            mythic: 'Bắn xuyên 1 mục tiêu',
+            chaotic: 'Mũi tên phát nổ khi trúng đích'
+          }
+        },
+        wooden_charm: {
+          id: 'wooden_charm', slot: 'necklace', isSTier: false, wikiSet: 'Starter Gear', archetypeLabel: '🌿 Khởi Đầu',
+          name: 'Bùa Gỗ (Wooden Charm)',
+          baseStat: 8, perLv: 2,
+          desc: 'Mảnh bùa gỗ khắc hình mặt trăng, do thợ săn già trong làng tặng trước khi vào hầm ngục.',
+          wikiTiers: {
+            fine: 'ATK PWR +5%',
+            rare: 'CRIT DMG +12%',
+            epic: 'Hồi 1% HP mỗi khi hạ gục kẻ địch',
+            legendary: 'ATK PWR +10%',
+            mythic: 'Hồi 3% HP mỗi khi hạ gục kẻ địch',
+            chaotic: 'Hồi máu bằng 5% sát thương gây ra'
+          }
+        },
+        copper_ring: {
+          id: 'copper_ring', slot: 'ring', isSTier: false, wikiSet: 'Starter Gear', archetypeLabel: '💍 Khởi Đầu',
+          name: 'Nhẫn Đồng (Copper Ring)',
+          baseStat: 7, perLv: 2,
+          desc: 'Chiếc nhẫn đồng xỉn màu, đeo vào vẫn thấy ấm tay lạ thường.',
+          wikiTiers: {
+            fine: 'ATK PWR +5%',
+            rare: 'CRIT Rate +2%',
+            epic: 'Gold nhận được +10%',
+            legendary: 'ATK PWR +10%',
+            mythic: 'Gold nhận được +25%',
+            chaotic: 'Gold nhận được +50%'
+          }
+        },
+        cloth_vest: {
+          id: 'cloth_vest', slot: 'armor', isSTier: false, wikiSet: 'Starter Gear', archetypeLabel: '🧵 Khởi Đầu',
+          name: 'Áo Vải (Cloth Vest)',
+          baseStat: 26, perLv: 7,
+          desc: 'Áo vải thô vá chằng chịt. Chỉ che được gió lạnh, không che được vuốt quái.',
+          wikiTiers: {
+            fine: 'Max HP +5%',
+            rare: 'Giảm 5% sát thương nhận vào',
+            epic: 'Max HP +10%',
+            legendary: 'Max HP +15%',
+            mythic: 'Giảm 12% sát thương nhận vào',
+            chaotic: 'Hồi 1% HP mỗi 3 giây'
+          }
+        },
+        leather_cap: {
+          id: 'leather_cap', slot: 'helmet', isSTier: false, wikiSet: 'Starter Gear', archetypeLabel: '🎩 Khởi Đầu',
+          name: 'Mũ Da (Leather Cap)',
+          baseStat: 18, perLv: 5,
+          desc: 'Mũ da mềm, thủng một lỗ do mũi tên lạc. Vẫn đội được.',
+          wikiTiers: {
+            fine: 'Max HP +5%',
+            rare: 'Dodge +3%',
+            epic: 'Max HP +10%',
+            legendary: 'Max HP +15%',
+            mythic: 'Dodge +8%',
+            chaotic: 'Miễn nhiễm hiệu ứng làm chậm'
+          }
+        },
+        worn_boots: {
+          id: 'worn_boots', slot: 'boots', isSTier: false, wikiSet: 'Starter Gear', archetypeLabel: '👢 Khởi Đầu',
+          name: 'Giày Mòn (Worn Boots)',
+          baseStat: 14, perLv: 4,
+          desc: 'Đôi giày đã đi qua ba hầm ngục. Đế mòn nhưng vẫn bám đường.',
+          wikiTiers: {
+            fine: 'Max HP +5%',
+            rare: 'Tốc chạy +4%',
+            epic: 'Max HP +10%',
+            legendary: 'Max HP +15%',
+            mythic: 'Tốc chạy +10%',
+            chaotic: 'Lướt một đoạn ngắn khi bị đánh trúng'
+          }
+        },
+
         // ==================== 1. DRAGON KNIGHT SET (BỘ KỴ SĨ RỒNG • S-TIER EXPLOSION / BLAST BUILD) ====================
         crimson_bow: {
           id: 'crimson_bow', slot: 'weapon', weaponArchetype: 'bow', isSTier: true, wikiSet: 'Dragon Knight Set', archetypeLabel: '💥 Nổ Diện Rộng (Explosion)',
@@ -6621,129 +6707,86 @@
         };
       }
 
-      // Build initial equipped items (Full 6/6 Phoenix Set at Mythic Lv.100 + 4 Gems + 3 SS Affixes)
+      /** Người chơi mới: trang bị Thường (Normal) Lv.1, chưa có đá quý / dòng phụ. */
+      function makeStarterItem(uid, templateId) {
+        return {
+          uid,
+          templateId,
+          quality: 'common',
+          awakening: 0,
+          level: 1,
+          locked: false,
+          favorite: false,
+          sockets: [],
+          affixes: []
+        };
+      }
+
+      // Build initial equipped items: bộ khởi đầu Normal Lv.1 (người chơi phải cày để lên cấp)
       function createDefaultEquipped() {
         return {
-          weapon:   makeMaxMythicItem('eq_w1', 'crimson_bow',      true),
-          necklace: makeMaxMythicItem('eq_n1', 'sapphire_pendant', true),
-          ring:     makeMaxMythicItem('eq_r1', 'sun_gold_ring',    true),
-          armor:    makeMaxMythicItem('eq_a1', 'golden_plate',     true),
-          helmet:   makeMaxMythicItem('eq_h1', 'golden_helm',      true),
-          boots:    makeMaxMythicItem('eq_b1', 'titan_boots',      true)
+          weapon:   makeStarterItem('eq_w1', 'rusty_bow'),
+          necklace: makeStarterItem('eq_n1', 'wooden_charm'),
+          ring:     makeStarterItem('eq_r1', 'copper_ring'),
+          armor:    makeStarterItem('eq_a1', 'cloth_vest'),
+          helmet:   makeStarterItem('eq_h1', 'leather_cap'),
+          boots:    makeStarterItem('eq_b1', 'worn_boots')
         };
       }
 
       function createDefaultBag() {
-        return [
-          // Full 6/6 Shadow Set (Bộ Ảnh Nguyệt) at Mythic Lv.100 + 4 Gems + 3 SS Affixes
-          makeMaxMythicItem('set_shadow_w', 'dragoon_claw',     true),
-          makeMaxMythicItem('set_shadow_n', 'celestial_amulet', true),
-          makeMaxMythicItem('set_shadow_r', 'jade_flower_ring', true),
-          makeMaxMythicItem('set_shadow_a', 'shadow_tunic',     true),
-          makeMaxMythicItem('set_shadow_h', 'phantom_mask',     true),
-          makeMaxMythicItem('set_shadow_b', 'aqua_boots',       true),
-          // Full 6/6 Celestial Set (Bộ Tinh Vân) at Mythic Lv.100 + 4 Gems + 3 SS Affixes
-          makeMaxMythicItem('set_celestial_w', 'oracle_staff',        true),
-          makeMaxMythicItem('set_celestial_n', 'void_prism_necklace', true),
-          makeMaxMythicItem('set_celestial_r', 'starlight_ring',      true),
-          makeMaxMythicItem('set_celestial_a', 'wind_vest',           true),
-          makeMaxMythicItem('set_celestial_h', 'astral_crown',        true),
-          makeMaxMythicItem('set_celestial_b', 'starlight_greaves',   true),
-          // Ready-to-merge Legendary ★3, Epic ★2, Rare, Uncommon & Common fodder for Blacksmith & Salvage testing
-          { uid: 'bag_leg3_a', templateId: 'crimson_bow',      quality: 'legendary', awakening: 3, level: 50, locked: false, favorite: false },
-          { uid: 'bag_leg3_b', templateId: 'crimson_bow',      quality: 'legendary', awakening: 3, level: 50, locked: false, favorite: false },
-          { uid: 'bag_epic2_a', templateId: 'oracle_staff',    quality: 'epic',      awakening: 2, level: 30, locked: false, favorite: false },
-          { uid: 'bag_epic2_b', templateId: 'oracle_staff',    quality: 'epic',      awakening: 2, level: 30, locked: false, favorite: false },
-          { uid: 'bag_1',  templateId: 'starlight_ring',   quality: 'rare',      awakening: 0, level: 10, locked: false, favorite: false },
-          { uid: 'bag_2',  templateId: 'crimson_bow',      quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_3',  templateId: 'dragoon_claw',     quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_4',  templateId: 'golden_plate',     quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_5',  templateId: 'jade_flower_ring', quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_6',  templateId: 'sun_gold_ring',    quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_7',  templateId: 'sun_gold_ring',    quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_8',  templateId: 'phantom_mask',     quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_9',  templateId: 'phantom_mask',     quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_10', templateId: 'golden_helm',      quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_11', templateId: 'sapphire_pendant', quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_12', templateId: 'aqua_boots',       quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_13', templateId: 'titan_boots',      quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_14', templateId: 'crimson_bow',      quality: 'common',    awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_15', templateId: 'crimson_bow',      quality: 'common',    awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_21', templateId: 'sun_gold_ring',    quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_22', templateId: 'phantom_mask',     quality: 'uncommon',  awakening: 0, level: 1, locked: false, favorite: false },
-          { uid: 'bag_23', templateId: 'crimson_bow',      quality: 'common',    awakening: 0, level: 1, locked: false, favorite: false }
-        ];
+        // Túi đồ trống: mọi trang bị đều phải kiếm từ chiến đấu, rương và sự kiện.
+        return [];
       }
 
       function createDefaultPresets() {
         return {
           1: { weapon: 'eq_w1', necklace: 'eq_n1', ring: 'eq_r1', armor: 'eq_a1', helmet: 'eq_h1', boots: 'eq_b1' },
-          2: { weapon: 'set_shadow_w', necklace: 'set_shadow_n', ring: 'set_shadow_r', armor: 'set_shadow_a', helmet: 'set_shadow_h', boots: 'set_shadow_b' },
-          3: { weapon: 'set_celestial_w', necklace: 'set_celestial_n', ring: 'set_celestial_r', armor: 'set_celestial_a', helmet: 'set_celestial_h', boots: 'set_celestial_b' }
+          2: { weapon: null, necklace: null, ring: null, armor: null, helmet: null, boots: null },
+          3: { weapon: null, necklace: null, ring: null, armor: null, helmet: null, boots: null }
         };
       }
 
       function createDefaultGearLoadouts() {
-        return {
-          loadout_phoenix_max: {
-            id: 'loadout_phoenix_max',
-            name: '🔥 Bộ Phượng Hoàng (Mythic Max)',
-            slots: { weapon: 'eq_w1', necklace: 'eq_n1', ring: 'eq_r1', armor: 'eq_a1', helmet: 'eq_h1', boots: 'eq_b1' },
-            createdAt: 1730000003000
-          },
-          loadout_shadow_max: {
-            id: 'loadout_shadow_max',
-            name: '🌑 Bộ Ảnh Nguyệt (Mythic Max)',
-            slots: { weapon: 'set_shadow_w', necklace: 'set_shadow_n', ring: 'set_shadow_r', armor: 'set_shadow_a', helmet: 'set_shadow_h', boots: 'set_shadow_b' },
-            createdAt: 1730000002000
-          },
-          loadout_celestial_max: {
-            id: 'loadout_celestial_max',
-            name: '🌌 Bộ Tinh Vân (Mythic Max)',
-            slots: { weapon: 'set_celestial_w', necklace: 'set_celestial_n', ring: 'set_celestial_r', armor: 'set_celestial_a', helmet: 'set_celestial_h', boots: 'set_celestial_b' },
-            createdAt: 1730000001000
-          }
-        };
+        return {};
       }
 
       // ==================== PERSISTENT PLAYER STATE ====================
       const SaveState = {
         maxedAllVersion: 1,
-        gold: 9999999,
-        gems: 999999,
-        stamina: 999,
-        playerLevel: 100,
+        // Tài nguyên khởi đầu của người chơi mới (phải cày để tăng).
+        gold: 500,
+        gems: 50,
+        stamina: 20,
+        playerLevel: 1,
         playerName: 'JohnBowman',
         artemisHeroVersion: 1,
         selectedChapterIdx: 0,
         selectedHeroId: 'artemis',
         selectedWeaponId: 'bow',
         selectedPetId: 'spirit_sword',
-        gearLevel: 100,
+        gearLevel: 1,
         activePreset: 1,
-        heroSkinIdx: 2,
+        heroSkinIdx: 0,
         wikiCharactersVersion: 2,
-        resonanceSlots: { slot1: 'thor', slot2: 'wukong' },
-        starterSkillIds: ['multishot', 'tracking_eye', 'energy_ring', 'beam_strike', 'sprite_king', 'corrosive_field'],
+        resonanceSlots: { slot1: null, slot2: null },
+        starterSkillIds: [],
         skillCodexRarityFilter: 'all',
         skillCodexCatFilter: 'all',
         heroStars: {
-          thor: 8, wukong: 8, cleo: 8, atreus: 8, rolla: 8, nezha: 8, otta: 8, hou_yi: 8,
-          phynx: 8, loki: 8, dracoola: 8, seraph: 8, mymu: 8, hela: 8, helix: 8, nyanja: 8, alex: 8, artemis: 8
+          thor: 0, wukong: 0, cleo: 0, atreus: 0, rolla: 0, nezha: 0, otta: 0, hou_yi: 0,
+          phynx: 0, loki: 0, dracoola: 0, seraph: 0, mymu: 0, hela: 0, helix: 0, nyanja: 0, alex: 0, artemis: 1
         },
         heroShards: {
-          thor: 999, wukong: 999, cleo: 999, atreus: 999, rolla: 999, nezha: 999, otta: 999, hou_yi: 999,
-          phynx: 999, loki: 999, dracoola: 999, seraph: 999, mymu: 999, hela: 999, helix: 999, nyanja: 999, alex: 999, artemis: 999
+          thor: 0, wukong: 0, cleo: 0, atreus: 0, rolla: 0, nezha: 0, otta: 0, hou_yi: 0,
+          phynx: 0, loki: 0, dracoola: 0, seraph: 0, mymu: 0, hela: 0, helix: 0, nyanja: 0, alex: 0, artemis: 0
         },
         heroSelectedSkins: {
-          thor: 2, wukong: 2, cleo: 2, atreus: 2, rolla: 2, nezha: 2, otta: 2, hou_yi: 2,
-          phynx: 2, loki: 2, dracoola: 2, seraph: 2, mymu: 2, hela: 2, helix: 2, nyanja: 2, alex: 2, artemis: 2
+          thor: 0, wukong: 0, cleo: 0, atreus: 0, rolla: 0, nezha: 0, otta: 0, hou_yi: 0,
+          phynx: 0, loki: 0, dracoola: 0, seraph: 0, mymu: 0, hela: 0, helix: 0, nyanja: 0, alex: 0, artemis: 0
         },
         unlockedSkins: {
-          artemis_default: true, artemis_celestial: true, artemis_seraphim: true,
-          alex_default: true, alex_paladin: true, alex_thunder: true,
-          nyanja_default: true, nyanja_kitsune: true, nyanja_tiger: true,
-          atreus_default: true, atreus_dragon: true, atreus_void: true
+          artemis_default: true
         },
         sortMode: 'quality', // 'quality' | 'level' | 'slot'
         slotFilter: 'all',
@@ -6752,25 +6795,25 @@
         activeGearSubtab: 'gear', // 'characters' | 'gear' | 'runes'
         equippedGear: createDefaultEquipped(),
         gearBag: createDefaultBag(),
-        gemInventory: { ruby: 99, sapphire: 99, amethyst: 99, emerald: 99, topaz: 99 },
-        salvageMaterials: 99999,
+        gemInventory: { ruby: 0, sapphire: 0, amethyst: 0, emerald: 0, topaz: 0 },
+        salvageMaterials: 0,
         presets: createDefaultPresets(),
         gearLoadouts: createDefaultGearLoadouts(), // Saved full equipment builds by stable item UID
         runes: {
-          rune_flame: 50,
-          rune_frost: 50,
-          rune_thunder: 50,
-          rune_valkyrie: 50
+          rune_flame: 0,
+          rune_frost: 0,
+          rune_thunder: 0,
+          rune_valkyrie: 0
         },
         talents: {
-          might: 10,
-          vitality: 10,
-          alacrity: 8,
-          healer: 5,
-          greed: 8,
-          valkyrie_favor: 6
+          might: 0,
+          vitality: 0,
+          alacrity: 0,
+          healer: 0,
+          greed: 0,
+          valkyrie_favor: 0
         },
-        bestRooms: { 1: 15, 2: 12, 3: 10 },
+        bestRooms: {},
         // ==================== THÀNH TỰU (ACHIEVEMENTS) ====================
         // lifetimeStats: bộ đếm vĩnh viễn, chỉ tăng, dùng để tính tiến độ thành tựu.
         lifetimeStats: {
@@ -7055,7 +7098,42 @@
           }
         }
       };
+      /**
+       * Chuẩn hoá state gacha/event: các trường PHẢI là array nhưng bị lưu thành
+       * number/undefined (do schema cũ hoặc save cũ) sẽ làm .map() ném lỗi và
+       * chặn toàn bộ renderLobbyUI -> Cửa Hàng / Sự Kiện trống trơn.
+       */
+      function normalizeStateArrays() {
+        const ensureObj = (key, defaults) => {
+          if (!SaveState[key] || typeof SaveState[key] !== 'object' || Array.isArray(SaveState[key])) {
+            SaveState[key] = {};
+          }
+          for (const [k, v] of Object.entries(defaults)) {
+            if (SaveState[key][k] === undefined || SaveState[key][k] === null) {
+              SaveState[key][k] = Array.isArray(v) ? [] : v;
+            }
+          }
+        };
+
+        ensureObj('chestGachaState', { epicPity: 0, sTierPity: 0, lastPullResults: [] });
+        ensureObj('runeRuinsState', { foundSturdyIcons: 0, foundGloriousIcons: 0, gridRewards: 0, gridRevealed: [], promisedPool: 'elemental_circle' });
+        ensureObj('wikiEventsState', {});
+        ensureObj('chestKeys', { silver_chest_key: 0, obsidian_chest_key: 0, chromatic_chest_key: 0 });
+        ensureObj('gearScrolls', { weapon: 0, armor: 0, helmet: 0, ring: 0, necklace: 0, boots: 0 });
+        ensureObj('wikiOtherItems', {});
+
+        // Các trường bắt buộc là array.
+        if (!Array.isArray(SaveState.chestGachaState.lastPullResults)) {
+          SaveState.chestGachaState.lastPullResults = [];
+        }
+        if (!Array.isArray(SaveState.runeRuinsState.gridRevealed)) {
+          SaveState.runeRuinsState.gridRevealed = [];
+        }
+      }
+
       SaveState.load();
+      // Chuẩn hoá ngay sau khi nạp, trước mọi lần render.
+      normalizeStateArrays();
 
       /**
        * Nap lai save tu localStorage.
@@ -7065,6 +7143,7 @@
       function reloadSaveFromStorage() {
         try {
           SaveState.load();
+          normalizeStateArrays();
           if (typeof checkAchievements === 'function') checkAchievements(true);
           return true;
         } catch (e) {
@@ -17491,7 +17570,12 @@
         ]
       };
 
+      /**
+       * Chuẩn hoá state gacha/event (đã có normalizeStateArrays ở trên).
+       * Giữ hàm này gọi lại để an toàn khi state bị sửa trong lúc chạy.
+       */
       function ensureVnAuthenticUIState() {
+        normalizeStateArrays();
         if (!SaveState.vnUiState || typeof SaveState.vnUiState !== 'object') {
           SaveState.vnUiState = {
             aurocite: 51,
@@ -19266,13 +19350,23 @@
         document.getElementById('topPowerDisplay').innerHTML = `Lực chiến: <span class="text-amber-400 font-bold">10.06M</span>`;
 
         // Render the 6-Slot Archero 2 Gear Screen & Pedestal + Authentic Vietnamese UI Tabs
-        renderGearSystemUI(stats);
-        renderVnShopTabUI();
-        renderVnHeroesAndWardrobeUI();
-        renderVnCampaignStageUI();
-        renderVnCollectiblesTabUI();
-        renderVnEventsBannerCardsUI();
-        renderWikiEventsHubUI();
+        // Mỗi tab bọc riêng: một tab lỗi KHÔNG được làm trống các tab còn lại.
+        const safeRender = (name, fn) => {
+          try {
+            fn();
+          } catch (err) {
+            console.error(`[Archero2] Render ${name} thất bại:`, err);
+            if (typeof window.__renderErrors !== 'object' || !window.__renderErrors) window.__renderErrors = {};
+            window.__renderErrors[name] = String(err && err.message || err);
+          }
+        };
+        safeRender('gear', () => renderGearSystemUI(stats));
+        safeRender('shop', () => renderVnShopTabUI());
+        safeRender('heroes', () => renderVnHeroesAndWardrobeUI());
+        safeRender('campaign', () => renderVnCampaignStageUI());
+        safeRender('collectibles', () => renderVnCollectiblesTabUI());
+        safeRender('events', () => renderVnEventsBannerCardsUI());
+        safeRender('wikiEvents', () => renderWikiEventsHubUI());
 
         const stageAtkEl = document.getElementById('stageAtkVal');
         if (stageAtkEl) stageAtkEl.textContent = '840.05K';
@@ -19914,6 +20008,9 @@
         Game.room = 1;
         Game.maxRooms = ch.rooms;
         Game.kills = 0;
+        // Đếm "trận đã chơi" ngay khi bắt đầu, để người chơi bỏ giữa trận vẫn được tính.
+        bumpLifetimeStat('runs', 1);
+        checkAchievements();
         Game.runGold = 0;
         Game.running = true;
         Game.paused = false;
@@ -24296,7 +24393,7 @@
         SaveState.gems += bonusGems;
 
         // ---- Thành tựu: chốt chỉ số cuối trận ----
-        bumpLifetimeStat('runs', 1);
+        // 'runs' da duoc dem luc bat dau tran (startNewRun) de khong dem 2 lan.
         bumpLifetimeStat('goldEarned', Game.runGold);
         setLifetimeStatMax('deepestRoom', Game.room);
         if (isVictory) {
