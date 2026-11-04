@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Archero 2: Kỷ Nguyên Cung Thủ Roguelike</title>
+  <script src="/cloud.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -7052,6 +7053,22 @@
         }
       };
       SaveState.load();
+
+      /**
+       * Nap lai save tu localStorage.
+       * Can thiet cho cloud save: SaveState.load() chay luc parse (co the chua co du lieu),
+       * sau do cloud.js tai save that tu MongoDB ve localStorage roi goi ham nay.
+       */
+      function reloadSaveFromStorage() {
+        try {
+          SaveState.load();
+          if (typeof checkAchievements === 'function') checkAchievements(true);
+          return true;
+        } catch (e) {
+          console.warn('[Archero2 Cloud] Nap lai save that bai:', e);
+          return false;
+        }
+      }
 
       function computeSingleItemStat(item) {
         if (!item) return 0;
@@ -24985,6 +25002,7 @@
       // Expose Fusion System Diagnostic & Test API for verification
       window.Archero2FusionAPI = {
         GEAR_QUALITIES,
+        reloadSaveFromStorage,
         GEAR_TEMPLATES,
         GEAR_SLOTS_META,
         FUSION_RECIPES,
@@ -25136,9 +25154,17 @@
       });
 
       // Initialize App on Load
-      window.addEventListener('load', () => {
+      // Cloud save: khong chay game ngay, doi xac thuc xong moi vao (xem cloud.js).
+      function __artemisBootGame() {
+        if (window.__artemisBooted) return;
+        window.__artemisBooted = true;
         renderLobbyUI();
-      });
+      }
+      if (window.__artemisBootstrap) {
+        window.__artemisBootstrap(__artemisBootGame);
+      } else {
+        window.addEventListener('load', __artemisBootGame);
+      }
     })();
   </script>
 </body>

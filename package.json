@@ -1,0 +1,20 @@
+{
+  "name": "artemis",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Archero 2 - Kỷ Nguyên Cung Thủ: game roguelike với tài khoản và cloud save trên MongoDB Atlas",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node dev-server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check lib/mongo.js && node --check lib/auth.js && node --check lib/saveSchema.js && node --check lib/http.js && node --check public/cloud.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jose": "^6.2.3",
+    "mongodb": "^7.7.0"
+  }
+}
