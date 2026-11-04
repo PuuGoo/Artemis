@@ -16,13 +16,13 @@ replaceOnce(patch.buttonOld, patch.buttonNew, 'gear workshop button');
 replaceOnce(patch.normalizeOld, patch.normalizeNew, 'gear item migration');
 replaceOnce(patch.statOld, patch.statNew, 'gear stat calculation');
 replaceOnce(patch.listenerOld, patch.listenerOld + '\n\n' + patch.forgeFunction, 'gear evolution event binding');
-const scriptTags = [...html.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/gi)];
+const scriptTags = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
 let checked = 0;
 for (let i = 0; i < scriptTags.length; i++) {
   const attrs = scriptTags[i][1] || '';
   const body = scriptTags[i][2] || '';
-  if (/\\bsrc\\s*=/i.test(attrs) || !body.trim()) continue;
-  const typeMatch = attrs.match(/\\btype\\s*=\\s*[\"']([^\"']+)[\"']/i);
+  if (/\bsrc\s*=/i.test(attrs) || !body.trim()) continue;
+  const typeMatch = attrs.match(/\btype\s*=\s*[\"']([^\"']+)[\"']/i);
   const type = typeMatch ? typeMatch[1].toLowerCase() : '';
   if (type && !type.includes('javascript') && !type.includes('ecmascript') && type !== 'module') continue;
   const temp = path.join(os.tmpdir(), 'archero-inline-' + i + '.js');
