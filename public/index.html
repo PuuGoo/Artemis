@@ -1076,8 +1076,8 @@
         </div>
         <div class="leading-tight">
           <div class="flex items-center gap-1.5">
-            <span id="topPlayerLevelNum" class="px-1.5 py-0.2 rounded bg-sky-600 text-xs sm:text-sm font-black text-white">61</span>
-            <h1 id="topPlayerNameText" class="font-black text-xs sm:text-sm tracking-tight text-white">Vie | PuuGoo</h1>
+            <span id="topPlayerLevelNum" class="px-1.5 py-0.2 rounded bg-sky-600 text-xs sm:text-sm font-black text-white">1</span>
+            <h1 id="topPlayerNameText" class="font-black text-xs sm:text-sm tracking-tight text-white">Người chơi</h1>
             <span class="px-1.5 py-0.2 rounded bg-amber-500/25 border border-amber-400/60 text-[9px] font-black text-amber-300">MAX VIP</span>
           </div>
           <div class="w-24 sm:w-28 h-1 bg-slate-800 rounded-full overflow-hidden my-0.5">
@@ -1085,8 +1085,8 @@
           </div>
           <div class="flex items-center gap-1">
             <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full gold-gradient text-[9px] font-black text-slate-950 shadow">🛡️</span>
-            <span id="topPowerShieldVal" class="text-xs sm:text-sm font-black text-amber-400 tracking-tight">10.06M</span>
-            <p id="topPowerDisplay" class="hidden lg:inline text-[10px] text-slate-400 font-semibold ml-1">Lực chiến: <span class="text-amber-400 font-bold">4,772</span></p>
+            <span id="topPowerShieldVal" class="text-xs sm:text-sm font-black text-amber-400 tracking-tight">0</span>
+            <p id="topPowerDisplay" class="hidden lg:inline text-[10px] text-slate-400 font-semibold ml-1">Lực chiến: <span class="text-amber-400 font-bold">0</span></p>
           </div>
         </div>
       </div>
@@ -1096,19 +1096,19 @@
         <!-- Energy / Stamina Bar -->
         <button id="btnRefillStamina" type="button" class="hidden sm:flex items-center gap-1 bg-slate-950/95 border border-emerald-500/50 px-2 py-1 rounded-full shadow-inner hover:brightness-110 transition" title="Nhận miễn phí Năng lượng & Vàng thưởng">
           <span class="text-sm drop-shadow">⚡</span>
-          <span id="staminaCountText" class="text-xs font-black text-white px-1.5 py-0.2 rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 shadow">30/30</span>
+          <span id="staminaCountText" class="text-xs font-black text-white px-1.5 py-0.2 rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 shadow">0/60</span>
           <span class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center">+</span>
         </button>
         <!-- Gold -->
         <button id="btnTopAddGold" type="button" class="flex items-center gap-1 bg-slate-950/95 border border-amber-500/40 px-2 sm:px-2.5 py-1 rounded-full shadow-inner hover:border-amber-400 transition" title="Nhận thưởng Vàng nhanh (+500 🪙)">
           <span class="text-sm">🪙</span>
-          <span id="goldCountText" class="text-xs sm:text-sm font-black text-white">6,579</span>
+          <span id="goldCountText" class="text-xs sm:text-sm font-black text-white">0</span>
           <span class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 font-black text-[11px] flex items-center justify-center">+</span>
         </button>
         <!-- Gems -->
         <button id="btnTopAddGem" type="button" class="flex items-center gap-1 bg-slate-950/95 border border-emerald-500/40 px-2 sm:px-2.5 py-1 rounded-full shadow-inner hover:border-emerald-400 transition" title="Nhận thưởng Đá Quý nhanh (+50 💎)">
           <span class="text-sm">💎</span>
-          <span id="gemCountText" class="text-xs sm:text-sm font-black text-white">430</span>
+          <span id="gemCountText" class="text-xs sm:text-sm font-black text-white">0</span>
           <span class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 font-black text-[11px] flex items-center justify-center">+</span>
         </button>
         <!-- Quick Jump to Wiki Currency & Items Vault / Chest Shop -->
@@ -1363,7 +1363,7 @@
                     <span class="text-sm sm:text-base drop-shadow">🗡️</span>
                     <span class="text-[10px] sm:text-[11px] font-black text-amber-200 tracking-tight">Tấn Công</span>
                   </div>
-                  <span id="stageAtkVal" class="text-xs sm:text-sm font-black text-white tracking-tight">379</span>
+                  <span id="stageAtkVal" class="text-xs sm:text-sm font-black text-white tracking-tight">0</span>
                 </div>
                 <!-- HP Pill -->
                 <div class="a2-stat-pill flex-1 rounded-xl px-2.5 py-1 flex items-center justify-between gap-1.5">
@@ -1371,7 +1371,7 @@
                     <span class="text-sm sm:text-base drop-shadow">❤️</span>
                     <span class="text-[10px] sm:text-[11px] font-black uppercase text-rose-200 tracking-tight">HP</span>
                   </div>
-                  <span id="stageHpVal" class="text-xs sm:text-sm font-black text-white tracking-tight">1747</span>
+                  <span id="stageHpVal" class="text-xs sm:text-sm font-black text-white tracking-tight">0</span>
                 </div>
               </div>
             </div>
@@ -20772,8 +20772,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               <div class="rounded-xl bg-slate-950/80 border border-slate-700/80 px-3 py-1.5 flex items-center justify-between text-xs text-slate-200">
                 <div class="flex items-center gap-2 truncate">
                   <span class="px-1.5 py-0.2 rounded bg-slate-800 text-amber-300 font-bold text-[10px]">💬 [Toàn server]</span>
-                  <span class="font-bold text-sky-300">kazuhaa:</span>
-                  <span>okay thanks • Chúc mừng Vie | PuuGoo đạt 10.06M Lực Chiến!</span>
+                  <span class="font-bold text-sky-300">Hệ thống:</span>
+                  <span>Chào mừng bạn đến với Kỷ Nguyên Cung Thủ! Chúc bạn may mắn.</span>
                 </div>
                 <span class="text-[10px] text-emerald-400 font-bold shrink-0">Online</span>
               </div>
@@ -21784,16 +21784,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         // Top Bar (100% Authentic Vietnamese Archero 2 HUD: 61 Vie | PuuGoo • 10.06M • 225/60 • 384.81K • 145.22K)
         const lvEl = document.getElementById('topPlayerLevelNum');
-        if (lvEl) lvEl.textContent = '61';
+        // Cấp người chơi lấy từ save. Trước đây hardcode '61' nên MỌI tài khoản
+        // (kể cả vừa tạo) đều hiện cấp 61 ở góc trái.
+        if (lvEl) lvEl.textContent = String(Math.max(1, Math.floor(Number(SaveState.playerLevel) || 1)));
+        // Ten hien thi: username that cua tai khoan dang dang nhap (truoc day
+        // hardcode "Vie | PuuGoo" trong HTML nen ai cung thay ten nay).
+        const nameEl = document.getElementById('topPlayerNameText');
+        if (nameEl) {
+          const cloudState = (window.ArtemisCloud && window.ArtemisCloud.getState) ? window.ArtemisCloud.getState() : null;
+          const uname = (cloudState && cloudState.player && cloudState.player.username) || SaveState.playerName || 'Người chơi';
+          nameEl.textContent = uname;
+        }
         const stamEl = document.getElementById('staminaCountText');
-        if (stamEl) stamEl.textContent = `${SaveState.stamina && SaveState.stamina > 60 ? SaveState.stamina : 225}/60`;
-        document.getElementById('goldCountText').textContent = formatCompactNumberVn(SaveState.gold, '384.81K');
-        document.getElementById('gemCountText').textContent = formatCompactNumberVn(SaveState.gems, '145.22K');
+        if (stamEl) stamEl.textContent = `${Math.max(0, Math.floor(Number(SaveState.stamina) || 0))}/60`;
+        document.getElementById('goldCountText').textContent = formatCompactNumberVn(SaveState.gold, '0');
+        document.getElementById('gemCountText').textContent = formatCompactNumberVn(SaveState.gems, '0');
         const shieldEl = document.getElementById('topPowerShieldVal');
-        if (shieldEl) shieldEl.textContent = '10.06M';
+        // Lực chiến lấy từ getComputedStats(). Trước đây hardcode '10.06M'.
+        if (shieldEl) shieldEl.textContent = formatCompactNumberVn(stats.powerScore, '0');
         const avatarImg = document.getElementById('topHeroAvatarImg');
         if (avatarImg) avatarImg.src = stats.hero.avatar;
-        document.getElementById('topPowerDisplay').innerHTML = `Lực chiến: <span class="text-amber-400 font-bold">10.06M</span>`;
+        document.getElementById('topPowerDisplay').innerHTML = `Lực chiến: <span class="text-amber-400 font-bold">${formatCompactNumberVn(stats.powerScore, '0')}</span>`;
 
         // Render the 6-Slot Archero 2 Gear Screen & Pedestal + Authentic Vietnamese UI Tabs
         // Mỗi tab bọc riêng: một tab lỗi KHÔNG được làm trống các tab còn lại.
@@ -21826,9 +21837,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         });
 
         const stageAtkEl = document.getElementById('stageAtkVal');
-        if (stageAtkEl) stageAtkEl.textContent = '840.05K';
+        // ATK/HP của nhân vật — lấy từ getComputedStats(). Trước đây hardcode
+        // '840.05K' / '2.85M' nên tài khoản mới cũng hiện chỉ số của nick cũ.
+        if (stageAtkEl) stageAtkEl.textContent = formatCompactNumberVn(stats.baseAtk, '0');
         const stageHpEl = document.getElementById('stageHpVal');
-        if (stageHpEl) stageHpEl.textContent = '2.85M';
+        if (stageHpEl) stageHpEl.textContent = formatCompactNumberVn(stats.baseHp, '0');
 
         // Chapter Card
         document.getElementById('chapterModeBadge').textContent = ch.modeLabel;
