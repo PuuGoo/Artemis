@@ -205,5 +205,29 @@ check("cu: best 15/15 mo C2 du khong co wins", !isLocked(CHAPTERS[1], wins, best
 best = { 1: 15, 2: 12 };
 check("cu: best day du mo C3", !isLocked(CHAPTERS[2], wins, best));
 
+// ============================================================ 8. DAI PIPS KHONG TRAN
+// Bug tung gap: .ms-node co width:100% nen moi moc rong bang ca khung,
+// 15 moc cong lai dai ~14.000px -> hien nhu MOT thanh lien thay vi 15 doan.
+console.log("\n=== 8. DAI PIPS KHONG TRAN (regression) ===");
+const nodeCssM = html.match(/\.ms-node \{[^}]*\}/);
+check("tim thay khung .ms-node", !!nodeCssM);
+if (nodeCssM) {
+  const ncss = nodeCssM[0];
+  check("ms-node dung flex co gian, KHONG dung width:100%",
+    !/width:\s*100%/.test(ncss) && /flex:\s*1 1 0/.test(ncss));
+  check("ms-node co min-width de khong bi bep", /min-width:\s*\d+px/.test(ncss));
+}
+check("ms-node (tram trum) van co dinh kich thuoc",
+  /\.ms-node\.boss-node \{[^}]*flex:\s*none/.test(html) &&
+  /\.ms-node\.boss-node \{[^}]*width:\s*\d+px/.test(html));
+check("trail co overflow-x de khong tran ra ngoai panel",
+  /\.ms-trail \{[^}]*overflow-x:\s*auto/.test(html));
+check("node 'hien tai' co animation de phan biet voi 'da qua'",
+  /\.ms-node\.now \{[^}]*animation:\s*msNowPulse/.test(html) &&
+  /@keyframes msNowPulse/.test(html));
+check("node 'da qua' to xanh, 'hien tai' vien vang (khac kieu)",
+  /\.ms-node\.done \{[^}]*#22c55e/.test(html) &&
+  /\.ms-node\.now \{[^}]*rgba\(251,191,36/.test(html));
+
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);
 process.exit(fail > 0 ? 1 : 0);
