@@ -2,8 +2,43 @@
 
 **Branch:** `feature/beginner-journey-v1` → `main`
 **So sánh:** https://github.com/PuuGoo/Artemis/compare/main...feature/beginner-journey-v1
-**Commit cuối:** `833168e`
-**Diff:** 12 files changed, +1991 / −19
+**Commit cuối:** `6dda40b`
+**Diff:** 15 files changed, +2611 / −20
+
+## 🔒 Bản vá bảo mật kèm theo
+
+Branch này còn vá một lỗ hổng nghiêm trọng phát hiện trên production: **12 đường cheat
+hiện công khai**, trong đó nút `MAX ĐỒ` nằm ngay HUD màn hình đầu. Đo thực tế trên
+production trước khi vá:
+
+```
+Trước khi bấm:  500 vàng, 50 đá quý, 0 bậc talent, common Lv.1
+Sau 1 cú click: 9.999.999 vàng, 999.999 đá quý, 30 bậc talent
+```
+
+Nghĩa là bất kỳ ai cũng vô hiệu hoá toàn bộ phần cân bằng (DEF, crit DMG, HP
+quái/boss neo theo `playerAtk`) chỉ bằng một cú click.
+
+**Đã khoá 3 lớp:**
+
+1. **Ẩn nút** — `applyDevCheatVisibility()` chạy lúc script khởi động và sau mỗi
+   `renderLobbyUI` (đặt sau `wikiEvents` vì nút đó nằm trong HTML sinh động). Ẩn bằng
+   cả `class="hidden"` và `style.display` để CSS khác không đè lên.
+2. **Chặn handler** — mọi `onclick` đều có `if (!devCheatsEnabled()) return;`.
+3. **Chặn tầng hàm** — `applyMaxAllSystems()` và `maxSingleHeroStarAndSkins()` tự
+   chặn bên trong, nên gọi thẳng từ console vẫn không qua.
+
+Bật lại cho dev bằng `?dev=1`. Giữ `btnModalResetLevel` vì đó là tính năng thật
+(hoàn cấp lấy vàng).
+
+**Sửa thêm:** `load()` trước đây gọi `applyMaxAllSystems(false)` khi
+`maxedAllVersion !== 1` → mọi save cũ bị cấp 9.999.999 vàng ngay lần đăng nhập đầu
+(chính là bug "gold 9,999,999"). Nay chỉ đóng dấu phiên bản.
+
+**Kiểm chứng trên production sau khi deploy:** 8/8 nút ẩn, 0 nút max-star lộ,
+3 đường tấn công (`SaveState.applyMaxAllSystems`, `maxSingleHeroStarAndSkins`, click
+qua JS) đều trả `false`, vàng 500 → 500. Game vẫn chơi bình thường: di chuyển
+x 511 → 967, `critDmg: 2.09`, `def: 2`, không NaN.
 
 ## Tạo PR (thủ công — chưa đăng nhập GitHub trong phiên này)
 
@@ -26,13 +61,14 @@ Giải quyết đồng thời 5 vấn đề trong MASTER TASK V1: trải nghiệ
 quán chỉ số, cân bằng chiến đấu, cơ chế reset phó bản, và ảnh hưởng thực tế của
 trang bị/kỹ năng lên sức mạnh nhân vật.
 
-**Kiểm thử: 363 PASS / 0 FAIL** trên 8 bộ test.
+**Kiểm thử: 403 PASS / 0 FAIL** trên 9 bộ test.
 
 | Bộ test | Số assertion |
 |---|---|
 | `combat.test.mjs` | 43 |
 | `dungeon-reset.test.mjs` | 74 |
 | `checkpoint.test.mjs` | 59 |
+| `dev-cheats.test.mjs` | 40 |
 | `beginner-journey.test.mjs` | 71 |
 | `save-schema.test.mjs` | 38 |
 | `devil-encounter.test.mjs` | 21 |
@@ -183,4 +219,4 @@ phòng 3, level 3, 2 kỹ năng khôi phục, không NaN.
 7. ✅ Không phần thưởng trùng — 2 lớp client + server
 8. ✅ Không hỏng trang bị/tiến trình — 74 assertion riêng
 9. ✅ Không commit trực tiếp vào `main` — nằm trên branch riêng
-10. ✅ PR chỉ tạo sau khi 363/363 test PASS
+10. ✅ PR chỉ tạo sau khi 403/403 test PASS
