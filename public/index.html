@@ -694,6 +694,136 @@
     @keyframes rcNextIn { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
     @keyframes rcBossPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
     @media (max-width: 520px) { .rc-title { font-size: 23px; } .rc-kicker { font-size: 8.5px; } .rc-next { font-size: 9.5px; padding: 2px 9px; } }
+    /* ==================== MAP SELECTION ==================== */
+    #mapSelectPanel { display:flex; flex-direction:column; gap:10px; }
+    .ms-stage { position: relative; border-radius: 18px; overflow: hidden;
+      border: 1px solid rgba(148,163,184,.22); background: #04070d;
+      box-shadow: 0 18px 44px -22px rgba(0,0,0,.95), inset 0 0 0 1px rgba(255,255,255,.03); }
+    /* Ảnh bản đồ: giữ tỉ lệ 2:1, luôn lấp đầy khung */
+    .ms-art { position: relative; width: 100%; aspect-ratio: 2 / 1; min-height: 190px; }
+    .ms-art img { position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      transition: transform .55s cubic-bezier(.22,.9,.28,1), filter .3s ease;
+      transform-origin: center 62%; }
+    /* Zoom nhẹ khi chọn chương khác — dùng transform để không gây reflow */
+    .ms-art.is-active img { transform: scale(1.045); }
+    .ms-art.is-locked img { filter: grayscale(.72) brightness(.42) blur(.4px); }
+    /* Lớp phủ gradient để chữ đọc được trên ảnh */
+    .ms-scrim { position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(2,6,23,.78) 0%, rgba(2,6,23,.10) 32%, rgba(2,6,23,.30) 62%, rgba(2,6,23,.96) 100%),
+        linear-gradient(90deg, rgba(2,6,23,.72) 0%, rgba(2,6,23,0) 46%); }
+    /* Vầng sáng màu theo chương */
+    .ms-aura { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+      opacity: .5; transition: opacity .4s ease; }
+    .ms-art.is-active .ms-aura { opacity: .85; }
+
+    /* Khối nhãn trên ảnh */
+    .ms-topbar { position: absolute; top: 0; left: 0; right: 0; padding: 11px 13px;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .ms-kicker { font-size: 8.5px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase;
+      color: #fbbf24; text-shadow: 0 1px 4px #000; }
+    .ms-name { font-size: 17px; font-weight: 900; color: #fff; line-height: 1.14;
+      text-shadow: 0 2px 10px rgba(0,0,0,.95), 0 0 26px rgba(0,0,0,.7); }
+    .ms-tagline { font-size: 9.5px; font-weight: 700; color: #e2e8f0; line-height: 1.45;
+      margin-top: 3px; max-width: 30ch; text-shadow: 0 1px 6px rgba(0,0,0,1), 0 0 14px rgba(0,0,0,.9); }
+    .ms-badges { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+
+    .ms-diff { display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px 8px; border-radius: 999px; font-size: 8.5px; font-weight: 900;
+      letter-spacing: .04em; backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.26); background: rgba(2,6,23,.62); }
+    .ms-diff-pip { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.22); }
+    .ms-diff-pip.on { box-shadow: 0 0 6px currentColor; }
+
+    .ms-cleared { display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px 8px; border-radius: 999px; font-size: 8px; font-weight: 900;
+      color: #052e16; background: linear-gradient(135deg, #86efac, #22c55e);
+      box-shadow: 0 3px 10px -3px rgba(34,197,94,.9); }
+
+    /* Khu vực thông tin dưới ảnh */
+    .ms-info { padding: 10px 13px 12px; background: linear-gradient(180deg, rgba(2,6,23,.92), rgba(2,6,23,1)); }
+    .ms-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: rgba(148,163,184,.14); border-radius: 10px; overflow: hidden; margin-bottom: 9px; }
+    .ms-stat { padding: 7px 4px; text-align: center; background: rgba(15,23,42,.92); }
+    .ms-stat b { display: block; font-size: 13px; font-weight: 900; color: #f8fafc; line-height: 1.15; }
+    .ms-stat span { display: block; font-size: 7.5px; font-weight: 900; letter-spacing: .07em;
+      color: #94a3b8; margin-top: 2px; }
+
+    /* Dải mốc phòng: Entrance → Stage ... → Boss */
+    .ms-trail { display: flex; align-items: center; gap: 0; margin-bottom: 11px; overflow-x: auto;
+      padding: 3px 0 4px; scrollbar-width: none; }
+    .ms-trail::-webkit-scrollbar { display: none; }
+    .ms-node { position: relative; flex: none; width: 20px; height: 20px; border-radius: 6px;
+      display: grid; place-items: center; font-size: 8.5px; font-weight: 900;
+      color: #64748b; background: rgba(30,41,59,.9); border: 1.5px solid rgba(148,163,184,.24);
+      transition: transform .18s, border-color .18s, box-shadow .18s; }
+    .ms-node.done { color: #052e16; background: linear-gradient(135deg, #86efac, #22c55e);
+      border-color: rgba(134,239,172,.85); box-shadow: 0 0 9px -2px rgba(34,197,94,.75); }
+    .ms-node.now { color: #0b1120; background: #fbbf24; border-color: #fde68a;
+      box-shadow: 0 0 0 3px rgba(251,191,36,.22), 0 0 12px rgba(251,191,36,.65);
+      animation: msNowPulse 1.8s ease-in-out infinite; }
+    .ms-node.boss-node { border-radius: 50%; }
+    .ms-node.boss-node.done { background: linear-gradient(135deg, #fca5a5, #ef4444);
+      color: #450a0a; border-color: rgba(252,165,165,.9); }
+    .ms-link { flex: none; width: 8px; height: 2px; background: rgba(148,163,184,.26); }
+    .ms-link.done { background: linear-gradient(90deg, #22c55e, #4ade80); }
+    .ms-node-legend { display: flex; gap: 9px; margin-left: auto; padding-left: 8px; flex: none; }
+    .ms-legend-item { display: inline-flex; align-items: center; gap: 3px;
+      font-size: 7.5px; font-weight: 800; color: #64748b; white-space: nowrap; }
+    .ms-legend-dot { width: 6px; height: 6px; border-radius: 2px; }
+
+    /* Hàng nút hành động */
+    .ms-actions { display: flex; gap: 8px; }
+    .ms-btn { border-radius: 12px; padding: 11px 14px; font-size: 12.5px; font-weight: 900;
+      cursor: pointer; border: 1px solid rgba(255,255,255,.2);
+      transition: transform .13s, filter .13s, box-shadow .13s; }
+    .ms-btn:hover { filter: brightness(1.14); } .ms-btn:active { transform: scale(.97); }
+    .ms-btn-start { flex: 2; color: #0b1120; }
+    .ms-btn-ghost { flex: 1; color: #cbd5e1; background: rgba(15,23,42,.9);
+      border-color: rgba(148,163,184,.3); }
+    .ms-btn[disabled] { cursor: not-allowed; filter: grayscale(.85) brightness(.62);
+      transform: none !important; }
+
+    /* Dải chọn nhanh giữa các chương */
+    .ms-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .ms-tab { position: relative; overflow: hidden; border-radius: 11px; padding: 7px 8px;
+      cursor: pointer; text-align: left; border: 1.5px solid rgba(148,163,184,.22);
+      background: rgba(15,23,42,.85); transition: border-color .16s, transform .16s, box-shadow .16s; }
+    .ms-tab:hover { transform: translateY(-1px); }
+    .ms-tab.is-active { border-color: currentColor; box-shadow: 0 0 0 1px currentColor, 0 6px 16px -8px currentColor; }
+    .ms-tab.is-locked { filter: grayscale(.7) brightness(.7); }
+    .ms-tab-bg { position: absolute; inset: 0; opacity: .26; object-fit: cover; width: 100%; height: 100%; }
+    .ms-tab-inner { position: relative; display: flex; align-items: center; gap: 5px; }
+    .ms-tab-num { font-size: 8px; font-weight: 900; letter-spacing: .07em; color: #94a3b8; }
+    .ms-tab-name { font-size: 10.5px; font-weight: 900; color: #f8fafc;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ms-tab-prog { height: 3px; border-radius: 2px; background: rgba(0,0,0,.6);
+      margin-top: 5px; overflow: hidden; }
+    .ms-tab-prog > i { display: block; height: 100%; border-radius: 2px; }
+    .ms-tab-lock { position: absolute; inset: 0; display: grid; place-items: center;
+      background: rgba(2,6,23,.66); font-size: 13px; border-radius: 10px; }
+
+    /* Banner thông báo khoá */
+    .ms-lockbar { display: flex; align-items: center; gap: 7px; padding: 8px 11px;
+      border-radius: 11px; background: rgba(69,10,10,.55);
+      border: 1px solid rgba(248,113,113,.32); font-size: 10px; font-weight: 800; color: #fecaca; }
+
+    @keyframes msNowPulse { 0%,100% { box-shadow: 0 0 0 3px rgba(251,191,36,.22), 0 0 12px rgba(251,191,36,.65); }
+      50% { box-shadow: 0 0 0 4px rgba(251,191,36,.12), 0 0 18px rgba(251,191,36,.9); } }
+    @keyframes msFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .ms-fade { animation: msFadeIn .32s ease both; }
+
+    @media (max-width: 640px) {
+      .ms-art { aspect-ratio: 16 / 10; min-height: 175px; }
+      .ms-name { font-size: 15px; } .ms-tagline { font-size: 9px; max-width: 26ch; }
+      .ms-stats { grid-template-columns: repeat(2, 1fr); }
+      .ms-node { width: 18px; height: 18px; font-size: 8px; }
+      .ms-node-legend { display: none; }
+      .ms-tab-name { font-size: 9.5px; }
+      .ms-btn { font-size: 11.5px; padding: 10px 12px; }
+    }
+
     /* ==================== DEFEAT PANEL ==================== */
     .df-hero { position: relative; padding: 20px 20px 14px; text-align: center; overflow: hidden;
       border-bottom: 1px solid rgba(244,63,94,.22); }
@@ -1025,11 +1155,16 @@
           </div>
         </div>
 
-        <!-- ==================== CHỌN CHƯƠNG: THẺ TRỰC QUAN ====================
-             Thay cặp nút ◀ ▶ (phải bấm mò để biết có mấy chương, chương nào mở)
-             bằng 3 thẻ hiện đủ: số chương, tên, độ khó, số phòng, tiến trình,
-             trạng thái khoá. Bấm thẳng vào thẻ muốn chơi. -->
-        <div id="chapterSelectStrip" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 shrink-0"></div>
+        <!-- ==================== CHỌN BẢN ĐỒ (MAP SELECTION) ====================
+             Thay dải thẻ nhỏ bằng một khung bản đồ phiêu lưu thật: ảnh minh hoạ
+             từng chương làm trọng tâm, panel thông tin đè lên vùng trống của ảnh,
+             và dải mốc phòng (Entrance → ... → Boss) cho biết đã đi tới đâu.
+             Giữ nguyên 100% logic mở khoá: isChapterLocked / getChapterBest /
+             startNewRun — chỉ thay cách hiển thị và cách chọn. -->
+        <div id="mapSelectPanel" class="shrink-0"></div>
+
+        <!-- Nút ◀ ▶ cũ vẫn giữ cho người quen dùng, đặt dưới bản đồ -->
+        <div id="chapterSelectStrip" class="hidden"></div>
 
         <!-- SỔ TAY QUÁI VẬT: cho người chơi biết mình đang đánh cái gì -->
         <div id="bestiaryPanel" class="rounded-2xl border border-slate-700/70 bg-slate-900/85 overflow-hidden shrink-0"></div>
@@ -2535,7 +2670,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           themeName: 'Đá Cổ',
           bossIcon: '🔥',
           bossName: 'Golem Dung Nham',
-          unlock: null
+          unlock: null,
+          // Ảnh minh hoạ bản đồ (SVG nội bộ, không phụ thuộc URL ngoài).
+          mapAsset: '/assets/map-ch1-ancient-stone.svg',
+          mapRegion: 'Hầm Ngục Đá Cổ',
+          mapTagline: 'Cổng đá ngàn năm chưa từng mở. Hơi lạnh từ lòng đất thổi lên.',
         },
         {
           id: 2,
@@ -2557,7 +2696,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           themeName: 'Dung Nham',
           bossIcon: '🕷️',
           bossName: 'Nữ Hoàng Nhện Độc',
-          unlock: { type: 'chapterWin', chapterId: 1, label: 'Thắng Chương 1' }
+          unlock: { type: 'chapterWin', chapterId: 1, label: 'Thắng Chương 1' },
+          mapAsset: '/assets/map-ch2-lava-valley.svg',
+          mapRegion: 'Thung Lũng Dung Nham',
+          mapTagline: 'Đất nứt ra từng thớ, dung nham chảy như mạch máu của núi lửa.',
         },
         {
           id: 3,
@@ -2579,7 +2721,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           themeName: 'Hư Không',
           bossIcon: '👑',
           bossName: 'Đại Ma Vương Atreus',
-          unlock: { type: 'chapterWin', chapterId: 2, label: 'Thắng Chương 2' }
+          unlock: { type: 'chapterWin', chapterId: 2, label: 'Thắng Chương 2' },
+          mapAsset: '/assets/map-ch3-void-sanctum.svg',
+          mapRegion: 'Thánh Điện Hư Không',
+          mapTagline: 'Không có mặt trời, chỉ có cổng dịch chuyển và tiếng thì thầm.',
         }
       ];
 
@@ -11922,6 +12067,178 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           modal.classList.add('hidden');
           startNewRun('fresh');
         });
+      }
+
+      /**
+       * Màn hình CHỌN BẢN ĐỒ (map selection).
+       *
+       * Thay dải 3 thẻ nhỏ bằng khung bản đồ phiêu lưu: ảnh minh hoạ từng chương
+       * làm trọng tâm, panel thông tin đè lên vùng trống của ảnh, dải mốc phòng
+       * cho biết đã đi tới đâu.
+       *
+       * Toàn bộ logic mở khoá/tiến trình lấy từ hàm sẵn có — KHÔNG tạo hệ thống
+       * thứ hai: isChapterLocked(), getChapterBest(), isChapterWon(),
+       * normalizeSelectedChapter(), startNewRun().
+       */
+      function renderMapSelect() {
+        const el = document.getElementById('mapSelectPanel');
+        if (!el) return;
+
+        normalizeSelectedChapter();
+        const selIdx = Math.max(0, Math.min(CHAPTERS.length - 1, SaveState.selectedChapterIdx || 0));
+        const ch = CHAPTERS[selIdx];
+        const locked = isChapterLocked(ch);
+        const best = getChapterBest(ch.id);
+        const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
+        const cleared = wins > 0;
+        const pct = Math.min(100, Math.round((best / ch.rooms) * 100));
+        const diffColor = ch.difficulty === 1 ? '#4ade80' : (ch.difficulty === 2 ? '#fbbf24' : '#f87171');
+        const curAtk = (() => { try { const s = getComputedStats(); return s.baseAtk; } catch (e) { return 0; } })();
+
+        // ---- Dải mốc phòng: mỗi phòng 1 nút, phòng trùm hình tròn ----
+        const nodes = [];
+        for (let r = 1; r <= ch.rooms; r++) {
+          const isBoss = (r % 5 === 0) || (r === ch.rooms);
+          const done = r <= best;
+          const isNow = r === Math.min(ch.rooms, best + 1) && !isBoss;
+          const cls = ['ms-node'];
+          if (isBoss) cls.push('boss-node');
+          if (done) cls.push('done');
+          if (isNow && !cleared) cls.push('now');
+          const glyph = isBoss ? '★' : r;
+          nodes.push(`<div class="${cls.join(' ')}" title="Phòng ${r}${isBoss ? ' — Trùm' : ''}">${glyph}</div>`);
+          if (r < ch.rooms) {
+            nodes.push(`<div class="ms-link${r < best ? ' done' : ''}"></div>`);
+          }
+        }
+
+        // ---- Dải chọn nhanh 3 chương ----
+        const tabs = CHAPTERS.map((c, i) => {
+          const cLocked = isChapterLocked(c);
+          const cBest = getChapterBest(c.id);
+          const cWins = (SaveState.winsByChapter || {})[c.id] || 0;
+          const cPct = Math.min(100, Math.round((cBest / c.rooms) * 100));
+          const active = i === selIdx;
+          const cls = ['ms-tab'];
+          if (active) cls.push('is-active');
+          if (cLocked) cls.push('is-locked');
+          return `<button type="button" class="${cls.join(' ')}" data-map-tab="${i}"
+                    style="color:${c.accent}"${cLocked ? ' data-locked="1"' : ''}>
+            <img class="ms-tab-bg" src="${c.mapAsset}" alt="" aria-hidden="true" loading="lazy">
+            <div class="ms-tab-inner">
+              <span style="font-size:13px;line-height:1">${c.icon}</span>
+              <div style="min-width:0;flex:1">
+                <div class="ms-tab-num">CHƯƠNG ${c.id}${cWins > 0 ? ' · XONG' : ''}</div>
+                <div class="ms-tab-name">${c.themeName}</div>
+              </div>
+            </div>
+            <div class="ms-tab-prog"><i style="width:${cPct}%;background:linear-gradient(90deg,${c.accent},${c.accent2})"></i></div>
+            ${cLocked ? `<div class="ms-tab-lock">🔒</div>` : ''}
+          </button>`;
+        }).join('');
+
+        const startLabel = locked
+          ? `🔒 Cần ${ch.unlock ? ch.unlock.label : 'mở khoá'}`
+          : (best > 0 && best < ch.rooms ? `▶ Chơi Tiếp Ở Phòng ${best + 1}` : `▶ Bắt Đầu Hành Trình`);
+
+        el.innerHTML = `
+          <div class="ms-stage">
+            <!-- ẢNH BẢN ĐỒ -->
+            <div class="ms-art${locked ? ' is-locked' : ''}${!locked ? ' is-active' : ''}">
+              <img src="${ch.mapAsset}" alt="Bản đồ ${ch.mapRegion}" draggable="false">
+              <div class="ms-aura" style="background:radial-gradient(ellipse at 50% 68%, ${ch.accent}3a, transparent 62%)"></div>
+              <div class="ms-scrim"></div>
+
+              <!-- NHÃN TRÊN ẢNH -->
+              <div class="ms-topbar">
+                <div style="min-width:0;flex:1">
+                  <div class="ms-kicker">Chương ${ch.id} · ${ch.mapRegion}</div>
+                  <div class="ms-name">${ch.name.replace(/^Chương \d+:\s*/, '')}</div>
+                  <div class="ms-tagline">${ch.mapTagline || ch.desc}</div>
+                </div>
+                <div class="ms-badges">
+                  ${cleared ? `<span class="ms-cleared">✓ ĐÃ PHÁ ĐẢO</span>` : ''}
+                  <span class="ms-diff" style="color:${diffColor}">
+                    ${[1,2,3].map(n => `<span class="ms-diff-pip${n <= ch.difficulty ? ' on' : ''}" style="${n <= ch.difficulty ? `background:${diffColor};color:${diffColor}` : ''}"></span>`).join('')}
+                    <span style="margin-left:3px;color:${diffColor}">${ch.difficultyLabel.split(' — ')[0]}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- THÔNG TIN DƯỚI ẢNH -->
+            <div class="ms-info">
+              <div class="ms-stats">
+                <div class="ms-stat"><b>${ch.rooms}</b><span>PHÒNG</span></div>
+                <div class="ms-stat"><b style="color:${best >= ch.rooms ? '#4ade80' : '#fbbf24'}">${best}/${ch.rooms}</b><span>TỐT NHẤT</span></div>
+                <div class="ms-stat"><b>${wins}</b><span>LẦN THẮNG</span></div>
+                <div class="ms-stat"><b style="color:${diffColor}">×${ch.enemyScale.toFixed(2)}</b><span>HỆ SỐ QUÁI</span></div>
+              </div>
+
+              <!-- MỐC TIẾN TRÌNH -->
+              <div class="ms-trail" aria-label="Tiến trình ${best}/${ch.rooms} phòng">
+                ${nodes.join('')}
+                <div class="ms-node-legend">
+                  ${cleared || best > 0 ? `<span class="ms-legend-item"><span class="ms-legend-dot" style="background:#22c55e"></span>đã qua</span>` : ''}
+                  ${!cleared && best < ch.rooms ? `<span class="ms-legend-item"><span class="ms-legend-dot" style="background:#fbbf24"></span>hiện tại</span>` : ''}
+                  <span class="ms-legend-item"><span class="ms-legend-dot" style="background:#ef4444;border-radius:50%"></span>trùm</span>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px;font-size:9.5px;font-weight:800">
+                <span style="color:#94a3b8">Tiến độ ${pct}% · ATK hiện tại <b style="color:#fbbf24">${Math.round(curAtk).toLocaleString('vi-VN')}</b></span>
+                <span style="color:#fbbf24;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ch.bossIcon} ${ch.bossName}</span>
+              </div>
+
+              ${locked ? `<div class="ms-lockbar">🔒 Chưa mở khoá — cần <b style="color:#fff">${ch.unlock ? ch.unlock.label : ''}</b> để vào khu vực này.</div>` : ''}
+
+              <div class="ms-actions">
+                <button type="button" id="msBtnLobby" class="ms-btn ms-btn-ghost">← Sảnh</button>
+                <button type="button" id="msBtnStart" class="ms-btn ms-btn-start"
+                  style="background:linear-gradient(135deg,${ch.accent},${ch.accent2});box-shadow:0 8px 22px -9px ${ch.accent}cc"
+                  ${locked ? 'disabled' : ''}>${startLabel}</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHỌN NHANH GIỮA CÁC CHƯƠNG -->
+          <div class="ms-tabs">${tabs}</div>
+        `;
+
+        // ---- Gắn sự kiện ----
+        el.querySelectorAll('[data-map-tab]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.dataset.mapTab);
+            const target = CHAPTERS[idx];
+            if (!target) return;
+            if (isChapterLocked(target)) {
+              // Không cho chọn chương khoá. Không đụng state save.
+              if (typeof SoundFX !== 'undefined' && SoundFX.deny) SoundFX.deny();
+              return;
+            }
+            // Chỉ đổi lựa chọn hiển thị — KHÔNG đụng vào tiến trình, vàng, trang bị.
+            SaveState.selectedChapterIdx = idx;
+            SaveState.save();
+            renderMapSelect();
+            renderChapterHeader();
+          });
+        });
+        const startBtn = document.getElementById('msBtnStart');
+        if (startBtn && !locked) {
+          startBtn.addEventListener('click', () => {
+            // Chốt chương đang chọn (đã lưu) rồi mở briefing như luồng cũ.
+            SaveState.selectedChapterIdx = selIdx;
+            SaveState.save();
+            if (typeof openRunBriefing === 'function') openRunBriefing();
+            else document.getElementById('btnStartGame')?.click();
+          });
+        }
+        const lobbyBtn = document.getElementById('msBtnLobby');
+        if (lobbyBtn) {
+          lobbyBtn.addEventListener('click', () => {
+            document.getElementById('mapSelectPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        }
       }
 
       function renderChapterSelectStrip() {
@@ -21473,6 +21790,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         document.getElementById('chapterTitleText').textContent = ch.name;
         document.getElementById('chapterDescText').textContent = ch.desc;
         safeRender('chapterStrip', () => renderChapterSelectStrip());
+        safeRender('mapSelect', () => renderMapSelect());
         safeRender('bestiary', () => renderBestiaryUI());
         const bestRm = getChapterBest(ch.id) || 1;
         document.getElementById('bestRecordText').textContent = `Kỷ lục: Phòng ${bestRm}/${ch.rooms}`;
@@ -27734,6 +28052,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         recordBestiaryKill,
         BESTIARY,
         renderChapterSelectStrip,
+        renderMapSelect,
         isChapterLocked,
         isChapterWon,
         normalizeSelectedChapter,

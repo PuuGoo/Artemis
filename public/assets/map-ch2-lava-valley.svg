@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Volcanic lava valley">
+  <defs>
+    <linearGradient id="c2sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a0b12"/>
+      <stop offset="30%" stop-color="#3d1220"/>
+      <stop offset="58%" stop-color="#7c2418"/>
+      <stop offset="82%" stop-color="#b8461c"/>
+      <stop offset="100%" stop-color="#e0701f"/>
+    </linearGradient>
+    <radialGradient id="c2sun" cx="0.22" cy="0.72" r="0.3">
+      <stop offset="0%" stop-color="#ffe0a3" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="#fb923c" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="c2far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5c1a17"/>
+      <stop offset="100%" stop-color="#3a100f"/>
+    </linearGradient>
+    <linearGradient id="c2mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3d1210"/>
+      <stop offset="100%" stop-color="#240a09"/>
+    </linearGradient>
+    <linearGradient id="c2ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a100c"/>
+      <stop offset="50%" stop-color="#180806"/>
+      <stop offset="100%" stop-color="#0b0403"/>
+    </linearGradient>
+    <linearGradient id="c2lava" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7c2d12"/>
+      <stop offset="18%" stop-color="#ea580c"/>
+      <stop offset="42%" stop-color="#fbbf24"/>
+      <stop offset="58%" stop-color="#fdba74"/>
+      <stop offset="78%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#7c2d12"/>
+    </linearGradient>
+    <linearGradient id="c2fall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#f97316" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#b91c1c" stop-opacity="0.7"/>
+    </linearGradient>
+    <radialGradient id="c2pool" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.95"/>
+      <stop offset="35%" stop-color="#f59e0b" stop-opacity="0.85"/>
+      <stop offset="70%" stop-color="#b45309" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#7c2d12" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c2glowbig" cx="0.5" cy="0.6" r="0.5">
+      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="c2ash" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fda4af" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#fda4af" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#fda4af" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="c2soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+    <filter id="c2soft2" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+
+  <!-- BẦU TRỜI DUNG NHAM -->
+  <rect width="1200" height="600" fill="url(#c2sky)"/>
+  <circle cx="264" cy="430" r="300" fill="url(#c2sun)"/>
+
+  <!-- TRO BỤI TRONG KHÔNG KHÍ -->
+  <g fill="#fecaca">
+    <circle cx="140" cy="96" r="1.6" opacity="0.5"/><circle cx="268" cy="148" r="1.3" opacity="0.4"/>
+    <circle cx="392" cy="78" r="1.8" opacity="0.55"/><circle cx="520" cy="132" r="1.2" opacity="0.35"/>
+    <circle cx="648" cy="92" r="1.5" opacity="0.45"/><circle cx="772" cy="156" r="1.3" opacity="0.4"/>
+    <circle cx="900" cy="86" r="1.7" opacity="0.5"/><circle cx="1040" cy="140" r="1.2" opacity="0.35"/>
+    <circle cx="1120" cy="72" r="1.4" opacity="0.42"/><circle cx="60" cy="182" r="1.1" opacity="0.3"/>
+  </g>
+
+  <!-- MÂY TRO -->
+  <g opacity="0.3" filter="url(#c2soft)">
+    <ellipse cx="320" cy="118" rx="210" ry="30" fill="#7f1d1d"/>
+    <ellipse cx="820" cy="92" rx="260" ry="26" fill="#7f1d1d"/>
+    <ellipse cx="1120" cy="150" rx="180" ry="24" fill="#7f1d1d"/>
+  </g>
+
+  <!-- NÚI LỬA XA -->
+  <path d="M0 398 L120 232 L188 300 L286 176 L392 306 L470 244 L560 340 L680 214 L788 322 L880 258 L990 348 L1090 268 L1200 356 L1200 450 L0 450 Z"
+        fill="url(#c2far)" opacity="0.92"/>
+  <path d="M0 0 L0 0 Z"/>
+
+  <!-- MIỆNG NÚI LỬA + DÒNG DUNG NHAM -->
+  <g>
+    <path d="M680 214 L712 196 L748 214 L784 200 L820 246 L680 264 Z" fill="#2a0d0a"/>
+    <path d="M706 216 L736 210 L764 216" fill="none" stroke="#fbbf24" stroke-width="3" opacity="0.9"/>
+    <path d="M712 218 Q700 300 664 380 Q652 402 640 430" fill="none" stroke="url(#c2fall)" stroke-width="7" opacity="0.85" stroke-linecap="round"/>
+    <path d="M746 220 Q760 296 792 366 Q806 396 818 424" fill="none" stroke="url(#c2fall)" stroke-width="5" opacity="0.7" stroke-linecap="round"/>
+  </g>
+
+  <!-- KHÓI NÚI LỬA -->
+  <g opacity="0.34" filter="url(#c2soft)">
+    <ellipse cx="700" cy="150" rx="70" ry="46" fill="#9a3412"/>
+    <ellipse cx="760" cy="106" rx="92" ry="40" fill="#7f1d1d"/>
+    <ellipse cx="672" cy="78" rx="74" ry="34" fill="#7f1d1d"/>
+  </g>
+
+  <!-- VÁCH NÚI GIỮA -->
+  <path d="M0 440 L96 350 L180 402 L276 318 L376 396 L470 336 L560 412 L660 350 L756 404 L850 340 L944 398 L1040 342 L1130 406 L1200 356 L1200 486 L0 486 Z"
+        fill="url(#c2mid)"/>
+
+  <!-- ĐÁ NHÔ -->
+  <g fill="#1a0806">
+    <path d="M156 486 L172 402 L192 398 L208 486 Z"/>
+    <path d="M172 402 L182 372 L192 398 Z" fill="#2d110d"/>
+    <path d="M1012 486 L1026 414 L1046 410 L1060 486 Z"/>
+    <path d="M1026 414 L1036 384 L1046 410 Z" fill="#2d110d"/>
+  </g>
+
+  <!-- MẶT ĐẤT NỨT NẺ -->
+  <path d="M0 470 Q300 446 600 462 Q900 478 1200 452 L1200 600 L0 600 Z" fill="url(#c2ground)"/>
+
+  <!-- KHE NỨT DUNG NHAM -->
+  <g>
+    <path d="M0 486 Q180 470 340 494 Q420 506 470 500 Q520 494 566 512 L560 526 Q512 510 468 516 Q420 522 344 512 Q184 490 0 504 Z"
+          fill="url(#c2lava)" opacity="0.9"/>
+    <path d="M640 520 Q760 500 900 524 Q1010 542 1100 520 Q1160 506 1200 516 L1200 534 Q1150 524 1098 538 Q1006 560 894 542 Q758 518 642 538 Z"
+          fill="url(#c2lava)" opacity="0.75"/>
+    <!-- dòng chảy chính dẫn vào sâu -->
+    <path d="M596 462 Q604 500 600 540 Q596 574 606 600 L630 600 Q618 572 622 540 Q626 500 618 464 Z"
+          fill="url(#c2lava)" opacity="0.95"/>
+  </g>
+
+  <!-- QUẦNG SÁNG DUNG NHAM -->
+  <ellipse cx="300" cy="500" rx="200" ry="52" fill="#fb923c" opacity="0.20" filter="url(#c2soft)"/>
+  <ellipse cx="920" cy="534" rx="220" ry="46" fill="#fb923c" opacity="0.18" filter="url(#c2soft)"/>
+  <ellipse cx="610" cy="540" rx="130" ry="60" fill="#fde68a" opacity="0.22" filter="url(#c2soft)"/>
+
+  <!-- HỒ DUNG NHAM -->
+  <ellipse cx="600" cy="536" rx="86" ry="26" fill="url(#c2pool)"/>
+  <ellipse cx="600" cy="536" rx="52" ry="14" fill="#fde68a" opacity="0.55" filter="url(#c2soft2)"/>
+
+  <!-- BỌT DUNG NHAM -->
+  <g fill="#fde68a">
+    <circle cx="566" cy="530" r="3.2" opacity="0.9"/><circle cx="618" cy="540" r="2.4" opacity="0.8"/>
+    <circle cx="640" cy="528" r="2" opacity="0.7"/><circle cx="586" cy="546" r="2.2" opacity="0.75"/>
+    <circle cx="298" cy="498" r="2.6" opacity="0.7"/><circle cx="336" cy="508" r="1.8" opacity="0.6"/>
+    <circle cx="912" cy="530" r="2.4" opacity="0.65"/><circle cx="962" cy="542" r="1.9" opacity="0.6"/>
+  </g>
+
+  <!-- TÀN LỬA BAY -->
+  <g fill="#fbbf24">
+    <circle cx="486" cy="382" r="2.4" opacity="0.9"/><circle cx="524" cy="332" r="1.7" opacity="0.7"/>
+    <circle cx="690" cy="352" r="2.1" opacity="0.8"/><circle cx="742" cy="292" r="1.5" opacity="0.6"/>
+    <circle cx="356" cy="420" r="2" opacity="0.75"/><circle cx="838" cy="396" r="2.3" opacity="0.85"/>
+    <circle cx="262" cy="356" r="1.6" opacity="0.6"/><circle cx="1006" cy="368" r="1.9" opacity="0.65"/>
+    <circle cx="596" cy="288" r="1.8" opacity="0.65"/><circle cx="908" cy="252" r="1.5" opacity="0.55"/>
+  </g>
+  <g fill="#fff7ed">
+    <circle cx="600" cy="530" r="3.4" opacity="0.85"/><circle cx="580" cy="518" r="2" opacity="0.6"/>
+    <circle cx="624" cy="524" r="2.2" opacity="0.65"/>
+  </g>
+
+  <!-- ĐÁ ĐEN GẦN -->
+  <g fill="#140705">
+    <ellipse cx="386" cy="566" rx="34" ry="12"/>
+    <ellipse cx="820" cy="580" rx="40" ry="14"/>
+    <ellipse cx="214" cy="560" rx="26" ry="10"/>
+    <ellipse cx="1006" cy="570" rx="30" ry="11"/>
+    <ellipse cx="486" cy="592" rx="22" ry="8"/>
+  </g>
+
+  <!-- SƯƠNG TRO -->
+  <rect x="0" y="404" width="1200" height="70" fill="url(#c2ash)"/>
+  <rect x="0" y="470" width="1200" height="52" fill="url(#c2ash)" opacity="0.7"/>
+
+  <!-- VIỀN TỐI -->
+  <path d="M0 0 L1200 0 L1200 96 Q600 40 0 96 Z" fill="#0b0403" opacity="0.45"/>
+  <path d="M0 600 L1200 600 L1200 506 Q600 566 0 506 Z" fill="#0b0403" opacity="0.58"/>
+  <path d="M0 0 L112 0 L0 128 Z" fill="#0b0403" opacity="0.4"/>
+  <path d="M1200 0 L1088 0 L1200 128 Z" fill="#0b0403" opacity="0.4"/>
+  <rect width="1200" height="600" fill="none" stroke="#0b0403" stroke-width="3" opacity="0.45"/>
+</svg>
