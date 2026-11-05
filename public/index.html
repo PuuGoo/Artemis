@@ -652,6 +652,102 @@
     .hv2-room-main #hudRoomText { font-size: 15px; font-weight: 900; color: #fcd34d; text-shadow: 0 0 10px rgba(251,191,36,.5); }
     .hv2-enemy { font-size: 11px; font-weight: 800; color: #fda4af; padding: 1px 7px; border-radius: 999px; background: rgba(244,63,94,.14); border: 1px solid rgba(244,63,94,.35); }
     .hv2-pips { display: flex; gap: 3px; margin-top: 5px; }
+    /* Dòng định hướng: cho người chơi biết còn bao xa tới trùm kế / hết chương.
+       Trước đây chỉ thấy "Phòng 7/15" — không biết phòng nào có trùm, còn bao lâu. */
+    .hv2-nextup { font-size: 9px; font-weight: 900; letter-spacing: .02em; margin-top: 3px;
+      color: #fbbf24; display: flex; align-items: center; gap: 3px; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; }
+    .hv2-nextup.is-boss { color: #fda4af; animation: hv2nextPulse 1.1s ease-in-out infinite; }
+    .hv2-nextup.is-final { color: #f0abfc; }
+    .hv2-nextup.is-clear { color: #4ade80; }
+    @keyframes hv2nextPulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+    /* ==================== ROOM CLEAR OVERLAY ====================
+       Nằm giữa màn hình, không chặn thao tác (pointer-events:none) để người chơi
+       vẫn di chuyển vào cổng ngay khi nó đang hiện. */
+    #roomClearOverlay { position: absolute; inset: 0; display: flex; align-items: center;
+      justify-content: center; pointer-events: none; z-index: 12; }
+    #roomClearOverlay.hidden { display: none; }
+    #roomClearCard { display: flex; flex-direction: column; align-items: center; gap: 2px;
+      animation: rcPop .45s cubic-bezier(.16,1.3,.3,1) both; }
+    #roomClearCard.rc-out { animation: rcOut .4s ease forwards; }
+    .rc-kicker { font-size: 10px; font-weight: 900; letter-spacing: .26em; color: #fde68a;
+      text-shadow: 0 0 14px rgba(251,191,36,.9), 0 2px 4px #000; }
+    .rc-title { font-size: 30px; font-weight: 900; letter-spacing: .04em; line-height: 1.05;
+      color: #fff; text-shadow: 0 0 24px rgba(251,191,36,.95), 0 0 48px rgba(251,191,36,.5), 0 3px 6px #000; }
+    .rc-title.rc-boss { color: #fecdd3; text-shadow: 0 0 24px rgba(244,63,94,.95), 0 0 52px rgba(244,63,94,.55), 0 3px 6px #000; }
+    .rc-stats { display: flex; gap: 10px; margin-top: 3px; }
+    .rc-stat { font-size: 11px; font-weight: 900; color: #e2e8f0;
+      background: rgba(8,12,26,.82); border: 1px solid rgba(148,163,184,.34);
+      border-radius: 999px; padding: 2px 10px; backdrop-filter: blur(6px);
+      animation: rcStatIn .4s .12s ease both; }
+    .rc-next { margin-top: 5px; font-size: 11px; font-weight: 900; letter-spacing: .05em;
+      color: #0f172a; background: linear-gradient(180deg,#fde68a,#f59e0b);
+      border: 1px solid #fff8; border-radius: 999px; padding: 3px 12px;
+      box-shadow: 0 4px 14px -4px rgba(251,191,36,.9);
+      animation: rcNextIn .45s .22s cubic-bezier(.2,1.3,.4,1) both; }
+    .rc-next.rc-next-boss { color: #fff; background: linear-gradient(180deg,#f43f5e,#9f1239);
+      box-shadow: 0 4px 16px -4px rgba(244,63,94,.95);
+      animation: rcNextIn .45s .22s cubic-bezier(.2,1.3,.4,1) both, rcBossPulse 1s .7s ease-in-out infinite; }
+    @keyframes rcPop { from { opacity: 0; transform: scale(.82) translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes rcOut { to { opacity: 0; transform: scale(1.05); } }
+    @keyframes rcStatIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @keyframes rcNextIn { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
+    @keyframes rcBossPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
+    @media (max-width: 520px) { .rc-title { font-size: 23px; } .rc-kicker { font-size: 8.5px; } .rc-next { font-size: 9.5px; padding: 2px 9px; } }
+    /* ==================== DEFEAT PANEL ==================== */
+    .df-hero { position: relative; padding: 20px 20px 14px; text-align: center; overflow: hidden;
+      border-bottom: 1px solid rgba(244,63,94,.22); }
+    .df-veil { position: absolute; inset: -50%; pointer-events: none;
+      background: radial-gradient(circle at 50% 42%, rgba(244,63,94,.3), transparent 62%);
+      animation: dfVeil 3.2s ease-in-out infinite; }
+    .df-skull { position: relative; font-size: 42px; line-height: 1;
+      filter: drop-shadow(0 0 18px rgba(244,63,94,.85)) drop-shadow(0 4px 10px rgba(0,0,0,.75));
+      animation: dfSkull .9s cubic-bezier(.2,1.5,.35,1) both; }
+    .df-title { position: relative; margin-top: 5px; font-size: 20px; font-weight: 900; letter-spacing: .1em;
+      color: #fda4af; text-shadow: 0 0 20px rgba(244,63,94,.75), 0 2px 4px #000; }
+    .df-subtitle { position: relative; margin-top: 3px; font-size: 11.5px; font-weight: 800; color: #94a3b8; }
+    .df-progress { padding: 11px 18px; background: rgba(2,6,23,.5); border-bottom: 1px solid rgba(255,255,255,.07); }
+    .df-progress-top { display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 8.5px; font-weight: 900; letter-spacing: .09em; color: #64748b; margin-bottom: 5px; }
+    .df-progress-top b { font-size: 12px; color: #fda4af; letter-spacing: 0; }
+    .df-progress-track { height: 7px; border-radius: 4px; background: rgba(2,6,23,.9);
+      overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.8); }
+    .df-progress-fill { height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, #f43f5e, #fb923c);
+      box-shadow: 0 0 10px rgba(244,63,94,.7);
+      animation: dfFill .7s cubic-bezier(.2,.9,.3,1) both; }
+    .df-record { margin-top: 7px; font-size: 10px; font-weight: 900; color: #fde68a;
+      text-align: center; animation: dfTipIn .4s .5s ease both; }
+    .df-best { margin-top: 6px; font-size: 9.5px; font-weight: 800; color: #64748b; text-align: center; }
+    .df-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.07); }
+    .df-stat { padding: 8px 4px; text-align: center; background: rgba(2,6,23,.55); }
+    .df-stat b { display: block; font-size: 12.5px; font-weight: 900; color: #fbbf24; }
+    .df-stat span { display: block; font-size: 7.5px; font-weight: 900; letter-spacing: .07em; color: #64748b; margin-top: 1px; }
+    .df-tips { padding: 11px 16px 3px; display: flex; flex-direction: column; gap: 7px; }
+    .df-tip { display: flex; gap: 8px; align-items: flex-start; font-size: 10.5px; font-weight: 700;
+      color: #cbd5e1; line-height: 1.5; background: rgba(30,41,59,.5);
+      border: 1px solid rgba(148,163,184,.16); border-radius: 9px; padding: 7px 9px;
+      animation: dfTipIn .4s ease both; }
+    .df-tip:nth-child(1) { animation-delay: .25s; }
+    .df-tip:nth-child(2) { animation-delay: .38s; }
+    .df-tip:nth-child(3) { animation-delay: .51s; }
+    .df-tip-icon { font-size: 13px; line-height: 1.25; flex: none; }
+    .df-actions { display: flex; gap: 8px; padding: 13px 18px 17px; }
+    .df-btn { padding: 11px; border-radius: 12px; font-size: 12.5px; font-weight: 900; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.24); transition: transform .12s, filter .12s; }
+    .df-btn:hover { filter: brightness(1.15); } .df-btn:active { transform: scale(.96); }
+    .df-btn-ghost { flex: 1; background: rgba(15,23,42,.9); color: #cbd5e1; border-color: rgba(148,163,184,.3); }
+    .df-btn-primary { flex: 2; color: #1c0a0a; background: linear-gradient(135deg, #fda4af, #f43f5e);
+      box-shadow: 0 6px 18px -6px rgba(244,63,94,.9); }
+    @keyframes dfVeil { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+    @keyframes dfSkull { from { opacity: 0; transform: scale(.4) rotate(-12deg); } to { opacity: 1; transform: none; } }
+    @keyframes dfFill { from { width: 0; } }
+    @keyframes dfTipIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 520px) {
+      .df-skull { font-size: 34px; } .df-title { font-size: 17px; }
+      .df-tip { font-size: 9.5px; padding: 6px 8px; }
+      .df-actions { padding: 11px 14px 14px; } .df-btn { font-size: 11.5px; padding: 10px; }
+    }
     .hv2-pip { flex: 1; height: 4px; border-radius: 3px; background: rgba(148,163,184,.25); min-width: 5px; }
     .hv2-pip.done { background: linear-gradient(90deg,#34d399,#2dd4bf); box-shadow: 0 0 6px rgba(52,211,153,.7); }
     .hv2-pip.cur { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: hv2pulse 1s ease-in-out infinite; }
@@ -688,7 +784,144 @@
     .hv2-loot b { font-size: 15px; color: #fff; text-shadow: 0 0 10px rgba(251,191,36,.7); }
     .hv2-warn { height: 36px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 900; color: #451a03; background: linear-gradient(180deg,#fcd34d,#f59e0b); border: 1px solid #fff8; }
     .hv2-hint { text-align: center; max-width: 100%; }
+    /* ==================== BOSS INTRO BANNER ====================
+       Hiện khi trùm vào phòng: nền đỏ tối, viền phát sáng, icon trùm nảy vào,
+       tên trượt lên, một vệt scan chạy ngang. Tự biến mất sau 2.2s. */
+    .hv2-bossintro { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 14px;
+      border-radius: 14px; overflow: hidden; border: 2px solid rgba(244,63,94,.85);
+      background: linear-gradient(100deg, rgba(76,5,25,.97), rgba(30,7,20,.96) 45%, rgba(76,5,25,.97));
+      box-shadow: 0 0 26px rgba(244,63,94,.55), inset 0 0 20px rgba(244,63,94,.14);
+      animation: hv2introIn .42s cubic-bezier(.16,1.2,.3,1) both; }
+    .hv2-bossintro.hide { animation: hv2introOut .45s ease forwards; }
+    .hv2-bossintro-glow { position: absolute; inset: -40%; pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, rgba(244,63,94,.35), transparent 62%);
+      animation: hv2introGlow 1.6s ease-in-out infinite; }
+    .hv2-bossintro-icon { position: relative; font-size: 26px; line-height: 1; flex: none;
+      filter: drop-shadow(0 0 10px rgba(244,63,94,.9)); animation: hv2introIcon .5s cubic-bezier(.2,1.8,.4,1) both; }
+    .hv2-bossintro-text { position: relative; min-width: 0; }
+    .hv2-bossintro-kicker { font-size: 8.5px; font-weight: 900; letter-spacing: .22em; color: #fda4af; opacity: .95; }
+    .hv2-bossintro-name { font-size: 14px; font-weight: 900; color: #fff; line-height: 1.15;
+      text-shadow: 0 0 14px rgba(244,63,94,.9), 0 2px 3px #000;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: hv2introSlide .45s .1s ease both; }
+    .hv2-bossintro-scan { position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(100deg, transparent 35%, rgba(255,255,255,.22) 50%, transparent 65%);
+      transform: translateX(-120%); animation: hv2introScan 1.1s .18s ease-out; }
+    @keyframes hv2introIn { from { opacity: 0; transform: translateY(-14px) scale(.9); } to { opacity: 1; transform: none; } }
+    @keyframes hv2introOut { to { opacity: 0; transform: translateY(-10px) scale(.96); } }
+    @keyframes hv2introGlow { 0%,100% { opacity: .45; } 50% { opacity: .95; } }
+    @keyframes hv2introIcon { from { transform: scale(0) rotate(-30deg); } to { transform: none; } }
+    @keyframes hv2introSlide { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+    @keyframes hv2introScan { to { transform: translateX(120%); } }
+    @media (max-width: 520px) { .hv2-bossintro { padding: 6px 10px; gap: 8px; } .hv2-bossintro-icon { font-size: 21px; } .hv2-bossintro-name { font-size: 12px; } }
     .hv2-hintwrap { bottom: 58px; display: flex; justify-content: center; }
+    /* ==================== PLAYER VITALS ====================
+       Thanh máu người chơi: fill đổi màu theo % (xanh -> vàng -> đỏ), có "ghost"
+       trắng mờ chạy chậm phía sau để thấy lượng máu vừa mất. */
+    .hv2-vitals { background: linear-gradient(180deg, rgba(20,28,52,.86), rgba(8,12,26,.9));
+      backdrop-filter: blur(10px) saturate(1.3); border: 1px solid rgba(148,163,184,.3);
+      border-radius: 12px; padding: 5px 9px 6px; box-shadow: 0 5px 16px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.07); }
+    .hv2-vitals-top { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+    .hv2-vitals-icon { font-size: 12px; line-height: 1; filter: drop-shadow(0 0 5px rgba(244,63,94,.8)); }
+    .hv2-vitals-num { font-size: 10.5px; font-weight: 900; color: #fecdd3; letter-spacing: .01em; }
+    .hv2-vitals-pct { font-size: 9.5px; font-weight: 900; color: #94a3b8; margin-left: auto; }
+    .hv2-vitals-track { position: relative; height: 9px; border-radius: 999px; background: rgba(2,6,23,.85);
+      overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.8); border: 1px solid rgba(244,63,94,.22); }
+    .hv2-vitals-fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; z-index: 2;
+      background: linear-gradient(90deg,#22c55e,#4ade80); transition: width .16s ease-out, background .3s; }
+    .hv2-vitals-fill.warn { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+    .hv2-vitals-fill.crit { background: linear-gradient(90deg,#be123c,#f43f5e); animation: hv2hpPulse .8s ease-in-out infinite; }
+    .hv2-vitals-ghost { position: absolute; inset: 0 auto 0 0; border-radius: 999px; z-index: 1;
+      background: rgba(248,113,113,.5); transition: width .7s ease-out .12s; }
+    .hv2-vitals.low .hv2-vitals-num { color: #fda4af; }
+    @keyframes hv2hpPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.45); } }
+    /* ==================== CHAPTER VICTORY PANEL ==================== */
+    .cv-hero { position: relative; padding: 22px 20px 16px; text-align: center; overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,.1); }
+    .cv-rays { position: absolute; inset: -60% -20%; pointer-events: none;
+      background: conic-gradient(from 0deg, transparent 0deg, var(--cv-accent)22 12deg, transparent 24deg,
+        transparent 40deg, var(--cv-accent)1a 52deg, transparent 64deg, transparent 90deg,
+        var(--cv-accent)22 102deg, transparent 114deg, transparent 150deg, var(--cv-accent)1a 162deg, transparent 174deg,
+        transparent 210deg, var(--cv-accent)22 222deg, transparent 234deg, transparent 270deg, var(--cv-accent)1a 282deg, transparent 294deg);
+      animation: cvRays 14s linear infinite; opacity: .55; }
+    .cv-trophy { position: relative; font-size: 46px; line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(251,191,36,.85)) drop-shadow(0 4px 10px rgba(0,0,0,.7));
+      animation: cvTrophy 1.1s cubic-bezier(.2,1.6,.35,1) both; }
+    .cv-title { position: relative; margin-top: 6px; font-size: 20px; font-weight: 900; letter-spacing: .08em;
+      color: #fde68a; text-shadow: 0 0 20px rgba(251,191,36,.7), 0 2px 4px #000; }
+    .cv-subtitle { position: relative; margin-top: 3px; font-size: 11.5px; font-weight: 800; color: #cbd5e1; }
+    .cv-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,.08); }
+    .cv-stat { padding: 9px 4px; text-align: center; background: rgba(2,6,23,.55); }
+    .cv-stat b { display: block; font-size: 13px; font-weight: 900; color: #fbbf24; }
+    .cv-stat span { display: block; font-size: 8px; font-weight: 900; letter-spacing: .07em; color: #64748b; margin-top: 1px; }
+    .cv-unlock { padding: 13px 18px; background: rgba(2,6,23,.42); border-top: 1px solid rgba(255,255,255,.08); }
+    .cv-unlock-kicker { font-size: 8.5px; font-weight: 900; letter-spacing: .14em; color: #4ade80; margin-bottom: 7px;
+      animation: cvUnlockKicker .6s .3s ease both; }
+    .cv-unlock-row { display: flex; align-items: center; gap: 10px; animation: cvUnlockRow .5s .35s cubic-bezier(.2,1.3,.4,1) both; }
+    .cv-unlock-icon { font-size: 28px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(0,0,0,.7)); }
+    .cv-unlock-meta { min-width: 0; }
+    .cv-unlock-name { font-size: 14px; font-weight: 900; color: #f8fafc; line-height: 1.2; }
+    .cv-unlock-diff { font-size: 10px; font-weight: 800; margin-top: 2px; }
+    .cv-unlock.cv-final { text-align: center; }
+    .cv-unlock-final { font-size: 11px; font-weight: 700; color: #cbd5e1; line-height: 1.5; }
+    .cv-actions { display: flex; gap: 8px; padding: 14px 18px 18px; }
+    .cv-btn { padding: 11px; border-radius: 12px; font-size: 12.5px; font-weight: 900; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.28); transition: transform .12s, filter .12s; }
+    .cv-btn:hover { filter: brightness(1.14); } .cv-btn:active { transform: scale(.96); }
+    .cv-btn-ghost { flex: 1; background: rgba(15,23,42,.9); color: #cbd5e1; border-color: rgba(148,163,184,.3); }
+    .cv-btn-primary { flex: 2; color: #0f172a; box-shadow: 0 6px 18px -6px rgba(0,0,0,.7); }
+    @keyframes cvRays { to { transform: rotate(360deg); } }
+    @keyframes cvTrophy { from { opacity: 0; transform: scale(.3) rotate(-14deg); } to { opacity: 1; transform: none; } }
+    @keyframes cvUnlockKicker { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+    @keyframes cvUnlockRow { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 520px) {
+      .cv-trophy { font-size: 36px; } .cv-title { font-size: 17px; }
+      .cv-stat b { font-size: 11.5px; } .cv-unlock-name { font-size: 12.5px; }
+      .cv-actions { padding: 12px 14px 15px; } .cv-btn { font-size: 11.5px; padding: 10px; }
+    }
+    /* ==================== BESTIARY (SỔ TAY QUÁI VẬT) ==================== */
+    .bs-header { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 9px 12px; background: linear-gradient(180deg, rgba(30,41,59,.95), rgba(15,23,42,.92));
+      border-bottom: 1px solid rgba(148,163,184,.18); }
+    .bs-header-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .bs-book { font-size: 19px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+    .bs-title { font-size: 10px; font-weight: 900; letter-spacing: .1em; color: #fbbf24; }
+    .bs-sub { font-size: 9.5px; font-weight: 700; color: #94a3b8; margin-top: 1px; }
+    .bs-sub b { color: #38bdf8; }
+    .bs-header-right { display: flex; align-items: center; gap: 8px; flex: none; }
+    .bs-progress { width: 62px; height: 5px; border-radius: 3px; background: rgba(2,6,23,.85); overflow: hidden; }
+    .bs-progress-fill { height: 100%; background: linear-gradient(90deg,#38bdf8,#818cf8); transition: width .3s; }
+    .bs-toggle { font-size: 9.5px; font-weight: 900; color: #cbd5e1; background: rgba(15,23,42,.95);
+      border: 1px solid rgba(148,163,184,.3); border-radius: 999px; padding: 3px 9px; cursor: pointer; }
+    .bs-toggle:hover { border-color: rgba(148,163,184,.6); color: #fff; }
+    .bs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 7px; padding: 9px; }
+    .bs-card { position: relative; border-radius: 11px; padding: 8px 9px; overflow: hidden;
+      background: linear-gradient(160deg, rgba(15,23,42,.96), rgba(2,6,23,.96));
+      border: 1px solid rgba(148,163,184,.2); transition: border-color .16s, transform .16s; }
+    .bs-card:not(.bs-unknown):hover { transform: translateY(-2px); border-color: var(--bs-color, #64748b); }
+    .bs-card::before { content: ''; position: absolute; top: -22px; right: -22px; width: 62px; height: 62px;
+      border-radius: 50%; background: radial-gradient(circle, var(--bs-color, #64748b)33, transparent 70%); pointer-events: none; }
+    .bs-card.bs-boss { border-color: rgba(244,63,94,.42); background: linear-gradient(160deg, rgba(60,8,22,.96), rgba(18,4,10,.97)); }
+    .bs-card.bs-boss::before { background: radial-gradient(circle, rgba(244,63,94,.35), transparent 70%); }
+    .bs-card.bs-unknown { border-style: dashed; opacity: .72; }
+    .bs-head { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+    .bs-icon { font-size: 17px; line-height: 1; flex: none; filter: drop-shadow(0 1px 3px rgba(0,0,0,.6)); }
+    .bs-meta { min-width: 0; flex: 1; }
+    .bs-name { font-size: 10.5px; font-weight: 900; color: #f8fafc; line-height: 1.15;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bs-tier { font-size: 7.5px; font-weight: 900; letter-spacing: .06em; margin-top: 1px; }
+    .bs-count { font-size: 9px; font-weight: 900; color: #fbbf24; flex: none;
+      background: rgba(251,191,36,.13); border: 1px solid rgba(251,191,36,.3); border-radius: 999px; padding: 1px 5px; }
+    .bs-threat { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+    .bs-threat-lbl { font-size: 7.5px; font-weight: 900; letter-spacing: .05em; color: #64748b; }
+    .bs-threat-pips { display: flex; gap: 2px; align-items: flex-end; }
+    .bs-lore { font-size: 9.5px; color: #cbd5e1; line-height: 1.42; margin-bottom: 4px; }
+    .bs-behavior { font-size: 9px; color: #94a3b8; line-height: 1.4; margin-bottom: 5px; }
+    .bs-behavior b { color: #fbbf24; font-weight: 900; }
+    .bs-tags { display: flex; flex-wrap: wrap; gap: 3px; }
+    .bs-tag { font-size: 7.5px; font-weight: 800; color: #cbd5e1; background: rgba(51,65,85,.75);
+      border: 1px solid rgba(148,163,184,.2); border-radius: 5px; padding: 1px 4px; }
+    .bs-hint { font-size: 9px; color: #64748b; font-style: italic; }
+    @media (max-width: 520px) { .bs-grid { grid-template-columns: repeat(2, 1fr); padding: 7px; gap: 6px; } }
     @media (max-width: 520px) { .hv2-xp > div:last-child > div:first-child { display: none; } .hv2-xp-track { height: 7px; } .hv2-boss { padding: 4px 10px 6px; } .hv2-boss .text-xs { font-size: 11px; margin-bottom: 2px; } .hv2-boss-track { height: 9px; } .hv2-warn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-room { min-width: 104px; padding: 5px 9px 6px; } .hv2-top { flex-wrap: wrap; } .hv2-xp { order: 3; flex-basis: 100%; max-width: none; padding: 2px 10px 2px 2px; } .hv2-lv { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; } .hv2-btn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-hint { font-size: 10px; padding: 2px 10px; text-align: center; } }
   </style>
 
@@ -800,6 +1033,15 @@
             </div>
           </div>
         </div>
+
+        <!-- ==================== CHỌN CHƯƠNG: THẺ TRỰC QUAN ====================
+             Thay cặp nút ◀ ▶ (phải bấm mò để biết có mấy chương, chương nào mở)
+             bằng 3 thẻ hiện đủ: số chương, tên, độ khó, số phòng, tiến trình,
+             trạng thái khoá. Bấm thẳng vào thẻ muốn chơi. -->
+        <div id="chapterSelectStrip" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 shrink-0"></div>
+
+        <!-- SỔ TAY QUÁI VẬT: cho người chơi biết mình đang đánh cái gì -->
+        <div id="bestiaryPanel" class="rounded-2xl border border-slate-700/70 bg-slate-900/85 overflow-hidden shrink-0"></div>
 
         <!-- Middle Grid: Hero Selection & Current Loadout Summary -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1346,6 +1588,8 @@
                 <span id="hudRoomText">Phòng 1 / 15</span>
                 <span id="hudEnemyLeftText" class="hv2-enemy">Quái: 4</span>
               </div>
+              <!-- Dòng định hướng: còn bao xa tới trùm kế / hết chương -->
+              <div class="hv2-nextup" id="hudNextUp">🐾 Còn 4 phòng tới Trùm</div>
               <div class="hv2-pips" id="hudRoomPips"></div>
             </div>
 
@@ -1376,6 +1620,19 @@
             <div class="hv2-boss-track"><div id="bossHpBar" class="h-full transition-all duration-100" style="width: 100%;"></div></div>
           </div>
 
+          <!-- Banner "TRÙM XUẤT HIỆN" — hiện 2.2s rồi tự mờ, tạo nhịp căng thẳng -->
+          <div id="bossIntroBanner" class="hidden w-full max-w-md mx-auto">
+            <div class="hv2-bossintro">
+              <div class="hv2-bossintro-glow"></div>
+              <div class="hv2-bossintro-icon" id="bossIntroIcon">👑</div>
+              <div class="hv2-bossintro-text">
+                <div class="hv2-bossintro-kicker">CẢNH BÁO</div>
+                <div class="hv2-bossintro-name" id="bossIntroName">TRÙM XUẤT HIỆN</div>
+              </div>
+              <div class="hv2-bossintro-scan"></div>
+            </div>
+          </div>
+
         </div>
 
         <div class="pointer-events-none absolute inset-x-0 flex justify-center z-10 px-2 hv2-hintwrap">
@@ -1386,6 +1643,31 @@
         <div class="pointer-events-none absolute bottom-2 left-2 right-2 flex items-end justify-between z-10">
           <div id="hudSkillIcons" class="flex flex-wrap gap-1.5 max-w-[70%]"></div>
           <div class="hv2-glass hv2-loot">🪙 <span>Chiến lợi phẩm</span> <b id="hudRunGold">0</b></div>
+        </div>
+
+        <!-- ==================== ROOM CLEAR OVERLAY ====================
+             Hiện 1,9s khi dọn sạch phòng: số phòng vừa xong, thưởng nhặt được,
+             và phòng kế (thường / trùm). Trước đây chỉ đổi dòng gợi ý nhỏ trên HUD
+             — người chơi không cảm nhận được mình vừa đạt một mốc. -->
+        <div id="roomClearOverlay" class="hidden">
+          <div id="roomClearCard"></div>
+        </div>
+
+        <!-- ==================== PLAYER VITALS (góc dưới trái) ====================
+             Trước đây KHÔNG có thanh máu người chơi trong HUD — người chơi chỉ biết
+             mình sắp chết khi nhìn nhân vật nhấp nháy. Nay hiện rõ HP + tỉ lệ. -->
+        <div class="pointer-events-none absolute left-2" style="bottom:52px;max-width:min(52%,260px);z-index:11">
+          <div class="hv2-vitals">
+            <div class="hv2-vitals-top">
+              <span class="hv2-vitals-icon" id="hudVitalsIcon">❤️</span>
+              <span class="hv2-vitals-num" id="hudHpText">0 / 0</span>
+              <span class="hv2-vitals-pct" id="hudHpPct">100%</span>
+            </div>
+            <div class="hv2-vitals-track">
+              <div class="hv2-vitals-fill" id="hudHpBar" style="width:100%"></div>
+              <div class="hv2-vitals-ghost" id="hudHpGhost" style="width:100%"></div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1457,6 +1739,31 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- ==================== MODAL: THẤT BẠI ====================
+         Thua là lúc người chơi dễ bỏ game nhất. Trước đây chỉ hiện summary chung
+         "Bạn đã ngã xuống tại phòng N" — không nói vì sao, không gợi ý nên làm gì
+         tiếp. Nay: nguyên nhân chết, tỉ lệ hoàn thành, so sánh kỷ lục, và gợi ý
+         cụ thể dựa trên chính chỉ số của người chơi. -->
+    <div id="runDefeatModal" class="hidden absolute inset-0 z-45 bg-slate-950/94 backdrop-blur-md flex flex-col items-center justify-center p-4">
+      <div id="runDefeatCard" class="w-full max-w-lg rounded-3xl overflow-hidden border-2 shadow-2xl flex flex-col"></div>
+    </div>
+
+    <!-- ==================== MODAL: CHINH PHỤC CHƯƠNG ====================
+         Hiện khi phá đảo: ăn mừng, thống kê trận, và QUAN TRỌNG NHẤT là báo
+         chương tiếp theo vừa được mở khoá. Trước đây thắng chương chỉ hiện
+         summary thường, người chơi không biết mình vừa mở nội dung mới. -->
+    <div id="chapterVictoryModal" class="hidden absolute inset-0 z-45 bg-slate-950/94 backdrop-blur-md flex flex-col items-center justify-center p-4">
+      <div id="chapterVictoryCard" class="w-full max-w-lg rounded-3xl overflow-hidden border-2 shadow-2xl flex flex-col"></div>
+    </div>
+
+    <!-- ==================== MODAL 0: BRIEFING TRƯỚC TRẬN ====================
+         Hiện rõ: chương, độ khó, số phòng, trùm, kỷ lục, và cảnh báo nếu người
+         chơi yếu so với chương. Bấm "Xuất Chinh" mới vào trận — tránh việc bấm
+         nhầm chương rồi chết ngay mà không hiểu vì sao. -->
+    <div id="runBriefingModal" class="hidden absolute inset-0 z-45 bg-slate-950/92 backdrop-blur-md flex flex-col items-center justify-center p-4">
+      <div id="runBriefingCard" class="w-full max-w-lg rounded-3xl overflow-hidden border-2 shadow-2xl flex flex-col"></div>
     </div>
 
     <!-- ==================== MODAL 2: DEVIL PACT ENCOUNTER ==================== -->
@@ -3033,7 +3340,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           floorColor1: '#1e293b',
           floorColor2: '#172033',
           wallColor: '#334155',
-          enemyScale: 1.0
+          enemyScale: 1.0,
+          icon: '🏰',
+          accent: '#38bdf8',
+          accent2: '#0ea5e9',
+          gradFrom: '#0c4a6e',
+          gradTo: '#082f49',
+          difficulty: 1,
+          difficultyLabel: 'Dễ — Tân Thủ',
+          themeName: 'Đá Cổ',
+          bossIcon: '🔥',
+          bossName: 'Golem Dung Nham',
+          unlock: null
         },
         {
           id: 2,
@@ -3044,7 +3362,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           floorColor1: '#2a1810',
           floorColor2: '#1f120b',
           wallColor: '#7c2d12',
-          enemyScale: 1.45
+          enemyScale: 1.45,
+          icon: '🌋',
+          accent: '#fb923c',
+          accent2: '#ea580c',
+          gradFrom: '#7c2d12',
+          gradTo: '#431407',
+          difficulty: 2,
+          difficultyLabel: 'Thường — Cần Trang Bị',
+          themeName: 'Dung Nham',
+          bossIcon: '🕷️',
+          bossName: 'Nữ Hoàng Nhện Độc',
+          unlock: { type: 'chapterWin', chapterId: 1, label: 'Thắng Chương 1' }
         },
         {
           id: 3,
@@ -3055,9 +3384,153 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           floorColor1: '#1e1b4b',
           floorColor2: '#151236',
           wallColor: '#4c1d95',
-          enemyScale: 2.0
+          enemyScale: 2.0,
+          icon: '🌌',
+          accent: '#c084fc',
+          accent2: '#a855f7',
+          gradFrom: '#4c1d95',
+          gradTo: '#2e1065',
+          difficulty: 3,
+          difficultyLabel: 'Ác Mộng — Trang Bị Cao',
+          themeName: 'Hư Không',
+          bossIcon: '👑',
+          bossName: 'Đại Ma Vương Atreus',
+          unlock: { type: 'chapterWin', chapterId: 2, label: 'Thắng Chương 2' }
         }
       ];
+
+      /**
+       * Chương đã phá đảo chưa.
+       *
+       * Nguồn 1: winsByChapter — đếm số lần thắng (chính xác nhất).
+       * Nguồn 2: bestRooms đạt bằng số phòng của chương — suy ra cho tài khoản
+       *   cũ có kỷ lục nhưng chưa từng ghi nhận "win" (field này thêm sau), nếu
+       *   không sẽ khoá oan người chơi đã phá đảo từ trước.
+       */
+      function isChapterWon(chapterId) {
+        if (((SaveState.winsByChapter || {})[chapterId] || 0) > 0) return true;
+        const ch = CHAPTERS.find(c => c.id === chapterId);
+        if (!ch) return false;
+        return getChapterBest(chapterId) >= ch.rooms;
+      }
+
+      /** Chương có đang bị khoá không (phải thắng chương trước). */
+      function isChapterLocked(ch) {
+        if (!ch || !ch.unlock) return false;
+        if (ch.unlock.type === 'chapterWin') return !isChapterWon(ch.unlock.chapterId);
+        return false;
+      }
+
+      /**
+       * Nếu chương đang chọn bị khoá (save cũ chọn chương 3 khi chưa thắng
+       * chương 1) thì tự lùi về chương mở cao nhất. Gọi ở renderLobbyUI để thẻ
+       * "ĐANG CHỌN" không bao giờ nằm trên một chương bị khoá.
+       */
+      function normalizeSelectedChapter() {
+        const idx = SaveState.selectedChapterIdx || 0;
+        const ch = CHAPTERS[idx];
+        if (ch && !isChapterLocked(ch)) return idx;
+        let fallback = 0;
+        for (let i = CHAPTERS.length - 1; i >= 0; i--) {
+          if (!isChapterLocked(CHAPTERS[i])) { fallback = i; break; }
+        }
+        SaveState.selectedChapterIdx = fallback;
+        return fallback;
+      }
+
+      // ==================== BESTIARY: SỔ TAY QUÁI VẬT ====================
+      // Mục đích: cho người chơi hiểu mình đang đánh cái gì — máu bao nhiêu, gây
+      // bao nhiêu sát thương, có chiêu gì. Đây là chiều sâu chiến đấu thật sự:
+      // biết quái yếu gì thì mới biết nên né hay nên đứng bắn.
+      // Mở dần theo tiến trình: con nào chưa giết lần nào thì hiện "??? ".
+      const BESTIARY = [
+        {
+          id: 'slime', name: 'Slime Nhớt', icon: '🟢', tier: 'Thường',
+          color: '#4ade80', aura: '#4ade80',
+          lore: 'Khối nhớt sống trong hầm ẩm. Chậm chạp nhưng dai, hay xuất hiện theo bầy.',
+          behavior: 'Di chuyển chậm, lao vào người chơi khi áp sát.',
+          threat: 1,
+          stats: { speed: 64, contact: true, ranged: false }
+        },
+        {
+          id: 'goblin', name: 'Goblin Đột Kích', icon: '👺', tier: 'Thường',
+          color: '#a3e635', aura: '#a3e635',
+          lore: 'Lũ cướp nhỏ con nhưng nhanh nhẹn, chuyên đánh lén từ hai bên sườn.',
+          behavior: 'Di chuyển nhanh, đổi hướng liên tục để tránh đạn.',
+          threat: 1,
+          stats: { speed: 64, contact: true, ranged: false }
+        },
+        {
+          id: 'skeleton_mage', name: 'Pháp Sư Xương', icon: '💀', tier: 'Tinh Anh',
+          color: '#e2e8f0', aura: '#a855f7',
+          lore: 'Xương cốt biết niệm chú. Đứng xa bắn đạn phép, trâu hơn quái thường.',
+          behavior: 'Bắn đạn phép tầm xa. Máu cao hơn quái thường ~12%.',
+          threat: 2,
+          stats: { speed: 64, contact: false, ranged: true }
+        },
+        {
+          id: 'plant_turret', name: 'Hoa Pháo Đài', icon: '🌸', tier: 'Tinh Anh',
+          color: '#f472b6', aura: '#f472b6',
+          lore: 'Rễ cắm sâu vào đá, không di chuyển. Bù lại là giàn pháo sống bắn liên tục.',
+          behavior: 'ĐỨNG YÊN hoàn toàn, bắn đạn liên tục. Trâu nhất trong quái thường (~23% máu cao hơn).',
+          threat: 2,
+          stats: { speed: 0, contact: false, ranged: true }
+        },
+        {
+          id: 'bat', name: 'Dơi Huyết Nguyệt', icon: '🦇', tier: 'Thường',
+          color: '#a78bfa', aura: '#c084fc',
+          lore: 'Bay lượn trên đầu, khó trúng vì nhỏ và nhanh. Xuất hiện nhiều ở phòng sâu.',
+          behavior: 'Bay nhanh, di chuyển hình sin. Thân nhỏ nên khó bắn trúng.',
+          threat: 1,
+          stats: { speed: 115, contact: true, ranged: false }
+        },
+        {
+          id: 'golem', name: 'Golem Dung Nham', icon: '🔥', tier: 'TRÙM',
+          color: '#f97316', aura: '#f97316',
+          lore: 'Khối đá nóng chảy được triệu hồi để canh giữ Hầm Ngục Đá Cổ. Mỗi bước chân để lại vết cháy.',
+          behavior: 'Lao thẳng vào người chơi với tốc độ cao. Bắn đạn lửa theo hình quạt. Chịu ~9 đòn là bạn gục.',
+          threat: 4,
+          stats: { speed: 68, contact: true, ranged: true }
+        },
+        {
+          id: 'queen', name: 'Nữ Hoàng Nhện Độc', icon: '🕷️', tier: 'TRÙM',
+          color: '#a855f7', aura: '#a855f7',
+          lore: 'Chúa tể Thung Lũng Dung Nham. Tơ độc của ả làm chậm cả những anh hùng nhanh nhất.',
+          behavior: 'Bắn đạn tơ độc gây làm chậm. Di chuyển nhanh hơn Golem. Chịu ~7 đòn là bạn gục.',
+          threat: 5,
+          stats: { speed: 68, contact: true, ranged: true }
+        },
+        {
+          id: 'demon_king', name: 'Đại Ma Vương Atreus', icon: '👑', tier: 'TRÙM CUỐI',
+          color: '#e11d48', aura: '#e11d48',
+          lore: 'Kẻ ngự trị Thánh Điện Hư Không. Hắn không canh giữ kho báu — hắn canh giữ cánh cổng cuối cùng.',
+          behavior: 'Triệu hồi mưa thiên thạch, lao thẳng và bắn đạn tỏa tròn. Chịu CHỈ ~5 đòn là bạn gục.',
+          threat: 6,
+          stats: { speed: 68, contact: true, ranged: true }
+        }
+      ];
+
+      const BESTIARY_BY_ID = Object.fromEntries(BESTIARY.map(b => [b.id, b]));
+
+      /** Đánh dấu đã gặp/hạ một loại quái. Gọi từ onEnemyKilled. */
+      function recordBestiaryKill(type, isBoss) {
+        if (!type) return;
+        if (!SaveState.bestiary) SaveState.bestiary = {};
+        const rec = SaveState.bestiary[type] || { seen: 0, killed: 0, firstAt: 0 };
+        rec.seen = (rec.seen || 0) + 1;
+        rec.killed = (rec.killed || 0) + 1;
+        if (!rec.firstAt) rec.firstAt = Date.now();
+        SaveState.bestiary[type] = rec;
+      }
+
+      function getBestiaryRecord(type) {
+        return (SaveState.bestiary || {})[type] || null;
+      }
+
+      function getBestiaryDiscoveredCount() {
+        const b = SaveState.bestiary || {};
+        return BESTIARY.filter(m => (b[m.id] || {}).killed > 0).length;
+      }
 
       // ==================== ARCHERO 2 WIKI CHARACTER PORTRAIT SVG GENERATOR ====================
       function makeWikiHeroPortraitURI(cfg) {
@@ -8145,6 +8618,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           flawlessRooms: 0
         },
         winsByChapter: {},
+        // Sổ tay quái vật: { [typeId]: { seen, killed, firstAt } }
+        bestiary: {},
         achievementsUnlocked: {},
         achievementsClaimed: {},
         achievementFilter: 'all',
@@ -8214,6 +8689,21 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         load() {
           try {
             const raw = localStorage.getItem('archero2_web_save_v2');
+            // KHONG CO SAVE: phai dua ve trang thai mac dinh.
+            //
+            // LO HONG DA VA: truoc day khoi lenh nay chi chay khi `raw` ton tai.
+            // Khi localStorage trong (tai khoan moi, hoac vua dang xuat), ham
+            // khong lam gi ca — SaveState van giu du lieu da nap luc parse, tuc
+            // la du lieu cua TAI KHOAN TRUOC do tren cung trinh duyet. Ket qua:
+            // tai khoan moi thua huong winsByChapter/bestRooms/gear cua nguoi
+            // khac, va cac chuong bi coi la da pha dao.
+            if (!raw) {
+              if (typeof SAVE_STATE_DEFAULTS === 'object' && SAVE_STATE_DEFAULTS) {
+                Object.assign(this, JSON.parse(JSON.stringify(SAVE_STATE_DEFAULTS)));
+              }
+              this.normalizeLoadedGear();
+              return;
+            }
             if (raw) {
               const parsed = JSON.parse(raw);
               if (parsed && typeof parsed === 'object') {
@@ -8442,6 +8932,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               // Thành tựu & chỉ số vĩnh viễn
               lifetimeStats: this.lifetimeStats,
               winsByChapter: this.winsByChapter,
+              bestiary: this.bestiary,
               achievementsUnlocked: this.achievementsUnlocked,
               achievementsClaimed: this.achievementsClaimed,
               achievementFilter: this.achievementFilter,
@@ -8457,10 +8948,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       };
       /**
-       * Chuẩn hoá state gacha/event: các trường PHẢI là array nhưng bị lưu thành
-       * number/undefined (do schema cũ hoặc save cũ) sẽ làm .map() ném lỗi và
-       * chặn toàn bộ renderLobbyUI -> Cửa Hàng / Sự Kiện trống trơn.
+       * Ảnh chụp trạng thái mặc định, chụp NGAY sau khi SaveState vừa được định
+       * nghĩa (trước mọi thao tác). Dùng để đưa SaveState về đúng tân thủ khi
+       * localStorage trống — xem SaveState.load().
        */
+      const SAVE_STATE_DEFAULTS = JSON.parse(JSON.stringify(
+        Object.fromEntries(Object.entries(SaveState).filter(([, v]) => typeof v !== 'function'))
+      ));
       function normalizeStateArrays() {
         const ensureObj = (key, defaults) => {
           if (!SaveState[key] || typeof SaveState[key] !== 'object' || Array.isArray(SaveState[key])) {
@@ -8479,6 +8973,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         ensureObj('chestKeys', { silver_chest_key: 0, obsidian_chest_key: 0, chromatic_chest_key: 0 });
         ensureObj('gearScrolls', { weapon: 0, armor: 0, helmet: 0, ring: 0, necklace: 0, boots: 0 });
         ensureObj('wikiOtherItems', {});
+        // Sổ tay quái vật — save cũ chưa có trường này.
+        ensureObj('bestiary', {});
 
         // Các trường bắt buộc là array.
         if (!Array.isArray(SaveState.chestGachaState.lastPullResults)) {
@@ -11890,6 +12386,600 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           toast.classList.remove('opacity-100');
           toast.classList.add('opacity-0');
         }, 2200);
+      }
+
+      /**
+       * Banner "TRÙM XUẤT HIỆN": hiện 2.2s rồi tự mờ. Cho người chơi một nhịp
+       * báo trước khi trận đấu đổi hoàn toàn, thay vì trùm đột ngột xuất hiện.
+       */
+      let _bossIntroTimer = null;
+      function showBossIntro(bossType, bossNameText) {
+        const wrap = document.getElementById('bossIntroBanner');
+        if (!wrap) return;
+        const icons = { golem: '🔥', queen: '🕷️', demon_king: '👑' };
+        const iconEl = document.getElementById('bossIntroIcon');
+        const nameEl = document.getElementById('bossIntroName');
+        if (iconEl) iconEl.textContent = icons[bossType] || '👑';
+        if (nameEl) {
+          // bossNames có dạng "🔥 TRÙM: GOLEM DUNG NHAM" -> chỉ lấy phần tên
+          const raw = String(bossNameText || 'TRÙM XUẤT HIỆN');
+          nameEl.textContent = raw.replace(/^[^\s]+\s*/, '').replace(/^TRÙM:\s*/i, '');
+        }
+        wrap.classList.remove('hidden');
+        const box = wrap.querySelector('.hv2-bossintro');
+        if (box) {
+          box.classList.remove('hide');
+          // Ép animation chạy lại mỗi lần trùm xuất hiện
+          void box.offsetWidth;
+        }
+        if (_bossIntroTimer) clearTimeout(_bossIntroTimer);
+        _bossIntroTimer = setTimeout(() => {
+          if (box) box.classList.add('hide');
+          setTimeout(() => wrap.classList.add('hidden'), 460);
+        }, 2200);
+      }
+
+      function hideBossIntro() {
+        const wrap = document.getElementById('bossIntroBanner');
+        if (wrap) wrap.classList.add('hidden');
+        if (_bossIntroTimer) { clearTimeout(_bossIntroTimer); _bossIntroTimer = null; }
+      }
+
+      /**
+       * Đọc kỷ lục phòng của một chương, đã kẹp về khoảng hợp lệ.
+       *
+       * Vì sao cần kẹp: `bestRooms` là dữ liệu client gửi lên. Save cũ có thể
+       * chứa giá trị vượt số phòng của chương (đo thật trên production:
+       * bestRooms[3] = 15 trong khi chương 3 chỉ có 10 phòng) — do chương từng
+       * được đổi số phòng, hoặc do dữ liệu bị sửa. Hiển thị "KỶ LỤC P15/10" là
+       * vô nghĩa và làm sai cả điều kiện mở khoá chương.
+       */
+      function getChapterBest(chapterId) {
+        const ch = CHAPTERS.find(c => c.id === chapterId);
+        if (!ch) return 0;
+        const raw = Number((SaveState.bestRooms || {})[chapterId]) || 0;
+        return Math.max(0, Math.min(ch.rooms, Math.floor(raw)));
+      }
+
+      /**
+       * Màn hình chiến thắng chương — ăn mừng + báo mở khoá chương mới.
+       *
+       * Trước đây phá đảo chỉ hiện summary thường ("Bạn đã chinh phục..."), người
+       * chơi không biết chương tiếp theo vừa mở. Với 3 chương, đó là phần
+       * thưởng lớn nhất của cả trận — phải nói rõ.
+       *
+       * @param {object} ch        chương vừa phá đảo
+       * @param {object|null} next chương mới mở (null nếu là chương cuối)
+       */
+      function openChapterVictory(ch, next, stats) {
+        const modal = document.getElementById('chapterVictoryModal');
+        const card = document.getElementById('chapterVictoryCard');
+        if (!modal || !card) return;
+
+        card.style.borderColor = ch.accent;
+        card.style.background = `linear-gradient(165deg, ${ch.gradFrom}, ${ch.gradTo} 55%, #020617)`;
+
+        const unlockBlock = next
+          ? `<div class="cv-unlock">
+               <div class="cv-unlock-kicker">MỞ KHOÁ CHƯƠNG MỚI</div>
+               <div class="cv-unlock-row">
+                 <span class="cv-unlock-icon">${next.icon}</span>
+                 <div class="cv-unlock-meta">
+                   <div class="cv-unlock-name">${next.name}</div>
+                   <div class="cv-unlock-diff" style="color:${next.difficulty === 1 ? '#4ade80' : next.difficulty === 2 ? '#fbbf24' : '#f87171'}">
+                     ${next.difficultyLabel} · ${next.rooms} phòng · ${next.bossIcon} ${next.bossName}
+                   </div>
+                 </div>
+               </div>
+             </div>`
+          : `<div class="cv-unlock cv-final">
+               <div class="cv-unlock-kicker">👑 TẤT CẢ CHƯƠNG ĐÃ CHINH PHỤC</div>
+               <div class="cv-unlock-final">Bạn đã phá đảo toàn bộ chiến dịch. Hãy cày trang bị để chinh phục lại với thời gian nhanh hơn!</div>
+             </div>`;
+
+        card.innerHTML = `
+          <div class="cv-hero" style="--cv-accent:${ch.accent}">
+            <div class="cv-rays"></div>
+            <div class="cv-trophy">🏆</div>
+            <div class="cv-title">CHIẾN THẮNG</div>
+            <div class="cv-subtitle">${ch.name}</div>
+          </div>
+
+          <div class="cv-stats">
+            <div class="cv-stat"><b>${stats.rooms}</b><span>PHÒNG</span></div>
+            <div class="cv-stat"><b>${stats.kills}</b><span>HẠ GỤC</span></div>
+            <div class="cv-stat"><b>+${stats.gold.toLocaleString('vi-VN')}</b><span>VÀNG</span></div>
+            <div class="cv-stat"><b>+${stats.gems}</b><span>ĐÁ QUÝ</span></div>
+          </div>
+
+          ${unlockBlock}
+
+          <div class="cv-actions">
+            <button type="button" id="btnCvLobby" class="cv-btn cv-btn-ghost">← Về Sảnh</button>
+            ${next
+              ? `<button type="button" id="btnCvNext" class="cv-btn cv-btn-primary" style="background:linear-gradient(135deg,${next.accent},${next.accent2})">Chương Tiếp ${next.icon}</button>`
+              : `<button type="button" id="btnCvNext" class="cv-btn cv-btn-primary" style="background:linear-gradient(135deg,#fbbf24,#f59e0b)">🔄 Chơi Lại</button>`}
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+
+        document.getElementById('btnCvLobby').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          document.getElementById('summaryModal').classList.add('hidden');
+          returnToLobby();
+        });
+        document.getElementById('btnCvNext').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          document.getElementById('summaryModal').classList.add('hidden');
+          if (next) {
+            // Chuyển sang chương vừa mở rồi vào trận luôn — không bắt người chơi
+            // quay về sảnh bấm lại từ đầu.
+            SaveState.selectedChapterIdx = CHAPTERS.findIndex(c => c.id === next.id);
+            SaveState.save();
+            startNewRun('fresh');
+          } else {
+            startNewRun('fresh');
+          }
+        });
+      }
+
+      /**
+       * Overlay "PHÒNG ĐÃ SẠCH" — phản hồi rõ ràng khi dọn sạch một phòng.
+       *
+       * Trước đây chỉ đổi dòng gợi ý nhỏ trên HUD, người chơi không cảm nhận được
+       * mình vừa đạt một mốc. Nay: số phòng vừa xong, vàng nhặt được trong phòng,
+       * và thông báo phòng kế là thường hay TRÙM.
+       *
+       * Không chặn thao tác (pointer-events:none) — người chơi vẫn di chuyển vào
+       * cổng ngay khi overlay đang hiện.
+       */
+      let _roomClearTimer = null;
+      function showRoomClearOverlay(opts = {}) {
+        const wrap = document.getElementById('roomClearOverlay');
+        const card = document.getElementById('roomClearCard');
+        if (!wrap || !card) return;
+
+        const room = opts.room || Game.room || 1;
+        const max = opts.max || Game.maxRooms || 1;
+        const gold = opts.gold || 0;
+        const wasBoss = !!opts.wasBoss;
+
+        // Phòng kế tiếp có phải trùm không?
+        const nextRoom = room + 1;
+        const nextExists = nextRoom <= max;
+        const nextIsBoss = nextExists && ((nextRoom % 5 === 0) || (nextRoom === max));
+        const nextIsFinal = nextExists && nextRoom === max;
+
+        const statsHtml = gold > 0
+          ? `<div class="rc-stats"><span class="rc-stat">🪙 +${gold.toLocaleString('vi-VN')}</span></div>`
+          : '';
+
+        let nextHtml = '';
+        if (!nextExists) {
+          nextHtml = `<div class="rc-next">🚪 Vào cổng để hoàn thành chương!</div>`;
+        } else if (nextIsBoss) {
+          nextHtml = `<div class="rc-next rc-next-boss">${nextIsFinal ? '👑' : '⚔️'} PHÒNG ${nextRoom}: ${nextIsFinal ? 'TRÙM CUỐI' : 'TRÙM'}</div>`;
+        } else {
+          // Đếm số phòng còn lại tới trùm kế (tính cả phòng trùm đó).
+          // Ví dụ ở P5 (vừa xong), phòng kế là P6, trùm kế là P10 -> còn 5 phòng (6,7,8,9,10).
+          let nb = null;
+          for (let i = nextRoom; i <= max; i++) {
+            if (i % 5 === 0 || i === max) { nb = i; break; }
+          }
+          const dist = nb ? nb - nextRoom + 1 : 0;
+          nextHtml = `<div class="rc-next">Phòng ${nextRoom} · còn ${dist} tới trùm</div>`;
+        }
+
+        card.innerHTML = `
+          <div class="rc-kicker">PHÒNG ${room}/${max} HOÀN THÀNH</div>
+          <div class="rc-title ${wasBoss ? 'rc-boss' : ''}">${wasBoss ? 'TRÙM ĐÃ GỤC!' : 'PHÒNG ĐÃ SẠCH'}</div>
+          ${statsHtml}
+          ${nextHtml}
+        `;
+        card.classList.remove('rc-out');
+        wrap.classList.remove('hidden');
+
+        if (_roomClearTimer) clearTimeout(_roomClearTimer);
+        _roomClearTimer = setTimeout(() => {
+          card.classList.add('rc-out');
+          setTimeout(() => wrap.classList.add('hidden'), 400);
+        }, 1900);
+      }
+
+      function hideRoomClearOverlay() {
+        const wrap = document.getElementById('roomClearOverlay');
+        if (wrap) wrap.classList.add('hidden');
+        if (_roomClearTimer) { clearTimeout(_roomClearTimer); _roomClearTimer = null; }
+      }
+
+      /**
+       * Màn hình tổng kết khi THUA.
+       *
+       * Thua là điểm rơi người chơi dễ bỏ game nhất. Màn hình cũ chỉ nói "Bạn đã
+       * ngã xuống tại Phòng N" — không giải thích, không gợi ý. Nay màn hình trả
+       * lời ba câu hỏi mà người chơi thực sự cần:
+       *   1. Tôi chết vì cái gì?          -> nguồn sát thương + đòn cuối
+       *   2. Tôi đi được bao xa?          -> tỉ lệ hoàn thành + so kỷ lục
+       *   3. Lần sau nên làm gì khác đi?  -> gợi ý tính từ chính chỉ số của họ
+       */
+      function openRunDefeat(info = {}) {
+        const modal = document.getElementById('runDefeatModal');
+        const card = document.getElementById('runDefeatCard');
+        if (!modal || !card) return;
+
+        const room = info.room || Game.room || 1;
+        const max = info.max || Game.maxRooms || 1;
+        const kills = info.kills != null ? info.kills : (Game.kills || 0);
+        const gold = info.gold != null ? info.gold : (Game.runGold || 0);
+        const ch = Game.chapter || CHAPTERS[0];
+        const pct = Math.round((room / max) * 100);
+        const bestRaw = getChapterBest(ch.id);
+        // Kẹp theo max của trận đang xét — best có thể thuộc chương khác nếu
+        // info.max không khớp Game.chapter (gọi từ test hoặc debug).
+        const best = Math.min(bestRaw, max);
+        const isRecord = room > best;
+        const bossRoom = (room % 5 === 0) || (room === max);
+        const diedToBoss = info.source === 'boss' || bossRoom;
+
+        // ---- Gợi ý cụ thể, tính từ chỉ số thật của người chơi ----
+        const stats = (() => { try { return getComputedStats(); } catch (e) { return null; } })();
+        const tips = [];
+        if (diedToBoss) {
+          tips.push({ icon: '👟', text: 'Trùm gây sát thương lớn theo từng đòn — hãy di chuyển liên tục và chỉ dừng lại để bắn khi trùm vừa ra đòn.' });
+        } else {
+          tips.push({ icon: '🎯', text: 'Đứng yên bắn sẽ ăn đòn liên tục. Di chuyển vòng tròn quanh quái, dừng 1 nhịp ngắn để bắn rồi di chuyển tiếp.' });
+        }
+        if (room <= 3) {
+          tips.push({ icon: '⚔️', text: 'Bạn còn ở rất sớm. Cường hóa vài món trang bị ở tab Trang Bị sẽ tăng sát thương rõ rệt.' });
+        } else if (pct < 60) {
+          tips.push({ icon: '🛡️', text: 'Cường hóa Giáp và Mũ để giảm sát thương nhận vào — sống lâu hơn giúp bạn đi xa hơn.' });
+        } else {
+          tips.push({ icon: '💎', text: 'Bạn đã đi được ' + pct + '% chương. Nâng cấp Vũ Khí và mở thêm Thẻ Năng Lực sẽ giúp vượt nốt đoạn còn lại.' });
+        }
+        if (stats && stats.baseHp > 0) {
+          const hitsToDie = Math.max(1, Math.round(stats.baseHp / Math.max(1, info.lastHit || 1)));
+          if (info.lastHit && info.lastHit > stats.baseHp * 0.3) {
+            tips.push({ icon: '⚠️', text: `Đòn cuối gây ${Math.round(info.lastHit).toLocaleString('vi-VN')} sát thương — hơn 30% máu của bạn. Cần thêm DEF hoặc Khiên.` });
+          }
+        }
+        // Chỉ hiện tối đa 3 gợi ý để không ngợp
+        const tipHtml = tips.slice(0, 3).map(t => `
+          <div class="df-tip"><span class="df-tip-icon">${t.icon}</span><span>${t.text}</span></div>
+        `).join('');
+
+        card.style.borderColor = '#f43f5e';
+        card.style.background = 'linear-gradient(165deg, #450a0a, #1f070d 55%, #020617)';
+
+        card.innerHTML = `
+          <div class="df-hero">
+            <div class="df-veil"></div>
+            <div class="df-skull">💀</div>
+            <div class="df-title">THẤT BẠI</div>
+            <div class="df-subtitle">${ch.name}</div>
+          </div>
+
+          <div class="df-progress">
+            <div class="df-progress-top">
+              <span>TIẾN ĐỘ CHƯƠNG</span>
+              <b>${room}/${max} · ${pct}%</b>
+            </div>
+            <div class="df-progress-track"><div class="df-progress-fill" style="width:${pct}%"></div></div>
+            ${isRecord ? `<div class="df-record">🏅 KỶ LỤC MỚI! (trước đó: phòng ${best || 0})</div>` : (best > 0 ? `<div class="df-best">Kỷ lục của bạn: phòng ${best}/${max}</div>` : '')}
+          </div>
+
+          <div class="df-stats">
+            <div class="df-stat"><b>${kills}</b><span>HẠ GỤC</span></div>
+            <div class="df-stat"><b>+${gold.toLocaleString('vi-VN')}</b><span>VÀNG</span></div>
+            <div class="df-stat"><b>${diedToBoss ? 'TRÙM' : 'QUÁI'}</b><span>NGUYÊN NHÂN</span></div>
+          </div>
+
+          <div class="df-tips">${tipHtml}</div>
+
+          <div class="df-actions">
+            <button type="button" id="btnDfLobby" class="df-btn df-btn-ghost">← Về Sảnh</button>
+            <button type="button" id="btnDfRetry" class="df-btn df-btn-primary">⚔️ Thử Lại</button>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+
+        document.getElementById('btnDfLobby').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          returnToLobby();
+        });
+        document.getElementById('btnDfRetry').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          startNewRun('fresh');
+        });
+      }
+
+      function renderChapterSelectStrip() {
+        /**
+         * Vẽ dải thẻ chọn chương.
+         * Mỗi thẻ hiện đủ: số + tên chương, độ khó (3 bậc), số phòng, tiến trình
+         * tốt nhất, trùm cuối. Chương chưa mở thì phủ lớp khoá + điều kiện.
+         */
+        const el = document.getElementById('chapterSelectStrip');
+        if (!el) return;
+        const selIdx = SaveState.selectedChapterIdx || 0;
+
+        el.innerHTML = CHAPTERS.map((ch, idx) => {
+          const active = idx === selIdx;
+          const locked = isChapterLocked(ch);
+          const best = getChapterBest(ch.id);
+          const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
+          const cleared = wins > 0;
+          const pct = Math.min(100, Math.round((best / ch.rooms) * 100));
+          const diffColor = ch.difficulty === 1 ? '#4ade80' : (ch.difficulty === 2 ? '#fbbf24' : '#f87171');
+
+          const pips = [1, 2, 3].map(n =>
+            `<span style="flex:1;height:4px;border-radius:2px;background:${n <= ch.difficulty ? diffColor : 'rgba(255,255,255,.13)'}"></span>`
+          ).join('');
+
+          const lockOverlay = locked
+            ? `<div style="position:absolute;inset:0;border-radius:0.85rem;background:linear-gradient(180deg,rgba(2,6,23,.5),rgba(2,6,23,.9));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;z-index:3">
+                 <div style="font-size:24px;filter:grayscale(1) drop-shadow(0 2px 4px #000)">🔒</div>
+                 <div style="font-size:10px;font-weight:900;color:#e2e8f0">${ch.unlock.label}</div>
+                 <div style="font-size:9px;color:#94a3b8">để mở khoá</div>
+               </div>`
+            : '';
+
+          return `
+            <button type="button" data-chapter-card="${idx}"${locked ? ' data-locked="1"' : ''}
+              style="position:relative;overflow:hidden;border-radius:0.85rem;padding:9px 10px;text-align:left;
+                     border:2px solid ${active ? ch.accent : 'rgba(148,163,184,.2)'};
+                     background:linear-gradient(135deg,${ch.gradFrom},${ch.gradTo});
+                     box-shadow:${active ? `0 0 0 1px ${ch.accent}55,0 8px 20px -8px ${ch.accent}99` : '0 3px 10px -5px rgba(0,0,0,.8)'};
+                     transition:transform .16s ease,border-color .16s ease;cursor:${locked ? 'not-allowed' : 'pointer'}">
+              <div style="position:absolute;top:-28px;right:-28px;width:84px;height:84px;border-radius:50%;background:radial-gradient(circle,${ch.accent}30,transparent 70%);pointer-events:none"></div>
+
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+                <span style="font-size:19px;line-height:1">${ch.icon}</span>
+                <div style="min-width:0;flex:1">
+                  <div style="font-size:8.5px;font-weight:900;letter-spacing:.07em;color:${ch.accent};text-transform:uppercase">
+                    Chương ${ch.id}${cleared ? ' · ĐÃ PHÁ ĐẢO' : ''}
+                  </div>
+                  <div style="font-size:12.5px;font-weight:900;color:#f8fafc;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                    ${ch.themeName}
+                  </div>
+                </div>
+                ${active ? `<span style="font-size:8px;font-weight:900;color:#0f172a;background:${ch.accent};padding:1px 5px;border-radius:999px;white-space:nowrap">ĐANG CHỌN</span>` : ''}
+              </div>
+
+              <div style="display:flex;align-items:center;gap:3px;margin-bottom:4px">${pips}</div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:9.5px;font-weight:800;color:#cbd5e1;margin-bottom:4px">
+                <span>${ch.rooms} phòng</span>
+                <span style="color:${diffColor}">${ch.difficultyLabel.split(' — ')[0]}</span>
+              </div>
+
+              <div style="height:4px;border-radius:2px;background:rgba(0,0,0,.5);overflow:hidden;margin-bottom:4px">
+                <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${ch.accent},${ch.accent2})"></div>
+              </div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:8.5px;font-weight:800">
+                <span style="color:#94a3b8">Tốt nhất ${best}/${ch.rooms}</span>
+                <span style="color:#fbbf24;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:56%">${ch.bossIcon} ${ch.bossName}</span>
+              </div>
+
+              ${lockOverlay}
+            </button>
+          `;
+        }).join('');
+
+        el.querySelectorAll('[data-chapter-card]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-chapter-card'));
+            const ch = CHAPTERS[idx];
+            if (!ch) return;
+            if (isChapterLocked(ch)) {
+              showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
+              return;
+            }
+            SaveState.selectedChapterIdx = idx;
+            SaveState.save();
+            SoundFX.coinPickup();
+            renderLobbyUI();
+          });
+        });
+      }
+
+      /**
+       * Màn hình briefing trước khi vào trận.
+       * Mục đích: người chơi biết CHÍNH XÁC mình sắp đánh gì trước khi cam kết —
+       * chương nào, bao nhiêu phòng, trùm nào, kỷ lục cũ, và cảnh báo nếu lực
+       * chiến còn thấp so với chương. Bấm "Xuất Chinh" mới thật sự vào trận.
+       */
+      function openRunBriefing() {
+        const modal = document.getElementById('runBriefingModal');
+        const card = document.getElementById('runBriefingCard');
+        if (!modal || !card) return;
+        const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
+        const stats = getComputedStats();
+        const best = getChapterBest(ch.id);
+        const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
+        const diffColor = ch.difficulty === 1 ? '#4ade80' : (ch.difficulty === 2 ? '#fbbf24' : '#f87171');
+
+        // Ước lượng sức: so powerScore với mốc kỳ vọng của từng chương.
+        const expectedPower = [200000, 420000, 800000][SaveState.selectedChapterIdx] || 200000;
+        const ratio = stats.powerScore / expectedPower;
+        let advice, adviceColor, adviceIcon;
+        if (ratio >= 1.15) { advice = 'Bạn mạnh hơn mức cần thiết — trận này sẽ khá nhẹ nhàng.'; adviceColor = '#4ade80'; adviceIcon = '💪'; }
+        else if (ratio >= 0.85) { advice = 'Lực chiến phù hợp với chương này. Hãy tập trung né đòn của trùm.'; adviceColor = '#fbbf24'; adviceIcon = '⚖️'; }
+        else { advice = 'Lực chiến còn thấp so với chương này. Nên cường hóa trang bị trước, hoặc chấp nhận thử thách!'; adviceColor = '#f87171'; adviceIcon = '⚠️'; }
+
+        const pips = [1, 2, 3].map(n =>
+          `<span style="flex:1;height:6px;border-radius:3px;background:${n <= ch.difficulty ? diffColor : 'rgba(255,255,255,.12)'}"></span>`
+        ).join('');
+
+        card.style.borderColor = ch.accent;
+        card.style.background = `linear-gradient(160deg, ${ch.gradFrom}, ${ch.gradTo} 60%, #020617)`;
+
+        card.innerHTML = `
+          <!-- Header -->
+          <div style="position:relative;padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.1)">
+            <div style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;
+                        background:radial-gradient(circle,${ch.accent}44,transparent 70%);pointer-events:none"></div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:34px;line-height:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,.7))">${ch.icon}</span>
+              <div>
+                <div style="font-size:10px;font-weight:900;letter-spacing:.1em;color:${ch.accent};text-transform:uppercase">
+                  Chuẩn bị xuất chinh
+                </div>
+                <div style="font-size:19px;font-weight:900;color:#f8fafc;line-height:1.15">${ch.name}</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;margin-top:10px">${pips}</div>
+            <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:800;margin-top:4px">
+              <span style="color:${diffColor}">${ch.difficultyLabel}</span>
+              <span style="color:#94a3b8">${ch.rooms} phòng</span>
+            </div>
+          </div>
+
+          <!-- Chỉ số 3 ô -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.08)">
+            ${[
+              ['LỰC CHIẾN', formatCompactNumberVn(stats.powerScore, '0'), '#fbbf24'],
+              ['KỶ LỤC', best > 0 ? `P${best}/${ch.rooms}` : 'Chưa chơi', '#38bdf8'],
+              ['SỐ LẦN THẮNG', wins > 0 ? String(wins) : '0', '#4ade80'],
+            ].map(([label, val, col]) => `
+              <div style="padding:10px 8px;text-align:center;background:rgba(2,6,23,.5)">
+                <div style="font-size:8.5px;font-weight:900;letter-spacing:.06em;color:#64748b">${label}</div>
+                <div style="font-size:14px;font-weight:900;color:${col};margin-top:2px">${val}</div>
+              </div>`).join('')}
+          </div>
+
+          <!-- Trùm cuối -->
+          <div style="padding:12px 20px;display:flex;align-items:center;gap:10px;background:rgba(2,6,23,.35)">
+            <span style="font-size:24px">${ch.bossIcon}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:8.5px;font-weight:900;letter-spacing:.06em;color:#64748b">TRÙM CUỐI</div>
+              <div style="font-size:13px;font-weight:900;color:#fda4af">${ch.bossName}</div>
+            </div>
+          </div>
+
+          <!-- Lời khuyên theo lực chiến -->
+          <div style="padding:10px 20px;display:flex;gap:8px;align-items:flex-start;background:${adviceColor}14;border-top:1px solid ${adviceColor}33">
+            <span style="font-size:15px;line-height:1.3">${adviceIcon}</span>
+            <div style="font-size:11px;font-weight:700;color:${adviceColor};line-height:1.45">${advice}</div>
+          </div>
+
+          <!-- Mô tả chế độ -->
+          <div style="padding:10px 20px 4px">
+            <div style="font-size:10.5px;color:#94a3b8;line-height:1.5">${ch.desc}</div>
+          </div>
+
+          <!-- Nút -->
+          <div style="padding:14px 20px 18px;display:flex;gap:8px">
+            <button type="button" id="btnBriefingCancel"
+              style="flex:1;padding:11px;border-radius:12px;background:rgba(15,23,42,.9);border:1px solid rgba(148,163,184,.3);
+                     color:#cbd5e1;font-size:12px;font-weight:900;cursor:pointer">← Quay lại</button>
+            <button type="button" id="btnBriefingStart"
+              style="flex:2;padding:11px;border-radius:12px;background:linear-gradient(135deg,${ch.accent},${ch.accent2});
+                     border:1px solid rgba(255,255,255,.4);color:#0f172a;font-size:13px;font-weight:900;cursor:pointer;
+                     box-shadow:0 6px 18px -6px ${ch.accent}cc">⚔️ XUẤT CHINH</button>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+        document.getElementById('btnBriefingCancel').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          SoundFX.coinPickup();
+        });
+        document.getElementById('btnBriefingStart').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          startNewRun('fresh');
+        });
+      }
+
+      /**
+       * Vẽ Sổ Tay Quái Vật.
+       *
+       * Mở dần: con chưa hạ lần nào hiện "???" với silhouette xám. Con đã hạ hiện
+       * đầy đủ thông tin (mô tả, hành vi, độ nguy hiểm, số lần hạ). Đây là phần
+       * thưởng tri thức — người chơi càng chơi càng hiểu quái hơn, và lần sau
+       * biết nên né đòn gì.
+       */
+      function renderBestiaryUI() {
+        const el = document.getElementById('bestiaryPanel');
+        if (!el) return;
+
+        const disc = getBestiaryDiscoveredCount();
+        const total = BESTIARY.length;
+        const collapsed = SaveState.bestiaryCollapsed === true;
+
+        const threatPips = (n) => {
+          const max = 6;
+          return Array.from({ length: max }, (_, i) =>
+            `<span style="width:4px;height:9px;border-radius:1px;background:${i < n
+              ? (n <= 2 ? '#4ade80' : n <= 4 ? '#fbbf24' : '#f43f5e')
+              : 'rgba(148,163,184,.22)'}"></span>`
+          ).join('');
+        };
+
+        const cards = BESTIARY.map(m => {
+          const rec = getBestiaryRecord(m.id);
+          const known = rec && rec.killed > 0;
+          const isBoss = m.tier.indexOf('TRÙM') === 0;
+
+          if (!known) {
+            return `
+              <div class="bs-card bs-unknown" title="Chưa từng hạ gục">
+                <div class="bs-head">
+                  <span class="bs-icon" style="filter:grayscale(1) brightness(.5)">❓</span>
+                  <div class="bs-meta">
+                    <div class="bs-name">???</div>
+                    <div class="bs-tier">CHƯA KHÁM PHÁ</div>
+                  </div>
+                </div>
+                <div class="bs-hint">Hạ gục loại quái này để mở thông tin.</div>
+              </div>`;
+          }
+
+          return `
+            <div class="bs-card ${isBoss ? 'bs-boss' : ''}" style="--bs-color:${m.color}" data-bs-id="${m.id}">
+              <div class="bs-head">
+                <span class="bs-icon">${m.icon}</span>
+                <div class="bs-meta">
+                  <div class="bs-name">${m.name}</div>
+                  <div class="bs-tier" style="color:${isBoss ? '#fda4af' : '#94a3b8'}">${m.tier}</div>
+                </div>
+                <div class="bs-count">×${rec.killed}</div>
+              </div>
+              <div class="bs-threat"><span class="bs-threat-lbl">Nguy hiểm</span><span class="bs-threat-pips">${threatPips(m.threat)}</span></div>
+              <div class="bs-lore">${m.lore}</div>
+              <div class="bs-behavior"><b>Chiêu thức:</b> ${m.behavior}</div>
+              <div class="bs-tags">
+                ${m.stats.speed === 0 ? '<span class="bs-tag">🥶 Đứng yên</span>' : `<span class="bs-tag">🏃 Tốc độ ${m.stats.speed}</span>`}
+                ${m.stats.ranged ? '<span class="bs-tag">🏹 Bắn xa</span>' : ''}
+                ${m.stats.contact ? '<span class="bs-tag">💥 Lao vào</span>' : ''}
+              </div>
+            </div>`;
+        }).join('');
+
+        el.innerHTML = `
+          <div class="bs-header">
+            <div class="bs-header-left">
+              <span class="bs-book">📖</span>
+              <div>
+                <div class="bs-title">SỔ TAY QUÁI VẬT</div>
+                <div class="bs-sub">Đã khám phá <b>${disc}/${total}</b> loài</div>
+              </div>
+            </div>
+            <div class="bs-header-right">
+              <div class="bs-progress"><div class="bs-progress-fill" style="width:${Math.round((disc / total) * 100)}%"></div></div>
+              <button type="button" id="btnToggleBestiary" class="bs-toggle">${collapsed ? 'Mở ▾' : 'Thu ▴'}</button>
+            </div>
+          </div>
+          ${collapsed ? '' : `<div class="bs-grid">${cards}</div>`}
+        `;
+
+        document.getElementById('btnToggleBestiary')?.addEventListener('click', () => {
+          SaveState.bestiaryCollapsed = !collapsed;
+          SaveState.save();
+          renderBestiaryUI();
+        });
       }
 
       // Build a single 3D Glossy Item Card HTML (used in both Equipped Slots and 5-Column Bag Grid)
@@ -21096,6 +22186,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
       function renderLobbyUI() {
         const stats = getComputedStats();
+        // Chương đang chọn có thể bị khoá (save cũ) -> lùi về chương mở cao nhất.
+        normalizeSelectedChapter();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
 
         // Top Bar (100% Authentic Vietnamese Archero 2 HUD: 61 Vie | PuuGoo • 10.06M • 225/60 • 384.81K • 145.22K)
@@ -21150,7 +22242,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         document.getElementById('chapterModeBadge').textContent = ch.modeLabel;
         document.getElementById('chapterTitleText').textContent = ch.name;
         document.getElementById('chapterDescText').textContent = ch.desc;
-        const bestRm = SaveState.bestRooms[ch.id] || 1;
+        safeRender('chapterStrip', () => renderChapterSelectStrip());
+        safeRender('bestiary', () => renderBestiaryUI());
+        const bestRm = getChapterBest(ch.id) || 1;
         document.getElementById('bestRecordText').textContent = `Kỷ lục: Phòng ${bestRm}/${ch.rooms}`;
 
         // Hero Selector (Displays dynamic Star Level 1★-6★ & Equipped Luxury Skin)
@@ -22018,6 +23112,12 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const stats = getComputedStats();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
 
+        // Chặn vào chương chưa mở khoá — kể cả khi gọi qua console/API.
+        if (isChapterLocked(ch)) {
+          showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
+          return false;
+        }
+
         // Switch UI view
         document.getElementById('tabShopVn')?.classList.add('hidden');
         document.getElementById('tabBattle').classList.add('hidden');
@@ -22119,6 +23219,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
       // Setup Room Obstacles & Enemies
       function setupRoom(roomNum) {
+        // Overlay "phòng đã sạch" của phòng trước phải tắt khi sang phòng mới.
+        if (typeof hideRoomClearOverlay === 'function') hideRoomClearOverlay();
+        // Kẹp số phòng về khoảng hợp lệ của chương đang chơi.
+        //
+        // Trước đây không có kẹp: gọi setupRoom(15) khi đang ở chương chỉ có 10
+        // phòng vẫn dựng phòng 15 -> HUD hiện "Phòng 15 / 10" và trùm cuối không
+        // bao giờ được nhận diện đúng. Đây là hàm debug/API nên phải tự bảo vệ.
+        const _maxRooms = Math.max(1, Game.maxRooms || 1);
+        roomNum = Math.max(1, Math.min(_maxRooms, Math.floor(Number(roomNum) || 1)));
         Game.room = roomNum;
         Game.roomCleared = false;
         Game.portalOpen = false;
@@ -22213,7 +23322,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (roomNum > 1 && (SaveState.talents.healer || 0) > 0) {
           const healAmt = Math.round(Game.player.maxHp * 0.06 * SaveState.talents.healer);
           Game.player.hp = Math.min(Game.player.maxHp, Game.player.hp + healAmt);
-          spawnFloatText(Game.player.x, Game.player.y - 24, `+${healAmt} HP`, '#4ade80', 14);
+          spawnFloatText(Game.player.x, Game.player.y - 24, `+${healAmt} HP`, '#4ade80', 14, { kind: 'heal' });
         }
 
         // Update best room record
@@ -22237,20 +23346,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           }
         }
 
-        // ==================== CÂN BẰNG ĐỘ KHÓ ====================
-        // Trước đây quái/boss dùng số tuyệt đối (28/1450) trong khi HP người chơi
-        // tăng theo trang bị lên hàng chục nghìn -> quái gây 28 sát thương lên
-        // 75.000 HP (cần ~2700 đòn mới chết) và boss 3.147 HP chết trong 1 đòn.
-        //
-        // Nay dùng HAI thước đo khác nhau, mỗi cái đúng chỗ:
+        // ==================== CÂN BẰNG ĐỘ KHÓ (đường cong theo chương) ====================
+        // Hai thước đo khác nhau, mỗi cái đúng chỗ:
         //   • HP quái/boss  neo theo ATK người chơi  -> TTK (thời gian giết) ổn định
         //   • ATK quái/boss neo theo MaxHP người chơi -> số đòn chịu được ổn định
-        // Nhờ vậy độ khó giữ nguyên ý nghĩa ở mọi mức trang bị, không phụ thuộc
-        // vào việc người chơi đang mặc đồ gì.
-        //   quái HP  = 2.6 × ATK  -> ~2 đòn (crit ~1.5 đòn)
-        //   boss HP  = 30 × ATK   -> trận boss ~20-30s có né đòn
-        //   quái ATK = 5.5% maxHp -> ăn đòn liên tục chết sau vài phòng
-        //   boss ATK = 11% maxHp  -> 9 đòn là chết, buộc phải né
+        // Nhờ vậy độ khó giữ nguyên ý nghĩa ở mọi mức trang bị.
+        //
+        // ĐƯỜNG CONG: trước đây boss cuối chương 1 mất 53s (đo thật trên tài khoản
+        // mới: 2.594.623 HP / 48.844 DPS) — quá dài cho trận đầu tiên của người
+        // mới. Nay TTK boss giảm dần theo tiến trình phòng nhưng vẫn đủ áp lực:
+        //   phòng 5  (trùm đầu tiên)  ~11s
+        //   phòng 10 (trùm giữa)      ~14s
+        //   phòng cuối (đại ma vương) ~19s
         const playerMaxHp = Math.max(1, Game.player?.maxHp || 1000);
         const playerAtk = Math.max(1, Game.player?.atk || 100);
         const chapterMul = Game.chapter.enemyScale || 1;
@@ -22265,9 +23372,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             queen: '🕷️ TRÙM: NỮ HOÀNG NHỆN ĐỘC',
             demon_king: '👑 ĐẠI MA VƯƠNG ATREUS'
           };
-          // Boss HP neo theo ATK người chơi để trận boss luôn dài đủ lâu bất kể
-          // người chơi mạnh yếu ra sao (~30 đòn đánh thường).
-          const maxHp = Math.round(playerAtk * 30 * scale * (bossType === 'demon_king' ? 1.35 : 1.0));
+          // HP boss neo theo ATK người chơi (≈ số đòn đánh thường để hạ).
+          // Scale phòng KHÔNG nhân vào HP nữa — đã tính bằng hitsToKill, nếu nhân
+          // thêm roomMul thì trùm cuối thành bức tường 53 giây.
+          const hitsToKill = roomNum === 5 ? 24 : (roomNum === 10 ? 30 : 40);
+          const maxHp = Math.round(playerAtk * hitsToKill * chapterMul * (bossType === 'demon_king' ? 1.15 : 1.0));
           Game.enemies.push({
             isBoss: true,
             type: bossType,
@@ -22277,10 +23386,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             r: 34,
             hp: maxHp,
             maxHp: maxHp,
-            // ATK boss = 7.5% maxHp × scale → phòng 5 ~9 đòn, phòng 10 ~6 đòn,
-            // phòng 15 (trùm cuối) ~5 đòn. Đủ áp lực buộc né đòn nhưng không
-            // one-shot người chơi mới.
-            atk: Math.max(1, Math.round(playerMaxHp * 0.075 * Math.min(2.5, scale))),
+            // ATK boss = số đòn phải chịu, khó dần: trùm đầu 9 đòn, trùm giữa 7,
+            // trùm cuối 5. Trước đây dùng % maxHp × scale nên trùm cuối lại chịu
+            // đòn tốt hơn trùm đầu (6 vs 9 đòn) — ngược đường cong.
+            atk: Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
             speed: 68,
             vx: 45,
             vy: 30,
@@ -22293,9 +23402,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             color: bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48')
           });
           document.getElementById('bossHudContainer').classList.remove('hidden');
+          showBossIntro(bossType, bossNames[bossType]);
           document.getElementById('hudHintBanner').textContent = '⚠️ CẢNH BÁO TRÙM XUẤT HIỆN! Di chuyển né vòng đạn và dừng lại để phản công!';
         } else {
           document.getElementById('bossHudContainer').classList.add('hidden');
+          hideBossIntro();
           document.getElementById('hudHintBanner').textContent = '💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!';
           const count = Math.min(8, 3 + Math.floor(roomNum / 2));
           const types = ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat'];
@@ -22304,10 +23415,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             const t = types[(roomNum + i) % types.length];
             const ex = Game.wallPad + 35 + Math.random() * Math.max(80, Game.width - (Game.wallPad + 35) * 2);
             const ey = Game.wallPad + 45 + Math.random() * (Game.height * 0.42);
-            // HP quái neo theo ATK người chơi -> TTK ổn định ~2 đòn ở mọi mức
-            // trang bị. plant_turret trâu nhất (3.2×), skeleton_mage 2.9×,
-            // còn lại 2.6×.
-            const atkMul = t === 'plant_turret' ? 3.2 : (t === 'skeleton_mage' ? 2.9 : 2.6);
+            // HP quái neo theo ATK người chơi -> TTK ổn định ở mọi mức trang bị.
+            // ĐƯỜNG CONG CHO NGƯỜI MỚI: phòng 1-3 là "học cách chơi" nên quái
+            // chỉ ~1,4 đòn; tăng dần tới ~2,4 đòn ở phòng cuối. Trước đây phòng 1
+            // đã 1,2-1,5s mỗi con — người mới thấy quái trâu ngay từ đầu.
+            const depth = Math.min(1, (roomNum - 1) / Math.max(1, Game.maxRooms - 1));
+            const baseHits = 1.4 + depth * 1.0;   // 1,4 -> 2,4 đòn
+            const atkMul = (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0)) * baseHits;
             const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale));
             Game.enemies.push({
               isBoss: false,
@@ -22317,9 +23431,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               r: t === 'bat' ? 13 : 16,
               hp: enemyHp,
               maxHp: enemyHp,
-              // 5.5% maxHp chia đều cho số quái -> ăn đòn liên tục thì chết sau
-              // vài phòng, buộc phải di chuyển né thay vì đứng bắn.
-              atk: Math.max(1, Math.round(playerMaxHp * 0.055 * Math.min(2.5, scale) / Math.max(2, count * 0.6))),
+              // Sát thương quái — thiết kế theo SỐ ĐÒN PHẢI CHỊU, không theo %:
+              //   phòng đầu  ~16 đòn là chết  (dễ, người mới học né)
+              //   phòng cuối ~6 đòn là chết   (buộc phải né liên tục)
+              // Chia theo sqrt(số quái) để phòng đông không one-shot, nhưng vẫn
+              // giữ đúng đường cong khó dần (trước đây chia theo count khiến
+              // càng về sau càng dễ chịu đòn — ngược hoàn toàn ý đồ).
+              atk: Math.max(1, Math.round(
+                playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
+              )),
               speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : 64),
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,
@@ -22342,6 +23462,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         document.getElementById('hudXpRatioText').textContent = `${Math.floor(Game.player.xp)} / ${Game.player.xpNext} EXP`;
         document.getElementById('hudXpBar').style.width = `${Math.min(100, (Game.player.xp / Game.player.xpNext) * 100)}%`;
         document.getElementById('hudRunGold').textContent = Game.runGold;
+
+        // ---- Thanh máu người chơi ----
+        // Trước đây HUD không có HP: người chơi chỉ biết mình yếu đi qua việc
+        // nhân vật nhấp nháy đỏ, không biết còn bao nhiêu. Nay hiện số + % + màu.
+        const hpPct = Math.max(0, Math.min(100, (Game.player.hp / Game.player.maxHp) * 100));
+        const hpNumEl = document.getElementById('hudHpText');
+        const hpBarEl = document.getElementById('hudHpBar');
+        const hpGhostEl = document.getElementById('hudHpGhost');
+        const hpPctEl = document.getElementById('hudHpPct');
+        if (hpNumEl) {
+          hpNumEl.textContent = `${Math.max(0, Math.ceil(Game.player.hp)).toLocaleString('vi-VN')} / ${Math.ceil(Game.player.maxHp).toLocaleString('vi-VN')}`;
+        }
+        if (hpBarEl) {
+          hpBarEl.style.width = hpPct + '%';
+          hpBarEl.classList.toggle('warn', hpPct <= 50 && hpPct > 22);
+          hpBarEl.classList.toggle('crit', hpPct <= 22);
+        }
+        if (hpGhostEl) hpGhostEl.style.width = hpPct + '%';
+        if (hpPctEl) hpPctEl.textContent = Math.round(hpPct) + '%';
+        const vitalsEl = document.querySelector('.hv2-vitals');
+        if (vitalsEl) vitalsEl.classList.toggle('low', hpPct <= 30);
 
         const boss = Game.enemies.find(e => e.isBoss);
         if (boss) {
@@ -22915,12 +24056,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
 
         SoundFX.hitEnemy(isCrit);
+        // Phân loại phản hồi theo ngữ cảnh: crit > đánh trùm > đánh thường.
+        // Trước đây mọi cú đánh cùng cỡ chữ nên không phân biệt được.
         spawnFloatText(
           e.x + (Math.random() - 0.5) * 16,
           e.y - e.r - 6,
           isCrit ? `💥 ${finalDmg}!` : `${finalDmg}`,
-          isCrit ? '#fde047' : (isElemental ? '#fb923c' : '#f8fafc'),
-          isCrit ? 15 : 12
+          isCrit ? '#fde047' : (e.isBoss ? '#fda4af' : (isElemental ? '#fb923c' : '#f8fafc')),
+          isCrit ? 17 : (e.isBoss ? 14 : 12),
+          { kind: isCrit ? 'crit' : (e.isBoss ? 'boss' : 'normal') }
         );
 
         // Apply Elemental Enchantments
@@ -22979,6 +24123,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         Game.kills++;
         bumpLifetimeStat('kills', 1);
         if (e.isBoss) bumpLifetimeStat('bossKills', 1);
+        // Sổ tay quái vật: ghi nhận đã hạ loại này (mở khoá thông tin trong Bestiary)
+        recordBestiaryKill(e.type, !!e.isBoss);
         checkAchievements();
         spawnParticles(e.x, e.y, e.isBoss ? '#f43f5e' : '#fbbf24', e.isBoss ? 52 : 26);
         spawnShatterShards(e.x, e.y, e.isBoss ? '#f43f5e' : '#c084fc', e.isBoss ? 18 : 9);
@@ -22998,7 +24144,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (btLv > 0) {
           const heal = Math.round(Game.player.maxHp * 0.04 * btLv);
           Game.player.hp = Math.min(Game.player.maxHp, Game.player.hp + heal);
-          spawnFloatText(Game.player.x, Game.player.y - 20, `+${heal}`, '#4ade80', 11);
+          spawnFloatText(Game.player.x, Game.player.y - 20, `+${heal}`, '#4ade80', 11, { kind: 'heal' });
         }
 
         // Drop Gold & EXP Gems & Red Hearts
@@ -23052,6 +24198,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           Game.portalOpen = true;
           SoundFX.portalOpen();
           document.getElementById('hudHintBanner').textContent = '✨ PHÒNG ĐÃ SẠCH QUÁI! Di chuyển vào CỔNG ÁNH SÁNG phía trên để sang phòng tiếp theo!';
+          // Overlay phản hồi rõ: phòng vừa xong, vàng nhặt được, phòng kế (thường/trùm).
+          showRoomClearOverlay({
+            room: Game.room,
+            max: Game.maxRooms,
+            gold: Game.runGold || 0,
+            wasBoss: !!(e && e.isBoss)
+          });
           // Beginner Journey: N02 — dọn sạch phòng đầu tiên.
           if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onRoomCleared();
           // Checkpoint: phòng vừa sạch là điểm an toàn duy nhất được lưu.
@@ -23094,14 +24247,54 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       }
 
-      function spawnFloatText(x, y, text, color = '#ffffff', size = 13) {
+      /**
+       * Text bay lên khi có sự kiện (sát thương, hồi máu, thông báo kỹ năng).
+       *
+       * Nâng cấp: phân loại bằng `opts.kind` để mỗi loại có "trọng lượng" khác
+       * nhau — đây là phản hồi quan trọng nhất của mọi trận đấu, trước đây mọi
+       * text đều giống nhau nên cú đánh thường và crit trông không khác gì.
+       *
+       *   'normal'  sát thương thường  — trắng, nhỏ, bay êm
+       *   'crit'    chí mạng            — vàng cam, to, rung, tỏa sáng
+       *   'boss'    đánh trúng trùm     — đỏ hồng, vừa, có viền dày
+       *   'heal'    hồi máu             — xanh lá, có dấu +
+       *   'info'    thông báo kỹ năng   — giữ nguyên màu truyền vào
+       *
+       * @param {number} x
+       * @param {number} y
+       * @param {string} text
+       * @param {string} color
+       * @param {number} size
+       * @param {object} [opts] { kind, shake, life, vy, scale }
+       */
+      function spawnFloatText(x, y, text, color = '#ffffff', size = 13, opts = {}) {
+        const kind = opts.kind || 'info';
+        // Tham số theo loại — gom một chỗ để dễ cân chỉnh về sau.
+        const PRESET = {
+          normal: { life: 0.62, vy: 34, scale: 1.00, stroke: 3.4, glow: 0,    shake: 0 },
+          crit:   { life: 0.95, vy: 42, scale: 1.18, stroke: 4.6, glow: 14,   shake: 2.2 },
+          boss:   { life: 0.72, vy: 32, scale: 1.08, stroke: 4.2, glow: 8,    shake: 1.1 },
+          heal:   { life: 0.85, vy: 30, scale: 1.05, stroke: 3.6, glow: 6,    shake: 0 },
+          info:   { life: 0.75, vy: 32, scale: 1.00, stroke: 3.8, glow: 0,    shake: 0 },
+        };
+        const p = PRESET[kind] || PRESET.info;
+
         Game.floatTexts.push({
           x,
           y,
           text,
           color,
           size,
-          life: 0.75
+          kind,
+          life: opts.life != null ? opts.life : p.life,
+          maxLife: opts.life != null ? opts.life : p.life,
+          vy: opts.vy != null ? opts.vy : p.vy,
+          scale: (opts.scale != null ? opts.scale : 1) * p.scale,
+          stroke: p.stroke,
+          glow: p.glow,
+          shake: opts.shake != null ? opts.shake : p.shake,
+          // Lệch ngang ngẫu nhiên để nhiều số không chồng khít lên nhau
+          driftX: (Math.random() - 0.5) * 9,
         });
       }
 
@@ -23452,7 +24645,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             const healAmt = Math.max(12, Math.round(p.maxHp * (hasHeroSkillActive(p, 'hela') ? 0.035 : 0.025)));
             if (p.hp < p.maxHp) {
               p.hp = Math.min(p.maxHp, p.hp + healAmt);
-              spawnFloatText(p.x, p.y - 26, `+${healAmt} HP`, '#34d399', 11);
+              spawnFloatText(p.x, p.y - 26, `+${healAmt} HP`, '#34d399', 11, { kind: 'heal' });
             }
           }
         }
@@ -24024,7 +25217,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               }
             } else if (d.type === 'heart') {
               p.hp = Math.min(p.maxHp, p.hp + d.val);
-              spawnFloatText(p.x, p.y - 20, `+${d.val} HP`, '#4ade80', 13);
+              spawnFloatText(p.x, p.y - 20, `+${d.val} HP`, '#4ade80', 13, { kind: 'heal' });
             } else if (d.type === 'scroll') {
               ensureWikiCurrencyAndItemsState();
               const slotKey = d.slot || 'weapon';
@@ -24149,7 +25342,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         for (let i = Game.floatTexts.length - 1; i >= 0; i--) {
           const ft = Game.floatTexts[i];
-          ft.y -= 32 * dt;
+          // Chuyển động: bay lên chậm dần (ease-out) + trôi ngang nhẹ để nhiều số
+          // không chồng lên nhau khi đánh liên tục.
+          ft.y -= (ft.vy || 32) * dt;
+          ft.x += (ft.driftX || 0) * dt;
           ft.life -= dt;
           if (ft.life <= 0) Game.floatTexts.splice(i, 1);
         }
@@ -24212,7 +25408,6 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       function hurtPlayer(dmg) {
         const p = Game.player;
         if (!p || p.invulnTimer > 0) return;
-
         // Dodge chance from Hermes Boots
         const dodgeChance = Math.min(0.55, (p.skills.hermes_boots || 0) * 0.15 + (p.gearDodge || 0));
         if (Math.random() < dodgeChance) {
@@ -24289,6 +25484,12 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // HP không bao giờ âm (trước đây có thể xuống số âm lớn trước khi kiểm tra chết).
         if (p.hp < 0) p.hp = 0;
         Game.playerTookDamageThisRoom = true;
+        // Ghi lại nguồn sát thương gần nhất — dùng cho màn hình tổng kết khi thua.
+        // Không có thông tin này thì người chơi chết mà không biết vì sao.
+        Game.lastDamageSource = (typeof Game._pendingDamageSource === 'string' && Game._pendingDamageSource)
+          ? Game._pendingDamageSource
+          : (Game.enemies.some(e => e.isBoss) ? 'boss' : (Game.enemies.length ? 'enemy' : 'unknown'));
+        Game.lastDamageAmount = dmg;
         p.invulnTimer = 0.65;
         Game.shakeTime = 0.22;
         Game.shakeMag = 5;
@@ -24773,18 +25974,44 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // 22. Crisp Outlined Floating Damage Numbers
         for (const ft of Game.floatTexts) {
           ctx.save();
-          const alpha = Math.min(1, ft.life * 1.8);
-          const popScale = ft.life > 0.55 ? 1 + (ft.life - 0.55) * 1.4 : 1;
+          const maxLife = ft.maxLife || 0.75;
+          const alpha = Math.min(1, ft.life * (maxLife < 0.8 ? 2.4 : 1.8));
+          // Pop: phóng to nhanh ở đầu đời rồi thu về kích thước gốc
+          const born = maxLife - ft.life;              // giây đã sống
+          const popT = Math.min(1, born / 0.09);
+          const popScale = 0.55 + 0.45 * popT + (1 - popT) * 0.35;
+          const baseScale = ft.scale || 1;
+
           ctx.globalAlpha = alpha;
-          ctx.translate(ft.x, ft.y);
-          ctx.scale(popScale, popScale);
+          const sx = ft.shake ? (Math.random() - 0.5) * ft.shake : 0;
+          const sy = ft.shake ? (Math.random() - 0.5) * ft.shake : 0;
+          ctx.translate(ft.x + sx, ft.y + sy);
+          ctx.scale(popScale * baseScale, popScale * baseScale);
           ctx.font = `900 ${ft.size}px Inter`;
-          ctx.fillStyle = ft.color;
-          ctx.strokeStyle = '#090d16';
-          ctx.lineWidth = 3.8;
           ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Quầng sáng cho crit/trùm/hồi máu — tách khỏi cú đánh thường
+          if (ft.glow > 0) {
+            ctx.shadowColor = ft.color;
+            ctx.shadowBlur = ft.glow * (0.6 + 0.4 * Math.sin(born * 22));
+          }
+
+          ctx.strokeStyle = '#090d16';
+          ctx.lineWidth = ft.stroke || 3.8;
+          ctx.lineJoin = 'round';
           ctx.strokeText(ft.text, 0, 0);
+          // Bóng mờ phía dưới để số đọc được cả trên nền sáng
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = ft.color;
           ctx.fillText(ft.text, 0, 0);
+
+          // Crit: thêm lớp highlight trắng mỏng ở nửa trên chữ
+          if (ft.kind === 'crit') {
+            ctx.globalAlpha = alpha * 0.55;
+            ctx.fillStyle = '#fffdf5';
+            ctx.fillText(ft.text, 0, -1);
+          }
           ctx.restore();
         }
 
@@ -26246,15 +27473,30 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         if (isVictory) SoundFX.levelUp();
 
-        showSummaryModal(
-          isVictory ? '🏆 CHIẾN THẮNG HUY HOÀNG!' : '💀 KẾT THÚC HÀNH TRÌNH',
-          isVictory
-            ? `Chúc mừng! Bạn đã chinh phục toàn bộ ${Game.maxRooms} phòng của ${Game.chapter.name}!`
-            : `Bạn đã ngã xuống tại Phòng ${Game.room}/${Game.maxRooms}. Hãy nâng cấp Vũ khí & Thẻ Tài Năng để phục thù!`,
-          isVictory ? '🏆' : '⚔️',
-          false,
-          bonusGems
-        );
+        // Phá đảo: hiện màn hình chinh phục riêng, có thông báo mở khoá chương
+        // tiếp theo. Summary thường chỉ hiện khi thua hoặc tạm dừng.
+        if (isVictory) {
+          const curIdx = CHAPTERS.findIndex(c => c.id === (Game.chapter && Game.chapter.id));
+          const nextCh = CHAPTERS[curIdx + 1] || null;
+          const unlockedNext = nextCh && !isChapterLocked(nextCh);
+          openChapterVictory(Game.chapter, unlockedNext ? nextCh : null, {
+            rooms: Game.maxRooms,
+            kills: Game.kills,
+            gold: Game.runGold,
+            gems: bonusGems
+          });
+          return;
+        }
+
+        // Thua: màn hình tổng kết riêng — giải thích nguyên nhân + gợi ý cụ thể.
+        openRunDefeat({
+          room: Game.room,
+          max: Game.maxRooms,
+          kills: Game.kills,
+          gold: Game.runGold,
+          source: Game.lastDamageSource || 'enemy',
+          lastHit: Game.lastDamageAmount || 0
+        });
       }
 
       function showSummaryModal(title, subtitle, icon, isPause, bonusGems = 0) {
@@ -26368,23 +27610,35 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       });
 
       // Chapter Switching
+      // Chương trước / sau: bỏ qua chương đang khoá, báo rõ thay vì nhảy vào rồi chết.
       document.getElementById('btnPrevChapter').addEventListener('click', () => {
-        SaveState.selectedChapterIdx = (SaveState.selectedChapterIdx - 1 + CHAPTERS.length) % CHAPTERS.length;
+        let idx = SaveState.selectedChapterIdx;
+        for (let step = 1; step < CHAPTERS.length; step++) {
+          idx = (idx - 1 + CHAPTERS.length) % CHAPTERS.length;
+          if (!isChapterLocked(CHAPTERS[idx])) break;
+        }
+        SaveState.selectedChapterIdx = idx;
         SaveState.save();
         SoundFX.coinPickup();
         renderLobbyUI();
       });
       document.getElementById('btnNextChapter').addEventListener('click', () => {
-        SaveState.selectedChapterIdx = (SaveState.selectedChapterIdx + 1) % CHAPTERS.length;
+        const cur = SaveState.selectedChapterIdx;
+        const next = (cur + 1) % CHAPTERS.length;
+        if (isChapterLocked(CHAPTERS[next])) {
+          const req = CHAPTERS[next].unlock;
+          showToast(`🔒 Cần "${req.label}" để mở ${CHAPTERS[next].name.split(':')[0]}!`);
+          return;
+        }
+        SaveState.selectedChapterIdx = next;
         SaveState.save();
         SoundFX.coinPickup();
         renderLobbyUI();
       });
 
-      // Start Game
+      // Start Game — mở briefing trước, người chơi xác nhận mới vào trận.
       document.getElementById('btnStartGame').addEventListener('click', () => {
-        // "Bắt Đầu" = Reset: luôn tạo phiên mới từ màn 1 và xoá checkpoint.
-        startNewRun('fresh');
+        openRunBriefing();
       });
       // Continue: khôi phục lượt chơi từ checkpoint của đúng chương đang chọn.
       document.getElementById('btnContinueRun')?.addEventListener('click', () => {
@@ -26487,7 +27741,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (Game.player) {
           const heal = Math.round(Game.player.maxHp * 0.25);
           Game.player.hp = Math.min(Game.player.maxHp, Game.player.hp + heal);
-          spawnFloatText(Game.player.x, Game.player.y - 24, `+${heal} HP`, '#4ade80', 14);
+          spawnFloatText(Game.player.x, Game.player.y - 24, `+${heal} HP`, '#4ade80', 14, { kind: 'heal' });
         }
         modal.classList.add('hidden');
         Game.paused = false;
@@ -26531,16 +27785,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         Game.lastTime = performance.now();
       });
 
-      document.getElementById('btnReturnLobby').addEventListener('click', () => {
+      /**
+       * Quay về sảnh từ màn chơi. Một chỗ duy nhất để mọi đường thoát (summary,
+       * victory panel, nút Về Sảnh) đều dọn cùng một tập trạng thái.
+       */
+      function returnToLobby() {
         Game.running = false;
         Game.paused = false;
         if (Game.animId) cancelAnimationFrame(Game.animId);
+        if (typeof hideRoomClearOverlay === 'function') hideRoomClearOverlay();
         document.getElementById('summaryModal').classList.add('hidden');
+        const cvModal = document.getElementById('chapterVictoryModal');
+        if (cvModal) cvModal.classList.add('hidden');
         document.getElementById('gameArenaView').classList.add('hidden');
         document.getElementById('tabBattle').classList.remove('hidden');
         document.getElementById('bottomNavBar').classList.remove('hidden');
         SaveState.save();
         renderLobbyUI();
+      }
+
+      document.getElementById('btnReturnLobby').addEventListener('click', () => {
+        returnToLobby();
       });
 
       document.getElementById('btnPlayAgain').addEventListener('click', () => {
@@ -27191,6 +28456,25 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // ===== API session / reset phó bản =====
         DungeonSession,
         clearRunState,
+        updateInGameHUD,
+        showBossIntro,
+        hideBossIntro,
+        openRunBriefing,
+        openChapterVictory,
+        finishRun,
+        returnToLobby,
+        getChapterBest,
+        renderBestiaryUI,
+        showRoomClearOverlay,
+        hideRoomClearOverlay,
+        spawnFloatText,
+        openRunDefeat,
+        recordBestiaryKill,
+        BESTIARY,
+        renderChapterSelectStrip,
+        isChapterLocked,
+        isChapterWon,
+        normalizeSelectedChapter,
         stopGameLoop,
         // ===== API checkpoint / continue =====
         saveCheckpoint,
@@ -27335,6 +28619,41 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
         pips.innerHTML = html;
       }
+    }
+
+    // ---- Dòng định hướng: còn bao xa tới trùm kế / hết chương ----
+    // Người chơi cần biết mình đang ở đâu trong nhịp của chương, không chỉ con số
+    // phòng. Phòng trùm là mốc căng thẳng — báo trước để chuẩn bị tâm lý.
+    const nextEl = document.getElementById('hudNextUp');
+    if (nextEl && Game.maxRooms) {
+      const room = Game.room, max = Game.maxRooms;
+      // Phòng trùm theo cùng luật với setupRoom: bội số 5, VÀ phòng cuối luôn là trùm.
+      const isBossRoom = (room % 5 === 0) || (room === max);
+      // Phòng cuối của chương luôn là trùm cuối, bất kể max có chia hết cho 5 hay không
+      // (chương 1 có 15 phòng — 15 % 5 === 0 nhưng vẫn là trùm cuối của chương).
+      const isFinalBoss = room === max;
+      let txt, cls;
+      if (isBossRoom) {
+        txt = isFinalBoss ? '👑 TRÙM CUỐI — Hạ gục để phá đảo!' : '⚔️ PHÒNG TRÙM — Hạ gục để mở cổng';
+        cls = isFinalBoss ? 'is-final' : 'is-boss';
+      } else {
+        // Tìm phòng trùm kế tiếp (bội số 5, hoặc phòng cuối)
+        let nextBoss = null;
+        for (let i = room + 1; i <= max; i++) {
+          if (i % 5 === 0 || i === max) { nextBoss = i; break; }
+        }
+        if (nextBoss === null) {
+          txt = '🚪 Đã tới cổng cuối — tiến lên!';
+          cls = 'is-clear';
+        } else {
+          const dist = nextBoss - room;
+          const finalNext = nextBoss === max;
+          txt = `${finalNext ? '👑' : '⚔️'} Còn ${dist} phòng tới ${finalNext ? 'Trùm Cuối' : 'Trùm'}`;
+          cls = dist <= 1 ? 'is-boss' : '';
+        }
+      }
+      if (nextEl.textContent !== txt) nextEl.textContent = txt;
+      nextEl.className = 'hv2-nextup ' + cls;
     }
   };
 })();

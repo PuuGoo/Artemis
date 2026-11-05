@@ -30,6 +30,10 @@ const TEST_PATTERNS = [
   /^shot\d+$/i, /^noc\d{5}$/i, /^pf\d{5}$/i, /^nw\d{6}$/i, /^ec\d{6}$/i,
   /^eco_/i, /^move\d{6}$/i, /^reg\d+$/i, /^clean\d{6}$/i, /^zero\d{6}$/i,
   /^real\d{6}$/i, /^fresh\d+$/i, /^boss\d{6}$/i, /^cheat\d+$/i, /^ok\d{5}$/i,
+  // Cac tien to do test e2e cua toi tao ra (2 ky tu + 6 so, hoac tu khoa ngan)
+  /^(df|nb|cl|cv|ui)\d{6}$/i, /^prod[a-z0-9]{4,}$/i, /^fix\d{4,}$/i,
+  /^inf\d{4,}$/i, /^ult[a-z0-9]{2,}$/i,
+  /^(chap|sweep|bal|hp|bname|best|newacc|reset)\d{0,6}$/i,
 ];
 
 function isTestAccount(name) {

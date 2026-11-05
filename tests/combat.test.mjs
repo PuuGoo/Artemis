@@ -61,9 +61,21 @@ check("speed co fallback so", src.includes("Number(stats.hero && stats.hero.bonu
 // ---------------------------------------------------------------- 4. Cân bằng
 console.log("\n=== 4. CAN BANG QUAI / BOSS ===");
 check("quai HP neo theo playerAtk", src.includes("const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale))"));
-check("quai ATK neo theo playerMaxHp", src.includes("playerMaxHp * 0.055 * Math.min(2.5, scale)"));
-check("boss HP neo theo playerAtk", src.includes("playerAtk * 30 * scale"));
-check("boss ATK neo theo playerMaxHp", src.includes("playerMaxHp * 0.075 * Math.min(2.5, scale)"));
+// Cong thuc CÂN BẰNG MỚI (khó dần theo tiến trình):
+//   quái HP  = playerAtk × baseHits(1.4→2.4) × scale
+//   quái ATK = playerMaxHp / (16 - depth*10) / sqrt(count/3)
+//   boss HP  = playerAtk × hitsToKill(24/30/40) × chapterMul
+//   boss ATK = playerMaxHp / (9 / 7 / 5)
+// Kiểm tra theo Ý NGHĨA (neo vào chỉ số người chơi) chứ không theo chuỗi ký tự
+// cũ, để lần cân bằng sau không phải viết lại test.
+check("quai ATK neo theo playerMaxHp", /playerMaxHp\s*\/\s*\(16\s*-\s*depth\s*\*\s*10\)/.test(src));
+check("quai HP neo theo playerAtk + duong cong do sau", /playerAtk\s*\*\s*atkMul\s*\*\s*scale/.test(src) &&
+  /const baseHits = 1\.4 \+ depth \* 1\.0/.test(src));
+check("boss HP neo theo playerAtk voi hitsToKill", /playerAtk \* hitsToKill \* chapterMul/.test(src) &&
+  /const hitsToKill = roomNum === 5 \? 24 : \(roomNum === 10 \? 30 : 40\)/.test(src));
+check("boss ATK neo theo playerMaxHp voi so don giam dan",
+  /playerMaxHp \/ \(roomNum === 5 \? 9 : \(roomNum === 10 \? 7 : 5\)\)/.test(src));
+check("quai ATK giam so don chiu duoc khi cang sau", /16 - depth \* 10/.test(src));
 check("khong con so tuyet doi 1450 cho boss HP", !src.includes("Math.round(1450 * scale"));
 check("khong con so tuyet doi 28 cho quai ATK", !src.includes("atk: Math.round(28 * scale)"));
 check("van giu enemyScale theo chuong", src.includes("const chapterMul = Game.chapter.enemyScale || 1"));
