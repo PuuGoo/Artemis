@@ -58,7 +58,11 @@ check("chi bao mo khoa khi chuong that su mo", /const unlockedNext = nextCh && !
 check("truyen du stats (rooms/kills/gold/gems)",
   /rooms: Game\.maxRooms[\s\S]{0,120}?kills: Game\.kills[\s\S]{0,120}?gold: Game\.runGold/.test(fr));
 check("return som de khong hien summary thuong", /openChapterVictory\([\s\S]{0,320}?return;/.test(fr));
-check("thua van hien summary thuong", /showSummaryModal\(\s*isVictory \?/.test(fr));
+check("thua hien man hinh that bai rieng (khong phai summary thuong)",
+  /openRunDefeat\(\{[\s\S]{0,260}?room: Game\.room/.test(fr));
+check("man hinh that bai nhan duoc nguyen nhan + sat thuong cuoi",
+  /source: Game\.lastDamageSource[\s\S]{0,120}?lastHit: Game\.lastDamageAmount/.test(fr));
+check("summary thuong khong con dung cho nhanh thua", !/showSummaryModal\(\s*isVictory \?/.test(fr));
 
 // ============================================================ 5. returnToLobby
 console.log("\n=== 5. returnToLobby (mot cho duy nhat) ===");

@@ -694,6 +694,60 @@
     @keyframes rcNextIn { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
     @keyframes rcBossPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
     @media (max-width: 520px) { .rc-title { font-size: 23px; } .rc-kicker { font-size: 8.5px; } .rc-next { font-size: 9.5px; padding: 2px 9px; } }
+    /* ==================== DEFEAT PANEL ==================== */
+    .df-hero { position: relative; padding: 20px 20px 14px; text-align: center; overflow: hidden;
+      border-bottom: 1px solid rgba(244,63,94,.22); }
+    .df-veil { position: absolute; inset: -50%; pointer-events: none;
+      background: radial-gradient(circle at 50% 42%, rgba(244,63,94,.3), transparent 62%);
+      animation: dfVeil 3.2s ease-in-out infinite; }
+    .df-skull { position: relative; font-size: 42px; line-height: 1;
+      filter: drop-shadow(0 0 18px rgba(244,63,94,.85)) drop-shadow(0 4px 10px rgba(0,0,0,.75));
+      animation: dfSkull .9s cubic-bezier(.2,1.5,.35,1) both; }
+    .df-title { position: relative; margin-top: 5px; font-size: 20px; font-weight: 900; letter-spacing: .1em;
+      color: #fda4af; text-shadow: 0 0 20px rgba(244,63,94,.75), 0 2px 4px #000; }
+    .df-subtitle { position: relative; margin-top: 3px; font-size: 11.5px; font-weight: 800; color: #94a3b8; }
+    .df-progress { padding: 11px 18px; background: rgba(2,6,23,.5); border-bottom: 1px solid rgba(255,255,255,.07); }
+    .df-progress-top { display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 8.5px; font-weight: 900; letter-spacing: .09em; color: #64748b; margin-bottom: 5px; }
+    .df-progress-top b { font-size: 12px; color: #fda4af; letter-spacing: 0; }
+    .df-progress-track { height: 7px; border-radius: 4px; background: rgba(2,6,23,.9);
+      overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.8); }
+    .df-progress-fill { height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, #f43f5e, #fb923c);
+      box-shadow: 0 0 10px rgba(244,63,94,.7);
+      animation: dfFill .7s cubic-bezier(.2,.9,.3,1) both; }
+    .df-record { margin-top: 7px; font-size: 10px; font-weight: 900; color: #fde68a;
+      text-align: center; animation: dfTipIn .4s .5s ease both; }
+    .df-best { margin-top: 6px; font-size: 9.5px; font-weight: 800; color: #64748b; text-align: center; }
+    .df-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.07); }
+    .df-stat { padding: 8px 4px; text-align: center; background: rgba(2,6,23,.55); }
+    .df-stat b { display: block; font-size: 12.5px; font-weight: 900; color: #fbbf24; }
+    .df-stat span { display: block; font-size: 7.5px; font-weight: 900; letter-spacing: .07em; color: #64748b; margin-top: 1px; }
+    .df-tips { padding: 11px 16px 3px; display: flex; flex-direction: column; gap: 7px; }
+    .df-tip { display: flex; gap: 8px; align-items: flex-start; font-size: 10.5px; font-weight: 700;
+      color: #cbd5e1; line-height: 1.5; background: rgba(30,41,59,.5);
+      border: 1px solid rgba(148,163,184,.16); border-radius: 9px; padding: 7px 9px;
+      animation: dfTipIn .4s ease both; }
+    .df-tip:nth-child(1) { animation-delay: .25s; }
+    .df-tip:nth-child(2) { animation-delay: .38s; }
+    .df-tip:nth-child(3) { animation-delay: .51s; }
+    .df-tip-icon { font-size: 13px; line-height: 1.25; flex: none; }
+    .df-actions { display: flex; gap: 8px; padding: 13px 18px 17px; }
+    .df-btn { padding: 11px; border-radius: 12px; font-size: 12.5px; font-weight: 900; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.24); transition: transform .12s, filter .12s; }
+    .df-btn:hover { filter: brightness(1.15); } .df-btn:active { transform: scale(.96); }
+    .df-btn-ghost { flex: 1; background: rgba(15,23,42,.9); color: #cbd5e1; border-color: rgba(148,163,184,.3); }
+    .df-btn-primary { flex: 2; color: #1c0a0a; background: linear-gradient(135deg, #fda4af, #f43f5e);
+      box-shadow: 0 6px 18px -6px rgba(244,63,94,.9); }
+    @keyframes dfVeil { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+    @keyframes dfSkull { from { opacity: 0; transform: scale(.4) rotate(-12deg); } to { opacity: 1; transform: none; } }
+    @keyframes dfFill { from { width: 0; } }
+    @keyframes dfTipIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 520px) {
+      .df-skull { font-size: 34px; } .df-title { font-size: 17px; }
+      .df-tip { font-size: 9.5px; padding: 6px 8px; }
+      .df-actions { padding: 11px 14px 14px; } .df-btn { font-size: 11.5px; padding: 10px; }
+    }
     .hv2-pip { flex: 1; height: 4px; border-radius: 3px; background: rgba(148,163,184,.25); min-width: 5px; }
     .hv2-pip.done { background: linear-gradient(90deg,#34d399,#2dd4bf); box-shadow: 0 0 6px rgba(52,211,153,.7); }
     .hv2-pip.cur { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: hv2pulse 1s ease-in-out infinite; }
@@ -1676,6 +1730,15 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- ==================== MODAL: THẤT BẠI ====================
+         Thua là lúc người chơi dễ bỏ game nhất. Trước đây chỉ hiện summary chung
+         "Bạn đã ngã xuống tại phòng N" — không nói vì sao, không gợi ý nên làm gì
+         tiếp. Nay: nguyên nhân chết, tỉ lệ hoàn thành, so sánh kỷ lục, và gợi ý
+         cụ thể dựa trên chính chỉ số của người chơi. -->
+    <div id="runDefeatModal" class="hidden absolute inset-0 z-45 bg-slate-950/94 backdrop-blur-md flex flex-col items-center justify-center p-4">
+      <div id="runDefeatCard" class="w-full max-w-lg rounded-3xl overflow-hidden border-2 shadow-2xl flex flex-col"></div>
     </div>
 
     <!-- ==================== MODAL: CHINH PHỤC CHƯƠNG ====================
@@ -11712,6 +11775,107 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const wrap = document.getElementById('roomClearOverlay');
         if (wrap) wrap.classList.add('hidden');
         if (_roomClearTimer) { clearTimeout(_roomClearTimer); _roomClearTimer = null; }
+      }
+
+      /**
+       * Màn hình tổng kết khi THUA.
+       *
+       * Thua là điểm rơi người chơi dễ bỏ game nhất. Màn hình cũ chỉ nói "Bạn đã
+       * ngã xuống tại Phòng N" — không giải thích, không gợi ý. Nay màn hình trả
+       * lời ba câu hỏi mà người chơi thực sự cần:
+       *   1. Tôi chết vì cái gì?          -> nguồn sát thương + đòn cuối
+       *   2. Tôi đi được bao xa?          -> tỉ lệ hoàn thành + so kỷ lục
+       *   3. Lần sau nên làm gì khác đi?  -> gợi ý tính từ chính chỉ số của họ
+       */
+      function openRunDefeat(info = {}) {
+        const modal = document.getElementById('runDefeatModal');
+        const card = document.getElementById('runDefeatCard');
+        if (!modal || !card) return;
+
+        const room = info.room || Game.room || 1;
+        const max = info.max || Game.maxRooms || 1;
+        const kills = info.kills != null ? info.kills : (Game.kills || 0);
+        const gold = info.gold != null ? info.gold : (Game.runGold || 0);
+        const ch = Game.chapter || CHAPTERS[0];
+        const pct = Math.round((room / max) * 100);
+        const bestRaw = getChapterBest(ch.id);
+        // Kẹp theo max của trận đang xét — best có thể thuộc chương khác nếu
+        // info.max không khớp Game.chapter (gọi từ test hoặc debug).
+        const best = Math.min(bestRaw, max);
+        const isRecord = room > best;
+        const bossRoom = (room % 5 === 0) || (room === max);
+        const diedToBoss = info.source === 'boss' || bossRoom;
+
+        // ---- Gợi ý cụ thể, tính từ chỉ số thật của người chơi ----
+        const stats = (() => { try { return getComputedStats(); } catch (e) { return null; } })();
+        const tips = [];
+        if (diedToBoss) {
+          tips.push({ icon: '👟', text: 'Trùm gây sát thương lớn theo từng đòn — hãy di chuyển liên tục và chỉ dừng lại để bắn khi trùm vừa ra đòn.' });
+        } else {
+          tips.push({ icon: '🎯', text: 'Đứng yên bắn sẽ ăn đòn liên tục. Di chuyển vòng tròn quanh quái, dừng 1 nhịp ngắn để bắn rồi di chuyển tiếp.' });
+        }
+        if (room <= 3) {
+          tips.push({ icon: '⚔️', text: 'Bạn còn ở rất sớm. Cường hóa vài món trang bị ở tab Trang Bị sẽ tăng sát thương rõ rệt.' });
+        } else if (pct < 60) {
+          tips.push({ icon: '🛡️', text: 'Cường hóa Giáp và Mũ để giảm sát thương nhận vào — sống lâu hơn giúp bạn đi xa hơn.' });
+        } else {
+          tips.push({ icon: '💎', text: 'Bạn đã đi được ' + pct + '% chương. Nâng cấp Vũ Khí và mở thêm Thẻ Năng Lực sẽ giúp vượt nốt đoạn còn lại.' });
+        }
+        if (stats && stats.baseHp > 0) {
+          const hitsToDie = Math.max(1, Math.round(stats.baseHp / Math.max(1, info.lastHit || 1)));
+          if (info.lastHit && info.lastHit > stats.baseHp * 0.3) {
+            tips.push({ icon: '⚠️', text: `Đòn cuối gây ${Math.round(info.lastHit).toLocaleString('vi-VN')} sát thương — hơn 30% máu của bạn. Cần thêm DEF hoặc Khiên.` });
+          }
+        }
+        // Chỉ hiện tối đa 3 gợi ý để không ngợp
+        const tipHtml = tips.slice(0, 3).map(t => `
+          <div class="df-tip"><span class="df-tip-icon">${t.icon}</span><span>${t.text}</span></div>
+        `).join('');
+
+        card.style.borderColor = '#f43f5e';
+        card.style.background = 'linear-gradient(165deg, #450a0a, #1f070d 55%, #020617)';
+
+        card.innerHTML = `
+          <div class="df-hero">
+            <div class="df-veil"></div>
+            <div class="df-skull">💀</div>
+            <div class="df-title">THẤT BẠI</div>
+            <div class="df-subtitle">${ch.name}</div>
+          </div>
+
+          <div class="df-progress">
+            <div class="df-progress-top">
+              <span>TIẾN ĐỘ CHƯƠNG</span>
+              <b>${room}/${max} · ${pct}%</b>
+            </div>
+            <div class="df-progress-track"><div class="df-progress-fill" style="width:${pct}%"></div></div>
+            ${isRecord ? `<div class="df-record">🏅 KỶ LỤC MỚI! (trước đó: phòng ${best || 0})</div>` : (best > 0 ? `<div class="df-best">Kỷ lục của bạn: phòng ${best}/${max}</div>` : '')}
+          </div>
+
+          <div class="df-stats">
+            <div class="df-stat"><b>${kills}</b><span>HẠ GỤC</span></div>
+            <div class="df-stat"><b>+${gold.toLocaleString('vi-VN')}</b><span>VÀNG</span></div>
+            <div class="df-stat"><b>${diedToBoss ? 'TRÙM' : 'QUÁI'}</b><span>NGUYÊN NHÂN</span></div>
+          </div>
+
+          <div class="df-tips">${tipHtml}</div>
+
+          <div class="df-actions">
+            <button type="button" id="btnDfLobby" class="df-btn df-btn-ghost">← Về Sảnh</button>
+            <button type="button" id="btnDfRetry" class="df-btn df-btn-primary">⚔️ Thử Lại</button>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+
+        document.getElementById('btnDfLobby').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          returnToLobby();
+        });
+        document.getElementById('btnDfRetry').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          startNewRun('fresh');
+        });
       }
 
       function renderChapterSelectStrip() {
@@ -24427,7 +24591,6 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       function hurtPlayer(dmg) {
         const p = Game.player;
         if (!p || p.invulnTimer > 0) return;
-
         // Dodge chance from Hermes Boots
         const dodgeChance = Math.min(0.55, (p.skills.hermes_boots || 0) * 0.15 + (p.gearDodge || 0));
         if (Math.random() < dodgeChance) {
@@ -24504,6 +24667,12 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // HP không bao giờ âm (trước đây có thể xuống số âm lớn trước khi kiểm tra chết).
         if (p.hp < 0) p.hp = 0;
         Game.playerTookDamageThisRoom = true;
+        // Ghi lại nguồn sát thương gần nhất — dùng cho màn hình tổng kết khi thua.
+        // Không có thông tin này thì người chơi chết mà không biết vì sao.
+        Game.lastDamageSource = (typeof Game._pendingDamageSource === 'string' && Game._pendingDamageSource)
+          ? Game._pendingDamageSource
+          : (Game.enemies.some(e => e.isBoss) ? 'boss' : (Game.enemies.length ? 'enemy' : 'unknown'));
+        Game.lastDamageAmount = dmg;
         p.invulnTimer = 0.65;
         Game.shakeTime = 0.22;
         Game.shakeMag = 5;
@@ -26534,15 +26703,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           return;
         }
 
-        showSummaryModal(
-          isVictory ? '🏆 CHIẾN THẮNG HUY HOÀNG!' : '💀 KẾT THÚC HÀNH TRÌNH',
-          isVictory
-            ? `Chúc mừng! Bạn đã chinh phục toàn bộ ${Game.maxRooms} phòng của ${Game.chapter.name}!`
-            : `Bạn đã ngã xuống tại Phòng ${Game.room}/${Game.maxRooms}. Hãy nâng cấp Vũ khí & Thẻ Tài Năng để phục thù!`,
-          isVictory ? '🏆' : '⚔️',
-          false,
-          bonusGems
-        );
+        // Thua: màn hình tổng kết riêng — giải thích nguyên nhân + gợi ý cụ thể.
+        openRunDefeat({
+          room: Game.room,
+          max: Game.maxRooms,
+          kills: Game.kills,
+          gold: Game.runGold,
+          source: Game.lastDamageSource || 'enemy',
+          lastHit: Game.lastDamageAmount || 0
+        });
       }
 
       function showSummaryModal(title, subtitle, icon, isPause, bonusGems = 0) {
@@ -27514,6 +27683,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         showRoomClearOverlay,
         hideRoomClearOverlay,
         spawnFloatText,
+        openRunDefeat,
         recordBestiaryKill,
         BESTIARY,
         renderChapterSelectStrip,
