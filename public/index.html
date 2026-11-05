@@ -773,6 +773,50 @@
       .cv-stat b { font-size: 11.5px; } .cv-unlock-name { font-size: 12.5px; }
       .cv-actions { padding: 12px 14px 15px; } .cv-btn { font-size: 11.5px; padding: 10px; }
     }
+    /* ==================== BESTIARY (SỔ TAY QUÁI VẬT) ==================== */
+    .bs-header { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 9px 12px; background: linear-gradient(180deg, rgba(30,41,59,.95), rgba(15,23,42,.92));
+      border-bottom: 1px solid rgba(148,163,184,.18); }
+    .bs-header-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .bs-book { font-size: 19px; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+    .bs-title { font-size: 10px; font-weight: 900; letter-spacing: .1em; color: #fbbf24; }
+    .bs-sub { font-size: 9.5px; font-weight: 700; color: #94a3b8; margin-top: 1px; }
+    .bs-sub b { color: #38bdf8; }
+    .bs-header-right { display: flex; align-items: center; gap: 8px; flex: none; }
+    .bs-progress { width: 62px; height: 5px; border-radius: 3px; background: rgba(2,6,23,.85); overflow: hidden; }
+    .bs-progress-fill { height: 100%; background: linear-gradient(90deg,#38bdf8,#818cf8); transition: width .3s; }
+    .bs-toggle { font-size: 9.5px; font-weight: 900; color: #cbd5e1; background: rgba(15,23,42,.95);
+      border: 1px solid rgba(148,163,184,.3); border-radius: 999px; padding: 3px 9px; cursor: pointer; }
+    .bs-toggle:hover { border-color: rgba(148,163,184,.6); color: #fff; }
+    .bs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 7px; padding: 9px; }
+    .bs-card { position: relative; border-radius: 11px; padding: 8px 9px; overflow: hidden;
+      background: linear-gradient(160deg, rgba(15,23,42,.96), rgba(2,6,23,.96));
+      border: 1px solid rgba(148,163,184,.2); transition: border-color .16s, transform .16s; }
+    .bs-card:not(.bs-unknown):hover { transform: translateY(-2px); border-color: var(--bs-color, #64748b); }
+    .bs-card::before { content: ''; position: absolute; top: -22px; right: -22px; width: 62px; height: 62px;
+      border-radius: 50%; background: radial-gradient(circle, var(--bs-color, #64748b)33, transparent 70%); pointer-events: none; }
+    .bs-card.bs-boss { border-color: rgba(244,63,94,.42); background: linear-gradient(160deg, rgba(60,8,22,.96), rgba(18,4,10,.97)); }
+    .bs-card.bs-boss::before { background: radial-gradient(circle, rgba(244,63,94,.35), transparent 70%); }
+    .bs-card.bs-unknown { border-style: dashed; opacity: .72; }
+    .bs-head { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+    .bs-icon { font-size: 17px; line-height: 1; flex: none; filter: drop-shadow(0 1px 3px rgba(0,0,0,.6)); }
+    .bs-meta { min-width: 0; flex: 1; }
+    .bs-name { font-size: 10.5px; font-weight: 900; color: #f8fafc; line-height: 1.15;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bs-tier { font-size: 7.5px; font-weight: 900; letter-spacing: .06em; margin-top: 1px; }
+    .bs-count { font-size: 9px; font-weight: 900; color: #fbbf24; flex: none;
+      background: rgba(251,191,36,.13); border: 1px solid rgba(251,191,36,.3); border-radius: 999px; padding: 1px 5px; }
+    .bs-threat { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+    .bs-threat-lbl { font-size: 7.5px; font-weight: 900; letter-spacing: .05em; color: #64748b; }
+    .bs-threat-pips { display: flex; gap: 2px; align-items: flex-end; }
+    .bs-lore { font-size: 9.5px; color: #cbd5e1; line-height: 1.42; margin-bottom: 4px; }
+    .bs-behavior { font-size: 9px; color: #94a3b8; line-height: 1.4; margin-bottom: 5px; }
+    .bs-behavior b { color: #fbbf24; font-weight: 900; }
+    .bs-tags { display: flex; flex-wrap: wrap; gap: 3px; }
+    .bs-tag { font-size: 7.5px; font-weight: 800; color: #cbd5e1; background: rgba(51,65,85,.75);
+      border: 1px solid rgba(148,163,184,.2); border-radius: 5px; padding: 1px 4px; }
+    .bs-hint { font-size: 9px; color: #64748b; font-style: italic; }
+    @media (max-width: 520px) { .bs-grid { grid-template-columns: repeat(2, 1fr); padding: 7px; gap: 6px; } }
     @media (max-width: 520px) { .hv2-xp > div:last-child > div:first-child { display: none; } .hv2-xp-track { height: 7px; } .hv2-boss { padding: 4px 10px 6px; } .hv2-boss .text-xs { font-size: 11px; margin-bottom: 2px; } .hv2-boss-track { height: 9px; } .hv2-warn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-room { min-width: 104px; padding: 5px 9px 6px; } .hv2-top { flex-wrap: wrap; } .hv2-xp { order: 3; flex-basis: 100%; max-width: none; padding: 2px 10px 2px 2px; } .hv2-lv { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; } .hv2-btn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-hint { font-size: 10px; padding: 2px 10px; text-align: center; } }
   </style>
 
@@ -890,6 +934,9 @@
              bằng 3 thẻ hiện đủ: số chương, tên, độ khó, số phòng, tiến trình,
              trạng thái khoá. Bấm thẳng vào thẻ muốn chơi. -->
         <div id="chapterSelectStrip" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 shrink-0"></div>
+
+        <!-- SỔ TAY QUÁI VẬT: cho người chơi biết mình đang đánh cái gì -->
+        <div id="bestiaryPanel" class="rounded-2xl border border-slate-700/70 bg-slate-900/85 overflow-hidden shrink-0"></div>
 
         <!-- Middle Grid: Hero Selection & Current Loadout Summary -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2458,6 +2505,100 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
         SaveState.selectedChapterIdx = fallback;
         return fallback;
+      }
+
+      // ==================== BESTIARY: SỔ TAY QUÁI VẬT ====================
+      // Mục đích: cho người chơi hiểu mình đang đánh cái gì — máu bao nhiêu, gây
+      // bao nhiêu sát thương, có chiêu gì. Đây là chiều sâu chiến đấu thật sự:
+      // biết quái yếu gì thì mới biết nên né hay nên đứng bắn.
+      // Mở dần theo tiến trình: con nào chưa giết lần nào thì hiện "??? ".
+      const BESTIARY = [
+        {
+          id: 'slime', name: 'Slime Nhớt', icon: '🟢', tier: 'Thường',
+          color: '#4ade80', aura: '#4ade80',
+          lore: 'Khối nhớt sống trong hầm ẩm. Chậm chạp nhưng dai, hay xuất hiện theo bầy.',
+          behavior: 'Di chuyển chậm, lao vào người chơi khi áp sát.',
+          threat: 1,
+          stats: { speed: 64, contact: true, ranged: false }
+        },
+        {
+          id: 'goblin', name: 'Goblin Đột Kích', icon: '👺', tier: 'Thường',
+          color: '#a3e635', aura: '#a3e635',
+          lore: 'Lũ cướp nhỏ con nhưng nhanh nhẹn, chuyên đánh lén từ hai bên sườn.',
+          behavior: 'Di chuyển nhanh, đổi hướng liên tục để tránh đạn.',
+          threat: 1,
+          stats: { speed: 64, contact: true, ranged: false }
+        },
+        {
+          id: 'skeleton_mage', name: 'Pháp Sư Xương', icon: '💀', tier: 'Tinh Anh',
+          color: '#e2e8f0', aura: '#a855f7',
+          lore: 'Xương cốt biết niệm chú. Đứng xa bắn đạn phép, trâu hơn quái thường.',
+          behavior: 'Bắn đạn phép tầm xa. Máu cao hơn quái thường ~12%.',
+          threat: 2,
+          stats: { speed: 64, contact: false, ranged: true }
+        },
+        {
+          id: 'plant_turret', name: 'Hoa Pháo Đài', icon: '🌸', tier: 'Tinh Anh',
+          color: '#f472b6', aura: '#f472b6',
+          lore: 'Rễ cắm sâu vào đá, không di chuyển. Bù lại là giàn pháo sống bắn liên tục.',
+          behavior: 'ĐỨNG YÊN hoàn toàn, bắn đạn liên tục. Trâu nhất trong quái thường (~23% máu cao hơn).',
+          threat: 2,
+          stats: { speed: 0, contact: false, ranged: true }
+        },
+        {
+          id: 'bat', name: 'Dơi Huyết Nguyệt', icon: '🦇', tier: 'Thường',
+          color: '#a78bfa', aura: '#c084fc',
+          lore: 'Bay lượn trên đầu, khó trúng vì nhỏ và nhanh. Xuất hiện nhiều ở phòng sâu.',
+          behavior: 'Bay nhanh, di chuyển hình sin. Thân nhỏ nên khó bắn trúng.',
+          threat: 1,
+          stats: { speed: 115, contact: true, ranged: false }
+        },
+        {
+          id: 'golem', name: 'Golem Dung Nham', icon: '🔥', tier: 'TRÙM',
+          color: '#f97316', aura: '#f97316',
+          lore: 'Khối đá nóng chảy được triệu hồi để canh giữ Hầm Ngục Đá Cổ. Mỗi bước chân để lại vết cháy.',
+          behavior: 'Lao thẳng vào người chơi với tốc độ cao. Bắn đạn lửa theo hình quạt. Chịu ~9 đòn là bạn gục.',
+          threat: 4,
+          stats: { speed: 68, contact: true, ranged: true }
+        },
+        {
+          id: 'queen', name: 'Nữ Hoàng Nhện Độc', icon: '🕷️', tier: 'TRÙM',
+          color: '#a855f7', aura: '#a855f7',
+          lore: 'Chúa tể Thung Lũng Dung Nham. Tơ độc của ả làm chậm cả những anh hùng nhanh nhất.',
+          behavior: 'Bắn đạn tơ độc gây làm chậm. Di chuyển nhanh hơn Golem. Chịu ~7 đòn là bạn gục.',
+          threat: 5,
+          stats: { speed: 68, contact: true, ranged: true }
+        },
+        {
+          id: 'demon_king', name: 'Đại Ma Vương Atreus', icon: '👑', tier: 'TRÙM CUỐI',
+          color: '#e11d48', aura: '#e11d48',
+          lore: 'Kẻ ngự trị Thánh Điện Hư Không. Hắn không canh giữ kho báu — hắn canh giữ cánh cổng cuối cùng.',
+          behavior: 'Triệu hồi mưa thiên thạch, lao thẳng và bắn đạn tỏa tròn. Chịu CHỈ ~5 đòn là bạn gục.',
+          threat: 6,
+          stats: { speed: 68, contact: true, ranged: true }
+        }
+      ];
+
+      const BESTIARY_BY_ID = Object.fromEntries(BESTIARY.map(b => [b.id, b]));
+
+      /** Đánh dấu đã gặp/hạ một loại quái. Gọi từ onEnemyKilled. */
+      function recordBestiaryKill(type, isBoss) {
+        if (!type) return;
+        if (!SaveState.bestiary) SaveState.bestiary = {};
+        const rec = SaveState.bestiary[type] || { seen: 0, killed: 0, firstAt: 0 };
+        rec.seen = (rec.seen || 0) + 1;
+        rec.killed = (rec.killed || 0) + 1;
+        if (!rec.firstAt) rec.firstAt = Date.now();
+        SaveState.bestiary[type] = rec;
+      }
+
+      function getBestiaryRecord(type) {
+        return (SaveState.bestiary || {})[type] || null;
+      }
+
+      function getBestiaryDiscoveredCount() {
+        const b = SaveState.bestiary || {};
+        return BESTIARY.filter(m => (b[m.id] || {}).killed > 0).length;
       }
 
       // ==================== ARCHERO 2 WIKI CHARACTER PORTRAIT SVG GENERATOR ====================
@@ -7546,6 +7687,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           flawlessRooms: 0
         },
         winsByChapter: {},
+        // Sổ tay quái vật: { [typeId]: { seen, killed, firstAt } }
+        bestiary: {},
         achievementsUnlocked: {},
         achievementsClaimed: {},
         achievementFilter: 'all',
@@ -7858,6 +8001,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               // Thành tựu & chỉ số vĩnh viễn
               lifetimeStats: this.lifetimeStats,
               winsByChapter: this.winsByChapter,
+              bestiary: this.bestiary,
               achievementsUnlocked: this.achievementsUnlocked,
               achievementsClaimed: this.achievementsClaimed,
               achievementFilter: this.achievementFilter,
@@ -7898,6 +8042,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         ensureObj('chestKeys', { silver_chest_key: 0, obsidian_chest_key: 0, chromatic_chest_key: 0 });
         ensureObj('gearScrolls', { weapon: 0, armor: 0, helmet: 0, ring: 0, necklace: 0, boots: 0 });
         ensureObj('wikiOtherItems', {});
+        // Sổ tay quái vật — save cũ chưa có trường này.
+        ensureObj('bestiary', {});
 
         // Các trường bắt buộc là array.
         if (!Array.isArray(SaveState.chestGachaState.lastPullResults)) {
@@ -11643,6 +11789,95 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         document.getElementById('btnBriefingStart').addEventListener('click', () => {
           modal.classList.add('hidden');
           startNewRun('fresh');
+        });
+      }
+
+      /**
+       * Vẽ Sổ Tay Quái Vật.
+       *
+       * Mở dần: con chưa hạ lần nào hiện "???" với silhouette xám. Con đã hạ hiện
+       * đầy đủ thông tin (mô tả, hành vi, độ nguy hiểm, số lần hạ). Đây là phần
+       * thưởng tri thức — người chơi càng chơi càng hiểu quái hơn, và lần sau
+       * biết nên né đòn gì.
+       */
+      function renderBestiaryUI() {
+        const el = document.getElementById('bestiaryPanel');
+        if (!el) return;
+
+        const disc = getBestiaryDiscoveredCount();
+        const total = BESTIARY.length;
+        const collapsed = SaveState.bestiaryCollapsed === true;
+
+        const threatPips = (n) => {
+          const max = 6;
+          return Array.from({ length: max }, (_, i) =>
+            `<span style="width:4px;height:9px;border-radius:1px;background:${i < n
+              ? (n <= 2 ? '#4ade80' : n <= 4 ? '#fbbf24' : '#f43f5e')
+              : 'rgba(148,163,184,.22)'}"></span>`
+          ).join('');
+        };
+
+        const cards = BESTIARY.map(m => {
+          const rec = getBestiaryRecord(m.id);
+          const known = rec && rec.killed > 0;
+          const isBoss = m.tier.indexOf('TRÙM') === 0;
+
+          if (!known) {
+            return `
+              <div class="bs-card bs-unknown" title="Chưa từng hạ gục">
+                <div class="bs-head">
+                  <span class="bs-icon" style="filter:grayscale(1) brightness(.5)">❓</span>
+                  <div class="bs-meta">
+                    <div class="bs-name">???</div>
+                    <div class="bs-tier">CHƯA KHÁM PHÁ</div>
+                  </div>
+                </div>
+                <div class="bs-hint">Hạ gục loại quái này để mở thông tin.</div>
+              </div>`;
+          }
+
+          return `
+            <div class="bs-card ${isBoss ? 'bs-boss' : ''}" style="--bs-color:${m.color}" data-bs-id="${m.id}">
+              <div class="bs-head">
+                <span class="bs-icon">${m.icon}</span>
+                <div class="bs-meta">
+                  <div class="bs-name">${m.name}</div>
+                  <div class="bs-tier" style="color:${isBoss ? '#fda4af' : '#94a3b8'}">${m.tier}</div>
+                </div>
+                <div class="bs-count">×${rec.killed}</div>
+              </div>
+              <div class="bs-threat"><span class="bs-threat-lbl">Nguy hiểm</span><span class="bs-threat-pips">${threatPips(m.threat)}</span></div>
+              <div class="bs-lore">${m.lore}</div>
+              <div class="bs-behavior"><b>Chiêu thức:</b> ${m.behavior}</div>
+              <div class="bs-tags">
+                ${m.stats.speed === 0 ? '<span class="bs-tag">🥶 Đứng yên</span>' : `<span class="bs-tag">🏃 Tốc độ ${m.stats.speed}</span>`}
+                ${m.stats.ranged ? '<span class="bs-tag">🏹 Bắn xa</span>' : ''}
+                ${m.stats.contact ? '<span class="bs-tag">💥 Lao vào</span>' : ''}
+              </div>
+            </div>`;
+        }).join('');
+
+        el.innerHTML = `
+          <div class="bs-header">
+            <div class="bs-header-left">
+              <span class="bs-book">📖</span>
+              <div>
+                <div class="bs-title">SỔ TAY QUÁI VẬT</div>
+                <div class="bs-sub">Đã khám phá <b>${disc}/${total}</b> loài</div>
+              </div>
+            </div>
+            <div class="bs-header-right">
+              <div class="bs-progress"><div class="bs-progress-fill" style="width:${Math.round((disc / total) * 100)}%"></div></div>
+              <button type="button" id="btnToggleBestiary" class="bs-toggle">${collapsed ? 'Mở ▾' : 'Thu ▴'}</button>
+            </div>
+          </div>
+          ${collapsed ? '' : `<div class="bs-grid">${cards}</div>`}
+        `;
+
+        document.getElementById('btnToggleBestiary')?.addEventListener('click', () => {
+          SaveState.bestiaryCollapsed = !collapsed;
+          SaveState.save();
+          renderBestiaryUI();
         });
       }
 
@@ -20907,6 +21142,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         document.getElementById('chapterTitleText').textContent = ch.name;
         document.getElementById('chapterDescText').textContent = ch.desc;
         safeRender('chapterStrip', () => renderChapterSelectStrip());
+        safeRender('bestiary', () => renderBestiaryUI());
         const bestRm = getChapterBest(ch.id) || 1;
         document.getElementById('bestRecordText').textContent = `Kỷ lục: Phòng ${bestRm}/${ch.rooms}`;
 
@@ -22773,6 +23009,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         Game.kills++;
         bumpLifetimeStat('kills', 1);
         if (e.isBoss) bumpLifetimeStat('bossKills', 1);
+        // Sổ tay quái vật: ghi nhận đã hạ loại này (mở khoá thông tin trong Bestiary)
+        recordBestiaryKill(e.type, !!e.isBoss);
         checkAchievements();
         spawnParticles(e.x, e.y, e.isBoss ? '#f43f5e' : '#fbbf24', e.isBoss ? 52 : 26);
         spawnShatterShards(e.x, e.y, e.isBoss ? '#f43f5e' : '#c084fc', e.isBoss ? 18 : 9);
@@ -27062,6 +27300,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         finishRun,
         returnToLobby,
         getChapterBest,
+        renderBestiaryUI,
+        recordBestiaryKill,
+        BESTIARY,
         renderChapterSelectStrip,
         isChapterLocked,
         isChapterWon,
