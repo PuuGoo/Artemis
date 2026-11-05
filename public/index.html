@@ -818,10 +818,17 @@
       .ms-art { aspect-ratio: 16 / 10; min-height: 175px; }
       .ms-name { font-size: 15px; } .ms-tagline { font-size: 9px; max-width: 26ch; }
       .ms-stats { grid-template-columns: repeat(2, 1fr); }
-      .ms-node { width: 18px; height: 18px; font-size: 8px; }
+      /* Thu nho node de ca 15 moc vua 1 hang tren man hinh hep */
+      .ms-node { width: 15px; height: 15px; font-size: 7px; border-radius: 4px; }
+      .ms-link { width: 4px; }
       .ms-node-legend { display: none; }
       .ms-tab-name { font-size: 9.5px; }
       .ms-btn { font-size: 11.5px; padding: 10px 12px; }
+    }
+    /* Man hinh rat hep: node nho hon nua */
+    @media (max-width: 420px) {
+      .ms-node { width: 13px; height: 13px; font-size: 6.5px; }
+      .ms-link { width: 3px; }
     }
 
     /* ==================== DEFEAT PANEL ==================== */
