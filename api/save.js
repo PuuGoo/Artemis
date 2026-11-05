@@ -1,6 +1,7 @@
 import { getMongoDb, COLLECTIONS } from "../lib/mongo.js";
 import { getCurrentPlayer, json, fail, readJsonBody, bumpRateLimit, clientIp } from "../lib/http.js";
 import { sanitizeSave, MAX_SAVE_BYTES } from "../lib/saveSchema.js";
+import { validateEconomyDelta } from "../lib/economy.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -41,7 +42,7 @@ export async function PUT(request) {
   const expectedRevision = Number.isFinite(clientRevision) ? clientRevision : null;
   const now = new Date();
 
-  const existing = await saves.findOne({ playerId }, { projection: { revision: 1 } });
+  const existing = await saves.findOne({ playerId }, { projection: { revision: 1, "data.gold": 1, "data.gems": 1, "data.lifetimeStats": 1 } });
   const currentRevision = existing?.revision || 0;
 
   if (existing && expectedRevision !== null && expectedRevision !== currentRevision) {
@@ -51,6 +52,24 @@ export async function PUT(request) {
       conflict: true,
       serverRevision: currentRevision,
     }, 409);
+  }
+
+  // ===== Kiểm tra kinh tế phía server =====
+  // Không tin client: chặn việc tự cấp vàng/đá quý qua một request duy nhất.
+  // So sánh với bản ghi đang có trong DB, dùng số revision tăng làm mốc.
+  const economy = validateEconomyDelta(existing?.data || null, check.data, 1);
+  if (!economy.ok) {
+    const save = await saves.findOne({ playerId }, { projection: { revision: 1, data: 1 } });
+    return json({
+      ok: false,
+      error: economy.reason,
+      code: economy.code,
+      detail: economy.detail,
+      // Trả lại bản ghi server để client không ghi đè dữ liệu hỏng lên máy.
+      conflict: true,
+      serverRevision: save?.revision || 0,
+      serverData: save?.data || null,
+    }, 422);
   }
 
   const nextRevision = currentRevision + 1;

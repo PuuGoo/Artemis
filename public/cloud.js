@@ -299,6 +299,20 @@
           state.dirty = false;
           state.lastError = "";
           pulseSavedIndicator();
+        } else if (r.data && r.data.code && String(r.data.code).indexOf("ECONOMY_") === 0) {
+          // Server chặn vì số vàng/đá quý tăng bất thường. Khôi phục bản ghi server
+          // để người chơi không tiếp tục chơi trên dữ liệu sai, rồi báo rõ.
+          state.lastError = r.data.code;
+          if (r.data.serverData) {
+            try {
+              localStorage.setItem(SAVE_KEY, JSON.stringify(r.data.serverData));
+              state.revision = Number(r.data.serverRevision) || 0;
+              toast("Dữ liệu tài nguyên không hợp lệ đã bị từ chối. Đang tải lại tiến trình từ máy chủ…", "err");
+              setTimeout(function () { location.reload(); }, 1600);
+              return;
+            } catch (e) {}
+          }
+          toast((r.data && r.data.error) || "Tiến trình không hợp lệ, chưa được lưu.", "err");
         } else if (r.data && r.data.conflict) {
           toast("Tiến trình đã đổi từ thiết bị khác. Tải lại trang để đồng bộ.", "warn");
           state.lastError = "conflict";
