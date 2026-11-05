@@ -1717,6 +1717,92 @@
 
       </section>
 
+      <!-- ==================== TAB: THẺ (uimaincard — danh sách anh hùng) ==================== -->
+      <section id="tabHeroes" class="hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-3">
+        <div class="max-w-4xl w-full mx-auto">
+          <div class="rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border border-indigo-500/40 p-3.5 shadow-xl">
+            <div class="flex items-start justify-between gap-3 flex-wrap">
+              <div>
+                <div class="text-[9px] font-black uppercase tracking-wider text-indigo-300">Thẻ Anh Hùng</div>
+                <h2 class="text-base sm:text-lg font-black text-white leading-tight">Đội Hình Xuất Chiến</h2>
+                <p class="text-[10px] text-slate-400 mt-0.5">Chọn 1 anh hùng. Cày shard để lên sao, mở khóa kỹ năng đặc trưng.</p>
+              </div>
+              <button type="button" id="btnHeroDraw"
+                class="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-[11px] shadow hover:brightness-110 active:scale-95 transition shrink-0">
+                💎 Triệu Hồi Thẻ
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="heroRosterGrid" class="max-w-4xl w-full mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2"></div>
+
+        <!-- Chi tiết anh hùng đang chọn -->
+        <div id="heroDetailPanel" class="max-w-4xl w-full mx-auto"></div>
+
+        <!-- Nút vào Tài Năng (bản thật gộp talent vào màn Nhân Vật — ui_role) -->
+        <div class="max-w-4xl w-full mx-auto">
+          <button type="button" id="btnOpenTalents"
+            class="w-full rounded-xl bg-slate-800/90 border border-slate-600 hover:bg-slate-700 px-3 py-2.5 text-left transition flex items-center justify-between gap-2">
+            <span class="flex items-center gap-2">
+              <span class="text-lg">🃏</span>
+              <span>
+                <b class="block text-[12px] text-white font-black">Thẻ Tài Năng &amp; Hành Trình Tân Thủ</b>
+                <i class="block text-[10px] text-slate-400 not-italic">Nâng chỉ số vĩnh viễn · xem tiến độ mở khóa</i>
+              </span>
+            </span>
+            <span class="text-slate-400 font-black">›</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================== TAB: GUILD (uimainguild — chưa mở) ==================== -->
+      <section id="tabGuild" class="hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-3">
+        <div class="max-w-4xl w-full mx-auto">
+          <div class="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-black border border-slate-700 p-5 text-center shadow-xl">
+            <div class="text-4xl mb-2">🏰</div>
+            <div class="text-[9px] font-black uppercase tracking-widest text-slate-500">Tính Năng Đang Phát Triển</div>
+            <h2 class="text-lg font-black text-white mt-1">Bang Hội</h2>
+            <p class="text-[11px] text-slate-400 mt-2 max-w-md mx-auto leading-relaxed">
+              Bang hội cần máy chủ nhiều người chơi theo thời gian thực. Hiện game chạy chế độ chơi đơn có lưu đám mây —
+              bang hội sẽ mở khi có đủ hạ tầng.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 text-left">
+              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
+                <div class="text-base">🐲</div>
+                <b class="block text-[10.5px] text-white font-black mt-0.5">Trùm Bang Hội</b>
+                <i class="block text-[9px] text-slate-500 not-italic">Đánh chung, chia thưởng</i>
+              </div>
+              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
+                <div class="text-base">🗺️</div>
+                <b class="block text-[10.5px] text-white font-black mt-0.5">Viễn Chinh</b>
+                <i class="block text-[9px] text-slate-500 not-italic">Bản đồ đội nhóm</i>
+              </div>
+              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
+                <div class="text-base">⚔️</div>
+                <b class="block text-[10.5px] text-white font-black mt-0.5">Chiến Bang</b>
+                <i class="block text-[9px] text-slate-500 not-italic">Bang vs bang</i>
+              </div>
+              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
+                <div class="text-base">🏆</div>
+                <b class="block text-[10.5px] text-white font-black mt-0.5">Xếp Hạng</b>
+                <i class="block text-[9px] text-slate-500 not-italic">Bảng bang mạnh nhất</i>
+              </div>
+              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
+                <div class="text-base">🛒</div>
+                <b class="block text-[10.5px] text-white font-black mt-0.5">Chợ Bang</b>
+                <i class="block text-[9px] text-slate-500 not-italic">Trao đổi nội bộ</i>
+              </div>
+              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
+                <div class="text-base">🌱</div>
+                <b class="block text-[10.5px] text-white font-black mt-0.5">Vườn Bang</b>
+                <i class="block text-[9px] text-slate-500 not-italic">Trồng, thu hoạch chung</i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ==================== TAB 4: VẬT SƯU TẦM (THẺ NĂNG LỰC & THÁNH VẬT ĐỆM NHUNG ĐỎ — PAGES 60-61) ==================== -->
       <section id="tabTalents" class="hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-4">
         <div id="vnCollectiblesAuthenticContainer" class="max-w-4xl w-full mx-auto"></div>
@@ -1924,30 +2010,38 @@
 
     </main>
 
-    <!-- BOTTOM NAVIGATION BAR (100% AUTHENTIC 5-TAB ARCHERO 2 VIETNAMESE DOCK: Cửa Hàng | Trang bị | Chiến Dịch | Vật Sưu Tầm | Sự kiện) -->
+    <!-- BOTTOM NAVIGATION — 6 TAB THEO CHUẨN ARCHERO 2 THẬT
+         (uimainbattle · uimaincard · uimainequip · uimainactivity · uimainshop · uimainguild)
+         Bản thật KHÔNG có tab "Tài Năng" riêng: talent nằm trong màn Nhân Vật (ui_role),
+         và có tab Guild mà bản web trước đây thiếu hoàn toàn. -->
     <nav id="bottomNavBar" class="z-20 bg-[#0d193b] border-t-2 border-[#253c78] shrink-0 shadow-[0_-10px_25px_rgba(0,0,0,0.75)] px-1 sm:px-3 pt-1 pb-1">
-      <div class="max-w-3xl mx-auto grid grid-cols-5 gap-1 sm:gap-2 items-end">
-        <button type="button" data-tab="tabShopVn" class="nav-tab-btn relative py-2 px-1 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[11px] sm:text-xs transition">
-          <span class="text-xl sm:text-2xl drop-shadow">🏪</span>
+      <div class="max-w-3xl mx-auto grid grid-cols-6 gap-0.5 sm:gap-1.5 items-end">
+        <button type="button" data-tab="tabBattle" class="nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition">
+          <span class="text-lg sm:text-2xl drop-shadow">⚔️</span>
+          <span>Chiến Đấu</span>
+        </button>
+        <button type="button" data-tab="tabHeroes" class="nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition">
+          <span class="text-lg sm:text-2xl drop-shadow">🃏</span>
+          <span>Thẻ</span>
+        </button>
+        <button type="button" data-tab="tabEquip" class="nav-tab-btn relative py-2.5 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 bg-gradient-to-b from-[#fde047] via-[#facc15] to-[#eab308] text-amber-950 border-t-2 border-x-2 border-white font-black text-[10px] sm:text-sm shadow-lg -mt-2 transition">
+          <span class="text-lg sm:text-2xl drop-shadow">🥋</span>
+          <span>Trang Bị</span>
+          <span class="absolute top-0.5 right-1 w-3.5 h-3.5 rounded-full bg-red-600 border border-white text-white text-[8px] font-black flex items-center justify-center shadow">!</span>
+        </button>
+        <button type="button" data-tab="tabEvents" class="nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition">
+          <span class="text-lg sm:text-2xl drop-shadow">🎪</span>
+          <span>Sự Kiện</span>
+          <span class="absolute top-0.5 right-1 w-3.5 h-3.5 rounded-full bg-red-600 border border-white text-white text-[8px] font-black flex items-center justify-center shadow">!</span>
+        </button>
+        <button type="button" data-tab="tabShopVn" class="nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition">
+          <span class="text-lg sm:text-2xl drop-shadow">🏪</span>
           <span>Cửa Hàng</span>
         </button>
-        <button type="button" data-tab="tabEquip" class="nav-tab-btn relative py-2.5 px-1 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 bg-gradient-to-b from-[#fde047] via-[#facc15] to-[#eab308] text-amber-950 border-t-2 border-x-2 border-white font-black text-xs sm:text-sm shadow-lg -mt-2 transition">
-          <span class="text-xl sm:text-2xl drop-shadow">🥋</span>
-          <span>Trang bị</span>
-          <span class="absolute top-0.5 right-2 w-4 h-4 rounded-full bg-red-600 border border-white text-white text-[9px] font-black flex items-center justify-center shadow">!</span>
-        </button>
-        <button type="button" data-tab="tabBattle" class="nav-tab-btn relative py-2 px-1 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[11px] sm:text-xs transition">
-          <span class="text-xl sm:text-2xl drop-shadow">🛡️</span>
-          <span>Chiến Dịch</span>
-        </button>
-        <button type="button" data-tab="tabTalents" class="nav-tab-btn relative py-2 px-1 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[11px] sm:text-xs transition">
-          <span class="text-xl sm:text-2xl drop-shadow">🏆</span>
-          <span>Vật Sưu Tầm</span>
-        </button>
-        <button type="button" data-tab="tabEvents" class="nav-tab-btn relative py-2 px-1 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[11px] sm:text-xs transition">
-          <span class="text-xl sm:text-2xl drop-shadow">♟️</span>
-          <span>Sự kiện</span>
-          <span class="absolute top-0.5 right-2 w-4 h-4 rounded-full bg-red-600 border border-white text-white text-[9px] font-black flex items-center justify-center shadow">!</span>
+        <button type="button" data-tab="tabGuild" class="nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition">
+          <span class="text-lg sm:text-2xl drop-shadow">🏰</span>
+          <span>Bang Hội</span>
+          <span class="absolute top-0.5 right-1 px-1 rounded-full bg-slate-700 border border-slate-500 text-slate-300 text-[7px] font-black shadow">Sắp mở</span>
         </button>
       </div>
       <!-- Preserve Legacy Quick-Switch Pills for 100% Backward Compatibility -->
@@ -13078,17 +13172,118 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        * normalizeSelectedChapter(), startNewRun().
        */
       /**
-       * Màn hình CHỌN BẢN ĐỒ — bản gọn.
+       * Màn THẺ (tương ứng `uimaincard` của Archero 2 thật).
        *
-       * Nguyên tắc: mỗi thông tin chỉ xuất hiện MỘT lần.
-       *   - Tên chương: chỉ ở dòng tiêu đề (không lặp ở overline)
-       *   - Số phòng: chỉ ở dải mốc (không có ô "15 PHÒNG" riêng)
-       *   - Tiến độ: chỉ ở dải mốc + 1 dòng nhỏ (không lặp 3 nơi)
-       *   - Độ khó + hệ số quái: gộp thành 1 badge
-       *   - "Lần thắng" bỏ khỏi màn chính (thông tin meta)
-       *
-       * Logic mở khoá/tiến trình vẫn dùng hàm sẵn có, không tạo hệ thống mới.
+       * Hiển thị toàn bộ anh hùng dưới dạng lưới thẻ, kèm sao hiện tại và
+       * nút chọn xuất chiến. Theo bản thật: chọn hero ở đây, nâng sao bằng
+       * shard, mở kỹ năng đặc trưng ở mốc 0★/2★/5★/8★.
        */
+      function renderHeroRoster() {
+        const grid = document.getElementById('heroRosterGrid');
+        const detail = document.getElementById('heroDetailPanel');
+        if (!grid) return;
+
+        const selId = SaveState.selectedHeroId || 'alex';
+        const RARITY_STYLE = {
+          Legendary: { ring: 'border-amber-400/70', bg: 'from-amber-500/15 to-slate-950', tag: 'bg-amber-400 text-slate-950' },
+          Epic: { ring: 'border-fuchsia-400/70', bg: 'from-fuchsia-500/15 to-slate-950', tag: 'bg-fuchsia-400 text-slate-950' },
+          Rare: { ring: 'border-sky-400/70', bg: 'from-sky-500/15 to-slate-950', tag: 'bg-sky-400 text-slate-950' }
+        };
+
+        grid.innerHTML = HEROES.map(h => {
+          const stars = getHeroStarLevel(h.id);
+          const st = RARITY_STYLE[h.rarity] || RARITY_STYLE.Rare;
+          const isSel = h.id === selId;
+          const starStr = '★'.repeat(stars) + '☆'.repeat(Math.max(0, 8 - stars));
+          return `
+            <button type="button" data-hero-pick="${h.id}"
+              class="relative overflow-hidden rounded-xl border-2 ${st.ring} bg-gradient-to-b ${st.bg} p-2 text-left transition
+                     ${isSel ? 'ring-2 ring-white/80 shadow-[0_0_0_2px_rgba(255,255,255,.35)]' : 'hover:brightness-125'}">
+              <span class="absolute top-1 right-1 text-[8px] font-black px-1.5 py-0.5 rounded-full ${st.tag}">${h.rarity}</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-xl leading-none">${h.spriteEmoji || h.skillIcon || '🃏'}</span>
+                <div class="min-w-0">
+                  <b class="block text-[11px] font-black text-white truncate">${h.name}</b>
+                  <i class="block text-[8px] text-amber-300 not-italic tracking-tight">${starStr}</i>
+                </div>
+              </div>
+              <p class="text-[8.5px] text-slate-400 mt-1 leading-tight line-clamp-2">${(h.role || '').slice(0, 48)}</p>
+              ${isSel ? '<span class="absolute bottom-0 left-0 right-0 bg-white/90 text-slate-950 text-[7.5px] font-black text-center py-0.5">ĐANG DÙNG</span>' : ''}
+            </button>`;
+        }).join('');
+
+        grid.querySelectorAll('[data-hero-pick]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-hero-pick');
+            if (!HEROES.some(h => h.id === id)) return;
+            SaveState.selectedHeroId = id;
+            SaveState.heroSkinIdx = SaveState.heroSelectedSkins?.[id] || 0;
+            SaveState.save();
+            SoundFX.coinPickup();
+            renderHeroRoster();
+          });
+        });
+
+        // ---- Chi tiết hero đang chọn ----
+        const hero = HEROES.find(h => h.id === selId) || HEROES[0];
+        if (!detail || !hero) return;
+        const stars = getHeroStarLevel(hero.id);
+        const ms = getHeroMilestoneData(stars, hero);
+        const shards = (SaveState.heroShards || {})[hero.id] || 0;
+        const nextCost = stars >= 8 ? null : getHeroShardRequirement(hero, stars + 1);
+        const canUp = nextCost !== null && shards >= nextCost && SaveState.gold >= (HERO_STAR_MILESTONES[stars + 1]?.goldCost || 0);
+
+        detail.innerHTML = `
+          <div class="rounded-2xl border border-slate-700 bg-slate-900/90 p-3.5 shadow-xl">
+            <div class="flex items-start gap-3">
+              <div class="text-3xl leading-none">${hero.spriteEmoji || '🃏'}</div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <b class="text-sm font-black text-white">${hero.name}</b>
+                  <span class="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-200">${hero.rarity}</span>
+                  <span class="text-[10px] text-amber-300 font-black">${'★'.repeat(stars)}${'☆'.repeat(Math.max(0, 8 - stars))}</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-0.5">${hero.title || ''}</p>
+                <p class="text-[10px] text-cyan-300 font-bold mt-1">${hero.skillName || ''}</p>
+              </div>
+            </div>
+
+            <div class="mt-2.5 rounded-xl bg-slate-950/80 border border-slate-700 p-2.5">
+              <div class="text-[9px] font-black uppercase tracking-wider text-slate-500">Mốc sao hiện tại</div>
+              <b class="block text-[11px] text-amber-300 font-black mt-0.5">${ms.name}</b>
+              <p class="text-[10px] text-slate-300 leading-snug mt-1">${ms.perkDesc}</p>
+            </div>
+
+            <div class="mt-2">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <div class="text-[10px] text-slate-400">
+                  Shard: <b class="text-white">${shards}</b>${nextCost !== null ? ` / ${nextCost}` : ' · CỰC CẠN 8★'}
+                </div>
+                <button type="button" id="btnUpgradeStar"
+                  class="px-3 py-1.5 rounded-lg text-[10.5px] font-black transition ${canUp
+                    ? 'bg-emerald-500 text-slate-950 hover:brightness-110 active:scale-95'
+                    : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'}"
+                  ${canUp ? '' : 'disabled'}>
+                  ${stars >= 8 ? 'ĐÃ CỰC CẠN' : `⬆ Lên ${stars + 1}★`}
+                </button>
+              </div>
+              ${nextCost !== null ? `
+              <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-300"
+                  style="width:${Math.min(100, Math.round((shards / nextCost) * 100))}%"></div>
+              </div>` : ''}
+            </div>
+          </div>`;
+
+        const upBtn = document.getElementById('btnUpgradeStar');
+        if (upBtn && canUp) {
+          upBtn.addEventListener('click', () => {
+            if (typeof upgradeHeroStar === 'function') upgradeHeroStar(hero.id);
+            renderHeroRoster();
+          });
+        }
+      }
+
       function renderMapSelect() {
         const el = document.getElementById('mapSelectPanel');
         if (!el) return;
@@ -28051,24 +28246,56 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       canvas.addEventListener('touchend', handlePointerEnd);
 
       // ==================== UI BUTTON EVENT LISTENERS ====================
-      // Navigation Tabs
+      // Navigation Tabs — 6 tab theo chuẩn Archero 2 thật
+      const NAV_TAB_IDS = ['tabBattle', 'tabHeroes', 'tabEquip', 'tabEvents', 'tabShopVn', 'tabGuild'];
       document.querySelectorAll('.nav-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const targetId = btn.getAttribute('data-tab');
-          ['tabShopVn', 'tabBattle', 'tabEquip', 'tabTalents', 'tabEvents'].forEach(id => {
+          NAV_TAB_IDS.forEach(id => {
             const sec = document.getElementById(id);
             if (sec) sec.classList.toggle('hidden', id !== targetId);
           });
           document.querySelectorAll('#bottomNavBar .grid .nav-tab-btn').forEach(b => {
             const active = b.getAttribute('data-tab') === targetId;
             b.className = active
-              ? 'nav-tab-btn relative py-2.5 px-1 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 bg-gradient-to-b from-[#fde047] via-[#facc15] to-[#eab308] text-amber-950 border-t-2 border-x-2 border-white font-black text-xs sm:text-sm shadow-lg -mt-2 transition'
-              : 'nav-tab-btn relative py-2 px-1 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[11px] sm:text-xs transition';
+              ? 'nav-tab-btn relative py-2.5 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 bg-gradient-to-b from-[#fde047] via-[#facc15] to-[#eab308] text-amber-950 border-t-2 border-x-2 border-white font-black text-[10px] sm:text-sm shadow-lg -mt-2 transition'
+              : 'nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition';
           });
           SoundFX.coinPickup();
+          if (targetId === 'tabHeroes' && typeof renderHeroRoster === 'function') renderHeroRoster();
           renderLobbyUI();
         });
       });
+
+      /** Chuyển sang tab khác bằng id (dùng nội bộ + debug). */
+      function gotoNavTab(tabId) {
+        const btn = document.querySelector(`#bottomNavBar .grid .nav-tab-btn[data-tab="${tabId}"]`);
+        if (btn) btn.click();
+      }
+      window.gotoNavTab = gotoNavTab;
+
+      // Nút trong tab Thẻ mở thẳng màn Tài Năng (bản thật gộp talent vào ui_role)
+      (function wireHeroPanelButtons() {
+        const openTalents = document.getElementById('btnOpenTalents');
+        if (openTalents) {
+          openTalents.addEventListener('click', () => {
+            const sec = document.getElementById('tabTalents');
+            const heroSec = document.getElementById('tabHeroes');
+            if (sec) { sec.classList.remove('hidden'); }
+            if (heroSec) heroSec.classList.add('hidden');
+            document.querySelectorAll('#bottomNavBar .grid .nav-tab-btn').forEach(b => {
+              b.className = 'nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition';
+            });
+            SoundFX.coinPickup();
+          });
+        }
+        const drawBtn = document.getElementById('btnHeroDraw');
+        if (drawBtn) {
+          drawBtn.addEventListener('click', () => {
+            showToast('💎 Triệu hồi thẻ sẽ mở ở bản cập nhật sau — hãy cày shard từ chiến đấu!');
+          });
+        }
+      })();
 
       // Chapter Switching
       // Nút ◀ ▶ đã bỏ khỏi giao diện: việc chọn chương nay nằm trong
@@ -28984,6 +29211,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         BESTIARY,
         renderChapterSelectStrip,
         renderMapSelect,
+        renderHeroRoster,
+        gotoNavTab,
         openBestiaryModal,
         closeBestiaryModal,
         switchChapter,
