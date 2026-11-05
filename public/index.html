@@ -643,7 +643,42 @@
         box-shadow: 0 0 8px rgba(244, 63, 94, 0.9);
         z-index: 12;
       }
-    </style>
+        /* ===================== ARENA V2 — HUD CHIẾN ĐẤU ===================== */
+    #gameArenaView { font-family: 'Inter', sans-serif; }
+    .hv2-glass { background: linear-gradient(180deg, rgba(20,28,52,.82), rgba(8,12,26,.88)); backdrop-filter: blur(10px) saturate(1.3); border: 1px solid rgba(148,163,184,.28); box-shadow: 0 6px 18px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08); }
+    .hv2-room { border-radius: 16px; padding: 6px 12px 7px; min-width: 128px; }
+    .hv2-room-stage { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #94a3b8; font-weight: 800; }
+    .hv2-room-main { display: flex; align-items: baseline; gap: 8px; }
+    .hv2-room-main #hudRoomText { font-size: 15px; font-weight: 900; color: #fcd34d; text-shadow: 0 0 10px rgba(251,191,36,.5); }
+    .hv2-enemy { font-size: 11px; font-weight: 800; color: #fda4af; padding: 1px 7px; border-radius: 999px; background: rgba(244,63,94,.14); border: 1px solid rgba(244,63,94,.35); }
+    .hv2-pips { display: flex; gap: 3px; margin-top: 5px; }
+    .hv2-pip { flex: 1; height: 4px; border-radius: 3px; background: rgba(148,163,184,.25); min-width: 5px; }
+    .hv2-pip.done { background: linear-gradient(90deg,#34d399,#2dd4bf); box-shadow: 0 0 6px rgba(52,211,153,.7); }
+    .hv2-pip.cur { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: hv2pulse 1s ease-in-out infinite; }
+    .hv2-pip.boss { height: 6px; margin-top: -1px; background: rgba(244,63,94,.45); }
+    .hv2-pip.boss.done { background: linear-gradient(90deg,#fb7185,#f43f5e); }
+    @keyframes hv2pulse { 50% { opacity: .45; transform: scaleY(1.5); } }
+    .hv2-xp { flex: 1; max-width: 300px; border-radius: 999px; padding: 4px 12px 4px 4px; display: flex; align-items: center; gap: 8px; }
+    .hv2-lv { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; font-weight: 900; font-size: 11px; color: #052e2b; background: radial-gradient(circle at 30% 25%, #a7f3d0, #10b981 70%); border: 2px solid #ecfdf5; box-shadow: 0 0 12px rgba(16,185,129,.6); }
+    .hv2-xp-track { position: relative; height: 10px; border-radius: 999px; background: rgba(2,6,23,.75); overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.7); }
+    #hudXpBar { background: linear-gradient(90deg,#10b981,#5eead4,#a7f3d0) !important; box-shadow: 0 0 10px rgba(94,234,212,.8); border-radius: 999px; position: relative; }
+    #hudXpBar::after { content:''; position:absolute; inset:0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%); animation: hv2shine 2.2s linear infinite; }
+    @keyframes hv2shine { from { transform: translateX(-100%);} to { transform: translateX(100%);} }
+    .hv2-btn { height: 36px; min-width: 36px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 900; color: #f8fafc; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; transition: transform .12s, filter .12s; }
+    .hv2-btn:hover { filter: brightness(1.2); } .hv2-btn:active { transform: scale(.92); }
+    .hv2-ult { white-space: nowrap; color: #1c0a00; background: linear-gradient(135deg,#f0abfc,#fb7185 45%,#fbbf24); border: 1px solid #fff7; box-shadow: 0 0 16px rgba(251,113,133,.65); animation: hv2ult 1.8s ease-in-out infinite; }
+    @keyframes hv2ult { 50% { box-shadow: 0 0 26px rgba(251,191,36,.95); } }
+    .hv2-boss { border-radius: 14px; padding: 6px 12px 8px; border: 1px solid rgba(244,63,94,.65) !important; background: linear-gradient(180deg, rgba(60,8,22,.92), rgba(18,4,10,.94)) !important; box-shadow: 0 0 22px rgba(244,63,94,.4), inset 0 1px 0 rgba(255,255,255,.1) !important; animation: hv2bossin .5s cubic-bezier(.2,1.4,.4,1); }
+    @keyframes hv2bossin { from { transform: translateY(-14px) scale(.92); opacity: 0; } }
+    .hv2-boss-track { position: relative; height: 12px; border-radius: 999px; background: rgba(2,6,23,.85); overflow: hidden; border: 1px solid rgba(251,113,133,.35); }
+    .hv2-boss-track::after { content:''; position:absolute; inset:0; background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), rgba(0,0,0,.55) calc(10% - 1px) 10%); pointer-events:none; }
+    #bossHpBar { background: linear-gradient(90deg,#be123c,#f43f5e 55%,#fb923c) !important; box-shadow: 0 0 14px rgba(244,63,94,.9); border-radius: 999px; }
+    .hv2-hint { font-size: 11px; font-weight: 700; color: #fde68a; padding: 3px 14px; border-radius: 999px; background: rgba(8,12,26,.72); border: 1px solid rgba(251,191,36,.28); text-shadow: 0 1px 2px #000; }
+    #hudSkillIcons > span { width: 32px; height: 32px; display: inline-flex !important; align-items: center; justify-content: center; border-radius: 10px !important; font-size: 17px !important; background: linear-gradient(180deg, rgba(30,41,70,.92), rgba(10,15,32,.95)) !important; border: 1px solid rgba(251,191,36,.45) !important; box-shadow: 0 3px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12); padding: 0 !important; }
+    .hv2-loot { border-radius: 14px; padding: 6px 12px; font-size: 12px; font-weight: 900; color: #fde68a; display: flex; align-items: center; gap: 6px; }
+    .hv2-loot b { font-size: 15px; color: #fff; text-shadow: 0 0 10px rgba(251,191,36,.7); }
+    @media (max-width: 520px) { .hv2-room { min-width: 104px; padding: 5px 9px 6px; } .hv2-top { flex-wrap: wrap; } .hv2-xp { order: 3; flex-basis: 100%; max-width: none; padding: 3px 10px 3px 3px; } .hv2-lv { width: 26px; height: 26px; font-size: 10px; } .hv2-btn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-hint { font-size: 10px; padding: 2px 10px; text-align: center; } }
+  </style>
 
 
 </head>
@@ -1290,71 +1325,54 @@
         <!-- Main HTML5 Canvas -->
         <canvas id="battleCanvas" class="block w-full h-full"></canvas>
 
-        <!-- In-Game HUD Top Overlay -->
-        <div class="pointer-events-none absolute top-0 inset-x-0 p-2.5 sm:p-3 flex flex-col gap-1.5 z-10">
-          <div class="flex items-center justify-between gap-2">
-            <!-- Room / Wave Info -->
-            <div class="pointer-events-auto flex items-center gap-2 bg-slate-900/85 backdrop-blur border border-slate-700/80 px-3 py-1 rounded-xl">
-              <span id="hudRoomText" class="text-xs sm:text-sm font-black text-amber-400">Phòng 1 / 15</span>
-              <span class="text-slate-600">|</span>
-              <span id="hudEnemyLeftText" class="text-xs font-bold text-slate-300">Quái: 4</span>
+        <!-- In-Game HUD Top Overlay (Arena V2) -->
+        <div class="pointer-events-none absolute top-0 inset-x-0 p-2.5 sm:p-3 flex flex-col gap-2 z-10">
+          <div class="flex items-start justify-between gap-2 hv2-top">
+            <div class="pointer-events-auto hv2-glass hv2-room">
+              <div class="hv2-room-stage" id="hudStageName">Hầm Ngục</div>
+              <div class="hv2-room-main">
+                <span id="hudRoomText">Phòng 1 / 15</span>
+                <span id="hudEnemyLeftText" class="hv2-enemy">Quái: 4</span>
+              </div>
+              <div class="hv2-pips" id="hudRoomPips"></div>
             </div>
 
-            <!-- Player Level & XP Bar -->
-            <div class="flex-1 max-w-xs bg-slate-900/85 backdrop-blur border border-slate-700/80 px-3 py-1 rounded-xl flex flex-col gap-1">
-              <div class="flex items-center justify-between text-[11px] font-extrabold">
-                <span id="hudLevelText" class="text-emerald-400">Cấp 1</span>
-                <span id="hudXpRatioText" class="text-slate-400">0 / 100 EXP</span>
-              </div>
-              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div id="hudXpBar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-300 transition-all duration-150" style="width: 0%;"></div>
+            <div class="hv2-glass hv2-xp">
+              <div class="hv2-lv" id="hudLevelBadge">1</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between text-[10px] font-extrabold mb-0.5">
+                  <span id="hudLevelText" class="text-emerald-300">Cấp 1</span>
+                  <span id="hudXpRatioText" class="text-slate-400">0 / 100 EXP</span>
+                </div>
+                <div class="hv2-xp-track"><div id="hudXpBar" class="h-full transition-all duration-150" style="width: 0%;"></div></div>
               </div>
             </div>
 
-            <!-- Pause, Ultimate Cataclysm & Acquired Skills Button -->
             <div class="pointer-events-auto flex items-center gap-1.5 flex-wrap justify-end">
-              <button id="btnTriggerUltimate" type="button" class="px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-400 text-slate-950 text-xs font-black border border-white/80 shadow-[0_0_15px_rgba(244,63,94,0.85)] hover:brightness-110 active:scale-95 transition animate-pulse" title="Phóng Tuyệt Kỹ Thần Uy Tinh Hà (Phím Space) - Mưa Thiên Phạt & Bão Kiếm!">
-                🔥 Tuyệt Kỹ Thần Uy
-              </button>
-              <button id="btnMaxRunSkills" type="button" class="px-2.5 py-1.5 rounded-xl gold-gradient text-slate-950 text-xs font-black shadow hover:brightness-110 active:scale-95 transition" title="Kích hoạt toàn bộ 18 Kỹ năng Roguelike tối đa và hồi đầy HP">
-                ⚡ Full 18 Kỹ Năng
-              </button>
-              <button id="btnPauseGame" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition">
-                ⏸ Tạm dừng
-              </button>
-              <button id="btnHudGfx" type="button" class="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition" title="Bật/tắt hiệu ứng cao để tăng FPS">
-                ✨ HD
-              </button>
+              <button id="btnTriggerUltimate" type="button" class="hv2-btn hv2-ult" title="Tuyệt Kỹ Thần Uy">🔥 <span class="hidden sm:inline">Tuyệt Kỹ</span></button>
+              <button id="btnMaxRunSkills" type="button" class="hv2-btn gold-gradient !text-slate-950" title="Full 18 Kỹ Năng">⚡ <span class="hidden sm:inline">Full Kỹ Năng</span></button>
+              <button id="btnPauseGame" type="button" class="hv2-btn hv2-glass" title="Tạm dừng">⏸</button>
+              <button id="btnHudGfx" type="button" class="hv2-btn hv2-glass" title="Bật/tắt đồ hoạ HD">✨ HD</button>
             </div>
           </div>
 
-          <!-- Boss HP Bar (Shown only during Boss Fight) -->
-          <div id="bossHudContainer" class="hidden w-full max-w-md mx-auto bg-slate-950/90 border border-rose-500/60 rounded-xl px-3 py-1.5 shadow-lg">
-            <div class="flex items-center justify-between text-xs font-black text-rose-400 mb-1">
-              <span id="bossNameText">🔥 TRÙM: GOLEM DUNG NHAM</span>
-              <span id="bossHpNumbers">2500 / 2500</span>
+          <div id="bossHudContainer" class="hidden hv2-boss w-full max-w-md mx-auto">
+            <div class="flex items-center justify-between text-xs font-black mb-1">
+              <span id="bossNameText" class="text-rose-300" style="text-shadow:0 0 10px rgba(244,63,94,.8)">TRÙM</span>
+              <span id="bossHpNumbers" class="text-rose-100/90 text-[11px]">0 / 0</span>
             </div>
-            <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
-              <div id="bossHpBar" class="h-full bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 transition-all duration-100" style="width: 100%;"></div>
-            </div>
+            <div class="hv2-boss-track"><div id="bossHpBar" class="h-full transition-all duration-100" style="width: 100%;"></div></div>
           </div>
 
-          <!-- Active Status Banner (e.g., "CỔNG ĐÃ MỞ - BƯỚC LÊN TRÊN!" or "DI CHUYỂN ĐỂ NÉ - DỪNG LẠI ĐỂ BẮN") -->
           <div class="flex justify-center">
-            <div id="hudHintBanner" class="px-3 py-0.5 rounded-full bg-slate-900/75 border border-slate-700/70 text-[11px] font-bold text-amber-300 shadow">
-              💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!
-            </div>
+            <div id="hudHintBanner" class="hv2-hint">💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!</div>
           </div>
         </div>
 
         <!-- Bottom Acquired Skills Strip -->
         <div class="pointer-events-none absolute bottom-2 left-2 right-2 flex items-end justify-between z-10">
-          <div id="hudSkillIcons" class="flex flex-wrap gap-1 max-w-[70%]">
-            <!-- Populated dynamically with acquired skill badges -->
-          </div>
-          <div class="bg-slate-900/80 border border-slate-700/80 px-2.5 py-1 rounded-xl text-[11px] font-bold text-amber-300">
-            Chiến lợi phẩm: +<span id="hudRunGold">0</span> 🪙
-          </div>
+          <div id="hudSkillIcons" class="flex flex-wrap gap-1.5 max-w-[70%]"></div>
+          <div class="hv2-glass hv2-loot">🪙 <span>Chiến lợi phẩm</span> <b id="hudRunGold">0</b></div>
         </div>
       </section>
 
@@ -1753,6 +1771,365 @@
 
   <!-- GAME ENGINE & LOGIC SCRIPT -->
   <script>
+/* ===================== ARENA V2 — MAP CHIẾN ĐẤU & QUÁI VẬT (vẽ lại) =====================
+ * Chỉ thay phần HIỂN THỊ. Không đổi logic, va chạm, công thức hay save.
+ * Giữ nguyên: Game.obstacles {x,y,w,h}, Game.portalRect/portalOpen, floorDetails,
+ * floorDecals, wallTorches, enemies[{type,r,hp,maxHp,displayHp,hitFlashTimer,...}].
+ */
+const ArenaV2 = (() => {
+  let Game = { enemies: [], obstacles: [], floorDecals: [], wallTorches: [], portalRect: { x: 0, y: 0, w: 0, h: 0 } };
+  const TAU = Math.PI * 2;
+  const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+  // Bảng màu theo chương: nền, viền tường, màu nhấn, ánh đuốc, khí quyển
+  const THEMES = {
+    1: { name: 'stone', f1: '#243247', f2: '#1b2638', wall0: '#0a0f1a', wall1: '#2b3a52', trim: '#7dd3fc',
+         accent: '#38bdf8', glow: 'rgba(125,211,252,', torch: ['#fef08a', '#fb923c'], fog: 'rgba(56,189,248,',
+         ob0: '#3b4a63', ob1: '#1c2535', obTop: '#64748b', vein: 'rgba(52,211,153,' },
+    2: { name: 'lava', f1: '#35170c', f2: '#27110a', wall0: '#160603', wall1: '#4a1d0c', trim: '#fb923c',
+         accent: '#f97316', glow: 'rgba(251,146,60,', torch: ['#fde047', '#ef4444'], fog: 'rgba(249,115,22,',
+         ob0: '#3d1a0e', ob1: '#1a0a05', obTop: '#7c2d12', vein: 'rgba(249,115,22,' },
+    3: { name: 'void', f1: '#241a4f', f2: '#181238', wall0: '#0a0520', wall1: '#34206b', trim: '#e879f9',
+         accent: '#c084fc', glow: 'rgba(232,121,249,', torch: ['#f5d0fe', '#a855f7'], fog: 'rgba(168,85,247,',
+         ob0: '#3b2478', ob1: '#150c36', obTop: '#6d28d9', vein: 'rgba(192,132,252,' }
+  };
+  const theme = id => THEMES[id] || THEMES[1];
+
+  // ---------- Lớp nền tĩnh được cache (tường + sàn + vân) ----------
+  let cache = null, cacheKey = '';
+  function buildStatic(w, h, pad, chId) {
+    const T = theme(chId);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const g = c.getContext('2d');
+    // Tường ngoài
+    const wg = g.createLinearGradient(0, 0, w, h);
+    wg.addColorStop(0, T.wall0); wg.addColorStop(0.5, T.wall1); wg.addColorStop(1, T.wall0);
+    g.fillStyle = wg; g.fillRect(0, 0, w, h);
+    const brick = (x, y, bw, bh, s) => {
+      g.fillStyle = `rgba(255,255,255,${0.03 + hash(s) * 0.05})`; g.fillRect(x + 1, y + 1, bw - 2, bh * 0.35);
+      g.fillStyle = 'rgba(0,0,0,0.28)'; g.fillRect(x + 1, y + bh * 0.72, bw - 2, bh * 0.28 - 1);
+      g.strokeStyle = 'rgba(0,0,0,0.55)'; g.lineWidth = 1.5; g.strokeRect(x, y, bw, bh);
+    };
+    let k = 0;
+    for (let x = 0; x < w; x += 44) { brick(x, 0, 44, pad, k++); brick(x + (k % 2 ? 22 : 0), h - pad, 44, pad, k++); }
+    for (let y = pad; y < h - pad; y += 44) { brick(0, y, pad, 44, k++); brick(w - pad, y, pad, 44, k++); }
+    // Sàn: gạch có sắc độ ngẫu nhiên, mép sáng-tối
+    const ts = 48;
+    for (let y = pad, gy = 0; y < h - pad; y += ts, gy++) {
+      for (let x = pad, gx = 0; x < w - pad; x += ts, gx++) {
+        const tw = Math.min(ts, w - pad - x), th = Math.min(ts, h - pad - y);
+        const s = gx * 31 + gy * 17 + chId * 101;
+        g.fillStyle = (gx + gy) % 2 ? T.f1 : T.f2; g.fillRect(x, y, tw, th);
+        g.fillStyle = `rgba(255,255,255,${0.012 + hash(s) * 0.035})`; g.fillRect(x, y, tw, th);
+        g.fillStyle = 'rgba(255,255,255,0.05)'; g.fillRect(x, y, tw, 1.5); g.fillRect(x, y, 1.5, th);
+        g.fillStyle = 'rgba(0,0,0,0.22)'; g.fillRect(x, y + th - 1.5, tw, 1.5); g.fillRect(x + tw - 1.5, y, 1.5, th);
+        // vết nứt riêng từng gạch
+        if (hash(s + 7) > 0.72) {
+          g.strokeStyle = 'rgba(0,0,0,0.35)'; g.lineWidth = 1; g.beginPath();
+          const sx = x + 6 + hash(s + 1) * (tw - 12), sy = y + 6 + hash(s + 2) * (th - 12);
+          g.moveTo(sx, sy); g.lineTo(sx + 9 * (hash(s + 3) - 0.5) * 2, sy + 11); g.lineTo(sx + 14 * (hash(s + 4) - 0.3), sy + 20); g.stroke();
+        }
+      }
+    }
+    // Vân sinh thái: rêu / dung nham nứt / vân hư không
+    for (let i = 0; i < 16; i++) {
+      const vx = pad + hash(i * 3 + chId) * (w - pad * 2), vy = pad + hash(i * 5 + chId) * (h - pad * 2);
+      if (T.name === 'stone') {
+        const mg = g.createRadialGradient(vx, vy, 1, vx, vy, 26); mg.addColorStop(0, T.vein + '0.20)'); mg.addColorStop(1, T.vein + '0)');
+        g.fillStyle = mg; g.beginPath(); g.arc(vx, vy, 26, 0, TAU); g.fill();
+      } else {
+        g.strokeStyle = T.vein + (T.name === 'lava' ? '0.38)' : '0.22)'); g.lineWidth = T.name === 'lava' ? 2 : 1.4;
+        g.shadowColor = T.accent; g.shadowBlur = 5; g.beginPath(); g.moveTo(vx, vy);
+        let px = vx, py = vy;
+        for (let j = 0; j < 4; j++) { px += (hash(i * 9 + j) - 0.5) * 44; py += 14 + hash(i * 13 + j) * 16; g.lineTo(px, py); }
+        g.stroke(); g.shadowBlur = 0;
+      }
+    }
+    // Đổ bóng tường lên sàn + khung kim loại + hoa văn góc
+    const sh = (x0, y0, x1, y1, rx, ry, rw, rh) => { const gr = g.createLinearGradient(x0, y0, x1, y1); gr.addColorStop(0, 'rgba(0,0,0,0.65)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(rx, ry, rw, rh); };
+    sh(0, pad, 0, pad + 38, pad, pad, w - pad * 2, 38);
+    sh(0, h - pad, 0, h - pad - 24, pad, h - pad - 24, w - pad * 2, 24);
+    sh(pad, 0, pad + 26, 0, pad, pad, 26, h - pad * 2);
+    sh(w - pad, 0, w - pad - 26, 0, w - pad - 26, pad, 26, h - pad * 2);
+    g.strokeStyle = T.trim; g.globalAlpha = 0.55; g.lineWidth = 3; g.strokeRect(pad, pad, w - pad * 2, h - pad * 2);
+    g.globalAlpha = 0.2; g.lineWidth = 8; g.strokeRect(pad - 4, pad - 4, w - pad * 2 + 8, h - pad * 2 + 8); g.globalAlpha = 1;
+    // Vignette
+    const vg = g.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.max(w, h) * 0.78);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.62)');
+    g.fillStyle = vg; g.fillRect(0, 0, w, h);
+    return c;
+  }
+
+  function drawArena(ctx, w, h, pad, nowMs, chId) {
+    const T = theme(chId);
+    const key = `${w}x${h}|${pad}|${chId}`;
+    if (key !== cacheKey) { cache = buildStatic(w, h, pad, chId); cacheKey = key; }
+    ctx.drawImage(cache, 0, 0);
+
+    // Pháp trận trung tâm (động)
+    ctx.save(); ctx.translate(w / 2, h / 2 + 10);
+    const R = Math.min(w, h) * 0.27;
+    ctx.lineWidth = 2; ctx.strokeStyle = T.glow + '0.16)'; ctx.rotate(nowMs * 0.00022);
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, TAU); ctx.stroke();
+    ctx.setLineDash([3, 9]); ctx.beginPath(); ctx.arc(0, 0, R * 1.12, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+    ctx.rotate(-nowMs * 0.0005);
+    for (let t = 0; t < 2; t++) {
+      ctx.beginPath();
+      for (let i = 0; i < 3; i++) { const a = i * TAU / 3 + t * Math.PI / 3; const x = Math.cos(a) * R * 0.78, y = Math.sin(a) * R * 0.78; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.closePath(); ctx.stroke();
+    }
+    ctx.restore();
+
+    // Chi tiết sàn & vết chiến trường (giữ dữ liệu cũ)
+    for (const dc of Game.floorDecals) {
+      ctx.save(); ctx.globalAlpha = Math.min(1, dc.life / 2.5) * 0.75; ctx.translate(dc.x, dc.y); ctx.rotate(dc.rot); ctx.scale(1, 0.65);
+      const gr = ctx.createRadialGradient(0, 0, 2, 0, 0, dc.r);
+      gr.addColorStop(0, 'rgba(0,0,0,0.75)'); gr.addColorStop(0.55, dc.color); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(0, 0, dc.r, 0, TAU); ctx.fill(); ctx.restore();
+    }
+
+    // Phòng trùm: viền đỏ đập nhịp tim
+    if (Game.enemies.some(e => e.isBoss)) {
+      const p = 0.5 + 0.5 * Math.sin(nowMs * 0.006);
+      const bg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.3, w / 2, h / 2, Math.max(w, h) * 0.75);
+      bg.addColorStop(0, 'rgba(225,29,72,0)'); bg.addColorStop(1, `rgba(225,29,72,${0.14 + p * 0.16})`);
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+    }
+
+    // Đuốc + ánh sáng cộng (additive)
+    for (const t of Game.wallTorches) {
+      const fl = 0.82 + Math.sin(nowMs * 0.016 + t.phase) * 0.12 + Math.sin(nowMs * 0.037 + t.phase * 2) * 0.06;
+      const lr = (Game.ultraGfx ? 110 : 74) * fl;
+      ctx.save(); if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
+      const lg = ctx.createRadialGradient(t.x, t.y, 2, t.x, t.y, lr);
+      lg.addColorStop(0, T.glow + '0.40)'); lg.addColorStop(0.5, T.glow + '0.12)'); lg.addColorStop(1, T.glow + '0)');
+      ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(t.x, t.y, lr, 0, TAU); ctx.fill(); ctx.restore();
+      ctx.fillStyle = '#0b1020'; ctx.strokeStyle = T.trim; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.roundRect(t.x - 7, t.y - 3, 14, 12, 3); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = T.torch[1];
+      ctx.beginPath(); ctx.moveTo(t.x - 5, t.y - 2); ctx.quadraticCurveTo(t.x + Math.sin(nowMs * 0.02 + t.phase) * 3, t.y - 18 * fl, t.x + 5, t.y - 2); ctx.fill();
+      ctx.fillStyle = T.torch[0];
+      ctx.beginPath(); ctx.moveTo(t.x - 2.6, t.y - 2); ctx.quadraticCurveTo(t.x, t.y - 10 * fl, t.x + 2.6, t.y - 2); ctx.fill();
+    }
+
+    drawPortal(ctx, nowMs, T);
+    for (const ob of Game.obstacles) drawObstacle(ctx, ob, nowMs, T);
+  }
+
+  // ---------- Cổng qua phòng ----------
+  function drawPortal(ctx, nowMs, T) {
+    const pr = Game.portalRect, cx = pr.x + pr.w / 2, cy = pr.y + pr.h / 2;
+    ctx.save();
+    // Hai trụ đá
+    for (const sx of [pr.x - 12, pr.x + pr.w + 2]) {
+      const gr = ctx.createLinearGradient(sx, 0, sx + 10, 0); gr.addColorStop(0, '#475569'); gr.addColorStop(1, '#1e293b');
+      ctx.fillStyle = gr; ctx.strokeStyle = T.trim; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.roundRect(sx, pr.y - 6, 10, pr.h + 16, 3); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = Game.portalOpen ? '#fef08a' : '#ef4444';
+      ctx.beginPath(); ctx.arc(sx + 5, pr.y + 2, 2.8, 0, TAU); ctx.fill();
+    }
+    if (Game.portalOpen) {
+      const pulse = 0.75 + 0.25 * Math.sin(nowMs * 0.008);
+      ctx.save(); if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
+      const gl = ctx.createRadialGradient(cx, cy + 4, 4, cx, cy + 4, 92 * pulse);
+      gl.addColorStop(0, 'rgba(254,240,138,0.9)'); gl.addColorStop(0.4, 'rgba(56,189,248,0.5)'); gl.addColorStop(1, 'rgba(56,189,248,0)');
+      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(cx, cy + 4, 92 * pulse, 0, TAU); ctx.fill(); ctx.restore();
+      const pf = ctx.createLinearGradient(pr.x, pr.y, pr.x, pr.y + pr.h); pf.addColorStop(0, '#7dd3fc'); pf.addColorStop(1, '#4338ca');
+      ctx.fillStyle = pf; ctx.strokeStyle = '#fde047'; ctx.lineWidth = 2.6;
+      ctx.beginPath(); ctx.roundRect(pr.x, pr.y, pr.w, pr.h, 12); ctx.fill(); ctx.stroke();
+      ctx.save(); ctx.beginPath(); ctx.roundRect(pr.x, pr.y, pr.w, pr.h, 12); ctx.clip();
+      ctx.translate(cx, cy); ctx.rotate(nowMs * 0.004); ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 2; ctx.setLineDash([7, 5]);
+      ctx.beginPath(); ctx.ellipse(0, 0, pr.w * 0.38, pr.h * 0.34, 0, 0, TAU); ctx.stroke(); ctx.restore();
+      // Mũi tên chạy lên
+      const off = (nowMs * 0.03) % 14;
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      for (let i = 0; i < 2; i++) { const yy = pr.y + pr.h - 6 - off - i * 14; if (yy > pr.y + 2 && yy < pr.y + pr.h) { ctx.beginPath(); ctx.moveTo(cx - 7, yy + 5); ctx.lineTo(cx, yy - 3); ctx.lineTo(cx + 7, yy + 5); ctx.lineTo(cx, yy + 1); ctx.closePath(); ctx.fill(); } }
+      ctx.font = '900 10px Inter'; ctx.textAlign = 'center'; ctx.fillStyle = '#082f49'; ctx.fillText('TIẾN LÊN', cx, pr.y + pr.h + 14);
+    } else {
+      ctx.fillStyle = '#05080f'; ctx.strokeStyle = '#475569'; ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.roundRect(pr.x, pr.y, pr.w, pr.h, 10); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle = '#334155'; ctx.lineWidth = 2.2;
+      for (let gx = pr.x + 12; gx < pr.x + pr.w - 6; gx += 12) { ctx.beginPath(); ctx.moveTo(gx, pr.y + 3); ctx.lineTo(gx, pr.y + pr.h - 3); ctx.stroke(); }
+      ctx.fillStyle = `rgba(239,68,68,${0.55 + 0.3 * Math.sin(nowMs * 0.006)})`;
+      ctx.beginPath(); ctx.arc(cx, cy, 5, 0, TAU); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ---------- Chướng ngại 3D: mặt trên + mặt trước + bóng ----------
+  function drawObstacle(ctx, ob, nowMs, T) {
+    const lift = 9;
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.beginPath(); ctx.ellipse(ob.x + ob.w / 2 + 4, ob.y + ob.h + 3, ob.w * 0.62, 8, 0, 0, TAU); ctx.fill();
+    const fr = ctx.createLinearGradient(0, ob.y, 0, ob.y + ob.h); fr.addColorStop(0, T.ob0); fr.addColorStop(1, T.ob1);
+    ctx.fillStyle = fr; ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.roundRect(ob.x, ob.y, ob.w, ob.h, 6); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.lineWidth = 1;
+    for (let yy = ob.y + 12; yy < ob.y + ob.h - 4; yy += 12) { ctx.beginPath(); ctx.moveTo(ob.x + 3, yy); ctx.lineTo(ob.x + ob.w - 3, yy); ctx.stroke(); }
+    const tg = ctx.createLinearGradient(0, ob.y - lift, 0, ob.y + ob.h * 0.5); tg.addColorStop(0, T.obTop); tg.addColorStop(1, T.ob0);
+    ctx.fillStyle = tg; ctx.strokeStyle = T.trim; ctx.globalAlpha = 1; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.roundRect(ob.x - 2, ob.y - lift, ob.w + 4, Math.max(14, ob.h * 0.5), 6); ctx.fill(); ctx.stroke();
+    const rp = 0.5 + 0.5 * Math.sin(nowMs * 0.005 + ob.x * 0.05);
+    const cx = ob.x + ob.w / 2, cy = ob.y - lift + Math.max(14, ob.h * 0.5) / 2;
+    ctx.save(); if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
+    ctx.strokeStyle = T.glow + (0.35 + rp * 0.55) + ')'; ctx.lineWidth = 1.8; ctx.shadowColor = T.accent; ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.moveTo(cx - 8, cy); ctx.lineTo(cx, cy - 5.5); ctx.lineTo(cx + 8, cy); ctx.lineTo(cx, cy + 5.5); ctx.closePath(); ctx.stroke(); ctx.restore();
+    ctx.restore();
+  }
+
+  // ---------- Quái vật ----------
+  const BODY = {
+    slime: ['#4ade80', '#15803d'], goblin: ['#a3e635', '#3f6212'], skeleton_mage: ['#e2e8f0', '#64748b'],
+    plant_turret: ['#f472b6', '#9d174d'], bat: ['#a78bfa', '#4c1d95']
+  };
+  const AURA = { slime: '#4ade80', goblin: '#a3e635', skeleton_mage: '#a78bfa', plant_turret: '#f472b6', bat: '#c084fc', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48' };
+  const eyes = (ctx, x, y, s, col = '#fff', pupil = '#0f172a') => {
+    for (const d of [-1, 1]) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x + d * s * 1.1, y, s * 0.72, s * 0.9, 0, 0, TAU); ctx.fill(); ctx.fillStyle = pupil; ctx.beginPath(); ctx.arc(x + d * s * 1.1 + 0.6, y + 0.5, s * 0.38, 0, TAU); ctx.fill(); }
+  };
+  const orb = (ctx, x, y, r, col, a = 1) => {
+    ctx.save(); if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, '#fff'); g.addColorStop(0.35, col); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = a; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); ctx.restore();
+  };
+  const blob = (ctx, r, c0, c1) => {
+    const g = ctx.createRadialGradient(-r * 0.3, -r * 0.4, r * 0.1, 0, 0, r * 1.15); g.addColorStop(0, c0); g.addColorStop(1, c1);
+    ctx.fillStyle = g; ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineWidth = 2;
+  };
+
+  function drawBody(ctx, e, t) {
+    const r = e.r, ty = e.type;
+    const [c0, c1] = BODY[ty] || ['#94a3b8', '#334155'];
+    if (ty === 'slime') {
+      blob(ctx, r, c0, c1);
+      ctx.beginPath(); ctx.moveTo(-r, r * 0.55); ctx.bezierCurveTo(-r * 1.05, -r * 1.1, r * 1.05, -r * 1.1, r, r * 0.55); ctx.quadraticCurveTo(0, r * 0.95, -r, r * 0.55); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.beginPath(); ctx.ellipse(-r * 0.4, -r * 0.45, r * 0.26, r * 0.14, -0.6, 0, TAU); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.25)'; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(Math.sin(t * 0.002 + i * 2) * r * 0.45, r * 0.15 + Math.cos(t * 0.003 + i) * r * 0.2, 2 + i * 0.7, 0, TAU); ctx.fill(); }
+      eyes(ctx, 0, -r * 0.05, 3.2);
+    } else if (ty === 'goblin') {
+      ctx.fillStyle = c1; for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(d * r * 0.8, -r * 0.2); ctx.lineTo(d * r * 1.6, -r * 0.75); ctx.lineTo(d * r * 0.85, r * 0.2); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      blob(ctx, r, c0, c1); ctx.beginPath(); ctx.arc(0, -r * 0.15, r * 0.95, 0, TAU); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#7c2d12'; ctx.beginPath(); ctx.roundRect(-r * 0.8, r * 0.35, r * 1.6, r * 0.7, 4); ctx.fill();
+      eyes(ctx, 0, -r * 0.25, 3, '#fde047', '#7f1d1d');
+      ctx.strokeStyle = '#1a2e05'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, r * 0.15, r * 0.35, 0.2, Math.PI - 0.2); ctx.stroke();
+      ctx.save(); ctx.translate(r * 1.05, r * 0.3); ctx.rotate(Math.sin(t * 0.008) * 0.35 - 0.5); ctx.fillStyle = '#e2e8f0'; ctx.beginPath(); ctx.moveTo(0, -r * 0.9); ctx.lineTo(3, 0); ctx.lineTo(-3, 0); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#92400e'; ctx.fillRect(-4, 0, 8, 3); ctx.restore();
+    } else if (ty === 'skeleton_mage') {
+      ctx.fillStyle = '#4c1d95'; ctx.strokeStyle = '#1e1b4b'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(-r * 0.95, r * 0.9); ctx.quadraticCurveTo(-r * 0.7, -r * 0.2, 0, -r * 1.1); ctx.quadraticCurveTo(r * 0.7, -r * 0.2, r * 0.95, r * 0.9); ctx.closePath(); ctx.fill(); ctx.stroke();
+      blob(ctx, r, c0, c1); ctx.beginPath(); ctx.ellipse(0, -r * 0.2, r * 0.58, r * 0.65, 0, 0, TAU); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#0f172a'; for (const d of [-1, 1]) { ctx.beginPath(); ctx.ellipse(d * r * 0.24, -r * 0.28, 3.2, 4, 0, 0, TAU); ctx.fill(); }
+      orb(ctx, -r * 0.15, -r * 0.28, 5, '#a78bfa', 0.9); orb(ctx, r * 0.15, -r * 0.28, 5, '#a78bfa', 0.9);
+      ctx.fillStyle = '#0f172a'; ctx.fillRect(-r * 0.3, r * 0.15, r * 0.6, 2.4);
+      ctx.strokeStyle = '#78350f'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(r * 1.1, r * 0.9); ctx.lineTo(r * 1.1, -r * 0.8); ctx.stroke();
+      orb(ctx, r * 1.1, -r * 1.0 + Math.sin(t * 0.006) * 2, 10, '#c084fc');
+    } else if (ty === 'plant_turret') {
+      const pl = Game.player, a = pl ? Math.atan2(pl.y - e.y, pl.x - e.x) : Math.PI / 2;
+      ctx.strokeStyle = '#166534'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(0, r * 1.1); ctx.quadraticCurveTo(-4, r * 0.3, 0, 0); ctx.stroke();
+      ctx.fillStyle = '#16a34a'; for (const d of [-1, 1]) { ctx.beginPath(); ctx.ellipse(d * r * 0.7, r * 0.8, r * 0.55, r * 0.22, d * 0.5, 0, TAU); ctx.fill(); }
+      ctx.save(); ctx.rotate(a - Math.PI / 2 + Math.sin(t * 0.005) * 0.05);
+      for (let i = 0; i < 6; i++) { ctx.save(); ctx.rotate(i * TAU / 6); ctx.fillStyle = i % 2 ? '#f9a8d4' : '#ec4899'; ctx.strokeStyle = '#831843'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.ellipse(0, -r * 0.85, r * 0.34, r * 0.62, 0, 0, TAU); ctx.fill(); ctx.stroke(); ctx.restore(); }
+      blob(ctx, r, '#fb7185', '#881337'); ctx.beginPath(); ctx.arc(0, 0, r * 0.68, 0, TAU); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#2b0a14'; ctx.beginPath(); ctx.arc(0, r * 0.1, r * 0.38, 0, TAU); ctx.fill();
+      ctx.fillStyle = '#fff'; for (let i = 0; i < 6; i++) { const aa = i * TAU / 6; ctx.beginPath(); ctx.moveTo(Math.cos(aa) * r * 0.38, r * 0.1 + Math.sin(aa) * r * 0.38); ctx.lineTo(Math.cos(aa + 0.2) * r * 0.2, r * 0.1 + Math.sin(aa + 0.2) * r * 0.2); ctx.lineTo(Math.cos(aa - 0.2) * r * 0.2, r * 0.1 + Math.sin(aa - 0.2) * r * 0.2); ctx.fill(); }
+      ctx.restore();
+    } else if (ty === 'bat') {
+      const fl = Math.sin(t * 0.03);
+      for (const d of [-1, 1]) { ctx.save(); ctx.scale(d, 1); ctx.rotate(fl * 0.5 * -1);
+        const wg = ctx.createLinearGradient(0, 0, r * 2.2, 0); wg.addColorStop(0, c1); wg.addColorStop(1, '#1e1b4b'); ctx.fillStyle = wg; ctx.strokeStyle = '#0f0a2a'; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(r * 0.3, -r * 0.2); ctx.quadraticCurveTo(r * 1.4, -r * 1.4, r * 2.3, -r * 0.5); ctx.quadraticCurveTo(r * 1.9, -r * 0.1, r * 1.7, r * 0.3); ctx.quadraticCurveTo(r * 1.3, 0, r * 1.0, r * 0.45); ctx.quadraticCurveTo(r * 0.7, 0.1, r * 0.3, r * 0.4); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+      blob(ctx, r, c0, c1); ctx.beginPath(); ctx.ellipse(0, 0, r * 0.7, r * 0.85, 0, 0, TAU); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = c1; for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(d * r * 0.2, -r * 0.7); ctx.lineTo(d * r * 0.55, -r * 1.25); ctx.lineTo(d * r * 0.62, -r * 0.5); ctx.fill(); }
+      eyes(ctx, 0, -r * 0.1, 2.3, '#fecaca', '#7f1d1d'); ctx.fillStyle = '#fff'; for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(d * 2.5, r * 0.3); ctx.lineTo(d * 2.5 + 1.4, r * 0.62); ctx.lineTo(d * 2.5 - 1.4, r * 0.62); ctx.fill(); }
+    } else if (ty === 'golem') {
+      const bob = Math.sin(t * 0.006) * 4;
+      for (const d of [-1, 1]) { ctx.save(); ctx.translate(d * r * 1.15, r * 0.1 + bob * d); blob(ctx, r, '#78350f', '#1c0a02'); ctx.beginPath(); ctx.roundRect(-r * 0.4, -r * 0.45, r * 0.8, r * 0.95, 9); ctx.fill(); ctx.stroke(); ctx.strokeStyle = '#fb923c'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-5, -8); ctx.lineTo(2, 0); ctx.lineTo(-3, 9); ctx.stroke(); ctx.restore(); }
+      blob(ctx, r, '#9a3412', '#2b0f04'); ctx.lineWidth = 3.4; ctx.strokeStyle = '#f97316';
+      ctx.beginPath(); ctx.roundRect(-r * 0.85, -r * 0.7, r * 1.7, r * 1.6, 12); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(-r * 0.5, -r * 1.15, r, r * 0.65, 8); ctx.fill(); ctx.stroke();
+      orb(ctx, 0, r * 0.15, r * 0.7, '#fbbf24', 0.9 + Math.sin(t * 0.01) * 0.1);
+      ctx.strokeStyle = '#fde047'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(-r * 0.55, -r * 0.4); ctx.lineTo(-r * 0.1, r * 0.05); ctx.lineTo(-r * 0.4, r * 0.5); ctx.moveTo(r * 0.5, -r * 0.35); ctx.lineTo(r * 0.15, 0); ctx.stroke();
+      for (const d of [-1, 1]) { ctx.fillStyle = '#fde047'; ctx.beginPath(); ctx.moveTo(d * r * 0.12, -r * 0.88); ctx.lineTo(d * r * 0.4, -r * 0.8); ctx.lineTo(d * r * 0.12, -r * 0.7); ctx.fill(); orb(ctx, d * r * 0.26, -r * 0.82, 7, '#fb923c'); }
+    } else if (ty === 'queen') {
+      for (let i = 0; i < 4; i++) for (const d of [-1, 1]) {
+        const ph = Math.sin(t * 0.008 + i * 1.3) * 0.18; ctx.strokeStyle = '#2e1065'; ctx.lineWidth = 4.5; ctx.lineCap = 'round';
+        const a = (-0.65 + i * 0.5) + ph; ctx.beginPath(); ctx.moveTo(d * r * 0.4, 0); ctx.lineTo(d * r * (1.1 + i * 0.12), r * (a - 0.5) * 0.9); ctx.lineTo(d * r * (1.55 + i * 0.08), r * (a + 0.25) * 1.2); ctx.stroke();
+        ctx.strokeStyle = '#c084fc'; ctx.lineWidth = 1.4; ctx.stroke(); }
+      blob(ctx, r, '#6b21a8', '#1e0a3c'); ctx.beginPath(); ctx.ellipse(0, r * 0.55, r * 0.78, r * 0.95, 0, 0, TAU); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#f0abfc'; ctx.beginPath(); ctx.moveTo(0, r * 0.2); ctx.lineTo(r * 0.2, r * 0.6); ctx.lineTo(0, r * 1.0); ctx.lineTo(-r * 0.2, r * 0.6); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#4c1d95'; ctx.beginPath(); ctx.arc(0, -r * 0.4, r * 0.55, 0, TAU); ctx.fill(); ctx.stroke();
+      for (const [ex, ey, es] of [[-0.22, -0.5, 3.4], [0.22, -0.5, 3.4], [-0.38, -0.3, 2.2], [0.38, -0.3, 2.2]]) orb(ctx, ex * r, ey * r, es * 2.2, '#f0abfc');
+      ctx.fillStyle = '#f8fafc'; for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(d * 4, -r * 0.05); ctx.lineTo(d * 7, r * 0.3); ctx.lineTo(d * 1.5, -r * 0.02); ctx.fill(); }
+    } else if (ty === 'demon_king') {
+      for (const d of [-1, 1]) { ctx.save(); ctx.scale(d, 1); ctx.rotate(Math.sin(t * 0.005) * 0.08);
+        const wg = ctx.createLinearGradient(0, 0, r * 2.4, -r); wg.addColorStop(0, '#7f1d1d'); wg.addColorStop(1, '#1c0206'); ctx.fillStyle = wg; ctx.strokeStyle = '#fb7185'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(r * 0.5, -r * 0.3); ctx.lineTo(r * 2.4, -r * 1.5); ctx.lineTo(r * 2.0, -r * 0.4); ctx.lineTo(r * 2.3, r * 0.3); ctx.lineTo(r * 1.3, r * 0.1); ctx.lineTo(r * 1.4, r * 0.7); ctx.lineTo(r * 0.6, r * 0.35); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+      const cg = ctx.createLinearGradient(0, -r, 0, r * 1.2); cg.addColorStop(0, '#be123c'); cg.addColorStop(1, '#2a0310'); ctx.fillStyle = cg; ctx.strokeStyle = '#fda4af'; ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.moveTo(-r * 0.8, -r * 0.5); ctx.lineTo(r * 0.8, -r * 0.5); ctx.lineTo(r * 1.0, r * 1.1); ctx.quadraticCurveTo(0, r * 0.8, -r * 1.0, r * 1.1); ctx.closePath(); ctx.fill(); ctx.stroke();
+      blob(ctx, r, '#fca5a5', '#9f1239'); ctx.beginPath(); ctx.arc(0, -r * 0.4, r * 0.62, 0, TAU); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#1f0509'; for (const d of [-1, 1]) { ctx.beginPath(); ctx.moveTo(d * r * 0.3, -r * 0.9); ctx.quadraticCurveTo(d * r * 1.1, -r * 1.4, d * r * 0.85, -r * 1.9); ctx.quadraticCurveTo(d * r * 0.6, -r * 1.3, d * r * 0.12, -r * 0.75); ctx.fill(); ctx.stroke(); }
+      for (const d of [-1, 1]) orb(ctx, d * r * 0.25, -r * 0.45, 10, '#fde047');
+      ctx.fillStyle = '#fde047'; for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(i * r * 0.2 - 4, -r * 0.95); ctx.lineTo(i * r * 0.2, -r * (1.25 + (i % 2 ? 0 : 0.18)) + Math.sin(t * 0.01 + i) * 2); ctx.lineTo(i * r * 0.2 + 4, -r * 0.95); ctx.fill(); }
+      orb(ctx, 0, r * 0.3, r * 0.5, '#fb7185', 0.85);
+    } else {
+      blob(ctx, r, c0, c1); ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.fill(); ctx.stroke(); eyes(ctx, 0, -2, 3);
+    }
+  }
+
+  function drawMonster(ctx, e, nowMs) {
+    const r = e.r, big = e.isBoss;
+    const aura = AURA[e.type] || '#94a3b8';
+    ctx.save(); ctx.translate(e.x, e.y);
+    // Bóng đổ + vòng khí sắc theo loại
+    ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.beginPath(); ctx.ellipse(0, r + 3, r * 1.05, r * 0.42, 0, 0, TAU); ctx.fill();
+    ctx.save(); ctx.globalAlpha = 0.5; if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
+    const ag = ctx.createRadialGradient(0, r * 0.7, 0, 0, r * 0.7, r * 1.7); ag.addColorStop(0, aura); ag.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = ag; ctx.beginPath(); ctx.ellipse(0, r * 0.9, r * 1.6, r * 0.7, 0, 0, TAU); ctx.fill(); ctx.restore();
+    if (e.slowTimer > 0) { ctx.strokeStyle = 'rgba(125,211,252,0.9)'; ctx.fillStyle = 'rgba(56,189,248,0.22)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(0, r, r * 1.2, r * 0.52, 0, 0, TAU); ctx.fill(); ctx.stroke(); }
+
+    // Vòng ma pháp trùm
+    if (big) {
+      ctx.save(); ctx.rotate(-nowMs * 0.0028); ctx.strokeStyle = aura; ctx.globalAlpha = 0.8; ctx.lineWidth = 3; ctx.setLineDash([10, 6]);
+      ctx.beginPath(); ctx.arc(0, 0, r + 15, 0, TAU); ctx.stroke(); ctx.rotate(nowMs * 0.0055); ctx.strokeStyle = '#fde047'; ctx.globalAlpha = 0.45; ctx.lineWidth = 1.6; ctx.setLineDash([4, 5]); ctx.beginPath(); ctx.arc(0, 0, r + 22, 0, TAU); ctx.stroke(); ctx.restore();
+    }
+    // Thân (squash & stretch)
+    const bounce = Math.sin(nowMs * (e.type === 'bat' ? 0.02 : 0.009) + e.x * 0.1);
+    const hover = e.type === 'bat' ? Math.sin(nowMs * 0.012 + e.y) * 4 - 6 : 0;
+    ctx.save(); ctx.translate(0, hover); ctx.scale(1 + bounce * 0.05, 1 - bounce * 0.05);
+    const flash = e.hitFlashTimer > 0;
+    if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
+    drawBody(ctx, e, nowMs);
+    if (flash) { ctx.filter = 'none'; orb(ctx, 0, 0, r * 1.25, '#ffffff', Math.min(1, e.hitFlashTimer / 0.14) * 0.8); }
+    ctx.restore();
+
+    // Cảnh báo sắp tấn công: vòng tụ lực
+    if (!big && e.attackTimer > 0 && e.attackTimer < 0.5) {
+      const k = 1 - e.attackTimer / 0.5; ctx.strokeStyle = `rgba(248,113,113,${0.3 + k * 0.7})`; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0, 0, r * (1.9 - k * 0.7), 0, TAU); ctx.stroke();
+      ctx.fillStyle = `rgba(248,113,113,${k * 0.9})`; ctx.font = '900 13px Inter'; ctx.textAlign = 'center'; ctx.fillText('!', 0, -r - 18);
+    }
+    // Trạng thái cháy
+    if (e.burnTimer > 0) { for (let i = 0; i < 3; i++) orb(ctx, Math.sin(nowMs * 0.02 + i * 2) * r * 0.6, -r * 0.4 - ((nowMs * 0.05 + i * 9) % 18), 5, '#fb923c', 0.85); }
+
+    // Thanh máu quái thường: bo tròn, nền kính, thanh trễ vàng + thanh đỏ gradient
+    if (!big) {
+      const bw = 38, bh = 6, by = -r - 14, hr = Math.max(0, e.hp / e.maxHp), dr = Math.max(0, (typeof e.displayHp === 'number' ? e.displayHp : e.hp) / e.maxHp);
+      ctx.fillStyle = 'rgba(8,12,22,0.9)'; ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.roundRect(-bw / 2 - 1.5, by - 1.5, bw + 3, bh + 3, 4); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#fde68a'; ctx.beginPath(); ctx.roundRect(-bw / 2, by, bw * dr, bh, 3); ctx.fill();
+      const hg = ctx.createLinearGradient(0, by, 0, by + bh); hg.addColorStop(0, hr > 0.35 ? '#fb7185' : '#fecaca'); hg.addColorStop(1, '#be123c');
+      ctx.fillStyle = hg; ctx.beginPath(); ctx.roundRect(-bw / 2, by, bw * hr, bh, 3); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(-bw / 2 + 2, by + 1, Math.max(0, bw * hr - 4), 1.4);
+    }
+    ctx.restore();
+  }
+
+  return { drawArena, drawMonster, init(g) { Game = g; } };
+})();
+
+// Ghi đè hàm cũ (mọi nơi gọi drawMonsterSprite đều dùng bản mới)
+function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); }
+
+</script>
+<script>
     (function() {
       'use strict';
 
@@ -20534,6 +20911,8 @@
         afterimageTimer: 0
       };
 
+      ArenaV2.init(Game);
+
       function resizeCanvas() {
         const container = document.getElementById('gameArenaView');
         if (!container) return;
@@ -23147,335 +23526,8 @@
           ctx.translate((Math.random() - 0.5) * Game.shakeMag, (Math.random() - 0.5) * Game.shakeMag);
         }
 
-        // 1. Rich Biome Outer Masonry Walls & 3D Beveled Dungeon Architecture
-        const wallGrad = ctx.createLinearGradient(0, 0, w, h);
-        if (chId === 1) {
-          wallGrad.addColorStop(0, '#090d16');
-          wallGrad.addColorStop(0.5, '#1e293b');
-          wallGrad.addColorStop(1, '#060911');
-        } else if (chId === 2) {
-          wallGrad.addColorStop(0, '#1f0704');
-          wallGrad.addColorStop(0.5, '#451a03');
-          wallGrad.addColorStop(1, '#120402');
-        } else {
-          wallGrad.addColorStop(0, '#12082b');
-          wallGrad.addColorStop(0.5, '#2e1065');
-          wallGrad.addColorStop(1, '#070312');
-        }
-        ctx.fillStyle = wallGrad;
-        ctx.fillRect(0, 0, w, h);
-
-        // Beveled 2.5D Wall Stone Blocks with Specular Top Edge
-        const brickStep = 48;
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
-        ctx.lineWidth = 2;
-        for (let bx = 0; bx < w; bx += brickStep) {
-          ctx.strokeRect(bx, 0, brickStep, pad);
-          ctx.strokeRect(bx, h - pad, brickStep, pad);
-          ctx.fillStyle = 'rgba(255,255,255,0.04)';
-          ctx.fillRect(bx + 2, 2, brickStep - 4, 5);
-        }
-        for (let by = pad; by < h - pad; by += brickStep) {
-          ctx.strokeRect(0, by, pad, brickStep);
-          ctx.strokeRect(w - pad, by, pad, brickStep);
-        }
-
-        // 2. Textured 2.5D Dungeon Floor Tiles with Sub-Tile Bevels & Biome Veins
-        const tileSize = 46;
-        for (let y = pad; y < h - pad; y += tileSize) {
-          for (let x = pad; x < w - pad; x += tileSize) {
-            const gx = Math.floor(x / tileSize);
-            const gy = Math.floor(y / tileSize);
-            const isEven = (gx + gy) % 2 === 0;
-            ctx.fillStyle = isEven ? Game.chapter.floorColor1 : Game.chapter.floorColor2;
-            const tw = Math.min(tileSize, w - pad - x);
-            const th = Math.min(tileSize, h - pad - y);
-            ctx.fillRect(x, y, tw, th);
-
-            // Inner stone bevel highlight & grouting
-            ctx.fillStyle = isEven ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.14)';
-            ctx.fillRect(x + 2, y + 2, Math.max(0, tw - 4), Math.max(0, th - 4));
-            ctx.strokeStyle = 'rgba(0,0,0,0.22)';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x, y, tw, th);
-          }
-        }
-
-        // 3. Multi-Ring Arcane Arena Floor Astrolabe & Rotating Runic Sigil
-        ctx.save();
-        ctx.translate(w / 2, h / 2 + 10);
-        const baseR = Math.min(w, h) * 0.25;
-        const sigilColor = chId === 1 ? 'rgba(56, 189, 248, 0.11)' : (chId === 2 ? 'rgba(249, 115, 22, 0.13)' : 'rgba(192, 132, 252, 0.14)');
-        ctx.strokeStyle = sigilColor;
-        ctx.lineWidth = 2.5;
-        ctx.rotate(nowMs * 0.00025);
-        ctx.beginPath();
-        ctx.arc(0, 0, baseR, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(0, 0, baseR * 0.74, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Inscribed Hexagram Star inside Arena Circle
-        for (let t = 0; t < 2; t++) {
-          ctx.beginPath();
-          for (let i = 0; i < 3; i++) {
-            const ang = (i * Math.PI * 2) / 3 + (t * Math.PI) / 3;
-            const px = Math.cos(ang) * baseR * 0.74;
-            const py = Math.sin(ang) * baseR * 0.74;
-            if (i === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
-          }
-          ctx.closePath();
-          ctx.stroke();
-        }
-        ctx.restore();
-
-        // 4. Procedural Floor Details & Persistent Combat Floor Decals (Craters & Scorch Marks)
-        for (const fd of Game.floorDetails) {
-          ctx.save();
-          ctx.translate(fd.x, fd.y);
-          ctx.rotate(fd.rot);
-          ctx.scale(fd.scale, fd.scale);
-          if (fd.type === 0) {
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.38)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(-10, -4);
-            ctx.lineTo(-2, 2);
-            ctx.lineTo(6, -2);
-            ctx.lineTo(12, 5);
-            ctx.stroke();
-          } else if (fd.type === 1) {
-            ctx.fillStyle = chId === 1 ? 'rgba(16, 185, 129, 0.13)' : (chId === 2 ? 'rgba(249, 115, 22, 0.20)' : 'rgba(168, 85, 247, 0.18)');
-            ctx.beginPath();
-            ctx.arc(0, 0, 7.5, 0, Math.PI * 2);
-            ctx.fill();
-          } else {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-            ctx.fillRect(-4, -3, 8, 5);
-          }
-          ctx.restore();
-        }
-
-        // Render Persistent Battlefield Decals (Scorch Craters / Blast Marks)
-        for (const dc of Game.floorDecals) {
-          ctx.save();
-          ctx.globalAlpha = Math.min(1, dc.life / 2.5) * 0.75;
-          ctx.translate(dc.x, dc.y);
-          ctx.rotate(dc.rot);
-          ctx.scale(1, 0.65);
-          const dcGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, dc.r);
-          dcGrad.addColorStop(0, 'rgba(0, 0, 0, 0.75)');
-          dcGrad.addColorStop(0.55, dc.color);
-          dcGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-          ctx.fillStyle = dcGrad;
-          ctx.beginPath();
-          ctx.arc(0, 0, dc.r, 0, Math.PI * 2);
-          ctx.fill();
-          if (dc.type === 'crater') {
-            ctx.strokeStyle = 'rgba(251, 146, 60, 0.45)';
-            ctx.lineWidth = 1.5;
-            ctx.setLineDash([4, 3]);
-            ctx.beginPath();
-            ctx.arc(0, 0, dc.r * 0.72, 0, Math.PI * 2);
-            ctx.stroke();
-          }
-          ctx.restore();
-        }
-
-        // 5. Inner Arena Wall Cast Shadow & Ornate Metallic Trim Border
-        const topShadow = ctx.createLinearGradient(0, pad, 0, pad + 32);
-        topShadow.addColorStop(0, 'rgba(0,0,0,0.72)');
-        topShadow.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = topShadow;
-        ctx.fillRect(pad, pad, w - pad * 2, 32);
-
-        ctx.strokeStyle = chId === 1 ? 'rgba(148, 163, 184, 0.42)' : (chId === 2 ? 'rgba(249, 115, 22, 0.5)' : 'rgba(192, 132, 252, 0.5)');
-        ctx.lineWidth = 3.5;
-        ctx.strokeRect(pad, pad, w - pad * 2, h - pad * 2);
-
-        // Corner Battlement Pillars with Glowing Crystal Caps
-        const cornerPositions = [
-          [pad, pad], [w - pad, pad], [pad, h - pad], [w - pad, h - pad]
-        ];
-        for (const [cx, cy] of cornerPositions) {
-          ctx.fillStyle = '#0f172a';
-          ctx.strokeStyle = '#fbbf24';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.roundRect(cx - 11, cy - 11, 22, 22, 5);
-          ctx.fill();
-          ctx.stroke();
-          ctx.fillStyle = chId === 1 ? '#38bdf8' : (chId === 2 ? '#f97316' : '#e879f9');
-          ctx.beginPath();
-          ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // 6. Animated Wall Torches & Additive Dynamic Point Lighting
-        for (const t of Game.wallTorches) {
-          const flicker = Math.sin(nowMs * 0.015 + t.phase) * 0.15 + 0.85;
-          const lightRadius = (Game.ultraGfx ? 85 : 64) * flicker;
-          ctx.save();
-          if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
-          const lightGrad = ctx.createRadialGradient(t.x, t.y, 2, t.x, t.y, lightRadius);
-          if (chId === 3) {
-            lightGrad.addColorStop(0, 'rgba(232, 121, 249, 0.38)');
-            lightGrad.addColorStop(0.5, 'rgba(147, 51, 234, 0.12)');
-            lightGrad.addColorStop(1, 'rgba(147, 51, 234, 0)');
-          } else {
-            lightGrad.addColorStop(0, 'rgba(253, 224, 71, 0.42)');
-            lightGrad.addColorStop(0.5, 'rgba(249, 115, 22, 0.14)');
-            lightGrad.addColorStop(1, 'rgba(249, 115, 22, 0)');
-          }
-          ctx.fillStyle = lightGrad;
-          ctx.beginPath();
-          ctx.arc(t.x, t.y, lightRadius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-
-          // Brazier sconce
-          ctx.fillStyle = '#0f172a';
-          ctx.strokeStyle = '#fbbf24';
-          ctx.lineWidth = 1.6;
-          ctx.beginPath();
-          ctx.arc(t.x, t.y, 6.8, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-
-          // Multi-layered Dancing Flame Core
-          ctx.fillStyle = chId === 3 ? '#c084fc' : '#f97316';
-          ctx.beginPath();
-          ctx.arc(t.x, t.y - 1, 5.2 * flicker, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(t.x + Math.sin(nowMs * 0.02 + t.phase) * 1.2, t.y - 1.5, 2.6 * flicker, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // 7. Dimensional Exit Gate / Valkyrie Portal Archway
-        const pr = Game.portalRect;
-        ctx.save();
-        const pcx = pr.x + pr.w / 2;
-        const pcy = pr.y + pr.h / 2;
-        if (Game.portalOpen) {
-          ctx.save();
-          if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
-          const glow = ctx.createRadialGradient(pcx, pcy, 4, pcx, pcy, 78);
-          glow.addColorStop(0, 'rgba(254, 240, 138, 0.95)');
-          glow.addColorStop(0.4, 'rgba(56, 189, 248, 0.65)');
-          glow.addColorStop(0.75, 'rgba(99, 102, 241, 0.25)');
-          glow.addColorStop(1, 'rgba(56, 189, 248, 0)');
-          ctx.fillStyle = glow;
-          ctx.beginPath();
-          ctx.arc(pcx, pcy + 4, 78, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-
-          const portalFill = ctx.createLinearGradient(pr.x, pr.y, pr.x + pr.w, pr.y + pr.h);
-          portalFill.addColorStop(0, '#0284c7');
-          portalFill.addColorStop(0.5, '#38bdf8');
-          portalFill.addColorStop(1, '#4f46e5');
-          ctx.fillStyle = portalFill;
-          ctx.strokeStyle = '#fde047';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.roundRect(pr.x, pr.y, pr.w, pr.h, 14);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.save();
-          ctx.translate(pcx, pcy);
-          ctx.rotate(nowMs * 0.005);
-          ctx.strokeStyle = 'rgba(255,255,255,0.75)';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([6, 4]);
-          ctx.beginPath();
-          ctx.ellipse(0, 0, pr.w * 0.36, pr.h * 0.32, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-
-          ctx.fillStyle = '#ffffff';
-          ctx.shadowColor = '#0284c7';
-          ctx.shadowBlur = 6;
-          ctx.font = '900 11px Inter';
-          ctx.textAlign = 'center';
-          ctx.fillText('⬆️ QUA PHÒNG', pcx, pr.y + 21);
-          ctx.shadowBlur = 0;
-        } else {
-          ctx.fillStyle = '#090d16';
-          ctx.strokeStyle = '#475569';
-          ctx.lineWidth = 2.5;
-          ctx.beginPath();
-          ctx.roundRect(pr.x, pr.y, pr.w, pr.h, 10);
-          ctx.fill();
-          ctx.stroke();
-
-          ctx.strokeStyle = '#334155';
-          ctx.lineWidth = 2;
-          for (let gx = pr.x + 16; gx < pr.x + pr.w - 10; gx += 14) {
-            ctx.beginPath();
-            ctx.moveTo(gx, pr.y + 3);
-            ctx.lineTo(gx, pr.y + pr.h - 3);
-            ctx.stroke();
-          }
-          ctx.fillStyle = 'rgba(244, 63, 94, 0.75)';
-          ctx.beginPath();
-          ctx.arc(pcx, pcy, 5.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
-
-        // 8. 2.5D Obstacles (Beveled Ancient Pillars with Floating Crystal Runes & Drop Shadows)
-        for (const ob of Game.obstacles) {
-          ctx.save();
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
-          ctx.beginPath();
-          ctx.roundRect(ob.x + 5, ob.y + 8, ob.w, ob.h, 9);
-          ctx.fill();
-
-          ctx.fillStyle = chId === 1 ? '#1e293b' : (chId === 2 ? '#431407' : '#2e1065');
-          ctx.strokeStyle = chId === 1 ? '#64748b' : (chId === 2 ? '#c2410c' : '#9333ea');
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.roundRect(ob.x, ob.y, ob.w, ob.h, 8);
-          ctx.fill();
-          ctx.stroke();
-
-          const roofH = Math.max(12, ob.h - 10);
-          const capGrad = ctx.createLinearGradient(ob.x, ob.y, ob.x, ob.y + roofH);
-          if (chId === 1) {
-            capGrad.addColorStop(0, '#64748b');
-            capGrad.addColorStop(1, '#334155');
-          } else if (chId === 2) {
-            capGrad.addColorStop(0, '#9a3412');
-            capGrad.addColorStop(1, '#451a03');
-          } else {
-            capGrad.addColorStop(0, '#6b21a8');
-            capGrad.addColorStop(1, '#3b0764');
-          }
-          ctx.fillStyle = capGrad;
-          ctx.beginPath();
-          ctx.roundRect(ob.x + 2, ob.y + 2, ob.w - 4, roofH, 6);
-          ctx.fill();
-
-          // Glowing Rune Inscription on Pillar Top
-          const runePulse = 0.55 + 0.45 * Math.sin(nowMs * 0.006 + ob.x);
-          ctx.strokeStyle = chId === 1 ? `rgba(56, 189, 248, ${runePulse})` : (chId === 2 ? `rgba(251, 146, 60, ${runePulse})` : `rgba(232, 121, 249, ${runePulse})`);
-          ctx.lineWidth = 1.8;
-          const rcx = ob.x + ob.w / 2;
-          const rcy = ob.y + roofH / 2 + 2;
-          ctx.beginPath();
-          ctx.moveTo(rcx - 8, rcy);
-          ctx.lineTo(rcx, rcy - 5.5);
-          ctx.lineTo(rcx + 8, rcy);
-          ctx.lineTo(rcx, rcy + 5.5);
-          ctx.closePath();
-          ctx.stroke();
-          ctx.restore();
-        }
+        // 1-8. Map chiến đấu V2 (tường, sàn, pháp trận, vết chiến trường, đuốc, cổng, chướng ngại)
+        ArenaV2.drawArena(ctx, w, h, pad, nowMs, chId);
 
         // 9. Ground Shockwaves & Boss Laser Telegraphs
         for (const sw of Game.shockwaves) {
@@ -24740,7 +24792,7 @@
         ctx.restore();
       }
 
-      function drawMonsterSprite(ctx, e, nowMs) {
+      function drawMonsterSpriteLegacy(ctx, e, nowMs) {
         ctx.save();
         ctx.translate(e.x, e.y);
 
@@ -26464,6 +26516,30 @@
         window.__artemisBooted = true;
         renderLobbyUI();
       }
+/* ===== ARENA V2 — nối HUD mới (pips tiến trình, huy hiệu cấp, tên chương) ===== */
+(function () {
+  const orig = updateInGameHUD;
+  updateInGameHUD = function () {
+    orig.apply(this, arguments);
+    if (!Game.player) return;
+    const lv = document.getElementById('hudLevelBadge'); if (lv) lv.textContent = Game.player.level;
+    const st = document.getElementById('hudStageName'); if (st && Game.chapter) st.textContent = Game.chapter.name.replace(/^Chương \d+:\s*/, '');
+    const pips = document.getElementById('hudRoomPips');
+    if (pips && Game.maxRooms) {
+      const key = Game.room + '/' + Game.maxRooms;
+      if (pips.dataset.k !== key) {
+        pips.dataset.k = key; let html = '';
+        for (let i = 1; i <= Game.maxRooms; i++) {
+          const boss = (i % 5 === 0) || i === Game.maxRooms;
+          html += `<i class="hv2-pip${boss ? ' boss' : ''}${i < Game.room ? ' done' : (i === Game.room ? ' cur' : '')}"></i>`;
+        }
+        pips.innerHTML = html;
+      }
+    }
+  };
+})();
+
+
       if (window.__artemisBootstrap) {
         window.__artemisBootstrap(__artemisBootGame);
       } else {
