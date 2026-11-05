@@ -81,10 +81,19 @@ check("SAVE_STATE_DEFAULTS chi chua du lieu, khong chua ham",
 check("SaveState.load() return som khi khong co save",
   /if \(!raw\) \{[\s\S]{0,320}?return;/.test(loadBlock));
 
-// cloud.js: tài khoản mới phải xoá save cũ
-check("cloud.js xoa save cu khi tai khoan moi",
-  /if \(r\.data\.hasSave && r\.data\.data\)[\s\S]{0,500}?localStorage\.removeItem\(SAVE_KEY\)/.test(cloud));
-check("cloud.js xoa save khi dang xuat", /logout[\s\S]{0,400}?localStorage\.removeItem\(SAVE_KEY\)/i.test(cloud));
+// cloud.js: tài khoản mới KHÔNG được giữ save cũ (kiến trúc buffer).
+check("cloud.js don save cu bang purgeLegacyLocalSave",
+  /function purgeLegacyLocalSave\(\)[\s\S]{0,420}?localStorage\.removeItem\(SAVE_KEY\)/.test(cloud));
+check("loadCloudSave goi purge truoc khi nap",
+  /function loadCloudSave\(\)[\s\S]{0,120}?purgeLegacyLocalSave\(\)/.test(cloud));
+check("tai khoan moi -> buffer = null (ve tan thu)",
+  /Tai khoan moi: buffer = null[\s\S]{0,160}?__ARTEMIS_SAVE_BUFFER = null/.test(cloud));
+check("cloud.js xoa save khi dang xuat",
+  /logout[\s\S]{0,600}?purgeLegacyLocalSave\(\)/i.test(cloud));
+check("cloud.js KHONG dung localStorage lam nguon doc",
+  !/localStorage\.getItem/.test(cloud));
+check("cloud.js khong hook Storage.prototype",
+  !/Storage\.prototype\.setItem\s*=/.test(cloud));
 
 // ============================================================ 6. Đường cong độ khó
 console.log("\n=== 6. DUONG CONG DO KHO KHO DAN ===");

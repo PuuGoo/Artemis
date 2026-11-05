@@ -1,14 +1,20 @@
 /* ==================== ARTEMIS CLOUD: AUTH GATE + CLOUD SAVE ====================
+   MONGODB LA NGUON DU LIEU DUY NHAT.
+
    Module nay chay TRUOC game script. No:
    1. Hien man hinh dang nhap / dang ky neu chua co phien.
-   2. Tai save tu MongoDB va bom vao localStorage truoc khi SaveState.load() chay.
-   3. Bat SaveState.save() de day len server (debounce).
-   Game goc khong bi sua: moi thu di qua localStorage nhu cu.
+   2. Tai save tu MongoDB va dat vao window.__ARTEMIS_SAVE_BUFFER truoc khi
+      SaveState.load() chay.
+   3. Nghe su kien 'artemis:save' do SaveState.save() phat ra, roi day len server.
+
+   KHONG dung localStorage o bat ky dau. Ly do: tren mot trinh duyet da tung
+   choi, du lieu con lai cua tai khoan cu lam tai khoan MOI hien sai chi so
+   (bug that: nick moi tao hien 840K ATK / 2.85M HP / 10.0GM vang cua nick cu).
    ================================================================= */
 (function () {
   "use strict";
 
-  var SAVE_KEY = "archero2_web_save_v2";
+  var SAVE_KEY = "archero2_web_save_v2"; // chi dung de DON DEP du lieu cu
   var API = {
     me: "/api/auth/me",
     login: "/api/auth/login",
@@ -26,6 +32,8 @@
     lastPushedHash: "",
     dirty: false,
     lastError: "",
+    booted: false,
+    saveHookInstalled: false,
   };
 
   // ---------- Tien ich ----------
@@ -40,6 +48,19 @@
     var h = 5381;
     for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
     return String(h >>> 0);
+  }
+
+  /** Xoa sach moi dau vet save cua nguoi dung truoc tren trinh duyet nay. */
+  function purgeLegacyLocalSave() {
+    try {
+      localStorage.removeItem(SAVE_KEY);
+      var stale = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf("archero2") === 0) stale.push(k);
+      }
+      for (var j = 0; j < stale.length; j++) localStorage.removeItem(stale[j]);
+    } catch (e) { /* localStorage bi chan / khong co */ }
   }
 
   function toastRoot() {
@@ -58,59 +79,75 @@
     var n = el("div", "", msg);
     n.style.cssText =
       "background:" + (colors[kind] || colors.info) + ";color:#fff;font-weight:800;font-size:13px;" +
-      "padding:10px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.5);" +
-      "font-family:Inter,system-ui,sans-serif;opacity:0;transition:opacity .2s,transform .2s;transform:translateY(6px);";
+      "padding:9px 15px;border-radius:11px;box-shadow:0 10px 26px rgba(0,0,0,.45);" +
+      "font-family:Inter,system-ui,sans-serif;pointer-events:auto;max-width:90vw;text-align:center;" +
+      "animation:cloudToastIn .22s ease both;";
     toastRoot().appendChild(n);
-    requestAnimationFrame(function () { n.style.opacity = "1"; n.style.transform = "translateY(0)"; });
-    setTimeout(function () { n.style.opacity = "0"; setTimeout(function () { n.remove(); }, 250); }, 2600);
+    setTimeout(function () {
+      n.style.transition = "opacity .3s";
+      n.style.opacity = "0";
+      setTimeout(function () { n.remove(); }, 320);
+    }, 2600);
   }
 
-  // ---------- Goi API ----------
   function api(path, opts) {
     opts = opts || {};
     return fetch(path, {
       method: opts.method || "GET",
-      headers: Object.assign({ "content-type": "application/json" }, opts.headers || {}),
-      body: opts.body ? JSON.stringify(opts.body) : undefined,
+      headers: Object.assign({ "Content-Type": "application/json" }, opts.headers || {}),
       credentials: "same-origin",
-      cache: "no-store",
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
     }).then(function (res) {
       return res.json().catch(function () { return {}; }).then(function (data) {
-        return { status: res.status, data: data };
+        return { status: res.status, ok: res.ok, data: data };
       });
     });
   }
 
-  // ---------- Man hinh dang nhap ----------
+  // ---------- Cong dang nhap ----------
   var gateEl = null;
+  var styleInjected = false;
+
+  function injectStyle() {
+    if (styleInjected) return;
+    styleInjected = true;
+    var css = document.createElement("style");
+    css.textContent =
+      "html.cloud-locked body{overflow:hidden!important}" +
+      "@keyframes cloudToastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}" +
+      "@keyframes cloudCardIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}";
+    document.head.appendChild(css);
+  }
 
   function buildGate(mode) {
+    injectStyle();
     if (gateEl) gateEl.remove();
+    document.documentElement.classList.add("cloud-locked");
+
     var wrap = el("div", "");
     wrap.id = "cloudGate";
     wrap.style.cssText =
-      "position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;" +
-      "background:radial-gradient(circle at 50% 0%,#1e1b4b 0%,#090d16 70%);" +
-      "font-family:Inter,system-ui,sans-serif;padding:16px;overflow:auto;";
+      "position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;" +
+      "padding:18px;background:radial-gradient(ellipse at 50% 0%, #1e293b 0%, #020617 62%, #000 100%);" +
+      "font-family:Inter,system-ui,sans-serif;overflow:auto;";
 
     var card = el("div", "");
     card.style.cssText =
-      "width:100%;max-width:390px;background:linear-gradient(165deg,rgba(15,23,42,.97),rgba(9,13,22,.99));" +
-      "border:2px solid rgba(245,158,11,.55);border-radius:24px;padding:24px 20px;" +
-      "box-shadow:0 24px 60px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.12);";
+      "width:100%;max-width:390px;background:linear-gradient(165deg,rgba(15,23,42,.98),rgba(2,6,23,.99));" +
+      "border:1.5px solid rgba(148,163,184,.28);border-radius:22px;padding:26px 22px;" +
+      "box-shadow:0 24px 60px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.12);" +
+      "animation:cloudCardIn .3s cubic-bezier(.2,.9,.3,1) both;";
 
-    card.appendChild((function () {
-      var h = el("div", "");
-      h.style.cssText = "text-align:center;margin-bottom:18px;";
-      h.innerHTML =
-        '<div style="font-size:44px;line-height:1;filter:drop-shadow(0 0 14px rgba(245,158,11,.6))">🐴</div>' +
-        '<div style="font-size:19px;font-weight:900;color:#fff;margin-top:8px;letter-spacing:.3px">Archero 2</div>' +
-        '<div style="font-size:11px;font-weight:800;color:#fbbf24;text-transform:uppercase;letter-spacing:1.6px;margin-top:3px">Kỷ Nguyên Cung Thủ</div>' +
-        '<div style="font-size:11.5px;color:#94a3b8;margin-top:10px;line-height:1.5">' +
-        (mode === "login" ? "Đăng nhập để tiếp tục hành trình của bạn" : "Tạo tài khoản để bắt đầu hành trình") +
-        "</div>";
-      return h;
-    })());
+    var h = el("div", "");
+    h.style.cssText = "text-align:center;margin-bottom:18px;";
+    h.innerHTML =
+      '<div style="font-size:44px;line-height:1;filter:drop-shadow(0 0 14px rgba(245,158,11,.6))">🐴</div>' +
+      '<div style="font-size:19px;font-weight:900;color:#fff;margin-top:8px;letter-spacing:.3px">Archero 2</div>' +
+      '<div style="font-size:11px;font-weight:800;color:#fbbf24;text-transform:uppercase;letter-spacing:1.6px;margin-top:3px">Kỷ Nguyên Cung Thủ</div>' +
+      '<div style="font-size:11.5px;color:#94a3b8;margin-top:10px;line-height:1.5">' +
+      (mode === "login" ? "Đăng nhập để tiếp tục hành trình của bạn" : "Tạo tài khoản để bắt đầu hành trình") +
+      "</div>";
+    card.appendChild(h);
 
     var form = el("form", "");
     form.style.cssText = "display:flex;flex-direction:column;gap:11px;";
@@ -180,6 +217,12 @@
     switchRow.appendChild(switchBtn);
     form.appendChild(switchRow);
 
+    function resetSubmit() {
+      submit.disabled = false;
+      submit.style.opacity = "";
+      submit.innerHTML = mode === "login" ? "🔓 Đăng Nhập" : "✨ Tạo Tài Khoản";
+    }
+
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var username = userInput.value.trim();
@@ -208,21 +251,16 @@
         if (!r.data || !r.data.ok) {
           errBox.textContent = (r.data && r.data.error) || "Không kết nối được máy chủ. Thử lại.";
           errBox.style.display = "block";
-          submit.disabled = false;
-          submit.style.opacity = "";
-          submit.innerHTML = mode === "login" ? "🔓 Đăng Nhập" : "✨ Tạo Tài Khoản";
+          resetSubmit();
           return;
         }
         state.authenticated = true;
         state.player = r.data.player;
-        // Sau khi dang nhap/ky: tai save, roi MOI vao game.
+        // Tai khoan vua dang ky: server tra ve hasSave=false -> loadCloudSave()
+        // dat buffer = null -> SaveState.load() ve dung tan thu.
         loadCloudSave().then(function () {
           closeGate();
           enterGame();
-          // ===== Beginner Journey =====
-          // CHI tai khoan vua dang ky (mode === "register") moi duoc kich hoat.
-          // Tai khoan cu dang nhap (mode === "login") khong bao gio di qua day,
-          // nen tutorial khong bao gio tu bat tren du lieu da co.
           if (mode === "register" && window.Archero2FusionAPI
               && typeof window.Archero2FusionAPI.activateBeginnerJourney === "function") {
             var activated = window.Archero2FusionAPI.activateBeginnerJourney();
@@ -235,14 +273,12 @@
       }).catch(function () {
         errBox.textContent = "Lỗi mạng. Kiểm tra kết nối và thử lại.";
         errBox.style.display = "block";
-        submit.disabled = false;
-        submit.style.opacity = "";
-        submit.innerHTML = mode === "login" ? "🔓 Đăng Nhập" : "✨ Tạo Tài Khoản";
+        resetSubmit();
       });
     });
 
     card.appendChild(form);
-    var foot = el("div", "", "🔒 Tiến trình lưu an toàn trên MongoDB Atlas");
+    var foot = el("div", "", "🔒 Tiến trình lưu trên MongoDB Atlas — không dùng bộ nhớ trình duyệt");
     foot.style.cssText = "text-align:center;font-size:10px;color:#475569;margin-top:14px;font-weight:700;";
     card.appendChild(foot);
 
@@ -258,40 +294,57 @@
   }
 
   // ---------- Cloud save ----------
+  /**
+   * Tai save tu MongoDB va dat vao buffer trong bo nho.
+   *
+   * Tra ve true neu co save, false neu la tai khoan moi.
+   * LUON xoa sach localStorage truoc va sau khi nap — khong de du lieu cua
+   * tai khoan khac tren cung trinh duyet lot vao.
+   */
   function loadCloudSave() {
+    purgeLegacyLocalSave();
+    // Khoa ghi: SaveState.save() khong lam gi cho den khi co save that tu server.
+    window.__ARTEMIS_SAVE_READY = false;
     return api(API.save).then(function (r) {
-      if (!r.data || !r.data.ok) return false;
+      if (!r.data || !r.data.ok) {
+        // Khong lay duoc => KHONG duoc chay game voi du lieu cu.
+        window.__ARTEMIS_SAVE_BUFFER = null;
+        return false;
+      }
       state.revision = Number(r.data.revision) || 0;
       if (r.data.hasSave && r.data.data) {
-        try {
-          localStorage.setItem(SAVE_KEY, JSON.stringify(r.data.data));
-          state.lastPushedHash = hashStr(JSON.stringify(r.data.data));
-        } catch (e) {
-          toast("Không ghi được vào bộ nhớ tạm của trình duyệt.", "err");
-        }
+        var payload = JSON.stringify(r.data.data);
+        window.__ARTEMIS_SAVE_BUFFER = payload;
+        state.lastPushedHash = hashStr(payload);
         return true;
       }
-      // Tai khoan moi: XOA save cua nguoi dung truoc do tren cung trinh duyet,
-      // neu khong se bi ro ri tien trinh giua cac tai khoan.
-      try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+      // Tai khoan moi: buffer = null => SaveState.load() ve dung tan thu.
+      window.__ARTEMIS_SAVE_BUFFER = null;
       state.lastPushedHash = "";
       return false;
-    }).catch(function () { return false; });
+    }).catch(function () {
+      window.__ARTEMIS_SAVE_BUFFER = null;
+      return false;
+    }).then(function (hadSave) {
+      // Mo khoa ghi SAU khi buffer da dung (du la null cho tai khoan moi).
+      window.__ARTEMIS_SAVE_READY = true;
+      return hadSave;
+    });
   }
 
+  /** Day buffer hien tai len MongoDB. */
   function pushCloudSave() {
     if (!state.authenticated) return;
-    var raw;
-    try { raw = localStorage.getItem(SAVE_KEY); } catch (e) { return; }
-    if (!raw) return;
+    var payload = window.__ARTEMIS_SAVE_BUFFER;
+    if (!payload) return;
 
-    var h = hashStr(raw);
+    var h = hashStr(payload);
     if (h === state.lastPushedHash) return; // khong co gi thay doi
 
-    var payload;
-    try { payload = JSON.parse(raw); } catch (e) { return; }
+    var data;
+    try { data = JSON.parse(payload); } catch (e) { return; }
 
-    api(API.save, { method: "PUT", body: { data: payload, revision: state.revision } })
+    api(API.save, { method: "PUT", body: { data: data, revision: state.revision } })
       .then(function (r) {
         if (r.data && r.data.ok) {
           state.revision = Number(r.data.revision) || state.revision + 1;
@@ -300,17 +353,16 @@
           state.lastError = "";
           pulseSavedIndicator();
         } else if (r.data && r.data.code && String(r.data.code).indexOf("ECONOMY_") === 0) {
-          // Server chặn vì số vàng/đá quý tăng bất thường. Khôi phục bản ghi server
-          // để người chơi không tiếp tục chơi trên dữ liệu sai, rồi báo rõ.
+          // Server chan vi vang/da quy tang bat thuong. Khoi phuc ban ghi server.
           state.lastError = r.data.code;
           if (r.data.serverData) {
-            try {
-              localStorage.setItem(SAVE_KEY, JSON.stringify(r.data.serverData));
-              state.revision = Number(r.data.serverRevision) || 0;
-              toast("Dữ liệu tài nguyên không hợp lệ đã bị từ chối. Đang tải lại tiến trình từ máy chủ…", "err");
-              setTimeout(function () { location.reload(); }, 1600);
-              return;
-            } catch (e) {}
+            var serverPayload = JSON.stringify(r.data.serverData);
+            window.__ARTEMIS_SAVE_BUFFER = serverPayload;
+            state.revision = Number(r.data.serverRevision) || 0;
+            state.lastPushedHash = hashStr(serverPayload);
+            toast("Dữ liệu tài nguyên không hợp lệ đã bị từ chối. Đang tải lại tiến trình từ máy chủ…", "err");
+            setTimeout(function () { location.reload(); }, 1600);
+            return;
           }
           toast((r.data && r.data.error) || "Tiến trình không hợp lệ, chưa được lưu.", "err");
         } else if (r.data && r.data.conflict) {
@@ -343,10 +395,12 @@
       "color:#94a3b8;cursor:pointer;backdrop-filter:blur(6px);transition:border-color .2s,color .2s;";
     indicator.title = "Nhấn để đăng xuất";
     indicator.addEventListener("click", function () {
-      if (!confirm("Đăng xuất khỏi tài khoản " + (state.player?.username || "") + "?")) return;
+      var who = (state.player && state.player.username) || "";
+      if (!confirm("Đăng xuất khỏi tài khoản " + who + "?")) return;
       api(API.logout, { method: "POST" }).then(function () {
         state.authenticated = false;
-        try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+        window.__ARTEMIS_SAVE_BUFFER = null;
+        purgeLegacyLocalSave();
         location.reload();
       });
     });
@@ -375,27 +429,38 @@
     indicatorTimer = setTimeout(function () { updateIndicator("idle"); }, 1800);
   }
 
-  // ---------- Bat localStorage.setItem de tu dong day len server ----------
-  function hookLocalStorage() {
-    var original = Storage.prototype.setItem;
-    Storage.prototype.setItem = function (key, value) {
-      original.call(this, key, value);
-      if (key === SAVE_KEY && state.authenticated) {
-        updateIndicator("saving");
-        scheduleSave();
-      }
-    };
+  // ---------- Nghe SaveState.save() ----------
+  /**
+   * SaveState.save() phat su kien 'artemis:save' sau khi cap nhat buffer.
+   * Khong con hook Storage.prototype nua: khong co localStorage thi khong co
+   * gi de hook, va hook do truoc day bat MOI lan ghi cua ca trang.
+   */
+  function hookSaveEvents() {
+    if (state.saveHookInstalled) return;
+    state.saveHookInstalled = true;
+    window.addEventListener("artemis:save", function () {
+      if (!state.authenticated) return;
+      updateIndicator("saving");
+      scheduleSave();
+    });
+    // Truong hop dong tab / tai lai: day not thay doi con treo.
+    window.addEventListener("beforeunload", function () {
+      if (state.dirty && state.authenticated) pushCloudSave();
+    });
   }
 
   // ---------- Khoi dong ----------
-  /** Dung chung cho ca 2 duong: co phien san (boot) va dang nhap/ky moi thanh cong. */
   function enterGame() {
     makeIndicator();
-    hookLocalStorage();
+    hookSaveEvents();
     startGame();
   }
 
   function boot() {
+    if (state.booted) return;
+    state.booted = true;
+    // Xoa du lieu client cu NGAY khi trang tai, truoc ca khi biet phien nao.
+    purgeLegacyLocalSave();
     document.documentElement.classList.add("cloud-locked");
     api(API.me).then(function (r) {
       if (r.data && r.data.ok && r.data.authenticated) {
@@ -407,11 +472,9 @@
         });
       }
       buildGate("login");
-      // Chua dang nhap -> khong chay game. Man hinh gate da phu toan bo.
       return null;
     }).catch(function () {
       buildGate("login");
-      // Cho phep thu lai khi mang co lai.
       var box = gateEl && gateEl.querySelector("form");
       if (box) {
         var warn = el("div", "", "⚠️ Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.");
@@ -424,8 +487,6 @@
   /** Game script da tai xong -> cho no chay. */
   function startGame() {
     state.ready = true;
-    // SaveState.load() da chay luc parse (co the chua co du lieu cloud).
-    // Nap lai de chac chan game dung du lieu tu MongoDB.
     if (window.Archero2FusionAPI && typeof window.Archero2FusionAPI.reloadSaveFromStorage === "function") {
       window.Archero2FusionAPI.reloadSaveFromStorage();
     }
@@ -444,6 +505,7 @@
     pushNow: function () { pushCloudSave(); return state.revision; },
     loadCloudSave: loadCloudSave,
     toast: toast,
+    purgeLegacyLocalSave: purgeLegacyLocalSave,
     SAVE_KEY: SAVE_KEY,
   };
 

@@ -8048,15 +8048,20 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         },
         load() {
           try {
-            const raw = localStorage.getItem('archero2_web_save_v2');
-            // KHONG CO SAVE: phai dua ve trang thai mac dinh.
+            // ==================== NGUON DU LIEU DUY NHAT: MONGODB ====================
             //
-            // LO HONG DA VA: truoc day khoi lenh nay chi chay khi `raw` ton tai.
-            // Khi localStorage trong (tai khoan moi, hoac vua dang xuat), ham
-            // khong lam gi ca — SaveState van giu du lieu da nap luc parse, tuc
-            // la du lieu cua TAI KHOAN TRUOC do tren cung trinh duyet. Ket qua:
-            // tai khoan moi thua huong winsByChapter/bestRooms/gear cua nguoi
-            // khac, va cac chuong bi coi la da pha dao.
+            // Truoc day SaveState doc thang localStorage, nen tren mot trinh duyet
+            // da tung choi, tai khoan MOI van thay chi so cua tai khoan CU cho den
+            // khi cloud.js kip bom save tu server de len (va co truong hop khong
+            // kip). Do la nguyen nhan "nick moi tao ma hien 840K ATK / 10.0GM".
+            //
+            // Nay: cloud.js nap save tu MongoDB vao __ARTEMIS_SAVE_BUFFER truoc khi
+            // game script chay. SaveState chi doc tu do. localStorage khong con la
+            // nguon du lieu nua — no chi duoc ghi de lam ban sao phu (neu co).
+            const raw = (typeof window !== 'undefined' && typeof window.__ARTEMIS_SAVE_BUFFER === 'string')
+              ? window.__ARTEMIS_SAVE_BUFFER
+              : null;
+            // KHONG CO SAVE (tai khoan moi / chua dang nhap): ve dung tan thu.
             if (!raw) {
               if (typeof SAVE_STATE_DEFAULTS === 'object' && SAVE_STATE_DEFAULTS) {
                 Object.assign(this, JSON.parse(JSON.stringify(SAVE_STATE_DEFAULTS)));
@@ -8250,8 +8255,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           this.save();
         },
         save() {
+          // ==================== KHOA GHI TRUOC KHI CLOUD NAP XONG ====================
+          //
+          // SaveState.load() chay luc parse (truoc khi cloud.js lay duoc save tu
+          // MongoDB) va co the goi this.save() o nhanh migration. Neu luu luc do,
+          // buffer rong se DAY DE save that tren server — mat du lieu nguoi choi.
+          //
+          // cloud.js dat __ARTEMIS_SAVE_READY = true NGAY SAU khi nap xong save tu
+          // MongoDB. Truoc moc do, save() khong ghi gi ca.
+          if (typeof window !== 'undefined' && window.__ARTEMIS_SAVE_READY !== true) {
+            return;
+          }
           try {
-            localStorage.setItem('archero2_web_save_v2', JSON.stringify({
+            const payload = JSON.stringify({
               maxedAllVersion: this.maxedAllVersion || 1,
               artemisHeroVersion: this.artemisHeroVersion || 1,
               wikiCharactersVersion: this.wikiCharactersVersion || 2,
@@ -8301,9 +8317,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               // nhân vật — bị xoá khi Retry/Reset hoặc khi Continue dùng xong.
               // Ghi thẳng giá trị: null là trạng thái hợp lệ (chưa có checkpoint).
               dungeonCheckpoint: this.dungeonCheckpoint,
-            }));
+            });
+            // Ghi vao buffer trong bo nho (nguon cho lan load() sau) va bao cho
+            // cloud.js day len MongoDB. KHONG dung localStorage: tren mot trinh
+            // duyet da tung choi, du lieu con lai cua tai khoan cu se lam tai
+            // khoan moi hien sai chi so (bug 840K ATK / 10.0GM).
+            if (typeof window !== 'undefined') {
+              window.__ARTEMIS_SAVE_BUFFER = payload;
+              try {
+                window.dispatchEvent(new CustomEvent('artemis:save', { detail: { payload } }));
+              } catch (e) { /* CustomEvent khong co (moi truong cu) */ }
+            }
           } catch (e) {
-            console.warn('[Archero2 SaveState] Failed to write localStorage:', e);
+            console.warn('[Archero2 SaveState] Failed to serialize save:', e);
           }
         }
       };
@@ -8352,9 +8378,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       applyDevCheatVisibility();
 
       /**
-       * Nap lai save tu localStorage.
-       * Can thiet cho cloud save: SaveState.load() chay luc parse (co the chua co du lieu),
-       * sau do cloud.js tai save that tu MongoDB ve localStorage roi goi ham nay.
+       * Nạp lại save từ buffer trong bộ nhớ (đã được cloud.js đổ từ MongoDB).
+       *
+       * SaveState.load() chạy lúc parse — có thể lúc đó cloud.js chưa lấy xong
+       * save từ server. cloud.js gọi hàm này NGAY SAU khi nạp xong để game dùng
+       * đúng dữ liệu của tài khoản đang đăng nhập.
        */
       function reloadSaveFromStorage() {
         try {

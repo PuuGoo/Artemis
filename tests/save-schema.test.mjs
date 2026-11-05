@@ -14,9 +14,11 @@ function check(name, cond, extra = "") {
   else { fail++; console.log("  FAIL  " + name + (extra ? "  -> " + extra : "")); }
 }
 
-// ---- 1. Trich danh sach field tu localStorage.setItem trong game ----
-const m = html.match(/localStorage\.setItem\('archero2_web_save_v2', JSON\.stringify\(\{([\s\S]*?)\}\)\);/);
-check("tim thay SaveState.save() trong index.html", !!m);
+// ---- 1. Trich danh sach field tu payload cua SaveState.save() ----
+// Kien truc moi: save() tao bien `payload = JSON.stringify({...})` roi dat vao
+// window.__ARTEMIS_SAVE_BUFFER. KHONG con localStorage.setItem de trich.
+const m = html.match(/const payload = JSON\.stringify\(\{([\s\S]*?)\n            \}\);/);
+check("tim thay SaveState.save() tao payload trong index.html", !!m);
 
 const body = m ? m[1] : "";
 const gameFields = new Set();
