@@ -763,9 +763,14 @@
     .ms-node.now { color: #0b1120; background: #fbbf24; border-color: #fde68a;
       box-shadow: 0 0 0 3px rgba(251,191,36,.22), 0 0 12px rgba(251,191,36,.65);
       animation: msNowPulse 1.8s ease-in-out infinite; }
-    .ms-node.boss-node { border-radius: 50%; }
+    .ms-node.boss-node { border-radius: 50%; color: #fca5a5;
+      background: rgba(69,10,10,.85); border-color: rgba(248,113,113,.65); }
     .ms-node.boss-node.done { background: linear-gradient(135deg, #fca5a5, #ef4444);
-      color: #450a0a; border-color: rgba(252,165,165,.9); }
+      color: #450a0a; border-color: rgba(252,165,165,.9);
+      box-shadow: 0 0 10px -2px rgba(239,68,68,.9); }
+    .ms-node.boss-node.now { background: #ef4444; color: #fff; border-color: #fecaca;
+      box-shadow: 0 0 0 3px rgba(239,68,68,.25), 0 0 14px rgba(239,68,68,.8);
+      animation: msNowPulseBoss 1.8s ease-in-out infinite; }
     .ms-link { flex: none; width: 8px; height: 2px; background: rgba(148,163,184,.26); }
     .ms-link.done { background: linear-gradient(90deg, #22c55e, #4ade80); }
     .ms-node-legend { display: flex; gap: 9px; margin-left: auto; padding-left: 8px; flex: none; }
@@ -811,6 +816,8 @@
 
     @keyframes msNowPulse { 0%,100% { box-shadow: 0 0 0 3px rgba(251,191,36,.22), 0 0 12px rgba(251,191,36,.65); }
       50% { box-shadow: 0 0 0 4px rgba(251,191,36,.12), 0 0 18px rgba(251,191,36,.9); } }
+    @keyframes msNowPulseBoss { 0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,.25), 0 0 14px rgba(239,68,68,.8); }
+      50% { box-shadow: 0 0 0 4px rgba(239,68,68,.14), 0 0 20px rgba(239,68,68,1); } }
     @keyframes msFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
     .ms-fade { animation: msFadeIn .32s ease both; }
 
@@ -12113,7 +12120,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           if (done) cls.push('done');
           if (isNow && !cleared) cls.push('now');
           const glyph = isBoss ? '★' : r;
-          nodes.push(`<div class="${cls.join(' ')}" title="Phòng ${r}${isBoss ? ' — Trùm' : ''}">${glyph}</div>`);
+          const tip = isBoss
+            ? `Phòng ${r} — ${r === ch.rooms ? 'TRÙM CUỐI' : 'TRÙM'}`
+            : `Phòng ${r}${done ? ' — đã qua' : (isNow ? ' — bạn đang ở đây' : '')}`;
+          nodes.push(`<div class="${cls.join(' ')}" title="${tip}" aria-label="${tip}">${glyph}</div>`);
           if (r < ch.rooms) {
             nodes.push(`<div class="ms-link${r < best ? ' done' : ''}"></div>`);
           }
