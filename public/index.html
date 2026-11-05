@@ -7,6 +7,7 @@
   <script src="/cloud.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -1132,6 +1133,54 @@
     #vnShopMainContainer .sv2-dock button { border-radius: 14px; color: #c7d2fe; }
     #vnShopMainContainer .sv2-dock button.on { color: #3b1a02; }
     @media (prefers-reduced-motion: reduce) { #tabShopVn::before, #vnShopMainContainer * { animation: none !important; } }
+      /* ===================== SHOP V2.1 — NÂNG CẤP ĐỘ LỘNG LẪY ===================== */
+    #vnShopMainContainer .sv2-title-text, #vnShopMainContainer .sv2-htitle, #vnShopMainContainer .sv2-buy, #vnShopMainContainer .sv2-buy2, #vnShopMainContainer .sv2-buy-gold, #vnShopMainContainer .sv2-tab, #vnShopMainContainer .sv2-ribbon { font-family: 'Baloo 2', 'Inter', sans-serif; }
+    #vnShopMainContainer .sv2-title-text { font-size: 15px; letter-spacing: .05em; font-weight: 800; }
+    #vnShopMainContainer .sv2-htitle { font-size: 15px; }
+    @keyframes sv2spin { to { transform: rotate(360deg); } }
+    @keyframes sv2pulse { 50% { transform: scale(1.035); box-shadow: 0 4px 0 #92400e, 0 12px 28px rgba(251,191,36,.75), inset 0 1px 0 rgba(255,255,255,.8); } }
+    @keyframes sv2heroglow { 50% { box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 16px 44px rgba(251,191,36,.45), inset 0 1px 0 rgba(255,255,255,.35); } }
+
+    /* Tia sáng xoay sau biểu tượng lớn */
+    #vnShopMainContainer .sv2-hero::before, #vnShopMainContainer .sv2-panel::before { content: ''; position: absolute; left: 50%; top: 84px; width: 360px; height: 360px; margin: -180px 0 0 -180px; z-index: 0; pointer-events: none; mix-blend-mode: screen;
+      background: repeating-conic-gradient(from 0deg, rgba(255,240,170,0) 0 9deg, rgba(255,240,170,.34) 9deg 15deg);
+      -webkit-mask: radial-gradient(circle, #000 6%, transparent 64%); mask: radial-gradient(circle, #000 6%, transparent 64%); animation: sv2spin 30s linear infinite; }
+    #vnShopMainContainer .sv2-hero > :not(.absolute), #vnShopMainContainer .sv2-panel > :not(.absolute) { position: relative; z-index: 1; }
+    @media (min-width: 640px) { #vnShopMainContainer .sv2-hero::before, #vnShopMainContainer .sv2-panel::before { left: 84px; top: 50%; } }
+    #vnShopMainContainer .sv2-hero { animation: sv2heroglow 3.4s ease-in-out infinite; }
+    #vnShopMainContainer .sv2-hero .sv2-buy-gold { animation: sv2pulse 2s ease-in-out infinite; }
+    #vnShopMainContainer .sv2-hero .text-6xl { font-size: 3.6rem; }
+
+    /* Hạt lấp lánh trên khung khu vực */
+    #vnShopMainContainer .sv2-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: .7;
+      background-image: radial-gradient(circle at 8% 12%, #fff 0 1px, transparent 2px), radial-gradient(circle at 93% 22%, #fde68a 0 1.3px, transparent 2.3px), radial-gradient(circle at 86% 78%, #bae6fd 0 1px, transparent 2px), radial-gradient(circle at 14% 88%, #f5d0fe 0 1.2px, transparent 2.2px);
+      animation: sv2twinkle 3.6s ease-in-out infinite alternate; }
+
+    /* Thẻ sản phẩm: bóng kính + tia sáng quanh ô vật phẩm */
+    #vnShopMainContainer .sv2-item::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(155deg, rgba(255,255,255,.2), rgba(255,255,255,0) 36%), linear-gradient(0deg, rgba(0,0,0,.22), transparent 30%); }
+    #vnShopMainContainer .sv2-plate { isolation: isolate; width: 62px; height: 62px; }
+    #vnShopMainContainer .sv2-plate::before { content: ''; position: absolute; inset: -20px; z-index: -1; border-radius: 50%; pointer-events: none;
+      background: repeating-conic-gradient(from 0deg, rgba(253,224,71,0) 0 10deg, rgba(253,224,71,.38) 10deg 17deg);
+      -webkit-mask: radial-gradient(circle, #000 12%, transparent 68%); mask: radial-gradient(circle, #000 12%, transparent 68%); animation: sv2spin 18s linear infinite; }
+    #vnShopMainContainer .sv2-item:hover .sv2-plate { border-color: #fff7d6; box-shadow: inset 0 0 18px rgba(251,191,36,.45), 0 0 18px rgba(253,224,71,.5); }
+    #vnShopMainContainer .sv2-qty { background: rgba(8,10,34,.85); border: 1px solid rgba(253,230,138,.65); border-radius: 999px; padding: 0 6px; color: #fff7d6; text-shadow: 0 1px 1px #000; line-height: 15px; }
+
+    /* Đồng hồ đếm ngược */
+    #vnShopMainContainer .sv2-timer { display: table; margin-left: auto; margin-right: auto; padding: 2px 14px; border-radius: 999px; background: rgba(8,10,34,.62); border: 1px solid rgba(125,211,252,.4); color: #bae6fd; box-shadow: inset 0 1px 5px rgba(0,0,0,.5); }
+    #vnShopMainContainer .sv2-timer::before { content: '⏳ '; }
+
+    /* Thanh tiền tệ + dock có icon */
+    #vnShopMainContainer .sv2-cur { display: flex; align-items: center; gap: 6px; }
+    #vnShopMainContainer .sv2-chip b { font-family: 'Baloo 2', 'Inter', sans-serif; font-size: 13px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+    #vnShopMainContainer .sv2-ico { font-size: 18px; line-height: 1; filter: drop-shadow(0 2px 3px rgba(0,0,0,.55)); transition: transform .18s ease; }
+    #vnShopMainContainer .sv2-tab.on .sv2-ico { transform: translateY(-2px) scale(1.18); }
+    #vnShopMainContainer .sv2-dock .sv2-tab { padding-top: 6px; padding-bottom: 5px; }
+
+    #vnShopMainContainer .sv2-chip, #vnShopMainContainer .sv2-htitle { white-space: nowrap; }
+    #vnShopMainContainer .sv2-chip > span { line-height: 1; }
+    @media (max-width: 460px) { #vnShopMainContainer .sv2-htitle { font-size: 13px; letter-spacing: .06em; } #vnShopMainContainer .sv2-chip-gold { display: none; } #vnShopMainContainer .sv2-header { padding-left: 10px; padding-right: 10px; } }
+    @media (min-width: 640px) { #vnShopMainContainer .sv2-hero .text-6xl { font-size: 2.5rem; white-space: nowrap; } }
+    @media (max-width: 400px) { #vnShopMainContainer .sv2-chip { padding-left: 8px; padding-right: 8px; } #vnShopMainContainer .sv2-cur { gap: 4px; } }
   </style>
 
 
@@ -20631,9 +20680,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             <div class="flex items-center gap-2">
               <span class="sv2-htitle font-black uppercase">🏪 Cửa Hàng Archero 2</span>
             </div>
-            <div class="sv2-chip flex items-center gap-1.5 rounded-full px-3 py-0.5">
-              <span class="text-sm">💎🌸</span>
-              <span class="text-xs font-black text-white">${st.aurocite || 51}</span>
+            <div class="sv2-cur">
+              <div class="sv2-chip sv2-chip-gold flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">🪙</span><b>${formatCompactNumberVn(SaveState.gold, '0')}</b></div>
+              <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">💚</span><b>${formatCompactNumberVn(SaveState.gems, '0')}</b></div>
+              <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">💎🌸</span><b>${st.aurocite || 51}</b></div>
             </div>
           </div>
 
@@ -20686,7 +20736,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                 <span class="sv2-title-text font-black">Cửa Hàng Mỗi Ngày</span>
                 <span class="sv2-dot"></span>
               </div>
-              <div class="text-center text-[11px] font-bold text-sky-200">Thời gian làm mới còn 13:45:01</div>
+              <div class="sv2-timer text-center text-[11px] font-bold">Thời gian làm mới còn 13:45:01</div>
 
               <div class="grid grid-cols-3 gap-2.5">
                 ${dailyCards.map(c => `
@@ -20697,7 +20747,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                     <div class="text-xs sm:text-sm font-black text-white text-center leading-tight pt-2 min-h-[34px] flex items-center justify-center">${c.title}</div>
                     <div class="sv2-plate w-14 h-14 flex flex-col items-center justify-center relative">
                       <span class="text-2xl">${c.icon}</span>
-                      <span class="absolute bottom-0.5 right-1 text-[10px] font-black text-white">${c.qty}</span>
+                      <span class="sv2-qty absolute bottom-0.5 right-1 text-[10px] font-black">${c.qty}</span>
                     </div>
                     <div class="text-[10px] font-bold text-sky-100 text-center">Còn có thể mua 1 lần</div>
                     <button type="button" data-vn-daily-buy="${c.id}" class="sv2-buy2 w-full py-1.5 text-xs flex items-center justify-center gap-1">
@@ -20896,7 +20946,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                 <span class="sv2-title-text font-black">${activeDealMeta.title}</span>
                 <span class="sv2-dot"></span>
               </div>
-              <div class="text-center text-[11px] font-bold text-sky-200">${activeDealMeta.timer}</div>
+              <div class="sv2-timer text-center text-[11px] font-bold">${activeDealMeta.timer}</div>
 
               <div class="grid grid-cols-3 gap-2.5">
                 ${activeDealMeta.packs.map(pk => `
@@ -20979,7 +21029,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                   `).join('')}
                 </div>
               ` : `
-                <div class="text-center text-[11px] font-bold text-sky-200">Thời gian làm mới còn 26 ngày 13 giờ • Aurocite dùng để mua tất cả các vật phẩm trả phí trong game</div>
+                <div class="sv2-timer text-center text-[11px] font-bold">Thời gian làm mới còn 26 ngày 13 giờ • Aurocite dùng để mua tất cả các vật phẩm trả phí trong game</div>
                 <div class="grid grid-cols-3 gap-2.5">
                   ${[
                     { amt: 99, price: '₫24,000' },
@@ -21026,8 +21076,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               { id: 'deals', label: 'Hạn Mua Ưu Đãi', target: 'shopSecDeals' },
               { id: 'topup', label: 'Nạp', target: 'shopSecTopup' }
             ].map(sb => `
-              <button type="button" data-vn-shop-subnav="${sb.id}" data-vn-scroll-to="${sb.target}" class="sv2-tab ${curSub === sb.id ? 'on' : ''} relative py-2 px-1 font-black text-[10px] sm:text-xs leading-tight text-center">
-                <span>${sb.label}</span>
+              <button type="button" data-vn-shop-subnav="${sb.id}" data-vn-scroll-to="${sb.target}" class="sv2-tab ${curSub === sb.id ? 'on' : ''} relative py-2 px-1 flex flex-col items-center justify-center gap-0.5 font-black text-[10px] sm:text-xs leading-tight text-center">
+                <span class="sv2-ico">${({ daily: '🏪', chests: '🎁', wish: '🙏', deals: '🏷️', topup: '💎' })[sb.id] || '✨'}</span><span>${sb.label}</span>
                 ${sb.alert ? '<span class="sv2-red absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-[9px] flex items-center justify-center">!</span>' : ''}
               </button>
             `).join('')}
