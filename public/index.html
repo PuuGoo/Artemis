@@ -677,7 +677,10 @@
     #hudSkillIcons > span { width: 32px; height: 32px; display: inline-flex !important; align-items: center; justify-content: center; border-radius: 10px !important; font-size: 17px !important; background: linear-gradient(180deg, rgba(30,41,70,.92), rgba(10,15,32,.95)) !important; border: 1px solid rgba(251,191,36,.45) !important; box-shadow: 0 3px 8px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12); padding: 0 !important; }
     .hv2-loot { border-radius: 14px; padding: 6px 12px; font-size: 12px; font-weight: 900; color: #fde68a; display: flex; align-items: center; gap: 6px; }
     .hv2-loot b { font-size: 15px; color: #fff; text-shadow: 0 0 10px rgba(251,191,36,.7); }
-    @media (max-width: 520px) { .hv2-room { min-width: 104px; padding: 5px 9px 6px; } .hv2-top { flex-wrap: wrap; } .hv2-xp { order: 3; flex-basis: 100%; max-width: none; padding: 3px 10px 3px 3px; } .hv2-lv { width: 26px; height: 26px; font-size: 10px; } .hv2-btn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-hint { font-size: 10px; padding: 2px 10px; text-align: center; } }
+    .hv2-warn { height: 36px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 900; color: #451a03; background: linear-gradient(180deg,#fcd34d,#f59e0b); border: 1px solid #fff8; }
+    .hv2-hint { text-align: center; max-width: 100%; }
+    .hv2-hintwrap { bottom: 58px; display: flex; justify-content: center; }
+    @media (max-width: 520px) { .hv2-xp > div:last-child > div:first-child { display: none; } .hv2-xp-track { height: 7px; } .hv2-boss { padding: 4px 10px 6px; } .hv2-boss .text-xs { font-size: 11px; margin-bottom: 2px; } .hv2-boss-track { height: 9px; } .hv2-warn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-room { min-width: 104px; padding: 5px 9px 6px; } .hv2-top { flex-wrap: wrap; } .hv2-xp { order: 3; flex-basis: 100%; max-width: none; padding: 2px 10px 2px 2px; } .hv2-lv { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; } .hv2-btn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-hint { font-size: 10px; padding: 2px 10px; text-align: center; } }
   </style>
 
 
@@ -1370,9 +1373,10 @@
             <div class="hv2-boss-track"><div id="bossHpBar" class="h-full transition-all duration-100" style="width: 100%;"></div></div>
           </div>
 
-          <div class="flex justify-center">
-            <div id="hudHintBanner" class="hv2-hint">💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!</div>
-          </div>
+        </div>
+
+        <div class="pointer-events-none absolute inset-x-0 flex justify-center z-10 px-2 hv2-hintwrap">
+          <div id="hudHintBanner" class="hv2-hint">💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!</div>
         </div>
 
         <!-- Bottom Acquired Skills Strip -->
@@ -1951,6 +1955,17 @@ const ArenaV2 = (() => {
       ctx.fillStyle = 'rgba(255,255,255,0.9)';
       for (let i = 0; i < 2; i++) { const yy = pr.y + pr.h - 6 - off - i * 14; if (yy > pr.y + 2 && yy < pr.y + pr.h) { ctx.beginPath(); ctx.moveTo(cx - 7, yy + 5); ctx.lineTo(cx, yy - 3); ctx.lineTo(cx + 7, yy + 5); ctx.lineTo(cx, yy + 1); ctx.closePath(); ctx.fill(); } }
       ctx.font = '900 10px Inter'; ctx.textAlign = 'center'; ctx.fillStyle = '#082f49'; ctx.fillText('TIẾN LÊN', cx, pr.y + pr.h + 14);
+      // Chùm sáng dẫn đường kéo xuống dưới vùng HUD để người chơi luôn thấy hướng đi
+      const bl = Math.min(Game.height * 0.5, 330), top = pr.y + pr.h;
+      ctx.save(); if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
+      const bm = ctx.createLinearGradient(0, top, 0, top + bl); bm.addColorStop(0, 'rgba(125,211,252,0.45)'); bm.addColorStop(1, 'rgba(125,211,252,0)');
+      ctx.fillStyle = bm; ctx.beginPath(); ctx.moveTo(cx - pr.w * 0.42, top); ctx.lineTo(cx + pr.w * 0.42, top); ctx.lineTo(cx + pr.w * 0.9, top + bl); ctx.lineTo(cx - pr.w * 0.9, top + bl); ctx.closePath(); ctx.fill();
+      for (let i = 0; i < 4; i++) {
+        const t = ((nowMs * 0.00045 + i / 4) % 1), yy = top + bl * (1 - t), a = Math.sin(t * Math.PI);
+        ctx.strokeStyle = `rgba(254,240,138,${a * 0.9})`; ctx.lineWidth = 3; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(cx - 11, yy + 7); ctx.lineTo(cx, yy - 5); ctx.lineTo(cx + 11, yy + 7); ctx.stroke();
+      }
+      ctx.restore();
     } else {
       ctx.fillStyle = '#05080f'; ctx.strokeStyle = '#475569'; ctx.lineWidth = 2.4;
       ctx.beginPath(); ctx.roundRect(pr.x, pr.y, pr.w, pr.h, 10); ctx.fill(); ctx.stroke();
@@ -25920,8 +25935,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (!btn) return;
         btn.textContent = Game.lowGfx ? '⚡ Hiệu Năng' : '✨ HD';
         btn.className = Game.lowGfx
-          ? 'px-2.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 border border-amber-300 text-xs font-extrabold text-white transition'
-          : 'px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-extrabold text-white transition';
+          ? 'hv2-btn hv2-warn'
+          : 'hv2-btn hv2-glass';
       }
       document.getElementById('btnHudGfx').addEventListener('click', () => {
         Game.perfMode = Game.lowGfx ? 'high' : 'low';
