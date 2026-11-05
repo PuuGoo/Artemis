@@ -729,6 +729,50 @@
       background: rgba(248,113,113,.5); transition: width .7s ease-out .12s; }
     .hv2-vitals.low .hv2-vitals-num { color: #fda4af; }
     @keyframes hv2hpPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.45); } }
+    /* ==================== CHAPTER VICTORY PANEL ==================== */
+    .cv-hero { position: relative; padding: 22px 20px 16px; text-align: center; overflow: hidden;
+      border-bottom: 1px solid rgba(255,255,255,.1); }
+    .cv-rays { position: absolute; inset: -60% -20%; pointer-events: none;
+      background: conic-gradient(from 0deg, transparent 0deg, var(--cv-accent)22 12deg, transparent 24deg,
+        transparent 40deg, var(--cv-accent)1a 52deg, transparent 64deg, transparent 90deg,
+        var(--cv-accent)22 102deg, transparent 114deg, transparent 150deg, var(--cv-accent)1a 162deg, transparent 174deg,
+        transparent 210deg, var(--cv-accent)22 222deg, transparent 234deg, transparent 270deg, var(--cv-accent)1a 282deg, transparent 294deg);
+      animation: cvRays 14s linear infinite; opacity: .55; }
+    .cv-trophy { position: relative; font-size: 46px; line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(251,191,36,.85)) drop-shadow(0 4px 10px rgba(0,0,0,.7));
+      animation: cvTrophy 1.1s cubic-bezier(.2,1.6,.35,1) both; }
+    .cv-title { position: relative; margin-top: 6px; font-size: 20px; font-weight: 900; letter-spacing: .08em;
+      color: #fde68a; text-shadow: 0 0 20px rgba(251,191,36,.7), 0 2px 4px #000; }
+    .cv-subtitle { position: relative; margin-top: 3px; font-size: 11.5px; font-weight: 800; color: #cbd5e1; }
+    .cv-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,.08); }
+    .cv-stat { padding: 9px 4px; text-align: center; background: rgba(2,6,23,.55); }
+    .cv-stat b { display: block; font-size: 13px; font-weight: 900; color: #fbbf24; }
+    .cv-stat span { display: block; font-size: 8px; font-weight: 900; letter-spacing: .07em; color: #64748b; margin-top: 1px; }
+    .cv-unlock { padding: 13px 18px; background: rgba(2,6,23,.42); border-top: 1px solid rgba(255,255,255,.08); }
+    .cv-unlock-kicker { font-size: 8.5px; font-weight: 900; letter-spacing: .14em; color: #4ade80; margin-bottom: 7px;
+      animation: cvUnlockKicker .6s .3s ease both; }
+    .cv-unlock-row { display: flex; align-items: center; gap: 10px; animation: cvUnlockRow .5s .35s cubic-bezier(.2,1.3,.4,1) both; }
+    .cv-unlock-icon { font-size: 28px; line-height: 1; filter: drop-shadow(0 2px 6px rgba(0,0,0,.7)); }
+    .cv-unlock-meta { min-width: 0; }
+    .cv-unlock-name { font-size: 14px; font-weight: 900; color: #f8fafc; line-height: 1.2; }
+    .cv-unlock-diff { font-size: 10px; font-weight: 800; margin-top: 2px; }
+    .cv-unlock.cv-final { text-align: center; }
+    .cv-unlock-final { font-size: 11px; font-weight: 700; color: #cbd5e1; line-height: 1.5; }
+    .cv-actions { display: flex; gap: 8px; padding: 14px 18px 18px; }
+    .cv-btn { padding: 11px; border-radius: 12px; font-size: 12.5px; font-weight: 900; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.28); transition: transform .12s, filter .12s; }
+    .cv-btn:hover { filter: brightness(1.14); } .cv-btn:active { transform: scale(.96); }
+    .cv-btn-ghost { flex: 1; background: rgba(15,23,42,.9); color: #cbd5e1; border-color: rgba(148,163,184,.3); }
+    .cv-btn-primary { flex: 2; color: #0f172a; box-shadow: 0 6px 18px -6px rgba(0,0,0,.7); }
+    @keyframes cvRays { to { transform: rotate(360deg); } }
+    @keyframes cvTrophy { from { opacity: 0; transform: scale(.3) rotate(-14deg); } to { opacity: 1; transform: none; } }
+    @keyframes cvUnlockKicker { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+    @keyframes cvUnlockRow { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 520px) {
+      .cv-trophy { font-size: 36px; } .cv-title { font-size: 17px; }
+      .cv-stat b { font-size: 11.5px; } .cv-unlock-name { font-size: 12.5px; }
+      .cv-actions { padding: 12px 14px 15px; } .cv-btn { font-size: 11.5px; padding: 10px; }
+    }
     @media (max-width: 520px) { .hv2-xp > div:last-child > div:first-child { display: none; } .hv2-xp-track { height: 7px; } .hv2-boss { padding: 4px 10px 6px; } .hv2-boss .text-xs { font-size: 11px; margin-bottom: 2px; } .hv2-boss-track { height: 9px; } .hv2-warn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-room { min-width: 104px; padding: 5px 9px 6px; } .hv2-top { flex-wrap: wrap; } .hv2-xp { order: 3; flex-basis: 100%; max-width: none; padding: 2px 10px 2px 2px; } .hv2-lv { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; } .hv2-btn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-hint { font-size: 10px; padding: 2px 10px; text-align: center; } }
   </style>
 
@@ -1533,6 +1577,14 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- ==================== MODAL: CHINH PHỤC CHƯƠNG ====================
+         Hiện khi phá đảo: ăn mừng, thống kê trận, và QUAN TRỌNG NHẤT là báo
+         chương tiếp theo vừa được mở khoá. Trước đây thắng chương chỉ hiện
+         summary thường, người chơi không biết mình vừa mở nội dung mới. -->
+    <div id="chapterVictoryModal" class="hidden absolute inset-0 z-45 bg-slate-950/94 backdrop-blur-md flex flex-col items-center justify-center p-4">
+      <div id="chapterVictoryCard" class="w-full max-w-lg rounded-3xl overflow-hidden border-2 shadow-2xl flex flex-col"></div>
     </div>
 
     <!-- ==================== MODAL 0: BRIEFING TRƯỚC TRẬN ====================
@@ -11310,6 +11362,89 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (!ch) return 0;
         const raw = Number((SaveState.bestRooms || {})[chapterId]) || 0;
         return Math.max(0, Math.min(ch.rooms, Math.floor(raw)));
+      }
+
+      /**
+       * Màn hình chiến thắng chương — ăn mừng + báo mở khoá chương mới.
+       *
+       * Trước đây phá đảo chỉ hiện summary thường ("Bạn đã chinh phục..."), người
+       * chơi không biết chương tiếp theo vừa mở. Với 3 chương, đó là phần
+       * thưởng lớn nhất của cả trận — phải nói rõ.
+       *
+       * @param {object} ch        chương vừa phá đảo
+       * @param {object|null} next chương mới mở (null nếu là chương cuối)
+       */
+      function openChapterVictory(ch, next, stats) {
+        const modal = document.getElementById('chapterVictoryModal');
+        const card = document.getElementById('chapterVictoryCard');
+        if (!modal || !card) return;
+
+        card.style.borderColor = ch.accent;
+        card.style.background = `linear-gradient(165deg, ${ch.gradFrom}, ${ch.gradTo} 55%, #020617)`;
+
+        const unlockBlock = next
+          ? `<div class="cv-unlock">
+               <div class="cv-unlock-kicker">MỞ KHOÁ CHƯƠNG MỚI</div>
+               <div class="cv-unlock-row">
+                 <span class="cv-unlock-icon">${next.icon}</span>
+                 <div class="cv-unlock-meta">
+                   <div class="cv-unlock-name">${next.name}</div>
+                   <div class="cv-unlock-diff" style="color:${next.difficulty === 1 ? '#4ade80' : next.difficulty === 2 ? '#fbbf24' : '#f87171'}">
+                     ${next.difficultyLabel} · ${next.rooms} phòng · ${next.bossIcon} ${next.bossName}
+                   </div>
+                 </div>
+               </div>
+             </div>`
+          : `<div class="cv-unlock cv-final">
+               <div class="cv-unlock-kicker">👑 TẤT CẢ CHƯƠNG ĐÃ CHINH PHỤC</div>
+               <div class="cv-unlock-final">Bạn đã phá đảo toàn bộ chiến dịch. Hãy cày trang bị để chinh phục lại với thời gian nhanh hơn!</div>
+             </div>`;
+
+        card.innerHTML = `
+          <div class="cv-hero" style="--cv-accent:${ch.accent}">
+            <div class="cv-rays"></div>
+            <div class="cv-trophy">🏆</div>
+            <div class="cv-title">CHIẾN THẮNG</div>
+            <div class="cv-subtitle">${ch.name}</div>
+          </div>
+
+          <div class="cv-stats">
+            <div class="cv-stat"><b>${stats.rooms}</b><span>PHÒNG</span></div>
+            <div class="cv-stat"><b>${stats.kills}</b><span>HẠ GỤC</span></div>
+            <div class="cv-stat"><b>+${stats.gold.toLocaleString('vi-VN')}</b><span>VÀNG</span></div>
+            <div class="cv-stat"><b>+${stats.gems}</b><span>ĐÁ QUÝ</span></div>
+          </div>
+
+          ${unlockBlock}
+
+          <div class="cv-actions">
+            <button type="button" id="btnCvLobby" class="cv-btn cv-btn-ghost">← Về Sảnh</button>
+            ${next
+              ? `<button type="button" id="btnCvNext" class="cv-btn cv-btn-primary" style="background:linear-gradient(135deg,${next.accent},${next.accent2})">Chương Tiếp ${next.icon}</button>`
+              : `<button type="button" id="btnCvNext" class="cv-btn cv-btn-primary" style="background:linear-gradient(135deg,#fbbf24,#f59e0b)">🔄 Chơi Lại</button>`}
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+
+        document.getElementById('btnCvLobby').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          document.getElementById('summaryModal').classList.add('hidden');
+          returnToLobby();
+        });
+        document.getElementById('btnCvNext').addEventListener('click', () => {
+          modal.classList.add('hidden');
+          document.getElementById('summaryModal').classList.add('hidden');
+          if (next) {
+            // Chuyển sang chương vừa mở rồi vào trận luôn — không bắt người chơi
+            // quay về sảnh bấm lại từ đầu.
+            SaveState.selectedChapterIdx = CHAPTERS.findIndex(c => c.id === next.id);
+            SaveState.save();
+            startNewRun('fresh');
+          } else {
+            startNewRun('fresh');
+          }
+        });
       }
 
       function renderChapterSelectStrip() {
@@ -25937,6 +26072,21 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         if (isVictory) SoundFX.levelUp();
 
+        // Phá đảo: hiện màn hình chinh phục riêng, có thông báo mở khoá chương
+        // tiếp theo. Summary thường chỉ hiện khi thua hoặc tạm dừng.
+        if (isVictory) {
+          const curIdx = CHAPTERS.findIndex(c => c.id === (Game.chapter && Game.chapter.id));
+          const nextCh = CHAPTERS[curIdx + 1] || null;
+          const unlockedNext = nextCh && !isChapterLocked(nextCh);
+          openChapterVictory(Game.chapter, unlockedNext ? nextCh : null, {
+            rooms: Game.maxRooms,
+            kills: Game.kills,
+            gold: Game.runGold,
+            gems: bonusGems
+          });
+          return;
+        }
+
         showSummaryModal(
           isVictory ? '🏆 CHIẾN THẮNG HUY HOÀNG!' : '💀 KẾT THÚC HÀNH TRÌNH',
           isVictory
@@ -26234,16 +26384,26 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         Game.lastTime = performance.now();
       });
 
-      document.getElementById('btnReturnLobby').addEventListener('click', () => {
+      /**
+       * Quay về sảnh từ màn chơi. Một chỗ duy nhất để mọi đường thoát (summary,
+       * victory panel, nút Về Sảnh) đều dọn cùng một tập trạng thái.
+       */
+      function returnToLobby() {
         Game.running = false;
         Game.paused = false;
         if (Game.animId) cancelAnimationFrame(Game.animId);
         document.getElementById('summaryModal').classList.add('hidden');
+        const cvModal = document.getElementById('chapterVictoryModal');
+        if (cvModal) cvModal.classList.add('hidden');
         document.getElementById('gameArenaView').classList.add('hidden');
         document.getElementById('tabBattle').classList.remove('hidden');
         document.getElementById('bottomNavBar').classList.remove('hidden');
         SaveState.save();
         renderLobbyUI();
+      }
+
+      document.getElementById('btnReturnLobby').addEventListener('click', () => {
+        returnToLobby();
       });
 
       document.getElementById('btnPlayAgain').addEventListener('click', () => {
@@ -26898,6 +27058,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         showBossIntro,
         hideBossIntro,
         openRunBriefing,
+        openChapterVictory,
+        finishRun,
+        returnToLobby,
+        getChapterBest,
         renderChapterSelectStrip,
         isChapterLocked,
         isChapterWon,
