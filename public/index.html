@@ -20827,6 +20827,10 @@
           atk: stats.baseAtk,
           aspd: stats.baseAspd,
           critRate: stats.baseCrit,
+          // Năng lượng Tuyệt Kỹ: bắt đầu đầy để người chơi dùng được ngay đầu trận,
+          // sau đó hồi dần 18 NL/giây (xem updateUltimateCharge).
+          ultCharge: ULT_COST,
+          ultMax: ULT_COST,
           // CRIT DMG đã gom đủ 5 nguồn (talent/artifact/hero-star/set/skin) —
           // trước đây damageEnemy hardcode 1.85 nên mọi nguồn này vô hiệu.
           critDmgMult: stats.critDmgMult || 1.85,
@@ -21941,9 +21945,57 @@
         }
       }
 
+      // Tuyệt kỹ Thần Uy Tinh Hà — CÓ HỒI CHIÊU.
+      //
+      // Trước đây hàm này không có bất kỳ giới hạn nào: bấm nút HUD hoặc phím Space
+      // liên tục thì mỗi lần bắn 20 đạn × 1.45 ATK. Với ATK 99.763 (tài khoản thật)
+      // mỗi lần bấm ≈ 2,89 triệu sát thương, không cooldown => phá toàn bộ cân bằng
+      // phó bản.
+      //
+      // Nay: năng lượng đầy 100 mới dùng được, mỗi lần dùng trừ 100, hồi 18 NL/giây
+      // (≈5,6 giây mỗi lần). Đánh trúng quái cũng nạp thêm (xem damageEnemy).
+      const ULT_COST = 100;
+      const ULT_REGEN_PER_SEC = 18;
+
+      function updateUltimateCharge(dt) {
+        const p = Game.player;
+        if (!p) return;
+        if (typeof p.ultCharge !== 'number') p.ultCharge = 0;
+        if (typeof p.ultMax !== 'number') p.ultMax = ULT_COST;
+        if (p.ultCharge < p.ultMax) {
+          p.ultCharge = Math.min(p.ultMax, p.ultCharge + ULT_REGEN_PER_SEC * dt);
+        }
+        syncUltimateButton();
+      }
+
+      function syncUltimateButton() {
+        const btn = document.getElementById('btnTriggerUltimate');
+        if (!btn || !Game.player) return;
+        const p = Game.player;
+        const pct = Math.max(0, Math.min(100, Math.round(((p.ultCharge || 0) / (p.ultMax || ULT_COST)) * 100)));
+        const ready = pct >= 100;
+        // Nhấp nháy CHỈ khi thật sự sẵn sàng — trước đây luôn nhấp nháy gây hiểu nhầm.
+        btn.classList.toggle('animate-pulse', ready);
+        btn.style.opacity = ready ? '1' : '0.55';
+        btn.textContent = ready ? '🔥 Tuyệt Kỹ Thần Uy' : `🔥 Tuyệt Kỹ (${pct}%)`;
+        btn.title = ready
+          ? 'Phóng Tuyệt Kỹ Thần Uy Tinh Hà (Phím Space) — SẴN SÀNG!'
+          : `Đang hồi năng lượng: ${pct}% (cần ${ULT_COST})`;
+      }
+
       function triggerCelestialUltimate() {
         if (!Game.running || !Game.player) return;
         const p = Game.player;
+        if (typeof p.ultCharge !== 'number') p.ultCharge = 0;
+        if (typeof p.ultMax !== 'number') p.ultMax = ULT_COST;
+        if (p.ultCharge < p.ultMax) {
+          // Chưa đủ năng lượng: báo rõ thay vì im lặng
+          const pct = Math.round((p.ultCharge / p.ultMax) * 100);
+          spawnFloatText(p.x, p.y - 40, `⚡ Năng lượng ${pct}%`, '#94a3b8', 12);
+          return;
+        }
+        p.ultCharge = 0;   // tiêu hết năng lượng => có hồi chiêu thật
+        syncUltimateButton();   // cập nhật nút ngay, không đợi frame sau
         const activeSkin = getActiveHeroSkin(p.hero.id);
         const ultColor = activeSkin.projColor || '#f43f5e';
 
@@ -21998,6 +22050,9 @@
 
         if (Game.shakeTime > 0) Game.shakeTime -= dt;
         if (p.invulnTimer > 0) p.invulnTimer -= dt;
+
+        // Hồi năng lượng Tuyệt Kỹ (18 NL/giây) + cập nhật nút HUD
+        updateUltimateCharge(dt);
 
         // 1. Player Movement (WASD / Arrows / Virtual Joystick)
         let mx = 0;
