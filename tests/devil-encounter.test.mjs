@@ -95,7 +95,7 @@ check(
 );
 check(
   "btnAcceptDevil nha pause",
-  /btnAcceptDevil'\).addEventListener[\s\S]{0,600}?Game\.paused = false/.test(src)
+  /btnAcceptDevil'\).addEventListener[\s\S]{0,3000}?Game\.paused = false/.test(src)
 );
 check(
   "btnResumeGame nha pause",

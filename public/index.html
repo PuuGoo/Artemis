@@ -23946,6 +23946,48 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       }
 
+      /**
+       * Tính chi phí Máu Tối Đa của Khế Ước Huyết Ma.
+       *
+       * Dùng CHUNG cho cả phần hiển thị (lời mời) và phần trừ máu (khi bấm
+       * "Ký Khế Ước") để hai bên không bao giờ lệch nhau.
+       *
+       * Thứ tự áp dụng:
+       *   1. Tỷ lệ gốc theo độ hiếm: Legend 30% / Epic 23% / Rare 15%
+       *   2. Seraph [Divine Favor LV.3] -> miễn phí hoàn toàn (0%)
+       *   3. Rune Devil Pact          -> giảm 50% lượng máu bị mất
+       *   4. Mythic Enchant của rune  -> không mất Max HP vĩnh viễn (0%)
+       *
+       * @returns {{pct:number, costHp:number, freeReason:string|null}}
+       */
+      function computeDevilCost(skillRarity) {
+        const p = Game.player;
+        const basePct = skillRarity === 'legend' ? 30 : (skillRarity === 'epic' ? 23 : 15);
+        let freeReason = null;
+        let pct = basePct;
+
+        if (p && hasHeroSkillActive(p, 'seraph')) {
+          pct = 0;
+          freeReason = 'Seraph [Divine Favor LV.3]';
+        } else if (isRuneEquipped('devil_pact')) {
+          // Mythic Enchant: miễn trừ hoàn toàn việc mất Max HP vĩnh viễn.
+          if (SaveState.runeMythicEnchant !== false) {
+            pct = 0;
+            freeReason = 'Rune Devil Pact [Mythic Enchant]';
+          } else {
+            // Blessing thường: giảm một nửa lượng máu phải trả.
+            pct = basePct / 2;
+          }
+        }
+
+        const maxHp = Math.max(1, (p && p.maxHp) || 1);
+        return {
+          pct,
+          costHp: Math.round(maxHp * pct / 100),
+          freeReason
+        };
+      }
+
       function triggerDevilEncounter() {
         Game.paused = true;
         try {
@@ -23954,10 +23996,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           const modal = document.getElementById('devilModal');
           if (!modal) throw new Error('Thiếu #devilModal trong DOM');
           modal.setAttribute('data-devil-skill', pick.id);
-          // Exact Wiki Devil Max HP Cost: 30% for Legendary, 23% for Epic, 15% for Rare (0% if Seraph Divine Favor LV.3 is active!)
-          const seraphFree = Game.player && hasHeroSkillActive(Game.player, 'seraph');
-          const hpCostPct = seraphFree ? 0 : (pick.rarity === 'legend' ? 30 : (pick.rarity === 'epic' ? 23 : 15));
+          // Chi phí tính 1 lần ở đây và chốt vào DOM — lúc bấm "Ký" chỉ việc
+          // đọc lại con số này, không tính lại (tránh lệch nếu state đổi).
+          const { pct: hpCostPct, costHp, freeReason } = computeDevilCost(pick.rarity);
           modal.setAttribute('data-devil-cost-pct', String(hpCostPct));
+          modal.setAttribute('data-devil-cost-hp', String(costHp));
 
           // KHÔNG dùng span con #devilSkillName nữa: khối dưới ghi đè innerHTML
           // của #devilOfferDesc nên span đó bị xoá sau lần gặp trùm đầu tiên.
@@ -23967,9 +24010,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           const skillLabel = `${pick.icon} ${pick.name}`;
           const descEl = document.getElementById('devilOfferDesc');
           if (descEl) {
-            descEl.innerHTML = seraphFree
-              ? `Nhờ đặc quyền <span class="text-amber-300 font-black">Seraph [Divine Favor LV.3]</span>, bạn được nhận kỹ năng <span class="text-rose-400 font-black">${skillLabel}</span> mà <span class="text-emerald-300 font-black">KHÔNG TỐN MÁU TỐI ĐA (0% Max HP)</span>!`
-              : `Đổi <span class="text-rose-400 font-black">${hpCostPct}% Máu Tối Đa Gốc</span> (Chuẩn Wiki: 15%/23%/30%) để nhận ngay kỹ năng <span class="text-amber-300 font-black">${skillLabel}</span> (${pick.desc})?`;
+            descEl.innerHTML = (hpCostPct === 0)
+              ? `Nhờ <span class="text-amber-300 font-black">${freeReason || 'đặc quyền'}</span>, bạn được nhận kỹ năng <span class="text-rose-400 font-black">${skillLabel}</span> mà <span class="text-emerald-300 font-black">KHÔNG TỐN MÁU TỐI ĐA (0% Max HP)</span>!`
+              : `Đổi <span class="text-rose-400 font-black">${hpCostPct}% Máu Tối Đa</span> (<b class="text-rose-300">-${costHp.toLocaleString('vi-VN')} HP</b>, Chuẩn Wiki: 15%/23%/30%) để nhận ngay kỹ năng <span class="text-amber-300 font-black">${skillLabel}</span> (${pick.desc})?`;
           }
 
           modal.classList.remove('hidden');
@@ -28064,9 +28107,41 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const skId = modal.getAttribute('data-devil-skill');
         const costPct = parseInt(modal.getAttribute('data-devil-cost-pct'), 10) || 0;
         if (Game.player) {
+          const p = Game.player;
           if (costPct > 0) {
-            Game.player.maxHp = Math.max(120, Math.round(Game.player.maxHp * (1 - costPct / 100)));
-            Game.player.hp = Math.min(Game.player.hp, Game.player.maxHp);
+            const beforeMaxHp = p.maxHp;
+            const beforeHp = p.hp;
+            const newMaxHp = Math.max(120, Math.round(p.maxHp * (1 - costPct / 100)));
+            const lostMaxHp = beforeMaxHp - newMaxHp;
+
+            p.maxHp = newMaxHp;
+            // PHẢI trừ cả HP hiện tại, không chỉ kẹp trần.
+            //
+            // Lỗi cũ: chỉ có `p.hp = Math.min(p.hp, p.maxHp)`. Sau khi diệt
+            // trùm, người chơi thường còn ít máu (ví dụ 502/1005). maxHp
+            // giảm 1005 -> 774 nhưng hp 502 < 774 nên Math.min không làm gì
+            // => KHÔNG mất một giọt máu nào, thậm chí tỷ lệ máu còn TĂNG
+            // (50% -> 64.9%). Người chơi báo "ký khế ước không giảm máu".
+            //
+            // Nay trừ đúng lượng máu tối đa bị mất khỏi HP hiện tại.
+            //
+            // SÀN AN TOÀN: khế ước là "hiến tế máu", KHÔNG phải đòn đánh
+            // chí mạng. Nếu HP hiện tại đang thấp hơn giá phải trả thì vẫn
+            // giữ tối thiểu 15% Max HP mới, không bao giờ để người chơi
+            // chết vì bấm nút. Người chơi đã thắng trùm, không nên chết
+            // oan ở màn thưởng.
+            //
+            // Sàn KHÔNG được vượt quá HP hiện tại: ký khế ước chỉ được làm
+            // MẤT máu, không bao giờ HỒI máu (đã từng để HP 50 -> 106 vì
+            // sàn 15% của Max HP mới cao hơn HP đang có).
+            const safeFloor = Math.min(beforeHp, Math.max(1, Math.round(newMaxHp * 0.15)));
+            p.hp = Math.min(newMaxHp, Math.max(safeFloor, Math.round(beforeHp - lostMaxHp)));
+
+            const lostHp = beforeHp - p.hp;
+            if (lostHp > 0) {
+              spawnFloatText(p.x, p.y - 40, `-${Math.round(lostHp)} HP`, '#f43f5e', 15, { kind: 'damage' });
+            }
+            spawnFloatText(p.x, p.y - 22, `💀 KẾ ƯỚC: -${costPct}% Máu Tối Đa`, '#f43f5e', 12);
           }
           applyRogueSkill(skId);
         }
