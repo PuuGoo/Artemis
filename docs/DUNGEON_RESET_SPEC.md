@@ -142,18 +142,65 @@ bestRooms:    1 → 1
 lifetimeKills: 9 → 9
 ```
 
-## 7. Continue (checkpoint) — chưa triển khai
+## 7. Continue (checkpoint) — ĐÃ TRIỂN KHAI
 
-Game hiện **không lưu trạng thái giữa các phòng**. Đóng tab giữa trận = mất lượt chơi
-đó (dữ liệu nhân vật vẫn an toàn vì đã lưu sau mỗi phòng).
+Game lưu tiến trình **ở mức phòng** để hỗ trợ Continue sau khi đóng tab.
 
-Lý do: lưu checkpoint đòi hỏi serialize toàn bộ `Game` state (enemies, bullets,
-particles, timers) vào save — dung lượng lớn và dễ hỏng khi format thay đổi.
-Chưa nằm trong phạm vi V1.
+### Nguyên tắc an toàn
 
-Nếu triển khai sau này:
-- Chỉ lưu khi `Game.roomCleared === true` (điểm an toàn)
-- Chỉ lưu `room`, `chapter`, `kills`, `runGold`, `player.hp/level/xp/skills`
-- Không lưu entity đang bay
-- `Continue` chỉ khả dụng khi có checkpoint của **cùng** `chapterIdx`
-- `Retry` xoá checkpoint
+- **Chỉ lưu khi `Game.roomCleared === true`** — không bao giờ lưu giữa lúc đang đánh,
+  vì trạng thái nửa vời (quái còn sống, đạn đang bay, boss đang phase 2) không thể
+  khôi phục chính xác.
+- **Chỉ lưu scalar của nhân vật**, không lưu entity nào.
+- **Không lưu phòng cuối** (`room < maxRooms`) — phòng cuối thì kết thúc trận, không
+  continue.
+- Hết hạn **24 giờ**.
+
+### Dữ liệu lưu
+
+```js
+SaveState.dungeonCheckpoint = {
+  v: 1,
+  chapterIdx, chapterId, room, maxRooms,
+  kills, runGold, savedAt,
+  player: {
+    hp, maxHp, atk, aspd, critRate, critDmgMult,
+    defFlat, dmgReduction, level, xp, xpNext,
+    skills: { id: tier, ... }     // kỹ năng đã nhặt trong lượt
+  }
+}
+```
+
+### Vòng đời
+
+| Sự kiện | Checkpoint |
+|---|---|
+| Phòng sạch quái | **lưu** (`saveCheckpoint()`) |
+| Continue | dùng rồi **xoá** |
+| Retry (`btnStartGame`) | **xoá** |
+| Trận kết thúc (`finishRun`) | **xoá** |
+| Chuyển chương | không dùng được (`chapterIdx` khác → nút ẩn) |
+| Quá 24h | không dùng được (nút ẩn) |
+
+### Nút Continue
+
+`#btnContinueRun` trong tab chiến đấu, ẩn mặc định. `syncContinueButton()` hiện nút
+với nhãn `▶ TIẾP TỤC • PHÒNG {room}/{maxRooms}` khi checkpoint dùng được. Được gọi
+trong `renderLobbyUI` (qua `safeRender`), sau khi lưu checkpoint, sau retry và sau
+`finishRun`.
+
+### Kiểm chứng trên trình duyệt thật
+
+```
+Dọn phòng 1→2→3                → checkpoint {room:3, kills:12, runGold:120, level:3, skills:{wounded_warrior:1, charged_arrow:1}}
+Reload trang (đóng tab mở lại) → checkpoint còn, nút hiện "▶ TIẾP TỤC • PHÒNG 3/15"
+Bấm Continue                   → room 3, level 3, 2 kỹ năng khôi phục, không NaN, checkpoint xoá, nút ẩn
+Bấm Bắt Đầu (retry)            → room 1, checkpoint null, nút ẩn
+```
+
+### Giới hạn đã biết
+
+- Không khôi phục HP tạm thời của quái, vị trí quái, đạn đang bay — phòng được dựng
+  lại từ đầu bằng `setupRoom(cp.room)`.
+- Không khôi phục combo, buff tạm thời đang chạy (đều là trạng thái theo giây).
+- Kỹ năng được khôi phục theo **bậc** nhưng không phát lại hiệu ứng "vừa nhặt".

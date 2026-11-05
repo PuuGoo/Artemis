@@ -825,6 +825,10 @@
           <button id="btnStartGame" type="button" class="w-full sm:w-80 py-3.5 rounded-2xl gold-gradient text-slate-950 font-black text-base sm:text-lg tracking-wide shadow-lg glow-gold hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2">
             <span>⚔️ BẮT ĐẦU CHIẾN ĐẤU</span>
           </button>
+          <!-- Continue: chỉ hiện khi có checkpoint của đúng chương đang chọn -->
+          <button id="btnContinueRun" type="button" class="hidden w-full sm:w-56 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base tracking-wide shadow-lg border border-emerald-300/50 active:scale-95 transition flex items-center justify-center gap-2">
+            <span id="btnContinueRunLabel">▶ TIẾP TỤC</span>
+          </button>
         </div>
       </section>
 
@@ -6866,6 +6870,8 @@
           claimedRewards: [],
           isCompleted: false
         },
+        // Checkpoint lượt chơi cho Continue. null = không có.
+        dungeonCheckpoint: null,
         normalizeLoadedGear() {
           const defaultEq = createDefaultEquipped();
           if (!this.equippedGear || typeof this.equippedGear !== 'object') {
@@ -7137,6 +7143,10 @@
               achievementsClaimed: this.achievementsClaimed,
               achievementFilter: this.achievementFilter,
               beginnerJourney: this.beginnerJourney,
+              // Checkpoint lượt chơi (dùng cho Continue). KHÔNG phải dữ liệu
+              // nhân vật — bị xoá khi Retry/Reset hoặc khi Continue dùng xong.
+              // Ghi thẳng giá trị: null là trạng thái hợp lệ (chưa có checkpoint).
+              dungeonCheckpoint: this.dungeonCheckpoint,
             }));
           } catch (e) {
             console.warn('[Archero2 SaveState] Failed to write localStorage:', e);
@@ -19799,6 +19809,9 @@
         safeRender('beginnerJourney', () => {
           if (typeof renderBeginnerJourneyUI === 'function') renderBeginnerJourneyUI();
         });
+        safeRender('continueButton', () => {
+          if (typeof syncContinueButton === 'function') syncContinueButton();
+        });
         safeRender('events', () => renderVnEventsBannerCardsUI());
         safeRender('wikiEvents', () => renderWikiEventsHubUI());
 
@@ -20449,6 +20462,148 @@
         },
       };
 
+      // ==================== CHECKPOINT (CONTINUE) ====================
+      // Lưu tiến trình Ở MỨC PHÒNG để hỗ trợ "Continue" sau khi đóng tab.
+      //
+      // Nguyên tắc an toàn:
+      //  • CHỈ lưu khi phòng đã sạch quái (Game.roomCleared) — không bao giờ lưu
+      //    giữa lúc đang đánh, vì trạng thái nửa vời (quái còn sống, đạn đang bay,
+      //    boss đang phase 2) không thể khôi phục chính xác.
+      //  • CHỈ lưu phần CHỈ SỐ của nhân vật, không lưu entity nào.
+      //  • Không đụng SaveState — checkpoint là field riêng của Game.
+      //  • Retry/Reset xoá checkpoint. Continue dùng rồi xoá.
+      const CHECKPOINT_VERSION = 1;
+
+      function canSaveCheckpoint() {
+        return !!(
+          Game.running &&
+          Game.roomCleared &&
+          Game.player &&
+          Game.chapter &&
+          Game.room >= 1 &&
+          Game.room < Game.maxRooms
+        );
+      }
+
+      /** Gọi khi phòng vừa sạch — điểm an toàn duy nhất được phép lưu. */
+      function saveCheckpoint() {
+        if (!canSaveCheckpoint()) return false;
+        const p = Game.player;
+        SaveState.dungeonCheckpoint = {
+          v: CHECKPOINT_VERSION,
+          chapterIdx: SaveState.selectedChapterIdx,
+          chapterId: Game.chapter.id,
+          room: Game.room,
+          maxRooms: Game.maxRooms,
+          kills: Game.kills,
+          runGold: Game.runGold,
+          savedAt: Date.now(),
+          // Chỉ số nhân vật — dựng lại được hoàn toàn, không phải entity
+          player: {
+            hp: Math.max(1, Math.round(p.hp)),
+            maxHp: Math.round(p.maxHp),
+            atk: Math.round(p.atk),
+            aspd: p.aspd,
+            critRate: p.critRate,
+            critDmgMult: p.critDmgMult,
+            defFlat: p.defFlat,
+            dmgReduction: p.dmgReduction,
+            level: p.level,
+            xp: p.xp,
+            xpNext: p.xpNext,
+            // Kỹ năng đã nhặt trong lượt này (id -> bậc)
+            skills: { ...p.skills },
+          },
+        };
+        // Lưu ngay để sống qua reload/đóng tab.
+        SaveState.save();
+        return true;
+      }
+
+      function clearCheckpoint() {
+        SaveState.dungeonCheckpoint = null;
+        SaveState.save();
+      }
+
+      /**
+       * Checkpoint có dùng được không: phải cùng chương đang chọn và còn hiệu lực.
+       * Hết hạn sau 24h để tránh "continue" một lượt chơi đã quá cũ.
+       */
+      function getUsableCheckpoint() {
+        const cp = SaveState.dungeonCheckpoint;
+        if (!cp || cp.v !== CHECKPOINT_VERSION) return null;
+        if (cp.chapterIdx !== SaveState.selectedChapterIdx) return null;
+        if (!cp.player || !(cp.room >= 1) || !(cp.room < cp.maxRooms)) return null;
+        if (Date.now() - (cp.savedAt || 0) > 24 * 60 * 60 * 1000) return null;
+        return cp;
+      }
+
+      /** Cập nhật nút Continue trong tab chiến đấu. */
+      function syncContinueButton() {
+        const btn = document.getElementById('btnContinueRun');
+        const label = document.getElementById('btnContinueRunLabel');
+        if (!btn) return;
+        const cp = getUsableCheckpoint();
+        if (!cp) {
+          btn.classList.add('hidden');
+          return;
+        }
+        btn.classList.remove('hidden');
+        if (label) label.textContent = `▶ TIẾP TỤC • PHÒNG ${cp.room}/${cp.maxRooms}`;
+      }
+
+      /**
+       * CONTINUE: khôi phục lượt chơi từ checkpoint.
+       * Khác với startNewRun() (Retry/Reset) ở chỗ: giữ phòng hiện tại, giữ kỹ năng
+       * đã nhặt, giữ kills/runGold. Chỉ dựng lại entity từ đầu phòng đó.
+       */
+      function continueRun() {
+        const cp = getUsableCheckpoint();
+        if (!cp) { showToast('⚠️ Không có lượt chơi nào để tiếp tục.'); return false; }
+
+        // Vẫn dựng lại từ getComputedStats để chỉ số trang bị mới nhất được áp,
+        // sau đó ghi đè bằng chỉ số đã lưu của lượt chơi.
+        startNewRun('continue');
+
+        Game.room = cp.room;
+        Game.maxRooms = cp.maxRooms;
+        Game.kills = cp.kills || 0;
+        Game.runGold = cp.runGold || 0;
+
+        const p = Game.player;
+        if (p && cp.player) {
+          const sp = cp.player;
+          p.maxHp = Math.max(1, Math.round(sp.maxHp || p.maxHp));
+          p.hp = Math.min(p.maxHp, Math.max(1, Math.round(sp.hp || p.maxHp)));
+          p.atk = Math.max(1, Math.round(sp.atk || p.atk));
+          if (typeof sp.aspd === 'number' && sp.aspd > 0) p.aspd = sp.aspd;
+          if (typeof sp.critRate === 'number') p.critRate = sp.critRate;
+          if (typeof sp.critDmgMult === 'number') p.critDmgMult = sp.critDmgMult;
+          if (typeof sp.defFlat === 'number') p.defFlat = sp.defFlat;
+          if (typeof sp.dmgReduction === 'number') p.dmgReduction = sp.dmgReduction;
+          p.level = Math.max(1, Math.round(sp.level || 1));
+          p.xp = Math.max(0, Number(sp.xp) || 0);
+          p.xpNext = Math.max(1, Number(sp.xpNext) || 80);
+          // Khôi phục kỹ năng đã nhặt trong lượt (không tính lại thành tựu)
+          p.skills = {};
+          p.skillList = [];
+          for (const [skId, tier] of Object.entries(sp.skills || {})) {
+            if (!ROGUE_SKILLS.some(s => s.id === skId)) continue;   // whitelist
+            p.skills[skId] = Math.max(1, Math.round(Number(tier) || 1));
+            const sk = ROGUE_SKILLS.find(s => s.id === skId);
+            if (sk) p.skillList.push(sk);
+          }
+        }
+
+        // Dựng lại phòng đã lưu (quái mới, sạch sẽ) rồi tiếp tục.
+        setupRoom(cp.room);
+        updateInGameHUD();
+        clearCheckpoint();          // dùng rồi xoá — tránh continue lặp lại
+        syncContinueButton();
+        showToast(`▶ Tiếp tục từ Phòng ${cp.room}/${cp.maxRooms}!`);
+        return true;
+      }
+
       /**
        * Xoá sạch mọi trạng thái combat của lượt chơi.
        * Tách riêng khỏi startNewRun() để mọi đường vào trận (retry / reset /
@@ -20523,6 +20678,13 @@
         // Dừng vòng lặp cũ TRƯỚC khi dựng trận mới để không có hai session.
         stopGameLoop();
         clearRunState();
+        // Retry / Reset đều xoá checkpoint. Chỉ 'continue' mới giữ lại
+        // (và continueRun() tự xoá sau khi khôi phục xong).
+        if (reason !== 'continue') {
+          SaveState.dungeonCheckpoint = null;
+        }
+        // Nút Continue phải ẩn ngay khi vừa xoá checkpoint.
+        syncContinueButton();
 
         const stats = getComputedStats();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
@@ -21558,6 +21720,9 @@
           document.getElementById('hudHintBanner').textContent = '✨ PHÒNG ĐÃ SẠCH QUÁI! Di chuyển vào CỔNG ÁNH SÁNG phía trên để sang phòng tiếp theo!';
           // Beginner Journey: N02 — dọn sạch phòng đầu tiên.
           if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onRoomCleared();
+          // Checkpoint: phòng vừa sạch là điểm an toàn duy nhất được lưu.
+          saveCheckpoint();
+          syncContinueButton();
 
           // ---- Thành tựu: đếm phòng đã dọn & phòng không mất máu ----
           bumpLifetimeStat('roomsCleared', 1);
@@ -25011,6 +25176,9 @@
         // Kết thúc session lượt chơi. SaveState (vàng/gems/thành tựu) đã được
         // cộng ngay bên dưới và KHÔNG bị reset — reset phó bản không xoá nhân vật.
         DungeonSession.end();
+        // Trận đã kết thúc -> checkpoint không còn ý nghĩa.
+        SaveState.dungeonCheckpoint = null;
+        syncContinueButton();
 
         const bonusGold = isVictory ? 350 * Game.chapter.id : Game.room * 20;
         const bonusGems = isVictory ? 40 * Game.chapter.id : Math.floor(Game.room * 2);
@@ -25189,7 +25357,12 @@
 
       // Start Game
       document.getElementById('btnStartGame').addEventListener('click', () => {
-        startNewRun();
+        // "Bắt Đầu" = Reset: luôn tạo phiên mới từ màn 1 và xoá checkpoint.
+        startNewRun('fresh');
+      });
+      // Continue: khôi phục lượt chơi từ checkpoint của đúng chương đang chọn.
+      document.getElementById('btnContinueRun')?.addEventListener('click', () => {
+        continueRun();
       });
 
       // Upgrade Gear Level
@@ -25987,7 +26160,13 @@
         // ===== API session / reset phó bản =====
         DungeonSession,
         clearRunState,
-        stopGameLoop
+        stopGameLoop,
+        // ===== API checkpoint / continue =====
+        saveCheckpoint,
+        clearCheckpoint,
+        getUsableCheckpoint,
+        continueRun,
+        syncContinueButton
       };
 
       // Engrave Elemental Rune
