@@ -652,6 +652,15 @@
     .hv2-room-main #hudRoomText { font-size: 15px; font-weight: 900; color: #fcd34d; text-shadow: 0 0 10px rgba(251,191,36,.5); }
     .hv2-enemy { font-size: 11px; font-weight: 800; color: #fda4af; padding: 1px 7px; border-radius: 999px; background: rgba(244,63,94,.14); border: 1px solid rgba(244,63,94,.35); }
     .hv2-pips { display: flex; gap: 3px; margin-top: 5px; }
+    /* Dòng định hướng: cho người chơi biết còn bao xa tới trùm kế / hết chương.
+       Trước đây chỉ thấy "Phòng 7/15" — không biết phòng nào có trùm, còn bao lâu. */
+    .hv2-nextup { font-size: 9px; font-weight: 900; letter-spacing: .02em; margin-top: 3px;
+      color: #fbbf24; display: flex; align-items: center; gap: 3px; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; }
+    .hv2-nextup.is-boss { color: #fda4af; animation: hv2nextPulse 1.1s ease-in-out infinite; }
+    .hv2-nextup.is-final { color: #f0abfc; }
+    .hv2-nextup.is-clear { color: #4ade80; }
+    @keyframes hv2nextPulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
     .hv2-pip { flex: 1; height: 4px; border-radius: 3px; background: rgba(148,163,184,.25); min-width: 5px; }
     .hv2-pip.done { background: linear-gradient(90deg,#34d399,#2dd4bf); box-shadow: 0 0 6px rgba(52,211,153,.7); }
     .hv2-pip.cur { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: hv2pulse 1s ease-in-out infinite; }
@@ -1483,6 +1492,8 @@
                 <span id="hudRoomText">Phòng 1 / 15</span>
                 <span id="hudEnemyLeftText" class="hv2-enemy">Quái: 4</span>
               </div>
+              <!-- Dòng định hướng: còn bao xa tới trùm kế / hết chương -->
+              <div class="hv2-nextup" id="hudNextUp">🐾 Còn 4 phòng tới Trùm</div>
               <div class="hv2-pips" id="hudRoomPips"></div>
             </div>
 
@@ -22118,6 +22129,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
       // Setup Room Obstacles & Enemies
       function setupRoom(roomNum) {
+        // Kẹp số phòng về khoảng hợp lệ của chương đang chơi.
+        //
+        // Trước đây không có kẹp: gọi setupRoom(15) khi đang ở chương chỉ có 10
+        // phòng vẫn dựng phòng 15 -> HUD hiện "Phòng 15 / 10" và trùm cuối không
+        // bao giờ được nhận diện đúng. Đây là hàm debug/API nên phải tự bảo vệ.
+        const _maxRooms = Math.max(1, Game.maxRooms || 1);
+        roomNum = Math.max(1, Math.min(_maxRooms, Math.floor(Number(roomNum) || 1)));
         Game.room = roomNum;
         Game.roomCleared = false;
         Game.portalOpen = false;
@@ -27451,6 +27469,41 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
         pips.innerHTML = html;
       }
+    }
+
+    // ---- Dòng định hướng: còn bao xa tới trùm kế / hết chương ----
+    // Người chơi cần biết mình đang ở đâu trong nhịp của chương, không chỉ con số
+    // phòng. Phòng trùm là mốc căng thẳng — báo trước để chuẩn bị tâm lý.
+    const nextEl = document.getElementById('hudNextUp');
+    if (nextEl && Game.maxRooms) {
+      const room = Game.room, max = Game.maxRooms;
+      // Phòng trùm theo cùng luật với setupRoom: bội số 5, VÀ phòng cuối luôn là trùm.
+      const isBossRoom = (room % 5 === 0) || (room === max);
+      // Phòng cuối của chương luôn là trùm cuối, bất kể max có chia hết cho 5 hay không
+      // (chương 1 có 15 phòng — 15 % 5 === 0 nhưng vẫn là trùm cuối của chương).
+      const isFinalBoss = room === max;
+      let txt, cls;
+      if (isBossRoom) {
+        txt = isFinalBoss ? '👑 TRÙM CUỐI — Hạ gục để phá đảo!' : '⚔️ PHÒNG TRÙM — Hạ gục để mở cổng';
+        cls = isFinalBoss ? 'is-final' : 'is-boss';
+      } else {
+        // Tìm phòng trùm kế tiếp (bội số 5, hoặc phòng cuối)
+        let nextBoss = null;
+        for (let i = room + 1; i <= max; i++) {
+          if (i % 5 === 0 || i === max) { nextBoss = i; break; }
+        }
+        if (nextBoss === null) {
+          txt = '🚪 Đã tới cổng cuối — tiến lên!';
+          cls = 'is-clear';
+        } else {
+          const dist = nextBoss - room;
+          const finalNext = nextBoss === max;
+          txt = `${finalNext ? '👑' : '⚔️'} Còn ${dist} phòng tới ${finalNext ? 'Trùm Cuối' : 'Trùm'}`;
+          cls = dist <= 1 ? 'is-boss' : '';
+        }
+      }
+      if (nextEl.textContent !== txt) nextEl.textContent = txt;
+      nextEl.className = 'hv2-nextup ' + cls;
     }
   };
 })();
