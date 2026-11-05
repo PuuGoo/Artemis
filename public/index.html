@@ -661,6 +661,39 @@
     .hv2-nextup.is-final { color: #f0abfc; }
     .hv2-nextup.is-clear { color: #4ade80; }
     @keyframes hv2nextPulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+    /* ==================== ROOM CLEAR OVERLAY ====================
+       Nằm giữa màn hình, không chặn thao tác (pointer-events:none) để người chơi
+       vẫn di chuyển vào cổng ngay khi nó đang hiện. */
+    #roomClearOverlay { position: absolute; inset: 0; display: flex; align-items: center;
+      justify-content: center; pointer-events: none; z-index: 12; }
+    #roomClearOverlay.hidden { display: none; }
+    #roomClearCard { display: flex; flex-direction: column; align-items: center; gap: 2px;
+      animation: rcPop .45s cubic-bezier(.16,1.3,.3,1) both; }
+    #roomClearCard.rc-out { animation: rcOut .4s ease forwards; }
+    .rc-kicker { font-size: 10px; font-weight: 900; letter-spacing: .26em; color: #fde68a;
+      text-shadow: 0 0 14px rgba(251,191,36,.9), 0 2px 4px #000; }
+    .rc-title { font-size: 30px; font-weight: 900; letter-spacing: .04em; line-height: 1.05;
+      color: #fff; text-shadow: 0 0 24px rgba(251,191,36,.95), 0 0 48px rgba(251,191,36,.5), 0 3px 6px #000; }
+    .rc-title.rc-boss { color: #fecdd3; text-shadow: 0 0 24px rgba(244,63,94,.95), 0 0 52px rgba(244,63,94,.55), 0 3px 6px #000; }
+    .rc-stats { display: flex; gap: 10px; margin-top: 3px; }
+    .rc-stat { font-size: 11px; font-weight: 900; color: #e2e8f0;
+      background: rgba(8,12,26,.82); border: 1px solid rgba(148,163,184,.34);
+      border-radius: 999px; padding: 2px 10px; backdrop-filter: blur(6px);
+      animation: rcStatIn .4s .12s ease both; }
+    .rc-next { margin-top: 5px; font-size: 11px; font-weight: 900; letter-spacing: .05em;
+      color: #0f172a; background: linear-gradient(180deg,#fde68a,#f59e0b);
+      border: 1px solid #fff8; border-radius: 999px; padding: 3px 12px;
+      box-shadow: 0 4px 14px -4px rgba(251,191,36,.9);
+      animation: rcNextIn .45s .22s cubic-bezier(.2,1.3,.4,1) both; }
+    .rc-next.rc-next-boss { color: #fff; background: linear-gradient(180deg,#f43f5e,#9f1239);
+      box-shadow: 0 4px 16px -4px rgba(244,63,94,.95);
+      animation: rcNextIn .45s .22s cubic-bezier(.2,1.3,.4,1) both, rcBossPulse 1s .7s ease-in-out infinite; }
+    @keyframes rcPop { from { opacity: 0; transform: scale(.82) translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes rcOut { to { opacity: 0; transform: scale(1.05); } }
+    @keyframes rcStatIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @keyframes rcNextIn { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
+    @keyframes rcBossPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
+    @media (max-width: 520px) { .rc-title { font-size: 23px; } .rc-kicker { font-size: 8.5px; } .rc-next { font-size: 9.5px; padding: 2px 9px; } }
     .hv2-pip { flex: 1; height: 4px; border-radius: 3px; background: rgba(148,163,184,.25); min-width: 5px; }
     .hv2-pip.done { background: linear-gradient(90deg,#34d399,#2dd4bf); box-shadow: 0 0 6px rgba(52,211,153,.7); }
     .hv2-pip.cur { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: hv2pulse 1s ease-in-out infinite; }
@@ -1547,6 +1580,14 @@
         <div class="pointer-events-none absolute bottom-2 left-2 right-2 flex items-end justify-between z-10">
           <div id="hudSkillIcons" class="flex flex-wrap gap-1.5 max-w-[70%]"></div>
           <div class="hv2-glass hv2-loot">🪙 <span>Chiến lợi phẩm</span> <b id="hudRunGold">0</b></div>
+        </div>
+
+        <!-- ==================== ROOM CLEAR OVERLAY ====================
+             Hiện 1,9s khi dọn sạch phòng: số phòng vừa xong, thưởng nhặt được,
+             và phòng kế (thường / trùm). Trước đây chỉ đổi dòng gợi ý nhỏ trên HUD
+             — người chơi không cảm nhận được mình vừa đạt một mốc. -->
+        <div id="roomClearOverlay" class="hidden">
+          <div id="roomClearCard"></div>
         </div>
 
         <!-- ==================== PLAYER VITALS (góc dưới trái) ====================
@@ -11602,6 +11643,75 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             startNewRun('fresh');
           }
         });
+      }
+
+      /**
+       * Overlay "PHÒNG ĐÃ SẠCH" — phản hồi rõ ràng khi dọn sạch một phòng.
+       *
+       * Trước đây chỉ đổi dòng gợi ý nhỏ trên HUD, người chơi không cảm nhận được
+       * mình vừa đạt một mốc. Nay: số phòng vừa xong, vàng nhặt được trong phòng,
+       * và thông báo phòng kế là thường hay TRÙM.
+       *
+       * Không chặn thao tác (pointer-events:none) — người chơi vẫn di chuyển vào
+       * cổng ngay khi overlay đang hiện.
+       */
+      let _roomClearTimer = null;
+      function showRoomClearOverlay(opts = {}) {
+        const wrap = document.getElementById('roomClearOverlay');
+        const card = document.getElementById('roomClearCard');
+        if (!wrap || !card) return;
+
+        const room = opts.room || Game.room || 1;
+        const max = opts.max || Game.maxRooms || 1;
+        const gold = opts.gold || 0;
+        const wasBoss = !!opts.wasBoss;
+
+        // Phòng kế tiếp có phải trùm không?
+        const nextRoom = room + 1;
+        const nextExists = nextRoom <= max;
+        const nextIsBoss = nextExists && ((nextRoom % 5 === 0) || (nextRoom === max));
+        const nextIsFinal = nextExists && nextRoom === max;
+
+        const statsHtml = gold > 0
+          ? `<div class="rc-stats"><span class="rc-stat">🪙 +${gold.toLocaleString('vi-VN')}</span></div>`
+          : '';
+
+        let nextHtml = '';
+        if (!nextExists) {
+          nextHtml = `<div class="rc-next">🚪 Vào cổng để hoàn thành chương!</div>`;
+        } else if (nextIsBoss) {
+          nextHtml = `<div class="rc-next rc-next-boss">${nextIsFinal ? '👑' : '⚔️'} PHÒNG ${nextRoom}: ${nextIsFinal ? 'TRÙM CUỐI' : 'TRÙM'}</div>`;
+        } else {
+          // Đếm số phòng còn lại tới trùm kế (tính cả phòng trùm đó).
+          // Ví dụ ở P5 (vừa xong), phòng kế là P6, trùm kế là P10 -> còn 5 phòng (6,7,8,9,10).
+          let nb = null;
+          for (let i = nextRoom; i <= max; i++) {
+            if (i % 5 === 0 || i === max) { nb = i; break; }
+          }
+          const dist = nb ? nb - nextRoom + 1 : 0;
+          nextHtml = `<div class="rc-next">Phòng ${nextRoom} · còn ${dist} tới trùm</div>`;
+        }
+
+        card.innerHTML = `
+          <div class="rc-kicker">PHÒNG ${room}/${max} HOÀN THÀNH</div>
+          <div class="rc-title ${wasBoss ? 'rc-boss' : ''}">${wasBoss ? 'TRÙM ĐÃ GỤC!' : 'PHÒNG ĐÃ SẠCH'}</div>
+          ${statsHtml}
+          ${nextHtml}
+        `;
+        card.classList.remove('rc-out');
+        wrap.classList.remove('hidden');
+
+        if (_roomClearTimer) clearTimeout(_roomClearTimer);
+        _roomClearTimer = setTimeout(() => {
+          card.classList.add('rc-out');
+          setTimeout(() => wrap.classList.add('hidden'), 400);
+        }, 1900);
+      }
+
+      function hideRoomClearOverlay() {
+        const wrap = document.getElementById('roomClearOverlay');
+        if (wrap) wrap.classList.add('hidden');
+        if (_roomClearTimer) { clearTimeout(_roomClearTimer); _roomClearTimer = null; }
       }
 
       function renderChapterSelectStrip() {
@@ -22129,6 +22239,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
       // Setup Room Obstacles & Enemies
       function setupRoom(roomNum) {
+        // Overlay "phòng đã sạch" của phòng trước phải tắt khi sang phòng mới.
+        if (typeof hideRoomClearOverlay === 'function') hideRoomClearOverlay();
         // Kẹp số phòng về khoảng hợp lệ của chương đang chơi.
         //
         // Trước đây không có kẹp: gọi setupRoom(15) khi đang ở chương chỉ có 10
@@ -23102,6 +23214,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           Game.portalOpen = true;
           SoundFX.portalOpen();
           document.getElementById('hudHintBanner').textContent = '✨ PHÒNG ĐÃ SẠCH QUÁI! Di chuyển vào CỔNG ÁNH SÁNG phía trên để sang phòng tiếp theo!';
+          // Overlay phản hồi rõ: phòng vừa xong, vàng nhặt được, phòng kế (thường/trùm).
+          showRoomClearOverlay({
+            room: Game.room,
+            max: Game.maxRooms,
+            gold: Game.runGold || 0,
+            wasBoss: !!(e && e.isBoss)
+          });
           // Beginner Journey: N02 — dọn sạch phòng đầu tiên.
           if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onRoomCleared();
           // Checkpoint: phòng vừa sạch là điểm an toàn duy nhất được lưu.
@@ -26648,6 +26767,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         Game.running = false;
         Game.paused = false;
         if (Game.animId) cancelAnimationFrame(Game.animId);
+        if (typeof hideRoomClearOverlay === 'function') hideRoomClearOverlay();
         document.getElementById('summaryModal').classList.add('hidden');
         const cvModal = document.getElementById('chapterVictoryModal');
         if (cvModal) cvModal.classList.add('hidden');
@@ -27319,6 +27439,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         returnToLobby,
         getChapterBest,
         renderBestiaryUI,
+        showRoomClearOverlay,
+        hideRoomClearOverlay,
         recordBestiaryKill,
         BESTIARY,
         renderChapterSelectStrip,
