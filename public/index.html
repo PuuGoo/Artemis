@@ -7,6 +7,7 @@
   <script src="/cloud.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -1061,6 +1062,125 @@
     .bs-hint { font-size: 9px; color: #64748b; font-style: italic; }
     @media (max-width: 520px) { .bs-grid { grid-template-columns: repeat(2, 1fr); padding: 7px; gap: 6px; } }
     @media (max-width: 520px) { .hv2-xp > div:last-child > div:first-child { display: none; } .hv2-xp-track { height: 7px; } .hv2-boss { padding: 4px 10px 6px; } .hv2-boss .text-xs { font-size: 11px; margin-bottom: 2px; } .hv2-boss-track { height: 9px; } .hv2-warn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-room { min-width: 104px; padding: 5px 9px 6px; } .hv2-top { flex-wrap: wrap; } .hv2-xp { order: 3; flex-basis: 100%; max-width: none; padding: 2px 10px 2px 2px; } .hv2-lv { width: 22px; height: 22px; font-size: 9px; border-width: 1.5px; } .hv2-btn { height: 32px; font-size: 11px; padding: 0 8px; } .hv2-hint { font-size: 10px; padding: 2px 10px; text-align: center; } }
+      /* ===================== SHOP V2 — CHỢ ĐÊM HOÀNG GIA ===================== */
+    #tabShopVn { position: relative; background: radial-gradient(130% 55% at 50% -8%, #3b2a9a 0%, #1a1f5a 38%, #0a0e27 100%) !important; }
+    #tabShopVn::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .55;
+      background-image: radial-gradient(circle at 12% 18%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 78% 9%, #fde68a 0 1.2px, transparent 1.8px), radial-gradient(circle at 44% 41%, #bae6fd 0 1px, transparent 1.6px), radial-gradient(circle at 90% 63%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 22% 82%, #ddd6fe 0 1.2px, transparent 1.8px);
+      background-size: 210px 260px; animation: sv2twinkle 5s ease-in-out infinite alternate; }
+    @keyframes sv2twinkle { to { opacity: .25; } }
+    #vnShopMainContainer { position: relative; z-index: 1; --sv-gold: #fbbf24; --sv-gold2: #f59e0b; }
+    #vnShopMainContainer .sv2-body { background: transparent !important; scrollbar-width: thin; scrollbar-color: #6d28d9 transparent; }
+
+    /* Thanh tiêu đề + tiền tệ */
+    #vnShopMainContainer .sv2-header { background: linear-gradient(180deg, rgba(76,29,149,.85), rgba(30,27,75,.92)); border-bottom: 1px solid rgba(251,191,36,.55); box-shadow: 0 8px 24px rgba(0,0,0,.45), 0 1px 0 rgba(255,255,255,.08) inset; backdrop-filter: blur(8px); }
+    #vnShopMainContainer .sv2-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: linear-gradient(90deg, transparent, #fde68a, transparent); }
+    #vnShopMainContainer .sv2-htitle { font-size: 13px; letter-spacing: .12em; background: linear-gradient(180deg, #fffbeb, #fbbf24 60%, #d97706); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 2px 6px rgba(251,191,36,.45)); }
+    #vnShopMainContainer .sv2-chip { background: linear-gradient(180deg, rgba(15,10,45,.95), rgba(40,20,90,.9)); border: 1px solid rgba(244,114,182,.7); box-shadow: 0 0 14px rgba(244,114,182,.35), inset 0 1px 0 rgba(255,255,255,.12); }
+
+    /* Khung khu vực */
+    #vnShopMainContainer .sv2-card { position: relative; border-radius: 26px; background: linear-gradient(165deg, rgba(49,36,120,.62), rgba(14,18,52,.78)); border: 1px solid rgba(165,180,252,.28); box-shadow: 0 14px 34px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.1), inset 0 0 40px rgba(99,102,241,.08); backdrop-filter: blur(6px); }
+    #vnShopMainContainer .sv2-card::before { content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: linear-gradient(160deg, rgba(251,191,36,.7), rgba(139,92,246,.1) 35%, rgba(34,211,238,.35)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+    #vnShopMainContainer .sv2-title { position: relative; background: linear-gradient(180deg, #5b21b6, #3b0f8a); border: 1px solid rgba(251,191,36,.75); border-radius: 999px; box-shadow: 0 6px 16px rgba(76,29,149,.6), 0 0 18px rgba(251,191,36,.18), inset 0 1px 0 rgba(255,255,255,.25); }
+    #vnShopMainContainer .sv2-dot { width: 8px; height: 8px; background: linear-gradient(135deg, #fef3c7, #f59e0b); border-radius: 2px; transform: rotate(45deg); box-shadow: 0 0 8px #fbbf24; }
+    #vnShopMainContainer .sv2-title-text { color: #fff7d6; text-shadow: 0 2px 0 rgba(0,0,0,.35), 0 0 12px rgba(251,191,36,.6); letter-spacing: .06em; text-transform: uppercase; font-size: 12.5px; }
+
+    /* Thẻ lớn: gói chương / panel rương / cầu nguyện */
+    #vnShopMainContainer .sv2-hero { border-radius: 22px; border: 1px solid rgba(253,230,138,.85); background: radial-gradient(90% 120% at 15% 0%, rgba(255,214,102,.55), transparent 55%), linear-gradient(135deg, #be123c, #9a1d6f 55%, #4c1d95); box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 16px 36px rgba(190,18,60,.35), inset 0 1px 0 rgba(255,255,255,.35); }
+    #vnShopMainContainer .sv2-hero::after, #vnShopMainContainer .sv2-panel::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.22), transparent); transform: skewX(-18deg); animation: sv2sweep 5.5s ease-in-out infinite; pointer-events: none; }
+    @keyframes sv2sweep { 0%, 55% { left: -60%; } 100% { left: 130%; } }
+    #vnShopMainContainer .sv2-panel { border-radius: 22px; border: 1px solid rgba(255,255,255,.28); box-shadow: 0 12px 28px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.25); overflow: hidden; }
+    #vnShopMainContainer .sv2-pan-sunset { background: radial-gradient(80% 90% at 0% 0%, rgba(253,224,71,.45), transparent 60%), linear-gradient(135deg, #db2777, #7c3aed 60%, #1d4ed8); }
+    #vnShopMainContainer .sv2-pan-rose { background: radial-gradient(80% 90% at 100% 0%, rgba(244,114,182,.5), transparent 60%), linear-gradient(135deg, #be185d, #6d28d9 55%, #2e1065); }
+    #vnShopMainContainer .sv2-pan-violet { background: radial-gradient(80% 90% at 50% 0%, rgba(196,181,253,.45), transparent 62%), linear-gradient(145deg, #7c3aed, #4338ca 55%, #1e1b4b); }
+    #vnShopMainContainer .sv2-pan-violet2 { background: linear-gradient(170deg, #5b21b6, #2e1065); border-color: rgba(196,181,253,.5); }
+    #vnShopMainContainer .sv2-pan-ocean { background: linear-gradient(170deg, #1d4ed8, #172554); border-color: rgba(125,211,252,.5); }
+    #vnShopMainContainer .sv2-ribbon { background: linear-gradient(180deg, #fbbf24, #d97706); color: #3b0a02; border-radius: 0 0 14px 0; box-shadow: 0 4px 10px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.6); letter-spacing: .03em; }
+    #vnShopMainContainer .sv2-hero .text-6xl, #vnShopMainContainer .sv2-panel .text-5xl, #vnShopMainContainer .sv2-panel .text-6xl { animation: sv2float 3.6s ease-in-out infinite; filter: drop-shadow(0 10px 14px rgba(0,0,0,.5)) drop-shadow(0 0 18px rgba(253,224,71,.35)); }
+    @keyframes sv2float { 50% { transform: translateY(-5px) scale(1.04); } }
+
+    /* Thẻ sản phẩm */
+    #vnShopMainContainer .sv2-item { position: relative; border-radius: 18px; border: 1px solid var(--tb, rgba(125,211,252,.55)); background: radial-gradient(120% 70% at 50% 0%, var(--tg, rgba(56,189,248,.32)), transparent 62%), linear-gradient(180deg, rgba(30,38,100,.92), rgba(12,16,48,.96)); box-shadow: 0 8px 18px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.14), 0 0 0 1px rgba(0,0,0,.35); transition: transform .18s ease, box-shadow .18s ease; }
+    #vnShopMainContainer .sv2-item:hover { transform: translateY(-3px); box-shadow: 0 14px 26px rgba(0,0,0,.5), 0 0 22px var(--tg, rgba(56,189,248,.32)), inset 0 1px 0 rgba(255,255,255,.2); }
+    #vnShopMainContainer .sv2-tone-sky { --tb: rgba(125,211,252,.6); --tg: rgba(56,189,248,.38); }
+    #vnShopMainContainer .sv2-tone-violet { --tb: rgba(216,180,254,.65); --tg: rgba(168,85,247,.42); }
+    #vnShopMainContainer .sv2-tone-gold { --tb: rgba(253,224,71,.7); --tg: rgba(250,204,21,.38); }
+    #vnShopMainContainer .sv2-tone-free { --tb: rgba(148,163,184,.4); --tg: rgba(100,116,139,.25); }
+    #vnShopMainContainer .sv2-plate { border-radius: 16px; background: radial-gradient(circle at 50% 30%, rgba(255,255,255,.2), rgba(15,23,70,.85) 70%); border: 1px solid rgba(253,230,138,.7); box-shadow: inset 0 0 14px rgba(251,191,36,.25), 0 4px 10px rgba(0,0,0,.4); }
+    #vnShopMainContainer .sv2-disc { background: linear-gradient(180deg, #67e8f9, #0ea5e9); color: #04202e; border-radius: 10px 10px 10px 2px; box-shadow: 0 3px 8px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.6); }
+    #vnShopMainContainer .sv2-disc-gold { background: linear-gradient(180deg, #fde047, #f59e0b); color: #3b1a02; }
+    #vnShopMainContainer .sv2-count { background: linear-gradient(180deg, #fde047, #f59e0b); color: #3b1a02; border: 2px solid #fff; box-shadow: 0 0 12px rgba(251,191,36,.8); }
+    #vnShopMainContainer .sv2-red { background: radial-gradient(circle at 35% 30%, #fb7185, #be123c); border: 1.5px solid #fff; box-shadow: 0 0 10px rgba(244,63,94,.9); animation: sv2ping 1.6s ease-in-out infinite; }
+    @keyframes sv2ping { 50% { transform: scale(1.18); } }
+    #vnShopMainContainer .sv2-pill { background: rgba(8,10,34,.72); border: 1px solid rgba(165,180,252,.35); box-shadow: inset 0 1px 6px rgba(0,0,0,.5); }
+    #vnShopMainContainer .sv2-slot { background: rgba(8,10,34,.55); border: 1px solid rgba(255,255,255,.22); border-radius: 12px; box-shadow: inset 0 0 10px rgba(0,0,0,.45); }
+
+    /* Nút mua */
+    #vnShopMainContainer .sv2-buy, #vnShopMainContainer .sv2-buy2, #vnShopMainContainer .sv2-buy-gold, #vnShopMainContainer .sv2-buy-free { position: relative; overflow: hidden; border-radius: 13px; font-weight: 900; transition: transform .12s ease, filter .15s ease, box-shadow .15s ease; cursor: pointer; }
+    #vnShopMainContainer .sv2-buy:hover, #vnShopMainContainer .sv2-buy2:hover, #vnShopMainContainer .sv2-buy-gold:hover { transform: translateY(-1px); filter: brightness(1.12); }
+    #vnShopMainContainer .sv2-buy:active, #vnShopMainContainer .sv2-buy2:active, #vnShopMainContainer .sv2-buy-gold:active { transform: translateY(1px) scale(.98); }
+    #vnShopMainContainer .sv2-buy { color: #fff; background: linear-gradient(180deg, #34d399, #059669 60%, #047857); border: 1px solid #a7f3d0; box-shadow: 0 4px 0 #064e3b, 0 8px 16px rgba(5,150,105,.4), inset 0 1px 0 rgba(255,255,255,.5); text-shadow: 0 1px 2px rgba(0,0,0,.45); }
+    #vnShopMainContainer .sv2-buy2 { color: #2a1450; background: linear-gradient(180deg, #fff, #e0e7ff 70%, #c7d2fe); border: 1px solid #fff; box-shadow: 0 3px 0 #6366f1, 0 7px 14px rgba(99,102,241,.35), inset 0 1px 0 #fff; }
+    #vnShopMainContainer .sv2-buy-gold { color: #3b1a02; background: linear-gradient(180deg, #fef08a, #fbbf24 55%, #d97706); border: 1px solid #fffbeb; box-shadow: 0 4px 0 #92400e, 0 10px 22px rgba(245,158,11,.5), inset 0 1px 0 rgba(255,255,255,.8); }
+    #vnShopMainContainer .sv2-buy-free { color: #6ee7b7; background: rgba(15,23,42,.85); border: 1px dashed rgba(110,231,183,.5); }
+    #vnShopMainContainer .sv2-buy::after, #vnShopMainContainer .sv2-buy-gold::after { content: ''; position: absolute; top: 0; bottom: 0; width: 36%; left: -60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-20deg); animation: sv2sweep 3.8s ease-in-out infinite; pointer-events: none; }
+
+    /* Tab con + dock */
+    #vnShopMainContainer .sv2-seg { background: rgba(6,8,30,.7); border: 1px solid rgba(165,180,252,.25); border-radius: 18px; box-shadow: inset 0 2px 8px rgba(0,0,0,.5); }
+    #vnShopMainContainer .sv2-tab { border-radius: 13px; color: #c7d2fe; transition: all .15s ease; }
+    #vnShopMainContainer .sv2-tab:hover { color: #fff; background: rgba(255,255,255,.08); }
+    #vnShopMainContainer .sv2-tab.on { color: #3b1a02; background: linear-gradient(180deg, #fef08a, #f59e0b); border: 1px solid #fff; box-shadow: 0 0 16px rgba(251,191,36,.6), inset 0 1px 0 rgba(255,255,255,.8); }
+    #vnShopMainContainer .sv2-dock { background: linear-gradient(180deg, rgba(20,16,64,.94), rgba(8,8,32,.98)); border-top: 1px solid rgba(251,191,36,.45); box-shadow: 0 -10px 24px rgba(0,0,0,.5); backdrop-filter: blur(8px); }
+    #vnShopMainContainer .sv2-dock button { border-radius: 14px; color: #c7d2fe; }
+    #vnShopMainContainer .sv2-dock button.on { color: #3b1a02; }
+    @media (prefers-reduced-motion: reduce) { #tabShopVn::before, #vnShopMainContainer * { animation: none !important; } }
+      /* ===================== SHOP V2.1 — NÂNG CẤP ĐỘ LỘNG LẪY ===================== */
+    #vnShopMainContainer .sv2-title-text, #vnShopMainContainer .sv2-htitle, #vnShopMainContainer .sv2-buy, #vnShopMainContainer .sv2-buy2, #vnShopMainContainer .sv2-buy-gold, #vnShopMainContainer .sv2-tab, #vnShopMainContainer .sv2-ribbon { font-family: 'Baloo 2', 'Inter', sans-serif; }
+    #vnShopMainContainer .sv2-title-text { font-size: 15px; letter-spacing: .05em; font-weight: 800; }
+    #vnShopMainContainer .sv2-htitle { font-size: 15px; }
+    @keyframes sv2spin { to { transform: rotate(360deg); } }
+    @keyframes sv2pulse { 50% { transform: scale(1.035); box-shadow: 0 4px 0 #92400e, 0 12px 28px rgba(251,191,36,.75), inset 0 1px 0 rgba(255,255,255,.8); } }
+    @keyframes sv2heroglow { 50% { box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 16px 44px rgba(251,191,36,.45), inset 0 1px 0 rgba(255,255,255,.35); } }
+
+    /* Tia sáng xoay sau biểu tượng lớn */
+    #vnShopMainContainer .sv2-hero::before, #vnShopMainContainer .sv2-panel::before { content: ''; position: absolute; left: 50%; top: 84px; width: 360px; height: 360px; margin: -180px 0 0 -180px; z-index: 0; pointer-events: none; mix-blend-mode: screen;
+      background: repeating-conic-gradient(from 0deg, rgba(255,240,170,0) 0 9deg, rgba(255,240,170,.34) 9deg 15deg);
+      -webkit-mask: radial-gradient(circle, #000 6%, transparent 64%); mask: radial-gradient(circle, #000 6%, transparent 64%); animation: sv2spin 30s linear infinite; }
+    #vnShopMainContainer .sv2-hero > :not(.absolute), #vnShopMainContainer .sv2-panel > :not(.absolute) { position: relative; z-index: 1; }
+    @media (min-width: 640px) { #vnShopMainContainer .sv2-hero::before, #vnShopMainContainer .sv2-panel::before { left: 84px; top: 50%; } }
+    #vnShopMainContainer .sv2-hero { animation: sv2heroglow 3.4s ease-in-out infinite; }
+    #vnShopMainContainer .sv2-hero .sv2-buy-gold { animation: sv2pulse 2s ease-in-out infinite; }
+    #vnShopMainContainer .sv2-hero .text-6xl { font-size: 3.6rem; }
+
+    /* Hạt lấp lánh trên khung khu vực */
+    #vnShopMainContainer .sv2-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: .7;
+      background-image: radial-gradient(circle at 8% 12%, #fff 0 1px, transparent 2px), radial-gradient(circle at 93% 22%, #fde68a 0 1.3px, transparent 2.3px), radial-gradient(circle at 86% 78%, #bae6fd 0 1px, transparent 2px), radial-gradient(circle at 14% 88%, #f5d0fe 0 1.2px, transparent 2.2px);
+      animation: sv2twinkle 3.6s ease-in-out infinite alternate; }
+
+    /* Thẻ sản phẩm: bóng kính + tia sáng quanh ô vật phẩm */
+    #vnShopMainContainer .sv2-item::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(155deg, rgba(255,255,255,.2), rgba(255,255,255,0) 36%), linear-gradient(0deg, rgba(0,0,0,.22), transparent 30%); }
+    #vnShopMainContainer .sv2-plate { isolation: isolate; width: 62px; height: 62px; }
+    #vnShopMainContainer .sv2-plate::before { content: ''; position: absolute; inset: -20px; z-index: -1; border-radius: 50%; pointer-events: none;
+      background: repeating-conic-gradient(from 0deg, rgba(253,224,71,0) 0 10deg, rgba(253,224,71,.38) 10deg 17deg);
+      -webkit-mask: radial-gradient(circle, #000 12%, transparent 68%); mask: radial-gradient(circle, #000 12%, transparent 68%); animation: sv2spin 18s linear infinite; }
+    #vnShopMainContainer .sv2-item:hover .sv2-plate { border-color: #fff7d6; box-shadow: inset 0 0 18px rgba(251,191,36,.45), 0 0 18px rgba(253,224,71,.5); }
+    #vnShopMainContainer .sv2-qty { background: rgba(8,10,34,.85); border: 1px solid rgba(253,230,138,.65); border-radius: 999px; padding: 0 6px; color: #fff7d6; text-shadow: 0 1px 1px #000; line-height: 15px; }
+
+    /* Đồng hồ đếm ngược */
+    #vnShopMainContainer .sv2-timer { display: table; margin-left: auto; margin-right: auto; padding: 2px 14px; border-radius: 999px; background: rgba(8,10,34,.62); border: 1px solid rgba(125,211,252,.4); color: #bae6fd; box-shadow: inset 0 1px 5px rgba(0,0,0,.5); }
+    #vnShopMainContainer .sv2-timer::before { content: '⏳ '; }
+
+    /* Thanh tiền tệ + dock có icon */
+    #vnShopMainContainer .sv2-cur { display: flex; align-items: center; gap: 6px; }
+    #vnShopMainContainer .sv2-chip b { font-family: 'Baloo 2', 'Inter', sans-serif; font-size: 13px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+    #vnShopMainContainer .sv2-ico { font-size: 18px; line-height: 1; filter: drop-shadow(0 2px 3px rgba(0,0,0,.55)); transition: transform .18s ease; }
+    #vnShopMainContainer .sv2-tab.on .sv2-ico { transform: translateY(-2px) scale(1.18); }
+    #vnShopMainContainer .sv2-dock .sv2-tab { padding-top: 6px; padding-bottom: 5px; }
+
+    #vnShopMainContainer .sv2-chip, #vnShopMainContainer .sv2-htitle { white-space: nowrap; }
+    #vnShopMainContainer .sv2-chip > span { line-height: 1; }
+    @media (max-width: 460px) { #vnShopMainContainer .sv2-htitle { font-size: 13px; letter-spacing: .06em; } #vnShopMainContainer .sv2-chip-gold { display: none; } #vnShopMainContainer .sv2-header { padding-left: 10px; padding-right: 10px; } }
+    @media (min-width: 640px) { #vnShopMainContainer .sv2-hero .text-6xl { font-size: 2.5rem; white-space: nowrap; } }
+    @media (max-width: 400px) { #vnShopMainContainer .sv2-chip { padding-left: 8px; padding-right: 8px; } #vnShopMainContainer .sv2-cur { gap: 4px; } }
   </style>
 
 
@@ -20556,29 +20676,30 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         el.innerHTML = `
           <!-- TOP BLUE SCALLOPED AWNING + AUROCITE COUNTER (MATCHES PAGES 1-19) -->
-          <div class="relative bg-gradient-to-b from-[#1e40af] via-[#2563eb] to-[#1d4ed8] border-b-4 border-amber-400 px-3 py-2 flex items-center justify-between shadow-lg">
+          <div class="sv2-header relative px-3 py-2 flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <span class="text-xs font-black text-amber-200 uppercase tracking-wider">🏪 Cửa Hàng Archero 2</span>
+              <span class="sv2-htitle font-black uppercase">🏪 Cửa Hàng Archero 2</span>
             </div>
-            <div class="flex items-center gap-1.5 bg-slate-950/85 border border-pink-400/60 rounded-full px-3 py-0.5 shadow">
-              <span class="text-sm">💎🌸</span>
-              <span class="text-xs font-black text-white">${st.aurocite || 51}</span>
+            <div class="sv2-cur">
+              <div class="sv2-chip sv2-chip-gold flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">🪙</span><b>${formatCompactNumberVn(SaveState.gold, '0')}</b></div>
+              <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">💚</span><b>${formatCompactNumberVn(SaveState.gems, '0')}</b></div>
+              <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">💎🌸</span><b>${st.aurocite || 51}</b></div>
             </div>
           </div>
 
           <!-- MAIN SCROLLABLE SHOP BODY -->
-          <div class="flex-1 overflow-y-auto px-2.5 sm:px-5 py-3 space-y-5 bg-[#132347]">
+          <div class="sv2-body flex-1 overflow-y-auto px-2.5 sm:px-5 py-3 space-y-5">
 
             <!-- 1. GÓI CHƯƠNG 91 (PAGE 1) -->
-            <div id="shopSecChapterPack" class="rounded-3xl bg-[#192d5c] border-2 border-[#2b4c8c] p-3 shadow-xl space-y-2.5">
-              <div class="mx-auto max-w-xs rounded-full bg-gradient-to-b from-[#3b82f6] to-[#1d4ed8] border-2 border-[#60a5fa] py-1 px-5 flex items-center justify-between shadow">
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
-                <span class="font-black text-white text-sm tracking-wide drop-shadow">Gói Chương</span>
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+            <div id="shopSecChapterPack" class="sv2-card p-3 space-y-2.5">
+              <div class="sv2-title mx-auto max-w-xs py-1.5 px-5 flex items-center justify-between">
+                <span class="sv2-dot"></span>
+                <span class="sv2-title-text font-black">Gói Chương</span>
+                <span class="sv2-dot"></span>
               </div>
 
-              <div class="relative rounded-2xl overflow-hidden border-2 border-amber-300/80 bg-gradient-to-r from-[#dc2626] via-[#ea580c] to-[#b91c1c] p-3.5 shadow-2xl">
-                <div class="absolute top-0 left-0 bg-red-600 border-r-2 border-b-2 border-amber-300 px-2.5 py-0.5 rounded-br-xl text-[10px] font-black text-white shadow">
+              <div class="sv2-hero relative overflow-hidden p-3.5">
+                <div class="sv2-ribbon absolute top-0 left-0 px-2.5 py-0.5 text-[10px] font-black">
                   600% Giá Trị
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-[140px_1fr] items-center gap-3 pt-3">
@@ -20588,19 +20709,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                   <div class="flex flex-col items-center sm:items-end justify-between gap-2">
                     <div class="text-center sm:text-right">
                       <div class="text-lg sm:text-xl font-black text-white drop-shadow">Gói Chương 91</div>
-                      <div class="inline-block px-3 py-0.5 rounded-full bg-black/35 text-[11px] font-bold text-amber-200 mt-0.5">Chỉ một lần duy nhất</div>
+                      <div class="sv2-pill inline-block px-3 py-0.5 rounded-full text-[11px] font-bold text-amber-200 mt-0.5">Chỉ một lần duy nhất</div>
                     </div>
                     <div class="flex items-center gap-2">
-                      <div class="w-12 h-12 rounded-xl bg-purple-700/90 border-2 border-purple-300 flex flex-col items-center justify-center shadow">
+                      <div class="sv2-slot w-12 h-12 flex flex-col items-center justify-center">
                         <span class="text-lg">💚</span>
                         <span class="text-[9px] font-black text-white">14K</span>
                       </div>
-                      <div class="w-12 h-12 rounded-xl bg-rose-700/90 border-2 border-rose-300 flex flex-col items-center justify-center shadow">
+                      <div class="sv2-slot w-12 h-12 flex flex-col items-center justify-center">
                         <span class="text-lg">🏆</span>
                         <span class="text-[9px] font-black text-white">Rương S</span>
                       </div>
                     </div>
-                    <button type="button" data-vn-shop-buy-pack="chapter_91" class="w-full sm:w-64 py-2 rounded-xl bg-gradient-to-b from-[#e0f2fe] to-[#bae6fd] hover:brightness-105 border-2 border-white text-slate-900 font-black text-sm shadow-lg">
+                    <button type="button" data-vn-shop-buy-pack="chapter_91" class="sv2-buy-gold w-full sm:w-64 py-2.5 text-sm">
                       ₫2,500,000
                     </button>
                   </div>
@@ -20609,27 +20730,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             </div>
 
             <!-- 2. CỬA HÀNG MỖI NGÀY (PAGES 1, 2, 15) -->
-            <div id="shopSecDaily" class="rounded-3xl bg-[#192d5c] border-2 border-[#2b4c8c] p-3.5 shadow-xl space-y-2.5">
-              <div class="mx-auto max-w-xs rounded-full bg-gradient-to-b from-[#3b82f6] to-[#1d4ed8] border-2 border-[#60a5fa] py-1 px-5 flex items-center justify-between shadow">
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
-                <span class="font-black text-white text-sm tracking-wide drop-shadow">Cửa Hàng Mỗi Ngày</span>
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+            <div id="shopSecDaily" class="sv2-card p-3.5 space-y-2.5">
+              <div class="sv2-title mx-auto max-w-xs py-1.5 px-5 flex items-center justify-between">
+                <span class="sv2-dot"></span>
+                <span class="sv2-title-text font-black">Cửa Hàng Mỗi Ngày</span>
+                <span class="sv2-dot"></span>
               </div>
-              <div class="text-center text-[11px] font-bold text-sky-200">Thời gian làm mới còn 13:45:01</div>
+              <div class="sv2-timer text-center text-[11px] font-bold">Thời gian làm mới còn 13:45:01</div>
 
               <div class="grid grid-cols-3 gap-2.5">
                 ${dailyCards.map(c => `
-                  <div class="relative rounded-2xl bg-gradient-to-b from-[#38bdf8] via-[#2563eb] to-[#1d4ed8] border-2 border-[#7dd3fc] p-2.5 flex flex-col items-center justify-between gap-2 shadow-lg">
-                    <span class="absolute -top-1.5 -left-1.5 px-1.5 py-0.5 rounded-lg ${c.goldTag ? 'bg-amber-400 text-slate-950' : 'bg-sky-300 text-slate-950'} font-black text-[9px] shadow">
+                  <div class="sv2-item sv2-tone-sky relative p-2.5 flex flex-col items-center justify-between gap-2">
+                    <span class="sv2-disc ${c.goldTag ? 'sv2-disc-gold' : ''} absolute -top-1.5 -left-1.5 px-1.5 py-0.5 font-black text-[9px]">
                       ${c.disc}
                     </span>
                     <div class="text-xs sm:text-sm font-black text-white text-center leading-tight pt-2 min-h-[34px] flex items-center justify-center">${c.title}</div>
-                    <div class="w-14 h-14 rounded-2xl bg-[#1e3a8a]/80 border-2 border-amber-300/80 flex flex-col items-center justify-center relative shadow-inner">
+                    <div class="sv2-plate w-14 h-14 flex flex-col items-center justify-center relative">
                       <span class="text-2xl">${c.icon}</span>
-                      <span class="absolute bottom-0.5 right-1 text-[10px] font-black text-white">${c.qty}</span>
+                      <span class="sv2-qty absolute bottom-0.5 right-1 text-[10px] font-black">${c.qty}</span>
                     </div>
                     <div class="text-[10px] font-bold text-sky-100 text-center">Còn có thể mua 1 lần</div>
-                    <button type="button" data-vn-daily-buy="${c.id}" class="w-full py-1.5 rounded-xl bg-gradient-to-b from-white to-[#bae6fd] hover:brightness-105 border border-white text-slate-900 font-black text-xs flex items-center justify-center gap-1 shadow">
+                    <button type="button" data-vn-daily-buy="${c.id}" class="sv2-buy2 w-full py-1.5 text-xs flex items-center justify-center gap-1">
                       <span>${c.cur === 'gem' ? '💚' : '🪙'}</span>
                       <span>${c.cost}</span>
                     </button>
@@ -20639,16 +20760,16 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             </div>
 
             <!-- 3. RƯƠNG TRANG BỊ (PAGES 2, 3, 4, 5, 16) -->
-            <div id="shopSecChests" class="rounded-3xl bg-[#192d5c] border-2 border-[#2b4c8c] p-3.5 shadow-xl space-y-3">
-              <div class="mx-auto max-w-xs rounded-full bg-gradient-to-b from-[#3b82f6] to-[#1d4ed8] border-2 border-[#60a5fa] py-1 px-5 flex items-center justify-between shadow">
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
-                <span class="font-black text-white text-sm tracking-wide drop-shadow">Rương Trang Bị</span>
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+            <div id="shopSecChests" class="sv2-card p-3.5 space-y-3">
+              <div class="sv2-title mx-auto max-w-xs py-1.5 px-5 flex items-center justify-between">
+                <span class="sv2-dot"></span>
+                <span class="sv2-title-text font-black">Rương Trang Bị</span>
+                <span class="sv2-dot"></span>
               </div>
 
               <!-- 3A. RƯƠNG TINH THẠCH LẤP LÁNH (MYTHSTONE CHEST) -->
-              <div class="rounded-2xl bg-gradient-to-b from-[#4c1d95] to-[#2e1065] border-2 border-purple-400/70 p-3 space-y-2.5 shadow-xl">
-                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#ec4899] via-[#7e22ce] to-[#3b0764] border border-pink-300/50 p-3 grid grid-cols-1 sm:grid-cols-[160px_1fr] items-center gap-3">
+              <div class="sv2-panel sv2-pan-violet2 relative p-3 space-y-2.5">
+                <div class="sv2-panel sv2-pan-rose relative p-3 grid grid-cols-1 sm:grid-cols-[160px_1fr] items-center gap-3">
                   <div class="flex flex-col items-center justify-center">
                     <div class="relative w-28 h-28 rounded-full bg-amber-400/20 border-2 border-amber-300 flex items-center justify-center shadow-inner">
                       <span class="text-5xl font-black text-amber-300 drop-shadow">S⬆️</span>
@@ -20662,10 +20783,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                     <div class="text-base sm:text-lg font-black text-amber-300 drop-shadow">Rương Tinh Thạch Lấp Lánh ⓘ</div>
                     <div class="text-[11px] font-bold text-white">Chứa 1 Trang Bị <span class="text-emerald-300">Tốt</span>, <span class="text-sky-300">Hiếm</span> hoặc <span class="text-purple-300">Sử Thi</span></div>
                     <div class="text-[11px] font-black text-amber-200">Tăng tỷ lệ Trang Bị <span class="text-rose-300">Sử Thi S</span></div>
-                    <div class="inline-block w-full sm:w-64 rounded-full bg-slate-950/75 border border-purple-400/50 px-3 py-0.5 text-[10px] font-bold text-white">
+                    <div class="sv2-pill inline-block w-full sm:w-64 rounded-full px-3 py-0.5 text-[10px] font-bold text-white">
                       Trong <strong class="text-amber-300">${10 - ((SaveState.chestGachaState?.epicPity || 0) % 10)}</strong> lần chắc chắn nhận <span class="text-purple-300">Sử Thi</span> Trang Bị
                     </div>
-                    <div class="inline-block w-full sm:w-64 rounded-full bg-slate-950/75 border border-rose-400/50 px-3 py-0.5 text-[10px] font-bold text-white">
+                    <div class="sv2-pill inline-block w-full sm:w-64 rounded-full px-3 py-0.5 text-[10px] font-bold text-white">
                       Trong <strong class="text-amber-300">${50 - ((SaveState.chestGachaState?.sTierPity || 0) % 50)}</strong> lần chắc chắn nhận <span class="text-rose-300">Sử Thi ${seriesNames[curSeries]}</span>
                     </div>
                   </div>
@@ -20673,15 +20794,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
                 <!-- 3 Green Pull Buttons -->
                 <div class="grid grid-cols-3 gap-2">
-                  <button type="button" data-vn-chest-pull="mythstone" data-vn-pulls="1" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-chest-pull="mythstone" data-vn-pulls="1" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Rút 1 lần</span>
                     <span class="text-[11px] text-lime-100">💚 x400</span>
                   </button>
-                  <button type="button" data-vn-chest-pull="mythstone" data-vn-pulls="10" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-chest-pull="mythstone" data-vn-pulls="10" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Rút x10</span>
                     <span class="text-[11px] text-lime-100">💚 x4000</span>
                   </button>
-                  <button type="button" data-vn-chest-pull="mythstone" data-vn-pulls="100" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-chest-pull="mythstone" data-vn-pulls="100" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Rút 100 lần</span>
                     <span class="text-[11px] text-lime-100">💚 x40000</span>
                   </button>
@@ -20694,7 +20815,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                     { id: 'oracle', label: 'Dòng Tiên Tri Cấp S' },
                     { id: 'dragoon', label: 'Dòng Kỵ Sĩ Rồng Cấp S' }
                   ].map(sr => `
-                    <button type="button" data-vn-mythstone-series="${sr.id}" class="py-1.5 px-2 rounded-xl font-black text-[11px] transition ${curSeries === sr.id ? 'bg-gradient-to-b from-[#fde047] to-[#eab308] text-slate-950 border-2 border-white shadow' : 'bg-[#2e1065] text-purple-200 border border-purple-700'}">
+                    <button type="button" data-vn-mythstone-series="${sr.id}" class="sv2-tab ${curSeries === sr.id ? 'on' : ''} py-1.5 px-2 font-black text-[11px]">
                       ${sr.label}
                     </button>
                   `).join('')}
@@ -20702,8 +20823,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               </div>
 
               <!-- 3B. RƯƠNG ĐÁ LĂNG TRỤ (CHROMATIC CHEST) -->
-              <div class="rounded-2xl bg-gradient-to-b from-[#1e3a8a] to-[#172554] border-2 border-sky-400/70 p-3 space-y-2.5 shadow-xl">
-                <div class="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#f59e0b] via-[#ec4899] to-[#3b82f6] border border-amber-300/60 p-3 grid grid-cols-1 sm:grid-cols-[150px_1fr] items-center gap-3">
+              <div class="sv2-panel sv2-pan-ocean relative p-3 space-y-2.5">
+                <div class="sv2-panel sv2-pan-sunset relative p-3 grid grid-cols-1 sm:grid-cols-[150px_1fr] items-center gap-3">
                   <div class="flex items-center justify-center text-6xl drop-shadow">
                     👑🧰✨
                   </div>
@@ -20711,24 +20832,24 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                     <div class="text-base sm:text-lg font-black text-amber-200 drop-shadow">Rương Đá Lăng Trụ ⓘ</div>
                     <div class="text-[11px] font-bold text-white">Chứa 1 Trang Bị <span class="text-emerald-200">Tốt</span>, <span class="text-sky-200">Hiếm</span> hoặc <span class="text-purple-200">Sử Thi</span></div>
                     <div class="text-[11px] font-black text-amber-100">Tăng tỷ lệ Trang Bị <span class="text-rose-200">Sử Thi S</span></div>
-                    <div class="inline-block w-full sm:w-64 rounded-full bg-slate-950/75 border border-amber-300/50 px-3 py-0.5 text-[10px] font-bold text-white">
+                    <div class="sv2-pill inline-block w-full sm:w-64 rounded-full px-3 py-0.5 text-[10px] font-bold text-white">
                       Trong <strong class="text-amber-300">6</strong> lần chắc chắn nhận <span class="text-purple-300">Sử Thi</span> Trang Bị
                     </div>
-                    <div class="inline-block w-full sm:w-64 rounded-full bg-slate-950/75 border border-amber-300/50 px-3 py-0.5 text-[10px] font-bold text-white">
+                    <div class="sv2-pill inline-block w-full sm:w-64 rounded-full px-3 py-0.5 text-[10px] font-bold text-white">
                       Trong <strong class="text-amber-300">45</strong> lần chắc chắn nhận <span class="text-rose-300">Sử Thi S</span> Trang Bị
                     </div>
                   </div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
-                  <button type="button" data-vn-chest-pull="chromatic" data-vn-pulls="1" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-chest-pull="chromatic" data-vn-pulls="1" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Rút 1 lần</span>
                     <span class="text-[11px] text-lime-100">💚 x400</span>
                   </button>
-                  <button type="button" data-vn-chest-pull="chromatic" data-vn-pulls="10" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-chest-pull="chromatic" data-vn-pulls="10" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Rút x10</span>
                     <span class="text-[11px] text-lime-100">💚 x4000</span>
                   </button>
-                  <button type="button" data-vn-chest-pull="chromatic" data-vn-pulls="100" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-chest-pull="chromatic" data-vn-pulls="100" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Rút 100 lần</span>
                     <span class="text-[11px] text-lime-100">💚 x40000</span>
                   </button>
@@ -20737,41 +20858,41 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
               <!-- 3C. RƯƠNG BẠC & RƯƠNG HẮC DIỆU THẠCH (2 COLUMNS, PAGES 4-5) -->
               <div class="grid grid-cols-2 gap-3">
-                <div class="rounded-2xl bg-gradient-to-b from-[#38bdf8] via-[#2563eb] to-[#1e40af] border-2 border-sky-300 p-3 flex flex-col items-center justify-between gap-2 text-center shadow-lg">
+                <div class="sv2-item sv2-tone-sky p-3 flex flex-col items-center justify-between gap-2 text-center">
                   <div>
                     <div class="text-sm sm:text-base font-black text-white">Rương Bạc ⓘ</div>
                     <div class="text-[10px] font-bold text-sky-100">Chứa 1 Trang Bị Thường hoặc <span class="text-emerald-300">Tốt</span></div>
                   </div>
                   <div class="relative my-2">
                     <span class="text-5xl">🥈🧰</span>
-                    <span class="absolute -top-1 -right-4 w-7 h-7 rounded-full bg-amber-400 border-2 border-white text-slate-950 font-black text-[10px] flex items-center justify-center shadow">x10</span>
+                    <span class="sv2-count absolute -top-1 -right-4 w-7 h-7 rounded-full font-black text-[10px] flex items-center justify-center">x10</span>
                   </div>
                   <div class="w-full space-y-1.5">
-                    <div class="rounded-full bg-slate-950/60 px-2 py-0.5 text-[10px] font-bold text-white">🕒 Miễn phí sau 13:44:43</div>
-                    <button type="button" data-vn-chest-pull="silver" data-vn-pulls="10" class="relative w-full py-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] border-2 border-[#bef264] text-white font-black text-xs shadow">
+                    <div class="sv2-pill rounded-full px-2 py-0.5 text-[10px] font-bold text-white">🕒 Miễn phí sau 13:44:43</div>
+                    <button type="button" data-vn-chest-pull="silver" data-vn-pulls="10" class="sv2-buy relative w-full py-2 text-xs">
                       <div>Rút x10</div>
                       <div class="text-[11px]">🗝️🥈 ${SaveState.chestKeys?.silver_chest_key || 37}/10</div>
-                      <span class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-600 border border-white text-[9px] font-black flex items-center justify-center">!</span>
+                      <span class="sv2-red absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-black flex items-center justify-center">!</span>
                     </button>
                   </div>
                 </div>
 
-                <div class="rounded-2xl bg-gradient-to-b from-[#9333ea] via-[#6b21a8] to-[#3b0764] border-2 border-purple-300 p-3 flex flex-col items-center justify-between gap-2 text-center shadow-lg">
+                <div class="sv2-item sv2-tone-violet p-3 flex flex-col items-center justify-between gap-2 text-center">
                   <div>
                     <div class="text-sm sm:text-base font-black text-white">Rương Hắc Diệu Thạch</div>
                     <div class="text-[10px] font-bold text-purple-100">Chứa 1 Trang Bị <span class="text-emerald-300">Tốt</span>, <span class="text-sky-300">Hiếm</span> hoặc <span class="text-purple-300">Sử Thi</span></div>
                   </div>
                   <div class="relative my-2">
                     <span class="text-5xl">🔮🧰</span>
-                    <span class="absolute -top-1 -right-4 w-7 h-7 rounded-full bg-amber-400 border-2 border-white text-slate-950 font-black text-[10px] flex items-center justify-center shadow">x10</span>
+                    <span class="sv2-count absolute -top-1 -right-4 w-7 h-7 rounded-full font-black text-[10px] flex items-center justify-center">x10</span>
                   </div>
                   <div class="w-full space-y-1.5">
-                    <div class="rounded-full bg-slate-950/75 px-2 py-0.5 text-[9px] font-bold text-white">Trong 3 lần chắc chắn nhận <span class="text-purple-300">Sử Thi</span></div>
-                    <div class="rounded-full bg-slate-950/60 px-2 py-0.5 text-[10px] font-bold text-white">🕒 Miễn phí sau 02 ngày 13 giờ</div>
-                    <button type="button" data-vn-chest-pull="obsidian" data-vn-pulls="10" class="relative w-full py-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] border-2 border-[#bef264] text-white font-black text-xs shadow">
+                    <div class="sv2-pill rounded-full px-2 py-0.5 text-[9px] font-bold text-white">Trong 3 lần chắc chắn nhận <span class="text-purple-300">Sử Thi</span></div>
+                    <div class="sv2-pill rounded-full px-2 py-0.5 text-[10px] font-bold text-white">🕒 Miễn phí sau 02 ngày 13 giờ</div>
+                    <button type="button" data-vn-chest-pull="obsidian" data-vn-pulls="10" class="sv2-buy relative w-full py-2 text-xs">
                       <div>Rút x10</div>
                       <div class="text-[11px]">🗝️🔮 ${SaveState.chestKeys?.obsidian_chest_key || 59}/10</div>
-                      <span class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-600 border border-white text-[9px] font-black flex items-center justify-center">!</span>
+                      <span class="sv2-red absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] font-black flex items-center justify-center">!</span>
                     </button>
                   </div>
                 </div>
@@ -20779,38 +20900,38 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             </div>
 
             <!-- 4. CẦU NGUYỆN (PAGES 6, 17) -->
-            <div id="shopSecWish" class="rounded-3xl bg-[#192d5c] border-2 border-[#2b4c8c] p-3.5 shadow-xl space-y-3">
-              <div class="mx-auto max-w-xs rounded-full bg-gradient-to-b from-[#3b82f6] to-[#1d4ed8] border-2 border-[#60a5fa] py-1 px-5 flex items-center justify-between shadow">
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
-                <span class="font-black text-white text-sm tracking-wide drop-shadow">Cầu Nguyện</span>
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+            <div id="shopSecWish" class="sv2-card p-3.5 space-y-3">
+              <div class="sv2-title mx-auto max-w-xs py-1.5 px-5 flex items-center justify-between">
+                <span class="sv2-dot"></span>
+                <span class="sv2-title-text font-black">Cầu Nguyện</span>
+                <span class="sv2-dot"></span>
               </div>
 
-              <div class="rounded-2xl bg-gradient-to-r from-[#c084fc] via-[#6366f1] to-[#312e81] border-2 border-purple-300 p-3.5 space-y-3 shadow-xl">
+              <div class="sv2-panel sv2-pan-violet relative p-3.5 space-y-3">
                 <div class="grid grid-cols-1 sm:grid-cols-[150px_1fr] items-center gap-3">
                   <div class="flex items-center justify-center text-6xl drop-shadow">
                     🪽🗽✨
                   </div>
                   <div class="text-center sm:text-right space-y-1.5">
-                    <div class="inline-block w-full sm:w-64 rounded-full bg-slate-950/75 border border-purple-300/50 px-3 py-1 text-[10px] font-bold text-white">
+                    <div class="sv2-pill inline-block w-full sm:w-64 rounded-full px-3 py-1 text-[10px] font-bold text-white">
                       Trong 20 lần chắc chắn nhận <span class="text-purple-300 font-black">Sử Thi</span> Thánh Vật
                     </div>
-                    <div class="inline-block w-full sm:w-64 rounded-full bg-slate-950/75 border border-amber-300/50 px-3 py-1 text-[10px] font-bold text-white">
+                    <div class="sv2-pill inline-block w-full sm:w-64 rounded-full px-3 py-1 text-[10px] font-bold text-white">
                       Trong 34 lần chắc chắn nhận <span class="text-amber-300 font-black">Huyền Thoại</span> hoặc <span class="text-rose-400 font-black">Thần Thoại</span> Thánh Vật
                     </div>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-3 gap-2">
-                  <button type="button" data-vn-wish-pull="1" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-wish-pull="1" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Cầu Nguyện 1 lần</span>
                     <span class="text-[11px] text-lime-100">💚 x400</span>
                   </button>
-                  <button type="button" data-vn-wish-pull="10" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-wish-pull="10" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Cầu Nguyện x10</span>
                     <span class="text-[11px] text-lime-100">💚 x4000</span>
                   </button>
-                  <button type="button" data-vn-wish-pull="100" class="py-2 px-2 rounded-xl bg-gradient-to-b from-[#84cc16] to-[#4d7c0f] hover:brightness-110 border-2 border-[#bef264] text-white font-black text-xs shadow flex flex-col items-center">
+                  <button type="button" data-vn-wish-pull="100" class="sv2-buy py-2 px-2 text-xs flex flex-col items-center">
                     <span>Cầu Nguyện 100</span>
                     <span class="text-[11px] text-lime-100">💚 x40000</span>
                   </button>
@@ -20819,28 +20940,28 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             </div>
 
             <!-- 5. HẠN MUA ƯU ĐÃI: NGÀY / TUẦN / THÁNG (PAGES 7-11, 18) -->
-            <div id="shopSecDeals" class="rounded-3xl bg-[#192d5c] border-2 border-[#2b4c8c] p-3.5 shadow-xl space-y-3">
-              <div class="mx-auto max-w-xs rounded-full bg-gradient-to-b from-[#3b82f6] to-[#1d4ed8] border-2 border-[#60a5fa] py-1 px-5 flex items-center justify-between shadow">
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
-                <span class="font-black text-white text-sm tracking-wide drop-shadow">${activeDealMeta.title}</span>
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+            <div id="shopSecDeals" class="sv2-card p-3.5 space-y-3">
+              <div class="sv2-title mx-auto max-w-xs py-1.5 px-5 flex items-center justify-between">
+                <span class="sv2-dot"></span>
+                <span class="sv2-title-text font-black">${activeDealMeta.title}</span>
+                <span class="sv2-dot"></span>
               </div>
-              <div class="text-center text-[11px] font-bold text-sky-200">${activeDealMeta.timer}</div>
+              <div class="sv2-timer text-center text-[11px] font-bold">${activeDealMeta.timer}</div>
 
               <div class="grid grid-cols-3 gap-2.5">
                 ${activeDealMeta.packs.map(pk => `
-                  <div class="relative rounded-2xl ${pk.free ? 'bg-slate-800/80 border-slate-600' : (curDeal === 'weekly' ? 'bg-gradient-to-b from-[#c084fc] to-[#7e22ce] border-purple-300' : (curDeal === 'monthly' ? 'bg-gradient-to-b from-[#facc15] to-[#ca8a04] border-yellow-200' : 'bg-gradient-to-b from-[#38bdf8] to-[#2563eb] border-sky-300'))} border-2 p-2.5 flex flex-col items-center justify-between gap-2 shadow-lg">
-                    ${!pk.free ? `<span class="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 rounded-lg bg-amber-400 border border-white text-slate-950 font-black text-[9px] shadow">${activeDealMeta.badge}</span>` : ''}
+                  <div class="sv2-item relative ${pk.free ? 'sv2-tone-free' : (curDeal === 'weekly' ? 'sv2-tone-violet' : (curDeal === 'monthly' ? 'sv2-tone-gold' : 'sv2-tone-sky'))} p-2.5 flex flex-col items-center justify-between gap-2">
+                    ${!pk.free ? `<span class="sv2-disc sv2-disc-gold absolute -top-1.5 -right-1.5 px-1.5 py-0.5 font-black text-[9px]">${activeDealMeta.badge}</span>` : ''}
                     <div class="grid grid-cols-2 gap-1.5 pt-2 w-full">
                       ${pk.items.map(([ic, q]) => `
-                        <div class="h-11 rounded-xl bg-slate-950/45 border border-white/30 flex flex-col items-center justify-center text-xs font-black text-white">
+                        <div class="sv2-slot h-11 flex flex-col items-center justify-center text-xs font-black text-white">
                           <span>${ic}</span>
                           <span class="text-[9px]">${q}</span>
                         </div>
                       `).join('')}
                     </div>
                     <div class="text-[10px] font-bold text-white text-center">${pk.limit || 'Đã bán hết'}</div>
-                    <button type="button" data-vn-deal-buy="${pk.id}" data-vn-gems="${pk.gemGrant || 100}" class="w-full py-1.5 rounded-xl ${pk.free ? 'bg-slate-700 text-emerald-400' : 'bg-gradient-to-b from-white to-[#bae6fd] text-slate-900'} font-black text-xs shadow">
+                    <button type="button" data-vn-deal-buy="${pk.id}" data-vn-gems="${pk.gemGrant || 100}" class="${pk.free ? 'sv2-buy-free' : 'sv2-buy2'} w-full py-1.5 text-xs">
                       ${pk.free ? '✔️' : pk.price}
                     </button>
                   </div>
@@ -20848,13 +20969,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               </div>
 
               <!-- Sub-switcher: Ưu Đãi Mỗi Ngày | Ưu Đãi Mỗi Tuần | Ưu Đãi Mỗi Tháng -->
-              <div class="grid grid-cols-3 gap-2 bg-[#0d1836] p-1.5 rounded-2xl border border-slate-700">
+              <div class="sv2-seg grid grid-cols-3 gap-2 p-1.5">
                 ${[
                   { id: 'daily', label: 'Ưu Đãi Mỗi Ngày' },
                   { id: 'weekly', label: 'Ưu Đãi Mỗi Tuần' },
                   { id: 'monthly', label: 'Ưu Đãi Mỗi Tháng' }
                 ].map(d => `
-                  <button type="button" data-vn-deal-period="${d.id}" class="py-1.5 rounded-xl font-black text-xs transition ${curDeal === d.id ? 'bg-gradient-to-b from-[#fde047] to-[#eab308] text-slate-950 shadow' : 'text-slate-300 hover:text-white'}">
+                  <button type="button" data-vn-deal-period="${d.id}" class="sv2-tab ${curDeal === d.id ? 'on' : ''} py-1.5 font-black text-xs">
                     ${d.label}
                   </button>
                 `).join('')}
@@ -20862,11 +20983,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             </div>
 
             <!-- 6. NẠP: KIM CƯƠNG / XU / AUROCITE (PAGES 12, 13, 14, 19) -->
-            <div id="shopSecTopup" class="rounded-3xl bg-[#192d5c] border-2 border-[#2b4c8c] p-3.5 shadow-xl space-y-3">
-              <div class="mx-auto max-w-xs rounded-full bg-gradient-to-b from-[#3b82f6] to-[#1d4ed8] border-2 border-[#60a5fa] py-1 px-5 flex items-center justify-between shadow">
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
-                <span class="font-black text-white text-sm tracking-wide drop-shadow">${curTopup === 'gems' ? 'Kim Cương' : (curTopup === 'gold' ? 'Xu' : 'Aurocite')}</span>
-                <span class="w-2 h-2 rounded-full bg-slate-200"></span>
+            <div id="shopSecTopup" class="sv2-card p-3.5 space-y-3">
+              <div class="sv2-title mx-auto max-w-xs py-1.5 px-5 flex items-center justify-between">
+                <span class="sv2-dot"></span>
+                <span class="sv2-title-text font-black">${curTopup === 'gems' ? 'Kim Cương' : (curTopup === 'gold' ? 'Xu' : 'Aurocite')}</span>
+                <span class="sv2-dot"></span>
               </div>
 
               ${curTopup === 'gems' ? `
@@ -20879,12 +21000,12 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                     { amt: 6500, name: '1 Thùng Kim Cương', price: '₫1,300,000', icon: '🛢️💚' },
                     { amt: 14000, name: '1 Rương Lớn Kim Cương', price: '₫2,500,000', icon: '🧰💚' }
                   ].map(g => `
-                    <div class="relative rounded-2xl bg-gradient-to-b from-[#c084fc] via-[#9333ea] to-[#6b21a8] border-2 border-purple-300 p-2.5 flex flex-col items-center justify-between gap-2 text-center shadow-lg">
+                    <div class="relative sv2-item sv2-tone-violet p-2.5 flex flex-col items-center justify-between gap-2 text-center">
                       <span class="px-2 py-0.5 rounded-lg bg-emerald-500 border border-white text-slate-950 font-black text-[9px]">Tặng kèm ${g.amt}</span>
                       <div class="text-base sm:text-lg font-black text-white">${g.amt}</div>
                       <div class="text-3xl my-1">${g.icon}</div>
                       <div class="text-[10px] font-bold text-purple-100">${g.name}</div>
-                      <button type="button" data-vn-topup-gems="${g.amt}" class="w-full py-1.5 rounded-xl bg-gradient-to-b from-white to-[#bae6fd] text-slate-900 font-black text-xs shadow">
+                      <button type="button" data-vn-topup-gems="${g.amt}" class="sv2-buy2 w-full py-1.5 text-xs">
                         ${g.price}
                       </button>
                     </div>
@@ -20897,18 +21018,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                     { amt: 64200, name: 'Một Đống Xu', cost: 200, icon: '💰🪙' },
                     { amt: 642000, name: 'Một Thùng Xu', cost: 2000, icon: '🧰🪙' }
                   ].map(x => `
-                    <div class="rounded-2xl bg-gradient-to-b from-[#38bdf8] via-[#2563eb] to-[#1d4ed8] border-2 border-sky-300 p-2.5 flex flex-col items-center justify-between gap-2 text-center shadow-lg">
+                    <div class="sv2-item sv2-tone-sky p-2.5 flex flex-col items-center justify-between gap-2 text-center">
                       <div class="text-base font-black text-white">${x.amt}</div>
                       <div class="text-4xl my-2">${x.icon}</div>
                       <div class="text-[11px] font-bold text-sky-100">${x.name}</div>
-                      <button type="button" data-vn-topup-gold="${x.amt}" data-vn-gem-cost="${x.cost}" class="w-full py-1.5 rounded-xl bg-gradient-to-b from-white to-[#bae6fd] text-slate-900 font-black text-xs shadow">
+                      <button type="button" data-vn-topup-gold="${x.amt}" data-vn-gem-cost="${x.cost}" class="sv2-buy2 w-full py-1.5 text-xs">
                         💚 ${x.cost}
                       </button>
                     </div>
                   `).join('')}
                 </div>
               ` : `
-                <div class="text-center text-[11px] font-bold text-sky-200">Thời gian làm mới còn 26 ngày 13 giờ • Aurocite dùng để mua tất cả các vật phẩm trả phí trong game</div>
+                <div class="sv2-timer text-center text-[11px] font-bold">Thời gian làm mới còn 26 ngày 13 giờ • Aurocite dùng để mua tất cả các vật phẩm trả phí trong game</div>
                 <div class="grid grid-cols-3 gap-2.5">
                   ${[
                     { amt: 99, price: '₫24,000' },
@@ -20918,11 +21039,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                     { amt: 4999, price: '₫1,300,000' },
                     { amt: 9999, price: '₫2,500,000' }
                   ].map(a => `
-                    <div class="rounded-2xl bg-gradient-to-b from-[#c084fc] via-[#9333ea] to-[#6b21a8] border-2 border-purple-300 p-2.5 flex flex-col items-center justify-between gap-2 text-center shadow-lg">
+                    <div class="sv2-item sv2-tone-violet p-2.5 flex flex-col items-center justify-between gap-2 text-center">
                       <div class="text-base font-black text-white">${a.amt}</div>
                       <div class="text-4xl my-2">💎🌸</div>
                       <div class="text-[10px] font-bold text-pink-200">Còn có thể mua 30 lần</div>
-                      <button type="button" data-vn-topup-aurocite="${a.amt}" class="w-full py-1.5 rounded-xl bg-gradient-to-b from-white to-[#bae6fd] text-slate-900 font-black text-xs shadow">
+                      <button type="button" data-vn-topup-aurocite="${a.amt}" class="sv2-buy2 w-full py-1.5 text-xs">
                         ${a.price}
                       </button>
                     </div>
@@ -20931,13 +21052,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               `)}
 
               <!-- Sub-switcher: Kim Cương | Xu | Aurocite -->
-              <div class="grid grid-cols-3 gap-2 bg-[#0d1836] p-1.5 rounded-2xl border border-slate-700">
+              <div class="sv2-seg grid grid-cols-3 gap-2 p-1.5">
                 ${[
                   { id: 'gems', label: 'Kim Cương' },
                   { id: 'gold', label: 'Xu' },
                   { id: 'aurocite', label: 'Aurocite' }
                 ].map(t => `
-                  <button type="button" data-vn-topup-tab="${t.id}" class="py-1.5 rounded-xl font-black text-xs transition ${curTopup === t.id ? 'bg-gradient-to-b from-[#fde047] to-[#eab308] text-slate-950 shadow' : 'text-slate-300 hover:text-white'}">
+                  <button type="button" data-vn-topup-tab="${t.id}" class="sv2-tab ${curTopup === t.id ? 'on' : ''} py-1.5 font-black text-xs">
                     ${t.label}
                   </button>
                 `).join('')}
@@ -20947,7 +21068,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           </div>
 
           <!-- STICKY 5-TAB SHOP SUB-NAVIGATION BAR ABOVE MAIN DOCK (MATCHES PAGES 1-19) -->
-          <div class="bg-[#0e1b3d] border-t-2 border-[#2b4c8c] px-2 py-1.5 grid grid-cols-5 gap-1.5 shrink-0">
+          <div class="sv2-dock px-2 py-1.5 grid grid-cols-5 gap-1.5 shrink-0">
             ${[
               { id: 'daily', label: 'Cửa Hàng Mỗi Ngày', target: 'shopSecDaily' },
               { id: 'chests', label: 'Rương Trang Bị', target: 'shopSecChests', alert: true },
@@ -20955,9 +21076,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               { id: 'deals', label: 'Hạn Mua Ưu Đãi', target: 'shopSecDeals' },
               { id: 'topup', label: 'Nạp', target: 'shopSecTopup' }
             ].map(sb => `
-              <button type="button" data-vn-shop-subnav="${sb.id}" data-vn-scroll-to="${sb.target}" class="relative py-2 px-1 rounded-xl font-black text-[10px] sm:text-xs leading-tight text-center transition ${curSub === sb.id ? 'bg-gradient-to-b from-[#fde047] to-[#eab308] text-slate-950 border-2 border-white shadow' : 'bg-[#172554] text-slate-200 hover:text-white'}">
-                <span>${sb.label}</span>
-                ${sb.alert ? '<span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 border border-white text-white text-[9px] flex items-center justify-center">!</span>' : ''}
+              <button type="button" data-vn-shop-subnav="${sb.id}" data-vn-scroll-to="${sb.target}" class="sv2-tab ${curSub === sb.id ? 'on' : ''} relative py-2 px-1 flex flex-col items-center justify-center gap-0.5 font-black text-[10px] sm:text-xs leading-tight text-center">
+                <span class="sv2-ico">${({ daily: '🏪', chests: '🎁', wish: '🙏', deals: '🏷️', topup: '💎' })[sb.id] || '✨'}</span><span>${sb.label}</span>
+                ${sb.alert ? '<span class="sv2-red absolute -top-1 -right-1 w-4 h-4 rounded-full text-white text-[9px] flex items-center justify-center">!</span>' : ''}
               </button>
             `).join('')}
           </div>
