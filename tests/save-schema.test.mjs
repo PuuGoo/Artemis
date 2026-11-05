@@ -73,6 +73,16 @@ for (const f of ["resonanceSlots", "heroStars", "heroShards", "heroSelectedSkins
   if (f in sample) sample[f] = {};
 }
 sample.gearBag = [];
+// dungeonCheckpoint: null la gia tri HOP LE (chua co checkpoint). Test phai
+// dung mau that su co the khoi phuc duoc, neu khong sanitizer tra null dung
+// va bi bao nham la "field bi roi".
+sample.dungeonCheckpoint = {
+  v: 1, chapterIdx: 0, chapterId: 1, room: 5, maxRooms: 15,
+  kills: 10, runGold: 100, savedAt: Date.now(),
+  player: { hp: 500, maxHp: 1000, atk: 100, aspd: 1, critRate: 0.1,
+            critDmgMult: 1.85, defFlat: 0, dmgReduction: 0, level: 2,
+            xp: 0, xpNext: 100, skills: {} },
+};
 
 const result = sanitizeSave(sample);
 check("sanitizeSave chap nhan mau", result.ok === true, result.reason);

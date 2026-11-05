@@ -825,6 +825,10 @@
           <button id="btnStartGame" type="button" class="w-full sm:w-80 py-3.5 rounded-2xl gold-gradient text-slate-950 font-black text-base sm:text-lg tracking-wide shadow-lg glow-gold hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2">
             <span>⚔️ BẮT ĐẦU CHIẾN ĐẤU</span>
           </button>
+          <!-- Continue: chỉ hiện khi có checkpoint của đúng chương đang chọn -->
+          <button id="btnContinueRun" type="button" class="hidden w-full sm:w-56 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base tracking-wide shadow-lg border border-emerald-300/50 active:scale-95 transition flex items-center justify-center gap-2">
+            <span id="btnContinueRunLabel">▶ TIẾP TỤC</span>
+          </button>
         </div>
       </section>
 
@@ -1176,6 +1180,14 @@
       <!-- ==================== TAB 4: VẬT SƯU TẦM (THẺ NĂNG LỰC & THÁNH VẬT ĐỆM NHUNG ĐỎ — PAGES 60-61) ==================== -->
       <section id="tabTalents" class="hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-4">
         <div id="vnCollectiblesAuthenticContainer" class="max-w-4xl w-full mx-auto"></div>
+        <!-- ==================== BEGINNER JOURNEY ==================== -->
+        <div class="max-w-4xl w-full mx-auto">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+            <h2 class="text-sm sm:text-base font-black text-amber-300">🐴 Hành Trình Tân Thủ</h2>
+            <button id="btnBeginnerJourneyToggle" type="button" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-[11px] font-bold transition">Ẩn/Hiện</button>
+          </div>
+          <div id="beginnerJourneyContainer"></div>
+        </div>
         <div id="legacyTalentsAndSkillsSections" class="flex flex-col gap-4">
         <!-- Wiki Skills Header & Hybrid Formula Calculator -->
         <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-[#121636] to-slate-950 border-2 border-amber-400/60 p-4 shadow-2xl space-y-3">
@@ -3459,6 +3471,81 @@
           desc: '[Bộ 2]: Tăng thêm +0.2% lượng máu hồi từ Tim Đỏ mỗi ★ (Đạt +1.0% ở 5★).'
         }
       ];
+
+      // ==================== DEV CHEATS GATE ====================
+      /**
+       * Các nút "MAX ĐỒ / Full 18 Kỹ Năng / Max Talent / Max Artifact / Max Vật Phẩm /
+       * Max Tài Nguyên Sự Kiện / Reset Trang Bị / Max Sao Anh Hùng / Nâng Cấp Tối Đa"
+       * là công cụ phát triển. Trước đây chúng hiện công khai trên production: bất kỳ
+       * ai bấm "MAX ĐỒ" một lần là có 9.999.999 vàng + 999.999 đá quý + 30 bậc talent,
+       * phá huỷ toàn bộ cân bằng của game.
+       *
+       * Nay tất cả bị khoá sau cờ này. Bật bằng:
+       *   • URL:  ?dev=1        (?dev=1&dev=1 vẫn tính)
+       *   • hoặc localStorage.setItem('artemis_dev', '1') rồi reload
+       * Tắt lại:
+       *   • localStorage.removeItem('artemis_dev')
+       */
+      const DEV_CHEATS = (function () {
+        try {
+          const q = new URLSearchParams(location.search);
+          if (q.get('dev') === '1') {
+            try { localStorage.setItem('artemis_dev', '1'); } catch (e) {}
+            return true;
+          }
+          return localStorage.getItem('artemis_dev') === '1';
+        } catch (e) {
+          return false;
+        }
+      })();
+
+      function devCheatsEnabled() {
+        return DEV_CHEATS === true;
+      }
+
+      // Toàn bộ id nút cheat phải bị ẩn khi không bật cờ.
+      const DEV_CHEAT_BUTTON_IDS = [
+        'btnMaxAllSystems',
+        'btnWorkshopMaxAll',
+        'btnMaxRunSkills',
+        'btnMaxAllTalents5Star',
+        'btnMaxAllArtifacts15',
+        'btnMaxAllWikiItems',
+        'btnMaxAllWikiEventsCurrencies',
+        'btnResetWikiItemsStarter',
+        'btnModalMaxUpgradeGear',
+      ];
+
+      /** Ẩn/hiện mọi nút cheat theo cờ. Gọi lúc DOM ready và sau mỗi lần render. */
+      function applyDevCheatVisibility() {
+        const show = devCheatsEnabled();
+        for (const id of DEV_CHEAT_BUTTON_IDS) {
+          const el = document.getElementById(id);
+          if (!el) continue;
+          if (show) {
+            el.classList.remove('hidden');
+            el.style.removeProperty('display');
+          } else {
+            el.classList.add('hidden');
+            el.style.display = 'none';
+          }
+        }
+        // Nút "Max / Reset sao" nằm trong danh sách anh hùng (render động)
+        document.querySelectorAll('[data-max-star-hero], [data-reset-star-hero]').forEach((el) => {
+          if (show) {
+            el.classList.remove('hidden');
+            el.style.removeProperty('display');
+          } else {
+            el.classList.add('hidden');
+            el.style.display = 'none';
+          }
+        });
+      }
+
+      /** Cảnh báo khi người chơi cố bấm cheat lúc đã bị khoá. */
+      function blockedCheatNotice() {
+        showToast('🔒 Chức năng này chỉ dành cho chế độ phát triển (?dev=1).', 'warn');
+      }
 
       function ensureAllTalentCardsInitialized() {
         if (!SaveState.talents || typeof SaveState.talents !== 'object') {
@@ -6845,6 +6932,21 @@
         achievementsUnlocked: {},
         achievementsClaimed: {},
         achievementFilter: 'all',
+        // ==================== BEGINNER JOURNEY (TÂN THỦ) ====================
+        // Chỉ tài khoản MỚI đăng ký sau khi triển khai mới có startedAt > 0.
+        // Tài khoản cũ luôn có startedAt = 0 -> không bao giờ bị kích hoạt.
+        beginnerJourney: {
+          version: 1,
+          startedAt: 0,
+          completedAt: 0,
+          skipped: false,
+          currentStep: 'N01',
+          completedSteps: [],
+          claimedRewards: [],
+          isCompleted: false
+        },
+        // Checkpoint lượt chơi cho Continue. null = không có.
+        dungeonCheckpoint: null,
         normalizeLoadedGear() {
           const defaultEq = createDefaultEquipped();
           if (!this.equippedGear || typeof this.equippedGear !== 'object') {
@@ -6922,7 +7024,13 @@
                   this.bestRooms = {};
                 }
                 if (parsed.maxedAllVersion !== 1) {
-                  this.applyMaxAllSystems(false);
+                  // KHÔNG gọi applyMaxAllSystems ở đây nữa. Bản cũ gọi
+                  //   this.applyMaxAllSystems(false)
+                  // nghĩa là mọi save trước đây (chưa có cờ này) đều bị cấp
+                  // 9.999.999 vàng + Mythic Lv.100 ngay lần đăng nhập đầu —
+                  // chính là bug "gold 9,999,999". Nay chỉ đóng dấu phiên bản
+                  // để migration không chạy lại; dữ liệu người chơi giữ nguyên.
+                  this.maxedAllVersion = 1;
                 }
                 if (parsed.artemisHeroVersion !== 1) {
                   this.artemisHeroVersion = 1;
@@ -6982,6 +7090,25 @@
                 if (!this.achievementsUnlocked || typeof this.achievementsUnlocked !== 'object') this.achievementsUnlocked = {};
                 if (!this.achievementsClaimed || typeof this.achievementsClaimed !== 'object') this.achievementsClaimed = {};
                 if (typeof this.achievementFilter !== 'string') this.achievementFilter = 'all';
+
+                // ---- Migration Beginner Journey ----
+                // Tài khoản CŨ hoàn toàn không bị ảnh hưởng: nếu save chưa có
+                // beginnerJourney thì ta tạo object RỖNG với startedAt = 0, nghĩa
+                // là chưa kích hoạt tutorial. Việc kích hoạt chỉ xảy ra một lần,
+                // ở thời điểm đăng ký tài khoản mới (xem activateBeginnerJourney).
+                const bjDefaults = {
+                  version: 1, startedAt: 0, completedAt: 0, skipped: false,
+                  currentStep: 'N01', completedSteps: [], claimedRewards: [], isCompleted: false
+                };
+                if (!this.beginnerJourney || typeof this.beginnerJourney !== 'object') {
+                  this.beginnerJourney = { ...bjDefaults };
+                } else {
+                  for (const [k, v] of Object.entries(bjDefaults)) {
+                    if (this.beginnerJourney[k] === undefined) this.beginnerJourney[k] = v;
+                  }
+                  if (!Array.isArray(this.beginnerJourney.completedSteps)) this.beginnerJourney.completedSteps = [];
+                  if (!Array.isArray(this.beginnerJourney.claimedRewards)) this.beginnerJourney.claimedRewards = [];
+                }
                 // Đồng bộ kỷ lục phòng sâu nhất từ bestRooms cũ
                 const bestVals = Object.values(this.bestRooms || {}).map(v => Number(v) || 0);
                 if (bestVals.length > 0) {
@@ -6999,6 +7126,12 @@
           }
         },
         applyMaxAllSystems(resetSets = true) {
+          // Cheat: chặn khi không bật cờ dev. Hàm này cấp 9.999.999 vàng,
+          // 999.999 đá quý, Mythic Lv.100 — không được phép chạy trên production.
+          if (typeof devCheatsEnabled === 'function' && !devCheatsEnabled()) {
+            if (typeof blockedCheatNotice === 'function') blockedCheatNotice();
+            return false;
+          }
           this.maxedAllVersion = 1;
           this.gold = Math.max(this.gold || 0, 9999999);
           this.gems = Math.max(this.gems || 0, 999999);
@@ -7095,7 +7228,12 @@
               winsByChapter: this.winsByChapter,
               achievementsUnlocked: this.achievementsUnlocked,
               achievementsClaimed: this.achievementsClaimed,
-              achievementFilter: this.achievementFilter
+              achievementFilter: this.achievementFilter,
+              beginnerJourney: this.beginnerJourney,
+              // Checkpoint lượt chơi (dùng cho Continue). KHÔNG phải dữ liệu
+              // nhân vật — bị xoá khi Retry/Reset hoặc khi Continue dùng xong.
+              // Ghi thẳng giá trị: null là trạng thái hợp lệ (chưa có checkpoint).
+              dungeonCheckpoint: this.dungeonCheckpoint,
             }));
           } catch (e) {
             console.warn('[Archero2 SaveState] Failed to write localStorage:', e);
@@ -7138,6 +7276,8 @@
       SaveState.load();
       // Chuẩn hoá ngay sau khi nạp, trước mọi lần render.
       normalizeStateArrays();
+      // Ẩn toàn bộ nút cheat ngay khi script chạy (production không có ?dev=1).
+      applyDevCheatVisibility();
 
       /**
        * Nap lai save tu localStorage.
@@ -8236,6 +8376,8 @@
       }
 
       function maxSingleHeroStarAndSkins(heroId = SaveState.selectedHeroId) {
+        // Cheat: chặn ở tầng hàm để không thể gọi vòng qua từ console.
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return false; }
         const heroObj = HEROES.find(h => h.id === heroId) || HEROES[0];
         if (!SaveState.heroStars) SaveState.heroStars = {};
         SaveState.heroStars[heroId] = 8;
@@ -8354,9 +8496,40 @@
         const gearDodge = Math.min(.68, +(gemDodge + affDodge + talentTotals.dodgeBonus + (runeTotals.dodgeBonus || 0) + (artifactTotals.dodgeBonus || 0) + starMilestone.dodgeBonus + globalAll.dodgeBonus + setBonuses.reduce((n,b)=>n+b.dodge,0)).toFixed(3));
         const baseCrit = Math.min(0.98, +(0.10 + weapon.critBonus + gemCrit + affCrit + setCrit + (runeTotals.critBonus || 0) + (artifactTotals.critRate || 0) + starMilestone.critBonus + globalAll.critRate + (activeSkin.bonusCrit || 0) + talentTotals.critRate).toFixed(2));
         const totalGoldBonus = +(gemGold + affGold).toFixed(3);
-        const powerScore = Math.round(baseAtk * 6.2 + baseHp * 1.15 + baseAspd * 180 + baseCrit * 600 + gearDodge * 420 + heroStar * 1650 + (activeSkin.idx + 1) * 900);
 
-        return { hero, heroStar, starMilestone, activeSkin, globalAll, resonance, weapon, pet, baseAtk, baseHp, baseAspd, baseCrit, gearDodge, goldBonus: totalGoldBonus, powerScore, gearAtk, gearHp };
+        // ===== CRIT DMG: gom đủ 5 nguồn và chặn trên =====
+        // Trước đây critDmgPct được tính ở 5 nơi nhưng damageEnemy() hardcode
+        // 1.85 nên mọi đầu tư CRIT DMG đều vô hiệu. Base 0.85 = hệ số crit cũ
+        // (1 + 0.85 = 1.85) để không làm thay đổi sức mạnh hiện có của người chơi.
+        const critDmgBonus = (
+          (talentTotals.critDmgPct || 0)
+          + (artifactTotals.critDmgPct || 0)
+          + (globalAll.critDmgPct || 0)
+          + setBonuses.reduce((n, b) => n + (b.critDmgPct || 0), 0)
+          + (activeSkin.bonusCritDmg || 0)
+        );
+        const critDmgMult = +(1.85 + critDmgBonus).toFixed(3);
+
+        // ===== DEF: chỉ số phòng thủ mới =====
+        // Trước đây không tồn tại DEF; mọi đòn của quái đều gây sát thương
+        // nguyên bản. DEF quy đổi thành giảm sát thương theo đường cong bão hoà
+        // để không bao giờ miễn nhiễm hoàn toàn:
+        //   reduction = DEF / (DEF + K),  K = 400 + 120 * maxRooms
+        // Chặn trên 0.75 để luôn còn ít nhất 25% sát thương đi qua.
+        const defFlat = Math.round(
+          heroStar * 2
+          + (SaveState.gearLevel - 1) * 3
+          + (talentTotals.flatDef || 0)
+          + (runeTotals.defFlat || 0)
+          + (artifactTotals.defFlat || 0)
+          + (gemHp + affHpFlat) * 0.02
+        );
+        const defK = 400 + 120 * ((Game.chapter && Game.chapter.rooms) || 15);
+        const dmgReduction = +Math.min(0.75, defFlat / (defFlat + defK)).toFixed(4);
+
+        const powerScore = Math.round(baseAtk * 6.2 + baseHp * 1.15 + baseAspd * 180 + baseCrit * 600 + gearDodge * 420 + heroStar * 1650 + (activeSkin.idx + 1) * 900 + defFlat * 3);
+
+        return { hero, heroStar, starMilestone, activeSkin, globalAll, resonance, weapon, pet, baseAtk, baseHp, baseAspd, baseCrit, gearDodge, goldBonus: totalGoldBonus, powerScore, gearAtk, gearHp, critDmgMult, critDmgBonus, defFlat, dmgReduction };
       }
 
       // ==================== HD CUSTOM SVG ARTWORK FOR ALL 15 ARCHERO 2 GEAR ITEMS & SLOTS ====================
@@ -11006,6 +11179,7 @@
           });
           containerEl.querySelectorAll('.btn-max-hero-star').forEach(btn => {
             btn.addEventListener('click', () => {
+              if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
               maxSingleHeroStarAndSkins(btn.getAttribute('data-max-star-hero'));
             });
           });
@@ -11568,6 +11742,7 @@
         const maxAllArtBtn = document.getElementById('btnMaxAllArtifacts15');
         if (maxAllArtBtn) {
           maxAllArtBtn.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             const map = getArtifactStarMap();
             for (const a of ARTIFACTS_DATA) map[a.id] = 15;
             SaveState.save();
@@ -12904,6 +13079,7 @@
         const btnMaxItems = document.getElementById('btnMaxAllWikiItems');
         if (btnMaxItems) {
           btnMaxItems.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             SaveState.gold = Math.max(SaveState.gold || 0, 9999999);
             SaveState.gems = Math.max(SaveState.gems || 0, 999999);
             SaveState.wishTokens = Math.max(SaveState.wishTokens || 0, 999);
@@ -12931,6 +13107,7 @@
         const btnResetItems = document.getElementById('btnResetWikiItemsStarter');
         if (btnResetItems) {
           btnResetItems.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             for (const sk of Object.keys(WIKI_GEAR_SCROLLS_META)) SaveState.gearScrolls[sk] = 120;
             SaveState.chestKeys = { silver_chest_key: 30, obsidian_chest_key: 20, chromatic_chest_key: 10 };
             SaveState.wishTokens = 30;
@@ -15881,7 +16058,10 @@
 
         const btnMaxEv = document.getElementById('btnMaxAllWikiEventsCurrencies');
         if (btnMaxEv) {
+          // Nút này nằm trong HTML vừa sinh ra -> phải áp lại cờ ẩn/hiện.
+          if (typeof applyDevCheatVisibility === 'function') applyDevCheatVisibility();
           btnMaxEv.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             SaveState.stamina = 50;
             ev.huntingWarriorCard = true;
             ev.treasureCoins = (ev.treasureCoins || 0) + 500;
@@ -18937,6 +19117,366 @@
         return count;
       }
 
+      // ==================== BEGINNER JOURNEY (HÀNH TRÌNH TÂN THỦ) ====================
+      // Khối này được chèn vào index.html ngay trước buildAchievementsPanelHtml().
+      // Chỉ tài khoản MỚI có beginnerJourney.startedAt > 0 mới thấy tutorial.
+
+      const BEGINNER_STEPS = [
+        {
+          id: 'N01',
+          title: 'Chào mừng Cung Thủ',
+          desc: 'Ta là Artemis, người dẫn đường của ngươi. Trước khi bước vào hầm ngục, hãy để ta kể sơ về luật chơi: ngươi chỉ bắn khi ĐỨNG YÊN, nên hãy di chuyển né đòn rồi dừng lại để xả tên.',
+          hint: 'Bấm "Đã Hiểu" để bắt đầu hành trình.',
+          event: 'dialogue',
+          eventLabel: 'Hoàn thành hội thoại',
+          reward: { gold: 100 },
+          icon: '🐴',
+        },
+        {
+          id: 'N02',
+          title: 'Làm quen chiến đấu',
+          desc: 'Hãy vào phó bản Chương 1 và dọn sạch phòng đầu tiên. Đừng quên: quái chỉ chết khi ngươi ngừng di chuyển và để cung tự động khai hỏa.',
+          hint: 'Vào "Phó Bản" → bấm "Bắt Đầu" → dọn sạch phòng 1.',
+          event: 'first_room_cleared',
+          eventLabel: 'Dọn sạch 1 phòng',
+          reward: { gold: 200, gems: 10 },
+          icon: '⚔️',
+        },
+        {
+          id: 'N03',
+          title: 'Thu thập chiến lợi phẩm',
+          desc: 'Mỗi quái gục ngã đều rơi ngọc EXP, vàng và đôi khi cả tim hồi máu. Hãy nhặt đủ 10 vật phẩm rơi trên chiến trường.',
+          hint: 'Đi lại gần vật phẩm rơi để tự động nhặt.',
+          event: 'loot_10',
+          eventLabel: 'Nhặt 10 vật phẩm',
+          reward: { gold: 150, scrolls: 2 },
+          icon: '💎',
+        },
+        {
+          id: 'N04',
+          title: 'Trang bị sức mạnh',
+          desc: 'Trang bị là nguồn sức mạnh chính. Hãy mở tab Trang Bị và mặc một món đồ vào ô trống.',
+          hint: 'Tab "Trang Bị" → chọn món đồ trong túi → Trang Bị.',
+          event: 'gear_equipped',
+          eventLabel: 'Trang bị 1 món đồ',
+          reward: { gold: 250, scrolls: 3 },
+          icon: '🛡️',
+        },
+        {
+          id: 'N05',
+          title: 'Cường hóa',
+          desc: 'Trang bị có thể nâng cấp để tăng chỉ số. Hãy nâng cấp bất kỳ món nào lên cấp 2.',
+          hint: 'Tab "Trang Bị" → chọn món → bấm "Nâng Cấp".',
+          event: 'gear_upgraded',
+          eventLabel: 'Nâng cấp trang bị',
+          reward: { gold: 300, scrolls: 2 },
+          icon: '🔨',
+        },
+        {
+          id: 'N06',
+          title: 'Học kỹ năng',
+          desc: 'Trong phó bản, mỗi lần lên cấp ngươi sẽ được Valkyrie ban một kỹ năng. Hãy chọn 1 kỹ năng bất kỳ.',
+          hint: 'Giết quái để lên cấp → bảng chọn kỹ năng hiện ra → chọn 1.',
+          event: 'skill_picked',
+          eventLabel: 'Chọn 1 kỹ năng',
+          reward: { gold: 250, gems: 15 },
+          icon: '✨',
+        },
+        {
+          id: 'N07',
+          title: 'Thử thách đầu tiên',
+          desc: 'Đã đến lúc chứng minh. Hãy hoàn thành toàn bộ Chương 1 — 15 phòng, bao gồm cả trùm cuối.',
+          hint: 'Vượt qua cả 15 phòng của Chương 1.',
+          event: 'chapter_cleared',
+          eventLabel: 'Hoàn thành Chương 1',
+          reward: { gold: 800, gems: 50, chestKeys: 1 },
+          icon: '🏆',
+        },
+        {
+          id: 'N08',
+          title: 'Chính thức trở thành Cung Thủ',
+          desc: 'Ngươi đã đi hết con đường tân thủ. Từ nay, hầm ngục là của ngươi — hãy cày cuốc, mài giũa trang bị và chinh phục những chương cao hơn.',
+          hint: 'Bấm "Hoàn Tất" để kết thúc hành trình tân thủ.',
+          event: 'dialogue',
+          eventLabel: 'Hoàn tất hành trình',
+          reward: { gold: 1000, gems: 80 },
+          icon: '👑',
+        },
+      ];
+
+      const BEGINNER_STEP_IDS = new Set(BEGINNER_STEPS.map(s => s.id));
+
+      /** Tutorial có đang bật cho tài khoản này không. */
+      function isBeginnerJourneyActive() {
+        const bj = SaveState.beginnerJourney;
+        if (!bj || typeof bj !== 'object') return false;
+        if (!bj.startedAt || bj.startedAt <= 0) return false;   // tài khoản cũ
+        if (bj.skipped) return false;
+        if (bj.isCompleted) return false;
+        return true;
+      }
+
+      /**
+       * Kích hoạt tutorial. CHỈ gọi một lần, ngay sau khi đăng ký tài khoản mới.
+       * Tài khoản cũ không bao giờ đi qua hàm này nên startedAt luôn = 0.
+       */
+      function activateBeginnerJourney() {
+        if (!SaveState.beginnerJourney || typeof SaveState.beginnerJourney !== 'object') {
+          SaveState.beginnerJourney = {
+            version: 1, startedAt: 0, completedAt: 0, skipped: false,
+            currentStep: 'N01', completedSteps: [], claimedRewards: [], isCompleted: false,
+          };
+        }
+        const bj = SaveState.beginnerJourney;
+        if (bj.startedAt > 0) return false;      // đã kích hoạt rồi, không làm lại
+        bj.version = 1;
+        bj.startedAt = Date.now();
+        bj.completedAt = 0;
+        bj.skipped = false;
+        bj.currentStep = 'N01';
+        bj.completedSteps = [];
+        bj.claimedRewards = [];
+        bj.isCompleted = false;
+        SaveState.save();
+        return true;
+      }
+
+      function getBeginnerStep(id) {
+        return BEGINNER_STEPS.find(s => s.id === id) || null;
+      }
+
+      function getBeginnerCompletedCount() {
+        const bj = SaveState.beginnerJourney || {};
+        return (bj.completedSteps || []).filter(id => BEGINNER_STEP_IDS.has(id)).length;
+      }
+
+      /**
+       * Đánh dấu hoàn thành một bước. Idempotent: gọi nhiều lần chỉ tính một lần.
+       * Trả về true nếu đây là lần đầu hoàn thành.
+       */
+      function completeBeginnerStep(stepId) {
+        if (!isBeginnerJourneyActive()) return false;
+        if (!BEGINNER_STEP_IDS.has(stepId)) return false;   // whitelist
+        const bj = SaveState.beginnerJourney;
+        if (!Array.isArray(bj.completedSteps)) bj.completedSteps = [];
+        if (bj.completedSteps.includes(stepId)) return false;   // đã xong
+
+        bj.completedSteps.push(stepId);
+
+        // Tiến tới bước kế tiếp còn trống
+        const nextIdx = BEGINNER_STEPS.findIndex(s => !bj.completedSteps.includes(s.id));
+        if (nextIdx >= 0) {
+          bj.currentStep = BEGINNER_STEPS[nextIdx].id;
+        } else {
+          // Tất cả bước xong -> hoàn tất hành trình
+          bj.isCompleted = true;
+          bj.completedAt = Date.now();
+          bj.currentStep = 'N08';
+        }
+        SaveState.save();
+        if (typeof checkAchievements === 'function') checkAchievements(true);
+        return true;
+      }
+
+      /** Trao thưởng cho một bước. Idempotent theo claimedRewards. */
+      function claimBeginnerReward(stepId) {
+        const step = getBeginnerStep(stepId);
+        if (!step) return false;
+        const bj = SaveState.beginnerJourney;
+        if (!bj || !Array.isArray(bj.claimedRewards)) return false;
+        if (bj.claimedRewards.includes(stepId)) return false;   // đã nhận rồi
+        if (!(bj.completedSteps || []).includes(stepId)) return false;  // chưa hoàn thành
+
+        const r = step.reward || {};
+        if (r.gold) SaveState.gold = (SaveState.gold || 0) + r.gold;
+        if (r.gems) SaveState.gems = (SaveState.gems || 0) + r.gems;
+        if (r.scrolls) {
+          if (typeof ensureWikiCurrencyAndItemsState === 'function') ensureWikiCurrencyAndItemsState();
+          if (SaveState.gearScrolls) {
+            const slots = Object.keys(SaveState.gearScrolls);
+            // chia đều cuộn giấy cho các slot đang có
+            let left = r.scrolls;
+            for (const s of slots) {
+              if (left <= 0) break;
+              SaveState.gearScrolls[s] = (SaveState.gearScrolls[s] || 0) + 1;
+              left--;
+            }
+          }
+        }
+        if (r.chestKeys) {
+          if (typeof ensureWikiCurrencyAndItemsState === 'function') ensureWikiCurrencyAndItemsState();
+          if (SaveState.chestKeys) {
+            SaveState.chestKeys.silver_chest_key = (SaveState.chestKeys.silver_chest_key || 0) + r.chestKeys;
+          }
+        }
+        bj.claimedRewards.push(stepId);
+        SaveState.save();
+
+        const bits = [];
+        if (r.gold) bits.push(`+${r.gold.toLocaleString('vi-VN')} 🪙`);
+        if (r.gems) bits.push(`+${r.gems} 💎`);
+        if (r.scrolls) bits.push(`+${r.scrolls} 📜`);
+        if (r.chestKeys) bits.push(`+${r.chestKeys} 🗝️`);
+        if (bits.length && typeof showToast === 'function') {
+          showToast(`🎁 Thưởng nhiệm vụ: ${bits.join(' • ')}`);
+        }
+        if (typeof SoundFX !== 'undefined' && SoundFX.levelUp) SoundFX.levelUp();
+        return true;
+      }
+
+      /** Bỏ qua tutorial. Vẫn giữ startedAt để không kích hoạt lại. */
+      function skipBeginnerJourney() {
+        const bj = SaveState.beginnerJourney;
+        if (!bj || !bj.startedAt) return false;
+        bj.skipped = true;
+        bj.completedAt = Date.now();
+        SaveState.save();
+        return true;
+      }
+
+      /**
+       * Các hook sự kiện gameplay thật. Mỗi hook chỉ đánh dấu bước tương ứng,
+       * KHÔNG tự trao thưởng (người chơi phải bấm nhận) — tránh phát thưởng trùng.
+       */
+      const BeginnerHooks = {
+        onDialogueDone() { completeBeginnerStep('N01'); },
+        onRoomCleared() { completeBeginnerStep('N02'); },
+        onLoot(count = 1) {
+          const bj = SaveState.beginnerJourney;
+          if (!bj || !isBeginnerJourneyActive()) return;
+          bj._lootCount = (bj._lootCount || 0) + count;
+          if (bj._lootCount >= 10) completeBeginnerStep('N03');
+        },
+        onGearEquipped() { completeBeginnerStep('N04'); },
+        onGearUpgraded() { completeBeginnerStep('N05'); },
+        onSkillPicked() { completeBeginnerStep('N06'); },
+        onChapterCleared(chapterId) {
+          if (Number(chapterId) === 1) completeBeginnerStep('N07');
+        },
+        onFinalStepDone() { completeBeginnerStep('N08'); },
+      };
+
+      /** HTML cho panel Hành Trình Tân Thủ. */
+      function buildBeginnerJourneyPanelHtml() {
+        const bj = SaveState.beginnerJourney || {};
+        const active = isBeginnerJourneyActive();
+        const done = getBeginnerCompletedCount();
+        const total = BEGINNER_STEPS.length;
+        const pct = Math.round((done / total) * 100);
+        const currentId = bj.currentStep || 'N01';
+
+        const rows = BEGINNER_STEPS.map((s, idx) => {
+          const isDone = (bj.completedSteps || []).includes(s.id);
+          const isClaimed = (bj.claimedRewards || []).includes(s.id);
+          const isCurrent = s.id === currentId && active;
+          const r = s.reward || {};
+          const rewardBits = [];
+          if (r.gold) rewardBits.push(`${r.gold} 🪙`);
+          if (r.gems) rewardBits.push(`${r.gems} 💎`);
+          if (r.scrolls) rewardBits.push(`${r.scrolls} 📜`);
+          if (r.chestKeys) rewardBits.push(`${r.chestKeys} 🗝️`);
+
+          const border = isDone ? 'border-emerald-500/60' : (isCurrent ? 'border-amber-400/80' : 'border-slate-700/70');
+          const bg = isDone ? 'bg-emerald-950/40' : (isCurrent ? 'bg-amber-950/30' : 'bg-slate-950/60');
+          const badge = isDone
+            ? '<span class="text-emerald-400 font-black text-xs">✔ XONG</span>'
+            : (isCurrent ? '<span class="text-amber-300 font-black text-xs">▶ ĐANG LÀM</span>' : '<span class="text-slate-500 font-bold text-xs">🔒 CHƯA MỞ</span>');
+
+          const claimBtn = (isDone && !isClaimed)
+            ? `<button data-bj-claim="${s.id}" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-black transition">Nhận thưởng</button>`
+            : (isClaimed ? '<span class="text-[11px] text-slate-500 font-bold">Đã nhận</span>' : '');
+
+          const actionBtn = (isCurrent && s.event === 'dialogue')
+            ? `<button data-bj-step="${s.id}" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-[11px] font-black transition">Đã Hiểu</button>`
+            : '';
+
+          return `
+            <div class="rounded-xl border-2 ${border} ${bg} p-3 flex flex-col gap-1.5">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">${s.icon}</span>
+                <span class="text-[10px] font-black text-slate-500">${s.id}</span>
+                <b class="text-white text-xs flex-1">${s.title}</b>
+                ${badge}
+              </div>
+              <p class="text-[11px] text-slate-300 leading-snug">${s.desc}</p>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] text-cyan-300 font-bold">🎯 ${s.eventLabel}</span>
+                ${rewardBits.length ? `<span class="text-[10px] text-amber-300 font-bold">🎁 ${rewardBits.join(' • ')}</span>` : ''}
+                <span class="flex-1"></span>
+                ${actionBtn}${claimBtn}
+              </div>
+              ${isCurrent ? `<div class="text-[10px] text-slate-400 italic">${s.hint}</div>` : ''}
+            </div>`;
+        }).join('');
+
+        return `
+          <div class="flex flex-col gap-3">
+            <div class="rounded-2xl border-2 border-amber-500/50 bg-gradient-to-br from-amber-950/50 to-slate-950 p-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-2xl">🐴</div>
+                <div class="flex-1">
+                  <div class="text-[10px] font-black uppercase tracking-wider text-amber-400">Người Dẫn Đường</div>
+                  <b class="text-white text-sm">Artemis</b>
+                  <div class="text-[11px] text-slate-400">${active ? 'Đang đồng hành cùng bạn' : (bj.skipped ? 'Bạn đã bỏ qua hành trình' : 'Hành trình đã hoàn tất')}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xl font-black text-amber-400">${done}/${total}</div>
+                  <div class="text-[10px] text-slate-500 font-bold">BƯỚC</div>
+                </div>
+              </div>
+              <div class="mt-3 h-2 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all" style="width:${pct}%"></div>
+              </div>
+              ${active ? `<div class="mt-2 flex gap-2">
+                <button data-bj-skip="1" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-[11px] font-bold transition">Bỏ qua hướng dẫn</button>
+              </div>` : ''}
+            </div>
+            <div class="flex flex-col gap-2">${rows}</div>
+          </div>`;
+      }
+
+      /** Gắn sự kiện cho panel vừa render. */
+      function bindBeginnerJourneyEvents() {
+        document.querySelectorAll('[data-bj-step]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-bj-step');
+            completeBeginnerStep(id);
+            claimBeginnerReward(id);
+            renderBeginnerJourneyUI();
+          });
+        });
+        document.querySelectorAll('[data-bj-claim]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-bj-claim');
+            if (claimBeginnerReward(id)) renderBeginnerJourneyUI();
+          });
+        });
+        const skipBtn = document.querySelector('[data-bj-skip]');
+        if (skipBtn) {
+          skipBtn.addEventListener('click', () => {
+            if (!confirm('Bỏ qua hành trình tân thủ? Bạn sẽ không nhận được thưởng các bước còn lại.')) return;
+            skipBeginnerJourney();
+            renderBeginnerJourneyUI();
+          });
+        }
+      }
+
+      /** Render panel vào container. */
+      function renderBeginnerJourneyUI() {
+        const el = document.getElementById('beginnerJourneyContainer');
+        if (!el) return;
+        const bj = SaveState.beginnerJourney;
+        // Chỉ hiển thị với tài khoản đã từng kích hoạt tutorial (kể cả đã xong/bỏ qua,
+        // để người chơi xem lại được).
+        if (!bj || !bj.startedAt) {
+          el.innerHTML = '<div class="text-center text-slate-500 text-xs py-8">Hành trình tân thủ chỉ dành cho tài khoản mới.</div>';
+          return;
+        }
+        el.innerHTML = buildBeginnerJourneyPanelHtml();
+        bindBeginnerJourneyEvents();
+      }
+
+
       function buildAchievementsPanelHtml() {
         const filter = SaveState.achievementFilter || 'all';
         const counts = getAchievementCounts();
@@ -19364,8 +19904,19 @@
         safeRender('heroes', () => renderVnHeroesAndWardrobeUI());
         safeRender('campaign', () => renderVnCampaignStageUI());
         safeRender('collectibles', () => renderVnCollectiblesTabUI());
+        safeRender('beginnerJourney', () => {
+          if (typeof renderBeginnerJourneyUI === 'function') renderBeginnerJourneyUI();
+        });
+        safeRender('continueButton', () => {
+          if (typeof syncContinueButton === 'function') syncContinueButton();
+        });
         safeRender('events', () => renderVnEventsBannerCardsUI());
         safeRender('wikiEvents', () => renderWikiEventsHubUI());
+        // PHẢI chạy SAU mọi render: một số nút cheat nằm trong HTML sinh động
+        // (wikiEventsHub, danh sách anh hùng) nên bị tạo lại mỗi lần render.
+        safeRender('devCheats', () => {
+          if (typeof applyDevCheatVisibility === 'function') applyDevCheatVisibility();
+        });
 
         const stageAtkEl = document.getElementById('stageAtkVal');
         if (stageAtkEl) stageAtkEl.textContent = '840.05K';
@@ -19631,6 +20182,7 @@
         const maxTalBtn = document.getElementById('btnMaxAllTalents5Star');
         if (maxTalBtn) {
           maxTalBtn.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             for (const t of TALENT_CARDS_DATA) {
               SaveState.talents[t.id] = t.maxLv;
             }
@@ -19986,9 +20538,258 @@
       }
       window.addEventListener('resize', resizeCanvas);
 
+      // ==================== SESSION PHÓ BẢN ====================
+      // Phân biệt ba hành động (spec Phần 5.2):
+      //   retry   — chơi lại từ màn 1 của phó bản hiện tại (giữ chương đã chọn)
+      //   reset   — kết thúc phiên, tạo phiên mới từ màn 1 (chọn lại chương)
+      //   continue— tiếp tục phiên đang dở (chưa hỗ trợ checkpoint, trả false)
+      // Session CHỈ giữ trạng thái theo lượt chơi. SaveState (nhân vật) không bị
+      // đụng tới — reset phó bản tuyệt đối không xoá tiến trình người chơi.
+      const DungeonSession = {
+        active: false,
+        id: 0,
+        startedAt: 0,
+        chapterIdx: 0,
+
+        begin(chapterIdx) {
+          this.id += 1;
+          this.active = true;
+          this.startedAt = Date.now();
+          this.chapterIdx = chapterIdx;
+          Game.sessionId = this.id;
+          return this.id;
+        },
+
+        end() {
+          this.active = false;
+          Game.sessionId = 0;
+        },
+      };
+
+      // ==================== CHECKPOINT (CONTINUE) ====================
+      // Lưu tiến trình Ở MỨC PHÒNG để hỗ trợ "Continue" sau khi đóng tab.
+      //
+      // Nguyên tắc an toàn:
+      //  • CHỈ lưu khi phòng đã sạch quái (Game.roomCleared) — không bao giờ lưu
+      //    giữa lúc đang đánh, vì trạng thái nửa vời (quái còn sống, đạn đang bay,
+      //    boss đang phase 2) không thể khôi phục chính xác.
+      //  • CHỈ lưu phần CHỈ SỐ của nhân vật, không lưu entity nào.
+      //  • Không đụng SaveState — checkpoint là field riêng của Game.
+      //  • Retry/Reset xoá checkpoint. Continue dùng rồi xoá.
+      const CHECKPOINT_VERSION = 1;
+
+      function canSaveCheckpoint() {
+        return !!(
+          Game.running &&
+          Game.roomCleared &&
+          Game.player &&
+          Game.chapter &&
+          Game.room >= 1 &&
+          Game.room < Game.maxRooms
+        );
+      }
+
+      /** Gọi khi phòng vừa sạch — điểm an toàn duy nhất được phép lưu. */
+      function saveCheckpoint() {
+        if (!canSaveCheckpoint()) return false;
+        const p = Game.player;
+        SaveState.dungeonCheckpoint = {
+          v: CHECKPOINT_VERSION,
+          chapterIdx: SaveState.selectedChapterIdx,
+          chapterId: Game.chapter.id,
+          room: Game.room,
+          maxRooms: Game.maxRooms,
+          kills: Game.kills,
+          runGold: Game.runGold,
+          savedAt: Date.now(),
+          // Chỉ số nhân vật — dựng lại được hoàn toàn, không phải entity
+          player: {
+            hp: Math.max(1, Math.round(p.hp)),
+            maxHp: Math.round(p.maxHp),
+            atk: Math.round(p.atk),
+            aspd: p.aspd,
+            critRate: p.critRate,
+            critDmgMult: p.critDmgMult,
+            defFlat: p.defFlat,
+            dmgReduction: p.dmgReduction,
+            level: p.level,
+            xp: p.xp,
+            xpNext: p.xpNext,
+            // Kỹ năng đã nhặt trong lượt này (id -> bậc)
+            skills: { ...p.skills },
+          },
+        };
+        // Lưu ngay để sống qua reload/đóng tab.
+        SaveState.save();
+        return true;
+      }
+
+      function clearCheckpoint() {
+        SaveState.dungeonCheckpoint = null;
+        SaveState.save();
+      }
+
+      /**
+       * Checkpoint có dùng được không: phải cùng chương đang chọn và còn hiệu lực.
+       * Hết hạn sau 24h để tránh "continue" một lượt chơi đã quá cũ.
+       */
+      function getUsableCheckpoint() {
+        const cp = SaveState.dungeonCheckpoint;
+        if (!cp || cp.v !== CHECKPOINT_VERSION) return null;
+        if (cp.chapterIdx !== SaveState.selectedChapterIdx) return null;
+        if (!cp.player || !(cp.room >= 1) || !(cp.room < cp.maxRooms)) return null;
+        if (Date.now() - (cp.savedAt || 0) > 24 * 60 * 60 * 1000) return null;
+        return cp;
+      }
+
+      /** Cập nhật nút Continue trong tab chiến đấu. */
+      function syncContinueButton() {
+        const btn = document.getElementById('btnContinueRun');
+        const label = document.getElementById('btnContinueRunLabel');
+        if (!btn) return;
+        const cp = getUsableCheckpoint();
+        if (!cp) {
+          btn.classList.add('hidden');
+          return;
+        }
+        btn.classList.remove('hidden');
+        if (label) label.textContent = `▶ TIẾP TỤC • PHÒNG ${cp.room}/${cp.maxRooms}`;
+      }
+
+      /**
+       * CONTINUE: khôi phục lượt chơi từ checkpoint.
+       * Khác với startNewRun() (Retry/Reset) ở chỗ: giữ phòng hiện tại, giữ kỹ năng
+       * đã nhặt, giữ kills/runGold. Chỉ dựng lại entity từ đầu phòng đó.
+       */
+      function continueRun() {
+        const cp = getUsableCheckpoint();
+        if (!cp) { showToast('⚠️ Không có lượt chơi nào để tiếp tục.'); return false; }
+
+        // Vẫn dựng lại từ getComputedStats để chỉ số trang bị mới nhất được áp,
+        // sau đó ghi đè bằng chỉ số đã lưu của lượt chơi.
+        startNewRun('continue');
+
+        Game.room = cp.room;
+        Game.maxRooms = cp.maxRooms;
+        Game.kills = cp.kills || 0;
+        Game.runGold = cp.runGold || 0;
+
+        const p = Game.player;
+        if (p && cp.player) {
+          const sp = cp.player;
+          p.maxHp = Math.max(1, Math.round(sp.maxHp || p.maxHp));
+          p.hp = Math.min(p.maxHp, Math.max(1, Math.round(sp.hp || p.maxHp)));
+          p.atk = Math.max(1, Math.round(sp.atk || p.atk));
+          if (typeof sp.aspd === 'number' && sp.aspd > 0) p.aspd = sp.aspd;
+          if (typeof sp.critRate === 'number') p.critRate = sp.critRate;
+          if (typeof sp.critDmgMult === 'number') p.critDmgMult = sp.critDmgMult;
+          if (typeof sp.defFlat === 'number') p.defFlat = sp.defFlat;
+          if (typeof sp.dmgReduction === 'number') p.dmgReduction = sp.dmgReduction;
+          p.level = Math.max(1, Math.round(sp.level || 1));
+          p.xp = Math.max(0, Number(sp.xp) || 0);
+          p.xpNext = Math.max(1, Number(sp.xpNext) || 80);
+          // Khôi phục kỹ năng đã nhặt trong lượt (không tính lại thành tựu)
+          p.skills = {};
+          p.skillList = [];
+          for (const [skId, tier] of Object.entries(sp.skills || {})) {
+            if (!ROGUE_SKILLS.some(s => s.id === skId)) continue;   // whitelist
+            p.skills[skId] = Math.max(1, Math.round(Number(tier) || 1));
+            const sk = ROGUE_SKILLS.find(s => s.id === skId);
+            if (sk) p.skillList.push(sk);
+          }
+        }
+
+        // Dựng lại phòng đã lưu (quái mới, sạch sẽ) rồi tiếp tục.
+        setupRoom(cp.room);
+        updateInGameHUD();
+        clearCheckpoint();          // dùng rồi xoá — tránh continue lặp lại
+        syncContinueButton();
+        showToast(`▶ Tiếp tục từ Phòng ${cp.room}/${cp.maxRooms}!`);
+        return true;
+      }
+
+      /**
+       * Xoá sạch mọi trạng thái combat của lượt chơi.
+       * Tách riêng khỏi startNewRun() để mọi đường vào trận (retry / reset /
+       * chọn chương) đều đi qua cùng một chỗ dọn dẹp.
+       */
+      function clearRunState() {
+        // Array entity
+        Game.enemies = [];
+        Game.obstacles = [];
+        Game.playerBullets = [];
+        Game.enemyBullets = [];
+        Game.swords = [];
+        Game.drops = [];
+        Game.shockwaves = [];
+        Game.lightningBolts = [];
+        Game.meteors = [];
+        Game.artemisHawks = [];
+        Game.particles = [];
+        Game.floatTexts = [];
+        Game.ambientMotes = [];
+        Game.floorDetails = [];
+        Game.floorDecals = [];
+        Game.afterimages = [];
+        Game.muzzleFlashes = [];
+        Game.wallTorches = [];
+
+        // Cờ trạng thái phòng / cổng
+        Game.roomCleared = false;
+        Game.portalOpen = false;
+        Game.playerTookDamageThisRoom = false;
+
+        // Timer & bộ đếm rời (trước đây giữ nguyên từ trận cũ — BUG-05)
+        Game.shakeTime = 0;
+        Game.shakeMag = 0;
+        Game.roomBannerTimer = 0;
+        Game.nyanjaSwordTimer = 0;
+        Game.artemisHawkTimer = 0;
+        Game.flyingSwordSkillTimer = 0;
+        Game.meteorTimer = 0;
+        Game.afterimageTimer = 0;
+        Game.thorMoveHammerTimer = 0;
+        Game.comboCount = 0;
+        Game.comboTimer = 0;
+        Game.screenFlashTimer = 0;
+        Game.cleoFireHitCount = 0;
+        Game.pausedNoModalFrames = 0;
+
+        // Joystick (không để di chuyển cũ dính sang trận mới)
+        if (Game.joy) {
+          Game.joy.active = false;
+          Game.joy.startX = 0; Game.joy.startY = 0;
+          Game.joy.currX = 0; Game.joy.currY = 0;
+          Game.joy.dx = 0; Game.joy.dy = 0;
+        }
+      }
+
+      /**
+       * Chặn việc chạy song song hai vòng lặp game.
+       * Trước đây bấm "Chơi Lại" hai lần liên tiếp sẽ tạo hai requestAnimationFrame
+       * cùng lúc, cả hai cùng update/render trên một Game object.
+       */
+      function stopGameLoop() {
+        if (Game.animId) {
+          cancelAnimationFrame(Game.animId);
+          Game.animId = 0;
+        }
+      }
+
       // Initialize a new Run
-      function startNewRun() {
+      function startNewRun(reason = 'fresh') {
         SoundFX.init();
+        // Dừng vòng lặp cũ TRƯỚC khi dựng trận mới để không có hai session.
+        stopGameLoop();
+        clearRunState();
+        // Retry / Reset đều xoá checkpoint. Chỉ 'continue' mới giữ lại
+        // (và continueRun() tự xoá sau khi khôi phục xong).
+        if (reason !== 'continue') {
+          SaveState.dungeonCheckpoint = null;
+        }
+        // Nút Continue phải ẩn ngay khi vừa xoá checkpoint.
+        syncContinueButton();
+
         const stats = getComputedStats();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
 
@@ -20002,6 +20803,9 @@
         document.getElementById('gameArenaView').classList.remove('hidden');
 
         resizeCanvas();
+
+        // Mở session mới — chỉ chứa trạng thái lượt chơi, không đụng SaveState.
+        DungeonSession.begin(SaveState.selectedChapterIdx);
 
         Game.chapter = ch;
         Game.room = 1;
@@ -20023,6 +20827,12 @@
           atk: stats.baseAtk,
           aspd: stats.baseAspd,
           critRate: stats.baseCrit,
+          // CRIT DMG đã gom đủ 5 nguồn (talent/artifact/hero-star/set/skin) —
+          // trước đây damageEnemy hardcode 1.85 nên mọi nguồn này vô hiệu.
+          critDmgMult: stats.critDmgMult || 1.85,
+          // DEF: chỉ số phòng thủ mới, quy đổi thành % giảm sát thương.
+          defFlat: stats.defFlat || 0,
+          dmgReduction: stats.dmgReduction || 0,
           gearDodge: stats.gearDodge || 0,
           goldBonus: stats.goldBonus || 0,
           // bonusSpd khong duoc dinh nghia trong HEROES -> 225 * undefined = NaN,
@@ -20074,7 +20884,6 @@
         setupRoom(1);
         updateInGameHUD();
 
-        if (Game.animId) cancelAnimationFrame(Game.animId);
         Game.lastTime = performance.now();
         Game.animId = requestAnimationFrame(gameLoop);
       }
@@ -20199,7 +21008,25 @@
           }
         }
 
-        const scale = Game.chapter.enemyScale * (1 + (roomNum - 1) * 0.13);
+        // ==================== CÂN BẰNG ĐỘ KHÓ ====================
+        // Trước đây quái/boss dùng số tuyệt đối (28/1450) trong khi HP người chơi
+        // tăng theo trang bị lên hàng chục nghìn -> quái gây 28 sát thương lên
+        // 75.000 HP (cần ~2700 đòn mới chết) và boss 3.147 HP chết trong 1 đòn.
+        //
+        // Nay dùng HAI thước đo khác nhau, mỗi cái đúng chỗ:
+        //   • HP quái/boss  neo theo ATK người chơi  -> TTK (thời gian giết) ổn định
+        //   • ATK quái/boss neo theo MaxHP người chơi -> số đòn chịu được ổn định
+        // Nhờ vậy độ khó giữ nguyên ý nghĩa ở mọi mức trang bị, không phụ thuộc
+        // vào việc người chơi đang mặc đồ gì.
+        //   quái HP  = 2.6 × ATK  -> ~2 đòn (crit ~1.5 đòn)
+        //   boss HP  = 30 × ATK   -> trận boss ~20-30s có né đòn
+        //   quái ATK = 5.5% maxHp -> ăn đòn liên tục chết sau vài phòng
+        //   boss ATK = 11% maxHp  -> 9 đòn là chết, buộc phải né
+        const playerMaxHp = Math.max(1, Game.player?.maxHp || 1000);
+        const playerAtk = Math.max(1, Game.player?.atk || 100);
+        const chapterMul = Game.chapter.enemyScale || 1;
+        const roomMul = 1 + (roomNum - 1) * 0.13;
+        const scale = chapterMul * roomMul;
 
         if (isBossRoom) {
           SoundFX.bossSpawn();
@@ -20209,7 +21036,9 @@
             queen: '🕷️ TRÙM: NỮ HOÀNG NHỆN ĐỘC',
             demon_king: '👑 ĐẠI MA VƯƠNG ATREUS'
           };
-          const maxHp = Math.round(1450 * scale * (bossType === 'demon_king' ? 1.35 : 1.0));
+          // Boss HP neo theo ATK người chơi để trận boss luôn dài đủ lâu bất kể
+          // người chơi mạnh yếu ra sao (~30 đòn đánh thường).
+          const maxHp = Math.round(playerAtk * 30 * scale * (bossType === 'demon_king' ? 1.35 : 1.0));
           Game.enemies.push({
             isBoss: true,
             type: bossType,
@@ -20219,7 +21048,10 @@
             r: 34,
             hp: maxHp,
             maxHp: maxHp,
-            atk: Math.round(45 * scale),
+            // ATK boss = 7.5% maxHp × scale → phòng 5 ~9 đòn, phòng 10 ~6 đòn,
+            // phòng 15 (trùm cuối) ~5 đòn. Đủ áp lực buộc né đòn nhưng không
+            // one-shot người chơi mới.
+            atk: Math.max(1, Math.round(playerMaxHp * 0.075 * Math.min(2.5, scale))),
             speed: 68,
             vx: 45,
             vy: 30,
@@ -20243,16 +21075,22 @@
             const t = types[(roomNum + i) % types.length];
             const ex = Game.wallPad + 35 + Math.random() * Math.max(80, Game.width - (Game.wallPad + 35) * 2);
             const ey = Game.wallPad + 45 + Math.random() * (Game.height * 0.42);
-            const baseHp = t === 'plant_turret' ? 210 : (t === 'skeleton_mage' ? 185 : 155);
+            // HP quái neo theo ATK người chơi -> TTK ổn định ~2 đòn ở mọi mức
+            // trang bị. plant_turret trâu nhất (3.2×), skeleton_mage 2.9×,
+            // còn lại 2.6×.
+            const atkMul = t === 'plant_turret' ? 3.2 : (t === 'skeleton_mage' ? 2.9 : 2.6);
+            const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale));
             Game.enemies.push({
               isBoss: false,
               type: t,
               x: ex,
               y: ey,
               r: t === 'bat' ? 13 : 16,
-              hp: Math.round(baseHp * scale),
-              maxHp: Math.round(baseHp * scale),
-              atk: Math.round(28 * scale),
+              hp: enemyHp,
+              maxHp: enemyHp,
+              // 5.5% maxHp chia đều cho số quái -> ăn đòn liên tục thì chết sau
+              // vài phòng, buộc phải di chuyển né thay vì đứng bắn.
+              atk: Math.max(1, Math.round(playerMaxHp * 0.055 * Math.min(2.5, scale) / Math.max(2, count * 0.6))),
               speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : 64),
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,
@@ -20383,6 +21221,8 @@
         p.skills[skId] = (p.skills[skId] || 0) + 1;
         // ---- Thành tựu: chỉ tính kỹ năng nhặt trong trận, không tính pre-pin ----
         if (!silent) bumpLifetimeStat('skillsPicked', 1);
+        // Beginner Journey: N06 — chọn kỹ năng trong trận (không tính pre-pin).
+        if (!silent && typeof BeginnerHooks !== 'undefined') BeginnerHooks.onSkillPicked();
         if (!p.skillList.some(x => x.id === skId)) {
           p.skillList.push(sk);
         }
@@ -20747,7 +21587,7 @@
         if (p && p.hero && p.hero.id === 'artemis') {
           e.artemisMarked = true;
         }
-        const finalDmg = Math.round(rawDmg * (isCrit ? 1.85 : 1.0) * markMult);
+        const finalDmg = Math.round(rawDmg * (isCrit ? (p.critDmgMult || 1.85) : 1.0) * markMult);
         if (typeof e.displayHp !== 'number') e.displayHp = e.hp;
         e.hp -= finalDmg;
         e.hitFlashTimer = 0.14;
@@ -20982,6 +21822,11 @@
           Game.portalOpen = true;
           SoundFX.portalOpen();
           document.getElementById('hudHintBanner').textContent = '✨ PHÒNG ĐÃ SẠCH QUÁI! Di chuyển vào CỔNG ÁNH SÁNG phía trên để sang phòng tiếp theo!';
+          // Beginner Journey: N02 — dọn sạch phòng đầu tiên.
+          if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onRoomCleared();
+          // Checkpoint: phòng vừa sạch là điểm an toàn duy nhất được lưu.
+          saveCheckpoint();
+          syncContinueButton();
 
           // ---- Thành tựu: đếm phòng đã dọn & phòng không mất máu ----
           bumpLifetimeStat('roomsCleared', 1);
@@ -21908,6 +22753,8 @@
               spawnFloatText(p.x, p.y - 28, `+${d.val || 1} ${scMeta.shortName}`, '#38bdf8', 12);
             }
             Game.drops.splice(i, 1);
+            // Beginner Journey: N03 — đếm vật phẩm nhặt được trên chiến trường.
+            if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onLoot(1);
             updateInGameHUD();
           }
         }
@@ -22093,6 +22940,12 @@
           return;
         }
 
+        // ===== DEF: giảm sát thương nhận vào =====
+        // Áp TRƯỚC các hiệu ứng rune/hero để mọi nguồn giảm trừ cộng dồn tuyến tính
+        // và không bao giờ đẩy sát thương về 0 (giữ tối thiểu 1).
+        if (p.dmgReduction > 0) {
+          dmg = Math.max(1, Math.round(dmg * (1 - p.dmgReduction)));
+        }
         // Guardian [Mythic Blessing Rune]: Reduces all DMG taken by -15%!
         if (isRuneEquipped('guardian')) {
           dmg = Math.max(1, Math.round(dmg * 0.85));
@@ -22152,6 +23005,8 @@
         }
 
         p.hp -= dmg;
+        // HP không bao giờ âm (trước đây có thể xuống số âm lớn trước khi kiểm tra chết).
+        if (p.hp < 0) p.hp = 0;
         Game.playerTookDamageThisRoom = true;
         p.invulnTimer = 0.65;
         Game.shakeTime = 0.22;
@@ -24421,7 +25276,13 @@
       function finishRun(isVictory) {
         Game.running = false;
         Game.paused = true;
-        if (Game.animId) cancelAnimationFrame(Game.animId);
+        stopGameLoop();
+        // Kết thúc session lượt chơi. SaveState (vàng/gems/thành tựu) đã được
+        // cộng ngay bên dưới và KHÔNG bị reset — reset phó bản không xoá nhân vật.
+        DungeonSession.end();
+        // Trận đã kết thúc -> checkpoint không còn ý nghĩa.
+        SaveState.dungeonCheckpoint = null;
+        syncContinueButton();
 
         const bonusGold = isVictory ? 350 * Game.chapter.id : Game.room * 20;
         const bonusGems = isVictory ? 40 * Game.chapter.id : Math.floor(Game.room * 2);
@@ -24434,6 +25295,8 @@
         bumpLifetimeStat('goldEarned', Game.runGold);
         setLifetimeStatMax('deepestRoom', Game.room);
         if (isVictory) {
+          // Beginner Journey: N07 — hoàn thành Chương 1.
+          if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onChapterCleared(Game.chapter && Game.chapter.id);
           bumpLifetimeStat('wins', 1);
           const chId = Game.chapter ? Game.chapter.id : 'x';
           SaveState.winsByChapter = SaveState.winsByChapter || {};
@@ -24598,7 +25461,12 @@
 
       // Start Game
       document.getElementById('btnStartGame').addEventListener('click', () => {
-        startNewRun();
+        // "Bắt Đầu" = Reset: luôn tạo phiên mới từ màn 1 và xoá checkpoint.
+        startNewRun('fresh');
+      });
+      // Continue: khôi phục lượt chơi từ checkpoint của đúng chương đang chọn.
+      document.getElementById('btnContinueRun')?.addEventListener('click', () => {
+        continueRun();
       });
 
       // Upgrade Gear Level
@@ -25115,6 +25983,8 @@
         refreshGearDetailModalContent();
         renderLobbyUI();
         showToast(`⬆️ Đã dùng ${cost} 🪙 + ${scNeed} ${scMeta.wikiName} cường hóa lên Lv.${item.level}!`);
+        // Beginner Journey: nhiệm vụ N05 chỉ hoàn thành khi THẬT SỰ nâng cấp thành công.
+        if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onGearUpgraded();
       });
 
       // Equip Item inside Gear Detail Modal
@@ -25148,10 +26018,13 @@
         const qualStar = formatQualityWithStars(newItem.quality, newItem.awakening || 0, true);
         showToast(`🛡️ Đã đeo [${tpl.name} (${qualStar}) Lv.${newItem.level}] lên người!`);
         renderLobbyUI();
+        // Beginner Journey: nhiệm vụ N04 chỉ hoàn thành khi THẬT SỰ mặc đồ.
+        if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onGearEquipped();
       });
 
       // V4 Modal Buttons: Max Upgrade (Mythic Lv.100 + Full 4 Gems + 3 SS Affixes), Quick Open Reforge, and 100% Gold Level Reset
       document.getElementById('btnModalMaxUpgradeGear')?.addEventListener('click', () => {
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
         if (!_activeModalGearRef) return;
         const { uid, isEquipped, slotKey } = _activeModalGearRef;
         const item = isEquipped ? SaveState.equippedGear[slotKey] : SaveState.gearBag.find(i => i.uid === uid);
@@ -25377,7 +26250,31 @@
         damageEnemy,
         grantAllRogueSkillsInRun,
         triggerDevilEncounter,
-        updateGame
+        updateGame,
+        // ===== API Beginner Journey =====
+        BEGINNER_STEPS,
+        BeginnerHooks,
+        isBeginnerJourneyActive,
+        activateBeginnerJourney,
+        completeBeginnerStep,
+        claimBeginnerReward,
+        skipBeginnerJourney,
+        getBeginnerCompletedCount,
+        buildBeginnerJourneyPanelHtml,
+        renderBeginnerJourneyUI,
+        // ===== API session / reset phó bản =====
+        DungeonSession,
+        clearRunState,
+        stopGameLoop,
+        // ===== API checkpoint / continue =====
+        saveCheckpoint,
+        clearCheckpoint,
+        getUsableCheckpoint,
+        continueRun,
+        syncContinueButton,
+        // ===== API dev cheats (kiểm thử) =====
+        devCheatsEnabled,
+        applyDevCheatVisibility
       };
 
       // Engrave Elemental Rune
@@ -25397,6 +26294,8 @@
       });
 
       function grantAllRogueSkillsInRun() {
+        // Cheat: chặn khi không bật cờ dev.
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
         if (!Game.running || !Game.player) return;
         for (const sk of ROGUE_SKILLS) {
           if (!Game.player.skills[sk.id]) {
@@ -25411,6 +26310,8 @@
       }
 
       function handleMaxAllClick() {
+        // Cheat: chặn khi không bật cờ dev.
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
         SaveState.applyMaxAllSystems(true);
         if (Game.running && Game.player) {
           const stats = getComputedStats();
@@ -25429,6 +26330,18 @@
 
       document.getElementById('btnMaxAllSystems')?.addEventListener('click', handleMaxAllClick);
       document.getElementById('btnWorkshopMaxAll')?.addEventListener('click', handleMaxAllClick);
+
+      // Nút Ẩn/Hiện panel Hành Trình Tân Thủ
+      document.getElementById('btnBeginnerJourneyToggle')?.addEventListener('click', () => {
+        const box = document.getElementById('beginnerJourneyContainer');
+        if (!box) return;
+        box.classList.toggle('hidden');
+      });
+      // Nhảy tới panel tân thủ từ thông báo
+      document.getElementById('btnOpenBeginnerJourney')?.addEventListener('click', () => {
+        document.querySelector('.nav-tab-btn[data-tab="tabTalents"]')?.click();
+        renderBeginnerJourneyUI();
+      });
       document.getElementById('btnMaxRunSkills')?.addEventListener('click', grantAllRogueSkillsInRun);
       document.getElementById('btnTriggerUltimate')?.addEventListener('click', triggerCelestialUltimate);
 

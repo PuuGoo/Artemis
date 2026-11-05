@@ -219,6 +219,17 @@
         loadCloudSave().then(function () {
           closeGate();
           enterGame();
+          // ===== Beginner Journey =====
+          // CHI tai khoan vua dang ky (mode === "register") moi duoc kich hoat.
+          // Tai khoan cu dang nhap (mode === "login") khong bao gio di qua day,
+          // nen tutorial khong bao gio tu bat tren du lieu da co.
+          if (mode === "register" && window.Archero2FusionAPI
+              && typeof window.Archero2FusionAPI.activateBeginnerJourney === "function") {
+            var activated = window.Archero2FusionAPI.activateBeginnerJourney();
+            if (activated && typeof window.Archero2FusionAPI.renderBeginnerJourneyUI === "function") {
+              window.Archero2FusionAPI.renderBeginnerJourneyUI();
+            }
+          }
           toast(mode === "login" ? "Chào mừng trở lại, " + (state.player.username || "") + "!" : "Tạo tài khoản thành công! Chúc may mắn!", "ok");
         });
       }).catch(function () {
@@ -288,6 +299,20 @@
           state.dirty = false;
           state.lastError = "";
           pulseSavedIndicator();
+        } else if (r.data && r.data.code && String(r.data.code).indexOf("ECONOMY_") === 0) {
+          // Server chặn vì số vàng/đá quý tăng bất thường. Khôi phục bản ghi server
+          // để người chơi không tiếp tục chơi trên dữ liệu sai, rồi báo rõ.
+          state.lastError = r.data.code;
+          if (r.data.serverData) {
+            try {
+              localStorage.setItem(SAVE_KEY, JSON.stringify(r.data.serverData));
+              state.revision = Number(r.data.serverRevision) || 0;
+              toast("Dữ liệu tài nguyên không hợp lệ đã bị từ chối. Đang tải lại tiến trình từ máy chủ…", "err");
+              setTimeout(function () { location.reload(); }, 1600);
+              return;
+            } catch (e) {}
+          }
+          toast((r.data && r.data.error) || "Tiến trình không hợp lệ, chưa được lưu.", "err");
         } else if (r.data && r.data.conflict) {
           toast("Tiến trình đã đổi từ thiết bị khác. Tải lại trang để đồng bộ.", "warn");
           state.lastError = "conflict";
