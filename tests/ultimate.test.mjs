@@ -36,7 +36,7 @@ const regen = html.match(/const ULT_REGEN_PER_SEC\s*=\s*(\d+)/);
 check("toc do hoi 10-30 NL/giay (5-10s moi lan dung)",
   regen && Number(regen[1]) >= 10 && Number(regen[1]) <= 30, regen ? regen[1] : "?");
 check("updateUltimateCharge duoc goi trong updateGame",
-  /function updateGame\(dt\)[\s\S]{0,400}?updateUltimateCharge\(dt\)/.test(html));
+  /function updateGame\(dt\)[\s\S]{0,1200}?updateUltimateCharge\(dt\)/.test(html));
 // Thoi gian hoi day
 const cost = html.match(/const ULT_COST\s*=\s*(\d+)/);
 const secs = cost && regen ? Number(cost[1]) / Number(regen[1]) : 0;

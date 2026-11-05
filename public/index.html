@@ -23680,13 +23680,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           document.getElementById('bossHudContainer').classList.add('hidden');
         }
 
-        // Acquired skills strip
+        // Acquired skills strip — chỉ dựng lại khi danh sách kỹ năng ĐỔI.
+        // HUD nay chạy mỗi frame; rebuild innerHTML mỗi frame là lãng phí
+        // (tạo lại toàn bộ node + mất tooltip đang hover).
         const strip = document.getElementById('hudSkillIcons');
-        strip.innerHTML = Game.player.skillList.map(sk => `
-          <span class="px-1.5 py-0.5 rounded-md bg-slate-900/90 border border-slate-700 text-[11px] font-bold text-white shadow" title="${sk.name}">
-            ${sk.icon}
-          </span>
-        `).join('');
+        const skillSig = Game.player.skillList.map(sk => sk.id || sk.name).join('|');
+        if (strip && strip._lastSig !== skillSig) {
+          strip._lastSig = skillSig;
+          strip.innerHTML = Game.player.skillList.map(sk => `
+            <span class="px-1.5 py-0.5 rounded-md bg-slate-900/90 border border-slate-700 text-[11px] font-bold text-white shadow" title="${sk.name}">
+              ${sk.icon}
+            </span>
+          `).join('');
+        }
       }
 
       // ==================== ROGUELIKE SKILL MODAL (VALKYRIE / ANGEL / DEVIL PROVIDERS) ====================
@@ -25577,6 +25583,17 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             if (sh.life <= 0) Game.shatterShards.splice(i, 1);
           }
         }
+
+        // HUD cập nhật MỖI FRAME, ở CUỐI update — không chỉ khi có quái chết.
+        //
+        // Trước đây updateInGameHUD() chỉ được gọi bên trong nhánh giết quái
+        // (sau `Game.enemies.filter(en => en.hp > 0)`), nên khi đánh trùm máu
+        // trùm giảm thật nhưng thanh máu HUD đứng nguyên 100% cho tới lúc trùm
+        // chết — người chơi tưởng trùm không mất máu.
+        //
+        // Đặt ở CUỐI hàm (không phải đầu) để HUD đọc HP SAU khi damage trong
+        // cùng frame đã áp dụng — nếu đặt ở đầu, HUD luôn trễ đúng 1 frame.
+        updateInGameHUD();
       }
 
       function spawnEnemyBullet(x, y, angle, speed, dmg, r = 6) {
