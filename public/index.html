@@ -1734,7 +1734,7 @@
             </div>
           </div>
         </div>
-        <div id="heroRosterGrid" class="max-w-4xl w-full mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2"></div>
+        <div id="heroRosterGrid" class="max-w-4xl w-full mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2"></div>
 
         <!-- Chi tiết anh hùng đang chọn -->
         <div id="heroDetailPanel" class="max-w-4xl w-full mx-auto"></div>
@@ -13194,7 +13194,6 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           const stars = getHeroStarLevel(h.id);
           const st = RARITY_STYLE[h.rarity] || RARITY_STYLE.Rare;
           const isSel = h.id === selId;
-          const starStr = '★'.repeat(stars) + '☆'.repeat(Math.max(0, 8 - stars));
           return `
             <button type="button" data-hero-pick="${h.id}"
               class="relative overflow-hidden rounded-xl border-2 ${st.ring} bg-gradient-to-b ${st.bg} p-2 text-left transition
@@ -13204,7 +13203,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                 <span class="text-xl leading-none">${h.spriteEmoji || h.skillIcon || '🃏'}</span>
                 <div class="min-w-0">
                   <b class="block text-[11px] font-black text-white truncate">${h.name}</b>
-                  <i class="block text-[8px] text-amber-300 not-italic tracking-tight">${starStr}</i>
+                  <i class="block text-[8px] not-italic tracking-tight">${stars > 0
+                    ? `<span class="text-amber-300">${'★'.repeat(stars)}</span><span class="text-slate-600">${'☆'.repeat(Math.max(0, 8 - stars))}</span>`
+                    : `<span class="text-slate-600">0★ · ${'☆'.repeat(8)}</span>`}</i>
                 </div>
               </div>
               <p class="text-[8.5px] text-slate-400 mt-1 leading-tight line-clamp-2">${(h.role || '').slice(0, 48)}</p>
@@ -13241,7 +13242,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <b class="text-sm font-black text-white">${hero.name}</b>
                   <span class="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-200">${hero.rarity}</span>
-                  <span class="text-[10px] text-amber-300 font-black">${'★'.repeat(stars)}${'☆'.repeat(Math.max(0, 8 - stars))}</span>
+                  <span class="text-[10px] font-black">${stars > 0
+                    ? `<span class="text-amber-300">${'★'.repeat(stars)}</span><span class="text-slate-600">${'☆'.repeat(Math.max(0, 8 - stars))}</span>`
+                    : '<span class="text-slate-500">0★ · Chưa lên sao</span>'}</span>
                 </div>
                 <p class="text-[10px] text-slate-400 mt-0.5">${hero.title || ''}</p>
                 <p class="text-[10px] text-cyan-300 font-bold mt-1">${hero.skillName || ''}</p>
