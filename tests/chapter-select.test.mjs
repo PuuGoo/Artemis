@@ -60,9 +60,17 @@ check("the chuong co lop khoa khi chua mo", /const lockOverlay = locked/.test(ht
 check("bam the khoa thi bao, khong doi chuong",
   /if \(isChapterLocked\(ch\)\) \{[\s\S]{0,200}?return;/.test(html));
 
-console.log("\n=== 4. NUT ◀ ▶ TON TRONG LUAT KHOA ===");
-check("nut Chuong sau chan chuong khoa", /btnNextChapter[\s\S]{0,400}?isChapterLocked/.test(html));
-check("nut Chuong truoc bo qua chuong khoa", /btnPrevChapter[\s\S]{0,400}?isChapterLocked/.test(html));
+console.log("\n=== 4. CHUYEN CHUONG TON TRONG LUAT KHOA ===");
+// Nút ◀ ▶ đã bỏ khỏi UI (thay bằng 3 tab chương trong mapSelectPanel).
+// Logic chuyển chương giữ lại ở hàm switchChapter(dir) và vẫn phải tôn trọng khoá.
+check("switchChapter chan chuong khoa",
+  /function switchChapter\(dir\)[\s\S]{0,1400}?isChapterLocked\(CHAPTERS\[next\]\)/.test(html));
+check("switchChapter bo qua chuong khoa khi lui",
+  /function switchChapter\(dir\)[\s\S]{0,900}?if \(!isChapterLocked\(CHAPTERS\[idx\]\)\) break;/.test(html));
+check("khong con nut ◀ ▶ trong DOM",
+  !/id="btnPrevChapter"/.test(html) && !/id="btnNextChapter"/.test(html));
+check("tab chuong khoa khong doi selectedChapterIdx",
+  /if \(isChapterLocked\(target\)\) \{[\s\S]{0,300}?return;/.test(html));
 
 // ============================================================ 5. Rò rỉ dữ liệu
 console.log("\n=== 5. CHONG RO RI DU LIEU GIUA TAI KHOAN ===");

@@ -56,12 +56,18 @@ console.log("\n=== 3. DOM & CSS ===");
 check("co #mapSelectPanel", html.includes('id="mapSelectPanel"'));
 check("chapterSelectStrip cu da an (hidden)", /id="chapterSelectStrip" class="hidden"/.test(html));
 check("co .ms-stage", /\.ms-stage \{/.test(html));
-check("co .ms-art voi aspect-ratio", /\.ms-art \{[^}]*aspect-ratio: 2 \/ 1/.test(html));
+check("co .ms-art voi aspect-ratio 21/9 (gon hon 2/1)",
+  /\.ms-art \{[^}]*aspect-ratio: 21 \/ 9/.test(html));
 check("co .ms-art img object-fit cover", /\.ms-art img \{[^}]*object-fit: cover/.test(html));
 check("co .ms-scrim (gradient doc chu)", /\.ms-scrim \{/.test(html));
 check("co .ms-aura", /\.ms-aura \{/.test(html));
 check("co .ms-kicker / .ms-name / .ms-tagline", /\\.ms-kicker \{/.test(html.replace(/\\\\/g, "\\")) || /\.ms-kicker \{/.test(html));
-check("co .ms-stats 4 cot", /\.ms-stats \{[^}]*grid-template-columns: repeat\(4, 1fr\)/.test(html));
+check("KHONG con 4 o stats (da gop thanh 1 dong tien do)",
+  !/\.ms-stats \{/.test(html));
+check("co .ms-progline (1 dong tien do duy nhat)",
+  /\.ms-progline \{/.test(html));
+check("co .ms-bossline (1 dong trum duy nhat)",
+  /\.ms-bossline \{/.test(html));
 check("co .ms-node", /\.ms-node \{/.test(html));
 check("co .ms-node.done", /\.ms-node\.done \{/.test(html));
 check("co .ms-node.now", /\.ms-node\.now \{/.test(html));
@@ -71,10 +77,15 @@ check("co .ms-tab.is-locked", /\.ms-tab\.is-locked/.test(html));
 check("co .ms-tab-lock overlay", /\.ms-tab-lock \{/.test(html));
 check("co .ms-btn-start", /\.ms-btn-start \{/.test(html));
 check("co .ms-lockbar", /\.ms-lockbar \{/.test(html));
-check("co animation msNowPulse", /@keyframes msNowPulse/.test(html));
-check("co animation msFadeIn", /@keyframes msFadeIn/.test(html));
+check("node 'hien tai' dung vien vang (khong to dac)",
+  /\.ms-node\.now \{[^}]*background: rgba\(251,191,36,\.28\)/.test(html));
+check("node trum co animation rieng hoac vien do",
+  /\.ms-node\.boss-node\.now \{/.test(html));
 check("co responsive <= 640px", /@media \(max-width: 640px\) \{\s*\.ms-art/.test(html));
-check("responsive chuyen stats sang 2 cot", /@media \(max-width: 640px\) \{[\s\S]{0,400}?grid-template-columns: repeat\(2, 1fr\)/.test(html));
+check("responsive thu nho pips tren mobile",
+  /@media \(max-width: 640px\) \{[\s\S]{0,600}?\.ms-node \{[^}]*height: 6px/.test(html));
+check("responsive thu nho nut icon",
+  /@media \(max-width: 640px\) \{[\s\S]{0,900}?\.ms-btn-icon \{[^}]*width: 38px/.test(html));
 
 // ============================================================ 4. Hàm render
 console.log("\n=== 4. HAM renderMapSelect ===");
