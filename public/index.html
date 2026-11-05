@@ -7483,18 +7483,30 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (typeof map[artId] === 'number' && !Number.isNaN(map[artId])) {
           return Math.max(0, Math.min(15, map[artId]));
         }
-        map[artId] = 15;
-        return 15;
+        // Thánh vật chưa có trong save = chưa sở hữu = 0 sao.
+        // Trước đây trả 15 (kịch trần, ×8.5) cho MỌI artifact trong
+        // ARTIFACTS_DATA (46 món) nên tài khoản mới nhận ngay
+        // ~+76.670 ATK / +306.680 HP — gấp hàng nghìn lần trang bị tân thủ.
+        return 0;
       }
 
       // Wiki Formula: Each Star adds +50% Base Stats (0★ = 1.0x, 1★ = 1.5x ... 15★ = 8.5x)
+      // 0★ = CHƯA SỞ HỮU: thánh vật 0 sao không cộng bất kỳ chỉ số nào.
+      // Trước đây 0★ vẫn cho 1.0x base, nên cả 46 thánh vật (chưa ai mở khoá)
+      // cộng dồn +9.020 ATK / +36.080 HP cho MỌI tài khoản — kể cả tài khoản mới
+      // vừa tạo chưa từng chạm vào hệ thống thánh vật.
       function computeSingleArtifactStats(artObj, starLv = null) {
         if (starLv === null) starLv = getArtifactStarLevel(artObj.id);
-        const mult = 1 + Math.max(0, starLv) * 0.50;
+        const star = Math.max(0, Number(starLv) || 0);
+        if (star <= 0) {
+          return { atk: 0, hp: 0, mult: 0, owned: false };
+        }
+        const mult = 1 + star * 0.50;
         return {
           atk: Math.round(artObj.baseAtk * mult),
           hp: Math.round(artObj.baseHp * mult),
-          mult
+          mult,
+          owned: true
         };
       }
 
@@ -7522,6 +7534,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           const st = computeSingleArtifactStats(a, star);
           flatAtk += st.atk;
           flatHp += st.hp;
+          // Thánh vật chưa sở hữu (0★) không cộng cả bonus đặc biệt.
+          if (!st.owned) continue;
           const sb = a.specialBonus || {};
           specAtkPct += (sb.atkPct || 0) + (sb.allDmgPct || 0);
           specHpPct += (sb.hpPct || 0);
@@ -7539,10 +7553,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
 
         // Compute 13 Artifact Sets based on minimum Star level among set members (Activate / 3★ / 6★ / 9★ / 12★ / 15★)
+        // Chỉ set có ĐỦ thành viên sở hữu (>= 1 sao) mới được tính; trước đây
+        // minStar = 0 vẫn rơi vào tier 0 và cộng % cho cả 13 set.
         const activeSetsInfo = [];
         for (const s of ARTIFACT_SETS_DATA) {
           const memberStars = s.members.map(mId => getArtifactStarLevel(mId));
-          const minStar = Math.min(...memberStars);
+          const minStar = memberStars.length ? Math.min(...memberStars) : 0;
+          if (minStar <= 0) continue; // chưa sở hữu đủ bộ -> không có bonus
           const tierIdx = Math.min(5, Math.floor(minStar / 3)); // 0->0, 3->1, 6->2, 9->3, 12->4, 15->5
           const pctVal = s.tiersPct[tierIdx] || s.tiersPct[0];
           setAtkPct += pctVal / 100;
@@ -8930,7 +8947,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (typeof raw === 'number' && !Number.isNaN(raw)) {
           return Math.max(0, Math.min(8, raw));
         }
-        return 8;
+        // Tướng chưa có trong save = chưa mở khoá = 0 sao.
+        // Trước đây trả 8 (kịch trần) khiến MỌI tài khoản mới có ngay
+        // +960 ATK / +4.800 HP / ×2.0 atkMult / +30% crit / +15% dodge
+        // ngay khi tạo — cộng dồn cho cả 18 tướng qua globalAllBonus.
+        return 0;
       }
 
       function getHeroShardRequirement(heroObj, targetStar) {
@@ -9063,20 +9084,40 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           SaveState.heroSelectedSkins = {};
         }
         let idx = SaveState.heroSelectedSkins[heroId];
-        if (typeof idx !== 'number') idx = 2;
+        // Người chơi chưa chọn skin -> dùng skin Mặc Định (idx 0).
+        // Trước đây mặc định idx 2 (skin Huyền Thoại, +280 ATK / +1.150 HP /
+        // +10% crit) nên tài khoản mới được hưởng skin chưa mua.
+        if (typeof idx !== 'number') idx = 0;
         idx = Math.max(0, Math.min(list.length - 1, idx));
         return list[idx] || list[0];
       }
 
       function isHeroSkinUnlocked(skinId) {
-        if (!SaveState.unlockedSkins || typeof SaveState.unlockedSkins !== 'object') return true;
-        if (skinId.endsWith('_default') || skinId.endsWith('_legendary') || skinId.endsWith('_mythic')) return true;
+        if (!SaveState.unlockedSkins || typeof SaveState.unlockedSkins !== 'object') {
+          // Save chưa có trường -> chỉ coi skin Mặc Định là đã mở.
+          // Trước đây trả true cho TẤT CẢ skin, khiến getAllUnlockedSkinBonuses()
+          // cộng +1.715 ATK / +6.829 HP từ 46 skin chưa mua của 18 tướng.
+          return skinId.endsWith('_default');
+        }
+        if (skinId.endsWith('_default')) return true;
         return Boolean(SaveState.unlockedSkins[skinId]);
       }
 
+      /**
+       * Tổng bonus từ bộ sưu tập skin (mỗi skin đã mở cộng 25% chỉ số của nó).
+       *
+       * Chỉ tính skin của TƯỚNG ĐÃ SỞ HỮU. Trước đây hàm này duyệt cả 18 tướng
+       * và cộng skin Mặc Định của từng người, nên tài khoản mới (chỉ có 1 tướng)
+       * vẫn nhận +175 ATK / +684 HP từ 17 tướng chưa mở khoá — chiếm gần nửa
+       * tổng lực chiến ngay trận đầu.
+       */
       function getAllUnlockedSkinBonuses() {
         let atk = 0, hp = 0;
         for (const h of HEROES) {
+          // Tướng chưa sở hữu (0 sao và không phải tướng đang chọn) không
+          // đóng góp gì vào bộ sưu tập skin.
+          const owned = getHeroStarLevel(h.id) >= 1 || h.id === SaveState.selectedHeroId;
+          if (!owned) continue;
           const skins = getHeroSkinsList(h.id);
           for (const sk of skins) {
             if (isHeroSkinUnlocked(sk.id)) {
@@ -9392,8 +9433,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const setAtkRate = setBonuses.reduce((n,b)=>n+b.atk,0);
         const setHpRate = setBonuses.reduce((n,b)=>n+b.hp,0);
         const setAspdRate = setBonuses.reduce((n,b)=>n+(b.aspd||0),0);
-        const baseAtk = Math.round((78 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25));
-        const baseHp = Math.round((420 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25));
+        // Base ATK/HP của nhân vật khi chưa có bất kỳ bonus nào.
+        // 78/420 là mức của thời kỳ mọi hệ thống còn tặng sẵn chỉ số late-game,
+        // nên base chỉ chiếm phần nhỏ. Nay các hệ thống khác đã về 0 đúng nghĩa,
+        // hạ base để tài khoản mới rơi vào dải thiết kế 80-150 ATK / 400-800 HP
+        // (trước đây 176 ATK / 813 HP khi không mặc gì).
+        const baseAtk = Math.round((48 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25));
+        const baseHp = Math.round((300 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25));
         const baseAspd = +(weapon.aspd * (1 + talentTotals.aspdBonus + epicCount * 0.03 + setAspdRate + affAspd + (runeTotals.aspdBonus || 0) + (artifactTotals.aspdBonus || 0) + starMilestone.aspdBonus + (activeSkin.bonusAspd || 0))).toFixed(2);
         const setCrit = setBonuses.reduce((n,b)=>n+b.crit,0);
         const gearDodge = Math.min(.68, +(gemDodge + affDodge + talentTotals.dodgeBonus + (runeTotals.dodgeBonus || 0) + (artifactTotals.dodgeBonus || 0) + starMilestone.dodgeBonus + globalAll.dodgeBonus + setBonuses.reduce((n,b)=>n+b.dodge,0)).toFixed(3));
@@ -27684,6 +27730,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         hideRoomClearOverlay,
         spawnFloatText,
         openRunDefeat,
+        computeAllArtifactsAndSetsBonuses,
         recordBestiaryKill,
         BESTIARY,
         renderChapterSelectStrip,
