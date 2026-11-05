@@ -22342,7 +22342,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (roomNum > 1 && (SaveState.talents.healer || 0) > 0) {
           const healAmt = Math.round(Game.player.maxHp * 0.06 * SaveState.talents.healer);
           Game.player.hp = Math.min(Game.player.maxHp, Game.player.hp + healAmt);
-          spawnFloatText(Game.player.x, Game.player.y - 24, `+${healAmt} HP`, '#4ade80', 14);
+          spawnFloatText(Game.player.x, Game.player.y - 24, `+${healAmt} HP`, '#4ade80', 14, { kind: 'heal' });
         }
 
         // Update best room record
@@ -23075,12 +23075,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
 
         SoundFX.hitEnemy(isCrit);
+        // Phân loại phản hồi theo ngữ cảnh: crit > đánh trùm > đánh thường.
+        // Trước đây mọi cú đánh cùng cỡ chữ nên không phân biệt được.
         spawnFloatText(
           e.x + (Math.random() - 0.5) * 16,
           e.y - e.r - 6,
           isCrit ? `💥 ${finalDmg}!` : `${finalDmg}`,
-          isCrit ? '#fde047' : (isElemental ? '#fb923c' : '#f8fafc'),
-          isCrit ? 15 : 12
+          isCrit ? '#fde047' : (e.isBoss ? '#fda4af' : (isElemental ? '#fb923c' : '#f8fafc')),
+          isCrit ? 17 : (e.isBoss ? 14 : 12),
+          { kind: isCrit ? 'crit' : (e.isBoss ? 'boss' : 'normal') }
         );
 
         // Apply Elemental Enchantments
@@ -23160,7 +23163,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (btLv > 0) {
           const heal = Math.round(Game.player.maxHp * 0.04 * btLv);
           Game.player.hp = Math.min(Game.player.maxHp, Game.player.hp + heal);
-          spawnFloatText(Game.player.x, Game.player.y - 20, `+${heal}`, '#4ade80', 11);
+          spawnFloatText(Game.player.x, Game.player.y - 20, `+${heal}`, '#4ade80', 11, { kind: 'heal' });
         }
 
         // Drop Gold & EXP Gems & Red Hearts
@@ -23263,14 +23266,54 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       }
 
-      function spawnFloatText(x, y, text, color = '#ffffff', size = 13) {
+      /**
+       * Text bay lên khi có sự kiện (sát thương, hồi máu, thông báo kỹ năng).
+       *
+       * Nâng cấp: phân loại bằng `opts.kind` để mỗi loại có "trọng lượng" khác
+       * nhau — đây là phản hồi quan trọng nhất của mọi trận đấu, trước đây mọi
+       * text đều giống nhau nên cú đánh thường và crit trông không khác gì.
+       *
+       *   'normal'  sát thương thường  — trắng, nhỏ, bay êm
+       *   'crit'    chí mạng            — vàng cam, to, rung, tỏa sáng
+       *   'boss'    đánh trúng trùm     — đỏ hồng, vừa, có viền dày
+       *   'heal'    hồi máu             — xanh lá, có dấu +
+       *   'info'    thông báo kỹ năng   — giữ nguyên màu truyền vào
+       *
+       * @param {number} x
+       * @param {number} y
+       * @param {string} text
+       * @param {string} color
+       * @param {number} size
+       * @param {object} [opts] { kind, shake, life, vy, scale }
+       */
+      function spawnFloatText(x, y, text, color = '#ffffff', size = 13, opts = {}) {
+        const kind = opts.kind || 'info';
+        // Tham số theo loại — gom một chỗ để dễ cân chỉnh về sau.
+        const PRESET = {
+          normal: { life: 0.62, vy: 34, scale: 1.00, stroke: 3.4, glow: 0,    shake: 0 },
+          crit:   { life: 0.95, vy: 42, scale: 1.18, stroke: 4.6, glow: 14,   shake: 2.2 },
+          boss:   { life: 0.72, vy: 32, scale: 1.08, stroke: 4.2, glow: 8,    shake: 1.1 },
+          heal:   { life: 0.85, vy: 30, scale: 1.05, stroke: 3.6, glow: 6,    shake: 0 },
+          info:   { life: 0.75, vy: 32, scale: 1.00, stroke: 3.8, glow: 0,    shake: 0 },
+        };
+        const p = PRESET[kind] || PRESET.info;
+
         Game.floatTexts.push({
           x,
           y,
           text,
           color,
           size,
-          life: 0.75
+          kind,
+          life: opts.life != null ? opts.life : p.life,
+          maxLife: opts.life != null ? opts.life : p.life,
+          vy: opts.vy != null ? opts.vy : p.vy,
+          scale: (opts.scale != null ? opts.scale : 1) * p.scale,
+          stroke: p.stroke,
+          glow: p.glow,
+          shake: opts.shake != null ? opts.shake : p.shake,
+          // Lệch ngang ngẫu nhiên để nhiều số không chồng khít lên nhau
+          driftX: (Math.random() - 0.5) * 9,
         });
       }
 
@@ -23621,7 +23664,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             const healAmt = Math.max(12, Math.round(p.maxHp * (hasHeroSkillActive(p, 'hela') ? 0.035 : 0.025)));
             if (p.hp < p.maxHp) {
               p.hp = Math.min(p.maxHp, p.hp + healAmt);
-              spawnFloatText(p.x, p.y - 26, `+${healAmt} HP`, '#34d399', 11);
+              spawnFloatText(p.x, p.y - 26, `+${healAmt} HP`, '#34d399', 11, { kind: 'heal' });
             }
           }
         }
@@ -24193,7 +24236,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               }
             } else if (d.type === 'heart') {
               p.hp = Math.min(p.maxHp, p.hp + d.val);
-              spawnFloatText(p.x, p.y - 20, `+${d.val} HP`, '#4ade80', 13);
+              spawnFloatText(p.x, p.y - 20, `+${d.val} HP`, '#4ade80', 13, { kind: 'heal' });
             } else if (d.type === 'scroll') {
               ensureWikiCurrencyAndItemsState();
               const slotKey = d.slot || 'weapon';
@@ -24318,7 +24361,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         for (let i = Game.floatTexts.length - 1; i >= 0; i--) {
           const ft = Game.floatTexts[i];
-          ft.y -= 32 * dt;
+          // Chuyển động: bay lên chậm dần (ease-out) + trôi ngang nhẹ để nhiều số
+          // không chồng lên nhau khi đánh liên tục.
+          ft.y -= (ft.vy || 32) * dt;
+          ft.x += (ft.driftX || 0) * dt;
           ft.life -= dt;
           if (ft.life <= 0) Game.floatTexts.splice(i, 1);
         }
@@ -24974,18 +25020,44 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // 22. Crisp Outlined Floating Damage Numbers
         for (const ft of Game.floatTexts) {
           ctx.save();
-          const alpha = Math.min(1, ft.life * 1.8);
-          const popScale = ft.life > 0.55 ? 1 + (ft.life - 0.55) * 1.4 : 1;
+          const maxLife = ft.maxLife || 0.75;
+          const alpha = Math.min(1, ft.life * (maxLife < 0.8 ? 2.4 : 1.8));
+          // Pop: phóng to nhanh ở đầu đời rồi thu về kích thước gốc
+          const born = maxLife - ft.life;              // giây đã sống
+          const popT = Math.min(1, born / 0.09);
+          const popScale = 0.55 + 0.45 * popT + (1 - popT) * 0.35;
+          const baseScale = ft.scale || 1;
+
           ctx.globalAlpha = alpha;
-          ctx.translate(ft.x, ft.y);
-          ctx.scale(popScale, popScale);
+          const sx = ft.shake ? (Math.random() - 0.5) * ft.shake : 0;
+          const sy = ft.shake ? (Math.random() - 0.5) * ft.shake : 0;
+          ctx.translate(ft.x + sx, ft.y + sy);
+          ctx.scale(popScale * baseScale, popScale * baseScale);
           ctx.font = `900 ${ft.size}px Inter`;
-          ctx.fillStyle = ft.color;
-          ctx.strokeStyle = '#090d16';
-          ctx.lineWidth = 3.8;
           ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Quầng sáng cho crit/trùm/hồi máu — tách khỏi cú đánh thường
+          if (ft.glow > 0) {
+            ctx.shadowColor = ft.color;
+            ctx.shadowBlur = ft.glow * (0.6 + 0.4 * Math.sin(born * 22));
+          }
+
+          ctx.strokeStyle = '#090d16';
+          ctx.lineWidth = ft.stroke || 3.8;
+          ctx.lineJoin = 'round';
           ctx.strokeText(ft.text, 0, 0);
+          // Bóng mờ phía dưới để số đọc được cả trên nền sáng
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = ft.color;
           ctx.fillText(ft.text, 0, 0);
+
+          // Crit: thêm lớp highlight trắng mỏng ở nửa trên chữ
+          if (ft.kind === 'crit') {
+            ctx.globalAlpha = alpha * 0.55;
+            ctx.fillStyle = '#fffdf5';
+            ctx.fillText(ft.text, 0, -1);
+          }
           ctx.restore();
         }
 
@@ -26715,7 +26787,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (Game.player) {
           const heal = Math.round(Game.player.maxHp * 0.25);
           Game.player.hp = Math.min(Game.player.maxHp, Game.player.hp + heal);
-          spawnFloatText(Game.player.x, Game.player.y - 24, `+${heal} HP`, '#4ade80', 14);
+          spawnFloatText(Game.player.x, Game.player.y - 24, `+${heal} HP`, '#4ade80', 14, { kind: 'heal' });
         }
         modal.classList.add('hidden');
         Game.paused = false;
@@ -27441,6 +27513,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         renderBestiaryUI,
         showRoomClearOverlay,
         hideRoomClearOverlay,
+        spawnFloatText,
         recordBestiaryKill,
         BESTIARY,
         renderChapterSelectStrip,
