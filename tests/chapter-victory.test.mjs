@@ -13,7 +13,15 @@ function check(name, cond, extra = "") {
 function fnBody(name, len = 3200) {
   const i = html.indexOf("function " + name);
   if (i < 0) return "";
-  return html.slice(i, i + len);
+  // Cắt theo CÂN BẰNG NGOẶC, không theo độ dài cố định: hàm dài ra sau mỗi
+  // lần thêm tính năng nên offset cố định sẽ cụt giữa chừng và test báo
+  // FAIL sai trong khi code vẫn đúng.
+  let d = 0, j = html.indexOf('{', i), e = -1;
+  for (let k = j; k < html.length; k++) {
+    if (html[k] === '{') d++;
+    else if (html[k] === '}') { d--; if (d === 0) { e = k; break; } }
+  }
+  return e > 0 ? html.slice(i, e + 1) : html.slice(i, i + len);
 }
 
 // ============================================================ 1. Modal + hàm
@@ -59,9 +67,9 @@ check("truyen du stats (rooms/kills/gold/gems)",
   /rooms: Game\.maxRooms[\s\S]{0,120}?kills: Game\.kills[\s\S]{0,120}?gold: Game\.runGold/.test(fr));
 check("return som de khong hien summary thuong", /openChapterVictory\([\s\S]{0,320}?return;/.test(fr));
 check("thua hien man hinh that bai rieng (khong phai summary thuong)",
-  /openRunDefeat\(\{[\s\S]{0,260}?room: Game\.room/.test(fr));
+  /openRunDefeat\(\{[\s\S]{0,700}?room: Game\.room/.test(fr));
 check("man hinh that bai nhan duoc nguyen nhan + sat thuong cuoi",
-  /source: Game\.lastDamageSource[\s\S]{0,120}?lastHit: Game\.lastDamageAmount/.test(fr));
+  /source: Game\.lastDamageSource[\s\S]{0,200}?lastHit: Game\.lastDamageAmount/.test(fr));
 check("summary thuong khong con dung cho nhanh thua", !/showSummaryModal\(\s*isVictory \?/.test(fr));
 
 // ============================================================ 5. returnToLobby

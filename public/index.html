@@ -1271,6 +1271,12 @@
 
       <!-- ==================== TAB 1: BATTLE LOBBY ==================== -->
       <section id="tabBattle" class="hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-4">
+        <!-- ==================== CHỌN CHẾ ĐỘ CHƠI (GAME MODE) ====================
+             Màn `ui_world_main` của Archero 2 thật cho chọn chế độ TRƯỚC khi
+             vào bản đồ. Chiến Dịch hiện panel chọn chương; các chế độ khác
+             chỉ cần bấm "Bắt đầu". -->
+        <div id="gameModePanel" class="shrink-0"></div>
+
         <!-- ==================== CHỌN BẢN ĐỒ (MAP SELECTION) ====================
              Thay dải thẻ nhỏ bằng một khung bản đồ phiêu lưu thật: ảnh minh hoạ
              từng chương làm trọng tâm, panel thông tin đè lên vùng trống của ảnh,
@@ -2548,11 +2554,19 @@ const ArenaV2 = (() => {
 
   // Cùng quy tắc với setupRoom(): phòng 5 → golem, phòng 10 → queen, còn lại → demon_king
   function bossTypeOfRoom(room) { return room === 5 ? 'golem' : (room === 10 ? 'queen' : 'demon_king'); }
-  function isBossRoom(room) { return (room % 5 === 0) || (room === Game.maxRooms); }
+  /**
+   * Phòng trùm cho phần VẼ (block script riêng, không thấy GAME_MODES).
+   * Luật phòng trùm thật nằm ở isBossRoom() block 2 — đây chỉ để chọn biome.
+   */
+  function isBossRoomForBiome(room, maxRooms) {
+    const max = maxRooms || Game.maxRooms || 1;
+    return (room % 5 === 0) || (room === max);
+  }
+
 
   function pickBiome() {
     const room = Game.room || 1;
-    if (isBossRoom(room)) return BIOMES[BOSS_ARENA[bossTypeOfRoom(room)]];
+    if (isBossRoomForBiome(room)) return BIOMES[BOSS_ARENA[bossTypeOfRoom(room)]];
     const ch = Game.chapter ? Game.chapter.id : 1;
     const k = room - Math.floor(room / 5) - 1;           // chỉ đếm phòng thường → 4 phòng đầu luôn khác nhau
     const pool = POOLS[ch];
@@ -3675,6 +3689,109 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       };
 
       // ==================== STATIC GAME DATA (CHAPTERS, HEROES, WEAPONS, PETS, TALENTS, SKILLS) ====================
+
+      /**
+       * CHẾ ĐỘ CHƠI — lấy theo danh sách `ui_world_*` của Archero 2 thật.
+       *
+       * Bản thật có 15 chế độ; bản web chơi đơn chỉ làm được những chế độ
+       * không cần máy chủ nhiều người. Năm chế độ dưới đây tái dùng ĐÚNG
+       * combat engine hiện có — khác nhau ở cách sinh phòng và điều kiện kết
+       * thúc, không phải engine mới.
+       *
+       *   campaign : Chiến dịch  — theo chương, hết phòng cuối là thắng
+       *   endless  : Vô tận      — phòng vô hạn, khó tăng dần, chết là hết
+       *   tower    : Tháp        — chuỗi phòng toàn trùm, mỗi tầng 1 trùm
+       *   bossrush : Săn Trùm    — chỉ đánh trùm, thắng liên tiếp để lấy thưởng
+       *   practice : Luyện Tập   — không chết, không thưởng, để thử build
+       */
+      const GAME_MODES = [
+        {
+          id: 'campaign',
+          name: 'Chiến Dịch',
+          icon: '🗺️',
+          color: '#38bdf8',
+          desc: 'Đi qua từng chương, hạ trùm cuối để mở khu vực mới.',
+          rules: 'Hết phòng cuối = thắng chương',
+          hasChapters: true,
+          endless: false,
+          bossOnly: false,
+          practice: false
+        },
+        {
+          id: 'endless',
+          name: 'Vô Tận',
+          icon: '♾️',
+          color: '#a855f7',
+          desc: 'Phòng không có hồi kết. Càng sâu, quái càng mạnh.',
+          rules: 'Chết là kết thúc · ghi nhận kỷ lục phòng',
+          hasChapters: false,
+          endless: true,
+          bossOnly: false,
+          practice: false
+        },
+        {
+          id: 'tower',
+          name: 'Tháp',
+          icon: '🗼',
+          color: '#f59e0b',
+          desc: 'Mỗi tầng là một trùm. Càng lên cao, trùm càng trâu.',
+          rules: 'Hạ trùm để lên tầng · thua là dừng',
+          hasChapters: false,
+          endless: true,
+          bossOnly: true,
+          practice: false
+        },
+        {
+          id: 'bossrush',
+          name: 'Săn Trùm',
+          icon: '👑',
+          color: '#ef4444',
+          desc: 'Chuỗi 5 trùm liên tiếp, thưởng tăng theo số trùm đã hạ.',
+          rules: 'Hạ đủ 5 trùm = thắng · thưởng theo tiến độ',
+          hasChapters: false,
+          endless: false,
+          bossOnly: true,
+          maxRooms: 5,
+          practice: false
+        },
+        {
+          id: 'practice',
+          name: 'Luyện Tập',
+          icon: '🎯',
+          color: '#22c55e',
+          desc: 'Thử nghiệm build thoải mái. Không mất gì, không được gì.',
+          rules: 'Không chết thật · không cộng vàng/kinh nghiệm',
+          hasChapters: false,
+          endless: true,
+          bossOnly: false,
+          practice: true
+        }
+      ];
+
+      /** Chế độ đang chọn (lưu theo tài khoản). */
+      function getGameMode(id) {
+        return GAME_MODES.find(m => m.id === id) || GAME_MODES[0];
+      }
+      function getActiveGameMode() {
+        return getGameMode(SaveState.gameMode || 'campaign');
+      }
+
+      /**
+       * Phòng này có phải phòng TRÙM không? — nguồn duy nhất cho toàn bộ logic.
+       *
+       * Block script vẽ (biome) có bản riêng chỉ để tô màu, vì nó không thấy
+       * GAME_MODES. Mọi chỗ quyết định LUẬT (sinh quái, HUD, boss_slayer,
+       * màn thua) phải gọi hàm này, nếu không chế độ Tháp/Săn Trùm sẽ hiện
+       * phòng thường thay vì trùm.
+       */
+      function isBossRoom(room, maxRooms) {
+        const max = maxRooms || Game.maxRooms || 1;
+        const m = getGameMode(Game.mode || 'campaign');
+        // Tháp / Săn Trùm: MỌI phòng đều là trùm.
+        if (m.bossOnly) return true;
+        return (room % 5 === 0) || (room === max);
+      }
+
       const CHAPTERS = [
         {
           id: 1,
@@ -8927,9 +9044,14 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         playerName: 'JohnBowman',
         artemisHeroVersion: 1,
         selectedChapterIdx: 0,
+        // Chế độ chơi đang chọn (campaign / endless / tower / bossrush / practice)
+        gameMode: 'campaign',
+        // Kỷ lục theo từng chế độ: { endless: 37, tower: 12, ... }
+        modeBest: {},
         // Nhân vật mặc định: Alex (Braveheart) — tân thủ vào là có hero dùng được.
-        // 1 sao miễn phí để skill [Braveheart] kích hoạt ngay (skill cần 1★+);
-        // 0 sao thì hero chỉ còn là skin, không có tác dụng.
+        // 0 sao: hasHeroSkillActive() chỉ so hero.id nên skill [Braveheart]
+        // vẫn kích hoạt ở 0★. Từng để 1★ nhưng mốc sao 1★ cộng +40 ATK /
+        // +200 HP / +12% đẩy ATK tân thủ lên 202, vượt dải thiết kế 80–150.
         selectedHeroId: 'alex',
         selectedWeaponId: 'bow',
         selectedPetId: 'spirit_sword',
@@ -9157,7 +9279,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                   // Trước đây khối này gán 8 sao + 999 mảnh cho MỌI hero, nên
                   // tài khoản mới lập tức có đủ 18 hero 8 sao.
                   this.wikiCharactersVersion = 2;
-                  if (!this.heroStars || typeof this.heroStars !== 'object') this.heroStars = { artemis: 1 };
+                  if (!this.heroStars || typeof this.heroStars !== 'object') this.heroStars = {};
                   if (!this.heroShards || typeof this.heroShards !== 'object') this.heroShards = {};
                   if (!this.heroSelectedSkins || typeof this.heroSelectedSkins !== 'object') this.heroSelectedSkins = {};
                   for (const h of HEROES) {
@@ -13083,7 +13205,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // info.max không khớp Game.chapter (gọi từ test hoặc debug).
         const best = Math.min(bestRaw, max);
         const isRecord = room > best;
-        const bossRoom = (room % 5 === 0) || (room === max);
+        const bossRoom = isBossRoom(room, max);
         const diedToBoss = info.source === 'boss' || bossRoom;
 
         // ---- Gợi ý cụ thể, tính từ chỉ số thật của người chơi ----
@@ -13315,9 +13437,104 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       }
 
+      /**
+       * Panel chọn CHẾ ĐỘ CHƠI (màn `ui_world_main` của bản thật).
+       *
+       * 5 thẻ nằm ngang trên desktop, cuộn ngang trên mobile. Thẻ đang chọn
+       * viền theo màu chế độ. Chỉ Chiến Dịch mới hiện panel chọn chương bên
+       * dưới — 4 chế độ còn lại bấm "Bắt đầu" là vào thẳng.
+       */
+      function renderGameModePanel() {
+        const el = document.getElementById('gameModePanel');
+        if (!el) return;
+
+        const active = SaveState.gameMode || 'campaign';
+
+        el.innerHTML = `
+          <div class="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-2.5 sm:p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-[10px] font-black uppercase tracking-[.16em] text-slate-400">Chọn chế độ</span>
+              <span class="text-[10px] text-slate-500">${GAME_MODES.length} chế độ</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 sm:gap-2">
+              ${GAME_MODES.map(m => {
+                const on = m.id === active;
+                const best = (SaveState.modeBest || {})[m.id];
+                return `
+                <button type="button" data-mode-pick="${m.id}"
+                  class="relative overflow-hidden rounded-xl border-2 p-2 text-left transition active:scale-[.98]"
+                  style="border-color:${on ? m.color : 'rgba(71,85,105,.55)'};background:linear-gradient(160deg,${m.color}${on ? '2e' : '12'},rgba(2,6,23,.5))">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-lg leading-none">${m.icon}</span>
+                    <b class="text-[11px] font-black text-white truncate">${m.name}</b>
+                    ${on ? `<span class="ml-auto text-[7.5px] font-black px-1 py-0.5 rounded" style="background:${m.color};color:#020617">CHỌN</span>` : ''}
+                  </div>
+                  <p class="text-[8.5px] text-slate-300/85 leading-tight mt-1 line-clamp-2">${m.desc}</p>
+                  <p class="text-[8px] mt-1 font-bold" style="color:${m.color}">${best ? `Kỷ lục: phòng ${best}` : m.rules}</p>
+                </button>`;
+              }).join('')}
+            </div>
+          </div>`;
+
+        el.querySelectorAll('[data-mode-pick]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-mode-pick');
+            if (id === (SaveState.gameMode || 'campaign')) return;
+            SaveState.gameMode = id;
+            SaveState.save();
+            SoundFX.coinPickup();
+            renderGameModePanel();
+            // Chiến Dịch mới cần panel chọn chương; chế độ khác ẩn nó đi để
+            // màn hình không hiện bản đồ thừa.
+            renderChapterSelectStrip();
+            renderMapSelect();
+          });
+        });
+      }
+
       function renderMapSelect() {
         const el = document.getElementById('mapSelectPanel');
         if (!el) return;
+
+        const mode = getActiveGameMode();
+
+        // Chế độ không phải Chiến Dịch: không có bản đồ chương để chọn, thay
+        // bằng thẻ tóm tắt luật chơi + nút Bắt đầu.
+        if (!mode.hasChapters) {
+          const best = (SaveState.modeBest || {})[mode.id];
+          el.innerHTML = `
+            <div class="rounded-2xl border-2 overflow-hidden"
+              style="border-color:${mode.color}66;background:linear-gradient(150deg,${mode.color}1c,rgba(2,6,23,.72))">
+              <div class="p-3 sm:p-4">
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl leading-none">${mode.icon}</span>
+                  <div class="min-w-0">
+                    <b class="block text-sm font-black text-white">${mode.name}</b>
+                    <span class="block text-[10px] text-slate-300/80">${mode.desc}</span>
+                  </div>
+                </div>
+                <div class="mt-2.5 grid grid-cols-2 gap-2 text-[10px]">
+                  <div class="rounded-lg bg-slate-950/60 border border-slate-700/60 px-2 py-1.5">
+                    <span class="block text-slate-400 text-[8.5px] uppercase tracking-wider">Luật</span>
+                    <b class="text-slate-100 font-bold">${mode.rules}</b>
+                  </div>
+                  <div class="rounded-lg bg-slate-950/60 border border-slate-700/60 px-2 py-1.5">
+                    <span class="block text-slate-400 text-[8.5px] uppercase tracking-wider">Kỷ lục</span>
+                    <b class="font-black" style="color:${mode.color}">${best ? `Phòng ${best}` : 'Chưa có'}</b>
+                  </div>
+                </div>
+                <button type="button" id="btnStartModeRun"
+                  class="mt-3 w-full py-2.5 rounded-xl font-black text-sm text-slate-950 transition active:scale-[.99] hover:brightness-110"
+                  style="background:linear-gradient(135deg,${mode.color},${mode.color}bb)">
+                  ▶ Bắt đầu ${mode.name}
+                </button>
+              </div>
+            </div>`;
+          document.getElementById('btnStartModeRun')?.addEventListener('click', () => {
+            startNewRun('fresh');
+          });
+          return;
+        }
 
         normalizeSelectedChapter();
         const selIdx = Math.max(0, Math.min(CHAPTERS.length - 1, SaveState.selectedChapterIdx || 0));
@@ -13474,6 +13691,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
          */
         const el = document.getElementById('chapterSelectStrip');
         if (!el) return;
+        // Dải chọn chương chỉ có nghĩa ở Chiến Dịch. Đặt ngay trong hàm vẽ
+        // (không chỉ trong renderLobby) để mọi đường gọi đều ẩn đúng.
+        const _m = getActiveGameMode();
+        el.classList.toggle('hidden', !_m.hasChapters);
+        if (!_m.hasChapters) return;
         const selIdx = SaveState.selectedChapterIdx || 0;
 
         el.innerHTML = CHAPTERS.map((ch, idx) => {
@@ -22861,7 +23083,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         // Khung chọn bản đồ (mapSelectPanel) tự hiển thị tên/mô tả/nút của chương.
         // Không còn banner riêng để tránh lặp lại cùng một thông tin 2 lần.
+        // Dải chọn chương chỉ có nghĩa ở Chiến Dịch — renderChapterSelectStrip tự ẩn.
         safeRender('chapterStrip', () => renderChapterSelectStrip());
+        safeRender('gameMode', () => renderGameModePanel());
         safeRender('mapSelect', () => renderMapSelect());
         safeRender('bestiary', () => renderBestiaryUI());
         const bestRm = getChapterBest(ch.id) || 1;
@@ -23738,9 +23962,12 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         const stats = getComputedStats();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
+        const mode = getActiveGameMode();
 
-        // Chặn vào chương chưa mở khoá — kể cả khi gọi qua console/API.
-        if (isChapterLocked(ch)) {
+        // Chặn vào chương chưa mở khoá — chỉ áp cho chế độ Chiến Dịch.
+        // Các chế độ khác (Vô Tận, Tháp, Săn Trùm, Luyện Tập) không phụ
+        // thuộc tiến trình chương nên không được chặn oan.
+        if (mode.hasChapters && isChapterLocked(ch)) {
           showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
           return false;
         }
@@ -23760,8 +23987,14 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         DungeonSession.begin(SaveState.selectedChapterIdx);
 
         Game.chapter = ch;
+        Game.mode = mode.id;
         Game.room = 1;
-        Game.maxRooms = ch.rooms;
+        // Số phòng: Vô Tận/Tháp/Luyện Tập là vô hạn (dùng số lớn thay cho
+        // Infinity để các phép chia/so sánh số học vẫn hữu hạn); Săn Trùm
+        // cố định theo định nghĩa chế độ; Chiến Dịch theo chương.
+        Game.maxRooms = mode.hasChapters
+          ? ch.rooms
+          : (mode.maxRooms || (mode.endless ? 9999 : ch.rooms));
         Game.kills = 0;
         // Đếm "trận đã chơi" ngay khi bắt đầu, để người chơi bỏ giữa trận vẫn được tính.
         bumpLifetimeStat('runs', 1);
@@ -23877,7 +24110,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         Game.wallTorches = [];
         Game.ambientMotes = [];
         Game.roomBannerTimer = 2.1;
-        const isBossRm = (roomNum % 5 === 0) || (roomNum === Game.maxRooms);
+        const isBossRm = isBossRoom(roomNum);
         Game.roomBannerTitle = isBossRm ? `⚠️ CẢNH BÁO TRÙM • PHÒNG ${roomNum}` : `⚔️ PHÒNG ${roomNum} / ${Game.maxRooms}`;
         Game.roomBannerSub = Game.chapter ? Game.chapter.name : 'Hầm Ngục Archero 2';
 
@@ -23940,7 +24173,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           }, 250);
         }
         // Boss Slayer [Fine Skill]: Fully heal before boss battles!
-        if (((roomNum % 5 === 0) || (roomNum === Game.maxRooms)) && Game.player && (Game.player.skills.boss_slayer || 0) > 0) {
+        if (isBossRoom(roomNum) && Game.player && (Game.player.skills.boss_slayer || 0) > 0) {
           Game.player.hp = Game.player.maxHp;
           spawnFloatText(Game.player.x, Game.player.y - 42, '👑 BOSS SLAYER: HỒI ĐẦY 100% HP!', '#4ade80', 13);
         }
@@ -23959,10 +24192,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           SaveState.save();
         }
 
-        const isBossRoom = (roomNum % 5 === 0) || (roomNum === Game.maxRooms);
+        const isBossRoomNow = isBossRoom(roomNum);
 
         // Create cover obstacles (Blocks & Water/Lava Pits) for non-boss rooms
-        if (!isBossRoom) {
+        if (!isBossRoomNow) {
           const numBlocks = 2 + (roomNum % 3);
           for (let i = 0; i < numBlocks; i++) {
             const bw = 48 + Math.random() * 26;
@@ -23991,7 +24224,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const roomMul = 1 + (roomNum - 1) * 0.13;
         const scale = chapterMul * roomMul;
 
-        if (isBossRoom) {
+        if (isBossRoomNow) {
           SoundFX.bossSpawn();
           const bossType = (roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king');
           const bossNames = {
@@ -25273,6 +25506,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             p.x < pr.x + pr.w + 12 &&
             p.y < pr.y + pr.h + 26
           ) {
+            // Chiến Dịch: hết phòng cuối = phá đảo chương.
+            // Vô Tận / Tháp / Luyện Tập: maxRooms là 9999 nên không bao giờ
+            // chạm tới — cứ sang phòng tiếp.
+            // Săn Trùm: 5 phòng, hết là thắng.
             if (Game.room >= Game.maxRooms) {
               finishRun(true);
               return;
@@ -26214,6 +26451,17 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             p.invulnTimer = 2.0;
             spawnShockwave(p.x, p.y, 130, '#fde047', 0.45);
             spawnFloatText(p.x, p.y - 34, '⚰️ MYMU [OVERDRAW] BẤT TỬ TÁI SINH!', '#fde047', 14);
+            updateInGameHUD();
+            return;
+          }
+          // Luyện Tập: không chết thật — hồi đầy máu và tiếp tục, để người
+          // chơi thử build mà không bị ngắt giữa chừng.
+          if (getGameMode(Game.mode || 'campaign').practice) {
+            p.hp = p.maxHp;
+            p.invulnTimer = 1.5;
+            Game.enemyBullets = [];
+            spawnShockwave(p.x, p.y, 160, '#4ade80', 0.5);
+            spawnFloatText(p.x, p.y - 38, '🎯 LUYỆN TẬP — HỒI ĐẦY MÁU', '#4ade80', 14);
             updateInGameHUD();
             return;
           }
@@ -28123,8 +28371,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const bonusGold = isVictory ? 350 * Game.chapter.id : Game.room * 20;
         const bonusGems = isVictory ? 40 * Game.chapter.id : Math.floor(Game.room * 2);
         Game.runGold += bonusGold;
-        SaveState.gold += bonusGold;
-        SaveState.gems += bonusGems;
+        // Luyện Tập: không cộng tài nguyên (đúng mô tả "không mất gì, không
+        // được gì"). Chỉ chế độ chơi thật mới sinh vàng/đá quý.
+        const curMode = getGameMode(Game.mode || 'campaign');
+        if (!curMode.practice) {
+          SaveState.gold += bonusGold;
+          SaveState.gems += bonusGems;
+        }
 
         // ---- Thành tựu: chốt chỉ số cuối trận ----
         // 'runs' da duoc dem luc bat dau tran (startNewRun) de khong dem 2 lan.
@@ -28141,8 +28394,17 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           if (firstWinHere) bumpLifetimeStat('chaptersCleared', 1);
         }
         checkAchievements();
+        // ---- Kỷ lục theo chế độ ----
+        // Chiến Dịch đã có bestRooms riêng theo chương. Các chế độ khác đo
+        // bằng số phòng sâu nhất đạt được.
+        const modeRec = getGameMode(Game.mode || 'campaign');
+        if (modeRec.id !== 'campaign' && !modeRec.practice) {
+          SaveState.modeBest = SaveState.modeBest || {};
+          const prev = Number(SaveState.modeBest[modeRec.id]) || 0;
+          if (Game.room > prev) SaveState.modeBest[modeRec.id] = Game.room;
+        }
         // Drop a bonus piece of equipment into the Gear Bag if reached Room 3+ or Victory!
-        if (isVictory || Game.room >= 3) {
+        if (!curMode.practice && (isVictory || Game.room >= 3)) {
           const tplKeys = Object.keys(GEAR_TEMPLATES);
           const dropTpl = GEAR_TEMPLATES[tplKeys[Math.floor(Math.random() * tplKeys.length)]];
           const dropQ = isVictory ? 'epic' : (Game.room >= 8 ? 'rare' : 'uncommon');
@@ -28162,16 +28424,30 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
         // Phá đảo: hiện màn hình chinh phục riêng, có thông báo mở khoá chương
         // tiếp theo. Summary thường chỉ hiện khi thua hoặc tạm dừng.
+        //
+        // Chỉ Chiến Dịch mới có khái niệm "phá đảo chương" và mở khoá chương
+        // kế. Săn Trùm cũng thắng được nhưng không mở chương nào — hiện bảng
+        // tổng kết chế độ thay vì màn phá đảo chương.
         if (isVictory) {
-          const curIdx = CHAPTERS.findIndex(c => c.id === (Game.chapter && Game.chapter.id));
-          const nextCh = CHAPTERS[curIdx + 1] || null;
-          const unlockedNext = nextCh && !isChapterLocked(nextCh);
-          openChapterVictory(Game.chapter, unlockedNext ? nextCh : null, {
-            rooms: Game.maxRooms,
-            kills: Game.kills,
-            gold: Game.runGold,
-            gems: bonusGems
-          });
+          const winMode = getGameMode(Game.mode || 'campaign');
+          if (winMode.hasChapters) {
+            const curIdx = CHAPTERS.findIndex(c => c.id === (Game.chapter && Game.chapter.id));
+            const nextCh = CHAPTERS[curIdx + 1] || null;
+            const unlockedNext = nextCh && !isChapterLocked(nextCh);
+            openChapterVictory(Game.chapter, unlockedNext ? nextCh : null, {
+              rooms: Game.maxRooms,
+              kills: Game.kills,
+              gold: Game.runGold,
+              gems: bonusGems
+            });
+            return;
+          }
+          // Chế độ khác: tổng kết "hoàn thành chế độ".
+          showSummaryModal(
+            `${winMode.icon} HOÀN THÀNH ${winMode.name.toUpperCase()}`,
+            `Hạ ${Game.kills} địch qua ${Game.room} phòng · +${bonusGold} vàng · +${bonusGems} đá quý`,
+            winMode.icon, false, bonusGems
+          );
           return;
         }
 
@@ -29244,6 +29520,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         renderMapSelect,
         renderHeroRoster,
         isHeroOwned,
+        renderGameModePanel,
+        GAME_MODES,
+        getGameMode,
+        getActiveGameMode,
+        isBossRoom,
         gotoNavTab,
         openBestiaryModal,
         closeBestiaryModal,
@@ -29404,12 +29685,12 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
     if (nextEl && Game.maxRooms) {
       const room = Game.room, max = Game.maxRooms;
       // Phòng trùm theo cùng luật với setupRoom: bội số 5, VÀ phòng cuối luôn là trùm.
-      const isBossRoom = (room % 5 === 0) || (room === max);
+      const isBossRoomHud = isBossRoom(room, max);
       // Phòng cuối của chương luôn là trùm cuối, bất kể max có chia hết cho 5 hay không
       // (chương 1 có 15 phòng — 15 % 5 === 0 nhưng vẫn là trùm cuối của chương).
       const isFinalBoss = room === max;
       let txt, cls;
-      if (isBossRoom) {
+      if (isBossRoomHud) {
         txt = isFinalBoss ? '👑 TRÙM CUỐI — Hạ gục để phá đảo!' : '⚔️ PHÒNG TRÙM — Hạ gục để mở cổng';
         cls = isFinalBoss ? 'is-final' : 'is-boss';
       } else {

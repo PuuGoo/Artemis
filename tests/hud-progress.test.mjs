@@ -26,8 +26,8 @@ console.log("\n=== 2. LOGIC DINH HUONG ===");
 const hudStart = html.indexOf("const nextEl = document.getElementById('hudNextUp')");
 const hudBlock = html.slice(hudStart, hudStart + 2400);
 check("tim thay khoi logic", hudStart > 0);
-check("xac dinh phong trum dung luat setupRoom (boi so 5 HOAC phong cuoi)",
-  /const isBossRoom = \(room % 5 === 0\) \|\| \(room === max\)/.test(hudBlock));
+check("xac dinh phong trum qua isBossRoom (nguon duy nhat)",
+  /const isBossRoomHud = isBossRoom\(room, max\)/.test(hudBlock));
 check("phong cuoi LUON la trum cuoi (khong phu thuoc chia het 5)",
   /const isFinalBoss = room === max;/.test(hudBlock));
 check("KHONG con dieu kien sai 'max % 5 !== 0'", !/max % 5 !== 0/.test(hudBlock));

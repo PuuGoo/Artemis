@@ -92,7 +92,7 @@ check("responsive thu nho nut icon",
 console.log("\n=== 4. HAM renderMapSelect ===");
 const idx = html.indexOf("function renderMapSelect()");
 check("co renderMapSelect", idx > 0);
-const block = html.slice(idx, idx + 9000);
+const block = html.slice(idx, idx + 16000);
 check("goi normalizeSelectedChapter (khong tin state)", /normalizeSelectedChapter\(\)/.test(block));
 check("dung isChapterLocked (logic that)", /isChapterLocked\(ch\)/.test(block));
 check("dung getChapterBest (logic that)", /getChapterBest\(ch\.id\)/.test(block));
