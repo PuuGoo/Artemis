@@ -77,8 +77,9 @@ check("co .ms-tab.is-locked", /\.ms-tab\.is-locked/.test(html));
 check("co .ms-tab-lock overlay", /\.ms-tab-lock \{/.test(html));
 check("co .ms-btn-start", /\.ms-btn-start \{/.test(html));
 check("co .ms-lockbar", /\.ms-lockbar \{/.test(html));
-check("node 'hien tai' dung vien vang (khong to dac)",
-  /\.ms-node\.now \{[^}]*background: rgba\(251,191,36,\.28\)/.test(html));
+check("node 'hien tai' rong ruot + vien vang (khong to dac)",
+  /\.ms-node\.now \{[^}]*background:\s*transparent/.test(html) &&
+  /\.ms-node\.now \{[^}]*border:\s*2px solid #fbbf24/.test(html));
 check("node trum co animation rieng hoac vien do",
   /\.ms-node\.boss-node\.now \{/.test(html));
 check("co responsive <= 640px", /@media \(max-width: 640px\) \{\s*\.ms-art/.test(html));

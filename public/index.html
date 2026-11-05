@@ -753,12 +753,14 @@
       transition: background .2s, box-shadow .2s; }
     .ms-node.done { background: linear-gradient(90deg, #22c55e, #4ade80);
       border-color: rgba(134,239,172,.6); }
-    .ms-node.now { background: rgba(251,191,36,.28); border-color: #fbbf24;
-      box-shadow: 0 0 0 1px rgba(251,191,36,.45);
+    /* Phòng hiện tại: RỖNG RUỘT + viền vàng nhấp nháy. Cố ý không tô đặc
+       để không bị đọc thành "đã qua phòng này". */
+    .ms-node.now { background: transparent; border: 2px solid #fbbf24;
+      box-shadow: 0 0 0 1px rgba(251,191,36,.4);
       animation: msNowPulse 1.8s ease-in-out infinite; }
     @keyframes msNowPulse {
-      0%, 100% { box-shadow: 0 0 0 1px rgba(251,191,36,.45); }
-      50% { box-shadow: 0 0 0 2px rgba(251,191,36,.85), 0 0 7px rgba(251,191,36,.6); }
+      0%, 100% { box-shadow: 0 0 0 1px rgba(251,191,36,.4); }
+      50% { box-shadow: 0 0 0 2px rgba(251,191,36,.85), 0 0 7px rgba(251,191,36,.55); }
     }
     .ms-node.boss-node { flex: none; width: 16px; min-width: 16px; height: 16px; border-radius: 50%;
       display: grid; place-items: center; font-size: 7px; color: #fca5a5;
