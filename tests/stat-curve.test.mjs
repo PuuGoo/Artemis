@@ -72,8 +72,11 @@ check("khong auto-mo _legendary/_mythic", !/endsWith\('_legendary'\)\) return tr
 check("van doc unlockedSkins khi co", /SaveState\.unlockedSkins\[skinId\]/.test(unlockedFn));
 
 const skinColFn = fnBody("getAllUnlockedSkinBonuses");
-check("bo suu tap skin chi tinh tuong so huu", /const owned = getHeroStarLevel\(h\.id\) >= 1 \|\| h\.id === SaveState\.selectedHeroId;/.test(skinColFn));
-check("bo qua tuong chua so huu", /if \(!owned\) continue;/.test(skinColFn));
+// Logic "sở hữu" nay gom về một hàm dùng chung isHeroOwned() thay vì viết
+// inline ở từng chỗ (trước đây rải rác nên dễ lệch nhau).
+check("bo suu tap skin dung isHeroOwned (khong inline)",
+  /isHeroOwned\(h\.id\)/.test(skinColFn));
+check("bo qua tuong chua so huu", /if \(!isHeroOwned\(h\.id\)\) continue;/.test(skinColFn));
 
 // ============================================================ 5. Base stats
 console.log("\n=== 5. BASE STATS ===");

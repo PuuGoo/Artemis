@@ -44,7 +44,17 @@ console.log('\n=== 2. SAO RONG PHAI MO, SAO DAY MOI VANG ===');
 
 const rosterStart = html.indexOf('function renderHeroRoster() {');
 check('tim thay renderHeroRoster', rosterStart > 0);
-const rosterBody = html.slice(rosterStart, rosterStart + 6500);
+// Lấy đúng biên hàm bằng cân bằng ngoặc, không cắt theo số ký tự
+// (hàm dài ra sau mỗi lần thêm tính năng nên offset cố định sẽ sai).
+const rosterBody = (() => {
+  let d = 0, j = html.indexOf('{', rosterStart), e = -1;
+  for (let k = j; k < html.length; k++) {
+    if (html[k] === '{') d++;
+    else if (html[k] === '}') { d--; if (d === 0) { e = k; break; } }
+  }
+  return html.slice(rosterStart, e + 1);
+})();
+check('lay duoc than ham renderHeroRoster', rosterBody.length > 2000, rosterBody.length + ' ky tu');
 
 // KP: sao rong phai nam trong span mau mo (slate), khong phai amber
 check('sao rong dung mau mo (slate-600/500), KHONG phai amber',
@@ -70,6 +80,23 @@ check('panel chi tiet cung dung getHeroStarLevel',
   /const stars = getHeroStarLevel\(hero\.id\)/.test(rosterBody));
 check('moi card deu co data-hero-pick', /data-hero-pick="\$\{h\.id\}"/.test(rosterBody));
 check('bam the doi selectedHeroId', /SaveState\.selectedHeroId = id/.test(rosterBody));
+
+// ============================================================ 3b. HERO CHUA SO HUU
+console.log('\n=== 3b. HERO CHUA SO HUU PHAI BI KHOA ===');
+
+check('co ham isHeroOwned', /function isHeroOwned\(heroId\)/.test(html));
+check('owned = 1 sao tro len, hoac dang xuat chien',
+  /function isHeroOwned[\s\S]{0,600}?getHeroStarLevel\(heroId\) >= 1[\s\S]{0,400}?heroId === SaveState\.selectedHeroId/.test(html));
+check('card chua so huu co data-locked', /data-locked="1"/.test(rosterBody));
+check('card chua so huu hien o khoa 🔒', /owned \? \(h\.spriteEmoji/.test(rosterBody) && /🔒/.test(rosterBody));
+check('card chua so huu bi lam mo (opacity/grayscale)', /opacity-60 grayscale/.test(rosterBody));
+check('bam hero chua so huu thi bao, KHONG doi hero',
+  /if \(!isHeroOwned\(id\)\) \{[\s\S]{0,300}?return;/.test(rosterBody));
+check('thong bao neu ro so shard can va dang co',
+  /chưa mở khoá — cần[\s\S]{0,80}?mảnh/.test(rosterBody));
+check('panel chi tiet hien nhan CHUA SO HUU', /CHƯA SỞ HỮU/.test(rosterBody));
+check('getAllUnlockedSkinBonuses dung isHeroOwned (khong trung logic)',
+  /function getAllUnlockedSkinBonuses[\s\S]{0,500}?isHeroOwned\(h\.id\)/.test(html));
 
 // ============================================================ 4. PANEL CHI TIET
 console.log('\n=== 4. PANEL CHI TIET DAY DU ===');

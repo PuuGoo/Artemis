@@ -10345,10 +10345,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       function getAllUnlockedSkinBonuses() {
         let atk = 0, hp = 0;
         for (const h of HEROES) {
-          // Tướng chưa sở hữu (0 sao và không phải tướng đang chọn) không
-          // đóng góp gì vào bộ sưu tập skin.
-          const owned = getHeroStarLevel(h.id) >= 1 || h.id === SaveState.selectedHeroId;
-          if (!owned) continue;
+          // Tướng chưa sở hữu không đóng góp gì vào bộ sưu tập skin.
+          if (!isHeroOwned(h.id)) continue;
           const skins = getHeroSkinsList(h.id);
           for (const sk of skins) {
             if (isHeroSkinUnlocked(sk.id)) {
@@ -13172,6 +13170,22 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        * normalizeSelectedChapter(), startNewRun().
        */
       /**
+       * Một anh hùng được coi là SỞ HỮU khi đã có ít nhất 1 sao.
+       *
+       * Tân thủ chỉ sở hữu Alex (selectedHeroId) — 17 hero còn lại là 0 sao
+       * và phải mở bằng shard. Trước đây lưới thẻ cho chọn tất cả 18 hero
+       * nên "tân thủ không có nhân vật nào ngoài Alex" trên thực tế là SAI:
+       * bấm 1 cái là đổi được sang Thor dù chưa sở hữu.
+       */
+      function isHeroOwned(heroId) {
+        if (!heroId) return false;
+        if (getHeroStarLevel(heroId) >= 1) return true;
+        // Hero đang xuất chiến luôn được coi là sở hữu (kể cả 0★) — nếu không
+        // tân thủ sẽ bị khoá chính hero mặc định của mình.
+        return heroId === SaveState.selectedHeroId;
+      }
+
+      /**
        * Màn THẺ (tương ứng `uimaincard` của Archero 2 thật).
        *
        * Hiển thị toàn bộ anh hùng dưới dạng lưới thẻ, kèm sao hiện tại và
@@ -13194,18 +13208,22 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           const stars = getHeroStarLevel(h.id);
           const st = RARITY_STYLE[h.rarity] || RARITY_STYLE.Rare;
           const isSel = h.id === selId;
+          const owned = isHeroOwned(h.id);
           return `
-            <button type="button" data-hero-pick="${h.id}"
+            <button type="button" data-hero-pick="${h.id}" ${owned ? '' : 'data-locked="1"'}
               class="relative overflow-hidden rounded-xl border-2 ${st.ring} bg-gradient-to-b ${st.bg} p-2 text-left transition
-                     ${isSel ? 'ring-2 ring-white/80 shadow-[0_0_0_2px_rgba(255,255,255,.35)]' : 'hover:brightness-125'}">
+                     ${isSel ? 'ring-2 ring-white/80 shadow-[0_0_0_2px_rgba(255,255,255,.35)]' : 'hover:brightness-125'}
+                     ${owned ? '' : 'opacity-60 grayscale-[.55]'}">
               <span class="absolute top-1 right-1 text-[8px] font-black px-1.5 py-0.5 rounded-full ${st.tag}">${h.rarity}</span>
               <div class="flex items-center gap-1.5">
-                <span class="text-xl leading-none">${h.spriteEmoji || h.skillIcon || '🃏'}</span>
+                <span class="text-xl leading-none">${owned ? (h.spriteEmoji || h.skillIcon || '🃏') : '🔒'}</span>
                 <div class="min-w-0">
                   <b class="block text-[11px] font-black text-white truncate">${h.name}</b>
-                  <i class="block text-[8px] not-italic tracking-tight">${stars > 0
-                    ? `<span class="text-amber-300">${'★'.repeat(stars)}</span><span class="text-slate-600">${'☆'.repeat(Math.max(0, 8 - stars))}</span>`
-                    : `<span class="text-slate-600">0★ · ${'☆'.repeat(8)}</span>`}</i>
+                  <i class="block text-[8px] not-italic tracking-tight">${!owned
+                    ? '<span class="text-rose-300">Chưa mở khoá</span>'
+                    : (stars > 0
+                      ? `<span class="text-amber-300">${'★'.repeat(stars)}</span><span class="text-slate-600">${'☆'.repeat(Math.max(0, 8 - stars))}</span>`
+                      : `<span class="text-slate-600">0★ · ${'☆'.repeat(8)}</span>`)}</i>
                 </div>
               </div>
               <p class="text-[8.5px] text-slate-400 mt-1 leading-tight line-clamp-2">${(h.role || '').slice(0, 48)}</p>
@@ -13216,7 +13234,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         grid.querySelectorAll('[data-hero-pick]').forEach(btn => {
           btn.addEventListener('click', () => {
             const id = btn.getAttribute('data-hero-pick');
-            if (!HEROES.some(h => h.id === id)) return;
+            const heroObj = HEROES.find(h => h.id === id);
+            if (!heroObj) return;
+            // Hero chưa sở hữu: không cho chọn, chỉ báo cách mở.
+            if (!isHeroOwned(id)) {
+              const need = getHeroShardRequirement(heroObj, 1);
+              const have = (SaveState.heroShards || {})[id] || 0;
+              showToast(`🔒 ${heroObj.name} chưa mở khoá — cần ${need} 🧩 mảnh (đang có ${have}). Cày shard từ chiến đấu để mở.`, 'err');
+              return;
+            }
             SaveState.selectedHeroId = id;
             SaveState.heroSkinIdx = SaveState.heroSelectedSkins?.[id] || 0;
             SaveState.save();
@@ -13229,6 +13255,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const hero = HEROES.find(h => h.id === selId) || HEROES[0];
         if (!detail || !hero) return;
         const stars = getHeroStarLevel(hero.id);
+        const owned = isHeroOwned(hero.id);
         const ms = getHeroMilestoneData(stars, hero);
         const shards = (SaveState.heroShards || {})[hero.id] || 0;
         const nextCost = stars >= 8 ? null : getHeroShardRequirement(hero, stars + 1);
@@ -13242,6 +13269,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <b class="text-sm font-black text-white">${hero.name}</b>
                   <span class="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-200">${hero.rarity}</span>
+                  ${!owned ? '<span class="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-rose-500/25 border border-rose-400/60 text-rose-200">CHƯA SỞ HỮU</span>' : ''}
                   <span class="text-[10px] font-black">${stars > 0
                     ? `<span class="text-amber-300">${'★'.repeat(stars)}</span><span class="text-slate-600">${'☆'.repeat(Math.max(0, 8 - stars))}</span>`
                     : '<span class="text-slate-500">0★ · Chưa lên sao</span>'}</span>
@@ -29215,6 +29243,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         renderChapterSelectStrip,
         renderMapSelect,
         renderHeroRoster,
+        isHeroOwned,
         gotoNavTab,
         openBestiaryModal,
         closeBestiaryModal,
