@@ -78,9 +78,11 @@ check("bo qua tuong chua so huu", /if \(!owned\) continue;/.test(skinColFn));
 // ============================================================ 5. Base stats
 console.log("\n=== 5. BASE STATS ===");
 const csFn = fnBody("getComputedStats", 8000);
-check("base ATK = 48 (khong phai 78)", /\(48 \+ gearAtk/.test(csFn));
-check("base HP = 300 (khong phai 420)", /\(300 \+ gearHp/.test(csFn));
-check("khong con base cu 78/420", !/\(78 \+ gearAtk/.test(csFn) && !/\(420 \+ gearHp/.test(csFn));
+// Base stat phải đủ để TÂN THỦ KHÔNG CÓ GEAR vẫn sống được (80-150 ATK /
+// 400-800 HP). 78/420 + bonus hero 1★ Alex (~+34/+230) => khoảng 112/650.
+check("base ATK = 78 (du cho tan thu khong gear)", /\(78 \+ gearAtk/.test(csFn));
+check("base HP = 420 (du cho tan thu khong gear)", /\(420 \+ gearHp/.test(csFn));
+check("khong con base qua thap 48/300", !/\(48 \+ gearAtk/.test(csFn) && !/\(300 \+ gearHp/.test(csFn));
 check("atkMult cua vu khi van ap dung", /\* weapon\.atkMult \*/.test(csFn));
 check("crit dmg co base 1.85", /1\.85 \+ critDmgBonus/.test(csFn));
 check("DEF dung duong cong bao hoa", /defFlat \/ \(defFlat \+ defK\)/.test(csFn));

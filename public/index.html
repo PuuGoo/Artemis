@@ -8786,15 +8786,20 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         };
       }
 
-      // Build initial equipped items: bộ khởi đầu Normal Lv.1 (người chơi phải cày để lên cấp)
+      // Build initial equipped items — TÂN THỦ BẮT ĐẦU TAY KHÔNG.
+      //
+      // Trước đây tặng sẵn 6 món common Lv.1 (rusty_bow, wooden_charm,
+      // copper_ring, cloth_vest, leather_cap, worn_boots). Nay bỏ hết:
+      // mọi trang bị phải kiếm từ chiến đấu. Món đầu tiên đến từ
+      // Beginner Journey bước N01 (xem grantStarterWeaponIfNeeded()).
       function createDefaultEquipped() {
         return {
-          weapon:   makeStarterItem('eq_w1', 'rusty_bow'),
-          necklace: makeStarterItem('eq_n1', 'wooden_charm'),
-          ring:     makeStarterItem('eq_r1', 'copper_ring'),
-          armor:    makeStarterItem('eq_a1', 'cloth_vest'),
-          helmet:   makeStarterItem('eq_h1', 'leather_cap'),
-          boots:    makeStarterItem('eq_b1', 'worn_boots')
+          weapon: null,
+          necklace: null,
+          ring: null,
+          armor: null,
+          helmet: null,
+          boots: null
         };
       }
 
@@ -8804,8 +8809,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       }
 
       function createDefaultPresets() {
+        // Preset chỉ lưu UID trang bị. Tân thủ chưa có món nào nên mọi slot
+        // đều null — KHÔNG trỏ tới 'eq_w1'... vì các UID đó không còn tồn tại.
         return {
-          1: { weapon: 'eq_w1', necklace: 'eq_n1', ring: 'eq_r1', armor: 'eq_a1', helmet: 'eq_h1', boots: 'eq_b1' },
+          1: { weapon: null, necklace: null, ring: null, armor: null, helmet: null, boots: null },
           2: { weapon: null, necklace: null, ring: null, armor: null, helmet: null, boots: null },
           3: { weapon: null, necklace: null, ring: null, armor: null, helmet: null, boots: null }
         };
@@ -8826,7 +8833,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         playerName: 'JohnBowman',
         artemisHeroVersion: 1,
         selectedChapterIdx: 0,
-        selectedHeroId: 'artemis',
+        // Nhân vật mặc định: Alex (Braveheart) — tân thủ vào là có hero dùng được.
+        // 1 sao miễn phí để skill [Braveheart] kích hoạt ngay (skill cần 1★+);
+        // 0 sao thì hero chỉ còn là skin, không có tác dụng.
+        selectedHeroId: 'alex',
         selectedWeaponId: 'bow',
         selectedPetId: 'spirit_sword',
         gearLevel: 1,
@@ -8835,11 +8845,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         wikiCharactersVersion: 2,
         resonanceSlots: { slot1: null, slot2: null },
         starterSkillIds: [],
+        // Tân thủ nhận thanh vũ khí đầu tiên sau khi dọn phòng 1 (xem
+        // grantStarterWeaponIfNeeded). Cờ này chống tặng trùng.
+        starterWeaponGranted: false,
         skillCodexRarityFilter: 'all',
         skillCodexCatFilter: 'all',
         heroStars: {
           thor: 0, wukong: 0, cleo: 0, atreus: 0, rolla: 0, nezha: 0, otta: 0, hou_yi: 0,
-          phynx: 0, loki: 0, dracoola: 0, seraph: 0, mymu: 0, hela: 0, helix: 0, nyanja: 0, alex: 0, artemis: 1
+          phynx: 0, loki: 0, dracoola: 0, seraph: 0, mymu: 0, hela: 0, helix: 0, nyanja: 0,
+          // Alex 0★: skill [Braveheart] vẫn chạy vì hasHeroSkillActive() chỉ
+          // so hero.id, KHÔNG yêu cầu sao. Để 0★ thì tân thủ không nhận bonus
+          // mốc sao 1★ (+40 ATK / +200 HP / +12% — đẩy ATK lên 202, vượt dải
+          // thiết kế 80-150). Muốn lên sao thì cày shard.
+          alex: 0, artemis: 0
         },
         heroShards: {
           thor: 0, wukong: 0, cleo: 0, atreus: 0, rolla: 0, nezha: 0, otta: 0, hou_yi: 0,
@@ -8923,8 +8941,22 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             this.equippedGear = defaultEq;
           } else {
             for (const slotKey of Object.keys(GEAR_SLOTS_META)) {
-              const normEq = normalizeGearItem(this.equippedGear[slotKey], `eq_${slotKey}`);
-              this.equippedGear[slotKey] = normEq || defaultEq[slotKey];
+              const rawItem = this.equippedGear[slotKey];
+              const normEq = normalizeGearItem(rawItem, `eq_${slotKey}`);
+              // Tân thủ KHÔNG có trang bị: slot null là trạng thái hợp lệ,
+              // không được "sửa" thành gear mặc định.
+              //
+              // Trước đây dòng này là `normEq || defaultEq[slotKey]`, nên dù
+              // default là null thì save cũng bị nhét lại item. Nay chỉ điền
+              // default khi save THIẾU hẳn key (undefined), còn null tường
+              // minh thì giữ nguyên.
+              if (normEq) {
+                this.equippedGear[slotKey] = normEq;
+              } else if (rawItem === undefined) {
+                this.equippedGear[slotKey] = defaultEq[slotKey];
+              } else {
+                this.equippedGear[slotKey] = null;
+              }
             }
           }
 
@@ -10538,13 +10570,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const setAtkRate = setBonuses.reduce((n,b)=>n+b.atk,0);
         const setHpRate = setBonuses.reduce((n,b)=>n+b.hp,0);
         const setAspdRate = setBonuses.reduce((n,b)=>n+(b.aspd||0),0);
-        // Base ATK/HP của nhân vật khi chưa có bất kỳ bonus nào.
-        // 78/420 là mức của thời kỳ mọi hệ thống còn tặng sẵn chỉ số late-game,
-        // nên base chỉ chiếm phần nhỏ. Nay các hệ thống khác đã về 0 đúng nghĩa,
-        // hạ base để tài khoản mới rơi vào dải thiết kế 80-150 ATK / 400-800 HP
-        // (trước đây 176 ATK / 813 HP khi không mặc gì).
-        const baseAtk = Math.round((48 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25));
-        const baseHp = Math.round((300 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25));
+        // Base ATK/HP của nhân vật khi CHƯA có bất kỳ bonus nào.
+        //
+        // Tân thủ nay bắt đầu tay không (0 trang bị), nên base phải tự đủ
+        // sống. Mục tiêu thiết kế: 80-150 ATK / 400-800 HP cho tài khoản
+        // vừa tạo.
+        //
+        // 78/420 (giá trị cũ) cộng thêm bonus hero 1★ Alex (~+34 ATK /
+        // +230 HP) cho ra khoảng 112 / 650 — nằm giữa dải mục tiêu. Nếu để
+        // 48/300 như trước, tân thủ chỉ còn ~82/750 (sát sàn) và trận đầu
+        // quá chậm vì không có crit từ gear.
+        const baseAtk = Math.round((78 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25));
+        const baseHp = Math.round((420 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25));
         const baseAspd = +(weapon.aspd * (1 + talentTotals.aspdBonus + epicCount * 0.03 + setAspdRate + affAspd + (runeTotals.aspdBonus || 0) + (artifactTotals.aspdBonus || 0) + starMilestone.aspdBonus + (activeSkin.bonusAspd || 0))).toFixed(2);
         const setCrit = setBonuses.reduce((n,b)=>n+b.crit,0);
         const gearDodge = Math.min(.68, +(gemDodge + affDodge + talentTotals.dodgeBonus + (runeTotals.dodgeBonus || 0) + (artifactTotals.dodgeBonus || 0) + starMilestone.dodgeBonus + globalAll.dodgeBonus + setBonuses.reduce((n,b)=>n+b.dodge,0)).toFixed(3));
@@ -21760,8 +21797,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         {
           id: 'N04',
           title: 'Trang bị sức mạnh',
-          desc: 'Trang bị là nguồn sức mạnh chính. Hãy mở tab Trang Bị và mặc một món đồ vào ô trống.',
-          hint: 'Tab "Trang Bị" → chọn món đồ trong túi → Trang Bị.',
+          desc: 'Phần thưởng hoàn thành phòng đầu tiên là thanh kiếm gỗ. Hãy mặc nó vào ô Vũ Khí để tăng sát thương.',
+          hint: 'Tab "Trang Bị" → món đồ trong túi → Trang Bị.',
           event: 'gear_equipped',
           eventLabel: 'Trang bị 1 món đồ',
           reward: { gold: 250, scrolls: 3 },
@@ -21943,9 +21980,60 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        * Các hook sự kiện gameplay thật. Mỗi hook chỉ đánh dấu bước tương ứng,
        * KHÔNG tự trao thưởng (người chơi phải bấm nhận) — tránh phát thưởng trùng.
        */
+      /**
+       * Tặng thanh vũ khí đầu tiên cho tân thủ, đúng MỘT lần trong đời tài khoản.
+       *
+       * Bối cảnh: tân thủ nay bắt đầu tay không (createDefaultEquipped trả null
+       * hết 6 slot). Nhưng game KHÔNG có bất kỳ đường rơi gear nào — drop chỉ
+       * có gold/xp/heart/scroll. Nếu không tặng thì người chơi vĩnh viễn không
+       * có trang bị.
+       *
+       * Điều kiện: chỉ tặng khi
+       *   - chưa từng nhận (cờ starterWeaponGranted)
+       *   - đang không có vũ khí nào được mặc
+       *   - túi đồ không có vũ khí nào
+       *
+       * Gọi từ completeBeginnerStep('N02') — tức là ngay sau khi dọn phòng đầu
+       * tiên, người chơi thấy phần thưởng thật thay vì được phát sẵn từ đầu.
+       *
+       * @returns {object|null} món vừa tặng, hoặc null nếu không tặng
+       */
+      function grantStarterWeaponIfNeeded() {
+        if (!SaveState || !SaveState.playerName) return null;
+        if (SaveState.starterWeaponGranted) return null;
+
+        // Đã có vũ khí mặc hoặc trong túi -> không tặng (tránh trùng).
+        const equippedWeapon = SaveState.equippedGear && SaveState.equippedGear.weapon;
+        if (equippedWeapon && equippedWeapon.templateId) return null;
+        const bagWeapon = (SaveState.gearBag || []).find(
+          (it) => it && GEAR_TEMPLATES[it.templateId] && GEAR_TEMPLATES[it.templateId].slot === 'weapon'
+        );
+        if (bagWeapon) {
+          SaveState.starterWeaponGranted = true;
+          SaveState.save();
+          return null;
+        }
+
+        const uid = `starter_w_${Date.now().toString(36)}`;
+        const item = makeStarterItem(uid, 'rusty_bow');
+        if (!Array.isArray(SaveState.gearBag)) SaveState.gearBag = [];
+        SaveState.gearBag.push(item);
+        SaveState.starterWeaponGranted = true;
+        SaveState.save();
+        return item;
+      }
+
       const BeginnerHooks = {
         onDialogueDone() { completeBeginnerStep('N01'); },
-        onRoomCleared() { completeBeginnerStep('N02'); },
+        onRoomCleared() {
+          completeBeginnerStep('N02');
+          // Thưởng vũ khí đầu tiên ngay sau phòng đầu — người chơi có thứ
+          // để mặc ở bước N04 thay vì bị bỏ rơi với 6 ô trống.
+          const granted = grantStarterWeaponIfNeeded();
+          if (granted && typeof showToast === 'function') {
+            showToast('🗡️ Nhận được Thanh Kiếm Gỗ! Mở tab Trang Bị để mặc.');
+          }
+        },
         onLoot(count = 1) {
           const bj = SaveState.beginnerJourney;
           if (!bj || !isBeginnerJourneyActive()) return;
@@ -22633,8 +22721,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             const wId = btn.getAttribute('data-weapon-id');
             SaveState.selectedWeaponId = wId;
             const mapTpl = { bow: 'crimson_bow', staff: 'oracle_staff', claw: 'dragoon_claw' };
-            if (SaveState.equippedGear && SaveState.equippedGear.weapon) {
+            // Tân thủ có thể CHƯA có vũ khí nào (bắt đầu tay không). Trước đây
+            // chỉ sửa templateId khi đã có weapon -> đổi vũ khí không có tác
+            // dụng gì. Nay tạo mới nếu slot còn trống.
+            if (!SaveState.equippedGear) SaveState.equippedGear = createDefaultEquipped();
+            if (SaveState.equippedGear.weapon) {
               SaveState.equippedGear.weapon.templateId = mapTpl[wId] || 'crimson_bow';
+            } else {
+              const newUid = `eq_w_${Date.now().toString(36)}`;
+              SaveState.equippedGear.weapon = makeStarterItem(newUid, mapTpl[wId] || 'crimson_bow');
             }
             SaveState.save();
             SoundFX.coinPickup();
