@@ -789,6 +789,12 @@
           </div>
         </div>
 
+        <!-- ==================== CHỌN CHƯƠNG: THẺ TRỰC QUAN ====================
+             Thay cặp nút ◀ ▶ (phải bấm mò để biết có mấy chương, chương nào mở)
+             bằng 3 thẻ hiện đủ: số chương, tên, độ khó, số phòng, tiến trình,
+             trạng thái khoá. Bấm thẳng vào thẻ muốn chơi. -->
+        <div id="chapterSelectStrip" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 shrink-0"></div>
+
         <!-- Middle Grid: Hero Selection & Current Loadout Summary -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Hero Selector -->
@@ -2202,7 +2208,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           floorColor1: '#1e293b',
           floorColor2: '#172033',
           wallColor: '#334155',
-          enemyScale: 1.0
+          enemyScale: 1.0,
+          icon: '🏰',
+          accent: '#38bdf8',
+          accent2: '#0ea5e9',
+          gradFrom: '#0c4a6e',
+          gradTo: '#082f49',
+          difficulty: 1,
+          difficultyLabel: 'Dễ — Tân Thủ',
+          themeName: 'Đá Cổ',
+          bossIcon: '🔥',
+          bossName: 'Golem Dung Nham',
+          unlock: null
         },
         {
           id: 2,
@@ -2213,7 +2230,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           floorColor1: '#2a1810',
           floorColor2: '#1f120b',
           wallColor: '#7c2d12',
-          enemyScale: 1.45
+          enemyScale: 1.45,
+          icon: '🌋',
+          accent: '#fb923c',
+          accent2: '#ea580c',
+          gradFrom: '#7c2d12',
+          gradTo: '#431407',
+          difficulty: 2,
+          difficultyLabel: 'Thường — Cần Trang Bị',
+          themeName: 'Dung Nham',
+          bossIcon: '🕷️',
+          bossName: 'Nữ Hoàng Nhện Độc',
+          unlock: { type: 'chapterWin', chapterId: 1, label: 'Thắng Chương 1' }
         },
         {
           id: 3,
@@ -2224,9 +2252,59 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           floorColor1: '#1e1b4b',
           floorColor2: '#151236',
           wallColor: '#4c1d95',
-          enemyScale: 2.0
+          enemyScale: 2.0,
+          icon: '🌌',
+          accent: '#c084fc',
+          accent2: '#a855f7',
+          gradFrom: '#4c1d95',
+          gradTo: '#2e1065',
+          difficulty: 3,
+          difficultyLabel: 'Ác Mộng — Trang Bị Cao',
+          themeName: 'Hư Không',
+          bossIcon: '👑',
+          bossName: 'Đại Ma Vương Atreus',
+          unlock: { type: 'chapterWin', chapterId: 2, label: 'Thắng Chương 2' }
         }
       ];
+
+      /**
+       * Chương đã phá đảo chưa.
+       *
+       * Nguồn 1: winsByChapter — đếm số lần thắng (chính xác nhất).
+       * Nguồn 2: bestRooms đạt bằng số phòng của chương — suy ra cho tài khoản
+       *   cũ có kỷ lục nhưng chưa từng ghi nhận "win" (field này thêm sau), nếu
+       *   không sẽ khoá oan người chơi đã phá đảo từ trước.
+       */
+      function isChapterWon(chapterId) {
+        if (((SaveState.winsByChapter || {})[chapterId] || 0) > 0) return true;
+        const ch = CHAPTERS.find(c => c.id === chapterId);
+        if (!ch) return false;
+        return (SaveState.bestRooms || {})[chapterId] >= ch.rooms;
+      }
+
+      /** Chương có đang bị khoá không (phải thắng chương trước). */
+      function isChapterLocked(ch) {
+        if (!ch || !ch.unlock) return false;
+        if (ch.unlock.type === 'chapterWin') return !isChapterWon(ch.unlock.chapterId);
+        return false;
+      }
+
+      /**
+       * Nếu chương đang chọn bị khoá (save cũ chọn chương 3 khi chưa thắng
+       * chương 1) thì tự lùi về chương mở cao nhất. Gọi ở renderLobbyUI để thẻ
+       * "ĐANG CHỌN" không bao giờ nằm trên một chương bị khoá.
+       */
+      function normalizeSelectedChapter() {
+        const idx = SaveState.selectedChapterIdx || 0;
+        const ch = CHAPTERS[idx];
+        if (ch && !isChapterLocked(ch)) return idx;
+        let fallback = 0;
+        for (let i = CHAPTERS.length - 1; i >= 0; i--) {
+          if (!isChapterLocked(CHAPTERS[i])) { fallback = i; break; }
+        }
+        SaveState.selectedChapterIdx = fallback;
+        return fallback;
+      }
 
       // ==================== ARCHERO 2 WIKI CHARACTER PORTRAIT SVG GENERATOR ====================
       function makeWikiHeroPortraitURI(cfg) {
@@ -7383,6 +7461,21 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         load() {
           try {
             const raw = localStorage.getItem('archero2_web_save_v2');
+            // KHONG CO SAVE: phai dua ve trang thai mac dinh.
+            //
+            // LO HONG DA VA: truoc day khoi lenh nay chi chay khi `raw` ton tai.
+            // Khi localStorage trong (tai khoan moi, hoac vua dang xuat), ham
+            // khong lam gi ca — SaveState van giu du lieu da nap luc parse, tuc
+            // la du lieu cua TAI KHOAN TRUOC do tren cung trinh duyet. Ket qua:
+            // tai khoan moi thua huong winsByChapter/bestRooms/gear cua nguoi
+            // khac, va cac chuong bi coi la da pha dao.
+            if (!raw) {
+              if (typeof SAVE_STATE_DEFAULTS === 'object' && SAVE_STATE_DEFAULTS) {
+                Object.assign(this, JSON.parse(JSON.stringify(SAVE_STATE_DEFAULTS)));
+              }
+              this.normalizeLoadedGear();
+              return;
+            }
             if (raw) {
               const parsed = JSON.parse(raw);
               if (parsed && typeof parsed === 'object') {
@@ -7626,10 +7719,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       };
       /**
-       * Chuẩn hoá state gacha/event: các trường PHẢI là array nhưng bị lưu thành
-       * number/undefined (do schema cũ hoặc save cũ) sẽ làm .map() ném lỗi và
-       * chặn toàn bộ renderLobbyUI -> Cửa Hàng / Sự Kiện trống trơn.
+       * Ảnh chụp trạng thái mặc định, chụp NGAY sau khi SaveState vừa được định
+       * nghĩa (trước mọi thao tác). Dùng để đưa SaveState về đúng tân thủ khi
+       * localStorage trống — xem SaveState.load().
        */
+      const SAVE_STATE_DEFAULTS = JSON.parse(JSON.stringify(
+        Object.fromEntries(Object.entries(SaveState).filter(([, v]) => typeof v !== 'function'))
+      ));
       function normalizeStateArrays() {
         const ensureObj = (key, defaults) => {
           if (!SaveState[key] || typeof SaveState[key] !== 'object' || Array.isArray(SaveState[key])) {
@@ -11059,6 +11155,97 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           toast.classList.remove('opacity-100');
           toast.classList.add('opacity-0');
         }, 2200);
+      }
+
+      /**
+       * Vẽ dải thẻ chọn chương.
+       * Mỗi thẻ hiện đủ: số + tên chương, độ khó (3 bậc), số phòng, tiến trình
+       * tốt nhất, trùm cuối. Chương chưa mở thì phủ lớp khoá + điều kiện.
+       */
+      function renderChapterSelectStrip() {
+        const el = document.getElementById('chapterSelectStrip');
+        if (!el) return;
+        const selIdx = SaveState.selectedChapterIdx || 0;
+
+        el.innerHTML = CHAPTERS.map((ch, idx) => {
+          const active = idx === selIdx;
+          const locked = isChapterLocked(ch);
+          const best = SaveState.bestRooms[ch.id] || 0;
+          const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
+          const cleared = wins > 0;
+          const pct = Math.min(100, Math.round((best / ch.rooms) * 100));
+          const diffColor = ch.difficulty === 1 ? '#4ade80' : (ch.difficulty === 2 ? '#fbbf24' : '#f87171');
+
+          const pips = [1, 2, 3].map(n =>
+            `<span style="flex:1;height:4px;border-radius:2px;background:${n <= ch.difficulty ? diffColor : 'rgba(255,255,255,.13)'}"></span>`
+          ).join('');
+
+          const lockOverlay = locked
+            ? `<div style="position:absolute;inset:0;border-radius:0.85rem;background:linear-gradient(180deg,rgba(2,6,23,.5),rgba(2,6,23,.9));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;z-index:3">
+                 <div style="font-size:24px;filter:grayscale(1) drop-shadow(0 2px 4px #000)">🔒</div>
+                 <div style="font-size:10px;font-weight:900;color:#e2e8f0">${ch.unlock.label}</div>
+                 <div style="font-size:9px;color:#94a3b8">để mở khoá</div>
+               </div>`
+            : '';
+
+          return `
+            <button type="button" data-chapter-card="${idx}"${locked ? ' data-locked="1"' : ''}
+              style="position:relative;overflow:hidden;border-radius:0.85rem;padding:9px 10px;text-align:left;
+                     border:2px solid ${active ? ch.accent : 'rgba(148,163,184,.2)'};
+                     background:linear-gradient(135deg,${ch.gradFrom},${ch.gradTo});
+                     box-shadow:${active ? `0 0 0 1px ${ch.accent}55,0 8px 20px -8px ${ch.accent}99` : '0 3px 10px -5px rgba(0,0,0,.8)'};
+                     transition:transform .16s ease,border-color .16s ease;cursor:${locked ? 'not-allowed' : 'pointer'}">
+              <div style="position:absolute;top:-28px;right:-28px;width:84px;height:84px;border-radius:50%;background:radial-gradient(circle,${ch.accent}30,transparent 70%);pointer-events:none"></div>
+
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+                <span style="font-size:19px;line-height:1">${ch.icon}</span>
+                <div style="min-width:0;flex:1">
+                  <div style="font-size:8.5px;font-weight:900;letter-spacing:.07em;color:${ch.accent};text-transform:uppercase">
+                    Chương ${ch.id}${cleared ? ' · ĐÃ PHÁ ĐẢO' : ''}
+                  </div>
+                  <div style="font-size:12.5px;font-weight:900;color:#f8fafc;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                    ${ch.themeName}
+                  </div>
+                </div>
+                ${active ? `<span style="font-size:8px;font-weight:900;color:#0f172a;background:${ch.accent};padding:1px 5px;border-radius:999px;white-space:nowrap">ĐANG CHỌN</span>` : ''}
+              </div>
+
+              <div style="display:flex;align-items:center;gap:3px;margin-bottom:4px">${pips}</div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:9.5px;font-weight:800;color:#cbd5e1;margin-bottom:4px">
+                <span>${ch.rooms} phòng</span>
+                <span style="color:${diffColor}">${ch.difficultyLabel.split(' — ')[0]}</span>
+              </div>
+
+              <div style="height:4px;border-radius:2px;background:rgba(0,0,0,.5);overflow:hidden;margin-bottom:4px">
+                <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${ch.accent},${ch.accent2})"></div>
+              </div>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;font-size:8.5px;font-weight:800">
+                <span style="color:#94a3b8">Tốt nhất ${best}/${ch.rooms}</span>
+                <span style="color:#fbbf24;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:56%">${ch.bossIcon} ${ch.bossName}</span>
+              </div>
+
+              ${lockOverlay}
+            </button>
+          `;
+        }).join('');
+
+        el.querySelectorAll('[data-chapter-card]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-chapter-card'));
+            const ch = CHAPTERS[idx];
+            if (!ch) return;
+            if (isChapterLocked(ch)) {
+              showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
+              return;
+            }
+            SaveState.selectedChapterIdx = idx;
+            SaveState.save();
+            SoundFX.coinPickup();
+            renderLobbyUI();
+          });
+        });
       }
 
       // Build a single 3D Glossy Item Card HTML (used in both Equipped Slots and 5-Column Bag Grid)
@@ -20265,6 +20452,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
       function renderLobbyUI() {
         const stats = getComputedStats();
+        // Chương đang chọn có thể bị khoá (save cũ) -> lùi về chương mở cao nhất.
+        normalizeSelectedChapter();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
 
         // Top Bar (100% Authentic Vietnamese Archero 2 HUD: 61 Vie | PuuGoo • 10.06M • 225/60 • 384.81K • 145.22K)
@@ -20319,6 +20508,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         document.getElementById('chapterModeBadge').textContent = ch.modeLabel;
         document.getElementById('chapterTitleText').textContent = ch.name;
         document.getElementById('chapterDescText').textContent = ch.desc;
+        safeRender('chapterStrip', () => renderChapterSelectStrip());
         const bestRm = SaveState.bestRooms[ch.id] || 1;
         document.getElementById('bestRecordText').textContent = `Kỷ lục: Phòng ${bestRm}/${ch.rooms}`;
 
@@ -21187,6 +21377,12 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const stats = getComputedStats();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
 
+        // Chặn vào chương chưa mở khoá — kể cả khi gọi qua console/API.
+        if (isChapterLocked(ch)) {
+          showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
+          return false;
+        }
+
         // Switch UI view
         document.getElementById('tabShopVn')?.classList.add('hidden');
         document.getElementById('tabBattle').classList.add('hidden');
@@ -21406,20 +21602,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           }
         }
 
-        // ==================== CÂN BẰNG ĐỘ KHÓ ====================
-        // Trước đây quái/boss dùng số tuyệt đối (28/1450) trong khi HP người chơi
-        // tăng theo trang bị lên hàng chục nghìn -> quái gây 28 sát thương lên
-        // 75.000 HP (cần ~2700 đòn mới chết) và boss 3.147 HP chết trong 1 đòn.
-        //
-        // Nay dùng HAI thước đo khác nhau, mỗi cái đúng chỗ:
+        // ==================== CÂN BẰNG ĐỘ KHÓ (đường cong theo chương) ====================
+        // Hai thước đo khác nhau, mỗi cái đúng chỗ:
         //   • HP quái/boss  neo theo ATK người chơi  -> TTK (thời gian giết) ổn định
         //   • ATK quái/boss neo theo MaxHP người chơi -> số đòn chịu được ổn định
-        // Nhờ vậy độ khó giữ nguyên ý nghĩa ở mọi mức trang bị, không phụ thuộc
-        // vào việc người chơi đang mặc đồ gì.
-        //   quái HP  = 2.6 × ATK  -> ~2 đòn (crit ~1.5 đòn)
-        //   boss HP  = 30 × ATK   -> trận boss ~20-30s có né đòn
-        //   quái ATK = 5.5% maxHp -> ăn đòn liên tục chết sau vài phòng
-        //   boss ATK = 11% maxHp  -> 9 đòn là chết, buộc phải né
+        // Nhờ vậy độ khó giữ nguyên ý nghĩa ở mọi mức trang bị.
+        //
+        // ĐƯỜNG CONG: trước đây boss cuối chương 1 mất 53s (đo thật trên tài khoản
+        // mới: 2.594.623 HP / 48.844 DPS) — quá dài cho trận đầu tiên của người
+        // mới. Nay TTK boss giảm dần theo tiến trình phòng nhưng vẫn đủ áp lực:
+        //   phòng 5  (trùm đầu tiên)  ~11s
+        //   phòng 10 (trùm giữa)      ~14s
+        //   phòng cuối (đại ma vương) ~19s
         const playerMaxHp = Math.max(1, Game.player?.maxHp || 1000);
         const playerAtk = Math.max(1, Game.player?.atk || 100);
         const chapterMul = Game.chapter.enemyScale || 1;
@@ -21434,9 +21628,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             queen: '🕷️ TRÙM: NỮ HOÀNG NHỆN ĐỘC',
             demon_king: '👑 ĐẠI MA VƯƠNG ATREUS'
           };
-          // Boss HP neo theo ATK người chơi để trận boss luôn dài đủ lâu bất kể
-          // người chơi mạnh yếu ra sao (~30 đòn đánh thường).
-          const maxHp = Math.round(playerAtk * 30 * scale * (bossType === 'demon_king' ? 1.35 : 1.0));
+          // HP boss neo theo ATK người chơi (≈ số đòn đánh thường để hạ).
+          // Scale phòng KHÔNG nhân vào HP nữa — đã tính bằng hitsToKill, nếu nhân
+          // thêm roomMul thì trùm cuối thành bức tường 53 giây.
+          const hitsToKill = roomNum === 5 ? 24 : (roomNum === 10 ? 30 : 40);
+          const maxHp = Math.round(playerAtk * hitsToKill * chapterMul * (bossType === 'demon_king' ? 1.15 : 1.0));
           Game.enemies.push({
             isBoss: true,
             type: bossType,
@@ -21446,10 +21642,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             r: 34,
             hp: maxHp,
             maxHp: maxHp,
-            // ATK boss = 7.5% maxHp × scale → phòng 5 ~9 đòn, phòng 10 ~6 đòn,
-            // phòng 15 (trùm cuối) ~5 đòn. Đủ áp lực buộc né đòn nhưng không
-            // one-shot người chơi mới.
-            atk: Math.max(1, Math.round(playerMaxHp * 0.075 * Math.min(2.5, scale))),
+            // ATK boss = số đòn phải chịu, khó dần: trùm đầu 9 đòn, trùm giữa 7,
+            // trùm cuối 5. Trước đây dùng % maxHp × scale nên trùm cuối lại chịu
+            // đòn tốt hơn trùm đầu (6 vs 9 đòn) — ngược đường cong.
+            atk: Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
             speed: 68,
             vx: 45,
             vy: 30,
@@ -21473,10 +21669,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             const t = types[(roomNum + i) % types.length];
             const ex = Game.wallPad + 35 + Math.random() * Math.max(80, Game.width - (Game.wallPad + 35) * 2);
             const ey = Game.wallPad + 45 + Math.random() * (Game.height * 0.42);
-            // HP quái neo theo ATK người chơi -> TTK ổn định ~2 đòn ở mọi mức
-            // trang bị. plant_turret trâu nhất (3.2×), skeleton_mage 2.9×,
-            // còn lại 2.6×.
-            const atkMul = t === 'plant_turret' ? 3.2 : (t === 'skeleton_mage' ? 2.9 : 2.6);
+            // HP quái neo theo ATK người chơi -> TTK ổn định ở mọi mức trang bị.
+            // ĐƯỜNG CONG CHO NGƯỜI MỚI: phòng 1-3 là "học cách chơi" nên quái
+            // chỉ ~1,4 đòn; tăng dần tới ~2,4 đòn ở phòng cuối. Trước đây phòng 1
+            // đã 1,2-1,5s mỗi con — người mới thấy quái trâu ngay từ đầu.
+            const depth = Math.min(1, (roomNum - 1) / Math.max(1, Game.maxRooms - 1));
+            const baseHits = 1.4 + depth * 1.0;   // 1,4 -> 2,4 đòn
+            const atkMul = (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0)) * baseHits;
             const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale));
             Game.enemies.push({
               isBoss: false,
@@ -21486,9 +21685,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               r: t === 'bat' ? 13 : 16,
               hp: enemyHp,
               maxHp: enemyHp,
-              // 5.5% maxHp chia đều cho số quái -> ăn đòn liên tục thì chết sau
-              // vài phòng, buộc phải di chuyển né thay vì đứng bắn.
-              atk: Math.max(1, Math.round(playerMaxHp * 0.055 * Math.min(2.5, scale) / Math.max(2, count * 0.6))),
+              // Sát thương quái — thiết kế theo SỐ ĐÒN PHẢI CHỊU, không theo %:
+              //   phòng đầu  ~16 đòn là chết  (dễ, người mới học né)
+              //   phòng cuối ~6 đòn là chết   (buộc phải né liên tục)
+              // Chia theo sqrt(số quái) để phòng đông không one-shot, nhưng vẫn
+              // giữ đúng đường cong khó dần (trước đây chia theo count khiến
+              // càng về sau càng dễ chịu đòn — ngược hoàn toàn ý đồ).
+              atk: Math.max(1, Math.round(
+                playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
+              )),
               speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : 64),
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,
@@ -25568,14 +25773,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       });
 
       // Chapter Switching
+      // Chương trước / sau: bỏ qua chương đang khoá, báo rõ thay vì nhảy vào rồi chết.
       document.getElementById('btnPrevChapter').addEventListener('click', () => {
-        SaveState.selectedChapterIdx = (SaveState.selectedChapterIdx - 1 + CHAPTERS.length) % CHAPTERS.length;
+        let idx = SaveState.selectedChapterIdx;
+        for (let step = 1; step < CHAPTERS.length; step++) {
+          idx = (idx - 1 + CHAPTERS.length) % CHAPTERS.length;
+          if (!isChapterLocked(CHAPTERS[idx])) break;
+        }
+        SaveState.selectedChapterIdx = idx;
         SaveState.save();
         SoundFX.coinPickup();
         renderLobbyUI();
       });
       document.getElementById('btnNextChapter').addEventListener('click', () => {
-        SaveState.selectedChapterIdx = (SaveState.selectedChapterIdx + 1) % CHAPTERS.length;
+        const cur = SaveState.selectedChapterIdx;
+        const next = (cur + 1) % CHAPTERS.length;
+        if (isChapterLocked(CHAPTERS[next])) {
+          const req = CHAPTERS[next].unlock;
+          showToast(`🔒 Cần "${req.label}" để mở ${CHAPTERS[next].name.split(':')[0]}!`);
+          return;
+        }
+        SaveState.selectedChapterIdx = next;
         SaveState.save();
         SoundFX.coinPickup();
         renderLobbyUI();
