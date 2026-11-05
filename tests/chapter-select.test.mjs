@@ -33,7 +33,12 @@ check("co ham isChapterWon", /function isChapterWon\(chapterId\)/.test(html));
 check("co ham isChapterLocked", /function isChapterLocked\(ch\)/.test(html));
 check("isChapterWon doc winsByChapter", /winsByChapter \|\| \{\}\)\[chapterId\]/.test(html));
 check("isChapterWon suy ra tu bestRooms (khong khoa oan tai khoan cu)",
-  /bestRooms \|\| \{\}\)\[chapterId\] >= ch\.rooms/.test(html));
+  /getChapterBest\(chapterId\) >= ch\.rooms/.test(html));
+check("co ham getChapterBest kep ky luc ve so phong cua chuong",
+  /function getChapterBest\(chapterId\)/.test(html) &&
+  /Math\.max\(0, Math\.min\(ch\.rooms, Math\.floor\(raw\)\)\)/.test(html));
+check("isChapterWon dung getChapterBest (khong doc bestRooms tho)",
+  !/\(SaveState\.bestRooms \|\| \{\}\)\[chapterId\] >= ch\.rooms/.test(html));
 check("co ham normalizeSelectedChapter", /function normalizeSelectedChapter\(\)/.test(html));
 check("renderLobbyUI goi normalizeSelectedChapter", /function renderLobbyUI\(\)[\s\S]{0,300}?normalizeSelectedChapter\(\)/.test(html));
 const snrStart = html.indexOf("function startNewRun(reason = 'fresh')");

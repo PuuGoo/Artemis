@@ -2381,7 +2381,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (((SaveState.winsByChapter || {})[chapterId] || 0) > 0) return true;
         const ch = CHAPTERS.find(c => c.id === chapterId);
         if (!ch) return false;
-        return (SaveState.bestRooms || {})[chapterId] >= ch.rooms;
+        return getChapterBest(chapterId) >= ch.rooms;
       }
 
       /** Chương có đang bị khoá không (phải thắng chương trước). */
@@ -11296,6 +11296,22 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (_bossIntroTimer) { clearTimeout(_bossIntroTimer); _bossIntroTimer = null; }
       }
 
+      /**
+       * Đọc kỷ lục phòng của một chương, đã kẹp về khoảng hợp lệ.
+       *
+       * Vì sao cần kẹp: `bestRooms` là dữ liệu client gửi lên. Save cũ có thể
+       * chứa giá trị vượt số phòng của chương (đo thật trên production:
+       * bestRooms[3] = 15 trong khi chương 3 chỉ có 10 phòng) — do chương từng
+       * được đổi số phòng, hoặc do dữ liệu bị sửa. Hiển thị "KỶ LỤC P15/10" là
+       * vô nghĩa và làm sai cả điều kiện mở khoá chương.
+       */
+      function getChapterBest(chapterId) {
+        const ch = CHAPTERS.find(c => c.id === chapterId);
+        if (!ch) return 0;
+        const raw = Number((SaveState.bestRooms || {})[chapterId]) || 0;
+        return Math.max(0, Math.min(ch.rooms, Math.floor(raw)));
+      }
+
       function renderChapterSelectStrip() {
         /**
          * Vẽ dải thẻ chọn chương.
@@ -11309,7 +11325,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         el.innerHTML = CHAPTERS.map((ch, idx) => {
           const active = idx === selIdx;
           const locked = isChapterLocked(ch);
-          const best = SaveState.bestRooms[ch.id] || 0;
+          const best = getChapterBest(ch.id);
           const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
           const cleared = wins > 0;
           const pct = Math.min(100, Math.round((best / ch.rooms) * 100));
@@ -11399,7 +11415,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (!modal || !card) return;
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
         const stats = getComputedStats();
-        const best = SaveState.bestRooms[ch.id] || 0;
+        const best = getChapterBest(ch.id);
         const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
         const diffColor = ch.difficulty === 1 ? '#4ade80' : (ch.difficulty === 2 ? '#fbbf24' : '#f87171');
 
@@ -20756,7 +20772,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         document.getElementById('chapterTitleText').textContent = ch.name;
         document.getElementById('chapterDescText').textContent = ch.desc;
         safeRender('chapterStrip', () => renderChapterSelectStrip());
-        const bestRm = SaveState.bestRooms[ch.id] || 1;
+        const bestRm = getChapterBest(ch.id) || 1;
         document.getElementById('bestRecordText').textContent = `Kỷ lục: Phòng ${bestRm}/${ch.rooms}`;
 
         // Hero Selector (Displays dynamic Star Level 1★-6★ & Equipped Luxury Skin)
