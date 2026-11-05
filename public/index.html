@@ -3472,6 +3472,81 @@
         }
       ];
 
+      // ==================== DEV CHEATS GATE ====================
+      /**
+       * Các nút "MAX ĐỒ / Full 18 Kỹ Năng / Max Talent / Max Artifact / Max Vật Phẩm /
+       * Max Tài Nguyên Sự Kiện / Reset Trang Bị / Max Sao Anh Hùng / Nâng Cấp Tối Đa"
+       * là công cụ phát triển. Trước đây chúng hiện công khai trên production: bất kỳ
+       * ai bấm "MAX ĐỒ" một lần là có 9.999.999 vàng + 999.999 đá quý + 30 bậc talent,
+       * phá huỷ toàn bộ cân bằng của game.
+       *
+       * Nay tất cả bị khoá sau cờ này. Bật bằng:
+       *   • URL:  ?dev=1        (?dev=1&dev=1 vẫn tính)
+       *   • hoặc localStorage.setItem('artemis_dev', '1') rồi reload
+       * Tắt lại:
+       *   • localStorage.removeItem('artemis_dev')
+       */
+      const DEV_CHEATS = (function () {
+        try {
+          const q = new URLSearchParams(location.search);
+          if (q.get('dev') === '1') {
+            try { localStorage.setItem('artemis_dev', '1'); } catch (e) {}
+            return true;
+          }
+          return localStorage.getItem('artemis_dev') === '1';
+        } catch (e) {
+          return false;
+        }
+      })();
+
+      function devCheatsEnabled() {
+        return DEV_CHEATS === true;
+      }
+
+      // Toàn bộ id nút cheat phải bị ẩn khi không bật cờ.
+      const DEV_CHEAT_BUTTON_IDS = [
+        'btnMaxAllSystems',
+        'btnWorkshopMaxAll',
+        'btnMaxRunSkills',
+        'btnMaxAllTalents5Star',
+        'btnMaxAllArtifacts15',
+        'btnMaxAllWikiItems',
+        'btnMaxAllWikiEventsCurrencies',
+        'btnResetWikiItemsStarter',
+        'btnModalMaxUpgradeGear',
+      ];
+
+      /** Ẩn/hiện mọi nút cheat theo cờ. Gọi lúc DOM ready và sau mỗi lần render. */
+      function applyDevCheatVisibility() {
+        const show = devCheatsEnabled();
+        for (const id of DEV_CHEAT_BUTTON_IDS) {
+          const el = document.getElementById(id);
+          if (!el) continue;
+          if (show) {
+            el.classList.remove('hidden');
+            el.style.removeProperty('display');
+          } else {
+            el.classList.add('hidden');
+            el.style.display = 'none';
+          }
+        }
+        // Nút "Max / Reset sao" nằm trong danh sách anh hùng (render động)
+        document.querySelectorAll('[data-max-star-hero], [data-reset-star-hero]').forEach((el) => {
+          if (show) {
+            el.classList.remove('hidden');
+            el.style.removeProperty('display');
+          } else {
+            el.classList.add('hidden');
+            el.style.display = 'none';
+          }
+        });
+      }
+
+      /** Cảnh báo khi người chơi cố bấm cheat lúc đã bị khoá. */
+      function blockedCheatNotice() {
+        showToast('🔒 Chức năng này chỉ dành cho chế độ phát triển (?dev=1).', 'warn');
+      }
+
       function ensureAllTalentCardsInitialized() {
         if (!SaveState.talents || typeof SaveState.talents !== 'object') {
           SaveState.talents = {};
@@ -6949,7 +7024,13 @@
                   this.bestRooms = {};
                 }
                 if (parsed.maxedAllVersion !== 1) {
-                  this.applyMaxAllSystems(false);
+                  // KHÔNG gọi applyMaxAllSystems ở đây nữa. Bản cũ gọi
+                  //   this.applyMaxAllSystems(false)
+                  // nghĩa là mọi save trước đây (chưa có cờ này) đều bị cấp
+                  // 9.999.999 vàng + Mythic Lv.100 ngay lần đăng nhập đầu —
+                  // chính là bug "gold 9,999,999". Nay chỉ đóng dấu phiên bản
+                  // để migration không chạy lại; dữ liệu người chơi giữ nguyên.
+                  this.maxedAllVersion = 1;
                 }
                 if (parsed.artemisHeroVersion !== 1) {
                   this.artemisHeroVersion = 1;
@@ -7045,6 +7126,12 @@
           }
         },
         applyMaxAllSystems(resetSets = true) {
+          // Cheat: chặn khi không bật cờ dev. Hàm này cấp 9.999.999 vàng,
+          // 999.999 đá quý, Mythic Lv.100 — không được phép chạy trên production.
+          if (typeof devCheatsEnabled === 'function' && !devCheatsEnabled()) {
+            if (typeof blockedCheatNotice === 'function') blockedCheatNotice();
+            return false;
+          }
           this.maxedAllVersion = 1;
           this.gold = Math.max(this.gold || 0, 9999999);
           this.gems = Math.max(this.gems || 0, 999999);
@@ -7189,6 +7276,8 @@
       SaveState.load();
       // Chuẩn hoá ngay sau khi nạp, trước mọi lần render.
       normalizeStateArrays();
+      // Ẩn toàn bộ nút cheat ngay khi script chạy (production không có ?dev=1).
+      applyDevCheatVisibility();
 
       /**
        * Nap lai save tu localStorage.
@@ -8287,6 +8376,8 @@
       }
 
       function maxSingleHeroStarAndSkins(heroId = SaveState.selectedHeroId) {
+        // Cheat: chặn ở tầng hàm để không thể gọi vòng qua từ console.
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return false; }
         const heroObj = HEROES.find(h => h.id === heroId) || HEROES[0];
         if (!SaveState.heroStars) SaveState.heroStars = {};
         SaveState.heroStars[heroId] = 8;
@@ -11088,6 +11179,7 @@
           });
           containerEl.querySelectorAll('.btn-max-hero-star').forEach(btn => {
             btn.addEventListener('click', () => {
+              if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
               maxSingleHeroStarAndSkins(btn.getAttribute('data-max-star-hero'));
             });
           });
@@ -11650,6 +11742,7 @@
         const maxAllArtBtn = document.getElementById('btnMaxAllArtifacts15');
         if (maxAllArtBtn) {
           maxAllArtBtn.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             const map = getArtifactStarMap();
             for (const a of ARTIFACTS_DATA) map[a.id] = 15;
             SaveState.save();
@@ -12986,6 +13079,7 @@
         const btnMaxItems = document.getElementById('btnMaxAllWikiItems');
         if (btnMaxItems) {
           btnMaxItems.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             SaveState.gold = Math.max(SaveState.gold || 0, 9999999);
             SaveState.gems = Math.max(SaveState.gems || 0, 999999);
             SaveState.wishTokens = Math.max(SaveState.wishTokens || 0, 999);
@@ -13013,6 +13107,7 @@
         const btnResetItems = document.getElementById('btnResetWikiItemsStarter');
         if (btnResetItems) {
           btnResetItems.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             for (const sk of Object.keys(WIKI_GEAR_SCROLLS_META)) SaveState.gearScrolls[sk] = 120;
             SaveState.chestKeys = { silver_chest_key: 30, obsidian_chest_key: 20, chromatic_chest_key: 10 };
             SaveState.wishTokens = 30;
@@ -15963,7 +16058,10 @@
 
         const btnMaxEv = document.getElementById('btnMaxAllWikiEventsCurrencies');
         if (btnMaxEv) {
+          // Nút này nằm trong HTML vừa sinh ra -> phải áp lại cờ ẩn/hiện.
+          if (typeof applyDevCheatVisibility === 'function') applyDevCheatVisibility();
           btnMaxEv.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             SaveState.stamina = 50;
             ev.huntingWarriorCard = true;
             ev.treasureCoins = (ev.treasureCoins || 0) + 500;
@@ -19814,6 +19912,11 @@
         });
         safeRender('events', () => renderVnEventsBannerCardsUI());
         safeRender('wikiEvents', () => renderWikiEventsHubUI());
+        // PHẢI chạy SAU mọi render: một số nút cheat nằm trong HTML sinh động
+        // (wikiEventsHub, danh sách anh hùng) nên bị tạo lại mỗi lần render.
+        safeRender('devCheats', () => {
+          if (typeof applyDevCheatVisibility === 'function') applyDevCheatVisibility();
+        });
 
         const stageAtkEl = document.getElementById('stageAtkVal');
         if (stageAtkEl) stageAtkEl.textContent = '840.05K';
@@ -20079,6 +20182,7 @@
         const maxTalBtn = document.getElementById('btnMaxAllTalents5Star');
         if (maxTalBtn) {
           maxTalBtn.onclick = () => {
+            if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
             for (const t of TALENT_CARDS_DATA) {
               SaveState.talents[t.id] = t.maxLv;
             }
@@ -25920,6 +26024,7 @@
 
       // V4 Modal Buttons: Max Upgrade (Mythic Lv.100 + Full 4 Gems + 3 SS Affixes), Quick Open Reforge, and 100% Gold Level Reset
       document.getElementById('btnModalMaxUpgradeGear')?.addEventListener('click', () => {
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
         if (!_activeModalGearRef) return;
         const { uid, isEquipped, slotKey } = _activeModalGearRef;
         const item = isEquipped ? SaveState.equippedGear[slotKey] : SaveState.gearBag.find(i => i.uid === uid);
@@ -26166,7 +26271,10 @@
         clearCheckpoint,
         getUsableCheckpoint,
         continueRun,
-        syncContinueButton
+        syncContinueButton,
+        // ===== API dev cheats (kiểm thử) =====
+        devCheatsEnabled,
+        applyDevCheatVisibility
       };
 
       // Engrave Elemental Rune
@@ -26186,6 +26294,8 @@
       });
 
       function grantAllRogueSkillsInRun() {
+        // Cheat: chặn khi không bật cờ dev.
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
         if (!Game.running || !Game.player) return;
         for (const sk of ROGUE_SKILLS) {
           if (!Game.player.skills[sk.id]) {
@@ -26200,6 +26310,8 @@
       }
 
       function handleMaxAllClick() {
+        // Cheat: chặn khi không bật cờ dev.
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
         SaveState.applyMaxAllSystems(true);
         if (Game.running && Game.player) {
           const stats = getComputedStats();
