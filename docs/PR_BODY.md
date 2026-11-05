@@ -26,12 +26,13 @@ Giải quyết đồng thời 5 vấn đề trong MASTER TASK V1: trải nghiệ
 quán chỉ số, cân bằng chiến đấu, cơ chế reset phó bản, và ảnh hưởng thực tế của
 trang bị/kỹ năng lên sức mạnh nhân vật.
 
-**Kiểm thử: 304 PASS / 0 FAIL** trên 7 bộ test.
+**Kiểm thử: 363 PASS / 0 FAIL** trên 8 bộ test.
 
 | Bộ test | Số assertion |
 |---|---|
 | `combat.test.mjs` | 43 |
 | `dungeon-reset.test.mjs` | 74 |
+| `checkpoint.test.mjs` | 59 |
 | `beginner-journey.test.mjs` | 71 |
 | `save-schema.test.mjs` | 38 |
 | `devil-encounter.test.mjs` | 21 |
@@ -158,11 +159,18 @@ hoàn thành.
 
 ### Chưa triển khai
 
-- **Checkpoint / Continue giữa phó bản.** Lý do và thiết kế đề xuất ghi trong
-  `docs/DUNGEON_RESET_SPEC.md` §7. Hiện đóng tab giữa trận = mất lượt đó (dữ liệu
-  nhân vật vẫn an toàn vì đã lưu sau mỗi phòng).
 - Hội thoại nhiều bước cho NPC (mỗi bước hiện là một đoạn văn).
 - Thông báo đẩy khi hoàn thành nhiệm vụ ngoài màn hình phó bản.
+- Khôi phục vị trí quái / đạn đang bay trong checkpoint (phòng được dựng lại từ đầu).
+
+### Continue (checkpoint) — đã bổ sung
+
+Hành động thứ ba trong spec PHẦN 5.2. Chỉ lưu khi phòng sạch quái (`Game.roomCleared`),
+chỉ lưu scalar nhân vật (không lưu entity), hết hạn 24h, phải cùng chương.
+Retry/Reset xoá checkpoint; Continue dùng rồi xoá.
+
+Kiểm chứng: dọn phòng 1→2→3 → reload trang → checkpoint còn → bấm Continue →
+phòng 3, level 3, 2 kỹ năng khôi phục, không NaN.
 
 ### Không vi phạm nguyên tắc
 
@@ -175,4 +183,4 @@ hoàn thành.
 7. ✅ Không phần thưởng trùng — 2 lớp client + server
 8. ✅ Không hỏng trang bị/tiến trình — 74 assertion riêng
 9. ✅ Không commit trực tiếp vào `main` — nằm trên branch riêng
-10. ✅ PR chỉ tạo sau khi 304/304 test PASS
+10. ✅ PR chỉ tạo sau khi 363/363 test PASS
