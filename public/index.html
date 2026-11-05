@@ -3514,6 +3514,14 @@
         'btnMaxAllWikiEventsCurrencies',
         'btnResetWikiItemsStarter',
         'btnModalMaxUpgradeGear',
+        // Ba nút "viện trợ" ở thanh trên: mỗi lần bấm cộng thẳng +500 vàng /
+        // +50 đá quý / +300 vàng & đầy năng lượng, KHÔNG giới hạn. Trước đây
+        // không nằm trong danh sách này nên người chơi thật bấm được vô hạn:
+        // 10 lần bấm = +8.000 vàng + 500 đá quý, phá sạch nền kinh tế.
+        // Trong game thật, hồi năng lượng phải TIÊU đá quý chứ không tặng vàng.
+        'btnTopAddGold',
+        'btnTopAddGem',
+        'btnRefillStamina',
       ];
 
       /** Ẩn/hiện mọi nút cheat theo cờ. Gọi lúc DOM ready và sau mỗi lần render. */
@@ -8348,8 +8356,13 @@
       function summonHeroShards(heroId = SaveState.selectedHeroId, amount = 100) {
         const heroObj = HEROES.find(h => h.id === heroId) || HEROES[0];
         const gemCost = 50;
-        if (SaveState.gems < gemCost) {
-          SaveState.gems += 500;
+        // LO HONG DA VA: truoc day neu thieu da quy thi TU CONG +500 roi tru 50
+        // => lai rong +450 da quy VA +100 manh tuong moi lan bam, khong gioi han.
+        // Nguoi choi chi can bam nut trieu hoi la co vo han da quy/manh.
+        // Nay: khong du thi bao ro va khong lam gi.
+        if ((SaveState.gems || 0) < gemCost) {
+          showToast(`💎 Cần ${gemCost} Đá Quý để triệu hồi (đang có ${Math.floor(SaveState.gems || 0)}).`, 'err');
+          return getHeroShardsCount(heroId);
         }
         SaveState.gems = Math.max(0, SaveState.gems - gemCost);
         if (!SaveState.heroShards) SaveState.heroShards = {};
@@ -8363,6 +8376,8 @@
       }
 
       function resetHeroStarToOne(heroId = SaveState.selectedHeroId) {
+        // Tat ca cac nut "doi sao"/"tang manh" deu la cheat: chi dung khi ?dev=1.
+        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
         const heroObj = HEROES.find(h => h.id === heroId) || HEROES[0];
         if (!SaveState.heroStars) SaveState.heroStars = {};
         SaveState.heroStars[heroId] = 0;
@@ -25710,6 +25725,8 @@
       // ==================== ARCHERO 2 GEAR SYSTEM & BLACKSMITH EVENT LISTENERS ====================
       // Top Bar Quick Bonus Buttons
       document.getElementById('btnRefillStamina').addEventListener('click', () => {
+        // Chan tang ham: an nut la chua du, nguoi dung van co the goi qua console.
+        if (!devCheatsEnabled()) return blockedCheatNotice();
         SaveState.stamina = 30;
         SaveState.gold += 300;
         SaveState.save();
@@ -25718,6 +25735,7 @@
         renderLobbyUI();
       });
       document.getElementById('btnTopAddGold').addEventListener('click', () => {
+        if (!devCheatsEnabled()) return blockedCheatNotice();
         SaveState.gold += 500;
         SaveState.save();
         SoundFX.coinPickup();
@@ -25725,6 +25743,7 @@
         renderLobbyUI();
       });
       document.getElementById('btnTopAddGem').addEventListener('click', () => {
+        if (!devCheatsEnabled()) return blockedCheatNotice();
         SaveState.gems += 50;
         SaveState.save();
         SoundFX.coinPickup();
