@@ -115,7 +115,8 @@ check('chi chay 1 lan (khong tao nhieu interval)', /if \(gardenTicker\) return;/
 check('chi ve lai khi tab dang mo',
   /sec\.classList\.contains\('hidden'\)\) return;/.test(html));
 check('chi ve khi co o dang lon hoac chin', /if \(growing \|\| readyUnclaimed\) renderGardenPanel\(\)/.test(html));
-check('khoi dong khi mo tab', /renderGardenPanel\(\);\s*if \(typeof startGardenTicker === 'function'\) startGardenTicker\(\)/.test(html.replace(/\r/g, '')));
+check('khoi dong khi mo tab',
+  /renderGardenPanel\(\);[\s\S]{0,200}?if \(typeof startGardenTicker === 'function'\) startGardenTicker\(\)/.test(html.replace(/\r/g, '')));
 
 // ============================================================ 8. NHIỆM VỤ TUẦN
 console.log('\n=== 8. NHIEM VU TUAN ===');

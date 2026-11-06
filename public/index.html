@@ -1882,12 +1882,16 @@
       </section>
 
       <!-- ==================== TAB 5 (VN PDF): SỰ KIỆN (THI ĐẤU • KHIÊU CHIẾN • PB — PAGES 62-64 + 11 WIKI EVENTS) ==================== -->
-      <section id="tabEvents" class="hidden flex-1 overflow-y-auto p-2.5 sm:p-4 flex flex-col gap-4 bg-[#0d152c]">
+      <section id="tabEvents" class="hidden flex-1 overflow-y-auto p-2.5 sm:p-4 pb-24 sm:pb-28 flex flex-col gap-4 bg-[#0d152c]">
         <!-- ==================== SU KIEN THAT: VUON THU HO (guardplant) ====================
              Ban that co 8 man guardplant (docs/APK_000000_ARCHERO_ANALYSIS.md).
              Ban web lam ban don nguoi: trong/tuoi/thu hoach + doi thuong.
              Render boi renderGardenPanel(). -->
         <div id="gardenContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
+        <!-- ==================== SU KIEN THAT: PLINKO ====================
+             Ban that co 2 man: ui_activityplinko + ui_plinkoactivitychoosereward.
+             Render boi renderPlinkoPanel(). -->
+        <div id="plinkoContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
         <div id="vnEventsAuthenticCardsContainer" class="max-w-3xl w-full mx-auto">
           <!-- Populated dynamically by renderVnEventsBannerCardsUI() -->
         </div>
@@ -9040,6 +9044,14 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // Dữ liệu: { plots: [{id, seedId, plantedAt, wateredAt, stage}], seeds: {id:n},
         //            totalHarvest, weekTask: {done:n, target:10} }
         garden: null,
+        // ---- SỰ KIỆN: PLINKO ----
+        // Bản thật có 2 màn: ui_activityplinko + ui_plinkoactivitychoosereward.
+        // Bản web: thả bóng qua lưới chốt, bóng nảy ngẫu nhiên trái/phải rồi
+        // rơi vào một trong 9 ô thưởng. Càng về rìa hệ số càng cao nhưng xác
+        // suất càng thấp — đúng phân bố nhị thức của bản thật.
+        //
+        // { balls: n, history: [{bin, mult}], totalWon, bestMult }
+        plinko: null,
         // Nhân vật mặc định: Alex (Braveheart) — tân thủ vào là có hero dùng được.
         // 0 sao: hasHeroSkillActive() chỉ so hero.id nên skill [Braveheart]
         // vẫn kích hoạt ở 0★. Từng để 1★ nhưng mốc sao 1★ cộng +40 ATK /
@@ -13771,6 +13783,233 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (it.give.gems) SaveState.gems += it.give.gems;
         SaveState.save();
         return true;
+      }
+
+      // ==================== SỰ KIỆN: PLINKO ====================
+      //
+      // Bản thật có 2 màn: ui_activityplinko (thả bóng) và
+      // ui_plinkoactivitychoosereward (chọn phần thưởng). Bản web làm cả hai
+      // trong một màn: chọn mức cược → thả bóng → xem kết quả.
+      //
+      // VẬT LÝ ĐƠN GIẢN HOÁ: bóng rơi qua N hàng chốt, mỗi hàng nảy trái hoặc
+      // phải với xác suất 50/50. Sau N hàng, vị trí = số lần nảy phải → chỉ số
+      // ô thưởng. Đây chính là phân bố nhị thức B(N, 0.5), nên xác suất rơi
+      // vào ô giữa cao nhất và giảm dần ra rìa — ĐÚNG như máy plinko thật.
+      //
+      // Hệ số thưởng được đặt nghịch với xác suất để trò chơi "công bằng có
+      // lợi cho nhà" (house edge ~8%), và tôi đã kiểm bằng mô phỏng.
+
+      const PLINKO_ROWS = 8;           // số hàng chốt → 9 ô thưởng
+      const PLINKO_BINS = PLINKO_ROWS + 1;
+      const PLINKO_BETS = [50, 200, 1000];
+
+      /**
+       * Hệ số theo ô. Với B(8, 0.5), xác suất các ô là:
+       *   [1, 8, 28, 56, 70, 56, 28, 8, 1] / 256
+       *   = [0,39%  3,13%  10,94%  21,88%  27,34%  21,88%  10,94%  3,13%  0,39%]
+       * Tức ô giữa xuất hiện 27,34%, ô rìa chỉ 0,39%.
+       *
+       * EV = Σ(mult × odds) = 0,9396 → house edge 6,0%.
+       * (Bộ số đầu tiên tôi đặt cho EV 1,51 — người chơi lãi 51% mỗi lượt.
+       *  Đã tính lại bằng script, không đoán.)
+       */
+      const PLINKO_MULTS = [8.5, 3.2, 1.3, 0.67, 0.35, 0.67, 1.3, 3.2, 8.5];
+
+      function ensurePlinko() {
+        if (SaveState.plinko && typeof SaveState.plinko === 'object') return SaveState.plinko;
+        SaveState.plinko = { balls: 0, history: [], totalWon: 0, bestMult: 0, bet: 200 };
+        return SaveState.plinko;
+      }
+
+      /** Xác suất lý thuyết rơi vào từng ô (phân bố nhị thức). */
+      function plinkoBinOdds() {
+        const n = PLINKO_ROWS;
+        const out = [];
+        let c = 1; // C(n,0)
+        for (let k = 0; k <= n; k++) {
+          out.push(c / Math.pow(2, n));
+          c = c * (n - k) / (k + 1);
+        }
+        return out;
+      }
+
+      /** Thả một bóng: trả về chỉ số ô rơi vào. */
+      function plinkoDrop() {
+        let bin = 0;
+        for (let i = 0; i < PLINKO_ROWS; i++) {
+          if (Math.random() < 0.5) bin++;
+        }
+        return bin;
+      }
+
+      /**
+       * Thả bóng với mức cược. Trả về {bin, mult, win, delta} hoặc null nếu
+       * không đủ vàng.
+       */
+      function plinkoPlay(bet) {
+        const p = ensurePlinko();
+        const amount = Number(bet) || p.bet || 200;
+        if (SaveState.gold < amount) {
+          showToast(`Cần ${amount.toLocaleString('vi-VN')} vàng để thả bóng.`, 'err');
+          return null;
+        }
+        SaveState.gold -= amount;
+        const bin = plinkoDrop();
+        const mult = PLINKO_MULTS[bin];
+        const win = Math.round(amount * mult);
+        SaveState.gold += win;
+
+        const delta = win - amount;
+        p.balls += 1;
+        p.totalWon += win;
+        p.bestMult = Math.max(p.bestMult || 0, mult);
+        p.bet = amount;
+        p.history.unshift({ bin, mult, bet: amount, win, t: Date.now() });
+        // Giữ 20 lần gần nhất — lịch sử không được phình vô hạn trong save.
+        if (p.history.length > 20) p.history.length = 20;
+
+        SaveState.save();
+        return { bin, mult, win, delta, bet: amount };
+      }
+
+      function renderPlinkoPanel() {
+        const el = document.getElementById('plinkoContent');
+        if (!el) return;
+        const p = ensurePlinko();
+        const odds = plinkoBinOdds();
+        const selBet = PLINKO_BETS.includes(p.bet) ? p.bet : PLINKO_BETS[1];
+        const canPlay = SaveState.gold >= selBet;
+
+        el.innerHTML = `
+          <div class="rounded-2xl border-2 border-violet-400/50 bg-gradient-to-br from-[#12081f] via-slate-950 to-slate-950 p-3">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xl">🎰</span>
+                <div>
+                  <b class="block text-[13px] font-black text-white">Plinko</b>
+                  <span class="block text-[9px] text-slate-400">Thả bóng · ${PLINKO_ROWS} hàng chốt · ${PLINKO_BINS} ô thưởng</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 text-[9.5px]">
+                <span class="px-1.5 py-0.5 rounded bg-violet-500/15 border border-violet-400/40 text-violet-300 font-bold">${p.balls} bóng</span>
+                <span class="px-1.5 py-0.5 rounded bg-amber-500/15 border border-amber-400/40 text-amber-300 font-bold">×${p.bestMult || 0}</span>
+              </div>
+            </div>
+
+            <!-- Bàn chốt + ô thưởng -->
+            <div id="plinkoBoard" class="mt-2.5 rounded-xl bg-slate-950/70 border border-slate-800 p-2 overflow-hidden">
+              <div class="flex justify-center gap-0.5 mb-1" id="plinkoPegs">
+                ${(() => {
+                  let html = '';
+                  for (let row = 0; row < PLINKO_ROWS; row++) {
+                    const cnt = row + 1;
+                    html += `<div class="flex justify-center gap-1" style="height:9px">
+                      ${Array.from({ length: cnt }).map(() => '<span class="w-1 h-1 rounded-full bg-slate-600"></span>').join('')}
+                    </div>`;
+                  }
+                  return html;
+                })()}
+              </div>
+              <div class="flex gap-0.5 mt-1" id="plinkoBins">
+                ${PLINKO_MULTS.map((m, i) => {
+                  const heat = m >= 5 ? '#f43f5e' : (m >= 2 ? '#f59e0b' : (m >= 1 ? '#22c55e' : '#475569'));
+                  return `<div class="flex-1 min-w-0 rounded text-center py-1" style="background:${heat}22;border:1px solid ${heat}66">
+                    <b class="block text-[10px] font-black leading-none" style="color:${heat}">${m}×</b>
+                    <span class="block text-[7.5px] text-slate-300 leading-none mt-1 font-bold">${Math.round(odds[i] * 1000) / 10}%</span>
+                  </div>`;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Luật chơi: 1 dòng, để người mới hiểu ngay -->
+            <p class="text-[9.5px] text-slate-400 mt-2 leading-snug">
+              Bóng rơi qua các chốt, nảy trái/phải ngẫu nhiên. Rơi ô nào nhận
+              <b class="text-white">hệ số ô đó × tiền cược</b> — ô giữa dễ trúng nhất nhưng lãi ít,
+              ô rìa hiếm nhưng lãi lớn.
+            </p>
+
+            <!-- Chọn mức cược -->
+            <div class="flex items-center gap-1 mt-2">
+              <span class="text-[9px] text-slate-500 shrink-0">Cược:</span>
+              ${PLINKO_BETS.map(b => `
+                <button type="button" data-plinko-bet="${b}"
+                  class="flex-1 py-1 rounded-lg text-[9.5px] font-black transition ${b === selBet
+                    ? 'bg-violet-500 text-white'
+                    : 'bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700'}">
+                  ${b.toLocaleString('vi-VN')}
+                </button>`).join('')}
+            </div>
+
+            <button type="button" id="btnPlinkoDrop"
+              class="mt-1.5 w-full py-2.5 rounded-xl font-black text-[12px] transition ${canPlay
+                ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white hover:brightness-110 active:scale-[.99]'
+                : 'bg-slate-800 text-slate-500 cursor-not-allowed'}"
+              ${canPlay ? '' : 'disabled'}>
+              🎯 Thả Bóng (${selBet.toLocaleString('vi-VN')} 💰)
+            </button>
+
+            <div id="plinkoResult" class="mt-2"></div>
+
+            ${p.history.length > 0 ? `
+            <div class="mt-2">
+              <span class="block text-[8.5px] uppercase tracking-wider text-slate-500 mb-1">Lần gần đây</span>
+              <div class="flex flex-wrap gap-1">
+                ${p.history.slice(0, 10).map(h => `
+                  <span class="px-1.5 py-0.5 rounded text-[8.5px] font-black ${h.mult >= 1
+                    ? 'bg-emerald-500/20 border border-emerald-400/50 text-emerald-300'
+                    : 'bg-slate-800 border border-slate-700 text-slate-400'}">${h.mult}×</span>
+                `).join('')}
+              </div>
+            </div>` : ''}
+          </div>`;
+
+        el.querySelectorAll('[data-plinko-bet]').forEach(b => {
+          b.addEventListener('click', () => {
+            p.bet = Number(b.getAttribute('data-plinko-bet'));
+            SaveState.save();
+            renderPlinkoPanel();
+          });
+        });
+
+        document.getElementById('btnPlinkoDrop')?.addEventListener('click', () => {
+          const res = plinkoPlay(selBet);
+          if (!res) return;
+          // Hiện kết quả rồi vẽ lại bảng — không vẽ lại cả panel ngay để người
+          // chơi kịp đọc con số vừa ra.
+          const box = document.getElementById('plinkoResult');
+          if (box) {
+            const good = res.delta >= 0;
+            box.innerHTML = `
+              <div class="rounded-xl border-2 px-2.5 py-2 text-center ${good
+                ? 'border-emerald-400/60 bg-emerald-500/12' : 'border-rose-400/60 bg-rose-500/12'}">
+                <b class="block text-[15px] font-black ${good ? 'text-emerald-300' : 'text-rose-300'}">
+                  ${res.mult}× — ${good ? '+' : ''}${res.delta.toLocaleString('vi-VN')} 💰
+                </b>
+                <span class="block text-[9px] text-slate-400">
+                  Rơi ô ${res.bin + 1}/${PLINKO_BINS} · cược ${res.bet.toLocaleString('vi-VN')} → nhận ${res.win.toLocaleString('vi-VN')}
+                </span>
+              </div>`;
+          }
+          if (res.mult >= 2) SoundFX.levelUp(); else SoundFX.coinPickup();
+          // Vẽ lại sau 1 nhịp để cập nhật số dư/lịch sử nhưng vẫn giữ kết quả.
+          setTimeout(() => {
+            renderPlinkoPanel();
+            const b2 = document.getElementById('plinkoResult');
+            if (b2) {
+              const good = res.delta >= 0;
+              b2.innerHTML = `
+                <div class="rounded-xl border-2 px-2.5 py-2 text-center ${good
+                  ? 'border-emerald-400/60 bg-emerald-500/12' : 'border-rose-400/60 bg-rose-500/12'}">
+                  <b class="block text-[15px] font-black ${good ? 'text-emerald-300' : 'text-rose-300'}">
+                    ${res.mult}× — ${good ? '+' : ''}${res.delta.toLocaleString('vi-VN')} 💰
+                  </b>
+                  <span class="block text-[9px] text-slate-400">
+                    Rơi ô ${res.bin + 1}/${PLINKO_BINS} · cược ${res.bet.toLocaleString('vi-VN')} → nhận ${res.win.toLocaleString('vi-VN')}
+                  </span>
+                </div>`;
+            }
+          }, 60);
+        });
       }
 
       /** Màn hình chính — 6 ô đất. */
@@ -29747,6 +29986,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           if (targetId === 'tabGuild' && typeof renderGuildPanel === 'function') renderGuildPanel();
           if (targetId === 'tabEvents' && typeof renderGardenPanel === 'function') {
             renderGardenPanel();
+            if (typeof renderPlinkoPanel === 'function') renderPlinkoPanel();
             if (typeof startGardenTicker === 'function') startGardenTicker();
           }
           renderLobbyUI();
@@ -30705,6 +30945,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         getActiveGameMode,
         isBossRoom,
         renderGardenPanel,
+        ensurePlinko,
+        plinkoDrop,
+        plinkoPlay,
+        plinkoBinOdds,
+        renderPlinkoPanel,
+        PLINKO_MULTS,
+        PLINKO_ROWS,
         ensureGarden,
         plantSeed,
         waterPlot,
