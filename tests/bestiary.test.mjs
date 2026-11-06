@@ -26,7 +26,7 @@ for (const id of beastIds) {
 }
 for (const field of ["name", "icon", "tier", "color", "lore", "behavior", "threat"]) {
   const n = (bBlock.match(new RegExp(field + ":", "g")) || []).length;
-  check(`moi loai co '${field}' (${n}/12)`, n === 20, `${n}/20`);
+  check(`moi loai co '${field}' (${n}/20)`, n === 20, `${n}/20`);
 }
 check("co loai TRÙM", bBlock.includes("TRÙM'") || bBlock.includes("TRÙM CUỐI"));
 check("co indexed lookup", /const BESTIARY_BY_ID = Object\.fromEntries/.test(html));
