@@ -1,0 +1,46 @@
+name: Phase 1 — Gold Cave
+
+on:
+  push:
+    branches:
+      - feature/phase-1-gold-cave
+    paths:
+      - "public/index.html"
+      - "lib/saveSchema.js"
+      - "tests/game-modes.test.mjs"
+      - "tests/gold-cave.test.mjs"
+      - ".github/workflows/phase1-gold-cave.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "public/index.html"
+      - "lib/saveSchema.js"
+      - "tests/game-modes.test.mjs"
+      - "tests/gold-cave.test.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: Gameplay-safe regression
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test existing and new game modes
+        run: |
+          node tests/game-modes.test.mjs
+          node tests/gold-cave.test.mjs
+      - name: Test save compatibility
+        run: node tests/save-schema.test.mjs
+      - name: Check backend modules
+        run: npm run check
