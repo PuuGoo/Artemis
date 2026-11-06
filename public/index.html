@@ -4052,6 +4052,21 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           endless: true,
           bossOnly: false,
           practice: true
+        },
+        {
+          id: 'goldcave',
+          name: 'Hang Vàng',
+          icon: '🪙',
+          color: '#fbbf24',
+          desc: 'Phó bản 5 phòng tập trung thu thập vàng, dùng lại quái và trùm hiện có.',
+          rules: '5 phòng · vàng ×3 · chỉ nhận vàng',
+          hasChapters: false,
+          endless: false,
+          bossOnly: false,
+          maxRooms: 5,
+          goldOnly: true,
+          goldMultiplier: 3,
+          practice: false
         }
       ];
 
@@ -9445,7 +9460,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         playerName: 'JohnBowman',
         artemisHeroVersion: 1,
         selectedChapterIdx: 0,
-        // Chế độ chơi đang chọn (campaign / endless / tower / bossrush / practice)
+        // Chế độ chơi đang chọn (campaign / endless / tower / bossrush / practice / goldcave)
         gameMode: 'campaign',
         // Kỷ lục theo từng chế độ: { endless: 37, tower: 12, ... }
         modeBest: {},
@@ -16277,7 +16292,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               <span class="text-[10px] font-black uppercase tracking-[.16em] text-slate-400">Chọn chế độ</span>
               <span class="text-[10px] text-slate-500">${GAME_MODES.length} chế độ</span>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 sm:gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 sm:gap-2">
               ${GAME_MODES.map(m => {
                 const on = m.id === active;
                 const best = (SaveState.modeBest || {})[m.id];
@@ -16332,6 +16347,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   <div class="min-w-0">
                     <b class="block text-sm font-black text-white">${mode.name}</b>
                     <span class="block text-[10px] text-slate-300/80">${mode.desc}</span>
+                    ${mode.goldOnly ? `
+                    <div class="mt-2 rounded-lg border border-amber-400/25 bg-amber-400/10 px-2.5 py-2">
+                      <b class="block text-[10px] font-black text-amber-300">🪙 Vàng rơi ×${mode.goldMultiplier}</b>
+                      <span class="mt-0.5 block text-[9px] leading-relaxed text-amber-100/80">5 phòng, trùm ở phòng cuối. Chỉ nhận vàng; không nhận đá quý hoặc trang bị.</span>
+                    </div>` : ''}
                   </div>
                 </div>
                 <div class="mt-2.5 grid grid-cols-2 gap-2 text-[10px]">
@@ -27006,11 +27026,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           spawnFloatText(Game.player.x, Game.player.y - 24, `+${healAmt} HP`, '#4ade80', 14, { kind: 'heal' });
         }
 
-        // Update best room record
-        const prevBest = SaveState.bestRooms[Game.chapter.id] || 1;
-        if (roomNum > prevBest) {
-          SaveState.bestRooms[Game.chapter.id] = roomNum;
-          SaveState.save();
+        // Chỉ Chiến Dịch mới cập nhật kỷ lục chương. Các mode riêng (bao gồm
+        // Hang Vàng) có modeBest độc lập và không được làm sai tiến trình campaign.
+        if ((Game.mode || 'campaign') === 'campaign') {
+          const prevBest = SaveState.bestRooms[Game.chapter.id] || 1;
+          if (roomNum > prevBest) {
+            SaveState.bestRooms[Game.chapter.id] = roomNum;
+            SaveState.save();
+          }
         }
 
         const isBossRoomNow = isBossRoom(roomNum);
@@ -28992,7 +29015,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }
           if (dist < p.r + 14) {
             if (d.type === 'gold') {
-              const goldValue = Math.round(d.val * (1 + (p.goldBonus || 0)));
+              const goldMode = getGameMode(Game.mode || 'campaign');
+              const modeGoldMultiplier = goldMode.goldOnly ? (goldMode.goldMultiplier || 1) : 1;
+              const goldValue = Math.round(d.val * (1 + (p.goldBonus || 0)) * modeGoldMultiplier);
               Game.runGold += goldValue;
               SaveState.gold += goldValue;
               SoundFX.coinPickup();
@@ -31244,15 +31269,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         SaveState.dungeonCheckpoint = null;
         syncContinueButton();
 
-        const bonusGold = isVictory ? 350 * Game.chapter.id : Game.room * 20;
-        const bonusGems = isVictory ? 40 * Game.chapter.id : Math.floor(Game.room * 2);
-        Game.runGold += bonusGold;
-        // Luyện Tập: không cộng tài nguyên (đúng mô tả "không mất gì, không
-        // được gì"). Chỉ chế độ chơi thật mới sinh vàng/đá quý.
         const curMode = getGameMode(Game.mode || 'campaign');
+        const bonusGold = curMode.goldOnly ? 0 : (isVictory ? 350 * Game.chapter.id : Game.room * 20);
+        const bonusGems = curMode.goldOnly ? 0 : (isVictory ? 40 * Game.chapter.id : Math.floor(Game.room * 2));
+        Game.runGold += bonusGold;
+        // Luyện Tập không nhận tài nguyên; Hang Vàng chỉ nhận vàng rơi trong trận,
+        // không nhận đá quý hoặc thưởng kết thúc của Chiến Dịch.
         if (!curMode.practice) {
           SaveState.gold += bonusGold;
-          SaveState.gems += bonusGems;
+          if (!curMode.goldOnly) SaveState.gems += bonusGems;
         }
 
         // ---- Thành tựu: chốt chỉ số cuối trận ----
@@ -31260,14 +31285,17 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         bumpLifetimeStat('goldEarned', Game.runGold);
         setLifetimeStatMax('deepestRoom', Game.room);
         if (isVictory) {
-          // Beginner Journey: N07 — hoàn thành Chương 1.
-          if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onChapterCleared(Game.chapter && Game.chapter.id);
+          // Hang Vàng là phó bản tài nguyên: không ghi nhận hoàn thành chương,
+          // không kích hoạt nhiệm vụ phá đảo chương và không mở khoá campaign.
+          if (!curMode.goldOnly) {
+            if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onChapterCleared(Game.chapter && Game.chapter.id);
+            const chId = Game.chapter ? Game.chapter.id : 'x';
+            SaveState.winsByChapter = SaveState.winsByChapter || {};
+            const firstWinHere = !SaveState.winsByChapter[chId];
+            SaveState.winsByChapter[chId] = (SaveState.winsByChapter[chId] || 0) + 1;
+            if (firstWinHere) bumpLifetimeStat('chaptersCleared', 1);
+          }
           bumpLifetimeStat('wins', 1);
-          const chId = Game.chapter ? Game.chapter.id : 'x';
-          SaveState.winsByChapter = SaveState.winsByChapter || {};
-          const firstWinHere = !SaveState.winsByChapter[chId];
-          SaveState.winsByChapter[chId] = (SaveState.winsByChapter[chId] || 0) + 1;
-          if (firstWinHere) bumpLifetimeStat('chaptersCleared', 1);
         }
         checkAchievements();
         // ---- Kỷ lục theo chế độ ----
@@ -31280,7 +31308,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (Game.room > prev) SaveState.modeBest[modeRec.id] = Game.room;
         }
         // Drop a bonus piece of equipment into the Gear Bag if reached Room 3+ or Victory!
-        if (!curMode.practice && (isVictory || Game.room >= 3)) {
+        if (!curMode.practice && !curMode.goldOnly && (isVictory || Game.room >= 3)) {
           const tplKeys = Object.keys(GEAR_TEMPLATES);
           const dropTpl = GEAR_TEMPLATES[tplKeys[Math.floor(Math.random() * tplKeys.length)]];
           const dropQ = isVictory ? 'epic' : (Game.room >= 8 ? 'rare' : 'uncommon');
@@ -31319,10 +31347,24 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             return;
           }
           // Chế độ khác: tổng kết "hoàn thành chế độ".
+          const summaryText = winMode.goldOnly
+            ? `Thu thập ${Game.runGold.toLocaleString('vi-VN')} vàng · chỉ nhận vàng, không rơi đá quý/trang bị`
+            : `Hạ ${Game.kills} địch qua ${Game.room} phòng · +${bonusGold} vàng · +${bonusGems} đá quý`;
           showSummaryModal(
             `${winMode.icon} HOÀN THÀNH ${winMode.name.toUpperCase()}`,
-            `Hạ ${Game.kills} địch qua ${Game.room} phòng · +${bonusGold} vàng · +${bonusGems} đá quý`,
+            summaryText,
             winMode.icon, false, bonusGems
+          );
+          return;
+        }
+
+        // Hang Vàng không có tiến trình chương, dùng tổng kết riêng thay vì
+        // lời khuyên nâng trang bị theo phần trăm campaign.
+        if (curMode.goldOnly) {
+          showSummaryModal(
+            `${curMode.icon} HANG VÀNG KẾT THÚC`,
+            `Dừng tại phòng ${Game.room}/${Game.maxRooms} · thu thập ${Game.runGold.toLocaleString('vi-VN')} vàng`,
+            curMode.icon, false, 0
           );
           return;
         }

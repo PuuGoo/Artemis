@@ -1,7 +1,7 @@
 // ============================================================================
 // CHẾ ĐỘ CHƠI (game modes)
 //
-// Bản thật Archero 2 có 15 chế độ (`ui_world_*`). Bản web chơi đơn làm 5 chế
+// Bản thật Archero 2 có 15 chế độ (`ui_world_*`). Bản web chơi đơn làm 6 chế
 // độ không cần máy chủ nhiều người, tái dùng CÙNG combat engine.
 //
 // LỖI TỪNG CÓ (tiềm ẩn): luật phòng trùm `room % 5 === 0 || room === maxRooms`
@@ -38,7 +38,7 @@ function fnBody(name) {
 console.log('\n=== 1. NAM CHE DO CHOI ===');
 
 const modesBlk = html.slice(html.indexOf('const GAME_MODES = ['), html.indexOf('const CHAPTERS = ['));
-for (const id of ['campaign', 'endless', 'tower', 'bossrush', 'practice']) {
+for (const id of ['campaign', 'endless', 'tower', 'bossrush', 'practice', 'goldcave']) {
   check(`co che do "${id}"`, new RegExp(`id: '${id}'`).test(modesBlk));
 }
 check('Chiến Dịch có chương', /id: 'campaign'[\s\S]{0,400}?hasChapters: true/.test(modesBlk));
@@ -47,8 +47,14 @@ check('Tháp chỉ đánh trùm', /id: 'tower'[\s\S]{0,400}?bossOnly: true/.test
 check('Săn Trùm chỉ đánh trùm + 5 phòng',
   /id: 'bossrush'[\s\S]{0,500}?bossOnly: true[\s\S]{0,200}?maxRooms: 5/.test(modesBlk));
 check('Luyện Tập không thưởng', /id: 'practice'[\s\S]{0,400}?practice: true/.test(modesBlk));
+
+check('Hang Vàng cố định 5 phòng và dùng luật boss hiện có',
+  modesBlk.includes("id: 'goldcave'") && modesBlk.includes("maxRooms: 5") && modesBlk.includes("bossOnly: false"));
+check('Hang Vàng chỉ nhận vàng với hệ số riêng',
+  modesBlk.includes("goldOnly: true") && modesBlk.includes("goldMultiplier: 3"));
+
 check('moi che do co ten tieng Viet + icon', (modesBlk.match(/name: '[^']+'/g) || []).length === 5
-  && (modesBlk.match(/icon: '/g) || []).length === 5);
+  && (modesBlk.match(/icon: '/g) || []).length === 6);
 
 // ============================================================ 2. PHÒNG TRÙM
 console.log('\n=== 2. isBossRoom LA NGUON DUY NHAT ===');
@@ -117,7 +123,7 @@ console.log('\n=== 6. UI CHON CHE DO ===');
 check('co #gameModePanel trong DOM', /id="gameModePanel"/.test(html));
 check('renderGameModePanel ton tai', /function renderGameModePanel\(\)/.test(html));
 const modeUi = fnBody('renderGameModePanel');
-check('render 5 the', /GAME_MODES\.map\(m =>/.test(modeUi));
+check('render cards from all 6 modes', /GAME_MODES\.map\(m =>/.test(modeUi));
 check('bam the doi SaveState.gameMode', /SaveState\.gameMode = id/.test(modeUi));
 check('hien ky luc neu co', /Kỷ lục: phòng/.test(modeUi));
 check('duoc goi trong render lobby', /safeRender\('gameMode'/.test(html));
