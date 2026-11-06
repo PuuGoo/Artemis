@@ -39,12 +39,21 @@ check("co responsive <= 520px", /@media \(max-width: 520px\) \{\s*\.df-skull/.te
 console.log("\n=== 2. HAM openRunDefeat ===");
 const fnStart = html.indexOf("function openRunDefeat(info = {})");
 check("co openRunDefeat", fnStart > 0);
-const fnBlock = html.slice(fnStart, fnStart + 6000);
+// Cat theo can bang ngoac: ham dai ra sau moi lan them tinh nang, offset
+// co dinh se cut giua chung va test bao FAIL sai trong khi code dung.
+const fnBlock = (() => {
+  const pc = html.indexOf(") {", fnStart);
+  let d = 0, e = -1;
+  for (let k = html.indexOf("{", pc); k < html.length; k++) {
+    if (html[k] === "{") d++;
+    else if (html[k] === "}") { d--; if (d === 0) { e = k; break; } }
+  }
+  return html.slice(fnStart, e + 1);
+})();
 check("lay du tham so info", /function openRunDefeat\(info = \{\}\)/.test(html));
 check("co gia tri mac dinh tu Game", /info\.room \|\| Game\.room/.test(fnBlock));
 check("tinh % hoan thanh", /const pct = Math\.round\(\(room \/ max\) \* 100\)/.test(fnBlock));
-check("kep best theo max (tranh vuot)", /const best = Math\.min\(bestRaw, max\)/.test(fnBlock));
-check("phat hien ky luc moi", /const isRecord = room > best/.test(fnBlock));
+check("ky luc do theo CHE DO (modeBest), khong dung best chuong", /SaveState.modeBest/.test(fnBlock));
 check("nhan dien chet do trum", /const diedToBoss = info\.source === 'boss' \|\| bossRoom/.test(fnBlock));
 check("toi da 3 goi y", /tips\.slice\(0, 3\)/.test(fnBlock));
 check("dinh dang vang vi-VN", /gold\.toLocaleString\('vi-VN'\)/.test(fnBlock));

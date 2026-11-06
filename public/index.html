@@ -1763,50 +1763,12 @@
 
       <!-- ==================== TAB: GUILD (uimainguild — chưa mở) ==================== -->
       <section id="tabGuild" class="hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-3">
-        <div class="max-w-4xl w-full mx-auto">
-          <div class="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-black border border-slate-700 p-5 text-center shadow-xl">
-            <div class="text-4xl mb-2">🏰</div>
-            <div class="text-[9px] font-black uppercase tracking-widest text-slate-500">Tính Năng Đang Phát Triển</div>
-            <h2 class="text-lg font-black text-white mt-1">Bang Hội</h2>
-            <p class="text-[11px] text-slate-400 mt-2 max-w-md mx-auto leading-relaxed">
-              Bang hội cần máy chủ nhiều người chơi theo thời gian thực. Hiện game chạy chế độ chơi đơn có lưu đám mây —
-              bang hội sẽ mở khi có đủ hạ tầng.
-            </p>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-4 text-left">
-              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
-                <div class="text-base">🐲</div>
-                <b class="block text-[10.5px] text-white font-black mt-0.5">Trùm Bang Hội</b>
-                <i class="block text-[9px] text-slate-500 not-italic">Đánh chung, chia thưởng</i>
-              </div>
-              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
-                <div class="text-base">🗺️</div>
-                <b class="block text-[10.5px] text-white font-black mt-0.5">Viễn Chinh</b>
-                <i class="block text-[9px] text-slate-500 not-italic">Bản đồ đội nhóm</i>
-              </div>
-              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
-                <div class="text-base">⚔️</div>
-                <b class="block text-[10.5px] text-white font-black mt-0.5">Chiến Bang</b>
-                <i class="block text-[9px] text-slate-500 not-italic">Bang vs bang</i>
-              </div>
-              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
-                <div class="text-base">🏆</div>
-                <b class="block text-[10.5px] text-white font-black mt-0.5">Xếp Hạng</b>
-                <i class="block text-[9px] text-slate-500 not-italic">Bảng bang mạnh nhất</i>
-              </div>
-              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
-                <div class="text-base">🛒</div>
-                <b class="block text-[10.5px] text-white font-black mt-0.5">Chợ Bang</b>
-                <i class="block text-[9px] text-slate-500 not-italic">Trao đổi nội bộ</i>
-              </div>
-              <div class="rounded-xl bg-slate-900/80 border border-slate-700 p-2.5">
-                <div class="text-base">🌱</div>
-                <b class="block text-[10.5px] text-white font-black mt-0.5">Vườn Bang</b>
-                <i class="block text-[9px] text-slate-500 not-italic">Trồng, thu hoạch chung</i>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- ==================== BANG HOI (GUILD) ====================
+             Ban that co 41 man guild (docs/APK_000000_ARCHERO_ANALYSIS.md).
+             Ban web choi don dung 6 man cot loi voi thanh vien NPC:
+             camp / guildinfo(members) / guildboss / guildexpedition /
+             guildrank / guildlog. Render boi renderGuildPanel(). -->
+        <div id="guildContent" class="max-w-4xl w-full mx-auto flex flex-col gap-2"></div>
       </section>
 
       <!-- ==================== TAB 4: VẬT SƯU TẦM (THẺ NĂNG LỰC & THÁNH VẬT ĐỆM NHUNG ĐỎ — PAGES 60-61) ==================== -->
@@ -2047,7 +2009,6 @@
         <button type="button" data-tab="tabGuild" class="nav-tab-btn relative py-2 px-0.5 rounded-t-2xl flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white font-black text-[10px] sm:text-xs transition">
           <span class="text-lg sm:text-2xl drop-shadow">🏰</span>
           <span>Bang Hội</span>
-          <span class="absolute top-0.5 right-1 px-1 rounded-full bg-slate-700 border border-slate-500 text-slate-300 text-[7px] font-black shadow">Sắp mở</span>
         </button>
       </div>
       <!-- Preserve Legacy Quick-Switch Pills for 100% Backward Compatibility -->
@@ -9048,6 +9009,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         gameMode: 'campaign',
         // Kỷ lục theo từng chế độ: { endless: 37, tower: 12, ... }
         modeBest: {},
+        // ---- BANG HỘI (chơi đơn) ----
+        // Bản thật có 41 màn guild cần máy chủ nhiều người. Bản web chơi đơn
+        // nên thành viên là NPC sinh theo tiến trình người chơi; bang hoạt
+        // động như nội dung đơn người (giống campaign trong Clash of Clans).
+        guild: null,
         // Nhân vật mặc định: Alex (Braveheart) — tân thủ vào là có hero dùng được.
         // 0 sao: hasHeroSkillActive() chỉ so hero.id nên skill [Braveheart]
         // vẫn kích hoạt ở 0★. Từng để 1★ nhưng mốc sao 1★ cộng +40 ATK /
@@ -13200,11 +13166,6 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const gold = info.gold != null ? info.gold : (Game.runGold || 0);
         const ch = Game.chapter || CHAPTERS[0];
         const pct = Math.round((room / max) * 100);
-        const bestRaw = getChapterBest(ch.id);
-        // Kẹp theo max của trận đang xét — best có thể thuộc chương khác nếu
-        // info.max không khớp Game.chapter (gọi từ test hoặc debug).
-        const best = Math.min(bestRaw, max);
-        const isRecord = room > best;
         const bossRoom = isBossRoom(room, max);
         const diedToBoss = info.source === 'boss' || bossRoom;
 
@@ -13237,21 +13198,64 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         card.style.borderColor = '#f43f5e';
         card.style.background = 'linear-gradient(165deg, #450a0a, #1f070d 55%, #020617)';
 
+        // ---- Khối đo lường THEO CHẾ ĐỘ ----
+        // Bản thật có 15 màn kết quả riêng vì mỗi chế độ đo bằng đơn vị khác
+        // nhau: Chiến Dịch đo phòng/chương, Vô Tận đo độ sâu, Tháp đo tầng,
+        // Săn Trùm đo số trùm đã hạ. Dùng chung "phòng X/Y" cho tất cả là vô
+        // nghĩa — Vô Tận không có Y, Tháp không đo bằng phòng.
+        const mode = getGameMode(Game.mode || 'campaign');
+        const modeBestVal = Number((SaveState.modeBest || {})[mode.id]) || 0;
+        let modeBlock = '';
+        let modeTitle = 'TIẾN ĐỘ CHƯƠNG';
+        let modeValue = `${room}/${max} · ${pct}%`;
+        let modePct = pct;
+
+        if (mode.id === 'endless') {
+          const newRec = room > modeBestVal;
+          modeTitle = 'ĐỘ SÂU ĐẠT ĐƯỢC';
+          modeValue = `Phòng ${room}`;
+          modePct = Math.min(100, Math.round((room / Math.max(1, Math.max(modeBestVal, room))) * 100));
+          modeBlock = newRec
+            ? `<div class="df-record">🏅 KỶ LỤC MỚI! (trước đó: phòng ${modeBestVal})</div>`
+            : (modeBestVal > 0 ? `<div class="df-best">Kỷ lục Vô Tận: phòng ${modeBestVal}</div>` : '');
+        } else if (mode.id === 'tower') {
+          const newRec = room > modeBestVal;
+          modeTitle = 'TẦNG THÁP ĐẠT ĐƯỢC';
+          modeValue = `Tầng ${room}`;
+          modePct = 100;
+          modeBlock = newRec
+            ? `<div class="df-record">🏅 TẦNG CAO NHẤT MỚI! (trước đó: tầng ${modeBestVal})</div>`
+            : (modeBestVal > 0 ? `<div class="df-best">Tầng cao nhất: ${modeBestVal}</div>` : '');
+        } else if (mode.id === 'bossrush') {
+          const killed = Math.max(0, room - 1);
+          modeTitle = 'TIẾN ĐỘ SĂN TRÙM';
+          modeValue = `${killed}/${max} trùm · ${Math.round((killed / max) * 100)}%`;
+          modePct = Math.round((killed / max) * 100);
+          modeBlock = killed > 0
+            ? `<div class="df-best">Đã hạ ${killed} trùm — thưởng theo số trùm hạ được</div>`
+            : '<div class="df-best">Chưa hạ được trùm nào</div>';
+        } else if (mode.id === 'practice') {
+          modeTitle = 'LUYỆN TẬP';
+          modeValue = `Phòng ${room}`;
+          modePct = 100;
+          modeBlock = '<div class="df-best">Luyện Tập không tính kỷ lục và không cộng tài nguyên</div>';
+        }
+
         card.innerHTML = `
           <div class="df-hero">
             <div class="df-veil"></div>
             <div class="df-skull">💀</div>
-            <div class="df-title">THẤT BẠI</div>
-            <div class="df-subtitle">${ch.name}</div>
+            <div class="df-title">${mode.hasChapters ? 'THẤT BẠI' : `${mode.icon} KẾT THÚC`}</div>
+            <div class="df-subtitle">${mode.hasChapters ? ch.name : mode.name}</div>
           </div>
 
           <div class="df-progress">
             <div class="df-progress-top">
-              <span>TIẾN ĐỘ CHƯƠNG</span>
-              <b>${room}/${max} · ${pct}%</b>
+              <span>${modeTitle}</span>
+              <b>${modeValue}</b>
             </div>
-            <div class="df-progress-track"><div class="df-progress-fill" style="width:${pct}%"></div></div>
-            ${isRecord ? `<div class="df-record">🏅 KỶ LỤC MỚI! (trước đó: phòng ${best || 0})</div>` : (best > 0 ? `<div class="df-best">Kỷ lục của bạn: phòng ${best}/${max}</div>` : '')}
+            <div class="df-progress-track"><div class="df-progress-fill" style="width:${modePct}%"></div></div>
+            ${modeBlock}
           </div>
 
           <div class="df-stats">
@@ -13444,6 +13448,638 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        * viền theo màu chế độ. Chỉ Chiến Dịch mới hiện panel chọn chương bên
        * dưới — 4 chế độ còn lại bấm "Bắt đầu" là vào thẳng.
        */
+      // ==================== BANG HỘI (GUILD) ====================
+      //
+      // Bản thật có 41 màn guild (xem docs/APK_000000_ARCHERO_ANALYSIS.md).
+      // Bản web chơi đơn nên KHÔNG thể làm bang nhiều người thật. Thay vào
+      // đó dựng đúng 6 màn cốt lõi với thành viên NPC:
+      //
+      //   camp          — danh sách bang + tạo/tham gia     (ui_camp)
+      //   guildinfo     — thông tin bang, thành viên, cấp   (ui_guildinfopop)
+      //   guildboss     — trùm bang, đánh theo lượt         (ui_guildboss)
+      //   guildexpedition — viễn chinh nhiều tầng            (ui_guildexpedition)
+      //   guildrank     — bảng xếp hạng bang                (ui_guildrank)
+      //   guildlog      — lịch sử hoạt động                 (ui_guildlog)
+      //
+      // Thành viên NPC sinh theo tiến trình người chơi (lực chiến xoay quanh
+      // lực chiến thật của chủ bang), để bang luôn "vừa sức" chứ không phải
+      // toàn cao thủ bất khả chiến hay toàn gà.
+
+      const GUILD_NAME_POOL = [
+        'Thiên Long', 'Hắc Phong', 'Long Vệ', 'Bạch Hổ', 'Tinh Tú',
+        'Huyết Nguyệt', 'Vân Du', 'Thiết Quyền', 'Lôi Đình', 'U Ảnh'
+      ];
+      const GUILD_RANKS = [
+        { id: 'leader', name: 'Bang Chủ', icon: '👑', power: 1.0 },
+        { id: 'elder', name: 'Trưởng Lão', icon: '🎖️', power: 0.82 },
+        { id: 'member', name: 'Thành Viên', icon: '⚔️', power: 0.66 },
+        { id: 'recruit', name: 'Tân Binh', icon: '🌱', power: 0.45 }
+      ];
+      const GUILD_MAX_MEMBERS = 20;
+
+      function getGuildRankMeta(id) {
+        return GUILD_RANKS.find(r => r.id === id) || GUILD_RANKS[GUILD_RANKS.length - 1];
+      }
+
+      /** Một NPC thành viên: chỉ số sinh theo lực chiến chủ bang. */
+      function makeGuildMember(idx, basePower) {
+        const rankMeta = idx === 0
+          ? GUILD_RANKS[0]
+          : (idx <= 3 ? GUILD_RANKS[1] : (idx <= 12 ? GUILD_RANKS[2] : GUILD_RANKS[3]));
+        // Dao động +-18% để bảng thành viên trông tự nhiên, không bằng phẳng.
+        const jitter = 0.82 + Math.random() * 0.36;
+        const power = Math.max(100, Math.round(basePower * rankMeta.power * jitter));
+        const name = idx === 0
+          ? (SaveState.playerName || 'Bạn')
+          : `Chiến Binh ${String(idx).padStart(2, '0')}`;
+        return {
+          id: 'gm_' + idx + '_' + Math.random().toString(36).slice(2, 7),
+          name,
+          rank: rankMeta.id,
+          power,
+          contribution: idx === 0 ? 0 : Math.round(power * (0.3 + Math.random() * 0.9)),
+          // Điểm sát thương gây lên trùm bang trong tuần này
+          bossDamage: 0,
+          isPlayer: idx === 0
+        };
+      }
+
+      /** Tạo bang mới. Gọi từ màn `camp`. */
+      function createGuild(name) {
+        const clean = String(name || '').trim().slice(0, 24);
+        if (clean.length < 3) {
+          showToast('Tên bang phải có ít nhất 3 ký tự.', 'err');
+          return null;
+        }
+        if (SaveState.gold < 5000) {
+          showToast(`Cần 5.000 vàng để lập bang (đang có ${Math.floor(SaveState.gold).toLocaleString('vi-VN')}).`, 'err');
+          return null;
+        }
+        SaveState.gold -= 5000;
+
+        let basePower = 1200;
+        try {
+          const st = getComputedStats();
+          basePower = Math.max(500, Math.round((st.baseAtk || 100) * 6.5));
+        } catch (e) { /* giữ mặc định */ }
+
+        const members = [];
+        for (let i = 0; i < 12; i++) members.push(makeGuildMember(i, basePower));
+
+        SaveState.guild = {
+          name: clean,
+          level: 1,
+          exp: 0,
+          notice: 'Chào mừng đến với bang! Cùng nhau chinh phục trùm bang.',
+          createdAt: Date.now(),
+          members,
+          // Trùm bang mở đầu — HP theo tổng lực cả bang
+          boss: {
+            week: 1,
+            hp: Math.round(members.reduce((s, m) => s + m.power, 0) * 2.4),
+            maxHp: Math.round(members.reduce((s, m) => s + m.power, 0) * 2.4),
+            defeated: false,
+            attempts: 0
+          },
+          expedition: { floor: 0, best: 0 },
+          log: [{ t: Date.now(), text: `Bang ${clean} được thành lập.` }]
+        };
+        addGuildLog(`Bạn đã lập bang ${clean} (tốn 5.000 vàng).`);
+        SaveState.save();
+        showToast(`🏰 Đã lập bang ${clean}!`, 'ok');
+        return SaveState.guild;
+      }
+
+      function addGuildLog(text) {
+        if (!SaveState.guild) return;
+        SaveState.guild.log = SaveState.guild.log || [];
+        SaveState.guild.log.unshift({ t: Date.now(), text });
+        // Giữ 60 dòng gần nhất — log không được phình vô hạn trong save.
+        if (SaveState.guild.log.length > 60) SaveState.guild.log.length = 60;
+      }
+
+      /** Tổng lực chiến bang. */
+      function getGuildTotalPower() {
+        const g = SaveState.guild;
+        if (!g || !Array.isArray(g.members)) return 0;
+        return g.members.reduce((s, m) => s + (Number(m.power) || 0), 0);
+      }
+
+      /** Cấp bang từ điểm đóng góp — 1 cấp mỗi 20.000 đóng góp. */
+      function getGuildLevelInfo() {
+        const g = SaveState.guild;
+        if (!g) return { level: 0, exp: 0, need: 1, pct: 0 };
+        const totalContrib = (g.members || []).reduce((s, m) => s + (Number(m.contribution) || 0), 0);
+        const level = Math.max(1, Math.floor(totalContrib / 20000) + 1);
+        const exp = totalContrib % 20000;
+        return { level, exp, need: 20000, pct: Math.round((exp / 20000) * 100) };
+      }
+
+      // ---------- Màn hiển thị ----------
+
+      /**
+       * Màn con đang mở — cần nhớ để sau khi vẽ lại panel (do đánh trùm, leo
+       * viễn chinh...) thì màn con vẫn còn đó. Nếu không, nút "Đánh Trùm" biến
+       * mất sau lượt đầu và người chơi phải bấm lại từ đầu mỗi lượt.
+       */
+      let guildOpenScreen = null;
+
+      /**
+       * Màn `camp` — danh sách bang (khi chưa có bang) hoặc tổng quan bang.
+       */
+      function renderGuildPanel() {
+        const el = document.getElementById('guildContent');
+        if (!el) return;
+
+        const g = SaveState.guild;
+
+        if (!g) {
+          el.innerHTML = `
+            <div class="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-4">
+              <div class="text-center">
+                <div class="text-3xl mb-1">🏰</div>
+                <b class="block text-sm font-black text-white">Chưa có bang hội</b>
+                <span class="block text-[10.5px] text-slate-400 mt-1 max-w-md mx-auto leading-relaxed">
+                  Lập bang để mở Trùm Bang, Viễn Chinh và bảng xếp hạng.
+                  Thành viên là các chiến binh NPC cùng cấp — bang vẫn chơi được một mình.
+                </span>
+              </div>
+
+              <div class="mt-3.5 rounded-xl bg-slate-950/60 border border-slate-700/60 p-3">
+                <label class="block text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1">Tên bang</label>
+                <div class="flex gap-1.5">
+                  <input id="guildNameInput" type="text" maxlength="24" placeholder="Ví dụ: Thiên Long"
+                    class="flex-1 min-w-0 px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-600 text-white text-[12px] font-bold outline-none focus:border-amber-400">
+                  <button type="button" id="btnCreateGuild"
+                    class="px-3 py-2 rounded-lg bg-amber-400 text-slate-950 text-[11px] font-black hover:brightness-110 active:scale-95 transition shrink-0">
+                    🏰 Lập Bang
+                  </button>
+                </div>
+                <div class="flex items-center justify-between mt-1.5 text-[9.5px]">
+                  <span class="text-slate-500">Tốn 5.000 vàng</span>
+                  <span class="${SaveState.gold >= 5000 ? 'text-emerald-400' : 'text-rose-400'} font-bold">
+                    Đang có ${Math.floor(SaveState.gold).toLocaleString('vi-VN')}
+                  </span>
+                </div>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  ${GUILD_NAME_POOL.slice(0, 5).map(n => `
+                    <button type="button" data-guild-suggest="${n}"
+                      class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[9px] text-slate-300 hover:bg-slate-700">${n}</button>
+                  `).join('')}
+                </div>
+              </div>
+            </div>`;
+
+          document.getElementById('btnCreateGuild')?.addEventListener('click', () => {
+            const inp = document.getElementById('guildNameInput');
+            if (createGuild(inp ? inp.value : '')) renderGuildPanel();
+          });
+          el.querySelectorAll('[data-guild-suggest]').forEach(b => {
+            b.addEventListener('click', () => {
+              const inp = document.getElementById('guildNameInput');
+              if (inp) inp.value = b.getAttribute('data-guild-suggest');
+            });
+          });
+          return;
+        }
+
+        // ---- Đã có bang ----
+        const lv = getGuildLevelInfo();
+        const totalPower = getGuildTotalPower();
+        const bossPct = g.boss ? Math.max(0, Math.round((g.boss.hp / Math.max(1, g.boss.maxHp)) * 100)) : 0;
+        const expFloor = (g.expedition && g.expedition.floor) || 0;
+
+        el.innerHTML = `
+          <div class="rounded-2xl border-2 border-amber-400/50 bg-gradient-to-br from-[#1a1405] via-slate-950 to-slate-950 p-3.5">
+            <div class="flex items-start gap-2.5">
+              <div class="w-11 h-11 rounded-xl bg-amber-400/15 border-2 border-amber-400/60 flex items-center justify-center text-xl shrink-0">🏰</div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <b class="text-sm font-black text-white truncate">${g.name}</b>
+                  <span class="text-[8.5px] font-black px-1.5 py-0.5 rounded-full bg-amber-400 text-slate-950">CẤP ${lv.level}</span>
+                  <span class="text-[8.5px] font-black px-1.5 py-0.5 rounded-full bg-slate-700 text-slate-200">${g.members.length}/${GUILD_MAX_MEMBERS}</span>
+                </div>
+                <div class="flex items-center gap-2.5 mt-0.5 text-[9.5px] text-slate-400">
+                  <span>⚡ ${formatCompactNumberVn(totalPower, '0')} lực chiến</span>
+                  <span>🏅 ${g.expedition ? g.expedition.best : 0} tầng kỷ lục</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-2.5">
+              <div class="flex items-center justify-between text-[9px] text-slate-400 mb-1">
+                <span>CẤP BANG</span><b class="text-amber-300">${lv.exp.toLocaleString('vi-VN')} / ${lv.need.toLocaleString('vi-VN')}</b>
+              </div>
+              <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-300" style="width:${lv.pct}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" data-guild-screen="boss"
+              class="rounded-xl border-2 border-rose-400/50 bg-gradient-to-br from-rose-950/70 to-slate-950 p-2.5 text-left active:scale-[.98] transition">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">🐲</span>
+                <b class="text-[11px] font-black text-white">Trùm Bang</b>
+              </div>
+              <p class="text-[8.5px] text-slate-300/85 mt-0.5">${g.boss && g.boss.defeated ? 'Đã hạ tuần này' : `HP ${bossPct}% · ${g.boss ? g.boss.attempts : 0} lượt`}</p>
+              <div class="h-1 rounded-full bg-slate-800 mt-1 overflow-hidden">
+                <div class="h-full bg-rose-400" style="width:${bossPct}%"></div>
+              </div>
+            </button>
+
+            <button type="button" data-guild-screen="expedition"
+              class="rounded-xl border-2 border-sky-400/50 bg-gradient-to-br from-sky-950/70 to-slate-950 p-2.5 text-left active:scale-[.98] transition">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">🗺️</span>
+                <b class="text-[11px] font-black text-white">Viễn Chinh</b>
+              </div>
+              <p class="text-[8.5px] text-slate-300/85 mt-0.5">Tầng ${expFloor} · kỷ lục ${g.expedition ? g.expedition.best : 0}</p>
+            </button>
+
+            <button type="button" data-guild-screen="members"
+              class="rounded-xl border border-slate-700 bg-slate-900/70 p-2.5 text-left active:scale-[.98] transition">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">👥</span>
+                <b class="text-[11px] font-black text-white">Thành Viên</b>
+              </div>
+              <p class="text-[8.5px] text-slate-300/85 mt-0.5">${g.members.length} người</p>
+            </button>
+
+            <button type="button" data-guild-screen="rank"
+              class="rounded-xl border border-slate-700 bg-slate-900/70 p-2.5 text-left active:scale-[.98] transition">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">🏆</span>
+                <b class="text-[11px] font-black text-white">Xếp Hạng</b>
+              </div>
+              <p class="text-[8.5px] text-slate-300/85 mt-0.5">Bảng bang mạnh nhất</p>
+            </button>
+
+            <button type="button" data-guild-screen="log"
+              class="rounded-xl border border-slate-700 bg-slate-900/70 p-2.5 text-left active:scale-[.98] transition">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">📜</span>
+                <b class="text-[11px] font-black text-white">Lịch Sử</b>
+              </div>
+              <p class="text-[8.5px] text-slate-300/85 mt-0.5">${(g.log || []).length} hoạt động</p>
+            </button>
+
+            <button type="button" data-guild-screen="notice"
+              class="rounded-xl border border-slate-700 bg-slate-900/70 p-2.5 text-left active:scale-[.98] transition">
+              <div class="flex items-center gap-1.5">
+                <span class="text-lg">📢</span>
+                <b class="text-[11px] font-black text-white">Thông Báo</b>
+              </div>
+              <p class="text-[8.5px] text-slate-400 mt-0.5 truncate">${(g.notice || '').slice(0, 22)}</p>
+            </button>
+          </div>
+
+          <div id="guildSubScreen" class="mt-2"></div>`;
+
+        el.querySelectorAll('[data-guild-screen]').forEach(b => {
+          b.addEventListener('click', () => openGuildScreen(b.getAttribute('data-guild-screen')));
+        });
+
+        // Khôi phục màn con đang mở (nếu có) — để đánh trùm nhiều lượt liền
+        // không phải bấm lại từ đầu sau mỗi lượt.
+        if (guildOpenScreen) openGuildScreen(guildOpenScreen);
+      }
+
+      function openGuildScreen(which) {
+        guildOpenScreen = which;
+        const box = document.getElementById('guildSubScreen');
+        if (!box) return;
+        if (which === 'boss') renderGuildBoss(box);
+        else if (which === 'expedition') renderGuildExpedition(box);
+        else if (which === 'members') renderGuildMembers(box);
+        else if (which === 'rank') renderGuildRank(box);
+        else if (which === 'log') renderGuildLog(box);
+        else if (which === 'notice') renderGuildNotice(box);
+      }
+
+      function closeGuildScreen() {
+        guildOpenScreen = null;
+        const box = document.getElementById('guildSubScreen');
+        if (box) box.innerHTML = '';
+      }
+
+      // ---------- Trùm Bang ----------
+      function renderGuildBoss(box) {
+        const g = SaveState.guild;
+        if (!g || !g.boss) return;
+        const b = g.boss;
+        const pct = Math.max(0, Math.round((b.hp / Math.max(1, b.maxHp)) * 100));
+        const myDmg = (g.members.find(m => m.isPlayer) || {}).bossDamage || 0;
+
+        box.innerHTML = `
+          <div class="rounded-2xl border-2 border-rose-400/50 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xl">🐲</span>
+                <div>
+                  <b class="block text-[12px] font-black text-white">Trùm Bang Tuần ${b.week}</b>
+                  <span class="block text-[9px] text-slate-400">Cả bang cùng đánh, chia thưởng theo sát thương</span>
+                </div>
+              </div>
+              <button type="button" id="btnGuildBossClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+
+            <div class="mt-2.5">
+              <div class="flex items-center justify-between text-[9.5px] mb-1">
+                <span class="text-slate-400">MÁU TRÙM</span>
+                <b class="${pct > 0 ? 'text-rose-300' : 'text-emerald-400'}">${Math.max(0, b.hp).toLocaleString('vi-VN')} / ${b.maxHp.toLocaleString('vi-VN')}</b>
+              </div>
+              <div class="h-2.5 rounded-full bg-slate-800 overflow-hidden border border-slate-700">
+                <div class="h-full bg-gradient-to-r from-rose-600 to-rose-400 transition-all" style="width:${pct}%"></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1.5 mt-2 text-[9.5px]">
+              <div class="rounded-lg bg-slate-900 border border-slate-700 px-2 py-1.5">
+                <span class="block text-slate-500 text-[8.5px] uppercase">Lượt đã đánh</span>
+                <b class="text-white">${b.attempts}</b>
+              </div>
+              <div class="rounded-lg bg-slate-900 border border-slate-700 px-2 py-1.5">
+                <span class="block text-slate-500 text-[8.5px] uppercase">Sát thương của bạn</span>
+                <b class="text-amber-300">${myDmg.toLocaleString('vi-VN')}</b>
+              </div>
+            </div>
+
+            ${b.defeated
+              ? `<div class="mt-2 rounded-lg bg-emerald-500/15 border border-emerald-400/50 px-2.5 py-2 text-center">
+                   <b class="text-[11px] text-emerald-300">✅ Đã hạ trùm tuần này</b>
+                   <p class="text-[9px] text-slate-400 mt-0.5">Trùm mới mở vào tuần sau</p>
+                 </div>`
+              : `<button type="button" id="btnGuildBossFight"
+                   class="mt-2 w-full py-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 text-white text-[11.5px] font-black hover:brightness-110 active:scale-[.99] transition">
+                   ⚔️ Đánh Trùm Bang (1 lượt)
+                 </button>`}
+          </div>`;
+
+        document.getElementById('btnGuildBossClose')?.addEventListener('click', closeGuildScreen);
+        document.getElementById('btnGuildBossFight')?.addEventListener('click', () => {
+          startGuildBossFight();
+        });
+      }
+
+      /**
+       * Vào trận trùm bang — tái dùng combat engine, nhưng trùm có HP khổng lồ
+       * theo tổng lực bang nên mỗi lượt chỉ gây được một phần.
+       */
+      function startGuildBossFight() {
+        const g = SaveState.guild;
+        if (!g || !g.boss || g.boss.defeated) return;
+
+        const stats = getComputedStats();
+        const bossHp = Math.max(1, g.boss.hp);
+        // Mỗi lượt chỉ gây tối đa ~18% HP còn lại của trùm — buộc phải đánh
+        // nhiều lượt (và mô phỏng "cả bang cùng đánh").
+        const dmg = Math.min(bossHp, Math.max(1, Math.round(stats.baseAtk * 55)));
+        g.boss.hp = Math.max(0, bossHp - dmg);
+        g.boss.attempts = (g.boss.attempts || 0) + 1;
+
+        const me = g.members.find(m => m.isPlayer);
+        if (me) me.bossDamage = (me.bossDamage || 0) + dmg;
+
+        // NPC cũng đánh — tạo cảm giác "cả bang cùng tham gia".
+        let npcDmg = 0;
+        for (const m of g.members) {
+          if (m.isPlayer) continue;
+          const d = Math.round(m.power * 0.16 * (0.7 + Math.random() * 0.7));
+          npcDmg += d;
+        }
+        if (npcDmg > 0) g.boss.hp = Math.max(0, g.boss.hp - npcDmg);
+
+        const reward = Math.round(dmg * 0.12);
+        SaveState.gold += reward;
+
+        if (g.boss.hp <= 0 && !g.boss.defeated) {
+          g.boss.defeated = true;
+          const bonus = 8000;
+          SaveState.gold += bonus;
+          SaveState.gems += 120;
+          addGuildLog(`Cả bang đã hạ Trùm Bang tuần ${g.boss.week}! +${bonus} vàng, +120 đá quý.`);
+          showToast(`🐲 Hạ trùm bang! +${bonus} vàng, +120 💎`, 'ok');
+        } else {
+          addGuildLog(`Bạn gây ${dmg.toLocaleString('vi-VN')} sát thương lên Trùm Bang (NPC gây thêm ${npcDmg.toLocaleString('vi-VN')}).`);
+          showToast(`⚔️ Gây ${dmg.toLocaleString('vi-VN')} sát thương · +${reward} vàng`, 'ok');
+        }
+
+        // Đóng góp cá nhân tăng theo sát thương — nuôi cấp bang.
+        if (me) me.contribution = (me.contribution || 0) + Math.round(dmg * 0.4);
+
+        SaveState.save();
+        renderGuildPanel();
+      }
+
+      // ---------- Viễn Chinh ----------
+      function renderGuildExpedition(box) {
+        const g = SaveState.guild;
+        if (!g) return;
+        const exp = g.expedition || { floor: 0, best: 0 };
+        const nextFloor = exp.floor + 1;
+        // Độ khó tầng: mỗi tầng +12% so với lực chiến bang
+        const needPower = Math.round(getGuildTotalPower() * (0.08 + nextFloor * 0.012));
+
+        box.innerHTML = `
+          <div class="rounded-2xl border-2 border-sky-400/50 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xl">🗺️</span>
+                <div>
+                  <b class="block text-[12px] font-black text-white">Viễn Chinh</b>
+                  <span class="block text-[9px] text-slate-400">Mỗi tầng mạnh hơn — cả bang cùng leo</span>
+                </div>
+              </div>
+              <button type="button" id="btnGuildExpClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 mt-2.5 text-[9.5px]">
+              <div class="rounded-lg bg-slate-900 border border-slate-700 px-2 py-1.5 text-center">
+                <span class="block text-slate-500 text-[8px] uppercase">Tầng hiện tại</span>
+                <b class="text-sky-300 text-[12px]">${exp.floor}</b>
+              </div>
+              <div class="rounded-lg bg-slate-900 border border-slate-700 px-2 py-1.5 text-center">
+                <span class="block text-slate-500 text-[8px] uppercase">Kỷ lục</span>
+                <b class="text-amber-300 text-[12px]">${exp.best}</b>
+              </div>
+              <div class="rounded-lg bg-slate-900 border border-slate-700 px-2 py-1.5 text-center">
+                <span class="block text-slate-500 text-[8px] uppercase">Sức mạnh cần</span>
+                <b class="text-white text-[11px]">${formatCompactNumberVn(needPower, '0')}</b>
+              </div>
+            </div>
+
+            <p class="text-[9px] text-slate-400 mt-2 leading-relaxed">
+              Tầng ${nextFloor}: cần tổng lực chiến bang ≥ ${formatCompactNumberVn(needPower, '0')}
+              (bang bạn: ${formatCompactNumberVn(getGuildTotalPower(), '0')}).
+            </p>
+
+            <button type="button" id="btnGuildExpGo"
+              class="mt-2 w-full py-2 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 text-white text-[11.5px] font-black hover:brightness-110 active:scale-[.99] transition">
+              🚀 Tiến vào tầng ${nextFloor}
+            </button>
+          </div>`;
+
+        document.getElementById('btnGuildExpClose')?.addEventListener('click', closeGuildScreen);
+        document.getElementById('btnGuildExpGo')?.addEventListener('click', () => {
+          const power = getGuildTotalPower();
+          if (power < needPower) {
+            showToast(`🔒 Tầng ${nextFloor} cần ${formatCompactNumberVn(needPower, '0')} lực chiến bang — mới có ${formatCompactNumberVn(power, '0')}.`, 'err');
+            return;
+          }
+          // Chơi đơn: mô phỏng kết quả theo tỉ lệ lực lượng, tránh phải dựng
+          // thêm một engine trận riêng cho viễn chinh.
+          const winChance = Math.min(0.92, power / (needPower * 1.55));
+          const win = Math.random() < winChance;
+          if (win) {
+            g.expedition.floor = nextFloor;
+            g.expedition.best = Math.max(g.expedition.best || 0, nextFloor);
+            const reward = 600 + nextFloor * 220;
+            SaveState.gold += reward;
+            addGuildLog(`Viễn chinh: vượt tầng ${nextFloor} (+${reward} vàng).`);
+            showToast(`🚀 Vượt tầng ${nextFloor}! +${reward} vàng`, 'ok');
+          } else {
+            addGuildLog(`Viễn chinh: thất bại ở tầng ${nextFloor}.`);
+            showToast(`💀 Thất bại ở tầng ${nextFloor}, thử lại khi bang mạnh hơn.`, 'err');
+          }
+          SaveState.save();
+          renderGuildPanel();
+        });
+      }
+
+      // ---------- Thành viên ----------
+      function renderGuildMembers(box) {
+        const g = SaveState.guild;
+        if (!g) return;
+        const sorted = [...g.members].sort((a, b) => b.power - a.power);
+
+        box.innerHTML = `
+          <div class="rounded-2xl border border-slate-700 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[12px] font-black text-white">👥 Thành Viên (${g.members.length}/${GUILD_MAX_MEMBERS})</b>
+              <button type="button" id="btnGuildMemClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <div class="max-h-64 overflow-y-auto flex flex-col gap-1">
+              ${sorted.map(m => {
+                const rm = getGuildRankMeta(m.rank);
+                return `
+                <div class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 ${m.isPlayer ? 'bg-amber-400/12 border border-amber-400/40' : 'bg-slate-900 border border-slate-800'}">
+                  <span class="text-sm shrink-0">${rm.icon}</span>
+                  <div class="min-w-0 flex-1">
+                    <b class="block text-[10.5px] font-black ${m.isPlayer ? 'text-amber-200' : 'text-white'} truncate">${m.name}</b>
+                    <span class="block text-[8.5px] text-slate-500">${rm.name}</span>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <b class="block text-[10px] text-slate-200">${formatCompactNumberVn(m.power, '0')}</b>
+                    <span class="block text-[8px] text-slate-500">${m.contribution.toLocaleString('vi-VN')} đg</span>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>`;
+
+        document.getElementById('btnGuildMemClose')?.addEventListener('click', closeGuildScreen);
+      }
+
+      // ---------- Xếp hạng ----------
+      function renderGuildRank(box) {
+        const g = SaveState.guild;
+        if (!g) return;
+        const myPower = getGuildTotalPower();
+
+        // Sinh bảng xếp hạng quanh lực chiến thật của người chơi để luôn có
+        // mục tiêu vừa sức — không phải toàn bang vô địch hay toàn bang yếu.
+        const rivals = GUILD_NAME_POOL.slice(0, 7).map((name, i) => ({
+          name,
+          power: Math.round(myPower * (0.55 + i * 0.19) * (0.94 + Math.random() * 0.12)),
+          level: Math.max(1, Math.round(myPower / 24000) + (i % 3) - 1)
+        }));
+        rivals.push({ name: g.name, power: myPower, level: getGuildLevelInfo().level, isMe: true });
+        rivals.sort((a, b) => b.power - a.power);
+
+        box.innerHTML = `
+          <div class="rounded-2xl border-2 border-amber-400/50 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[12px] font-black text-white">🏆 Bảng Xếp Hạng Bang</b>
+              <button type="button" id="btnGuildRankClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <div class="flex flex-col gap-1">
+              ${rivals.map((r, i) => `
+                <div class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 ${r.isMe ? 'bg-amber-400/12 border border-amber-400/40' : 'bg-slate-900 border border-slate-800'}">
+                  <span class="w-5 text-center text-[10px] font-black ${i === 0 ? 'text-amber-300' : (i < 3 ? 'text-slate-300' : 'text-slate-500')}">${i + 1}</span>
+                  <b class="min-w-0 flex-1 text-[10.5px] font-black ${r.isMe ? 'text-amber-200' : 'text-white'} truncate">${r.name}${r.isMe ? ' (bạn)' : ''}</b>
+                  <span class="text-[8.5px] text-slate-500 shrink-0">Lv.${r.level}</span>
+                  <b class="text-[10px] text-slate-200 shrink-0 w-14 text-right">${formatCompactNumberVn(r.power, '0')}</b>
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
+
+        document.getElementById('btnGuildRankClose')?.addEventListener('click', closeGuildScreen);
+      }
+
+      // ---------- Lịch sử ----------
+      function renderGuildLog(box) {
+        const g = SaveState.guild;
+        if (!g) return;
+        const logs = (g.log || []).slice(0, 30);
+
+        box.innerHTML = `
+          <div class="rounded-2xl border border-slate-700 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[12px] font-black text-white">📜 Lịch Sử Hoạt Động</b>
+              <button type="button" id="btnGuildLogClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            ${logs.length === 0
+              ? '<p class="text-[10px] text-slate-500 text-center py-3">Chưa có hoạt động nào.</p>'
+              : `<div class="max-h-64 overflow-y-auto flex flex-col gap-1">
+                  ${logs.map(l => `
+                    <div class="rounded-lg bg-slate-900 border border-slate-800 px-2 py-1.5">
+                      <span class="block text-[9px] text-slate-500">${new Date(l.t).toLocaleString('vi-VN')}</span>
+                      <span class="block text-[10px] text-slate-200 leading-snug">${l.text}</span>
+                    </div>
+                  `).join('')}
+                </div>`}
+          </div>`;
+
+        document.getElementById('btnGuildLogClose')?.addEventListener('click', closeGuildScreen);
+      }
+
+      // ---------- Thông báo ----------
+      function renderGuildNotice(box) {
+        const g = SaveState.guild;
+        if (!g) return;
+
+        box.innerHTML = `
+          <div class="rounded-2xl border border-slate-700 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[12px] font-black text-white">📢 Thông Báo Bang</b>
+              <button type="button" id="btnGuildNotClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <textarea id="guildNoticeInput" rows="3" maxlength="200"
+              class="w-full px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-600 text-white text-[11px] outline-none focus:border-amber-400 resize-none">${g.notice || ''}</textarea>
+            <div class="flex items-center justify-between mt-1.5">
+              <span class="text-[9px] text-slate-500">Tối đa 200 ký tự</span>
+              <button type="button" id="btnGuildNotSave"
+                class="px-3 py-1.5 rounded-lg bg-amber-400 text-slate-950 text-[10.5px] font-black hover:brightness-110 active:scale-95 transition">
+                Lưu
+              </button>
+            </div>
+          </div>`;
+
+        document.getElementById('btnGuildNotClose')?.addEventListener('click', closeGuildScreen);
+        document.getElementById('btnGuildNotSave')?.addEventListener('click', () => {
+          const inp = document.getElementById('guildNoticeInput');
+          g.notice = String(inp ? inp.value : '').slice(0, 200);
+          addGuildLog('Bạn đã cập nhật thông báo bang.');
+          SaveState.save();
+          showToast('📢 Đã lưu thông báo bang.', 'ok');
+          closeGuildScreen();
+          renderGuildPanel();
+        });
+      }
+
       function renderGameModePanel() {
         const el = document.getElementById('gameModePanel');
         if (!el) return;
@@ -28570,6 +29206,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           });
           SoundFX.coinPickup();
           if (targetId === 'tabHeroes' && typeof renderHeroRoster === 'function') renderHeroRoster();
+          if (targetId === 'tabGuild' && typeof renderGuildPanel === 'function') renderGuildPanel();
           renderLobbyUI();
         });
       });
@@ -29525,6 +30162,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         getGameMode,
         getActiveGameMode,
         isBossRoom,
+        renderGuildPanel,
+        createGuild,
+        addGuildLog,
+        getGuildTotalPower,
+        getGuildLevelInfo,
+        GUILD_MAX_MEMBERS,
+        GUILD_RANKS,
         gotoNavTab,
         openBestiaryModal,
         closeBestiaryModal,

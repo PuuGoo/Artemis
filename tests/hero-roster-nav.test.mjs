@@ -35,8 +35,8 @@ if (navIds) {
 check('luoi nav dung grid-cols-6', /bottomNavBar[\s\S]{0,300}?grid-cols-6/.test(html));
 check('moi tab co section tuong ung',
   ['tabHeroes', 'tabGuild'].every(id => new RegExp(`id="${id}"`).test(html)));
-check('tab Bang Hoi la "Sap mo" (chua lam that)',
-  /Bang Hội[\s\S]{0,200}?Sắp mở/.test(html));
+check('tab Bang Hoi da lam that (khong con "Sap mo")',
+  /id="guildContent"/.test(html) && !/Bang Hội[\s\S]{0,300}?Sắp mở/.test(html));
 check('KHONG con nhan "SOON" tieng Anh', !/>SOON</.test(html));
 
 // ============================================================ 2. SAO RONG ≠ SAO DAY
