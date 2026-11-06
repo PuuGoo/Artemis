@@ -122,13 +122,28 @@ còn nhiều chỗ nếu cần (ví dụ `G:\Unity`).
 
 ### Cách B — Unity CLI (nếu muốn script hoá)
 
-Hub 3.22 vẫn còn Hub CLI (tuy đã deprecate từ 3.18):
+Hub 3.22 vẫn còn Hub CLI (tuy đã deprecate từ 3.18).
+
+> **Quan trọng:** trên Windows, Unity Hub cài qua winget là gói **MSIX**, nên
+> **KHÔNG** nằm ở `C:\Program Files\Unity Hub\`. Đường dẫn thật (đã kiểm tra trên
+> máy này):
+>
+> ```
+> C:\Program Files\WindowsApps\UnityTechnologies.UnityHub_3.22.5.65535_x64__2vrhnee42bhxm\app\Unity Hub.exe
+> ```
+>
+> Thư mục `WindowsApps` bị chặn quyền đọc với user thường, nên gọi `.exe` trực
+> tiếp từ bash sẽ ra **Permission denied**. Dùng một trong hai cách:
 
 ```bash
-# Windows: đường dẫn mặc định
-HUB="/c/Program Files/Unity Hub/Unity Hub.exe"
+# Cách 1 — chạy qua AppsFolder (hoạt động, đã thử trên máy này)
+powershell -NoProfile -Command "Start-Process 'shell:AppsFolder\UnityTechnologies.UnityHub_2vrhnee42bhxm!UnityHub'"
+```
 
-"$HUB" -- --headless install --version 2022.3.62f1 --changeset 4af31df58517 --module webgl
+Cách 2 — giao diện (khuyến nghị, vì CLI còn cần đăng nhập):
+
+```
+Mở Unity Hub → Sign in → Installs → Install Editor → Archive → 2022.3.62f1
 ```
 
 Nếu lệnh trên báo không nhận `--headless`, dùng **Unity CLI** mới:

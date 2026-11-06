@@ -100,9 +100,11 @@ Cột trạng thái:
 
 ---
 
-## D. Việc phải làm để B* chuyển thành ✅
+### Việc phải làm để B* chuyển thành ✅
 
-1. Cài Unity 2022.3 LTS + WebGL module.
+1. Cài Unity 2022.3 LTS + WebGL module. ← **Unity Hub đã cài xong (3.22.5)**, còn
+   thiếu: đăng nhập + chọn Editor 2022.3.62f1 + tick WebGL Build Support.
+   Xem `INSTALL-UNITY.md`.
 2. Mở project, tạo 2 prefab (đạn, quái), gán tham chiếu trong `GameBootstrap`.
 3. Dựng Canvas HUD + panel Auth, gán 23 field.
 4. Chạy PlayMode: di chuyển, bắn, giết 8 quái, hết phòng, sang phòng 2.
