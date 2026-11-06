@@ -31005,10 +31005,30 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           SoundFX.coinPickup();
           if (targetId === 'tabHeroes' && typeof renderHeroRoster === 'function') renderHeroRoster();
           if (targetId === 'tabGuild' && typeof renderGuildPanel === 'function') renderGuildPanel();
-          if (targetId === 'tabEvents' && typeof renderGardenPanel === 'function') {
-            renderGardenPanel();
-            if (typeof renderSeasonPanel === 'function') renderSeasonPanel();
-            if (typeof renderPlinkoPanel === 'function') renderPlinkoPanel();
+          // Khởi tạo từng khu vực Sự Kiện độc lập: một module lỗi/thiếu
+          // không được chặn Season hoặc các sự kiện còn lại hiển thị.
+          if (targetId === 'tabEvents') {
+            if (typeof renderSeasonPanel === 'function') {
+              try {
+                renderSeasonPanel();
+              } catch (error) {
+                console.error('[Season] Không thể render bảng Mùa Giải:', error);
+              }
+            }
+            if (typeof renderGardenPanel === 'function') {
+              try {
+                renderGardenPanel();
+              } catch (error) {
+                console.error('[Garden] Không thể render Vườn Thu Hoạch:', error);
+              }
+            }
+            if (typeof renderPlinkoPanel === 'function') {
+              try {
+                renderPlinkoPanel();
+              } catch (error) {
+                console.error('[Plinko] Không thể render sự kiện Plinko:', error);
+              }
+            }
             if (typeof startGardenTicker === 'function') startGardenTicker();
           }
           renderLobbyUI();
