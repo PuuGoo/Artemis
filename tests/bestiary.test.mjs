@@ -18,14 +18,15 @@ console.log("\n=== 1. DU LIEU BESTIARY ===");
 const bStart = html.indexOf("const BESTIARY = [");
 const bEnd = html.indexOf("\n      ];", bStart) + 8;
 const bBlock = html.slice(bStart, bEnd);
-const entries = (bBlock.match(/id: '(slime|goblin|skeleton_mage|plant_turret|bat|golem|queen|demon_king|dragon_whelp|cloud_wisp|sky_sentinel|elder_dragon)'/g) || []).length;
-check("co 12 loai quai/trum", entries === 12, String(entries));
-for (const id of ["slime", "goblin", "skeleton_mage", "plant_turret", "bat", "golem", "queen", "demon_king", "dragon_whelp", "cloud_wisp", "sky_sentinel", "elder_dragon"]) {
+const beastIds = ["slime", "goblin", "skeleton_mage", "plant_turret", "bat", "golem", "queen", "demon_king", "dragon_whelp", "cloud_wisp", "sky_sentinel", "elder_dragon", "rift_stalker", "eclipse_oracle", "obsidian_brute", "eclipse_sovereign", "frostfang_wolf", "aurora_wisp", "prism_knight", "ninth_star_dragon"];
+const entries = (bBlock.match(/id: '[a-z_]+'/g) || []).length;
+check("co 20 loai quai/trum", entries === 20, String(entries));
+for (const id of beastIds) {
   check(`co loai '${id}'`, bBlock.includes(`id: '${id}'`));
 }
 for (const field of ["name", "icon", "tier", "color", "lore", "behavior", "threat"]) {
   const n = (bBlock.match(new RegExp(field + ":", "g")) || []).length;
-  check(`moi loai co '${field}' (${n}/12)`, n === 12, `${n}/12`);
+  check(`moi loai co '${field}' (${n}/12)`, n === 20, `${n}/20`);
 }
 check("co loai TRÙM", bBlock.includes("TRÙM'") || bBlock.includes("TRÙM CUỐI"));
 check("co indexed lookup", /const BESTIARY_BY_ID = Object\.fromEntries/.test(html));
