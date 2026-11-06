@@ -1,7 +1,7 @@
 // ============================================================================
 // CHẾ ĐỘ CHƠI (game modes)
 //
-// Bản thật Archero 2 có 15 chế độ (`ui_world_*`). Bản web chơi đơn làm 5 chế
+// Bản thật Archero 2 có 15 chế độ (`ui_world_*`). Bản web chơi đơn làm 6 chế
 // độ không cần máy chủ nhiều người, tái dùng CÙNG combat engine.
 //
 // LỖI TỪNG CÓ (tiềm ẩn): luật phòng trùm `room % 5 === 0 || room === maxRooms`
@@ -9,7 +9,7 @@
 // HUD báo phòng thường trong khi thực tế là trùm, hoặc ngược lại.
 //
 // Test khoá:
-//   1. Có đúng 5 chế độ với cờ hành vi đúng
+//   1. Có đúng 6 chế độ với cờ hành vi đúng
 //   2. isBossRoom là NGUỒN DUY NHẤT quyết định phòng trùm
 //   3. maxRooms theo chế độ (chương thật / vô hạn / cố định)
 //   4. Luyện Tập không sinh tài nguyên, không chết thật
@@ -38,7 +38,7 @@ function fnBody(name) {
 console.log('\n=== 1. NAM CHE DO CHOI ===');
 
 const modesBlk = html.slice(html.indexOf('const GAME_MODES = ['), html.indexOf('const CHAPTERS = ['));
-for (const id of ['campaign', 'endless', 'tower', 'bossrush', 'practice']) {
+for (const id of ['campaign', 'endless', 'tower', 'bossrush', 'practice', 'goldcave']) {
   check(`co che do "${id}"`, new RegExp(`id: '${id}'`).test(modesBlk));
 }
 check('Chiến Dịch có chương', /id: 'campaign'[\s\S]{0,400}?hasChapters: true/.test(modesBlk));
@@ -47,8 +47,14 @@ check('Tháp chỉ đánh trùm', /id: 'tower'[\s\S]{0,400}?bossOnly: true/.test
 check('Săn Trùm chỉ đánh trùm + 5 phòng',
   /id: 'bossrush'[\s\S]{0,500}?bossOnly: true[\s\S]{0,200}?maxRooms: 5/.test(modesBlk));
 check('Luyện Tập không thưởng', /id: 'practice'[\s\S]{0,400}?practice: true/.test(modesBlk));
-check('moi che do co ten tieng Viet + icon', (modesBlk.match(/name: '[^']+'/g) || []).length === 5
-  && (modesBlk.match(/icon: '/g) || []).length === 5);
+
+check('Hang Vàng cố định 5 phòng và dùng luật boss hiện có',
+  modesBlk.includes("id: 'goldcave'") && modesBlk.includes("maxRooms: 5") && modesBlk.includes("bossOnly: false"));
+check('Hang Vàng chỉ nhận vàng với hệ số riêng',
+  modesBlk.includes("goldOnly: true") && modesBlk.includes("goldMultiplier: 3"));
+
+check('moi che do co ten tieng Viet + icon', (modesBlk.match(/name: '[^']+'/g) || []).length === 6
+  && (modesBlk.match(/icon: '/g) || []).length === 6);
 
 // ============================================================ 2. PHÒNG TRÙM
 console.log('\n=== 2. isBossRoom LA NGUON DUY NHAT ===');
@@ -90,7 +96,7 @@ console.log('\n=== 4. LUYEN TAP KHONG SINH TAI NGUYEN ===');
 const finFn = fnBody('finishRun');
 check('finishRun doc che do', /const curMode = getGameMode\(Game\.mode/.test(finFn));
 check('khong cong vang khi practice', /if \(!curMode\.practice\) \{\s*SaveState\.gold \+= bonusGold/.test(finFn.replace(/\r/g, '')));
-check('khong drop gear khi practice', /if \(!curMode\.practice && \(isVictory \|\| Game\.room >= 3\)\)/.test(finFn));
+check('khong drop gear khi practice hoac Hang Vang', /if \(!curMode\.practice && !curMode\.goldOnly && \(isVictory \|\| Game\.room >= 3\)\)/.test(finFn));
 
 // Chet trong luyen tap -> hoi day mau, khong finishRun(false)
 const deathSlice = html.slice(html.indexOf('Luyện Tập: không chết thật'));
@@ -117,7 +123,7 @@ console.log('\n=== 6. UI CHON CHE DO ===');
 check('co #gameModePanel trong DOM', /id="gameModePanel"/.test(html));
 check('renderGameModePanel ton tai', /function renderGameModePanel\(\)/.test(html));
 const modeUi = fnBody('renderGameModePanel');
-check('render 5 the', /GAME_MODES\.map\(m =>/.test(modeUi));
+check('render cards from all 6 modes', /GAME_MODES\.map\(m =>/.test(modeUi));
 check('bam the doi SaveState.gameMode', /SaveState\.gameMode = id/.test(modeUi));
 check('hien ky luc neu co', /Kỷ lục: phòng/.test(modeUi));
 check('duoc goi trong render lobby', /safeRender\('gameMode'/.test(html));
