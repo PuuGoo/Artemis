@@ -30,6 +30,8 @@
     <Compile Include="..\Assets\Artemis\Domain\**\*.cs" LinkBase="Domain" />
     <!-- Nguồn runtime Unity cần kiểm tra. -->
     <Compile Include="..\Assets\Artemis\Scripts\**\*.cs" LinkBase="Scripts" />
+    <!-- Editor script: dựng vertical slice bằng menu, kiểm tra biên dịch luôn. -->
+    <Compile Include="..\Assets\Artemis\Editor\**\*.cs" LinkBase="Editor" />
   </ItemGroup>
 
 </Project>

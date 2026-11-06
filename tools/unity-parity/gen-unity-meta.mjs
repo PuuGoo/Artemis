@@ -172,9 +172,17 @@ if (fs.existsSync(SCENE)) {
   });
 
   fs.writeFileSync(SCENE, scene, "utf8");
-  console.log("Đã vá " + replaced + "/" + order.length + " GUID script trong " + path.relative(PROJECT, SCENE));
-  if (replaced < order.length) {
-    console.warn("CẢNH BÁO: còn placeholder 0-guid — scene sẽ thiếu component khi mở trong Unity.");
+
+  // Cảnh báo chỉ có ý nghĩa nếu THẬT SỰ còn placeholder 0-guid trỏ tới script.
+  // (Lần chạy thứ hai sẽ thay 0 chỗ vì đã vá rồi — đó là trạng thái đúng.)
+  const remainingZero = (scene.match(/m_Script: \{fileID: 11500000, guid: 0{32}/g) || []).length;
+  if (replaced > 0) {
+    console.log("Đã vá " + replaced + " GUID script trong " + path.relative(PROJECT, SCENE));
+  } else {
+    console.log("Scene đã có GUID script (không cần vá): " + path.relative(PROJECT, SCENE));
+  }
+  if (remainingZero > 0) {
+    console.warn("CẢNH BÁO: còn " + remainingZero + " component chưa gán script — scene sẽ thiếu component khi mở trong Unity.");
   }
 }
 

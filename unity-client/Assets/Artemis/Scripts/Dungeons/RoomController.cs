@@ -117,6 +117,12 @@ namespace Artemis.Runtime.Dungeons
             if (Enemies.Count == 0) OnRoomCleared();
         }
 
+        [Header("Chuyển phòng")]
+        [Tooltip("Tự sang phòng kế sau khi dọn sạch (giây). 0 hoặc âm = chờ gọi thủ công.")]
+        public float AutoAdvanceDelay = 1.2f;
+
+        private float _clearDelay = -1f;
+
         private void OnRoomCleared()
         {
             if (_finished) return;
@@ -128,6 +134,18 @@ namespace Artemis.Runtime.Dungeons
                 FinishRun(true);
                 return;
             }
+
+            if (AutoAdvanceDelay > 0f) _clearDelay = AutoAdvanceDelay;
+        }
+
+        private void Update()
+        {
+            if (_clearDelay < 0f) return;
+            _clearDelay -= Time.deltaTime;
+            if (_clearDelay > 0f) return;
+
+            _clearDelay = -1f;
+            GoToNextRoom();
         }
 
         /// <summary>Sang phòng kế (gọi từ portal / nút UI).</summary>

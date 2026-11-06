@@ -23,8 +23,11 @@ namespace UnityEngine
         public float magnitude => (float)Math.Sqrt(sqrMagnitude);
         public Vector2 normalized { get { float m = magnitude; return m > 0 ? new Vector2(x / m, y / m) : new Vector2(0, 0); } }
         public static Vector2 zero => new Vector2(0, 0);
+        public static Vector2 one => new Vector2(1, 1);
         public static Vector2 up => new Vector2(0, 1);
         public static Vector2 down => new Vector2(0, -1);
+        public static Vector2 right => new Vector2(1, 0);
+        public static Vector2 left => new Vector2(-1, 0);
         public static Vector2 operator +(Vector2 a, Vector2 b) => new Vector2(a.x + b.x, a.y + b.y);
         public static Vector2 operator -(Vector2 a, Vector2 b) => new Vector2(a.x - b.x, a.y - b.y);
         public static Vector2 operator *(Vector2 a, float f) => new Vector2(a.x * f, a.y * f);
@@ -49,6 +52,9 @@ namespace UnityEngine
         public float r, g, b, a;
         public Color(float r, float g, float b) { this.r = r; this.g = g; this.b = b; a = 1f; }
         public Color(float r, float g, float b, float a) { this.r = r; this.g = g; this.b = b; this.a = a; }
+        public static Color white => new Color(1, 1, 1, 1);
+        public static Color black => new Color(0, 0, 0, 1);
+        public static Color red => new Color(1, 0, 0, 1);
     }
 
     public struct Rect
@@ -87,9 +93,12 @@ namespace UnityEngine
     {
         public string name;
         public static void Destroy(Object o) { }
+        public static void DestroyImmediate(Object o) { }
         public static void DontDestroyOnLoad(Object o) { }
         public static T Instantiate<T>(T original) where T : Object => original;
         public static T Instantiate<T>(T original, Transform parent) where T : Object => original;
+        public static T FindObjectOfType<T>() where T : Object => null;
+        public static T[] FindObjectsOfType<T>() where T : Object => new T[0];
         public static implicit operator bool(Object o) => !ReferenceEquals(o, null);
         public static bool operator ==(Object a, Object b) => ReferenceEquals(a, b);
         public static bool operator !=(Object a, Object b) => !ReferenceEquals(a, b);
@@ -113,15 +122,25 @@ namespace UnityEngine
         public static void print(object o) { }
     }
     public class Coroutine { }
-    public class Transform : Component { public Vector3 position; public Quaternion rotation; }
+    public class Transform : Component
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+        public Transform parent;
+        public Transform Find(string n) => null;
+        public void SetParent(Transform p, bool worldPositionStays) { parent = p; }
+    }
     public class GameObject : Object
     {
         public GameObject() { }
         public GameObject(string n) { name = n; }
+        public GameObject(string n, params Type[] components) { name = n; }
         public bool activeSelf;
+        public Transform transform { get; } = new Transform();
         public void SetActive(bool v) { activeSelf = v; }
         public T AddComponent<T>() where T : Component, new() => new T();
         public T GetComponent<T>() where T : class => null;
+        public static GameObject Find(string n) => null;
     }
 
     public class Rigidbody2D : Component
@@ -262,6 +281,11 @@ namespace UnityEngine.UI
     {
         public float fillAmount;
         public UnityEngine.Color color;
+        public Type type;
+        public FillMethod fillMethod;
+        public int fillOrigin;
+        public enum Type { Simple, Sliced, Tiled, Filled }
+        public enum FillMethod { Horizontal, Vertical, Radial90, Radial180, Radial360 }
     }
     public class Button : UnityEngine.Behaviour
     {
@@ -269,6 +293,96 @@ namespace UnityEngine.UI
         public ButtonClickedEvent onClick { get; } = new ButtonClickedEvent();
         public class ButtonClickedEvent { public void AddListener(Action a) { } }
     }
+
+    public class Canvas : UnityEngine.Behaviour
+    {
+        public RenderMode renderMode;
+        public int sortingOrder;
+    }
+
+    public class CanvasScaler : UnityEngine.Behaviour
+    {
+        public ScaleMode uiScaleMode;
+        public UnityEngine.Vector2 referenceResolution;
+        public float matchWidthOrHeight;
+        public enum ScaleMode { ConstantPixelSize, ScaleWithScreenSize, ConstantPhysicalSize }
+    }
+
+    public class GraphicRaycaster : UnityEngine.Behaviour { }
+}
+
+public enum RenderMode { ScreenSpaceOverlay, ScreenSpaceCamera, WorldSpace }
+
+namespace UnityEngine
+{
+    public class RectTransform : Transform
+    {
+        public Vector2 anchorMin, anchorMax, pivot, anchoredPosition, sizeDelta, offsetMin, offsetMax;
+    }
+    public class Sprite : Object { }
+    public class Texture2D : Object
+    {
+        public Texture2D(int w, int h, TextureFormat fmt, bool mip) { }
+        public void SetPixel(int x, int y, Color c) { }
+        public void Apply() { }
+        public byte[] EncodeToPNG() => new byte[0];
+    }
+    public enum TextureFormat { RGBA32 }
+    public enum TextureImporterType { Sprite }
+    public enum FilterMode { Point, Bilinear, Trilinear }
+    public class SpriteRenderer : Component { public Sprite sprite; public int sortingOrder; }
+    public class CircleCollider2D : Collider2D { public bool isTrigger; public float radius; }
+}
+
+namespace UnityEditor
+{
+    public static class AssetDatabase
+    {
+        public static void SaveAssets() { }
+        public static void Refresh() { }
+        public static bool IsValidFolder(string p) => false;
+        public static string CreateFolder(string parent, string name) => "";
+        public static void DeleteAsset(string p) { }
+        public static void ImportAsset(string p) { }
+        public static T LoadAssetAtPath<T>(string p) where T : UnityEngine.Object => null;
+    }
+    public class AssetImporter : UnityEngine.Object
+    {
+        public static AssetImporter GetAtPath(string p) => null;
+        public void SaveAndReimport() { }
+    }
+    public class TextureImporter : AssetImporter
+    {
+        public UnityEditor.TextureImporterType textureType;
+        public float spritePixelsPerUnit;
+        public UnityEngine.FilterMode filterMode;
+    }
+    public enum TextureImporterType { Sprite }
+    public static class PrefabUtility
+    {
+        public static UnityEngine.GameObject SaveAsPrefabAsset(UnityEngine.GameObject go, string path) => go;
+    }
+    public static class EditorUtility
+    {
+        public static bool DisplayDialog(string t, string m, string ok) => true;
+        public static void SetDirty(UnityEngine.Object o) { }
+    }
+    public static class EditorApplication { public static bool isPlaying => false; }
+    public class MenuItem : System.Attribute { public MenuItem(string path) { } }
+}
+
+namespace UnityEditor.SceneManagement
+{
+    public static class EditorSceneManager
+    {
+        public static UnityEngine.SceneManagement.Scene GetActiveScene() => new UnityEngine.SceneManagement.Scene();
+        public static void MarkSceneDirty(UnityEngine.SceneManagement.Scene s) { }
+    }
+}
+
+namespace UnityEngine.SceneManagement
+{
+    public struct Scene { }
 }
 
 namespace UnityEngine.InputSystem
@@ -283,6 +397,25 @@ namespace UnityEngine.InputSystem
 
 namespace TMPro
 {
-    public class TMP_Text : UnityEngine.Behaviour { public string text; }
-    public class TMP_InputField : UnityEngine.Behaviour { public string text; }
+    public enum TextAlignmentOptions { TopLeft, Top, TopRight, Left, Center, Right, BottomLeft, Bottom, BottomRight }
+
+    public class TMP_Text : UnityEngine.Behaviour
+    {
+        public string text;
+        public float fontSize;
+        public UnityEngine.Color color;
+        public TextAlignmentOptions alignment;
+    }
+
+    public class TextMeshProUGUI : TMP_Text { }
+
+    public class TMP_InputField : UnityEngine.Behaviour
+    {
+        public string text;
+        public TMP_Text textComponent;
+        public ContentType contentType;
+        public LineType lineType;
+        public enum ContentType { Standard, Password, IntegerNumber, DecimalNumber, Alphanumeric, Name, EmailAddress }
+        public enum LineType { SingleLine, MultiLineNewline, MultiLineSubmit }
+    }
 }
