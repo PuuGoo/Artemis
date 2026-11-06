@@ -13617,7 +13617,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       function showBossIntro(bossType, bossNameText) {
         const wrap = document.getElementById('bossIntroBanner');
         if (!wrap) return;
-        const icons = { golem: '🔥', queen: '🕷️', demon_king: '👑', elder_dragon: '🐉', eclipse_sovereign: '🌑' };
+        const icons = { golem: '🔥', queen: '🕷️', demon_king: '👑', elder_dragon: '🐉', eclipse_sovereign: '🌑', ninth_star_dragon: '🐉' };
         const iconEl = document.getElementById('bossIntroIcon');
         const nameEl = document.getElementById('bossIntroName');
         if (iconEl) iconEl.textContent = icons[bossType] || '👑';
@@ -27228,13 +27228,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         if (isBossRoomNow) {
           SoundFX.bossSpawn();
-          const bossType = Game.chapter && Number(Game.chapter.id) === 5 ? 'eclipse_sovereign' : (Game.chapter && Number(Game.chapter.id) === 4 ? 'elder_dragon' : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king')));
+          const chapterId = Number(Game.chapter && Game.chapter.id || 1);
+          const bossType = chapterId === 6 ? 'ninth_star_dragon' : (chapterId === 5 ? 'eclipse_sovereign' : (chapterId === 4 ? 'elder_dragon' : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king'))));
           const bossNames = {
             golem: '🔥 TRÙM: GOLEM DUNG NHAM',
             queen: '🕷️ TRÙM: NỮ HOÀNG NHỆN ĐỘC',
             demon_king: '👑 ĐẠI MA VƯƠNG ATREUS',
             elder_dragon: '🐉 TRÙM: CỔ LONG THIÊN KHÔNG',
-            eclipse_sovereign: '🌑 TRÙM CUỐI: BẠO CHÚA NHẬT THỰC'
+            eclipse_sovereign: '🌑 TRÙM CUỐI: BẠO CHÚA NHẬT THỰC',
+            ninth_star_dragon: '🐉 TRÙM CUỐI: CỬU DIỆU TINH LONG'
           };
           // HP boss neo theo ATK người chơi (≈ số đòn đánh thường để hạ).
           // Scale phòng KHÔNG nhân vào HP nữa — đã tính bằng hitsToKill, nếu nhân
@@ -27254,7 +27256,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // trùm cuối 5. Trước đây dùng % maxHp × scale nên trùm cuối lại chịu
             // đòn tốt hơn trùm đầu (6 vs 9 đòn) — ngược đường cong.
             atk: Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
-            speed: bossType === 'eclipse_sovereign' ? 76 : 68,
+            speed: bossType === 'ninth_star_dragon' ? 84 : (bossType === 'eclipse_sovereign' ? 76 : 68),
             vx: 45,
             vy: 30,
             attackTimer: 1.6,
@@ -27263,7 +27265,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             burnTimer: 0,
             burnDmg: 0,
             slowTimer: 0,
-            color: bossType === 'eclipse_sovereign' ? '#c084fc' : (bossType === 'elder_dragon' ? '#67e8f9' : (bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48')))
+            color: bossType === 'ninth_star_dragon' ? '#7dd3fc' : (bossType === 'eclipse_sovereign' ? '#c084fc' : (bossType === 'elder_dragon' ? '#67e8f9' : (bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48'))))
           });
           document.getElementById('bossHudContainer').classList.remove('hidden');
           showBossIntro(bossType, bossNames[bossType]);
@@ -27273,11 +27275,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           hideBossIntro();
           document.getElementById('hudHintBanner').textContent = '💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!';
           const count = Math.min(8, 3 + Math.floor(roomNum / 2));
-          const types = Game.chapter && Number(Game.chapter.id) === 5
-            ? ['rift_stalker', 'eclipse_oracle', 'obsidian_brute']
-            : (Game.chapter && Number(Game.chapter.id) === 4
-              ? ['dragon_whelp', 'cloud_wisp', 'sky_sentinel']
-              : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat']);
+          const types = Game.chapter && Number(Game.chapter.id) === 6
+            ? ['frostfang_wolf', 'aurora_wisp', 'prism_knight']
+            : (Game.chapter && Number(Game.chapter.id) === 5
+              ? ['rift_stalker', 'eclipse_oracle', 'obsidian_brute']
+              : (Game.chapter && Number(Game.chapter.id) === 4
+                ? ['dragon_whelp', 'cloud_wisp', 'sky_sentinel']
+                : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat']));
 
           for (let i = 0; i < count; i++) {
             const t = types[(roomNum + i) % types.length];
@@ -27289,14 +27293,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // đã 1,2-1,5s mỗi con — người mới thấy quái trâu ngay từ đầu.
             const depth = Math.min(1, (roomNum - 1) / Math.max(1, Game.maxRooms - 1));
             const baseHits = 1.4 + depth * 1.0;   // 1,4 -> 2,4 đòn
-            const atkMul = t === 'obsidian_brute' ? 1.28 : (t === 'eclipse_oracle' ? 1.16 : (t === 'rift_stalker' ? 1.04 : (t === 'sky_sentinel' ? 1.25 : (t === 'cloud_wisp' ? 0.96 : (t === 'dragon_whelp' ? 1.08 : (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0))))))) * baseHits;
+            const atkMul = t === 'prism_knight' ? 1.24 : (t === 'aurora_wisp' ? 1.12 : (t === 'frostfang_wolf' ? 1.03 : (t === 'obsidian_brute' ? 1.28 : (t === 'eclipse_oracle' ? 1.16 : (t === 'rift_stalker' ? 1.04 : (t === 'sky_sentinel' ? 1.25 : (t === 'cloud_wisp' ? 0.96 : (t === 'dragon_whelp' ? 1.08 : (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0)))))))))) * baseHits;
             const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale));
             Game.enemies.push({
               isBoss: false,
               type: t,
               x: ex,
               y: ey,
-              r: t === 'bat' ? 13 : (t === 'cloud_wisp' ? 14 : (t === 'sky_sentinel' || t === 'obsidian_brute' ? 19 : (t === 'rift_stalker' ? 14 : 16))),
+              r: t === 'bat' ? 13 : (t === 'cloud_wisp' || t === 'aurora_wisp' ? 14 : (t === 'sky_sentinel' || t === 'obsidian_brute' || t === 'prism_knight' ? 19 : (t === 'rift_stalker' ? 14 : 16))),
               hp: enemyHp,
               maxHp: enemyHp,
               // Sát thương quái — thiết kế theo SỐ ĐÒN PHẢI CHỊU, không theo %:
@@ -27308,7 +27312,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               atk: Math.max(1, Math.round(
                 playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
               )),
-              speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : (t === 'rift_stalker' ? 102 : (t === 'eclipse_oracle' ? 55 : (t === 'obsidian_brute' ? 38 : (t === 'dragon_whelp' ? 88 : (t === 'cloud_wisp' ? 92 : (t === 'sky_sentinel' ? 48 : 64))))))),
+              speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : (t === 'frostfang_wolf' ? 112 : (t === 'aurora_wisp' ? 76 : (t === 'prism_knight' ? 46 : (t === 'rift_stalker' ? 102 : (t === 'eclipse_oracle' ? 55 : (t === 'obsidian_brute' ? 38 : (t === 'dragon_whelp' ? 88 : (t === 'cloud_wisp' ? 92 : (t === 'sky_sentinel' ? 48 : 64))))))))))),
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,
               attackTimer: 1.1 + Math.random() * 1.4,
@@ -29049,7 +29053,25 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (e.attackTimer <= 0) {
             const ang = Math.atan2(p.y - e.y, p.x - e.x);
             if (e.isBoss) {
-              if (e.type === 'eclipse_sovereign') {
+              if (e.type === 'ninth_star_dragon') {
+                const enraged = e.hp / Math.max(1, e.maxHp) < 0.5;
+                e.phaseTimer = (e.phaseTimer + 1) % 3;
+                if (e.phaseTimer === 0) {
+                  const total = enraged ? 18 : 14;
+                  const spin = enraged ? Math.PI / 18 : 0;
+                  for (let k = 0; k < total; k++) spawnEnemyBullet(e.x, e.y, ang + spin + (k * Math.PI * 2) / total, enraged ? 242 : 214, e.atk, 7);
+                } else if (e.phaseTimer === 1) {
+                  const spread = enraged ? 4 : 3;
+                  for (let k = -spread; k <= spread; k++) spawnEnemyBullet(e.x, e.y, ang + k * (enraged ? 0.15 : 0.18), enraged ? 292 : 258, e.atk, 7);
+                } else {
+                  for (let k = 0; k < 9; k++) {
+                    const offset = (k * Math.PI * 2) / 9 + (enraged ? Math.PI / 9 : 0);
+                    spawnEnemyBullet(e.x, e.y, offset, enraged ? 278 : 228, e.atk, 7);
+                  }
+                  if (enraged) for (const offset of [-0.1, 0.1]) spawnEnemyBullet(e.x, e.y, ang + offset, 315, e.atk, 6);
+                }
+                e.attackTimer = enraged ? 1.18 : 1.58;
+              } else if (e.type === 'eclipse_sovereign') {
                 const enraged = e.hp / Math.max(1, e.maxHp) < 0.5;
                 e.phaseTimer = (e.phaseTimer + 1) % 3;
                 if (e.phaseTimer === 0) {
@@ -29098,6 +29120,19 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 }
                 e.attackTimer = 1.45;
               }
+            } else if (e.type === 'frostfang_wolf') {
+              for (let k = -1; k <= 1; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.2, 252, e.atk, 5);
+              e.attackTimer = 2.2;
+            } else if (e.type === 'aurora_wisp') {
+              if (Math.random() < 0.35) {
+                for (let k = 0; k < 6; k++) spawnEnemyBullet(e.x, e.y, ang + k * Math.PI / 3, 172, e.atk, 5);
+              } else {
+                for (let k = -2; k <= 2; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.16, 218, e.atk, 5);
+              }
+              e.attackTimer = 2.7;
+            } else if (e.type === 'prism_knight') {
+              for (let k = 0; k < 8; k++) spawnEnemyBullet(e.x, e.y, ang + (k * Math.PI) / 4, 184, e.atk, 6);
+              e.attackTimer = 3.15;
             } else if (e.type === 'rift_stalker') {
               for (let k = -1; k <= 1; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.22, 245, e.atk, 5);
               e.attackTimer = 2.25;
