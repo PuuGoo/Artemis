@@ -2590,19 +2590,41 @@ const ArenaV2 = (() => {
     floor: 'void', wall: 'obsidian', props: ['rift', 'stars', 'rune', 'crystalSmall', 'constellation'], wallProps: ['spikes', 'chains', 'crystals', 'columns'], ambient: 'stars', torchStyle: 'void',
     obstacles: ['crystal', 'obelisk', 'pillar'], skin: 'void', bullet: ['#ffffff', '#e9d5ff', '#a855f7'] });
 
+  // ---------- Chương 6: Vực Thẳm Thiên Hà ----------
+  // Bảng màu: xanh băng giá + tím sao + vàng thiên hà, tương phản với Chương 5
+  // (tím đậm/obsidian) để người chơi nhận ra ngay đã sang vùng đất mới.
+  def('nebula_gate', { label: 'Cổng Tinh Vân', f1: '#0e1633', f2: '#070d22', wall0: '#030718', wall1: '#1f3a6e', trim: '#67e8f9', accent: '#22d3ee',
+    glow: 'rgba(34,211,238,', torch: ['#cffafe', '#0891b2'], fog: 'rgba(56,189,248,', ob0: '#1a3358', ob1: '#081222', obTop: '#a5f3fc', vein: 'rgba(103,232,249,',
+    floor: 'star', wall: 'crystal', props: ['rift', 'constellation', 'stars', 'glyph', 'sparkleSpot'], wallProps: ['columns', 'crystals', 'spikes'], ambient: 'stars', torchStyle: 'crystal',
+    obstacles: ['obelisk', 'crystal', 'pillar'], skin: 'astral', bullet: ['#ffffff', '#a5f3fc', '#0891b2'] });
+  def('frozen_choir', { label: 'Ca Đoàn Băng Giá', f1: '#12263a', f2: '#08131f', wall0: '#04101a', wall1: '#2f5f7a', trim: '#a5f3fc', accent: '#38bdf8',
+    glow: 'rgba(56,189,248,', torch: ['#e0f2fe', '#0284c7'], fog: 'rgba(125,211,252,', ob0: '#1e4a63', ob1: '#071822', obTop: '#bae6fd', vein: 'rgba(165,243,252,',
+    floor: 'ice', wall: 'ice', props: ['frost', 'icicles', 'snow', 'crystalSmall', 'crack'], wallProps: ['icicles', 'crystals', 'columns'], ambient: 'snow', torchStyle: 'crystal',
+    obstacles: ['ice', 'crystal', 'pillar'], skin: 'ice', bullet: ['#ffffff', '#bae6fd', '#0369a1'] });
+  def('throne_of_stars', { label: 'Ngai Sao Lưu Lạc', f1: '#1a1033', f2: '#0a0620', wall0: '#050214', wall1: '#3d2a6b', trim: '#fde68a', accent: '#fbbf24',
+    glow: 'rgba(251,191,36,', torch: ['#fef3c7', '#d97706'], fog: 'rgba(252,211,77,', ob0: '#3a2a5c', ob1: '#0d0820', obTop: '#fcd34d', vein: 'rgba(253,230,138,',
+    floor: 'tiles', wall: 'bone', props: ['constellation', 'stars', 'rune', 'glyph', 'coin'], wallProps: ['banner', 'columns', 'chains'], ambient: 'sparkle', torchStyle: 'lantern',
+    obstacles: ['statue', 'pillar', 'coffin'], skin: 'temple', bullet: ['#ffffff', '#fde68a', '#b45309'] });
+  def('abyss_crown', { label: 'Vương Miện Vực Thẳm', boss: 'astral_devourer', f1: '#0a0a1e', f2: '#03030c', wall0: '#01010a', wall1: '#1e2a5c', trim: '#a78bfa', accent: '#818cf8',
+    glow: 'rgba(129,140,248,', torch: ['#e0e7ff', '#4338ca'], fog: 'rgba(99,102,241,', ob0: '#1c2350', ob1: '#050514', obTop: '#a5b4fc', vein: 'rgba(165,180,252,',
+    floor: 'void', wall: 'obsidian', props: ['rift', 'constellation', 'stars', 'rune', 'glyph'], wallProps: ['spikes', 'columns', 'crystals', 'chains'], ambient: 'stars', torchStyle: 'void',
+    obstacles: ['obelisk', 'crystal', 'statue', 'pillar'], skin: 'void', bullet: ['#ffffff', '#c7d2fe', '#4338ca'] });
+
   // Chương nào dùng biome nào (xoay vòng theo phòng thường). Chương sự kiện (999) trộn tất cả.
   const POOLS = {
     1: ['stone', 'forest', 'mine', 'swamp', 'crypt'],
     2: ['lava', 'desert', 'ash', 'canyon'],
     3: ['void', 'crystal', 'ice', 'astral', 'temple'],
     4: ['dragon_realm', 'ice', 'crystal', 'astral'],
-    5: ['eclipse_reach', 'obsidian_garden', 'starfall_rift', 'eclipse_reach']
+    5: ['eclipse_reach', 'obsidian_garden', 'starfall_rift', 'eclipse_reach'],
+    6: ['nebula_gate', 'frozen_choir', 'throne_of_stars', 'nebula_gate']
   };
-  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift'];
-  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne' };
+  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift', 'nebula_gate', 'frozen_choir', 'throne_of_stars'];
+  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne', astral_devourer: 'abyss_crown' };
 
   // Mỗi chương có một bản sắc trùm riêng; các chương đầu giữ nguyên bộ boss cũ.
   function bossTypeOfRoom(room) {
+    if (Game.chapter && Number(Game.chapter.id) === 6) return 'astral_devourer';
     if (Game.chapter && Number(Game.chapter.id) === 5) return 'eclipse_sovereign';
     if (Game.chapter && Number(Game.chapter.id) === 4) return 'elder_dragon';
     return room === 5 ? 'golem' : (room === 10 ? 'queen' : 'demon_king');
@@ -3348,7 +3370,7 @@ const ArenaV2 = (() => {
   };
   const TYPEKEY = { slime: 'slime', goblin: 'goblin', skeleton_mage: 'mage', plant_turret: 'plant', bat: 'bat' };
   const skinOf = (B, type) => (SK[B.skin] || SK.stone)[TYPEKEY[type]];
-  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', rift_stalker: '#c084fc', eclipse_oracle: '#f0abfc', obsidian_brute: '#34d399', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9', eclipse_sovereign: '#c084fc' };
+  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', rift_stalker: '#c084fc', eclipse_oracle: '#f0abfc', obsidian_brute: '#34d399', nebula_herald: '#22d3ee', frost_sentinel: '#7dd3fc', star_wraith: '#818cf8', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9', eclipse_sovereign: '#c084fc', astral_devourer: '#818cf8' };
 
   const eyes = (ctx, x, y, s, col = '#fff', pupil = '#0f172a') => {
     for (const d of [-1, 1]) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x + d * s * 1.1, y, s * 0.72, s * 0.9, 0, 0, TAU); ctx.fill(); ctx.fillStyle = pupil; ctx.beginPath(); ctx.arc(x + d * s * 1.1 + 0.6, y + 0.5, s * 0.38, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); ctx.arc(x + d * s * 1.1 - 0.4, y - 0.8, s * 0.16, 0, TAU); ctx.fill(); }
@@ -3699,6 +3721,313 @@ const ArenaV2 = (() => {
     ctx.restore();
   }
 
+  // ---------- Quái Chương 6 ----------
+
+  // Sứ Giả Tinh Vân: cá thể lơ lửng, ba mắt, vành sáng xoay chậm quanh thân.
+  function drawNebulaHerald(ctx, r, t) {
+    const bob = Math.sin(t * .0055) * r * .12, spin = t * .0011;
+    ctx.save(); ctx.translate(0, bob);
+    // Hào quang nền
+    const halo = ctx.createRadialGradient(0, 0, r * .2, 0, 0, r * 1.9);
+    halo.addColorStop(0, 'rgba(34,211,238,.34)');
+    halo.addColorStop(.45, 'rgba(56,189,248,.14)');
+    halo.addColorStop(1, 'rgba(29,78,216,0)');
+    ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(0, 0, r * 1.9, 0, TAU); ctx.fill();
+    // Vành nghiêng xoay
+    ctx.strokeStyle = 'rgba(165,243,252,.75)'; ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.ellipse(0, -r * .18, r * 1.34, r * .44, spin, 0, TAU); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0, -r * .18, r * 1.62, r * .58, -spin * .7, 0, TAU); ctx.stroke();
+    ctx.setLineDash([]);
+    // Thân: giọt nước ngược, gradient từ trắng băng sang xanh đậm
+    const body = ctx.createLinearGradient(-r * .6, -r, r * .6, r);
+    body.addColorStop(0, '#ecfeff'); body.addColorStop(.3, '#22d3ee');
+    body.addColorStop(.7, '#0e7490'); body.addColorStop(1, '#082f49');
+    ctx.fillStyle = body; ctx.strokeStyle = '#67e8f9'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, -r * 1.16);
+    ctx.bezierCurveTo(r * .82, -r * .5, r * .74, r * .62, 0, r * .98);
+    ctx.bezierCurveTo(-r * .74, r * .62, -r * .82, -r * .5, 0, -r * 1.16);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    // Ba mắt
+    const eyePulse = .7 + .3 * Math.sin(t * .009);
+    orb(ctx, 0, -r * .34, r * .3, '#a5f3fc', .9);
+    ctx.fillStyle = '#082f49'; ctx.beginPath(); ctx.ellipse(0, -r * .34, r * .16, r * .21, 0, 0, TAU); ctx.fill();
+    for (const d of [-1, 1]) {
+      orb(ctx, d * r * .34, -r * .02, r * .17, '#67e8f9', eyePulse);
+      ctx.fillStyle = '#082f49';
+      ctx.beginPath(); ctx.ellipse(d * r * .34, -r * .02, r * .085, r * .12, 0, 0, TAU); ctx.fill();
+    }
+    // Xúc tu dưới, lượn sóng lệch pha
+    ctx.strokeStyle = 'rgba(103,232,249,.85)'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    for (let i = 0; i < 3; i++) {
+      const x0 = (i - 1) * r * .26, ph = t * .008 + i * .9;
+      ctx.beginPath(); ctx.moveTo(x0, r * .86);
+      ctx.quadraticCurveTo(x0 + Math.sin(ph) * r * .3, r * 1.32, x0 + Math.sin(ph) * r * .52, r * 1.62);
+      ctx.stroke();
+    }
+    // Sao nhỏ bay quanh
+    for (let i = 0; i < 5; i++) {
+      const a = spin * 2.2 + i * TAU / 5, rr = r * (1.15 + .18 * Math.sin(t * .004 + i));
+      orb(ctx, Math.cos(a) * rr, -r * .2 + Math.sin(a) * rr * .55, r * .07, '#ffffff', .75);
+    }
+    ctx.restore();
+  }
+
+  // Băng Vệ Binh: khối băng đa diện, có sóng lạnh toả ra và lõi sáng.
+  function drawFrostSentinel(ctx, r, t) {
+    const pulse = .68 + .32 * Math.sin(t * .006), sway = Math.sin(t * .0042) * .05;
+    ctx.save(); ctx.rotate(sway);
+    // Sóng lạnh toả ra theo chu kỳ
+    for (let k = 0; k < 3; k++) {
+      const ph = ((t * .0009 + k / 3) % 1);
+      ctx.strokeStyle = 'rgba(186,230,253,' + (0.42 * (1 - ph)) + ')';
+      ctx.lineWidth = 2.2 * (1 - ph) + .6;
+      ctx.beginPath(); ctx.arc(0, 0, r * (.7 + ph * 1.5), 0, TAU); ctx.stroke();
+    }
+    // Gai băng phía sau
+    for (let i = 0; i < 6; i++) {
+      const a = -Math.PI * .82 + i * Math.PI * .33;
+      const len = r * (.9 + .26 * Math.sin(t * .005 + i * 1.3));
+      ctx.fillStyle = 'rgba(224,242,254,.9)'; ctx.strokeStyle = '#7dd3fc'; ctx.lineWidth = 1.4;
+      poly(ctx, [
+        [Math.cos(a) * r * .5, Math.sin(a) * r * .5],
+        [Math.cos(a + .14) * len, Math.sin(a + .14) * len],
+        [Math.cos(a - .14) * len, Math.sin(a - .14) * len],
+      ]); ctx.fill(); ctx.stroke();
+    }
+    // Thân tinh thể
+    const body = ctx.createLinearGradient(-r, -r, r, r);
+    body.addColorStop(0, '#f0f9ff'); body.addColorStop(.32, '#7dd3fc');
+    body.addColorStop(.68, '#0284c7'); body.addColorStop(1, '#082f49');
+    ctx.fillStyle = body; ctx.strokeStyle = '#e0f2fe'; ctx.lineWidth = 2.4;
+    poly(ctx, [[0, -r * 1.05], [r * .78, -r * .38], [r * .62, r * .72], [0, r * 1.06], [-r * .62, r * .72], [-r * .78, -r * .38]]);
+    ctx.fill(); ctx.stroke();
+    // Mặt cắt nội bộ
+    ctx.strokeStyle = 'rgba(240,249,255,.5)'; ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(0, -r * 1.05); ctx.lineTo(0, r * 1.06);
+    ctx.moveTo(-r * .78, -r * .38); ctx.lineTo(r * .78, -r * .38);
+    ctx.moveTo(-r * .62, r * .72); ctx.lineTo(r * .62, r * .72);
+    ctx.stroke();
+    // Lõi
+    orb(ctx, 0, -r * .06, r * .5, '#ffffff', pulse);
+    orb(ctx, 0, -r * .06, r * .26, '#bae6fd', .95);
+    // Mắt
+    for (const d of [-1, 1]) {
+      ctx.fillStyle = '#082f49';
+      ctx.beginPath(); ctx.ellipse(d * r * .26, -r * .3, r * .1, r * .15, 0, 0, TAU); ctx.fill();
+      orb(ctx, d * r * .26, -r * .3, r * .09, '#ffffff', .8);
+    }
+    ctx.restore();
+  }
+
+  // Ảnh Vệ Tinh Tú: bóng tối có viền sao, di chuyển như đang tan chảy.
+  function drawStarWraith(ctx, r, t) {
+    const drift = Math.sin(t * .0062) * r * .1, wave = t * .004;
+    ctx.save();
+    // Vệt đuôi phía sau, mờ dần
+    for (let i = 3; i >= 1; i--) {
+      const a = .1 + i * .07, off = i * r * .28;
+      ctx.fillStyle = 'rgba(129,140,248,' + a + ')';
+      ctx.beginPath();
+      ctx.ellipse(Math.sin(wave + i) * r * .16, drift + off, r * (.58 - i * .08), r * (.8 - i * .1), 0, 0, TAU);
+      ctx.fill();
+    }
+    // Thân chính: gradient tím than
+    const body = ctx.createRadialGradient(-r * .16, -r * .3, r * .1, 0, 0, r * 1.1);
+    body.addColorStop(0, '#c7d2fe'); body.addColorStop(.4, '#6366f1');
+    body.addColorStop(.78, '#312e81'); body.addColorStop(1, '#0b0a1f');
+    ctx.fillStyle = body; ctx.strokeStyle = 'rgba(165,180,252,.85)'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    // Viền răng cưa nhấp nhô theo thời gian
+    const pts = [];
+    for (let i = 0; i < 14; i++) {
+      const a = i / 14 * TAU - Math.PI / 2;
+      const rr = r * (1 + .13 * Math.sin(a * 4 + wave * 2));
+      pts.push([Math.cos(a) * rr, Math.sin(a) * rr * 1.08]);
+    }
+    poly(ctx, pts); ctx.fill(); ctx.stroke();
+    // Mũ trùm
+    ctx.fillStyle = 'rgba(11,10,31,.9)';
+    ctx.beginPath(); ctx.ellipse(0, -r * .14, r * .56, r * .62, 0, 0, TAU); ctx.fill();
+    // Mắt đôi phát sáng
+    const glow = .72 + .28 * Math.sin(t * .011);
+    for (const d of [-1, 1]) {
+      orb(ctx, d * r * .22, -r * .18, r * .21, '#a5b4fc', glow);
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.ellipse(d * r * .22, -r * .18, r * .07, r * .1, 0, 0, TAU); ctx.fill();
+    }
+    // Sao nhỏ nằm trong thân
+    for (let i = 0; i < 6; i++) {
+      const a = t * .0013 + i * TAU / 6, rr = r * (.4 + .3 * Math.sin(t * .003 + i * 2));
+      ctx.fillStyle = 'rgba(224,231,255,' + (.4 + .4 * Math.sin(t * .007 + i)) + ')';
+      ctx.beginPath(); ctx.arc(Math.cos(a) * rr, Math.sin(a) * rr * .8, r * .045, 0, TAU); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ---------- Boss Chương 6: Thực Thần Tinh Hà ----------
+  //
+  // Ba lớp chuyển động độc lập:
+  //   1. Vòng sao bên ngoài quay chậm, bán kính co giãn theo nhịp thở
+  //   2. Cánh tinh vân vỗ lệch pha, độ dài tăng khi máu giảm (cuồng nộ)
+  //   3. Lõi hố đen: đĩa bồi tụ quay nhanh, kèm tia phụt khi charge
+  function drawAstralDevourer(ctx, r, t, hr, charge) {
+    const rage = 1 - hr;
+    const pulse = .72 + .28 * Math.sin(t * .007);
+    const glow = Math.min(1.5, .55 + rage * .75 + (charge ? .45 : 0));
+    const breath = 1 + .06 * Math.sin(t * .0045);
+
+    ctx.save();
+
+    // ---- 1. Vòng sao ngoài cùng ----
+    const ringSpin = t * .00042;
+    for (let ring = 0; ring < 3; ring++) {
+      const rr = r * (1.55 + ring * .34) * breath;
+      const tilt = .48 + ring * .12;
+      ctx.save();
+      ctx.rotate(ringSpin * (ring % 2 ? -1 : 1) * (1 + ring * .35));
+      ctx.strokeStyle = ring === 0
+        ? 'rgba(199,210,254,.8)'
+        : (ring === 1 ? 'rgba(129,140,248,.55)' : 'rgba(99,102,241,.32)');
+      ctx.lineWidth = 3.4 - ring * .8;
+      ctx.setLineDash(ring === 2 ? [10, 9] : []);
+      ctx.beginPath(); ctx.ellipse(0, -r * .34, rr, rr * tilt, 0, 0, TAU); ctx.stroke();
+      ctx.setLineDash([]);
+      // Sao gắn trên vòng
+      const stars = 6 + ring * 3;
+      for (let i = 0; i < stars; i++) {
+        const a = i / stars * TAU + ringSpin * (3 + ring);
+        const x = Math.cos(a) * rr, y = -r * .34 + Math.sin(a) * rr * tilt;
+        const tw = .45 + .55 * Math.abs(Math.sin(t * .006 + i + ring));
+        orb(ctx, x, y, r * (.055 + ring * .012), '#ffffff', tw * .9);
+      }
+      ctx.restore();
+    }
+
+    // ---- 2. Cánh tinh vân ----
+    for (const d of [-1, 1]) {
+      ctx.save();
+      ctx.rotate(d * (Math.sin(t * .0032) * .06 + rage * .04));
+      const wingLen = r * (2.5 + rage * .55);
+      const wg = ctx.createLinearGradient(0, -r * 1.5, d * wingLen, r * .9);
+      wg.addColorStop(0, 'rgba(224,231,255,.95)');
+      wg.addColorStop(.28, 'rgba(129,140,248,.9)');
+      wg.addColorStop(.62, 'rgba(67,56,202,.82)');
+      wg.addColorStop(1, 'rgba(11,10,31,.15)');
+      ctx.fillStyle = wg;
+      ctx.strokeStyle = 'rgba(199,210,254,.7)';
+      ctx.lineWidth = 2.6;
+      // Cánh: đường cong kép tạo cảm giác màng mỏng
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(d * r * .55, -r * 2.0, d * wingLen, -r * 1.5);
+      ctx.quadraticCurveTo(d * wingLen * .82, -r * .4, d * r * 1.42, r * .18);
+      ctx.quadraticCurveTo(d * r * 1.9, r * .82, d * wingLen * .72, r * .95);
+      ctx.quadraticCurveTo(d * r * .58, r * .42, 0, 0);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      // Gân cánh
+      ctx.strokeStyle = 'rgba(224,231,255,.5)'; ctx.lineWidth = 1.6;
+      for (let k = 1; k <= 3; k++) {
+        const f = k / 4;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.quadraticCurveTo(
+          d * r * (.5 + f * 1.5), -r * (1.9 - f * .9),
+          d * wingLen * (.45 + f * .5), -r * (1.35 - f * 1.5),
+        );
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // ---- 3. Thân ----
+    const body = ctx.createRadialGradient(-r * .2, -r * .42, r * .12, 0, 0, r * 1.25);
+    body.addColorStop(0, '#e0e7ff'); body.addColorStop(.24, '#818cf8');
+    body.addColorStop(.58, '#312e81'); body.addColorStop(.86, '#100e2e');
+    body.addColorStop(1, '#03030c');
+    ctx.fillStyle = body;
+    ctx.strokeStyle = '#c7d2fe';
+    ctx.lineWidth = 3.4;
+    ctx.beginPath();
+    ctx.ellipse(0, r * .06, r * .92 * breath, r * 1.14 * breath, 0, 0, TAU);
+    ctx.fill(); ctx.stroke();
+
+    // Vương miện gai
+    ctx.fillStyle = 'rgba(199,210,254,.92)';
+    ctx.strokeStyle = 'rgba(67,56,202,.85)';
+    ctx.lineWidth = 1.8;
+    const crown = [];
+    const spikes = 9;
+    for (let i = 0; i < spikes; i++) {
+      const f = i / (spikes - 1);
+      const a = -Math.PI * .92 + f * Math.PI * .84;
+      const base = r * .78;
+      const len = r * (1.28 + (i % 2 ? .52 : .18) + .16 * Math.sin(t * .006 + i));
+      crown.push([Math.cos(a) * base, Math.sin(a) * base * .82 - r * .5]);
+      crown.push([Math.cos(a) * len, Math.sin(a) * len * .82 - r * .5]);
+    }
+    ctx.beginPath();
+    ctx.moveTo(crown[0][0], crown[0][1]);
+    for (let i = 1; i < crown.length; i++) ctx.lineTo(crown[i][0], crown[i][1]);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+
+    // ---- Lõi hố đen ----
+    const coreX = 0, coreY = r * .1, coreR = r * .62 * breath;
+    // Đĩa bồi tụ quay nhanh
+    ctx.save();
+    ctx.translate(coreX, coreY);
+    ctx.rotate(t * .0018);
+    for (let k = 0; k < 3; k++) {
+      const rg = ctx.createLinearGradient(-coreR, 0, coreR, 0);
+      rg.addColorStop(0, 'rgba(224,231,255,.92)');
+      rg.addColorStop(.5, 'rgba(165,180,252,.75)');
+      rg.addColorStop(1, 'rgba(67,56,202,.1)');
+      ctx.strokeStyle = rg;
+      ctx.lineWidth = 4.5 - k * 1.1;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, coreR * (.62 + k * .3), coreR * (.24 + k * .13), 0, 0, TAU);
+      ctx.stroke();
+    }
+    ctx.restore();
+    // Hố đen
+    ctx.fillStyle = '#02020a';
+    ctx.beginPath(); ctx.arc(coreX, coreY, coreR * .46, 0, TAU); ctx.fill();
+    // Vành photon
+    ctx.strokeStyle = 'rgba(224,231,255,' + (.75 + .25 * pulse) + ')';
+    ctx.lineWidth = 3.2;
+    ctx.beginPath(); ctx.arc(coreX, coreY, coreR * .5, 0, TAU); ctx.stroke();
+    orb(ctx, coreX, coreY, coreR * .92, charge ? '#ffffff' : '#818cf8', glow * pulse);
+
+    // Mắt trên trán
+    const eyeY = -r * .72;
+    orb(ctx, 0, eyeY, r * .3, '#ffffff', glow);
+    ctx.fillStyle = '#100e2e';
+    ctx.beginPath(); ctx.ellipse(0, eyeY, r * .085, r * .19, 0, 0, TAU); ctx.fill();
+
+    // Tia phụt khi charge
+    if (charge) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < 10; i++) {
+        const a = t * .0022 + i * TAU / 10;
+        const len = r * (1.5 + .4 * Math.sin(t * .012 + i));
+        const g2 = ctx.createLinearGradient(coreX, coreY, Math.cos(a) * len, coreY + Math.sin(a) * len);
+        g2.addColorStop(0, 'rgba(255,255,255,.95)');
+        g2.addColorStop(1, 'rgba(129,140,248,0)');
+        ctx.strokeStyle = g2; ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(coreX, coreY);
+        ctx.lineTo(Math.cos(a) * len, coreY + Math.sin(a) * len);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+
   function drawEclipseSovereign(ctx, r, t, hr, charge) {
     const rage=1-hr, pulse=.72+.28*Math.sin(t*.008), glow=Math.min(1.45,.55+rage*.7+(charge?.45:0));
     ctx.save(); ctx.rotate(t*.00035);
@@ -3794,7 +4123,8 @@ const ArenaV2 = (() => {
 
   const BOSSFN = {
     golem: drawGolem, queen: drawQueen, demon_king: drawDemon,
-    elder_dragon: drawElderDragon, eclipse_sovereign: drawEclipseSovereign
+    elder_dragon: drawElderDragon, eclipse_sovereign: drawEclipseSovereign,
+    astral_devourer: drawAstralDevourer
   };
 
   // ---------- trạng thái hiển thị riêng từng quái (không ghi vào dữ liệu game) ----------
@@ -3809,6 +4139,9 @@ const ArenaV2 = (() => {
     if (ty === 'rift_stalker') { drawRiftStalker(ctx, r, t); return; }
     if (ty === 'eclipse_oracle') { drawEclipseOracle(ctx, r, t); return; }
     if (ty === 'obsidian_brute') { drawObsidianBrute(ctx, r, t); return; }
+    if (ty === 'nebula_herald') { drawNebulaHerald(ctx, r, t); return; }
+    if (ty === 'frost_sentinel') { drawFrostSentinel(ctx, r, t); return; }
+    if (ty === 'star_wraith') { drawStarWraith(ctx, r, t); return; }
     if (BOSSFN[ty]) { const hr = clamp(e.hp / Math.max(1, e.maxHp), 0, 1); BOSSFN[ty](ctx, r, t, hr, e.attackTimer > 0 && e.attackTimer < 0.48); return; }
     const sk = skinOf(B, ty);
     if (!sk) { blob(ctx, r, '#94a3b8', '#334155'); ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.fill(); ctx.stroke(); eyes(ctx, 0, -2, 3); return; }
@@ -4205,6 +4538,31 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           mapAsset: '/assets/map-ch5-eclipse-kingdom.svg',
           mapRegion: 'Vương Quốc Nhật Thực',
           mapTagline: 'Khi mặt trời tắt lịm, ngai vàng hắc tinh thức tỉnh giữa những vết nứt không gian.',
+        },
+        {
+          id: 6,
+          name: 'Chương 6: Vực Thẳm Thiên Hà',
+          modeLabel: 'Thập Tự Chinh Tinh Hà (15 Phòng Hư Không)',
+          desc: 'Băng qua cổng tinh vân, ca đoàn băng giá và ngai sao lưu lạc. Chạm mặt Thực Thần Tinh Hà — kẻ nuốt ánh sáng của cả một thiên hà.',
+          rooms: 15,
+          floorColor1: '#0e1633',
+          floorColor2: '#05081a',
+          wallColor: '#1f3a6e',
+          enemyScale: 2.95,
+          icon: '🌌',
+          accent: '#818cf8',
+          accent2: '#22d3ee',
+          gradFrom: '#1e1b4b',
+          gradTo: '#05081a',
+          difficulty: 5,
+          difficultyLabel: 'Thần Thoại — Hư Không',
+          themeName: 'Thiên Hà',
+          bossIcon: '🌌',
+          bossName: 'Thực Thần Tinh Hà',
+          unlock: { type: 'chapterWin', chapterId: 5, label: 'Thắng Chương 5' },
+          mapAsset: '/assets/map-ch6-abyssal-galaxy.svg',
+          mapRegion: 'Vực Thẳm Thiên Hà',
+          mapTagline: 'Nơi ánh sáng không thoát ra được, và mọi vì sao đều là mồi của bóng tối.',
         }
       ];
 
@@ -4380,6 +4738,38 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           behavior: 'Tạo vòng đạn nhật thực, quét quạt hắc tinh và bắn chéo bốn phương. Dưới 50% máu, boss cuồng nộ và rút ngắn nhịp tấn công.',
           threat: 7,
           stats: { speed: 76, contact: true, ranged: true }
+        },
+        {
+          id: 'nebula_herald', name: 'Sứ Giả Tinh Vân', icon: '🪐', tier: 'Thường',
+          color: '#22d3ee', aura: '#67e8f9',
+          lore: 'Sinh vật trôi dạt trong tầng khí tinh vân. Ba mắt của nó nhìn được cả vật chất tối, nên không có chỗ nào để nấp.',
+          behavior: 'Lơ lửng áp sát, xúc tu quật liên tục và bắn ba tia băng theo hình quạt rộng.',
+          threat: 4,
+          stats: { speed: 86, contact: true, ranged: true }
+        },
+        {
+          id: 'frost_sentinel', name: 'Băng Vệ Binh', icon: '❄️', tier: 'Tinh Anh',
+          color: '#7dd3fc', aura: '#38bdf8',
+          lore: 'Tinh thể sống được rèn trong ca đoàn băng giá. Mỗi lớp giáp là một thế kỷ lạnh tích tụ.',
+          behavior: 'Đứng yên gần như tuyệt đối, toả sóng lạnh gây sát thương và làm chậm, rất lì đòn.',
+          threat: 5,
+          stats: { speed: 30, contact: true, ranged: true }
+        },
+        {
+          id: 'star_wraith', name: 'Ảnh Vệ Tinh Tú', icon: '👻', tier: 'Tinh Anh',
+          color: '#818cf8', aura: '#a5b4fc',
+          lore: 'Linh hồn của những ngôi sao đã tắt. Chúng không tấn công vì đói, mà vì ghen tị với ánh sáng còn sống.',
+          behavior: 'Tan chảy qua vật cản, lướt nhanh và phóng loạt mảnh sao truy đuổi khi người chơi đứng yên.',
+          threat: 5,
+          stats: { speed: 94, contact: true, ranged: true }
+        },
+        {
+          id: 'astral_devourer', name: 'Thực Thần Tinh Hà', icon: '🌌', tier: 'TRÙM CUỐI',
+          color: '#818cf8', aura: '#c7d2fe',
+          lore: 'Không phải sinh vật, mà là một hố đen đã học được cách mặc áo giáp. Ba vành sao của nó từng là ba hệ mặt trời.',
+          behavior: 'Phóng vành sao xoáy nhiều lớp, triệu hồi tinh vân phủ kín sân, và bắn tia hư không xuyên mọi vật cản. Dưới 40% máu, đĩa bồi tụ mở rộng và nhịp tấn công tăng mạnh.',
+          threat: 8,
+          stats: { speed: 64, contact: true, ranged: true }
         }
       ];
 
@@ -27047,13 +27437,17 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         if (isBossRoomNow) {
           SoundFX.bossSpawn();
-          const bossType = Game.chapter && Number(Game.chapter.id) === 5 ? 'eclipse_sovereign' : (Game.chapter && Number(Game.chapter.id) === 4 ? 'elder_dragon' : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king')));
+          const bossType = Game.chapter && Number(Game.chapter.id) === 6 ? 'astral_devourer'
+            : (Game.chapter && Number(Game.chapter.id) === 5 ? 'eclipse_sovereign'
+              : (Game.chapter && Number(Game.chapter.id) === 4 ? 'elder_dragon'
+                : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king'))));
           const bossNames = {
             golem: '🔥 TRÙM: GOLEM DUNG NHAM',
             queen: '🕷️ TRÙM: NỮ HOÀNG NHỆN ĐỘC',
             demon_king: '👑 ĐẠI MA VƯƠNG ATREUS',
             elder_dragon: '🐉 TRÙM: CỔ LONG THIÊN KHÔNG',
-            eclipse_sovereign: '🌑 TRÙM CUỐI: BẠO CHÚA NHẬT THỰC'
+            eclipse_sovereign: '🌑 TRÙM CUỐI: BẠO CHÚA NHẬT THỰC',
+            astral_devourer: '🌌 TRÙM CUỐI: THỰC THẦN TINH HÀ'
           };
           // HP boss neo theo ATK người chơi (≈ số đòn đánh thường để hạ).
           // Scale phòng KHÔNG nhân vào HP nữa — đã tính bằng hitsToKill, nếu nhân
@@ -27092,11 +27486,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           hideBossIntro();
           document.getElementById('hudHintBanner').textContent = '💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!';
           const count = Math.min(8, 3 + Math.floor(roomNum / 2));
-          const types = Game.chapter && Number(Game.chapter.id) === 5
-            ? ['rift_stalker', 'eclipse_oracle', 'obsidian_brute']
-            : (Game.chapter && Number(Game.chapter.id) === 4
-              ? ['dragon_whelp', 'cloud_wisp', 'sky_sentinel']
-              : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat']);
+          const types = Game.chapter && Number(Game.chapter.id) === 6
+            ? ['nebula_herald', 'frost_sentinel', 'star_wraith']
+            : (Game.chapter && Number(Game.chapter.id) === 5
+              ? ['rift_stalker', 'eclipse_oracle', 'obsidian_brute']
+              : (Game.chapter && Number(Game.chapter.id) === 4
+                ? ['dragon_whelp', 'cloud_wisp', 'sky_sentinel']
+                : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat']));
 
           for (let i = 0; i < count; i++) {
             const t = types[(roomNum + i) % types.length];
