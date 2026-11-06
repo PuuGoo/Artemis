@@ -1204,6 +1204,17 @@
 #seasonContent .rounded-2xl{border-radius:13px!important}#seasonContent button:focus-visible{outline:2px solid #e4c17b;outline-offset:3px}
 @media(max-width:760px){#seasonContent{max-width:100%!important}.season-sigil{right:18px;opacity:.42}.season-player{min-width:145px}.season-stat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.season-boss-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.season-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.season-shell{padding:10px;border-radius:16px}.season-hero{min-height:155px;padding:18px 14px}.season-hero:before{right:-150px;top:-75px}.season-hero h2{font-size:27px;max-width:260px}.season-hero p{max-width:250px;font-size:9px}.season-sigil{right:-15px;width:100px;height:100px;opacity:.32}.season-sigil-ring{width:77px;height:77px}.season-sigil-number{font-size:32px}.season-resources{display:block;padding:9px;margin:8px 0 14px}.season-player{min-width:0;margin-bottom:8px;padding:0;border:0}.season-resource-list{grid-template-columns:repeat(3,minmax(0,1fr))}.season-resource b{font-size:10px}.season-heading{display:block}.season-heading h3{font-size:20px}.season-heading p{margin-top:5px;text-align:left}.season-path{grid-template-columns:repeat(2,minmax(0,1fr))}.season-path>button{min-height:51px;padding:7px}.season-path-title{font-size:9px}.season-path-sub{font-size:6px}.season-stage-panel{padding:10px}.season-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.season-card-grid{grid-template-columns:1fr}.season-boss-grid{grid-template-columns:1fr}.season-current-boss{grid-template-columns:1fr}.season-exchange-layout{grid-template-columns:1fr}.season-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.season-panel-head h4{font-size:17px}}
+
+/* Harmonize existing season subviews with the redesigned shell */
+#seasonContent #seasonSubScreen>.rounded-2xl{padding:15px!important;border:1px solid rgba(178,196,220,.18)!important;border-radius:14px!important;background:linear-gradient(145deg,rgba(20,35,51,.98),rgba(9,18,29,.98))!important;box-shadow:0 12px 32px rgba(0,0,0,.16)}
+#seasonContent #seasonSubScreen .rounded-lg{border-radius:10px!important}
+#seasonContent #seasonSubScreen button[data-pick-career],#seasonContent #seasonSubScreen button[data-pick-boss]{display:flex;align-items:center;gap:12px;width:100%;min-height:74px;margin:6px 0;padding:12px!important;border:1px solid rgba(178,196,220,.16)!important;border-radius:12px!important;background:linear-gradient(145deg,rgba(28,45,64,.92),rgba(13,23,36,.96))!important;text-align:left;transition:border-color .16s,transform .16s}
+#seasonContent #seasonSubScreen button[data-pick-career]:hover,#seasonContent #seasonSubScreen button[data-pick-boss]:hover{border-color:rgba(228,193,123,.4)!important;transform:translateY(-1px)}
+#seasonContent #seasonSubScreen button[data-pick-career].border-cyan-400{border-color:rgba(228,193,123,.75)!important;background:linear-gradient(120deg,rgba(119,88,47,.22),rgba(18,42,54,.94))!important}
+#seasonContent #seasonSubScreen button[data-season-buy]{border-radius:9px!important;background:linear-gradient(135deg,#8ce0dc,#3aabae)!important;color:#092022!important;font-weight:900!important}
+#seasonContent #seasonSubScreen #btnSeasonBossClose,#seasonContent #seasonSubScreen #btnSeasonCareerClose,#seasonContent #seasonSubScreen #btnSeasonExClose{width:auto;min-width:32px;min-height:30px;padding:6px 10px!important;border-radius:9px!important;background:rgba(9,17,28,.8)!important;color:#d7e0e9!important}
+#seasonContent #seasonSubScreen .bg-rose-500\\/12{background:rgba(125,48,59,.12)!important}
+@media(max-width:540px){#seasonContent #seasonSubScreen>.rounded-2xl{padding:11px!important}#seasonContent #seasonSubScreen button[data-pick-career],#seasonContent #seasonSubScreen button[data-pick-boss]{min-height:68px;padding:10px!important}}
 </style>
 
 
@@ -14276,7 +14287,10 @@ function renderSeasonCareer(box) {
               </div>`}
           </div>`;
 
-        document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSeasonScreen);
+                box.querySelectorAll('[data-season-screen]').forEach(button => {
+          button.addEventListener('click', () => openSeasonScreen(button.getAttribute('data-season-screen')));
+        });
+document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSeasonScreen);
         box.querySelectorAll('[data-pick-boss]').forEach(b => {
           b.addEventListener('click', () => {
             if (recruitSeasonBoss(b.getAttribute('data-pick-boss'))) {
