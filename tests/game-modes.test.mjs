@@ -9,7 +9,7 @@
 // HUD báo phòng thường trong khi thực tế là trùm, hoặc ngược lại.
 //
 // Test khoá:
-//   1. Có đúng 5 chế độ với cờ hành vi đúng
+//   1. Có đúng 6 chế độ với cờ hành vi đúng
 //   2. isBossRoom là NGUỒN DUY NHẤT quyết định phòng trùm
 //   3. maxRooms theo chế độ (chương thật / vô hạn / cố định)
 //   4. Luyện Tập không sinh tài nguyên, không chết thật
@@ -53,7 +53,7 @@ check('Hang Vàng cố định 5 phòng và dùng luật boss hiện có',
 check('Hang Vàng chỉ nhận vàng với hệ số riêng',
   modesBlk.includes("goldOnly: true") && modesBlk.includes("goldMultiplier: 3"));
 
-check('moi che do co ten tieng Viet + icon', (modesBlk.match(/name: '[^']+'/g) || []).length === 5
+check('moi che do co ten tieng Viet + icon', (modesBlk.match(/name: '[^']+'/g) || []).length === 6
   && (modesBlk.match(/icon: '/g) || []).length === 6);
 
 // ============================================================ 2. PHÒNG TRÙM
