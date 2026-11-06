@@ -2590,21 +2590,41 @@ const ArenaV2 = (() => {
     floor: 'void', wall: 'obsidian', props: ['rift', 'stars', 'rune', 'crystalSmall', 'constellation'], wallProps: ['spikes', 'chains', 'crystals', 'columns'], ambient: 'stars', torchStyle: 'void',
     obstacles: ['crystal', 'obelisk', 'pillar'], skin: 'void', bullet: ['#ffffff', '#e9d5ff', '#a855f7'] });
 
+  def('frostfall', { label: 'Biển Băng Tinh Vân', f1: '#102b4b', f2: '#08162f', wall0: '#050e20', wall1: '#245078', trim: '#bae6fd', accent: '#38bdf8',
+    glow: 'rgba(125,211,252,', torch: ['#f0f9ff', '#38bdf8'], fog: 'rgba(56,189,248,', ob0: '#244b70', ob1: '#0c1d35', obTop: '#a5f3fc', vein: 'rgba(186,230,253,',
+    floor: 'star', wall: 'crystal', props: ['icecrack', 'crystalSmall', 'stars', 'sparkleSpot', 'rune'], wallProps: ['crystals', 'icicles', 'columns'], ambient: 'stars', torchStyle: 'crystal',
+    obstacles: ['crystal', 'pillar', 'obelisk', 'rock'], skin: 'ice', bullet: ['#ffffff', '#bae6fd', '#38bdf8'] });
+  def('aurora_shelf', { label: 'Thềm Cực Quang', f1: '#122b4b', f2: '#10183d', wall0: '#050d24', wall1: '#344b83', trim: '#c4b5fd', accent: '#a78bfa',
+    glow: 'rgba(167,139,250,', torch: ['#e0f2fe', '#8b5cf6'], fog: 'rgba(129,140,248,', ob0: '#293d68', ob1: '#101a37', obTop: '#c4b5fd', vein: 'rgba(165,243,252,',
+    floor: 'star', wall: 'crystal', props: ['constellation', 'stars', 'crystalSmall', 'icecrack', 'sparkleSpot'], wallProps: ['crystals', 'icicles', 'columns'], ambient: 'stars', torchStyle: 'crystal',
+    obstacles: ['crystal', 'obelisk', 'pillar', 'statue'], skin: 'ice', bullet: ['#ffffff', '#c4b5fd', '#67e8f9'] });
+  def('glacier_spire', { label: 'Tháp Băng Cửu Diệu', f1: '#16294b', f2: '#081329', wall0: '#050c1c', wall1: '#31557e', trim: '#e0f2fe', accent: '#7dd3fc',
+    glow: 'rgba(186,230,253,', torch: ['#ffffff', '#7dd3fc'], fog: 'rgba(125,211,252,', ob0: '#315477', ob1: '#0a1c34', obTop: '#e0f2fe', vein: 'rgba(147,197,253,',
+    floor: 'star', wall: 'crystal', props: ['rune', 'icecrack', 'crystalSmall', 'stars', 'constellation'], wallProps: ['icicles', 'crystals', 'columns'], ambient: 'stars', torchStyle: 'crystal',
+    obstacles: ['obelisk', 'crystal', 'pillar', 'rock'], skin: 'ice', bullet: ['#ffffff', '#e0f2fe', '#38bdf8'] });
+  def('ninth_star_arena', { label: 'Điện Tâm Tinh Long', boss: 'ninth_star_dragon', f1: '#102044', f2: '#070d22', wall0: '#030817', wall1: '#294b83', trim: '#e0f2fe', accent: '#7dd3fc',
+    glow: 'rgba(125,211,252,', torch: ['#ffffff', '#38bdf8'], fog: 'rgba(129,140,248,', ob0: '#24436e', ob1: '#09142d', obTop: '#e0f2fe', vein: 'rgba(192,132,252,',
+    floor: 'star', wall: 'crystal', props: ['constellation', 'rune', 'stars', 'crystalSmall', 'icecrack'], wallProps: ['crystals', 'icicles', 'columns'], ambient: 'stars', torchStyle: 'crystal',
+    obstacles: ['crystal', 'obelisk', 'pillar'], skin: 'ice', bullet: ['#ffffff', '#bae6fd', '#38bdf8'] });
+
   // Chương nào dùng biome nào (xoay vòng theo phòng thường). Chương sự kiện (999) trộn tất cả.
   const POOLS = {
     1: ['stone', 'forest', 'mine', 'swamp', 'crypt'],
     2: ['lava', 'desert', 'ash', 'canyon'],
     3: ['void', 'crystal', 'ice', 'astral', 'temple'],
     4: ['dragon_realm', 'ice', 'crystal', 'astral'],
-    5: ['eclipse_reach', 'obsidian_garden', 'starfall_rift', 'eclipse_reach']
+    5: ['eclipse_reach', 'obsidian_garden', 'starfall_rift', 'eclipse_reach'],
+    6: ['frostfall', 'aurora_shelf', 'glacier_spire', 'frostfall']
   };
-  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift'];
-  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne' };
+  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift', 'frostfall', 'aurora_shelf', 'glacier_spire'];
+  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne', ninth_star_dragon: 'ninth_star_arena' };
 
   // Mỗi chương có một bản sắc trùm riêng; các chương đầu giữ nguyên bộ boss cũ.
   function bossTypeOfRoom(room) {
-    if (Game.chapter && Number(Game.chapter.id) === 5) return 'eclipse_sovereign';
-    if (Game.chapter && Number(Game.chapter.id) === 4) return 'elder_dragon';
+    const chapterId = Number(Game.chapter && Game.chapter.id || 1);
+    if (chapterId === 6) return 'ninth_star_dragon';
+    if (chapterId === 5) return 'eclipse_sovereign';
+    if (chapterId === 4) return 'elder_dragon';
     return room === 5 ? 'golem' : (room === 10 ? 'queen' : 'demon_king');
   }
   /**
@@ -3348,7 +3368,7 @@ const ArenaV2 = (() => {
   };
   const TYPEKEY = { slime: 'slime', goblin: 'goblin', skeleton_mage: 'mage', plant_turret: 'plant', bat: 'bat' };
   const skinOf = (B, type) => (SK[B.skin] || SK.stone)[TYPEKEY[type]];
-  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', rift_stalker: '#c084fc', eclipse_oracle: '#f0abfc', obsidian_brute: '#34d399', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9', eclipse_sovereign: '#c084fc' };
+  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', rift_stalker: '#c084fc', eclipse_oracle: '#f0abfc', obsidian_brute: '#34d399', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9', eclipse_sovereign: '#c084fc', frostfang_wolf: '#67e8f9', aurora_wisp: '#a5f3fc', prism_knight: '#c4b5fd', ninth_star_dragon: '#7dd3fc' };
 
   const eyes = (ctx, x, y, s, col = '#fff', pupil = '#0f172a') => {
     for (const d of [-1, 1]) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x + d * s * 1.1, y, s * 0.72, s * 0.9, 0, 0, TAU); ctx.fill(); ctx.fillStyle = pupil; ctx.beginPath(); ctx.arc(x + d * s * 1.1 + 0.6, y + 0.5, s * 0.38, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); ctx.arc(x + d * s * 1.1 - 0.4, y - 0.8, s * 0.16, 0, TAU); ctx.fill(); }
@@ -4205,6 +4225,31 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           mapAsset: '/assets/map-ch5-eclipse-kingdom.svg',
           mapRegion: 'Vương Quốc Nhật Thực',
           mapTagline: 'Khi mặt trời tắt lịm, ngai vàng hắc tinh thức tỉnh giữa những vết nứt không gian.',
+        },
+        {
+          id: 6,
+          name: 'Chương 6: Tinh Hải Băng Ngục',
+          modeLabel: 'Chiến Dịch Cửu Diệu (15 Phòng Tinh Hải)',
+          desc: 'Vượt qua quần đảo pha lê trôi giữa cực quang, tiến vào Pháo Đài Cửu Diệu và đánh thức bí mật của Tinh Long. Hãy đánh bại Cửu Diệu Tinh Long để giải phóng tinh hải.',
+          rooms: 15,
+          floorColor1: '#0a1b38',
+          floorColor2: '#071126',
+          wallColor: '#1d4ed8',
+          enemyScale: 2.82,
+          icon: '❄️',
+          accent: '#7dd3fc',
+          accent2: '#818cf8',
+          gradFrom: '#164e63',
+          gradTo: '#0b102e',
+          difficulty: 5,
+          difficultyLabel: 'Thần Thoại — Cửu Diệu',
+          themeName: 'Tinh Hải',
+          bossIcon: '🐉',
+          bossName: 'Cửu Diệu Tinh Long',
+          unlock: { type: 'chapterWin', chapterId: 5, label: 'Thắng Chương 5' },
+          mapAsset: '/assets/map-ch6-frost-cosmos.svg',
+          mapRegion: 'Tinh Hải Băng Ngục',
+          mapTagline: 'Cực quang phủ lên những đảo băng lơ lửng; sâu trong pháo đài, chín vì sao đang thức tỉnh.',
         }
       ];
 
