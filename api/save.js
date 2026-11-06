@@ -1,7 +1,7 @@
 import { getMongoDb, COLLECTIONS } from "../lib/mongo.js";
 import { getCurrentPlayer, json, fail, readJsonBody, bumpRateLimit, clientIp } from "../lib/http.js";
 import { sanitizeSave, MAX_SAVE_BYTES } from "../lib/saveSchema.js";
-import { validateEconomyDelta } from "../lib/economy.js";
+import { validateEconomyDelta, validateSeasonDelta } from "../lib/economy.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -66,6 +66,23 @@ export async function PUT(request) {
       code: economy.code,
       detail: economy.detail,
       // Trả lại bản ghi server để client không ghi đè dữ liệu hỏng lên máy.
+      conflict: true,
+      serverRevision: save?.revision || 0,
+      serverData: save?.data || null,
+    }, 422);
+  }
+
+  // ===== Kiểm tra tiến trình Mùa Giải phía server =====
+  // Tiền Mùa chỉ được tăng khi save phản ánh một lần hi sinh hợp lệ (+60 mỗi 2%)
+  // hoặc một chuyển trạng thái hạ trùm hợp lệ (+120). Không nhận số dư do client tự khai.
+  const seasonEconomy = validateSeasonDelta(existing?.data || null, check.data);
+  if (!seasonEconomy.ok) {
+    const save = await saves.findOne({ playerId }, { projection: { revision: 1, data: 1 } });
+    return json({
+      ok: false,
+      error: seasonEconomy.reason,
+      code: seasonEconomy.code,
+      detail: seasonEconomy.detail,
       conflict: true,
       serverRevision: save?.revision || 0,
       serverData: save?.data || null,
