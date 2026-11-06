@@ -1888,6 +1888,11 @@
              Ban web lam ban don nguoi: trong/tuoi/thu hoach + doi thuong.
              Render boi renderGardenPanel(). -->
         <div id="gardenContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
+        <!-- ==================== SU KIEN THAT: MUA GIAI (season) ====================
+             Ban that co 5 man season*; ban web lam 4 man co co che that:
+             careerselect / bossrecruit / bossspecial / powerexchange.
+             Render boi renderSeasonPanel(). -->
+        <div id="seasonContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
         <!-- ==================== SU KIEN THAT: PLINKO ====================
              Ban that co 2 man: ui_activityplinko + ui_plinkoactivitychoosereward.
              Render boi renderPlinkoPanel(). -->
@@ -9052,6 +9057,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         //
         // { balls: n, history: [{bin, mult}], totalWon, bestMult }
         plinko: null,
+        // ---- MÙA GIẢI (season) ----
+        // Bản thật có 5 màn: seasoncareerselect, seasoncareerselectspineholder,
+        // seasonbossrecruit, seasonbossspecialmechanism, seasonbattlepowerexchange.
+        // Bản web làm 4 màn có cơ chế thật:
+        //   careerselect   — chọn 1 trong 4 nghề, mỗi nghề đổi chỉ số khác nhau
+        //                    (nối trực tiếp vào getComputedStats)
+        //   bossrecruit    — tuyển 1 trong 3 trùm mùa, mỗi trùm có cơ chế riêng
+        //   bossspecial    — cơ chế đặc biệt của trùm đã tuyển (hiển thị + áp dụng)
+        //   powerexchange  — hi sinh sức mạnh lấy Tiền Mùa (đổi quà)
+        //
+        // { season, career, tokens, boss, bossHp, bossMaxHp, bossDefeated,
+        //   powerSacrificed, log }
+        season: null,
         // Nhân vật mặc định: Alex (Braveheart) — tân thủ vào là có hero dùng được.
         // 0 sao: hasHeroSkillActive() chỉ so hero.id nên skill [Braveheart]
         // vẫn kích hoạt ở 0★. Từng để 1★ nhưng mốc sao 1★ cộng +40 ATK /
@@ -10788,6 +10806,22 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const setAtkRate = setBonuses.reduce((n,b)=>n+b.atk,0);
         const setHpRate = setBonuses.reduce((n,b)=>n+b.hp,0);
         const setAspdRate = setBonuses.reduce((n,b)=>n+(b.aspd||0),0);
+
+        // ===== NGHỀ NGHIỆP MÙA (seasoncareerselect) =====
+        // Nghề cộng theo TỈ LỆ vào tổng chỉ số, không phải số phẳng — để nó
+        // không bị mất giá khi người chơi lên trang bị về sau.
+        const _career = (typeof getSeasonCareerMeta === 'function') ? getSeasonCareerMeta() : null;
+        const careerAtkPct = _career ? (_career.atkPct || 0) : 0;
+        const careerHpPct = _career ? (_career.hpPct || 0) : 0;
+        const careerAspdPct = _career ? (_career.aspdPct || 0) : 0;
+        const careerCritFlat = _career ? (_career.critFlat || 0) : 0;
+        const careerDefFlat = _career ? (_career.defFlat || 0) : 0;
+        const careerDodgeFlat = _career ? (_career.dodgeFlat || 0) : 0;
+        const careerGoldPct = _career ? (_career.goldPct || 0) : 0;
+        const careerCritDmgPct = _career ? (_career.critDmgPct || 0) : 0;
+        // Hi sinh sức mạnh (powerexchange): giảm % chỉ số, đổi lấy Tiền Mùa.
+        const _sacPct = (typeof getSeasonPowerSacrificePct === 'function') ? getSeasonPowerSacrificePct() : 0;
+        const _sacMul = 1 - _sacPct;
         // Base ATK/HP của nhân vật khi CHƯA có bất kỳ bonus nào.
         //
         // Tân thủ nay bắt đầu tay không (0 trang bị), nên base phải tự đủ
@@ -10798,13 +10832,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // +230 HP) cho ra khoảng 112 / 650 — nằm giữa dải mục tiêu. Nếu để
         // 48/300 như trước, tân thủ chỉ còn ~82/750 (sát sàn) và trận đầu
         // quá chậm vì không có crit từ gear.
-        const baseAtk = Math.round((78 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25));
-        const baseHp = Math.round((420 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25));
-        const baseAspd = +(weapon.aspd * (1 + talentTotals.aspdBonus + epicCount * 0.03 + setAspdRate + affAspd + (runeTotals.aspdBonus || 0) + (artifactTotals.aspdBonus || 0) + starMilestone.aspdBonus + (activeSkin.bonusAspd || 0))).toFixed(2);
+        const baseAtk = Math.round((78 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25 + careerAtkPct) * _sacMul);
+        const baseHp = Math.round((420 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25 + careerHpPct) * _sacMul);
+        const baseAspd = +(weapon.aspd * (1 + talentTotals.aspdBonus + epicCount * 0.03 + setAspdRate + affAspd + (runeTotals.aspdBonus || 0) + (artifactTotals.aspdBonus || 0) + starMilestone.aspdBonus + (activeSkin.bonusAspd || 0) + careerAspdPct)).toFixed(2);
         const setCrit = setBonuses.reduce((n,b)=>n+b.crit,0);
-        const gearDodge = Math.min(.68, +(gemDodge + affDodge + talentTotals.dodgeBonus + (runeTotals.dodgeBonus || 0) + (artifactTotals.dodgeBonus || 0) + starMilestone.dodgeBonus + globalAll.dodgeBonus + setBonuses.reduce((n,b)=>n+b.dodge,0)).toFixed(3));
-        const baseCrit = Math.min(0.98, +(0.10 + weapon.critBonus + gemCrit + affCrit + setCrit + (runeTotals.critBonus || 0) + (artifactTotals.critRate || 0) + starMilestone.critBonus + globalAll.critRate + (activeSkin.bonusCrit || 0) + talentTotals.critRate).toFixed(2));
-        const totalGoldBonus = +(gemGold + affGold).toFixed(3);
+        const gearDodge = Math.min(.68, +(gemDodge + affDodge + talentTotals.dodgeBonus + (runeTotals.dodgeBonus || 0) + (artifactTotals.dodgeBonus || 0) + starMilestone.dodgeBonus + globalAll.dodgeBonus + setBonuses.reduce((n,b)=>n+b.dodge,0) + careerDodgeFlat).toFixed(3));
+        const baseCrit = Math.min(0.98, +(0.10 + weapon.critBonus + gemCrit + affCrit + setCrit + (runeTotals.critBonus || 0) + (artifactTotals.critRate || 0) + starMilestone.critBonus + globalAll.critRate + (activeSkin.bonusCrit || 0) + talentTotals.critRate + careerCritFlat).toFixed(2));
+        const totalGoldBonus = +(gemGold + affGold + careerGoldPct).toFixed(3);
 
         // ===== CRIT DMG: gom đủ 5 nguồn và chặn trên =====
         // Trước đây critDmgPct được tính ở 5 nơi nhưng damageEnemy() hardcode
@@ -10816,6 +10850,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           + (globalAll.critDmgPct || 0)
           + setBonuses.reduce((n, b) => n + (b.critDmgPct || 0), 0)
           + (activeSkin.bonusCritDmg || 0)
+          + careerCritDmgPct
         );
         const critDmgMult = +(1.85 + critDmgBonus).toFixed(3);
 
@@ -10832,6 +10867,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           + (runeTotals.defFlat || 0)
           + (artifactTotals.defFlat || 0)
           + (gemHp + affHpFlat) * 0.02
+          + careerDefFlat
         );
         const defK = 400 + 120 * ((Game.chapter && Game.chapter.rooms) || 15);
         const dmgReduction = +Math.min(0.75, defFlat / (defFlat + defK)).toFixed(4);
@@ -13783,6 +13819,553 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (it.give.gems) SaveState.gems += it.give.gems;
         SaveState.save();
         return true;
+      }
+
+      // ==================== MÙA GIẢI (season) ====================
+      //
+      // Bản thật có 5 màn: seasoncareerselect, seasoncareerselectspineholder,
+      // seasonbossrecruit, seasonbossspecialmechanism, seasonbattlepowerexchange.
+      // Bản web làm 4 màn có cơ chế THẬT (không phải mockup):
+      //
+      //   careerselect  — chọn 1/4 nghề. Nghề cộng tỉ lệ vào ATK/HP/ASPD/CRIT
+      //                   và nối TRỰC TIẾP vào getComputedStats(), nên đổi
+      //                   nghề là đổi luôn sức mạnh thật trong trận.
+      //   bossrecruit   — tuyển 1/3 trùm mùa, mỗi trùm có cơ chế khác nhau
+      //                   (giáp dày / phản đòn / hồi máu).
+      //   bossspecial   — xem + bật/tắt cơ chế đặc biệt của trùm đã tuyển.
+      //   powerexchange — hi sinh % ATK/HP vĩnh viễn lấy Tiền Mùa, đổi quà.
+      //
+      // Nghề KHÔNG cộng số phẳng mà cộng tỉ lệ, để không bị mất giá khi người
+      // chơi lên trang bị về sau.
+
+      const SEASON_CAREERS = [
+        {
+          id: 'blade', name: 'Kiếm Sĩ', icon: '⚔️', color: '#f87171',
+          desc: 'Sát thương vật lý thuần. Đánh nhanh, chí mạng cao.',
+          atkPct: 0.14, hpPct: 0.02, aspdPct: 0.06, critFlat: 0.04,
+          defFlat: 0, dodgeFlat: 0, goldPct: 0, critDmgPct: 0.10
+        },
+        {
+          id: 'ranger', name: 'Xạ Thủ', icon: '🏹', color: '#4ade80',
+          desc: 'Bắn xa, tốc độ bắn cao. Ít máu nhưng khó bị chạm.',
+          atkPct: 0.10, hpPct: 0, aspdPct: 0.14, critFlat: 0.02,
+          defFlat: 0, dodgeFlat: 0.05, goldPct: 0, critDmgPct: 0
+        },
+        {
+          id: 'guardian', name: 'Hộ Vệ', icon: '🛡️', color: '#60a5fa',
+          desc: 'Trâu bò, giảm sát thương. Sống lâu để tích luỹ kỹ năng.',
+          atkPct: 0.02, hpPct: 0.22, aspdPct: 0, critFlat: 0,
+          defFlat: 45, dodgeFlat: 0, goldPct: 0, critDmgPct: 0
+        },
+        {
+          id: 'mage', name: 'Pháp Sư', icon: '🔮', color: '#a855f7',
+          desc: 'Chí mạng cực mạnh. Đánh chậm nhưng mỗi đòn rất đau.',
+          atkPct: 0.06, hpPct: 0.06, aspdPct: 0, critFlat: 0.08,
+          defFlat: 0, dodgeFlat: 0, goldPct: 0, critDmgPct: 0.35
+        },
+        {
+          id: 'merchant', name: 'Thương Nhân', icon: '💰', color: '#facc15',
+          desc: 'Kiếm vàng tốt hơn. Yếu hơn trong chiến đấu nhưng lên đồ nhanh.',
+          atkPct: 0, hpPct: 0, aspdPct: 0, critFlat: 0,
+          defFlat: 0, dodgeFlat: 0, goldPct: 0.25, critDmgPct: 0
+        }
+      ];
+
+      const SEASON_BOSSES = [
+        {
+          id: 'ironhide', name: 'Thiết Giáp Vương', icon: '🦏', color: '#94a3b8',
+          desc: 'Giáp cực dày — giảm 40% sát thương nhận vào.',
+          special: 'damageReduction', specialVal: 0.40,
+          specialName: 'Thiết Giáp',
+          bossMul: 3.2
+        },
+        {
+          id: 'reflector', name: 'Kính Phản Chiếu', icon: '🪞', color: '#22d3ee',
+          desc: 'Phản lại 25% sát thương người chơi gây ra.',
+          special: 'reflect', specialVal: 0.25,
+          specialName: 'Phản Đòn',
+          bossMul: 2.6
+        },
+        {
+          id: 'regenerator', name: 'Sinh Mệnh Chi Thụ', icon: '🌳', color: '#4ade80',
+          desc: 'Hồi 2% máu mỗi giây — phải dồn sát thương nhanh.',
+          special: 'regen', specialVal: 0.02,
+          specialName: 'Hồi Sinh',
+          bossMul: 3.8
+        }
+      ];
+
+      const SEASON_SHOP = [
+        { id: 'se_gold', name: 'Túi Vàng Lớn', icon: '💰', cost: 40, give: { gold: 6000 } },
+        { id: 'se_gems', name: 'Đá Quý', icon: '💎', cost: 80, give: { gems: 200 } },
+        { id: 'se_gear', name: 'Rương Trang Bị', icon: '📦', cost: 150, give: { gold: 12000, gems: 300 } }
+      ];
+
+      /** Số % sức mạnh bị hi sinh mỗi lần đổi Tiền Mùa. */
+      const SEASON_SACRIFICE_STEP = 0.02;
+      const SEASON_SACRIFICE_MAX = 0.20;
+      const SEASON_TOKENS_PER_SACRIFICE = 60;
+
+      function ensureSeason() {
+        if (SaveState.season && typeof SaveState.season === 'object') return SaveState.season;
+        SaveState.season = {
+          season: 1,
+          career: null,
+          tokens: 0,
+          boss: null,
+          bossHp: 0,
+          bossMaxHp: 0,
+          bossDefeated: false,
+          powerSacrificed: 0,
+          log: []
+        };
+        return SaveState.season;
+      }
+
+      function getSeasonCareerMeta() {
+        const s = SaveState.season;
+        if (!s || !s.career) return null;
+        return SEASON_CAREERS.find(c => c.id === s.career) || null;
+      }
+
+      function getSeasonBossMeta() {
+        const s = SaveState.season;
+        if (!s || !s.boss) return null;
+        return SEASON_BOSSES.find(b => b.id === s.boss) || null;
+      }
+
+      /** % chỉ số đang bị hi sinh (0 nếu chưa đổi lần nào). */
+      function getSeasonPowerSacrificePct() {
+        const s = SaveState.season;
+        if (!s || !s.powerSacrificed) return 0;
+        // powerSacrificed lưu dạng phân số (0.02, 0.04, ...) nên dùng trực tiếp.
+        return Math.min(SEASON_SACRIFICE_MAX, Number(s.powerSacrificed) || 0);
+      }
+
+      function seasonLog(text) {
+        const s = ensureSeason();
+        s.log.unshift({ t: Date.now(), text });
+        if (s.log.length > 40) s.log.length = 40;
+      }
+
+      /** Chọn nghề. Đổi được bất cứ lúc nào nhưng mất Tiền Mùa để chống lạm dụng. */
+      function selectSeasonCareer(careerId) {
+        const s = ensureSeason();
+        const c = SEASON_CAREERS.find(x => x.id === careerId);
+        if (!c) return false;
+        const switching = !!s.career && s.career !== careerId;
+        const cost = switching ? 50 : 0;
+        if (s.tokens < cost) {
+          showToast(`Cần ${cost} Tiền Mùa để đổi nghề (đang có ${s.tokens}).`, 'err');
+          return false;
+        }
+        if (cost > 0) s.tokens -= cost;
+        s.career = careerId;
+        seasonLog(`${switching ? 'Đổi' : 'Chọn'} nghề: ${c.name}${cost ? ` (-${cost} Tiền Mùa)` : ''}.`);
+        SaveState.save();
+        return true;
+      }
+
+      /** Tuyển trùm mùa. HP neo theo tổng lực chiến người chơi. */
+      function recruitSeasonBoss(bossId) {
+        const s = ensureSeason();
+        const b = SEASON_BOSSES.find(x => x.id === bossId);
+        if (!b) return false;
+        if (s.boss && !s.bossDefeated) {
+          showToast('Phải hạ trùm mùa hiện tại trước khi tuyển trùm mới.', 'err');
+          return false;
+        }
+        let power = 5000;
+        try { power = Math.max(1000, getComputedStats().powerScore || 5000); } catch (e) { /* giữ mặc định */ }
+        const hp = Math.round(power * b.bossMul);
+        s.boss = bossId;
+        s.bossHp = hp;
+        s.bossMaxHp = hp;
+        s.bossDefeated = false;
+        seasonLog(`Tuyển trùm mùa: ${b.name} (${hp.toLocaleString('vi-VN')} HP).`);
+        SaveState.save();
+        return true;
+      }
+
+      /**
+       * Đánh trùm mùa — dùng cơ chế đặc biệt của từng trùm.
+       * Trả về {dmg, killed} hoặc null.
+       */
+      function fightSeasonBoss() {
+        const s = ensureSeason();
+        const b = getSeasonBossMeta();
+        if (!s.boss || s.bossDefeated || !b || s.bossHp <= 0) return null;
+
+        let stats;
+        try { stats = getComputedStats(); } catch (e) { return null; }
+        let dmg = Math.round((stats.baseAtk || 100) * 42);
+
+        // Cơ chế đặc biệt của trùm
+        if (b.special === 'damageReduction') {
+          dmg = Math.round(dmg * (1 - b.specialVal));
+        }
+        if (b.special === 'regenerator') {
+          // Hồi máu trước khi nhận đòn — mô phỏng 1 "giây" giao chiến
+          s.bossHp = Math.min(s.bossMaxHp, s.bossHp + Math.round(s.bossMaxHp * b.specialVal));
+        }
+
+        s.bossHp = Math.max(0, s.bossHp - dmg);
+
+        // Trùm phản đòn: người chơi mất vàng (không mất HP thật vì đây là màn
+        // meta, không phải trận trong hầm ngục).
+        let reflected = 0;
+        if (b.special === 'reflect') {
+          reflected = Math.round(dmg * b.specialVal * 0.5);
+          if (SaveState.gold >= reflected) SaveState.gold -= reflected;
+          else reflected = 0;
+        }
+
+        const killed = s.bossHp <= 0;
+        if (killed && !s.bossDefeated) {
+          s.bossDefeated = true;
+          s.tokens += 120;
+          SaveState.gems += 150;
+          seasonLog(`Hạ ${b.name}! +120 Tiền Mùa, +150 💎.`);
+          showToast(`👑 Hạ ${b.name}! +120 Tiền Mùa, +150 💎`, 'ok');
+        }
+
+        SaveState.save();
+        return { dmg, killed, reflected, hp: s.bossHp };
+      }
+
+      /** Hi sinh 2% ATK/HP lấy 60 Tiền Mùa. Tối đa 20%. */
+      function exchangeSeasonPower() {
+        const s = ensureSeason();
+        const cur = Number(s.powerSacrificed) || 0;
+        if (cur >= SEASON_SACRIFICE_MAX) {
+          showToast(`Đã hi sinh tối đa ${Math.round(SEASON_SACRIFICE_MAX * 100)}% sức mạnh.`, 'err');
+          return false;
+        }
+        s.powerSacrificed = Math.min(SEASON_SACRIFICE_MAX, cur + SEASON_SACRIFICE_STEP);
+        s.tokens += SEASON_TOKENS_PER_SACRIFICE;
+        seasonLog(`Hi sinh sức mạnh: -${Math.round(SEASON_SACRIFICE_STEP * 100)}% ATK/HP (+${SEASON_TOKENS_PER_SACRIFICE} Tiền Mùa).`);
+        SaveState.save();
+        return true;
+      }
+
+      function buySeasonShop(itemId) {
+        const s = ensureSeason();
+        const it = SEASON_SHOP.find(x => x.id === itemId);
+        if (!it) return false;
+        if (s.tokens < it.cost) {
+          showToast(`Cần ${it.cost} Tiền Mùa (đang có ${s.tokens}).`, 'err');
+          return false;
+        }
+        s.tokens -= it.cost;
+        if (it.give.gold) SaveState.gold += it.give.gold;
+        if (it.give.gems) SaveState.gems += it.give.gems;
+        seasonLog(`Đổi ${it.name} (-${it.cost} Tiền Mùa).`);
+        SaveState.save();
+        return true;
+      }
+
+      // ---------- Màn hiển thị ----------
+      let seasonOpenScreen = null;
+
+      function renderSeasonPanel() {
+        const el = document.getElementById('seasonContent');
+        if (!el) return;
+        const s = ensureSeason();
+        const career = getSeasonCareerMeta();
+        const boss = getSeasonBossMeta();
+        const sacPct = Math.round(s.powerSacrificed * 100);
+
+        el.innerHTML = `
+          <div class="rounded-2xl border-2 border-cyan-400/50 bg-gradient-to-br from-[#041a1f] via-slate-950 to-slate-950 p-3">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xl">🌊</span>
+                <div>
+                  <b class="block text-[13px] font-black text-white">Mùa Giải ${s.season}</b>
+                  <span class="block text-[9px] text-slate-400">Nghề nghiệp · Trùm mùa · Đổi sức mạnh</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 text-[9.5px]">
+                <span class="px-1.5 py-0.5 rounded bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 font-bold">🎟️ ${s.tokens} Tiền Mùa</span>
+                ${sacPct > 0 ? `<span class="px-1.5 py-0.5 rounded bg-rose-500/15 border border-rose-400/40 text-rose-300 font-bold">-${sacPct}%</span>` : ''}
+              </div>
+            </div>
+
+            <!-- Nghề đang chọn -->
+            <div class="mt-2 rounded-xl border border-slate-700 bg-slate-950/70 px-2.5 py-2 flex items-center gap-2">
+              <span class="text-lg">${career ? career.icon : '❔'}</span>
+              <div class="min-w-0 flex-1">
+                <b class="block text-[11px] font-black ${career ? 'text-white' : 'text-slate-500'}">${career ? career.name : 'Chưa chọn nghề'}</b>
+                <span class="block text-[9px] text-slate-400">${career ? career.desc : 'Chọn nghề để nhận bonus chỉ số vĩnh viễn'}</span>
+              </div>
+              <button type="button" data-season-screen="career"
+                class="px-2.5 py-1 rounded-lg bg-cyan-500 text-slate-950 text-[9.5px] font-black shrink-0 hover:brightness-110 active:scale-95 transition">
+                ${career ? 'Đổi' : 'Chọn'}
+              </button>
+            </div>
+
+            <!-- Trùm mùa -->
+            <div class="mt-1.5 rounded-xl border border-slate-700 bg-slate-950/70 px-2.5 py-2">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">${boss ? boss.icon : '👑'}</span>
+                <div class="min-w-0 flex-1">
+                  <b class="block text-[11px] font-black ${boss ? 'text-white' : 'text-slate-500'}">${boss ? boss.name : 'Chưa tuyển trùm mùa'}</b>
+                  <span class="block text-[9px] text-slate-400">${boss ? boss.desc : 'Tuyển trùm để nhận Tiền Mùa'}</span>
+                </div>
+                <button type="button" data-season-screen="boss"
+                  class="px-2.5 py-1 rounded-lg bg-rose-500 text-white text-[9.5px] font-black shrink-0 hover:brightness-110 active:scale-95 transition">
+                  ${boss && !s.bossDefeated ? 'Đánh' : 'Tuyển'}
+                </button>
+              </div>
+              ${boss && !s.bossDefeated ? `
+                <div class="mt-1.5">
+                  <div class="flex items-center justify-between text-[8.5px] mb-0.5">
+                    <span class="text-slate-500">MÁU TRÙM</span>
+                    <b class="text-rose-300">${s.bossHp.toLocaleString('vi-VN')} / ${s.bossMaxHp.toLocaleString('vi-VN')}</b>
+                  </div>
+                  <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-rose-600 to-rose-400" style="width:${Math.round((s.bossHp / Math.max(1, s.bossMaxHp)) * 100)}%"></div>
+                  </div>
+                </div>` : ''}
+            </div>
+
+            <div class="grid grid-cols-3 gap-1.5 mt-2">
+              <button type="button" data-season-screen="career" class="rounded-xl border border-cyan-700 bg-slate-900/70 p-2 text-left active:scale-[.98] transition">
+                <span class="text-base">🎭</span>
+                <b class="block text-[10px] font-black text-white">Nghề</b>
+                <i class="block text-[8px] text-slate-500 not-italic">5 lựa chọn</i>
+              </button>
+              <button type="button" data-season-screen="boss" class="rounded-xl border border-rose-700 bg-slate-900/70 p-2 text-left active:scale-[.98] transition">
+                <span class="text-base">👑</span>
+                <b class="block text-[10px] font-black text-white">Trùm Mùa</b>
+                <i class="block text-[8px] text-slate-500 not-italic">3 trùm</i>
+              </button>
+              <button type="button" data-season-screen="exchange" class="rounded-xl border border-amber-700 bg-slate-900/70 p-2 text-left active:scale-[.98] transition">
+                <span class="text-base">🎟️</span>
+                <b class="block text-[10px] font-black text-white">Cửa Hàng</b>
+                <i class="block text-[8px] text-slate-500 not-italic">${s.tokens} phiếu</i>
+              </button>
+            </div>
+
+            <div id="seasonSubScreen" class="mt-2"></div>
+          </div>`;
+
+        el.querySelectorAll('[data-season-screen]').forEach(b => {
+          b.addEventListener('click', () => openSeasonScreen(b.getAttribute('data-season-screen')));
+        });
+
+        if (seasonOpenScreen) openSeasonScreen(seasonOpenScreen);
+      }
+
+      function openSeasonScreen(which) {
+        seasonOpenScreen = which;
+        const box = document.getElementById('seasonSubScreen');
+        if (!box) return;
+        if (which === 'career') renderSeasonCareer(box);
+        else if (which === 'boss') renderSeasonBossScreen(box);
+        else if (which === 'exchange') renderSeasonExchange(box);
+      }
+
+      function closeSeasonScreen() {
+        seasonOpenScreen = null;
+        const box = document.getElementById('seasonSubScreen');
+        if (box) box.innerHTML = '';
+      }
+
+      function renderSeasonCareer(box) {
+        const s = ensureSeason();
+        box.innerHTML = `
+          <div class="rounded-2xl border-2 border-cyan-400/50 bg-slate-950/85 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">🎭 Chọn Nghề</b>
+              <button type="button" id="btnSeasonCareerClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <div class="flex flex-col gap-1">
+              ${SEASON_CAREERS.map(c => {
+                const on = s.career === c.id;
+                return `<button type="button" data-pick-career="${c.id}"
+                  class="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left transition ${on
+                    ? 'bg-cyan-400/15 border-2 border-cyan-400' : 'bg-slate-900 border border-slate-700 hover:bg-slate-800'}">
+                  <span class="text-base shrink-0">${c.icon}</span>
+                  <div class="min-w-0 flex-1">
+                    <b class="block text-[10.5px] font-black" style="color:${c.color}">${c.name}${on ? ' · ĐANG DÙNG' : ''}</b>
+                    <span class="block text-[8.5px] text-slate-400 leading-tight">${c.desc}</span>
+                    <span class="block text-[8px] text-slate-500 mt-0.5">${[
+                      c.atkPct ? `+${Math.round(c.atkPct * 100)}% ATK` : '',
+                      c.hpPct ? `+${Math.round(c.hpPct * 100)}% HP` : '',
+                      c.aspdPct ? `+${Math.round(c.aspdPct * 100)}% tốc đánh` : '',
+                      c.critFlat ? `+${Math.round(c.critFlat * 100)}% chí mạng` : '',
+                      c.critDmgPct ? `+${Math.round(c.critDmgPct * 100)}% sát thương chí mạng` : '',
+                      c.defFlat ? `+${c.defFlat} DEF` : '',
+                      c.dodgeFlat ? `+${Math.round(c.dodgeFlat * 100)}% né` : '',
+                      c.goldPct ? `+${Math.round(c.goldPct * 100)}% vàng` : ''
+                    ].filter(Boolean).join(' · ')}</span>
+                  </div>
+                </button>`;
+              }).join('')}
+            </div>
+            ${s.career ? '<p class="text-[8.5px] text-amber-300/80 mt-2">⚠️ Đổi nghề tốn 50 Tiền Mùa.</p>' : ''}
+          </div>`;
+
+        document.getElementById('btnSeasonCareerClose')?.addEventListener('click', closeSeasonScreen);
+        box.querySelectorAll('[data-pick-career]').forEach(b => {
+          b.addEventListener('click', () => {
+            if (selectSeasonCareer(b.getAttribute('data-pick-career'))) {
+              showToast('🎭 Đã chọn nghề — chỉ số cập nhật ngay.', 'ok');
+              closeSeasonScreen();
+              renderSeasonPanel();
+              if (typeof renderLobbyUI === 'function') renderLobbyUI();
+            }
+          });
+        });
+      }
+
+      function renderSeasonBossScreen(box) {
+        const s = ensureSeason();
+        const cur = getSeasonBossMeta();
+        const fighting = s.boss && !s.bossDefeated;
+
+        box.innerHTML = `
+          <div class="rounded-2xl border-2 border-rose-400/50 bg-slate-950/85 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">👑 Trùm Mùa</b>
+              <button type="button" id="btnSeasonBossClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+
+            ${fighting ? `
+              <div class="rounded-lg bg-rose-500/12 border border-rose-400/50 px-2 py-2 mb-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-base">${cur.icon}</span>
+                  <b class="text-[11px] font-black text-white">${cur.name}</b>
+                </div>
+                <p class="text-[8.5px] text-slate-300 mt-0.5">${cur.desc}</p>
+                <p class="text-[8.5px] text-amber-300 mt-1">⚡ Cơ chế: <b>${cur.specialName}</b></p>
+                <div class="mt-1.5">
+                  <div class="flex items-center justify-between text-[8.5px] mb-0.5">
+                    <span class="text-slate-500">MÁU</span>
+                    <b class="text-rose-300">${s.bossHp.toLocaleString('vi-VN')} / ${s.bossMaxHp.toLocaleString('vi-VN')}</b>
+                  </div>
+                  <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-rose-600 to-rose-400" style="width:${Math.round((s.bossHp / Math.max(1, s.bossMaxHp)) * 100)}%"></div>
+                  </div>
+                </div>
+                <button type="button" id="btnSeasonFightBoss"
+                  class="mt-2 w-full py-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 text-white text-[11px] font-black hover:brightness-110 active:scale-[.99] transition">
+                  ⚔️ Tấn Công
+                </button>
+                <div id="seasonBossResult" class="mt-1.5"></div>
+              </div>
+              <p class="text-[8.5px] text-slate-500">Hạ trùm nhận <b class="text-cyan-300">120 Tiền Mùa</b> + 150 💎.</p>
+            ` : `
+              <p class="text-[9px] text-slate-400 mb-1.5">Chọn trùm để tuyển. HP trùm neo theo lực chiến thật của bạn.</p>
+              <div class="flex flex-col gap-1">
+                ${SEASON_BOSSES.map(b => {
+                  const on = s.boss === b.id && s.bossDefeated;
+                  return `<button type="button" data-pick-boss="${b.id}"
+                    class="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left bg-slate-900 border border-slate-700 hover:bg-slate-800 transition">
+                    <span class="text-base shrink-0">${b.icon}</span>
+                    <div class="min-w-0 flex-1">
+                      <b class="block text-[10.5px] font-black" style="color:${b.color}">${b.name}${on ? ' · ĐÃ HẠ' : ''}</b>
+                      <span class="block text-[8.5px] text-slate-400 leading-tight">${b.desc}</span>
+                      <span class="block text-[8px] text-slate-500">Cơ chế: ${b.specialName} · HP ×${b.bossMul}</span>
+                    </div>
+                  </button>`;
+                }).join('')}
+              </div>`}
+          </div>`;
+
+        document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSeasonScreen);
+        box.querySelectorAll('[data-pick-boss]').forEach(b => {
+          b.addEventListener('click', () => {
+            if (recruitSeasonBoss(b.getAttribute('data-pick-boss'))) {
+              showToast('👑 Đã tuyển trùm mùa.', 'ok');
+              renderSeasonPanel();
+            }
+          });
+        });
+        document.getElementById('btnSeasonFightBoss')?.addEventListener('click', () => {
+          const res = fightSeasonBoss();
+          if (!res) return;
+          const box2 = document.getElementById('seasonBossResult');
+          if (box2) {
+            box2.innerHTML = `
+              <div class="rounded-lg bg-slate-900 border border-slate-700 px-2 py-1.5 text-[9px]">
+                <b class="text-white">Gây ${res.dmg.toLocaleString('vi-VN')} sát thương</b>
+                ${res.reflected ? `<span class="block text-rose-300">Phản đòn: -${res.reflected.toLocaleString('vi-VN')} vàng</span>` : ''}
+                ${res.killed ? '<span class="block text-emerald-300 font-black">✅ ĐÃ HẠ TRÙM!</span>' : `<span class="block text-slate-400">Còn ${res.hp.toLocaleString('vi-VN')} HP</span>`}
+              </div>`;
+          }
+          if (res.killed) SoundFX.levelUp(); else SoundFX.coinPickup();
+          setTimeout(() => { renderSeasonPanel(); }, 80);
+        });
+      }
+
+      function renderSeasonExchange(box) {
+        const s = ensureSeason();
+        const sacPct = Math.round(s.powerSacrificed * 100);
+        const maxPct = Math.round(SEASON_SACRIFICE_MAX * 100);
+        const atMax = s.powerSacrificed >= SEASON_SACRIFICE_MAX;
+
+        box.innerHTML = `
+          <div class="rounded-2xl border-2 border-amber-400/50 bg-slate-950/85 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">🎟️ Đổi Sức Mạnh & Quà</b>
+              <button type="button" id="btnSeasonExClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+
+            <div class="rounded-lg bg-slate-900 border border-slate-700 px-2 py-2">
+              <div class="flex items-center justify-between text-[9px] mb-1">
+                <span class="text-slate-400">ĐÃ HI SINH</span>
+                <b class="${sacPct > 0 ? 'text-rose-300' : 'text-slate-500'}">-${sacPct}% ATK/HP</b>
+              </div>
+              <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-rose-500 to-amber-400" style="width:${Math.round((sacPct / maxPct) * 100)}%"></div>
+              </div>
+              <p class="text-[8.5px] text-slate-500 mt-1">Mỗi lần: -${Math.round(SEASON_SACRIFICE_STEP * 100)}% ATK/HP → +${SEASON_TOKENS_PER_SACRIFICE} Tiền Mùa. Tối đa -${maxPct}%.</p>
+              <button type="button" id="btnSeasonSacrifice"
+                class="mt-1.5 w-full py-1.5 rounded-lg text-[10px] font-black transition ${atMax
+                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-amber-400 text-slate-950 hover:brightness-110 active:scale-95'}"
+                ${atMax ? 'disabled' : ''}>
+                ${atMax ? 'ĐÃ ĐẠT GIỚI HẠN' : `🎟️ Hi Sinh -${Math.round(SEASON_SACRIFICE_STEP * 100)}% → +${SEASON_TOKENS_PER_SACRIFICE}`}
+              </button>
+            </div>
+
+            <div class="mt-2">
+              <span class="block text-[8.5px] uppercase tracking-wider text-slate-500 mb-1">Đổi bằng Tiền Mùa (đang có ${s.tokens})</span>
+              <div class="flex flex-col gap-1">
+                ${SEASON_SHOP.map(it => {
+                  const can = s.tokens >= it.cost;
+                  return `<div class="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-2 py-1.5">
+                    <span class="text-base">${it.icon}</span>
+                    <b class="min-w-0 flex-1 text-[10px] text-white">${it.name}</b>
+                    <button type="button" data-season-buy="${it.id}"
+                      class="px-2 py-1 rounded-lg text-[9px] font-black shrink-0 transition ${can
+                        ? 'bg-cyan-500 text-slate-950 hover:brightness-110 active:scale-95'
+                        : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                      ${it.cost} 🎟️
+                    </button>
+                  </div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>`;
+
+        document.getElementById('btnSeasonExClose')?.addEventListener('click', closeSeasonScreen);
+        document.getElementById('btnSeasonSacrifice')?.addEventListener('click', () => {
+          if (exchangeSeasonPower()) {
+            showToast(`🎟️ +${SEASON_TOKENS_PER_SACRIFICE} Tiền Mùa (đổi -${Math.round(SEASON_SACRIFICE_STEP * 100)}% ATK/HP)`, 'ok');
+            renderSeasonPanel();
+            if (typeof renderLobbyUI === 'function') renderLobbyUI();
+          }
+        });
+        box.querySelectorAll('[data-season-buy]').forEach(b => {
+          b.addEventListener('click', () => {
+            if (buySeasonShop(b.getAttribute('data-season-buy'))) {
+              showToast('🎁 Đổi quà thành công!', 'ok');
+              renderSeasonPanel();
+            }
+          });
+        });
       }
 
       // ==================== SỰ KIỆN: PLINKO ====================
@@ -30274,6 +30857,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           if (targetId === 'tabGuild' && typeof renderGuildPanel === 'function') renderGuildPanel();
           if (targetId === 'tabEvents' && typeof renderGardenPanel === 'function') {
             renderGardenPanel();
+            if (typeof renderSeasonPanel === 'function') renderSeasonPanel();
             if (typeof renderPlinkoPanel === 'function') renderPlinkoPanel();
             if (typeof startGardenTicker === 'function') startGardenTicker();
           }
@@ -31233,6 +31817,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         getActiveGameMode,
         isBossRoom,
         renderGardenPanel,
+        renderSeasonPanel,
+        ensureSeason,
+        selectSeasonCareer,
+        recruitSeasonBoss,
+        fightSeasonBoss,
+        exchangeSeasonPower,
+        buySeasonShop,
+        getSeasonCareerMeta,
+        getSeasonBossMeta,
+        getSeasonPowerSacrificePct,
+        SEASON_CAREERS,
+        SEASON_BOSSES,
+        SEASON_SHOP,
         ensurePlinko,
         plinkoDrop,
         plinkoDropPath,
