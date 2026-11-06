@@ -1,0 +1,12 @@
+# Unity asset và dữ liệu sinh tự động phải giữ LF.
+# Lý do: Unity đọc .unity/.json/.meta theo nội dung; git trên Windows mặc định
+# đổi sang CRLF, khiến mỗi lần sinh lại dữ liệu lại hiện diff giả và làm rối
+# review. Nội dung không đổi, nhưng "diff giả" che mất diff thật.
+*.unity text eol=lf
+*.meta text eol=lf
+*.asmdef text eol=lf
+*.json text eol=lf
+
+# .csproj/.sln để git tự quyết.
+*.csproj text
+*.sln text
