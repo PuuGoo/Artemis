@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#070616"/><stop offset=".48" stop-color="#20103c"/><stop offset="1" stop-color="#090817"/></linearGradient>
+    <linearGradient id="cloud" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c4b5fd" stop-opacity=".35"/><stop offset="1" stop-color="#6d28d9" stop-opacity="0"/></linearGradient>
+    <linearGradient id="rock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#72528f"/><stop offset=".36" stop-color="#35204f"/><stop offset="1" stop-color="#080713"/></linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b7a2d0"/><stop offset=".35" stop-color="#4c3268"/><stop offset="1" stop-color="#130b23"/></linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5d0fe"/><stop offset=".35" stop-color="#c084fc"/><stop offset="1" stop-color="#581c87"/></linearGradient>
+    <linearGradient id="emerald" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d1fae5"/><stop offset=".42" stop-color="#34d399"/><stop offset="1" stop-color="#064e3b"/></linearGradient>
+    <radialGradient id="eclipse"><stop stop-color="#090613" offset=".42"/><stop stop-color="#090613" offset=".54"/><stop stop-color="#c084fc" stop-opacity=".65" offset=".6"/><stop stop-color="#a855f7" stop-opacity=".18" offset=".82"/><stop stop-color="#a855f7" stop-opacity="0" offset="1"/></radialGradient>
+    <radialGradient id="rift"><stop stop-color="#f5d0fe" stop-opacity=".8"/><stop offset=".3" stop-color="#a855f7" stop-opacity=".38"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></radialGradient>
+    <filter id="blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
+    <pattern id="stars" width="120" height="90" patternUnits="userSpaceOnUse"><circle cx="12" cy="18" r="1.5" fill="#f5d0fe" opacity=".8"/><circle cx="77" cy="53" r="1" fill="#c4b5fd" opacity=".7"/><circle cx="102" cy="12" r="1.2" fill="#fff" opacity=".65"/></pattern>
+  </defs>
+  <rect width="1200" height="600" fill="url(#sky)"/><rect width="1200" height="600" fill="url(#stars)"/>
+  <circle cx="826" cy="155" r="230" fill="url(#eclipse)"/><circle cx="826" cy="155" r="83" fill="#080611" stroke="#d8b4fe" stroke-opacity=".8" stroke-width="3"/><circle cx="826" cy="155" r="98" fill="none" stroke="#a855f7" stroke-width="2" opacity=".55"/>
+  <path d="M0 330 Q180 260 330 322 T650 310 T1200 300 V600 H0Z" fill="url(#cloud)" opacity=".8"/><path d="M0 420 Q180 335 330 410 T640 378 T920 405 T1200 370 V600 H0Z" fill="#5b21b6" opacity=".12" filter="url(#blur)"/>
+  <g fill="#0b0b20" stroke="#6d28d9" stroke-opacity=".45" stroke-width="2"><path d="M0 440 L120 360 220 410 320 350 420 435 505 380 590 448 590 600 H0Z"/><path d="M750 420 L840 350 940 410 1040 330 1200 420 V600 H750Z"/></g>
+  <g opacity=".85" filter="url(#glow)" fill="#a855f7"><ellipse cx="550" cy="450" rx="300" ry="48"/><ellipse cx="850" cy="320" rx="160" ry="30"/></g>
+  <path d="M170 430 Q260 375 390 385 Q520 345 650 385 Q760 365 900 414 L850 485 755 510 690 570 560 540 450 580 355 520 240 500Z" fill="url(#rock)" stroke="#a78bfa" stroke-opacity=".65" stroke-width="3"/>
+  <path d="M240 427 Q360 380 470 405 Q610 378 805 422 L765 470 650 480 500 465 365 485Z" fill="#3b2458" stroke="#c4b5fd" stroke-opacity=".35" stroke-width="2"/>
+  <path d="M330 490 L390 515 425 580 M550 478 L572 540 535 594 M720 475 L690 530 735 590" fill="none" stroke="#8b5cf6" stroke-width="8" opacity=".6"/>
+  <g stroke="#d8b4fe" stroke-opacity=".7" stroke-width="3" fill="url(#stone)">
+    <path d="M310 395 L310 300 350 300 350 330 395 330 395 290 435 290 435 330 475 330 475 270 520 270 520 330 565 330 565 295 608 295 608 330 655 330 655 290 700 290 700 395Z"/>
+    <path d="M420 330 L420 205 470 175 520 205 520 330Z"/><path d="M550 330 L550 180 605 145 660 180 660 330Z"/>
+    <path d="M465 270 L465 125 490 92 515 125 515 270Z"/><path d="M585 240 L585 92 610 55 635 92 635 240Z"/><path d="M690 330 L690 235 730 205 770 235 770 395Z"/>
+  </g>
+  <g fill="#170d29" stroke="#c084fc" stroke-width="2"><path d="M447 330 V250 Q470 218 493 250 V330Z"/><path d="M570 330 V246 Q605 205 640 246 V330Z"/><path d="M705 395 V300 Q730 270 755 300 V395Z"/></g>
+  <path d="M548 184 L580 118 605 35 630 118 664 184 636 168 605 143 575 168Z" fill="url(#violet)" stroke="#f5d0fe" stroke-width="3"/><path d="M605 38 L605 255" stroke="#f5d0fe" stroke-width="4" opacity=".8" filter="url(#glow)"/><circle cx="605" cy="172" r="29" fill="url(#rift)"/><circle cx="605" cy="172" r="10" fill="#f5d0fe" filter="url(#glow)"/>
+  <g fill="url(#emerald)" stroke="#a7f3d0" stroke-width="2"><path d="M245 418 L260 323 280 365 298 289 314 418Z"/><path d="M830 425 L852 320 870 367 890 286 910 425Z"/><path d="M930 412 L948 355 965 382 980 330 996 418Z"/></g>
+  <g fill="url(#rock)" stroke="#a78bfa" stroke-width="2"><path d="M70 470 L190 430 245 445 140 488Z"/><path d="M900 460 L1040 410 1120 440 1000 492Z"/><path d="M100 250 L145 220 180 258 135 288Z"/><path d="M1030 250 L1080 210 1118 248 1072 282Z"/><path d="M950 520 L980 465 1000 520 985 563Z"/></g>
+  <g fill="#c084fc" opacity=".85" filter="url(#glow)"><circle cx="180" cy="310" r="7"/><circle cx="1010" cy="350" r="6"/><circle cx="420" cy="175" r="5"/><circle cx="760" cy="245" r="6"/></g>
+  <g fill="none" stroke="#e9d5ff" stroke-width="3" opacity=".75" filter="url(#glow)"><path d="M100 70 L180 145 150 175 225 230"/><path d="M1080 55 L1010 132 1050 168 980 225"/><path d="M320 100 L360 145 340 174 390 222"/></g>
+  <g fill="none" stroke="#a78bfa" stroke-width="2" opacity=".65"><path d="M0 510 Q180 470 340 520 T650 520 T1000 510 T1200 530"/><path d="M0 548 Q160 520 320 555 T630 550 T960 548 T1200 565"/></g>
+  <g fill="#f5d0fe" opacity=".85" font-family="serif" text-anchor="middle"><text x="180" y="180" font-size="24">✦</text><text x="980" y="190" font-size="30">✧</text><text x="280" y="285" font-size="19">✧</text><text x="910" y="270" font-size="21">✦</text></g>
+</svg>

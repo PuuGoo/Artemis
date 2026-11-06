@@ -2573,19 +2573,37 @@ const ArenaV2 = (() => {
     glow: 'rgba(103,232,249,', torch: ['#fef9c3', '#22d3ee'], fog: 'rgba(34,211,238,', ob0: '#155e75', ob1: '#06243d', obTop: '#a5f3fc', vein: 'rgba(250,204,21,',
     floor: 'star', wall: 'crystal', props: ['rune', 'crystalSmall', 'icecrack', 'sparkleSpot', 'stars'], wallProps: ['crystals', 'icicles', 'columns'], ambient: 'stars', torchStyle: 'crystal',
     obstacles: ['crystal', 'obelisk', 'pillar'], skin: 'ice', bullet: ['#ffffff', '#fde68a', '#0891b2'] });
+  def('eclipse_reach', { label: 'Biên Giới Nhật Thực', f1: '#211332', f2: '#100a20', wall0: '#070611', wall1: '#3b2458', trim: '#d8b4fe', accent: '#c084fc',
+    glow: 'rgba(192,132,252,', torch: ['#f5d0fe', '#8b5cf6'], fog: 'rgba(139,92,246,', ob0: '#35204d', ob1: '#120b21', obTop: '#a78bfa', vein: 'rgba(216,180,254,',
+    floor: 'void', wall: 'obsidian', props: ['rift', 'rune', 'stars', 'crack', 'crystalSmall'], wallProps: ['spikes', 'chains', 'crystals'], ambient: 'stars', torchStyle: 'void',
+    obstacles: ['crystal', 'obelisk', 'pillar', 'rock'], skin: 'void', bullet: ['#ffffff', '#d8b4fe', '#7c3aed'] });
+  def('obsidian_garden', { label: 'Vườn Hắc Tinh', f1: '#17231f', f2: '#0b1517', wall0: '#050b0d', wall1: '#23443e', trim: '#a7f3d0', accent: '#34d399',
+    glow: 'rgba(52,211,153,', torch: ['#d1fae5', '#10b981'], fog: 'rgba(16,185,129,', ob0: '#24483e', ob1: '#0b1715', obTop: '#6ee7b7', vein: 'rgba(110,231,183,',
+    floor: 'tiles', wall: 'bone', props: ['crystalSmall', 'skull', 'rune', 'crack', 'stars'], wallProps: ['roots', 'crystals', 'chains'], ambient: 'souls', torchStyle: 'spirit',
+    obstacles: ['crystal', 'rock', 'pillar', 'bonesPile'], skin: 'void', bullet: ['#ffffff', '#a7f3d0', '#059669'] });
+  def('starfall_rift', { label: 'Khe Nứt Tinh Tú', f1: '#101a3c', f2: '#090d25', wall0: '#030617', wall1: '#29356b', trim: '#f0abfc', accent: '#a78bfa',
+    glow: 'rgba(167,139,250,', torch: ['#fae8ff', '#a855f7'], fog: 'rgba(129,140,248,', ob0: '#28346b', ob1: '#090d26', obTop: '#c4b5fd', vein: 'rgba(192,132,252,',
+    floor: 'star', wall: 'obsidian', props: ['constellation', 'rift', 'stars', 'rune', 'sparkleSpot'], wallProps: ['spikes', 'crystals', 'columns'], ambient: 'stars', torchStyle: 'void',
+    obstacles: ['obelisk', 'crystal', 'pillar', 'statue'], skin: 'astral', bullet: ['#ffffff', '#f0abfc', '#7e22ce'] });
+  def('eclipse_throne', { label: 'Ngai Vàng Nhật Thực', boss: 'eclipse_sovereign', f1: '#1b0b2b', f2: '#090613', wall0: '#03020a', wall1: '#4c1d5f', trim: '#f0abfc', accent: '#c084fc',
+    glow: 'rgba(192,132,252,', torch: ['#fae8ff', '#7c3aed'], fog: 'rgba(139,92,246,', ob0: '#3b1c50', ob1: '#100819', obTop: '#d8b4fe', vein: 'rgba(240,171,252,',
+    floor: 'void', wall: 'obsidian', props: ['rift', 'stars', 'rune', 'crystalSmall', 'constellation'], wallProps: ['spikes', 'chains', 'crystals', 'columns'], ambient: 'stars', torchStyle: 'void',
+    obstacles: ['crystal', 'obelisk', 'pillar'], skin: 'void', bullet: ['#ffffff', '#e9d5ff', '#a855f7'] });
 
   // Chương nào dùng biome nào (xoay vòng theo phòng thường). Chương sự kiện (999) trộn tất cả.
   const POOLS = {
     1: ['stone', 'forest', 'mine', 'swamp', 'crypt'],
     2: ['lava', 'desert', 'ash', 'canyon'],
     3: ['void', 'crystal', 'ice', 'astral', 'temple'],
-    4: ['dragon_realm', 'ice', 'crystal', 'astral']
+    4: ['dragon_realm', 'ice', 'crystal', 'astral'],
+    5: ['eclipse_reach', 'obsidian_garden', 'starfall_rift', 'eclipse_reach']
   };
-  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple'];
-  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar' };
+  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift'];
+  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne' };
 
-  // Cùng quy tắc với setupRoom(): phòng 5 → golem, phòng 10 → queen, còn lại → demon_king
+  // Mỗi chương có một bản sắc trùm riêng; các chương đầu giữ nguyên bộ boss cũ.
   function bossTypeOfRoom(room) {
+    if (Game.chapter && Number(Game.chapter.id) === 5) return 'eclipse_sovereign';
     if (Game.chapter && Number(Game.chapter.id) === 4) return 'elder_dragon';
     return room === 5 ? 'golem' : (room === 10 ? 'queen' : 'demon_king');
   }
@@ -3330,7 +3348,7 @@ const ArenaV2 = (() => {
   };
   const TYPEKEY = { slime: 'slime', goblin: 'goblin', skeleton_mage: 'mage', plant_turret: 'plant', bat: 'bat' };
   const skinOf = (B, type) => (SK[B.skin] || SK.stone)[TYPEKEY[type]];
-  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9' };
+  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', rift_stalker: '#c084fc', eclipse_oracle: '#f0abfc', obsidian_brute: '#34d399', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9', eclipse_sovereign: '#c084fc' };
 
   const eyes = (ctx, x, y, s, col = '#fff', pupil = '#0f172a') => {
     for (const d of [-1, 1]) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x + d * s * 1.1, y, s * 0.72, s * 0.9, 0, 0, TAU); ctx.fill(); ctx.fillStyle = pupil; ctx.beginPath(); ctx.arc(x + d * s * 1.1 + 0.6, y + 0.5, s * 0.38, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); ctx.arc(x + d * s * 1.1 - 0.4, y - 0.8, s * 0.16, 0, TAU); ctx.fill(); }
@@ -3625,6 +3643,108 @@ const ArenaV2 = (() => {
     ctx.restore();
   }
 
+  function drawRiftStalker(ctx, r, t) {
+    const pulse = .72 + .28 * Math.sin(t * .009), lean = Math.sin(t * .012) * .12;
+    ctx.save(); ctx.rotate(lean);
+    for (const d of [-1, 1]) {
+      ctx.save(); ctx.translate(d * r * .34, -r * .05); ctx.rotate(d * (.18 + Math.sin(t * .008) * .08));
+      const g = ctx.createLinearGradient(0, -r, d * r * 1.25, r);
+      g.addColorStop(0, '#f5d0fe'); g.addColorStop(.42, '#a855f7'); g.addColorStop(1, '#2e1065');
+      ctx.fillStyle = g; ctx.strokeStyle = '#e9d5ff'; ctx.lineWidth = 1.6;
+      poly(ctx, [[0,0],[d*r*.7,-r*1.25],[d*r*1.35,-r*.68],[d*r*.82,r*.2],[d*r*.48,r*.72]]); ctx.fill(); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.fillStyle = '#170b2a'; ctx.strokeStyle = '#c084fc'; ctx.lineWidth = 2;
+    poly(ctx, [[-r*.55,-r*.45],[0,-r*1.05],[r*.56,-r*.45],[r*.42,r*.8],[0,r*1.05],[-r*.42,r*.8]]); ctx.fill(); ctx.stroke();
+    const core = ctx.createRadialGradient(-r*.12,-r*.2,1,0,0,r*.8);
+    core.addColorStop(0,'#f5d0fe'); core.addColorStop(.35,'#c084fc'); core.addColorStop(1,'#3b0764');
+    ctx.fillStyle = core; ctx.beginPath(); ctx.ellipse(0,0,r*.48,r*.68,0,0,TAU); ctx.fill();
+    orb(ctx,0,-r*.22,r*.23,'#ffffff',pulse);
+    ctx.strokeStyle = '#f0abfc'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-r*.4,r*.72); ctx.lineTo(0,r*1.25); ctx.lineTo(r*.4,r*.72); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawEclipseOracle(ctx, r, t) {
+    const bob = Math.sin(t * .006) * r * .1, spin = t * .0015;
+    ctx.save(); ctx.translate(0,bob);
+    ctx.strokeStyle = 'rgba(240,171,252,.8)'; ctx.lineWidth = 1.8; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.ellipse(0,-r*.32,r*1.3,r*.54,spin,0,TAU); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#1b1230'; ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.2;
+    poly(ctx, [[-r*.8,r*.72],[-r*.58,-r*.25],[0,-r*1.05],[r*.58,-r*.25],[r*.8,r*.72],[0,r*.95]]); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#090613'; ctx.beginPath(); ctx.ellipse(0,-r*.2,r*.52,r*.62,0,0,TAU); ctx.fill();
+    orb(ctx,0,-r*.28,r*.38,'#e9d5ff',.85);
+    ctx.fillStyle = '#2e1065'; ctx.beginPath(); ctx.arc(0,-r*.2,r*.28,0,TAU); ctx.fill();
+    ctx.fillStyle = '#f0abfc'; poly(ctx, [[-r*.38,-r*.52],[0,-r*1.34],[r*.38,-r*.52]]); ctx.fill();
+    for (let k=0;k<4;k++) { const a=spin+k*Math.PI/2, x=Math.cos(a)*r*1.02, y=-r*.24+Math.sin(a)*r*.5; orb(ctx,x,y,r*.17,k%2?'#a78bfa':'#f0abfc',.9); }
+    ctx.restore();
+  }
+
+  function drawObsidianBrute(ctx, r, t) {
+    const pulse=.7+.3*Math.sin(t*.007);
+    ctx.save(); ctx.rotate(Math.sin(t*.004)*.035);
+    for (const d of [-1,1]) {
+      const cg=ctx.createLinearGradient(0,-r,0,r);
+      cg.addColorStop(0,'#d1fae5'); cg.addColorStop(.45,'#34d399'); cg.addColorStop(1,'#064e3b');
+      ctx.fillStyle=cg; ctx.strokeStyle='#052e2b'; ctx.lineWidth=2;
+      poly(ctx,[[d*r*.48,-r*.35],[d*r*1.05,-r*1.1],[d*r*1.3,-r*.05],[d*r*.75,r*.5]]); ctx.fill(); ctx.stroke();
+    }
+    const armor=ctx.createLinearGradient(-r,-r,r,r);
+    armor.addColorStop(0,'#a7f3d0'); armor.addColorStop(.3,'#14532d'); armor.addColorStop(.72,'#10251e'); armor.addColorStop(1,'#020b0b');
+    ctx.fillStyle=armor; ctx.strokeStyle='#6ee7b7'; ctx.lineWidth=2.5;
+    poly(ctx,[[-r*.72,-r*.65],[0,-r*1.02],[r*.72,-r*.65],[r*.92,r*.48],[r*.38,r*.95],[-r*.38,r*.95],[-r*.92,r*.48]]); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#071a16'; ctx.beginPath(); ctx.ellipse(0,-r*.25,r*.48,r*.42,0,0,TAU); ctx.fill();
+    orb(ctx,-r*.2,-r*.25,r*.13,'#f0fdf4',pulse); orb(ctx,r*.2,-r*.25,r*.13,'#f0fdf4',pulse);
+    ctx.strokeStyle='#34d399'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(-r*.36,r*.3); ctx.lineTo(r*.36,r*.3); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawEclipseSovereign(ctx, r, t, hr, charge) {
+    const rage=1-hr, pulse=.72+.28*Math.sin(t*.008), glow=Math.min(1.45,.55+rage*.7+(charge?.45:0));
+    ctx.save(); ctx.rotate(t*.00035);
+    ctx.strokeStyle='rgba(240,171,252,.78)'; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.ellipse(0,-r*.72,r*1.5,r*.5,0,0,TAU); ctx.stroke();
+    ctx.setLineDash([8,7]); ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(0,-r*.72,r*1.82,r*.68,0,0,TAU); ctx.stroke(); ctx.setLineDash([]);
+    for (let i=0;i<8;i++) {
+      const a=i*Math.PI/4, x=Math.cos(a)*r*1.55, y=-r*.72+Math.sin(a)*r*.55;
+      ctx.save(); ctx.translate(x,y); ctx.rotate(a);
+      const cg=ctx.createLinearGradient(0,-r*.3,0,r*.45);
+      cg.addColorStop(0,'#f5d0fe'); cg.addColorStop(.5,'#a855f7'); cg.addColorStop(1,'#2e1065');
+      ctx.fillStyle=cg; ctx.strokeStyle='#f0abfc'; ctx.lineWidth=1.5;
+      poly(ctx,[[0,-r*.34],[r*.18,0],[0,r*.42],[-r*.18,0]]); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+    ctx.restore();
+    for (const d of [-1,1]) {
+      ctx.save(); ctx.translate(d*r*.28,-r*.12); ctx.rotate(d*(Math.sin(t*.0035)*.07+rage*.035));
+      const wg=ctx.createLinearGradient(0,-r*1.8,d*r*2.45,r);
+      wg.addColorStop(0,'#f5d0fe'); wg.addColorStop(.34,'#8b5cf6'); wg.addColorStop(.72,'#4c1d95'); wg.addColorStop(1,'#090613');
+      ctx.fillStyle=wg; ctx.strokeStyle='#e9d5ff'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(d*r*.7,-r*1.9,d*r*2.45,-r*1.62);
+      ctx.lineTo(d*r*1.75,-r*.05); ctx.lineTo(d*r*2.18,r*.7); ctx.quadraticCurveTo(d*r*.72,r*.42,0,0); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle='rgba(245,208,254,.72)'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(d*r*2.3,-r*1.42); ctx.moveTo(0,0); ctx.lineTo(d*r*1.78,-r*.05); ctx.moveTo(0,0); ctx.lineTo(d*r*2.08,r*.58); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.strokeStyle='#2e1065'; ctx.lineWidth=r*.55; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(-r*.4,r*.5); ctx.bezierCurveTo(-r*1.55,r*1.5,-r*2.0,-r*.4,-r*1.05,-r*.48); ctx.stroke();
+    ctx.strokeStyle='#c084fc'; ctx.lineWidth=3; ctx.stroke();
+    const body=ctx.createLinearGradient(-r,-r,r,r);
+    body.addColorStop(0,'#f5d0fe'); body.addColorStop(.26,'#8b5cf6'); body.addColorStop(.68,'#2e1065'); body.addColorStop(1,'#080512');
+    ctx.fillStyle=body; ctx.strokeStyle='#090613'; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.ellipse(-r*.1,r*.25,r*.82,r*1.05,-.18,0,TAU); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#24103b'; ctx.beginPath(); ctx.ellipse(r*.92,-r*.78,r*.68,r*.48,-.12,0,TAU); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#e9d5ff'; ctx.beginPath(); ctx.ellipse(r*1.34,-r*.62,r*.38,r*.18,-.1,0,TAU); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#d8b4fe'; poly(ctx,[[r*.32,-r*1.05],[r*.12,-r*1.75],[r*.62,-r*1.26],[r*.92,-r*1.92],[r*1.08,-r*1.08],[r*1.48,-r*1.62],[r*1.46,-r*.92]]); ctx.fill(); ctx.stroke();
+    orb(ctx,r*1.13,-r*.9,r*.24,'#ffffff',glow*pulse);
+    ctx.fillStyle='#090613'; ctx.beginPath(); ctx.arc(r*1.16,-r*.91,r*.075,0,TAU); ctx.fill();
+    ctx.fillStyle='#090613'; ctx.strokeStyle='#f0abfc'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.arc(-r*.1,r*.31,r*.48,0,TAU); ctx.fill(); ctx.stroke();
+    orb(ctx,-r*.1,r*.31,r*.82,charge?'#ffffff':'#c084fc',glow);
+    for (let i=0;i<6;i++) { const x=-r*.55+i*r*.22, y=-r*.25-Math.sin(t*.006+i)*3; ctx.fillStyle='#f5d0fe'; poly(ctx,[[x-r*.07,y],[x,y-r*(.38+(i%2)*.13)],[x+r*.07,y]]); ctx.fill(); }
+    if (charge) for(let i=0;i<7;i++) orb(ctx,r*1.45+i*4,-r*.45+(i-3)*7,r*.17,'#f5d0fe',.92);
+    ctx.restore();
+  }
+
   function drawElderDragon(ctx, r, t, hr, charge) {
     const rage = 1 - hr, pulse = .72 + .28 * Math.sin(t * .008), glow = Math.min(1.3, .55 + rage * .65 + (charge ? .45 : 0));
     // wings, with moving membranes
@@ -3674,7 +3794,7 @@ const ArenaV2 = (() => {
 
   const BOSSFN = {
     golem: drawGolem, queen: drawQueen, demon_king: drawDemon,
-    elder_dragon: drawElderDragon
+    elder_dragon: drawElderDragon, eclipse_sovereign: drawEclipseSovereign
   };
 
   // ---------- trạng thái hiển thị riêng từng quái (không ghi vào dữ liệu game) ----------
@@ -3686,6 +3806,9 @@ const ArenaV2 = (() => {
     if (ty === 'dragon_whelp') { drawDragonWhelp(ctx, r, t); return; }
     if (ty === 'cloud_wisp') { drawCloudWisp(ctx, r, t); return; }
     if (ty === 'sky_sentinel') { drawSkySentinel(ctx, r, t); return; }
+    if (ty === 'rift_stalker') { drawRiftStalker(ctx, r, t); return; }
+    if (ty === 'eclipse_oracle') { drawEclipseOracle(ctx, r, t); return; }
+    if (ty === 'obsidian_brute') { drawObsidianBrute(ctx, r, t); return; }
     if (BOSSFN[ty]) { const hr = clamp(e.hp / Math.max(1, e.maxHp), 0, 1); BOSSFN[ty](ctx, r, t, hr, e.attackTimer > 0 && e.attackTimer < 0.48); return; }
     const sk = skinOf(B, ty);
     if (!sk) { blob(ctx, r, '#94a3b8', '#334155'); ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.fill(); ctx.stroke(); eyes(ctx, 0, -2, 3); return; }
@@ -4057,6 +4180,31 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           mapAsset: '/assets/map-ch4-dragon-realm.svg',
           mapRegion: 'Long Vực Thiên Không',
           mapTagline: 'Quần đảo rồng lơ lửng giữa biển mây, nơi long hồn thức tỉnh.',
+        },
+        {
+          id: 5,
+          name: 'Chương 5: Vương Quốc Nhật Thực',
+          modeLabel: 'Chiến Dịch Hắc Tinh (15 Phòng Dị Giới)',
+          desc: 'Băng qua thành trì obsidian, khe nứt hư không và khu vườn hắc tinh. Đánh bại Bạo Chúa Nhật Thực trước khi bóng tối nuốt chửng toàn cõi.',
+          rooms: 15,
+          floorColor1: '#170d2b',
+          floorColor2: '#090817',
+          wallColor: '#4c1d5f',
+          enemyScale: 2.62,
+          icon: '🌑',
+          accent: '#c084fc',
+          accent2: '#8b5cf6',
+          gradFrom: '#3b0764',
+          gradTo: '#090817',
+          difficulty: 4,
+          difficultyLabel: 'Huyền Thoại — Dị Giới',
+          themeName: 'Nhật Thực',
+          bossIcon: '🌑',
+          bossName: 'Bạo Chúa Nhật Thực',
+          unlock: { type: 'chapterWin', chapterId: 4, label: 'Thắng Chương 4' },
+          mapAsset: '/assets/map-ch5-eclipse-kingdom.svg',
+          mapRegion: 'Vương Quốc Nhật Thực',
+          mapTagline: 'Khi mặt trời tắt lịm, ngai vàng hắc tinh thức tỉnh giữa những vết nứt không gian.',
         }
       ];
 
@@ -4200,6 +4348,38 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           behavior: 'Xoay vòng 12 luồng long tức, quét hơi thở theo hình quạt và phóng loạt tinh thạch truy đuổi. Sức mạnh thay đổi khi còn ít máu.',
           threat: 6,
           stats: { speed: 82, contact: true, ranged: true }
+        },
+        {
+          id: 'rift_stalker', name: 'Ảnh Lang Khe Nứt', icon: '🐺', tier: 'Thường',
+          color: '#c084fc', aura: '#c084fc',
+          lore: 'Thú săn mồi bước ra từ những vết nứt giữa hai chiều không gian. Bóng của nó thường xuất hiện trước cả thân hình.',
+          behavior: 'Lướt nhanh áp sát và phóng ba mảnh nguyệt tinh theo hình quạt hẹp.',
+          threat: 4,
+          stats: { speed: 102, contact: true, ranged: true }
+        },
+        {
+          id: 'eclipse_oracle', name: 'Tiên Tri Nhật Thực', icon: '🔮', tier: 'Tinh Anh',
+          color: '#f0abfc', aura: '#a78bfa',
+          lore: 'Pháp sư cổ đại đọc điềm báo trong quầng tối. Mỗi lần giơ trượng, năm mảnh hắc tinh khóa vào vị trí của mục tiêu.',
+          behavior: 'Giữ khoảng cách và bắn quạt năm tia bóng tối có tốc độ cao.',
+          threat: 4,
+          stats: { speed: 55, contact: false, ranged: true }
+        },
+        {
+          id: 'obsidian_brute', name: 'Hộ Vệ Hắc Tinh', icon: '🗿', tier: 'Tinh Anh',
+          color: '#34d399', aura: '#34d399',
+          lore: 'Khối giáp obsidian được nuôi bằng lõi tinh tú. Những gai hắc tinh trên vai phát nổ thành vòng đạn khi năng lượng đầy.',
+          behavior: 'Di chuyển chậm, rất lì đòn và phát xung tám hướng quanh thân.',
+          threat: 5,
+          stats: { speed: 38, contact: true, ranged: true }
+        },
+        {
+          id: 'eclipse_sovereign', name: 'Bạo Chúa Nhật Thực', icon: '🌑', tier: 'TRÙM CUỐI',
+          color: '#c084fc', aura: '#f0abfc',
+          lore: 'Vị quân vương bị phong ấn trong lõi nhật thực. Khi ngai vàng thức tỉnh, cánh trời rách toạc và mọi vì sao đều tắt.',
+          behavior: 'Tạo vòng đạn nhật thực, quét quạt hắc tinh và bắn chéo bốn phương. Dưới 50% máu, boss cuồng nộ và rút ngắn nhịp tấn công.',
+          threat: 7,
+          stats: { speed: 76, contact: true, ranged: true }
         }
       ];
 
@@ -13256,7 +13436,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       function showBossIntro(bossType, bossNameText) {
         const wrap = document.getElementById('bossIntroBanner');
         if (!wrap) return;
-        const icons = { golem: '🔥', queen: '🕷️', demon_king: '👑', elder_dragon: '🐉' };
+        const icons = { golem: '🔥', queen: '🕷️', demon_king: '👑', elder_dragon: '🐉', eclipse_sovereign: '🌑' };
         const iconEl = document.getElementById('bossIntroIcon');
         const nameEl = document.getElementById('bossIntroName');
         if (iconEl) iconEl.textContent = icons[bossType] || '👑';
@@ -26867,12 +27047,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         if (isBossRoomNow) {
           SoundFX.bossSpawn();
-          const bossType = Game.chapter && Number(Game.chapter.id) === 4 ? 'elder_dragon' : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king'));
+          const bossType = Game.chapter && Number(Game.chapter.id) === 5 ? 'eclipse_sovereign' : (Game.chapter && Number(Game.chapter.id) === 4 ? 'elder_dragon' : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king')));
           const bossNames = {
             golem: '🔥 TRÙM: GOLEM DUNG NHAM',
             queen: '🕷️ TRÙM: NỮ HOÀNG NHỆN ĐỘC',
             demon_king: '👑 ĐẠI MA VƯƠNG ATREUS',
-            elder_dragon: '🐉 TRÙM: CỔ LONG THIÊN KHÔNG'
+            elder_dragon: '🐉 TRÙM: CỔ LONG THIÊN KHÔNG',
+            eclipse_sovereign: '🌑 TRÙM CUỐI: BẠO CHÚA NHẬT THỰC'
           };
           // HP boss neo theo ATK người chơi (≈ số đòn đánh thường để hạ).
           // Scale phòng KHÔNG nhân vào HP nữa — đã tính bằng hitsToKill, nếu nhân
@@ -26892,7 +27073,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // trùm cuối 5. Trước đây dùng % maxHp × scale nên trùm cuối lại chịu
             // đòn tốt hơn trùm đầu (6 vs 9 đòn) — ngược đường cong.
             atk: Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
-            speed: 68,
+            speed: bossType === 'eclipse_sovereign' ? 76 : 68,
             vx: 45,
             vy: 30,
             attackTimer: 1.6,
@@ -26901,7 +27082,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             burnTimer: 0,
             burnDmg: 0,
             slowTimer: 0,
-            color: bossType === 'elder_dragon' ? '#67e8f9' : (bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48'))
+            color: bossType === 'eclipse_sovereign' ? '#c084fc' : (bossType === 'elder_dragon' ? '#67e8f9' : (bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48')))
           });
           document.getElementById('bossHudContainer').classList.remove('hidden');
           showBossIntro(bossType, bossNames[bossType]);
@@ -26911,9 +27092,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           hideBossIntro();
           document.getElementById('hudHintBanner').textContent = '💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!';
           const count = Math.min(8, 3 + Math.floor(roomNum / 2));
-          const types = Game.chapter && Number(Game.chapter.id) === 4
-            ? ['dragon_whelp', 'cloud_wisp', 'sky_sentinel']
-            : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat'];
+          const types = Game.chapter && Number(Game.chapter.id) === 5
+            ? ['rift_stalker', 'eclipse_oracle', 'obsidian_brute']
+            : (Game.chapter && Number(Game.chapter.id) === 4
+              ? ['dragon_whelp', 'cloud_wisp', 'sky_sentinel']
+              : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat']);
 
           for (let i = 0; i < count; i++) {
             const t = types[(roomNum + i) % types.length];
@@ -26925,14 +27108,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // đã 1,2-1,5s mỗi con — người mới thấy quái trâu ngay từ đầu.
             const depth = Math.min(1, (roomNum - 1) / Math.max(1, Game.maxRooms - 1));
             const baseHits = 1.4 + depth * 1.0;   // 1,4 -> 2,4 đòn
-            const atkMul = t === 'sky_sentinel' ? 1.25 : (t === 'cloud_wisp' ? 0.96 : (t === 'dragon_whelp' ? 1.08 : (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0)))) * baseHits;
+            const atkMul = t === 'obsidian_brute' ? 1.28 : (t === 'eclipse_oracle' ? 1.16 : (t === 'rift_stalker' ? 1.04 : (t === 'sky_sentinel' ? 1.25 : (t === 'cloud_wisp' ? 0.96 : (t === 'dragon_whelp' ? 1.08 : (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0))))))) * baseHits;
             const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale));
             Game.enemies.push({
               isBoss: false,
               type: t,
               x: ex,
               y: ey,
-              r: t === 'bat' ? 13 : (t === 'cloud_wisp' ? 14 : (t === 'sky_sentinel' ? 18 : 16)),
+              r: t === 'bat' ? 13 : (t === 'cloud_wisp' ? 14 : (t === 'sky_sentinel' || t === 'obsidian_brute' ? 19 : (t === 'rift_stalker' ? 14 : 16))),
               hp: enemyHp,
               maxHp: enemyHp,
               // Sát thương quái — thiết kế theo SỐ ĐÒN PHẢI CHỊU, không theo %:
@@ -26944,7 +27127,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               atk: Math.max(1, Math.round(
                 playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
               )),
-              speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : (t === 'dragon_whelp' ? 88 : (t === 'cloud_wisp' ? 92 : (t === 'sky_sentinel' ? 48 : 64)))),
+              speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : (t === 'rift_stalker' ? 102 : (t === 'eclipse_oracle' ? 55 : (t === 'obsidian_brute' ? 38 : (t === 'dragon_whelp' ? 88 : (t === 'cloud_wisp' ? 92 : (t === 'sky_sentinel' ? 48 : 64))))))),
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,
               attackTimer: 1.1 + Math.random() * 1.4,
@@ -28685,7 +28868,21 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (e.attackTimer <= 0) {
             const ang = Math.atan2(p.y - e.y, p.x - e.x);
             if (e.isBoss) {
-              if (e.type === 'elder_dragon') {
+              if (e.type === 'eclipse_sovereign') {
+                const enraged = e.hp / Math.max(1, e.maxHp) < 0.5;
+                e.phaseTimer = (e.phaseTimer + 1) % 3;
+                if (e.phaseTimer === 0) {
+                  const total = enraged ? 20 : 16;
+                  for (let k = 0; k < total; k++) spawnEnemyBullet(e.x, e.y, ang + (k * Math.PI * 2) / total, enraged ? 248 : 218, e.atk, 7);
+                } else if (e.phaseTimer === 1) {
+                  const spread = enraged ? 4 : 3;
+                  for (let k = -spread; k <= spread; k++) spawnEnemyBullet(e.x, e.y, ang + k * (enraged ? 0.145 : 0.18), enraged ? 305 : 270, e.atk, 7);
+                } else {
+                  for (let k = 0; k < 8; k++) spawnEnemyBullet(e.x, e.y, (k * Math.PI) / 4 + (enraged ? Math.PI / 8 : 0), enraged ? 285 : 235, e.atk, 8);
+                  if (enraged) for (const offset of [-0.12, 0.12]) spawnEnemyBullet(e.x, e.y, ang + offset, 330, e.atk, 6);
+                }
+                e.attackTimer = enraged ? 1.12 : 1.52;
+              } else if (e.type === 'elder_dragon') {
                 // Long tức của Cổ Long: 12 hướng, quạt 5 tia, rồi song long truy kích.
                 e.phaseTimer = (e.phaseTimer + 1) % 3;
                 if (e.phaseTimer === 0) {
@@ -28720,6 +28917,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 }
                 e.attackTimer = 1.45;
               }
+            } else if (e.type === 'rift_stalker') {
+              for (let k = -1; k <= 1; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.22, 245, e.atk, 5);
+              e.attackTimer = 2.25;
+            } else if (e.type === 'eclipse_oracle') {
+              for (let k = -2; k <= 2; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.16, 225, e.atk, 5);
+              e.attackTimer = 2.75;
+            } else if (e.type === 'obsidian_brute') {
+              for (let k = 0; k < 8; k++) spawnEnemyBullet(e.x, e.y, ang + k * Math.PI / 4, 175, e.atk, 6);
+              e.attackTimer = 3.1;
             } else if (e.type === 'dragon_whelp') {
               for (let k = -1; k <= 1; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.17, 225, e.atk, 5);
               e.attackTimer = 2.05;
