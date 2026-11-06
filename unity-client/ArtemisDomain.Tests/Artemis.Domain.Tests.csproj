@@ -24,6 +24,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ArtemisDomain\Artemis.Domain.csproj" />
+    <!--
+      UiNode.cs không tham chiếu UnityEngine (chỉ dùng Artemis.Domain.Core.Json),
+      nên include thẳng vào test để kiểm chứng dữ liệu UI trích từ production mà
+      không cần Unity. UiTheme.cs và UiBuilder.cs có dùng UnityEngine nên KHÔNG
+      include ở đây.
+    -->
+    <Compile Include="..\Assets\Artemis\Scripts\UI\Production\UiNode.cs" LinkBase="ProductionUi" />
   </ItemGroup>
 
 </Project>

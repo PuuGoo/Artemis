@@ -55,6 +55,9 @@ namespace UnityEngine
         public static Color white => new Color(1, 1, 1, 1);
         public static Color black => new Color(0, 0, 0, 1);
         public static Color red => new Color(1, 0, 0, 1);
+        public static Color clear => new Color(0, 0, 0, 0);
+        public static Color Lerp(Color a, Color b, float t)
+            => new Color(a.r + (b.r - a.r) * t, a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t);
     }
 
     public struct Rect
@@ -127,6 +130,8 @@ namespace UnityEngine
         public Vector3 position;
         public Quaternion rotation;
         public Transform parent;
+        public int childCount => 0;
+        public Transform GetChild(int i) => null;
         public Transform Find(string n) => null;
         public void SetParent(Transform p, bool worldPositionStays) { parent = p; }
     }
@@ -136,6 +141,7 @@ namespace UnityEngine
         public GameObject(string n) { name = n; }
         public GameObject(string n, params Type[] components) { name = n; }
         public bool activeSelf;
+        public string tag = "Untagged";
         public Transform transform { get; } = new Transform();
         public void SetActive(bool v) { activeSelf = v; }
         public T AddComponent<T>() where T : Component, new() => new T();
@@ -195,6 +201,7 @@ namespace UnityEngine
     public static class Resources
     {
         public static T Load<T>(string path) where T : Object => null;
+        public static T GetBuiltinResource<T>(string path) where T : Object => null;
     }
 
     public static class Gizmos
@@ -277,8 +284,11 @@ namespace UnityEngine.Networking
 
 namespace UnityEngine.UI
 {
-    public class Image : UnityEngine.Behaviour
+    public class Image : UnityEngine.Component
     {
+        public UnityEngine.Sprite sprite;
+        public bool preserveAspect;
+        public bool raycastTarget = true;
         public float fillAmount;
         public UnityEngine.Color color;
         public Type type;
@@ -298,14 +308,19 @@ namespace UnityEngine.UI
     {
         public RenderMode renderMode;
         public int sortingOrder;
+        public Camera worldCamera;
+        public float planeDistance;
+        public static void ForceUpdateCanvases() { }
     }
 
-    public class CanvasScaler : UnityEngine.Behaviour
+    public class CanvasScaler : UnityEngine.Component
     {
+        public enum ScaleMode { ConstantPixelSize, ScaleWithScreenSize, ConstantPhysicalSize }
+        public enum ScreenMatchMode { MatchWidthOrHeight, Expand, Shrink }
         public ScaleMode uiScaleMode;
         public UnityEngine.Vector2 referenceResolution;
+        public ScreenMatchMode screenMatchMode;
         public float matchWidthOrHeight;
-        public enum ScaleMode { ConstantPixelSize, ScaleWithScreenSize, ConstantPhysicalSize }
     }
 
     public class GraphicRaycaster : UnityEngine.Behaviour { }
@@ -319,17 +334,27 @@ namespace UnityEngine
     {
         public Vector2 anchorMin, anchorMax, pivot, anchoredPosition, sizeDelta, offsetMin, offsetMax;
     }
-    public class Sprite : Object { }
+    public class Sprite : Object
+    {
+        public Texture2D texture;
+        public static Sprite Create(Texture2D t, Rect r, Vector2 pivot, float ppu, uint extrude, SpriteMeshType meshType)
+            => new Sprite { texture = t };
+    }
     public class Texture2D : Object
     {
+        public FilterMode filterMode;
+        public TextureWrapMode wrapMode;
+        public int width, height;
         public Texture2D(int w, int h, TextureFormat fmt, bool mip) { }
         public void SetPixel(int x, int y, Color c) { }
         public void Apply() { }
+        public void Apply(bool updateMipmaps, bool makeNoLongerReadable) { }
+        public void ReadPixels(Rect r, int x, int y) { }
         public byte[] EncodeToPNG() => new byte[0];
     }
     public enum TextureFormat { RGBA32 }
-    public enum TextureImporterType { Sprite }
     public enum FilterMode { Point, Bilinear, Trilinear }
+    public enum TextureWrapMode { Repeat, Clamp }
     public class SpriteRenderer : Component { public Sprite sprite; public int sortingOrder; }
     public class CircleCollider2D : Collider2D { public bool isTrigger; public float radius; }
 }
@@ -338,6 +363,7 @@ namespace UnityEditor
 {
     public static class AssetDatabase
     {
+        public static void ImportAsset(string p, ImportAssetOptions o) { }
         public static void SaveAssets() { }
         public static void Refresh() { }
         public static bool IsValidFolder(string p) => false;
@@ -352,6 +378,17 @@ namespace UnityEditor
         public void SaveAndReimport() { }
     }
     public class TextureImporter : AssetImporter
+    {
+        public TextureImporterType textureType;
+        public UnityEditor.SpriteImportMode spriteImportMode;
+        public bool mipmapEnabled;
+        public bool alphaIsTransparency;
+        public float spritePixelsPerUnit = 100f;
+        public UnityEngine.FilterMode filterMode;
+        public UnityEditor.TextureImporterCompression textureCompression;
+        public void SaveAndReimport() { }
+    }
+    public class TextureImporterLegacy : AssetImporter
     {
         public UnityEditor.TextureImporterType textureType;
         public float spritePixelsPerUnit;
@@ -384,6 +421,8 @@ namespace UnityEditor.SceneManagement
         public static UnityEngine.SceneManagement.Scene GetActiveScene() => new UnityEngine.SceneManagement.Scene();
         public static void MarkSceneDirty(UnityEngine.SceneManagement.Scene s) { }
         public static UnityEngine.SceneManagement.Scene OpenScene(string path, OpenSceneMode mode)
+            => new UnityEngine.SceneManagement.Scene();
+        public static UnityEngine.SceneManagement.Scene NewScene(NewSceneSetup setup, NewSceneMode mode)
             => new UnityEngine.SceneManagement.Scene();
         public static bool SaveScene(UnityEngine.SceneManagement.Scene s, string path) => true;
     }
@@ -486,4 +525,116 @@ namespace UnityEditor
             public static bool decompressionFallback { get; set; }
         }
     }
+}
+
+// ---- Bổ sung cho UI production parity (chỉ typecheck) ----
+namespace UnityEngine.UI
+{
+    public enum GraphicKind { Simple, Sliced }
+    public class Graphic : UnityEngine.Component
+    {
+        public UnityEngine.Color color;
+        public bool raycastTarget = true;
+    }
+    public class Text : Graphic
+    {
+        public string text;
+        public int fontSize;
+        public UnityEngine.Font font;
+        public UnityEngine.FontStyle fontStyle;
+        public UnityEngine.TextAnchor alignment;
+        public UnityEngine.HorizontalWrapMode horizontalOverflow;
+        public UnityEngine.VerticalWrapMode verticalOverflow;
+    }
+    public class LayoutElement : UnityEngine.Component
+    {
+        public float flexibleWidth, flexibleHeight, minWidth, minHeight, preferredWidth, preferredHeight;
+    }
+    public class RectMask2D : UnityEngine.Component { }
+    public class LayoutGroup : UnityEngine.Component
+    {
+        public UnityEngine.RectOffset padding = new UnityEngine.RectOffset();
+        public UnityEngine.TextAnchor childAlignment;
+    }
+    public class HorizontalOrVerticalLayoutGroup : LayoutGroup
+    {
+        public float spacing;
+        public bool childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight;
+    }
+    public class HorizontalLayoutGroup : HorizontalOrVerticalLayoutGroup { }
+    public class VerticalLayoutGroup : HorizontalOrVerticalLayoutGroup { }
+    public class GridLayoutGroup : LayoutGroup
+    {
+        public enum Constraint { Flexible, FixedColumnCount, FixedRowCount }
+        public Constraint constraint;
+        public UnityEngine.Vector2 cellSize;
+        public UnityEngine.Vector2 spacing;
+    }
+}
+namespace UnityEngine
+{
+    public enum FontStyle { Normal, Bold, Italic, BoldAndItalic }
+    public enum HorizontalWrapMode { Wrap, Overflow }
+    public enum VerticalWrapMode { Truncate, Overflow }
+    public enum SpriteMeshType { FullRect, Tight }
+    public class Font : Object { public string name; }
+    public class Outline : Component
+    {
+        public Color effectColor;
+        public Vector2 effectDistance;
+    }
+    public class RectOffset
+    {
+        public int left, right, top, bottom;
+        public RectOffset() { }
+        public RectOffset(int l, int r, int t, int b) { left = l; right = r; top = t; bottom = b; }
+    }
+}
+
+namespace UnityEngine { public enum TextAnchor { UpperLeft, UpperCenter, UpperRight, MiddleLeft, MiddleCenter, MiddleRight, LowerLeft, LowerCenter, LowerRight } }
+
+// ---- Stub cho dựng UI production (chỉ typecheck) ----
+namespace UnityEngine
+{
+    public enum CameraClearFlags { Skybox, SolidColor, Depth, Nothing }
+    public class Camera : Component
+    {
+        public CameraClearFlags clearFlags;
+        public Color backgroundColor;
+        public bool orthographic;
+        public float orthographicSize;
+        public RenderTexture targetTexture;
+        public void Render() { }
+    }
+}
+namespace UnityEngine.UI
+{
+}
+namespace UnityEditor.SceneManagement
+{
+    public enum NewSceneSetup { EmptyScene, DefaultGameObjects }
+    public enum NewSceneMode { Single, Additive }
+}
+
+// ---- Stub cho chụp ảnh (chỉ typecheck) ----
+namespace UnityEngine
+{
+    public enum RenderTextureFormat { ARGB32, RGB24 }
+    public class RenderTexture : Texture2D
+    {
+        public RenderTexture(int w, int h, int depth, RenderTextureFormat fmt)
+            : base(w, h, TextureFormat.RGBA32, false) { }
+        public static RenderTexture active;
+        public bool Create() => true;
+        public void Release() { }
+    }
+}
+
+// ---- Stub cho import sprite (chỉ typecheck) ----
+namespace UnityEditor
+{
+    public enum ImportAssetOptions { Default, ForceUpdate, ForceSynchronousImport }
+    public enum SpriteImportMode { None, Single, Multiple, Polygon }
+    public enum SpriteMeshType2 { FullRect, Tight }
+    public enum TextureImporterCompression { Uncompressed, Compressed, CompressedHQ, CompressedLQ }
 }

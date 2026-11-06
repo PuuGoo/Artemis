@@ -1,0 +1,50 @@
+{
+ "images": [
+  {
+   "id": "topHeroAvatarImg",
+   "alt": "Hero Avatar",
+   "cls": [
+    "w-full",
+    "h-full",
+    "object-cover"
+   ],
+   "file": "topHeroAvatarImg.jpg",
+   "bytes": 57144,
+   "mime": "jpeg"
+  },
+  {
+   "id": "skillModalPortrait",
+   "alt": "Valkyrie Blessing",
+   "cls": [
+    "w-14",
+    "h-14",
+    "sm:w-16",
+    "sm:h-16",
+    "rounded-2xl",
+    "object-cover",
+    "border-2",
+    "border-amber-400",
+    "shadow-lg"
+   ],
+   "file": "skillModalPortrait.jpg",
+   "bytes": 66783,
+   "mime": "jpeg"
+  },
+  {
+   "id": "",
+   "alt": "Devil Pact",
+   "cls": [
+    "w-20",
+    "h-20",
+    "rounded-2xl",
+    "object-cover",
+    "border-2",
+    "border-rose-500",
+    "shadow-lg"
+   ],
+   "file": "img02.jpg",
+   "bytes": 57653,
+   "mime": "jpeg"
+  }
+ ]
+}

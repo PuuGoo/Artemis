@@ -1,0 +1,132 @@
+{
+ "screens": [
+  {
+   "id": "gameModePanel",
+   "tag": "div",
+   "hidden": false
+  },
+  {
+   "id": "mapSelectPanel",
+   "tag": "div",
+   "hidden": false
+  },
+  {
+   "id": "bestiaryModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "bestiaryPanel",
+   "tag": "div",
+   "hidden": false
+  },
+  {
+   "id": "gearSetBonusPanel",
+   "tag": "div",
+   "hidden": false
+  },
+  {
+   "id": "charHeroStatsStarSkinPanel",
+   "tag": "div",
+   "hidden": false
+  },
+  {
+   "id": "heroDetailPanel",
+   "tag": "div",
+   "hidden": false
+  },
+  {
+   "id": "gameArenaView",
+   "tag": "section",
+   "hidden": true
+  },
+  {
+   "id": "skillSelectModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "runDefeatModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "chapterVictoryModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "runBriefingModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "devilModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "summaryModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "guideModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "gearDetailModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "btnCloseGearModal",
+   "tag": "button",
+   "hidden": false
+  },
+  {
+   "id": "blacksmithModal",
+   "tag": "div",
+   "hidden": true
+  },
+  {
+   "id": "quickMergePreviewModal",
+   "tag": "div",
+   "hidden": true
+  }
+ ],
+ "defaultState": {
+  "openTab": "tabEquip",
+  "visible": [
+   "gameModePanel",
+   "mapSelectPanel",
+   "bestiaryPanel",
+   "gearSetBonusPanel",
+   "charHeroStatsStarSkinPanel",
+   "heroDetailPanel",
+   "btnCloseGearModal"
+  ],
+  "allScreens": [
+   "gameModePanel",
+   "mapSelectPanel",
+   "bestiaryModal",
+   "bestiaryPanel",
+   "gearSetBonusPanel",
+   "charHeroStatsStarSkinPanel",
+   "heroDetailPanel",
+   "gameArenaView",
+   "skillSelectModal",
+   "runDefeatModal",
+   "chapterVictoryModal",
+   "runBriefingModal",
+   "devilModal",
+   "summaryModal",
+   "guideModal",
+   "gearDetailModal",
+   "btnCloseGearModal",
+   "blacksmithModal",
+   "quickMergePreviewModal"
+  ]
+ }
+}
