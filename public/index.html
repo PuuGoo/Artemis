@@ -3765,6 +3765,106 @@ const ArenaV2 = (() => {
     ctx.restore();
   }
 
+  function drawFrostfangWolf(ctx, r, t) {
+    const pulse = .76 + .24 * Math.sin(t * .01), stride = Math.sin(t * .014) * .12;
+    ctx.save(); ctx.rotate(Math.sin(t * .006) * .035);
+    const fur = ctx.createLinearGradient(-r, -r, r, r);
+    fur.addColorStop(0, '#f0f9ff'); fur.addColorStop(.42, '#7dd3fc'); fur.addColorStop(1, '#1e3a8a');
+    ctx.fillStyle = fur; ctx.strokeStyle = '#dbeafe'; ctx.lineWidth = 2;
+    poly(ctx, [[-r*.86,-r*.24],[-r*.52,-r*.86],[0,-r*.62],[r*.58,-r*.8],[r*.92,-r*.18],[r*.72,r*.54],[0,r*.82],[-r*.76,r*.5]]); ctx.fill(); ctx.stroke();
+    for (const d of [-1,1]) {
+      ctx.save(); ctx.translate(d*r*.42,r*.45); ctx.rotate(stride*d);
+      ctx.fillStyle = '#164e80'; ctx.strokeStyle = '#bae6fd'; ctx.lineWidth = 1.5;
+      poly(ctx,[[-r*.18,-r*.1],[r*.17,-r*.1],[r*.22,r*.72],[-r*.13,r*.72]]); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+    ctx.fillStyle = '#e0f2fe'; ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.6;
+    poly(ctx,[[-r*.62,-r*.56],[-r*.82,-r*1.18],[-r*.28,-r*.78],[0,-r*.9],[r*.24,-r*1.2],[r*.34,-r*.62]]); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#082f49'; ctx.beginPath(); ctx.ellipse(r*.58,-r*.22,r*.36,r*.27,-.12,0,TAU); ctx.fill();
+    orb(ctx,r*.61,-r*.27,r*.13,'#fef08a',pulse);
+    ctx.fillStyle = '#082f49'; ctx.beginPath(); ctx.moveTo(r*.83,r*.04); ctx.lineTo(r*1.18,r*.16); ctx.lineTo(r*.82,r*.29); ctx.closePath(); ctx.fill();
+    for(let i=0;i<3;i++) orb(ctx,-r*.35+i*r*.34,-r*.72,r*.12,'#ffffff',.9);
+    ctx.restore();
+  }
+
+  function drawAuroraWisp(ctx, r, t) {
+    const bob = Math.sin(t*.006)*r*.16, spin = t*.0018;
+    ctx.save(); ctx.translate(0,bob);
+    for(let i=0;i<3;i++){
+      ctx.save(); ctx.rotate(spin+i*Math.PI/3);
+      ctx.strokeStyle = i===1?'rgba(196,181,253,.9)':'rgba(125,211,252,.85)';
+      ctx.lineWidth = 2.5-i*.35; ctx.beginPath(); ctx.ellipse(0,0,r*(.9+i*.24),r*(.42+i*.1),0,0,TAU); ctx.stroke(); ctx.restore();
+    }
+    const core=ctx.createRadialGradient(-r*.15,-r*.2,1,0,0,r*.9);
+    core.addColorStop(0,'#ffffff'); core.addColorStop(.24,'#bae6fd'); core.addColorStop(.56,'#818cf8'); core.addColorStop(1,'rgba(30,64,175,0)');
+    ctx.fillStyle=core; ctx.beginPath(); ctx.ellipse(0,0,r*.5,r*.72,0,0,TAU); ctx.fill();
+    orb(ctx,0,-r*.12,r*.22,'#ffffff',.95);
+    for(let i=0;i<4;i++){ const x=Math.sin(spin+i*1.6)*r*.85, y=Math.cos(spin+i*1.6)*r*.55; orb(ctx,x,y,r*.13,i%2?'#c4b5fd':'#67e8f9',.85); }
+    ctx.restore();
+  }
+
+  function drawPrismKnight(ctx, r, t) {
+    const pulse=.8+.2*Math.sin(t*.008), tilt=Math.sin(t*.004)*.045;
+    ctx.save(); ctx.rotate(tilt);
+    const armor=ctx.createLinearGradient(-r,-r,r,r);
+    armor.addColorStop(0,'#f8fafc'); armor.addColorStop(.32,'#93c5fd'); armor.addColorStop(.68,'#4f46e5'); armor.addColorStop(1,'#111c48');
+    ctx.fillStyle=armor; ctx.strokeStyle='#dbeafe'; ctx.lineWidth=2.2;
+    poly(ctx,[[-r*.7,-r*.5],[0,-r*1.12],[r*.7,-r*.5],[r*.86,r*.48],[r*.38,r*.92],[-r*.38,r*.92],[-r*.86,r*.48]]); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#0b1c3a'; ctx.beginPath(); ctx.ellipse(0,-r*.18,r*.47,r*.38,0,0,TAU); ctx.fill();
+    orb(ctx,-r*.2,-r*.2,r*.13,'#67e8f9',pulse); orb(ctx,r*.2,-r*.2,r*.13,'#67e8f9',pulse);
+    for(const d of [-1,1]){
+      ctx.save(); ctx.translate(d*r*.78,r*.02); ctx.rotate(d*.23);
+      ctx.fillStyle='#bae6fd'; ctx.strokeStyle='#60a5fa'; ctx.lineWidth=1.5;
+      poly(ctx,[[0,-r*.62],[d*r*.28,-r*.12],[d*r*.16,r*.55],[0,r*.32],[-d*r*.16,r*.55],[-d*r*.28,-r*.12]]); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+    ctx.strokeStyle='#e0f2fe'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(r*.76,-r*.15); ctx.lineTo(r*1.16,r*.78); ctx.stroke();
+    ctx.fillStyle='#e0f2fe'; poly(ctx,[[r*1.12,r*.68],[r*1.3,r*.98],[r*.98,r*.84]]); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawNinthStarDragon(ctx, r, t, hr, charge) {
+    const rage=1-hr, pulse=.72+.28*Math.sin(t*.008), halo=.65+rage*.65+(charge?.35:0);
+    ctx.save(); ctx.rotate(t*.00028);
+    for(let i=0;i<3;i++){
+      ctx.strokeStyle=i===1?'rgba(196,181,253,.9)':'rgba(125,211,252,.78)';
+      ctx.lineWidth=i===1?3:2; ctx.setLineDash(i===2?[5,6]:[]);
+      ctx.beginPath(); ctx.ellipse(0,-r*.68,r*(1.25+i*.28),r*(.42+i*.09),i*.28,0,TAU); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    for(let i=0;i<9;i++){
+      const a=i*Math.PI*2/9+t*.00065, x=Math.cos(a)*r*1.55, y=-r*.68+Math.sin(a)*r*.52;
+      orb(ctx,x,y,r*(.15+(i%3)*.018),i%2?'#c4b5fd':'#67e8f9',halo*pulse);
+    }
+    ctx.restore();
+    for(const d of [-1,1]){
+      ctx.save(); ctx.translate(d*r*.22,-r*.14); ctx.rotate(d*(Math.sin(t*.0038)*.075+rage*.035));
+      const wing=ctx.createLinearGradient(0,-r*1.9,d*r*2.45,r);
+      wing.addColorStop(0,'#ffffff'); wing.addColorStop(.28,'#bae6fd'); wing.addColorStop(.62,'#38bdf8'); wing.addColorStop(1,'#172554');
+      ctx.fillStyle=wing; ctx.strokeStyle='#e0f2fe'; ctx.lineWidth=2.8;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(d*r*.7,-r*1.9,d*r*2.35,-r*1.55);
+      ctx.lineTo(d*r*1.72,-r*.08); ctx.lineTo(d*r*2.12,r*.63); ctx.quadraticCurveTo(d*r*.68,r*.42,0,0); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle='rgba(224,242,254,.8)'; ctx.lineWidth=1.8;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(d*r*2.2,-r*1.35); ctx.moveTo(0,0); ctx.lineTo(d*r*1.75,-r*.05); ctx.moveTo(0,0); ctx.lineTo(d*r*2.05,r*.52); ctx.stroke(); ctx.restore();
+    }
+    ctx.strokeStyle='#1e3a8a'; ctx.lineWidth=r*.46; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(-r*.28,r*.52); ctx.bezierCurveTo(-r*1.38,r*1.45,-r*1.9,-r*.4,-r*1.1,-r*.52); ctx.stroke();
+    ctx.strokeStyle='#bae6fd'; ctx.lineWidth=2.8; ctx.stroke();
+    const body=ctx.createLinearGradient(-r,-r,r,r);
+    body.addColorStop(0,'#f8fafc'); body.addColorStop(.3,'#7dd3fc'); body.addColorStop(.7,'#2563eb'); body.addColorStop(1,'#101b46');
+    ctx.fillStyle=body; ctx.strokeStyle='#0b1d43'; ctx.lineWidth=3.5;
+    ctx.beginPath(); ctx.ellipse(-r*.08,r*.22,r*.78,r*.98,-.18,0,TAU); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#dbeafe'; ctx.beginPath(); ctx.ellipse(r*.88,-r*.76,r*.64,r*.46,-.12,0,TAU); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#082f49'; ctx.beginPath(); ctx.ellipse(r*1.28,-r*.62,r*.33,r*.17,-.08,0,TAU); ctx.fill();
+    ctx.fillStyle='#e0f2fe'; poly(ctx,[[r*.32,-r*1.02],[r*.12,-r*1.72],[r*.55,-r*1.22],[r*.88,-r*1.95],[r*1.02,-r*1.05],[r*1.36,-r*1.56],[r*1.42,-r*.86]]); ctx.fill(); ctx.stroke();
+    orb(ctx,r*1.08,-r*.83,r*.22,'#ffffff',halo*pulse);
+    ctx.fillStyle='#082f49'; ctx.beginPath(); ctx.arc(r*1.1,-r*.84,r*.07,0,TAU); ctx.fill();
+    ctx.strokeStyle='#e0f2fe'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(r*.82,-r*.55); ctx.lineTo(r*1.1,-r*.46); ctx.lineTo(r*1.33,-r*.56); ctx.stroke();
+    ctx.fillStyle='#dbeafe';
+    for(let i=0;i<5;i++){ const x=-r*.45+i*r*.22, y=-r*.12-Math.sin(t*.006+i)*3; poly(ctx,[[x-r*.07,y],[x,y-r*(.3+(i%2)*.12)],[x+r*.07,y]]); ctx.fill(); }
+    orb(ctx,-r*.08,r*.25,r*.64,charge?'#ffffff':'#7dd3fc',halo);
+    if(charge) for(let i=0;i<9;i++) orb(ctx,-r*.45+i*r*.12,-r*.28-Math.sin(t*.01+i)*r*.12,r*.12,'#ffffff',.9);
+    ctx.restore();
+  }
+
   function drawElderDragon(ctx, r, t, hr, charge) {
     const rage = 1 - hr, pulse = .72 + .28 * Math.sin(t * .008), glow = Math.min(1.3, .55 + rage * .65 + (charge ? .45 : 0));
     // wings, with moving membranes
@@ -3814,7 +3914,8 @@ const ArenaV2 = (() => {
 
   const BOSSFN = {
     golem: drawGolem, queen: drawQueen, demon_king: drawDemon,
-    elder_dragon: drawElderDragon, eclipse_sovereign: drawEclipseSovereign
+    elder_dragon: drawElderDragon, eclipse_sovereign: drawEclipseSovereign,
+    ninth_star_dragon: drawNinthStarDragon
   };
 
   // ---------- trạng thái hiển thị riêng từng quái (không ghi vào dữ liệu game) ----------
@@ -3829,6 +3930,9 @@ const ArenaV2 = (() => {
     if (ty === 'rift_stalker') { drawRiftStalker(ctx, r, t); return; }
     if (ty === 'eclipse_oracle') { drawEclipseOracle(ctx, r, t); return; }
     if (ty === 'obsidian_brute') { drawObsidianBrute(ctx, r, t); return; }
+    if (ty === 'frostfang_wolf') { drawFrostfangWolf(ctx, r, t); return; }
+    if (ty === 'aurora_wisp') { drawAuroraWisp(ctx, r, t); return; }
+    if (ty === 'prism_knight') { drawPrismKnight(ctx, r, t); return; }
     if (BOSSFN[ty]) { const hr = clamp(e.hp / Math.max(1, e.maxHp), 0, 1); BOSSFN[ty](ctx, r, t, hr, e.attackTimer > 0 && e.attackTimer < 0.48); return; }
     const sk = skinOf(B, ty);
     if (!sk) { blob(ctx, r, '#94a3b8', '#334155'); ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.fill(); ctx.stroke(); eyes(ctx, 0, -2, 3); return; }
@@ -4426,6 +4530,38 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           threat: 7,
           stats: { speed: 76, contact: true, ranged: true }
         }
+        {
+          id: 'frostfang_wolf', name: 'Sói Băng Lam', icon: '🐺', tier: 'Thường',
+          color: '#67e8f9', aura: '#bae6fd',
+          lore: 'Bầy sói săn mồi trên những cầu băng giữa các đảo bay. Hơi thở của chúng đóng sương trên giáp trụ.',
+          behavior: 'Áp sát rất nhanh và phóng ba mảnh băng theo hình quạt hẹp.',
+          threat: 4,
+          stats: { speed: 112, contact: true, ranged: true }
+        },
+        {
+          id: 'aurora_wisp', name: 'Linh Thể Cực Quang', icon: '✨', tier: 'Tinh Anh',
+          color: '#a5f3fc', aura: '#818cf8',
+          lore: 'Tinh linh được sinh ra từ dải cực quang. Những vòng sáng quanh lõi của nó tích tụ năng lượng trước mỗi đợt đạn.',
+          behavior: 'Giữ khoảng cách và bắn quạt năm tia băng quang, đôi lúc phát xung sáu hướng.',
+          threat: 4,
+          stats: { speed: 76, contact: false, ranged: true }
+        },
+        {
+          id: 'prism_knight', name: 'Kỵ Sĩ Pha Lê', icon: '🛡️', tier: 'Tinh Anh',
+          color: '#c4b5fd', aura: '#7dd3fc',
+          lore: 'Chiến binh canh cổng được rèn từ lõi tinh thạch. Khiên lục giác của hắn bẻ cong ánh sáng và đạn phép.',
+          behavior: 'Tiến chậm, giáp dày và phát vòng kiếm tinh thể tám hướng.',
+          threat: 5,
+          stats: { speed: 46, contact: true, ranged: true }
+        },
+        {
+          id: 'ninth_star_dragon', name: 'Cửu Diệu Tinh Long', icon: '🐉', tier: 'TRÙM CUỐI',
+          color: '#7dd3fc', aura: '#c4b5fd',
+          lore: 'Thần long ngủ trong lõi pháo đài băng, mang chín tinh tú xoay quanh long tâm. Mỗi lần thức tỉnh, bầu trời lại đổi mùa.',
+          behavior: 'Xoay vòng chín tinh đạn, quét luồng băng quang theo hình quạt và phóng chùm sao truy kích. Dưới 50% máu, chín tinh tú tăng tốc và boss cuồng nộ.',
+          threat: 8,
+          stats: { speed: 84, contact: true, ranged: true }
+        },
       ];
 
       const BESTIARY_BY_ID = Object.fromEntries(BESTIARY.map(b => [b.id, b]));
