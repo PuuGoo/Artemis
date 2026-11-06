@@ -19,6 +19,8 @@ const assets = [
   { file: "map-ch2-lava-valley.svg", ch: 2 },
   { file: "map-ch3-void-sanctum.svg", ch: 3 },
   { file: "map-ch4-dragon-realm.svg", ch: 4 },
+  { file: "map-ch5-eclipse-kingdom.svg", ch: 5 },
+  { file: "map-ch6-frost-cosmos.svg", ch: 6 },
 ];
 for (const a of assets) {
   const p = new URL("../public/assets/" + a.file, import.meta.url);
@@ -43,14 +45,17 @@ for (const a of assets) {
 
 // ============================================================ 2. CHAPTERS metadata
 console.log("\n=== 2. METADATA CHAPTERS ===");
-check("moi chuong co mapAsset", (html.match(/mapAsset: '\/assets\//g) || []).length === 4,
+check("moi chuong co mapAsset", (html.match(/mapAsset: '\/assets\//g) || []).length === 6,
   String((html.match(/mapAsset: '\/assets\//g) || []).length));
 check("ch1 tro dung asset", html.includes("mapAsset: '/assets/map-ch1-ancient-stone.svg'"));
 check("ch2 tro dung asset", html.includes("mapAsset: '/assets/map-ch2-lava-valley.svg'"));
 check("ch3 tro dung asset", html.includes("mapAsset: '/assets/map-ch3-void-sanctum.svg'"));
 check("ch4 tro dung asset", html.includes("mapAsset: '/assets/map-ch4-dragon-realm.svg'"));
-check("moi chuong co mapRegion", (html.match(/mapRegion:/g) || []).length === 4);
-check("moi chuong co mapTagline", (html.match(/mapTagline:/g) || []).length === 4);
+check("ch5 tro dung asset", html.includes("mapAsset: '/assets/map-ch5-eclipse-kingdom.svg'"));
+check("ch6 tro dung asset", html.includes("mapAsset: '/assets/map-ch6-frost-cosmos.svg'"));
+check("chapter 6 co biome va boss arena rieng", html.includes("6: ['frostfall', 'aurora_shelf', 'glacier_spire', 'frostfall']") && html.includes("ninth_star_dragon: 'ninth_star_arena'"));
+check("moi chuong co mapRegion", (html.match(/mapRegion:/g) || []).length === 6);
+check("moi chuong co mapTagline", (html.match(/mapTagline:/g) || []).length === 6);
 check("khong dung URL anh ben ngoai", !/mapAsset: 'https?:/.test(html));
 
 // ============================================================ 3. DOM + CSS
