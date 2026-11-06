@@ -1,4 +1,9 @@
 // Test tich hop: sua loi shop/events + admin API.
+// Suite có thao tác admin phá hủy: chỉ chạy với fixtures trong DB cô lập.
+if (process.env.ARTEMIS_ISOLATED_TESTS !== "1") {
+  const { test } = await import("node:test");
+  test("admin integration: cần tài khoản và database test cô lập", { skip: "BLOCKED: đặt ARTEMIS_ISOLATED_TESTS=1 sau khi xác minh DB test" }, () => {});
+} else {
 const BASE = "http://127.0.0.1:3000";
 let pass = 0, fail = 0;
 const jar = new Map();
@@ -8,20 +13,7 @@ function check(name, cond, extra = "") {
   else { fail++; console.log("  FAIL  " + name + (extra ? "  -> " + extra : "")); }
 }
 
-async function clearLimits() {
-  try {
-    const fs = await import("node:fs");
-    const env = fs.readFileSync(new URL("../.env", import.meta.url), "utf8");
-    const uri = env.match(/^MONGODB_URI=(.*)$/m)?.[1]?.trim();
-    if (!uri) return;
-    const { MongoClient } = await import("mongodb");
-    const c = new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
-    await c.connect();
-    await c.db(env.match(/^MONGODB_DB=(.*)$/m)?.[1]?.trim() || "artemis").collection("login_attempts").deleteMany({});
-    await c.close();
-  } catch {}
-}
-await clearLimits();
+
 
 async function req(path, { method = "GET", body } = {}) {
   const headers = { "content-type": "application/json" };
@@ -129,4 +121,5 @@ r = await req("/api/admin/players?q=" + encodeURIComponent(user));
 check("tai khoan da bi xoa khoi danh sach", r.data.rows.length === 0, "con " + r.data.rows.length + " rows");
 
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);
-process.exit(fail > 0 ? 1 : 0);
+process.exitCode = fail > 0 ? 1 : 0;
+}

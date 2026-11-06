@@ -6424,14 +6424,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        * ai bấm "MAX ĐỒ" một lần là có 9.999.999 vàng + 999.999 đá quý + 30 bậc talent,
        * phá huỷ toàn bộ cân bằng của game.
        *
-       * Nay tất cả bị khoá sau cờ này. Bật bằng:
-       *   • URL:  ?dev=1        (?dev=1&dev=1 vẫn tính)
-       *   • hoặc localStorage.setItem('artemis_dev', '1') rồi reload
+       * Chỉ bật trong bản chạy local/offline, không phải quyền admin/server:
+       *   • localhost / 127.0.0.1 / [::1] hoặc file://
+       *   • URL: ?dev=1 hoặc localStorage artemis_dev=1
+       * Trên hostname công khai, cả URL lẫn localStorage đều không mở cổng này.
        * Tắt lại:
        *   • localStorage.removeItem('artemis_dev')
        */
       const DEV_CHEATS = (function () {
         try {
+          const localHost = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+          const localOrigin = location.protocol === 'file:'
+            || (localHost && ['http:', 'https:'].includes(location.protocol));
+          if (!localOrigin) return false;
           const q = new URLSearchParams(location.search);
           if (q.get('dev') === '1') {
             try { localStorage.setItem('artemis_dev', '1'); } catch (e) {}
@@ -10294,6 +10299,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               chestGachaState: this.chestGachaState,
               runeRuinsState: this.runeRuinsState,
               wikiEventsState: this.wikiEventsState,
+              season: this.season,
               runes: this.runes,
               talents: this.talents,
               bestRooms: this.bestRooms,
@@ -10305,6 +10311,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               achievementsClaimed: this.achievementsClaimed,
               achievementFilter: this.achievementFilter,
               beginnerJourney: this.beginnerJourney,
+              starterWeaponGranted: this.starterWeaponGranted,
               // Checkpoint lượt chơi (dùng cho Continue). KHÔNG phải dữ liệu
               // nhân vật — bị xoá khi Retry/Reset hoặc khi Continue dùng xong.
               // Ghi thẳng giá trị: null là trạng thái hợp lệ (chưa có checkpoint).
@@ -11418,8 +11425,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       }
 
       function upgradeHeroStar(heroId = SaveState.selectedHeroId) {
+        // ID lạ (không có trong HEROES) không được ghi sao/mảnh vào save.
+        const realHero = HEROES.find(h => h.id === heroId);
+        if (!realHero) return false;
         const curStar = getHeroStarLevel(heroId);
-        const heroObj = HEROES.find(h => h.id === heroId) || HEROES[0];
+        const heroObj = realHero;
         if (curStar >= 8) {
           showToast(`👑 ${heroObj.name} đã đạt cảnh giới Tối Thượng 8★ Cực Cảnh (LV.4)!`);
           return false;
@@ -11460,7 +11470,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       }
 
       function summonHeroShards(heroId = SaveState.selectedHeroId, amount = 100) {
-        const heroObj = HEROES.find(h => h.id === heroId) || HEROES[0];
+        const heroObj = HEROES.find(h => h.id === heroId);
+        // ID lạ không được cấp mảnh (trước đây rơi về HEROES[0] và ghi mảnh rác).
+        if (!heroObj) return 0;
         const gemCost = 50;
         // LO HONG DA VA: truoc day neu thieu da quy thi TU CONG +500 roi tru 50
         // => lai rong +450 da quy VA +100 manh tuong moi lan bam, khong gioi han.
@@ -11557,8 +11569,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       }
 
       // ==================== COMPUTED PLAYER STATS ====================
-      function getComputedStats() {
-        const hero = HEROES.find(h => h.id === SaveState.selectedHeroId) || HEROES[0];
+      // Override chỉ sống trong lúc launchEventCanvasRun dựng trận (trial Atreus).
+      let runHeroOverrideId = null;
+      function getComputedStats(heroId = runHeroOverrideId || SaveState.selectedHeroId) {
+        const hero = HEROES.find(h => h.id === heroId) || HEROES[0];
         const eqWeaponItem = SaveState.equippedGear && SaveState.equippedGear.weapon;
         if (eqWeaponItem && GEAR_TEMPLATES[eqWeaponItem.templateId]) {
           SaveState.selectedWeaponId = GEAR_TEMPLATES[eqWeaponItem.templateId].weaponArchetype || 'bow';
@@ -14183,6 +14197,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        */
       function isHeroOwned(heroId) {
         if (!heroId) return false;
+        // Chỉ hero có trong HEROES mới hợp lệ; ID lạ không bao giờ được coi là sở hữu.
+        // (typeof guard chỉ để harness cô lập nạp riêng hàm này không bị ReferenceError.)
+        if (typeof HEROES !== 'undefined' && Array.isArray(HEROES) && !HEROES.some(h => h.id === heroId)) return false;
+        // Alex là nhân vật khởi đầu miễn phí ở 0★, không mất quyền dùng khi đổi tướng.
+        if (heroId === 'alex') return true;
         if (getHeroStarLevel(heroId) >= 1) return true;
         // Hero đang xuất chiến luôn được coi là sở hữu (kể cả 0★) — nếu không
         // tân thủ sẽ bị khoá chính hero mặc định của mình.
@@ -17379,6 +17398,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             b.addEventListener('click', () => {
               const nextHeroId = b.getAttribute('data-stage-hero');
               if (nextHeroId && nextHeroId !== SaveState.selectedHeroId) {
+                if (!isHeroOwned(nextHeroId)) { showToast('🔒 Anh hùng chưa mở khoá.', 'err'); return; }
                 SaveState.selectedHeroId = nextHeroId;
                 SaveState.save();
                 SoundFX.levelUp();
@@ -17397,7 +17417,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const eqW = GEAR_TEMPLATES[SaveState.equippedGear?.weapon?.templateId]?.name?.split(' (')[0] || 'Cung';
           const eqA = GEAR_TEMPLATES[SaveState.equippedGear?.armor?.templateId]?.name?.split(' (')[0] || 'Giáp';
           const eqH = GEAR_TEMPLATES[SaveState.equippedGear?.helmet?.templateId]?.name?.split(' (')[0] || 'Mũ';
-          visSummaryEl.textContent = `${stats.hero.name} (${stats.heroStar || 6}★) • Skin: ${(stats.activeSkin || {}).name || 'Mặc Định'} • ${eqW}`;
+          // 0★ là giá trị hợp lệ: trước đây `|| 6` biến Alex 0★ thành 6★.
+          const summaryStar = Number.isFinite(stats.heroStar) ? stats.heroStar : getHeroStarLevel(stats.hero.id);
+          visSummaryEl.textContent = `${stats.hero.name} (${summaryStar}★) • Skin: ${(stats.activeSkin || {}).name || 'Mặc Định'} • ${eqW}`;
         }
 
         // Build Authentic Archero 2 Wiki Character Card (Skill + Rarity + Resonance + 0★-8★ Attribute List + Backstory)
@@ -17845,7 +17867,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }).join('');
           document.querySelectorAll('.char-subtab-hero-btn').forEach(b => {
             b.addEventListener('click', () => {
-              SaveState.selectedHeroId = b.getAttribute('data-char-hero');
+              const heroId = b.getAttribute('data-char-hero');
+              if (!isHeroOwned(heroId)) { showToast('🔒 Anh hùng chưa mở khoá.', 'err'); return; }
+              SaveState.selectedHeroId = heroId;
               SaveState.save();
               SoundFX.coinPickup();
               StageHeroAnim.triggerPose();
@@ -19795,6 +19819,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         container.querySelectorAll('[data-buy-hero-shard]').forEach(btn => {
           btn.onclick = () => {
             const hId = btn.getAttribute('data-buy-hero-shard');
+            // Validate trước khi trừ gem: id lạ không được làm mất 100 💎.
+            if (!HEROES.some(h => h.id === hId)) { showToast('🔒 Anh hùng không tồn tại.', 'err'); return; }
             if ((SaveState.gems || 0) < 100) {
               showToast('⚠️ Cần 100 💎 Đá Quý!');
               return;
@@ -19807,6 +19833,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         container.querySelectorAll('[data-jump-upgrade-hero]').forEach(btn => {
           btn.onclick = () => {
             const hId = btn.getAttribute('data-jump-upgrade-hero');
+            if (!isHeroOwned(hId)) { showToast('🔒 Anh hùng chưa mở khoá.', 'err'); return; }
             SaveState.selectedHeroId = hId;
             SaveState.save();
             const charSubBtn = document.querySelector('.gear-subtab-btn[data-gear-subtab="characters"]');
@@ -21350,8 +21377,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       function launchEventCanvasRun(modeTitle, stageName, floorColor1, floorColor2, wallColor, enemyScale, forceHeroId = null) {
-        if (forceHeroId) {
-          SaveState.selectedHeroId = forceHeroId;
+        // Demon King explicitly lends Atreus for this run, never as persistent ownership.
+        if (forceHeroId && (!HEROES.some(h => h.id === forceHeroId) || (forceHeroId !== 'atreus' && !isHeroOwned(forceHeroId)))) {
+          showToast('🔒 Anh hùng chưa mở khoá hoặc không tồn tại.', 'err');
+          return false;
         }
         const customCh = {
           id: 999,
@@ -21365,7 +21394,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           enemyScale: enemyScale || 1.35
         };
         const savedIdx = SaveState.selectedChapterIdx;
-        startNewRun();
+        // Áp hero trial CHỈ trong lúc dựng trận, rồi trả lại ngay — không ghi vào SaveState.
+        runHeroOverrideId = forceHeroId || null;
+        try {
+          if (startNewRun() === false) return false;
+        } finally {
+          runHeroOverrideId = null;
+        }
         Game.chapter = customCh;
         const hudRoom = document.getElementById('hudRoomText');
         if (hudRoom) hudRoom.textContent = `${stageName} (1/15)`;
@@ -25211,14 +25246,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           btn.onclick = (e) => {
             e.stopPropagation();
             const hId = btn.getAttribute('data-vn-hero-starup');
+            // Preview-only entries must go through canonical cost/ownership logic.
+            if (!HEROES.some(h => h.id === hId)) { showToast('🔒 Anh hùng chỉ có trong bản xem trước.', 'err'); return; }
             const hObj = VN_21_HEROES_PDF.find(x => x.id === hId);
-            if (hObj) {
-              hObj.unlocked = true;
-              hObj.stars = Math.min(8, (hObj.stars || 0) + 1);
-            }
-            if (typeof upgradeHeroStar === 'function') upgradeHeroStar(hId);
+            const ok = typeof upgradeHeroStar === 'function' && upgradeHeroStar(hId);
+            if (!ok) { renderVnHeroesAndWardrobeUI(); return; }
+            if (hObj) hObj.stars = Math.min(8, getHeroStarLevel(hId));
             renderVnHeroesAndWardrobeUI();
-            showToast(`🌟 Đã nâng sao anh hùng [${hObj?.name || hId}] lên ${hObj?.stars || 8}★!`);
+            showToast(`🌟 Đã nâng sao anh hùng [${hObj?.name || hId}] lên ${getHeroStarLevel(hId)}★!`);
           };
         });
 
@@ -25227,9 +25262,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             e.stopPropagation();
             const hId = btn.getAttribute('data-vn-hero-use');
             const hObj = VN_21_HEROES_PDF.find(x => x.id === hId);
-            if (hObj) hObj.unlocked = true;
-            const matchExisting = HEROES.find(x => x.id === hId) ? hId : 'artemis';
-            SaveState.selectedHeroId = matchExisting;
+            if (!isHeroOwned(hId)) { showToast('🔒 Anh hùng chưa mở khoá hoặc chỉ có trong bản xem trước.', 'err'); return; }
+            SaveState.selectedHeroId = hId;
             st.selectedHeroIdVn = hId;
             SaveState.save();
             SoundFX.levelUp();
@@ -25456,7 +25490,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         {
           id: 'N04',
           title: 'Trang bị sức mạnh',
-          desc: 'Phần thưởng hoàn thành phòng đầu tiên là thanh kiếm gỗ. Hãy mặc nó vào ô Vũ Khí để tăng sát thương.',
+          desc: 'Phần thưởng hoàn thành phòng đầu tiên là Cung Gỉ Sét. Hãy mặc nó vào ô Vũ Khí để tăng sát thương.',
           hint: 'Tab "Trang Bị" → món đồ trong túi → Trang Bị.',
           event: 'gear_equipped',
           eventLabel: 'Trang bị 1 món đồ',
@@ -25663,7 +25697,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // Đã có vũ khí mặc hoặc trong túi -> không tặng (tránh trùng).
         const equippedWeapon = SaveState.equippedGear && SaveState.equippedGear.weapon;
-        if (equippedWeapon && equippedWeapon.templateId) return null;
+        if (equippedWeapon && equippedWeapon.templateId) {
+          SaveState.starterWeaponGranted = true;
+          SaveState.save();
+          return null;
+        }
         const bagWeapon = (SaveState.gearBag || []).find(
           (it) => it && GEAR_TEMPLATES[it.templateId] && GEAR_TEMPLATES[it.templateId].slot === 'weapon'
         );
@@ -25690,14 +25728,17 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           // để mặc ở bước N04 thay vì bị bỏ rơi với 6 ô trống.
           const granted = grantStarterWeaponIfNeeded();
           if (granted && typeof showToast === 'function') {
-            showToast('🗡️ Nhận được Thanh Kiếm Gỗ! Mở tab Trang Bị để mặc.');
+            showToast('🏹 Nhận được Cung Gỉ Sét! Mở tab Trang Bị để mặc.');
           }
         },
         onLoot(count = 1) {
           const bj = SaveState.beginnerJourney;
-          if (!bj || !isBeginnerJourneyActive()) return;
-          bj._lootCount = (bj._lootCount || 0) + count;
+          if (!bj || !isBeginnerJourneyActive() || (bj.completedSteps || []).includes('N03')) return;
+          const amount = Number(count);
+          if (!Number.isFinite(amount) || amount <= 0) return;
+          bj._lootCount = Math.min(10, Math.max(0, Number(bj._lootCount) || 0) + Math.floor(amount));
           if (bj._lootCount >= 10) completeBeginnerStep('N03');
+          else SaveState.save();
         },
         onGearEquipped() { completeBeginnerStep('N04'); },
         onGearUpgraded() { completeBeginnerStep('N05'); },
@@ -25739,7 +25780,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             : (isClaimed ? '<span class="text-[11px] text-slate-500 font-bold">Đã nhận</span>' : '');
 
           const actionBtn = (isCurrent && s.event === 'dialogue')
-            ? `<button data-bj-step="${s.id}" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-[11px] font-black transition">Đã Hiểu</button>`
+            ? `<button data-bj-step="${s.id}" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-[11px] font-black transition">${s.id === 'N08' ? 'Hoàn Tất' : 'Đã Hiểu'}</button>`
             : '';
 
           return `
@@ -26324,7 +26365,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         document.querySelectorAll('.hero-card-btn').forEach(btn => {
           btn.addEventListener('click', () => {
-            SaveState.selectedHeroId = btn.getAttribute('data-hero-id');
+            const heroId = btn.getAttribute('data-hero-id');
+            if (!isHeroOwned(heroId)) {
+              showToast('🔒 Anh hùng chưa mở khoá — hãy thu thập mảnh để mở.', 'err');
+              return;
+            }
+            SaveState.selectedHeroId = heroId;
             SaveState.save();
             SoundFX.coinPickup();
             renderLobbyUI();
@@ -26357,7 +26403,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         const weaponGrid = document.getElementById('weaponCardsGrid');
         weaponGrid.innerHTML = WEAPONS.map(w => {
-          const isSelected = w.id === SaveState.selectedWeaponId;
+          const matchesWeapon = it => it && GEAR_TEMPLATES[it.templateId]?.slot === 'weapon'
+            && GEAR_TEMPLATES[it.templateId].weaponArchetype === w.id;
+          const isSelected = matchesWeapon(SaveState.equippedGear?.weapon);
+          const owned = isSelected || (SaveState.gearBag || []).some(matchesWeapon);
           return `
             <div class="p-3.5 rounded-2xl border flex flex-col justify-between gap-3 transition ${isSelected ? 'bg-amber-500/15 border-amber-400 shadow-lg' : 'bg-slate-900/90 border-slate-800'}">
               <div class="flex items-start justify-between gap-2">
@@ -26371,7 +26420,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               </div>
               <p class="text-xs text-slate-300 leading-relaxed">${w.desc}</p>
               <button type="button" data-weapon-id="${w.id}" class="select-weapon-btn w-full py-2 rounded-xl font-extrabold text-xs transition ${isSelected ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600'}">
-                ${isSelected ? '✓ Đang Trang Bị' : 'Trang Bị Vũ Khí Này'}
+                ${isSelected ? '✓ Đang Trang Bị' : (owned ? 'Trang Bị Vũ Khí Đang Có' : '🔒 Chưa sở hữu · Xem thông tin')}
               </button>
             </div>
           `;
@@ -26380,21 +26429,25 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         document.querySelectorAll('.select-weapon-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const wId = btn.getAttribute('data-weapon-id');
-            SaveState.selectedWeaponId = wId;
-            const mapTpl = { bow: 'crimson_bow', staff: 'oracle_staff', claw: 'dragoon_claw' };
-            // Tân thủ có thể CHƯA có vũ khí nào (bắt đầu tay không). Trước đây
-            // chỉ sửa templateId khi đã có weapon -> đổi vũ khí không có tác
-            // dụng gì. Nay tạo mới nếu slot còn trống.
-            if (!SaveState.equippedGear) SaveState.equippedGear = createDefaultEquipped();
-            if (SaveState.equippedGear.weapon) {
-              SaveState.equippedGear.weapon.templateId = mapTpl[wId] || 'crimson_bow';
-            } else {
-              const newUid = `eq_w_${Date.now().toString(36)}`;
-              SaveState.equippedGear.weapon = makeStarterItem(newUid, mapTpl[wId] || 'crimson_bow');
+            // Danh mục chỉ chọn món ĐÃ sở hữu, không tạo hay đổi template của đồ cũ.
+            const matchesWeapon = it => it && GEAR_TEMPLATES[it.templateId]?.slot === 'weapon'
+              && GEAR_TEMPLATES[it.templateId].weaponArchetype === wId;
+            const current = SaveState.equippedGear && SaveState.equippedGear.weapon;
+            if (matchesWeapon(current)) return;
+            const bagIdx = (SaveState.gearBag || []).findIndex(matchesWeapon);
+            if (bagIdx < 0) {
+              showToast('🔒 Chưa sở hữu vũ khí loại này. Hãy kiếm trang bị từ rương hoặc phần thưởng.');
+              return;
             }
+            if (!SaveState.equippedGear) SaveState.equippedGear = createDefaultEquipped();
+            const ownedItem = SaveState.gearBag.splice(bagIdx, 1)[0];
+            if (current) SaveState.gearBag.push(current);
+            SaveState.equippedGear.weapon = ownedItem;
+            SaveState.selectedWeaponId = wId;
             SaveState.save();
+            if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onGearEquipped();
             SoundFX.coinPickup();
-            showToast('Đã đổi Vũ Khí S-Tier!');
+            showToast('Đã trang bị vũ khí đang sở hữu!');
             renderLobbyUI();
           });
         });
@@ -32233,24 +32286,28 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       // Prev / Next Hero Switcher on Gear Stage
       document.getElementById('btnStagePrevHero')?.addEventListener('click', () => {
-        const idx = HEROES.findIndex(h => h.id === SaveState.selectedHeroId);
-        const nextIdx = (idx - 1 + HEROES.length) % HEROES.length;
-        SaveState.selectedHeroId = HEROES[nextIdx].id;
+        const ownedHeroes = HEROES.filter(h => isHeroOwned(h.id));
+        if (!ownedHeroes.length) return;
+        const idx = ownedHeroes.findIndex(h => h.id === SaveState.selectedHeroId);
+        const nextHero = ownedHeroes[idx < 0 ? 0 : (idx - 1 + ownedHeroes.length) % ownedHeroes.length];
+        SaveState.selectedHeroId = nextHero.id;
         SaveState.save();
         SoundFX.levelUp();
         StageHeroAnim.triggerPose();
-        showToast(`🌙 Đã chuyển sang nhân vật: ${HEROES[nextIdx].name} • ${HEROES[nextIdx].title}`);
+        showToast(`🌙 Đã chuyển sang nhân vật: ${nextHero.name} • ${nextHero.title}`);
         renderLobbyUI();
       });
 
       document.getElementById('btnStageNextHero')?.addEventListener('click', () => {
-        const idx = HEROES.findIndex(h => h.id === SaveState.selectedHeroId);
-        const nextIdx = (idx + 1) % HEROES.length;
-        SaveState.selectedHeroId = HEROES[nextIdx].id;
+        const ownedHeroes = HEROES.filter(h => isHeroOwned(h.id));
+        if (!ownedHeroes.length) return;
+        const idx = ownedHeroes.findIndex(h => h.id === SaveState.selectedHeroId);
+        const nextHero = ownedHeroes[(idx + 1) % ownedHeroes.length];
+        SaveState.selectedHeroId = nextHero.id;
         SaveState.save();
         SoundFX.levelUp();
         StageHeroAnim.triggerPose();
-        showToast(`🌙 Đã chuyển sang nhân vật: ${HEROES[nextIdx].name} • ${HEROES[nextIdx].title}`);
+        showToast(`🌙 Đã chuyển sang nhân vật: ${nextHero.name} • ${nextHero.title}`);
         renderLobbyUI();
       });
 

@@ -1,0 +1,47 @@
+{
+  "time": "2026-11-06T17:57:45.755Z",
+  "browser": "156.0.8078.80",
+  "scope": "Anonymous GET-only production smoke; all mutations blocked; no account created",
+  "login": {
+    "status": 200,
+    "gate": true,
+    "inputs": [
+      {
+        "type": "text",
+        "name": "username",
+        "maxLength": 20
+      },
+      {
+        "type": "password",
+        "name": "password",
+        "maxLength": 128
+      }
+    ],
+    "text": "🐴\nArchero 2\nKỶ NGUYÊN CUNG THỦ\nĐăng nhập để tiếp tục hành trình của bạn\nTÊN ĐĂNG NHẬP\nMẬT KHẨU\n🔓 Đăng Nhập\nChưa có tài khoản? Đăng ký\n🔒 Tiến trình lưu trên MongoDB Atlas — không dùng bộ nhớ trình duyệt"
+  },
+  "register": {
+    "gate": true,
+    "submit": true,
+    "text": "🐴\nArchero 2\nKỶ NGUYÊN CUNG THỦ\nTạo tài khoản để bắt đầu hành trình\nTÊN ĐĂNG NHẬP\nMẬT KHẨU\n✨ Tạo Tài Khoản\nĐã có tài khoản? Đăng nhập\n🔒 Tiến trình lưu trên MongoDB Atlas — không dùng bộ nhớ trình duyệt"
+  },
+  "emptyValidation": "🐴\nArchero 2\nKỶ NGUYÊN CUNG THỦ\nTạo tài khoản để bắt đầu hành trình\nTÊN ĐĂNG NHẬP\nMẬT KHẨU\nTên đăng nhập phải có ít nhất 3 ký tự.\n✨ Tạo Tài Khoản\nĐã có tài khoản? Đăng nhập\n🔒 Tiến trình lưu trên MongoDB Atlas — không dùng bộ nhớ trình duyệt",
+  "errors": [],
+  "failures": [],
+  "responses": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/cloud.js",
+      "status": 200
+    },
+    {
+      "path": "/api/auth/me",
+      "status": 200
+    }
+  ],
+  "blockedMutations": [],
+  "deploymentVersion": "DEPLOYMENT VERSION NOT VERIFIED",
+  "authenticatedFlow": "BLOCKED: no Artemis vault login, no password entered"
+}

@@ -1,0 +1,947 @@
+{
+  "time": "2026-11-06T19:10:24.454Z",
+  "browser": "156.0.8078.80",
+  "scope": "LOCAL MOCK AUTH/SAVE ONLY. Không đăng ký account thật, không kiểm chứng Mongo persistence hoặc auth server.",
+  "results": [
+    {
+      "name": "INIT: trạng thái fresh fixture (mock auth/save, không phải đăng ký thật)",
+      "status": "PASS",
+      "details": {
+        "level": 1,
+        "gold": 500,
+        "gems": 50,
+        "energy": 20,
+        "hero": "alex",
+        "stars": {
+          "thor": 0,
+          "wukong": 0,
+          "cleo": 0,
+          "atreus": 0,
+          "rolla": 0,
+          "nezha": 0,
+          "otta": 0,
+          "hou_yi": 0,
+          "phynx": 0,
+          "loki": 0,
+          "dracoola": 0,
+          "seraph": 0,
+          "mymu": 0,
+          "hela": 0,
+          "helix": 0,
+          "nyanja": 0,
+          "alex": 0,
+          "artemis": 0
+        },
+        "bag": [],
+        "equipped": {
+          "weapon": null,
+          "necklace": null,
+          "ring": null,
+          "armor": null,
+          "helmet": null,
+          "boots": null
+        },
+        "talents": {
+          "might": 0,
+          "vitality": 0,
+          "alacrity": 0,
+          "healer": 0,
+          "greed": 0,
+          "valkyrie_favor": 0,
+          "glory": 0,
+          "refinement": 0,
+          "ult_crit_dmg": 0,
+          "ult_dodge": 0,
+          "titan": 0,
+          "super_vigor": 0,
+          "super_strength": 0,
+          "super_recovery": 0,
+          "super_iron_wall": 0,
+          "super_crit_rate": 0,
+          "super_crit_dmg": 0,
+          "super_dodge": 0,
+          "recovery": 0,
+          "iron_wall": 0,
+          "tactics": 0,
+          "master_explorer": 0,
+          "brave_adventurer": 0,
+          "alchemist": 0,
+          "super_vigor_2": 0,
+          "super_strength_2": 0,
+          "super_recovery_2": 0,
+          "angelic_embrace": 0,
+          "devil_discount": 0,
+          "vigor_2": 0,
+          "strength_2": 0,
+          "recovery_2": 0
+        },
+        "stats": {
+          "baseAtk": 152,
+          "baseHp": 775,
+          "baseAspd": 1.94,
+          "baseCrit": 0.22,
+          "powerScore": 3215,
+          "defFlat": 0,
+          "dmgReduction": 0
+        }
+      }
+    },
+    {
+      "name": "Hero UI không chọn tướng chưa sở hữu qua stage/character/arrows",
+      "status": "PASS",
+      "details": [
+        {
+          "selector": ".stage-quick-hero-btn[data-stage-hero=\"thor\"]",
+          "selected": "alex",
+          "expected": "alex"
+        },
+        {
+          "selector": ".char-subtab-hero-btn[data-char-hero=\"thor\"]",
+          "selected": "alex",
+          "expected": "alex"
+        },
+        {
+          "selector": "#btnStagePrevHero",
+          "selected": "alex",
+          "expected": "alex"
+        },
+        {
+          "selector": "#btnStageNextHero",
+          "selected": "alex",
+          "expected": "alex"
+        }
+      ]
+    },
+    {
+      "name": "N01 activation + initial mission render",
+      "status": "PASS",
+      "details": {
+        "version": 1,
+        "startedAt": 1793992187915,
+        "completedAt": 0,
+        "skipped": false,
+        "currentStep": "N01",
+        "completedSteps": [],
+        "claimedRewards": [],
+        "isCompleted": false
+      }
+    },
+    {
+      "name": "N03 tiến độ sau cloud save/reload mock server",
+      "status": "PASS",
+      "details": {
+        "before": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N01",
+          "completedSteps": [],
+          "claimedRewards": [],
+          "isCompleted": false,
+          "_lootCount": 7
+        },
+        "after": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N01",
+          "completedSteps": [],
+          "claimedRewards": [],
+          "isCompleted": false,
+          "_lootCount": 7
+        }
+      }
+    },
+    {
+      "name": "A/B fixture cách ly sau reload cùng browser",
+      "status": "PASS",
+      "details": {
+        "a": {
+          "gold": 500,
+          "loot": 7
+        },
+        "b": {
+          "gold": 500,
+          "journey": {
+            "version": 1,
+            "startedAt": 0,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N01",
+            "completedSteps": [],
+            "claimedRewards": [],
+            "isCompleted": false
+          },
+          "bag": []
+        }
+      }
+    },
+    {
+      "name": "N01: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 500,
+            "gems": 50
+          },
+          "after": {
+            "gold": 600,
+            "gems": 50
+          },
+          "reward": {
+            "gold": 100
+          },
+          "count": 0,
+          "afterDuplicateCount": 0,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N02",
+            "completedSteps": [
+              "N01"
+            ],
+            "claimedRewards": [
+              "N01"
+            ],
+            "isCompleted": false,
+            "_lootCount": 7
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N02",
+          "completedSteps": [
+            "N01"
+          ],
+          "claimedRewards": [
+            "N01"
+          ],
+          "isCompleted": false,
+          "_lootCount": 7
+        }
+      }
+    },
+    {
+      "name": "N02: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 600,
+            "gems": 50
+          },
+          "after": {
+            "gold": 800,
+            "gems": 60
+          },
+          "reward": {
+            "gold": 200,
+            "gems": 10
+          },
+          "count": 1,
+          "afterDuplicateCount": 1,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N03",
+            "completedSteps": [
+              "N01",
+              "N02"
+            ],
+            "claimedRewards": [
+              "N01",
+              "N02"
+            ],
+            "isCompleted": false,
+            "_lootCount": 7
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N03",
+          "completedSteps": [
+            "N01",
+            "N02"
+          ],
+          "claimedRewards": [
+            "N01",
+            "N02"
+          ],
+          "isCompleted": false,
+          "_lootCount": 7
+        }
+      }
+    },
+    {
+      "name": "N03: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 800,
+            "gems": 60
+          },
+          "after": {
+            "gold": 950,
+            "gems": 60
+          },
+          "reward": {
+            "gold": 150,
+            "scrolls": 2
+          },
+          "count": 1,
+          "afterDuplicateCount": 1,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N04",
+            "completedSteps": [
+              "N01",
+              "N02",
+              "N03"
+            ],
+            "claimedRewards": [
+              "N01",
+              "N02",
+              "N03"
+            ],
+            "isCompleted": false,
+            "_lootCount": 10
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N04",
+          "completedSteps": [
+            "N01",
+            "N02",
+            "N03"
+          ],
+          "claimedRewards": [
+            "N01",
+            "N02",
+            "N03"
+          ],
+          "isCompleted": false,
+          "_lootCount": 10
+        }
+      }
+    },
+    {
+      "name": "N04: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 950,
+            "gems": 60
+          },
+          "after": {
+            "gold": 1200,
+            "gems": 60
+          },
+          "reward": {
+            "gold": 250,
+            "scrolls": 3
+          },
+          "count": 1,
+          "afterDuplicateCount": 1,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N05",
+            "completedSteps": [
+              "N01",
+              "N02",
+              "N03",
+              "N04"
+            ],
+            "claimedRewards": [
+              "N01",
+              "N02",
+              "N03",
+              "N04"
+            ],
+            "isCompleted": false,
+            "_lootCount": 10
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N05",
+          "completedSteps": [
+            "N01",
+            "N02",
+            "N03",
+            "N04"
+          ],
+          "claimedRewards": [
+            "N01",
+            "N02",
+            "N03",
+            "N04"
+          ],
+          "isCompleted": false,
+          "_lootCount": 10
+        }
+      }
+    },
+    {
+      "name": "N05: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 1200,
+            "gems": 60
+          },
+          "after": {
+            "gold": 1500,
+            "gems": 60
+          },
+          "reward": {
+            "gold": 300,
+            "scrolls": 2
+          },
+          "count": 1,
+          "afterDuplicateCount": 1,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N06",
+            "completedSteps": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05"
+            ],
+            "claimedRewards": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05"
+            ],
+            "isCompleted": false,
+            "_lootCount": 10
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N06",
+          "completedSteps": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ],
+          "claimedRewards": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05"
+          ],
+          "isCompleted": false,
+          "_lootCount": 10
+        }
+      }
+    },
+    {
+      "name": "N06: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 1500,
+            "gems": 60
+          },
+          "after": {
+            "gold": 1750,
+            "gems": 75
+          },
+          "reward": {
+            "gold": 250,
+            "gems": 15
+          },
+          "count": 1,
+          "afterDuplicateCount": 1,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N07",
+            "completedSteps": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05",
+              "N06"
+            ],
+            "claimedRewards": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05",
+              "N06"
+            ],
+            "isCompleted": false,
+            "_lootCount": 10
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N07",
+          "completedSteps": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05",
+            "N06"
+          ],
+          "claimedRewards": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05",
+            "N06"
+          ],
+          "isCompleted": false,
+          "_lootCount": 10
+        }
+      }
+    },
+    {
+      "name": "N07: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 1750,
+            "gems": 75
+          },
+          "after": {
+            "gold": 2550,
+            "gems": 125
+          },
+          "reward": {
+            "gold": 800,
+            "gems": 50,
+            "chestKeys": 1
+          },
+          "count": 1,
+          "afterDuplicateCount": 1,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 0,
+            "skipped": false,
+            "currentStep": "N08",
+            "completedSteps": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05",
+              "N06",
+              "N07"
+            ],
+            "claimedRewards": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05",
+              "N06",
+              "N07"
+            ],
+            "isCompleted": false,
+            "_lootCount": 10
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N08",
+          "completedSteps": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05",
+            "N06",
+            "N07"
+          ],
+          "claimedRewards": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05",
+            "N06",
+            "N07"
+          ],
+          "isCompleted": false,
+          "_lootCount": 10
+        }
+      }
+    },
+    {
+      "name": "N08: hook/reward/duplicate/reload — không giả là chơi hết chương",
+      "status": "PASS",
+      "details": {
+        "outcome": {
+          "early": false,
+          "claimed": true,
+          "duplicate": false,
+          "before": {
+            "gold": 2550,
+            "gems": 125
+          },
+          "after": {
+            "gold": 3550,
+            "gems": 205
+          },
+          "reward": {
+            "gold": 1000,
+            "gems": 80
+          },
+          "count": 1,
+          "afterDuplicateCount": 1,
+          "journey": {
+            "version": 1,
+            "startedAt": 1793992187915,
+            "completedAt": 1793992215735,
+            "skipped": false,
+            "currentStep": "N08",
+            "completedSteps": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05",
+              "N06",
+              "N07",
+              "N08"
+            ],
+            "claimedRewards": [
+              "N01",
+              "N02",
+              "N03",
+              "N04",
+              "N05",
+              "N06",
+              "N07",
+              "N08"
+            ],
+            "isCompleted": true,
+            "_lootCount": 10
+          }
+        },
+        "restored": {
+          "version": 1,
+          "startedAt": 1793992187915,
+          "completedAt": 1793992215735,
+          "skipped": false,
+          "currentStep": "N08",
+          "completedSteps": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05",
+            "N06",
+            "N07",
+            "N08"
+          ],
+          "claimedRewards": [
+            "N01",
+            "N02",
+            "N03",
+            "N04",
+            "N05",
+            "N06",
+            "N07",
+            "N08"
+          ],
+          "isCompleted": true,
+          "_lootCount": 10
+        }
+      }
+    },
+    {
+      "name": "Trận đầu chạy loop và nhân vật finite",
+      "status": "PASS",
+      "details": {
+        "running": true,
+        "paused": false,
+        "room": 1,
+        "enemyCount": 3,
+        "player": {
+          "x": 511,
+          "y": 737,
+          "hp": 775,
+          "maxHp": 775,
+          "atk": 152
+        },
+        "lastTime": 2653.2,
+        "coloredSamples": 8504
+      }
+    },
+    {
+      "name": "Hostname công khai giả lập: dev query/storage không cấp tài nguyên",
+      "status": "PASS",
+      "details": {
+        "enabled": false,
+        "unchanged": true
+      }
+    }
+  ],
+  "errors": [],
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_b"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/me",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    }
+  ],
+  "savedPlayers": [
+    "local_fixture_a"
+  ]
+}

@@ -34,7 +34,9 @@
     lastError: "",
     booted: false,
     saveHookInstalled: false,
+    saving: false,
   };
+  var lastPushedPayload = null;
 
   // ---------- Tien ich ----------
   function el(tag, cls, text) {
@@ -225,6 +227,7 @@
 
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
+      if (submit.disabled) return;
       var username = userInput.value.trim();
       var password = passInput.value;
       errBox.style.display = "none";
@@ -258,7 +261,7 @@
         state.player = r.data.player;
         // Tai khoan vua dang ky: server tra ve hasSave=false -> loadCloudSave()
         // dat buffer = null -> SaveState.load() ve dung tan thu.
-        loadCloudSave().then(function () {
+        return loadCloudSave().then(function () {
           closeGate();
           enterGame();
           if (mode === "register" && window.Archero2FusionAPI
@@ -305,26 +308,33 @@
     purgeLegacyLocalSave();
     // Khoa ghi: SaveState.save() khong lam gi cho den khi co save that tu server.
     window.__ARTEMIS_SAVE_READY = false;
+    state.ready = false;
     return api(API.save).then(function (r) {
-      if (!r.data || !r.data.ok) {
-        // Khong lay duoc => KHONG duoc chay game voi du lieu cu.
-        window.__ARTEMIS_SAVE_BUFFER = null;
-        return false;
+      if (!r.ok || !r.data || r.data.ok !== true
+          || (r.data.playerId !== undefined && (!state.player || r.data.playerId !== state.player.id))
+          || typeof r.data.hasSave !== "boolean"
+          || !Number.isSafeInteger(r.data.revision) || r.data.revision < 0
+          || (r.data.hasSave && (r.data.revision === 0 || !r.data.data || typeof r.data.data !== "object"
+              || Array.isArray(r.data.data) || Object.keys(r.data.data).length === 0))
+          || (!r.data.hasSave && (r.data.data !== null || r.data.revision !== 0))) {
+        throw new Error("Không tải được tiến trình. Hãy thử lại; dữ liệu chưa bị thay đổi.");
       }
-      state.revision = Number(r.data.revision) || 0;
+      state.revision = r.data.revision;
       if (r.data.hasSave && r.data.data) {
         var payload = JSON.stringify(r.data.data);
         window.__ARTEMIS_SAVE_BUFFER = payload;
         state.lastPushedHash = hashStr(payload);
+        lastPushedPayload = payload;
         return true;
       }
       // Tai khoan moi: buffer = null => SaveState.load() ve dung tan thu.
       window.__ARTEMIS_SAVE_BUFFER = null;
       state.lastPushedHash = "";
+      lastPushedPayload = null;
       return false;
-    }).catch(function () {
-      window.__ARTEMIS_SAVE_BUFFER = null;
-      return false;
+    }).catch(function (error) {
+      state.lastError = error.message || "Không tải được tiến trình";
+      throw error;
     }).then(function (hadSave) {
       // Mo khoa ghi SAU khi buffer da dung (du la null cho tai khoan moi).
       window.__ARTEMIS_SAVE_READY = true;
@@ -334,22 +344,25 @@
 
   /** Day buffer hien tai len MongoDB. */
   function pushCloudSave() {
-    if (!state.authenticated) return;
+    if (!state.authenticated || window.__ARTEMIS_SAVE_READY !== true || state.saving) return;
     var payload = window.__ARTEMIS_SAVE_BUFFER;
     if (!payload) return;
 
     var h = hashStr(payload);
-    if (h === state.lastPushedHash) return; // khong co gi thay doi
+    if (payload === lastPushedPayload) { state.dirty = false; return; }
 
     var data;
     try { data = JSON.parse(payload); } catch (e) { return; }
 
-    api(API.save, { method: "PUT", body: { data: data, revision: state.revision } })
+    state.saving = true;
+    var nextRevision = state.revision + 1;
+    api(API.save, { method: "PUT", body: { data: data, revision: state.revision, playerId: state.player.id } })
       .then(function (r) {
-        if (r.data && r.data.ok) {
-          state.revision = Number(r.data.revision) || state.revision + 1;
+        if (r.ok && r.data && r.data.ok === true && r.data.revision === nextRevision) {
+          state.revision = r.data.revision;
           state.lastPushedHash = h;
-          state.dirty = false;
+          lastPushedPayload = payload;
+          state.dirty = window.__ARTEMIS_SAVE_BUFFER !== payload;
           state.lastError = "";
           pulseSavedIndicator();
         } else if (r.data && r.data.code && String(r.data.code).indexOf("ECONOMY_") === 0) {
@@ -360,6 +373,7 @@
             window.__ARTEMIS_SAVE_BUFFER = serverPayload;
             state.revision = Number(r.data.serverRevision) || 0;
             state.lastPushedHash = hashStr(serverPayload);
+            lastPushedPayload = serverPayload;
             toast("Dữ liệu tài nguyên không hợp lệ đã bị từ chối. Đang tải lại tiến trình từ máy chủ…", "err");
             setTimeout(function () { location.reload(); }, 1600);
             return;
@@ -372,7 +386,11 @@
           state.lastError = (r.data && r.data.error) || "Lưu thất bại";
         }
       })
-      .catch(function () { state.lastError = "Lỗi mạng"; });
+      .catch(function () { state.lastError = "Lỗi mạng"; })
+      .then(function () {
+        state.saving = false;
+        if (state.dirty && !state.lastError) scheduleSave();
+      });
   }
 
   function scheduleSave() {

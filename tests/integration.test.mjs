@@ -1,27 +1,12 @@
 // Test tich hop that: dang ky, dang nhap, luu, tai, chong ghi de, bao mat.
+// Chỉ opt-in sau khi xác minh server local sử dụng database test cô lập.
+if (process.env.ARTEMIS_ISOLATED_TESTS !== "1") {
+  const { test } = await import("node:test");
+  test("integration: cần server và database cô lập", { skip: "BLOCKED: đặt ARTEMIS_ISOLATED_TESTS=1 sau khi xác minh DB test" }, () => {});
+} else {
 const BASE = "http://127.0.0.1:3000";
 let pass = 0, fail = 0;
 const jar = new Map();
-
-// ---- Don rate-limit cua lan chay truoc de test lap lai duoc ----
-// (Chi dung trong test; production giu nguyen gioi han.)
-async function clearRateLimits() {
-  try {
-    const fs = await import("node:fs");
-    const env = fs.readFileSync(new URL("../.env", import.meta.url), "utf8");
-    const uri = env.match(/^MONGODB_URI=(.*)$/m)?.[1]?.trim();
-    if (!uri) return;
-    const { MongoClient } = await import("mongodb");
-    const c = new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
-    await c.connect();
-    await c.db(env.match(/^MONGODB_DB=(.*)$/m)?.[1]?.trim() || "artemis")
-      .collection("login_attempts").deleteMany({});
-    await c.close();
-  } catch (e) {
-    console.log("  (bo qua don rate-limit: " + String(e.message).slice(0, 60) + ")");
-  }
-}
-await clearRateLimits();
 
 function check(name, cond, extra = "") {
   if (cond) { pass++; console.log("  PASS  " + name); }
@@ -161,4 +146,5 @@ for (let i = 0; i < 20; i++) {
 check("rate limit chan do mat khau", blocked);
 
 console.log(`\n================ KET QUA: ${pass} PASS / ${fail} FAIL ================\n`);
-process.exit(fail > 0 ? 1 : 0);
+process.exitCode = fail > 0 ? 1 : 0;
+}

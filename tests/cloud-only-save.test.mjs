@@ -140,9 +140,12 @@ check("nguoi cu: vang dung 203374", st.gold === 203374, String(st.gold));
 check("nguoi cu: bestRooms giu 15", st.bestRooms[1] === 15);
 check("nguoi cu: gems tu defaults vi save khong co", st.gems === 50);
 
-// Du lieu hong (JSON loi) khong duoc lam sap game
-check("buffer hong -> cloud.js dat null (khong crash)",
-  /catch\(function \(\) \{[\s\S]{0,120}?__ARTEMIS_SAVE_BUFFER = null/.test(cloud));
+// Load thất bại phải reject và khóa ghi; không xóa unsent buffer hay coi là no-save.
+// Runtime coverage: cloud-client-reliability.test.mjs.
+const cloudLoad = fnBody(cloud, 'loadCloudSave');
+check("load loi -> reject, giu buffer va khong mo khoa ghi",
+  /throw new Error/.test(cloudLoad) && /throw error;/.test(cloudLoad)
+  && !/catch\(function \(error\) \{[^}]*__ARTEMIS_SAVE_BUFFER = null/.test(cloudLoad));
 
 // Khoa ghi: truoc khi READY, save() khong lam gi
 function simulateSave(ready) {

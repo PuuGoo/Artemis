@@ -11,9 +11,10 @@ export async function GET(request) {
 
   const db = await getMongoDb();
   const doc = await db.collection(COLLECTIONS.saves).findOne({ playerId: String(player._id) });
-  if (!doc) return json({ ok: true, hasSave: false, data: null, revision: 0 });
+  if (!doc) return json({ ok: true, playerId: String(player._id), hasSave: false, data: null, revision: 0 });
   return json({
     ok: true,
+    playerId: String(player._id),
     hasSave: true,
     data: doc.data,
     revision: doc.revision || 1,
@@ -34,18 +35,25 @@ export async function PUT(request) {
 
   const body = await readJsonBody(request, MAX_SAVE_BYTES + 8192);
   if (!body.ok) return fail(body.error, body.status);
+  // Optional for legacy clients; new clients bind snapshots to the account that loaded them.
+  if (body.data.playerId !== undefined && body.data.playerId !== playerId) {
+    return json({ ok: false, conflict: true, code: "ACCOUNT_CHANGED",
+      error: "Tai khoan da thay doi. Hay tai lai trang truoc khi luu." }, 409);
+  }
 
   const check = sanitizeSave(body.data.data);
   if (!check.ok) return fail(check.reason, 422);
 
-  const clientRevision = Number(body.data.revision);
-  const expectedRevision = Number.isFinite(clientRevision) ? clientRevision : null;
+  const expectedRevision = body.data.revision;
+  if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0) {
+    return fail("Revision khong hop le. Hay tai lai truoc khi luu.", 400);
+  }
   const now = new Date();
 
-  const existing = await saves.findOne({ playerId }, { projection: { revision: 1, "data.gold": 1, "data.gems": 1, "data.lifetimeStats": 1 } });
-  const currentRevision = existing?.revision || 0;
+  const existing = await saves.findOne({ playerId }, { projection: { revision: 1, "data.gold": 1, "data.gems": 1, "data.lifetimeStats": 1, "data.season": 1 } });
+  const currentRevision = existing ? (existing.revision || 1) : 0;
 
-  if (existing && expectedRevision !== null && expectedRevision !== currentRevision) {
+  if (expectedRevision !== currentRevision) {
     return json({
       ok: false,
       error: "Du lieu da thay doi tu thiet bi khac. Hay tai lai truoc khi luu.",
@@ -90,21 +98,37 @@ export async function PUT(request) {
   }
 
   const nextRevision = currentRevision + 1;
-  await saves.updateOne(
-    { playerId },
-    {
-      $set: {
-        playerId,
-        username: player.username,
-        data: check.data,
-        revision: nextRevision,
-        updatedAt: now,
-        updatedIp: clientIp(request).slice(0, 45),
-      },
-      $setOnInsert: { createdAt: now },
-    },
-    { upsert: true },
-  );
+  const snapshot = {
+    playerId,
+    username: player.username,
+    data: check.data,
+    revision: nextRevision,
+    updatedAt: now,
+    updatedIp: clientIp(request).slice(0, 45),
+  };
+  async function revisionConflict() {
+    const latest = await saves.findOne({ playerId }, { projection: { revision: 1 } });
+    return json({ ok: false, conflict: true,
+      error: "Du lieu da thay doi tu thiet bi khac. Hay tai lai truoc khi luu.",
+      serverRevision: latest ? (latest.revision || 1) : 0 }, 409);
+  }
+  if (existing) {
+    // Compare-and-set: validation and replacement must refer to the same snapshot.
+    const result = await saves.updateOne(
+      { playerId, revision: existing.revision === undefined ? { $exists: false } : existing.revision },
+      { $set: snapshot },
+      { upsert: false },
+    );
+    if (result.matchedCount !== 1) return revisionConflict();
+  } else {
+    // The unique playerId index arbitrates concurrent first saves without replacing one.
+    try {
+      await saves.insertOne({ ...snapshot, createdAt: now });
+    } catch (error) {
+      if (error?.code === 11000) return revisionConflict();
+      throw error;
+    }
+  }
 
   return json({ ok: true, revision: nextRevision, updatedAt: now, bytes: check.bytes });
 }
