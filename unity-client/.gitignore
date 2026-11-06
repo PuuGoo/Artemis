@@ -1,0 +1,44 @@
+# Unity — dự án Unity thật (Assets/, Packages/, ProjectSettings/)
+unity-client/[Ll]ibrary/
+unity-client/[Tt]emp/
+unity-client/[Oo]bj/
+unity-client/[Bb]uild/
+unity-client/[Bb]uilds/
+unity-client/[Ll]ogs/
+unity-client/[Uu]ser[Ss]ettings/
+unity-client/[Mm]emoryCaptures/
+unity-client/[Rr]ecordings/
+unity-client/*.csproj
+unity-client/*.sln
+unity-client/*.unityproj
+unity-client/*.user
+unity-client/*.pidb
+unity-client/*.booproj
+unity-client/*.svd
+unity-client/*.pdb
+unity-client/*.mdb
+unity-client/*.opendb
+unity-client/*.VC.db
+unity-client/.vs/
+unity-client/.idea/
+unity-client/.vscode/
+unity-client/Assets/AssetStoreTools*
+unity-client/Assets/Plugins/Editor/JetBrains*
+unity-client/Assets/StreamingAssets/aa.meta
+unity-client/Assets/StreamingAssets/aa/*
+unity-client/Assets/AddressableAssetsData/*.bin
+unity-client/Assets/AddressableAssetsData/*/*.bin
+unity-client/Assets/AddressableAssetsData/*/*.dat
+
+# Build output
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# .NET domain build output
+unity-client/**/bin/
+unity-client/**/obj/
+!unity-client/**/*.csproj
+tools/unity-parity/.dotnet/
+dotnet8/

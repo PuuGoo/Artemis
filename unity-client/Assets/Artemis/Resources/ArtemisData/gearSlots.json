@@ -1,0 +1,38 @@
+{
+  "weapon": {
+    "id": "weapon",
+    "name": "Vũ Khí",
+    "statType": "atk",
+    "side": "left"
+  },
+  "necklace": {
+    "id": "necklace",
+    "name": "Dây Chuyền",
+    "statType": "atk",
+    "side": "left"
+  },
+  "ring": {
+    "id": "ring",
+    "name": "Nhẫn",
+    "statType": "atk",
+    "side": "left"
+  },
+  "armor": {
+    "id": "armor",
+    "name": "Áo Giáp",
+    "statType": "hp",
+    "side": "right"
+  },
+  "helmet": {
+    "id": "helmet",
+    "name": "Mũ Giáp",
+    "statType": "hp",
+    "side": "right"
+  },
+  "boots": {
+    "id": "boots",
+    "name": "Giày Chiến",
+    "statType": "hp",
+    "side": "right"
+  }
+}

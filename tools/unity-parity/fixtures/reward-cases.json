@@ -1,0 +1,242 @@
+[
+ {
+  "chapterId": 1,
+  "rooms": 15,
+  "victory": true,
+  "room": 1,
+  "expectedGold": 350,
+  "expectedGems": 40
+ },
+ {
+  "chapterId": 1,
+  "rooms": 15,
+  "victory": true,
+  "room": 5,
+  "expectedGold": 350,
+  "expectedGems": 40
+ },
+ {
+  "chapterId": 1,
+  "rooms": 15,
+  "victory": true,
+  "room": 15,
+  "expectedGold": 350,
+  "expectedGems": 40
+ },
+ {
+  "chapterId": 1,
+  "rooms": 15,
+  "victory": false,
+  "room": 1,
+  "expectedGold": 20,
+  "expectedGems": 2
+ },
+ {
+  "chapterId": 1,
+  "rooms": 15,
+  "victory": false,
+  "room": 5,
+  "expectedGold": 100,
+  "expectedGems": 10
+ },
+ {
+  "chapterId": 1,
+  "rooms": 15,
+  "victory": false,
+  "room": 15,
+  "expectedGold": 300,
+  "expectedGems": 30
+ },
+ {
+  "chapterId": 2,
+  "rooms": 12,
+  "victory": true,
+  "room": 1,
+  "expectedGold": 700,
+  "expectedGems": 80
+ },
+ {
+  "chapterId": 2,
+  "rooms": 12,
+  "victory": true,
+  "room": 5,
+  "expectedGold": 700,
+  "expectedGems": 80
+ },
+ {
+  "chapterId": 2,
+  "rooms": 12,
+  "victory": true,
+  "room": 12,
+  "expectedGold": 700,
+  "expectedGems": 80
+ },
+ {
+  "chapterId": 2,
+  "rooms": 12,
+  "victory": false,
+  "room": 1,
+  "expectedGold": 20,
+  "expectedGems": 2
+ },
+ {
+  "chapterId": 2,
+  "rooms": 12,
+  "victory": false,
+  "room": 5,
+  "expectedGold": 100,
+  "expectedGems": 10
+ },
+ {
+  "chapterId": 2,
+  "rooms": 12,
+  "victory": false,
+  "room": 12,
+  "expectedGold": 240,
+  "expectedGems": 24
+ },
+ {
+  "chapterId": 3,
+  "rooms": 10,
+  "victory": true,
+  "room": 1,
+  "expectedGold": 1050,
+  "expectedGems": 120
+ },
+ {
+  "chapterId": 3,
+  "rooms": 10,
+  "victory": true,
+  "room": 5,
+  "expectedGold": 1050,
+  "expectedGems": 120
+ },
+ {
+  "chapterId": 3,
+  "rooms": 10,
+  "victory": true,
+  "room": 10,
+  "expectedGold": 1050,
+  "expectedGems": 120
+ },
+ {
+  "chapterId": 3,
+  "rooms": 10,
+  "victory": false,
+  "room": 1,
+  "expectedGold": 20,
+  "expectedGems": 2
+ },
+ {
+  "chapterId": 3,
+  "rooms": 10,
+  "victory": false,
+  "room": 5,
+  "expectedGold": 100,
+  "expectedGems": 10
+ },
+ {
+  "chapterId": 3,
+  "rooms": 10,
+  "victory": false,
+  "room": 10,
+  "expectedGold": 200,
+  "expectedGems": 20
+ },
+ {
+  "chapterId": 4,
+  "rooms": 15,
+  "victory": true,
+  "room": 1,
+  "expectedGold": 1400,
+  "expectedGems": 160
+ },
+ {
+  "chapterId": 4,
+  "rooms": 15,
+  "victory": true,
+  "room": 5,
+  "expectedGold": 1400,
+  "expectedGems": 160
+ },
+ {
+  "chapterId": 4,
+  "rooms": 15,
+  "victory": true,
+  "room": 15,
+  "expectedGold": 1400,
+  "expectedGems": 160
+ },
+ {
+  "chapterId": 4,
+  "rooms": 15,
+  "victory": false,
+  "room": 1,
+  "expectedGold": 20,
+  "expectedGems": 2
+ },
+ {
+  "chapterId": 4,
+  "rooms": 15,
+  "victory": false,
+  "room": 5,
+  "expectedGold": 100,
+  "expectedGems": 10
+ },
+ {
+  "chapterId": 4,
+  "rooms": 15,
+  "victory": false,
+  "room": 15,
+  "expectedGold": 300,
+  "expectedGems": 30
+ },
+ {
+  "chapterId": 5,
+  "rooms": 15,
+  "victory": true,
+  "room": 1,
+  "expectedGold": 1750,
+  "expectedGems": 200
+ },
+ {
+  "chapterId": 5,
+  "rooms": 15,
+  "victory": true,
+  "room": 5,
+  "expectedGold": 1750,
+  "expectedGems": 200
+ },
+ {
+  "chapterId": 5,
+  "rooms": 15,
+  "victory": true,
+  "room": 15,
+  "expectedGold": 1750,
+  "expectedGems": 200
+ },
+ {
+  "chapterId": 5,
+  "rooms": 15,
+  "victory": false,
+  "room": 1,
+  "expectedGold": 20,
+  "expectedGems": 2
+ },
+ {
+  "chapterId": 5,
+  "rooms": 15,
+  "victory": false,
+  "room": 5,
+  "expectedGold": 100,
+  "expectedGems": 10
+ },
+ {
+  "chapterId": 5,
+  "rooms": 15,
+  "victory": false,
+  "room": 15,
+  "expectedGold": 300,
+  "expectedGems": 30
+ }
+]

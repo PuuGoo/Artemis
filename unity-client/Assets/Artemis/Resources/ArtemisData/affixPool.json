@@ -1,0 +1,58 @@
+{
+  "atk_flat": {
+    "id": "atk_flat",
+    "label": "Tấn Công",
+    "base": 14,
+    "isPct": false,
+    "unit": " ATK"
+  },
+  "hp_flat": {
+    "id": "hp_flat",
+    "label": "Máu Tối Đa",
+    "base": 68,
+    "isPct": false,
+    "unit": " HP"
+  },
+  "atk_pct": {
+    "id": "atk_pct",
+    "label": "Tấn Công",
+    "base": 2,
+    "isPct": true,
+    "unit": "% ATK"
+  },
+  "hp_pct": {
+    "id": "hp_pct",
+    "label": "Máu Tối Đa",
+    "base": 2.5,
+    "isPct": true,
+    "unit": "% HP"
+  },
+  "crit_pct": {
+    "id": "crit_pct",
+    "label": "Chí Mạng",
+    "base": 1.5,
+    "isPct": true,
+    "unit": "% Crit"
+  },
+  "aspd_pct": {
+    "id": "aspd_pct",
+    "label": "Tốc Bắn",
+    "base": 2,
+    "isPct": true,
+    "unit": "% Tốc bắn"
+  },
+  "dodge_pct": {
+    "id": "dodge_pct",
+    "label": "Né Tránh",
+    "base": 1.5,
+    "isPct": true,
+    "unit": "% Né"
+  },
+  "gold_pct": {
+    "id": "gold_pct",
+    "label": "Vàng Thưởng",
+    "base": 3.5,
+    "isPct": true,
+    "unit": "% Vàng"
+  }
+}

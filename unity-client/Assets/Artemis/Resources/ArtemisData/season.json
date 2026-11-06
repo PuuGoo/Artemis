@@ -1,0 +1,144 @@
+{
+  "careers": [
+    {
+      "id": "blade",
+      "name": "Kiếm Sĩ",
+      "icon": "⚔️",
+      "color": "#f87171",
+      "desc": "Sát thương vật lý thuần. Đánh nhanh, chí mạng cao.",
+      "atkPct": 0.14,
+      "hpPct": 0.02,
+      "aspdPct": 0.06,
+      "critFlat": 0.04,
+      "defFlat": 0,
+      "dodgeFlat": 0,
+      "goldPct": 0,
+      "critDmgPct": 0.1
+    },
+    {
+      "id": "ranger",
+      "name": "Xạ Thủ",
+      "icon": "🏹",
+      "color": "#4ade80",
+      "desc": "Bắn xa, tốc độ bắn cao. Ít máu nhưng khó bị chạm.",
+      "atkPct": 0.1,
+      "hpPct": 0,
+      "aspdPct": 0.14,
+      "critFlat": 0.02,
+      "defFlat": 0,
+      "dodgeFlat": 0.05,
+      "goldPct": 0,
+      "critDmgPct": 0
+    },
+    {
+      "id": "guardian",
+      "name": "Hộ Vệ",
+      "icon": "🛡️",
+      "color": "#60a5fa",
+      "desc": "Trâu bò, giảm sát thương. Sống lâu để tích luỹ kỹ năng.",
+      "atkPct": 0.02,
+      "hpPct": 0.22,
+      "aspdPct": 0,
+      "critFlat": 0,
+      "defFlat": 45,
+      "dodgeFlat": 0,
+      "goldPct": 0,
+      "critDmgPct": 0
+    },
+    {
+      "id": "mage",
+      "name": "Pháp Sư",
+      "icon": "🔮",
+      "color": "#a855f7",
+      "desc": "Chí mạng cực mạnh. Đánh chậm nhưng mỗi đòn rất đau.",
+      "atkPct": 0.06,
+      "hpPct": 0.06,
+      "aspdPct": 0,
+      "critFlat": 0.08,
+      "defFlat": 0,
+      "dodgeFlat": 0,
+      "goldPct": 0,
+      "critDmgPct": 0.35
+    },
+    {
+      "id": "merchant",
+      "name": "Thương Nhân",
+      "icon": "💰",
+      "color": "#facc15",
+      "desc": "Kiếm vàng tốt hơn. Yếu hơn trong chiến đấu nhưng lên đồ nhanh.",
+      "atkPct": 0,
+      "hpPct": 0,
+      "aspdPct": 0,
+      "critFlat": 0,
+      "defFlat": 0,
+      "dodgeFlat": 0,
+      "goldPct": 0.25,
+      "critDmgPct": 0
+    }
+  ],
+  "bosses": [
+    {
+      "id": "ironhide",
+      "name": "Thiết Giáp Vương",
+      "icon": "🦏",
+      "color": "#94a3b8",
+      "desc": "Giáp cực dày — giảm 40% sát thương nhận vào.",
+      "special": "damageReduction",
+      "specialVal": 0.4,
+      "specialName": "Thiết Giáp",
+      "bossMul": 3.2
+    },
+    {
+      "id": "reflector",
+      "name": "Kính Phản Chiếu",
+      "icon": "🪞",
+      "color": "#22d3ee",
+      "desc": "Phản lại 25% sát thương người chơi gây ra.",
+      "special": "reflect",
+      "specialVal": 0.25,
+      "specialName": "Phản Đòn",
+      "bossMul": 2.6
+    },
+    {
+      "id": "regenerator",
+      "name": "Sinh Mệnh Chi Thụ",
+      "icon": "🌳",
+      "color": "#4ade80",
+      "desc": "Hồi 2% máu mỗi giây — phải dồn sát thương nhanh.",
+      "special": "regen",
+      "specialVal": 0.02,
+      "specialName": "Hồi Sinh",
+      "bossMul": 3.8
+    }
+  ],
+  "shop": [
+    {
+      "id": "se_gold",
+      "name": "Túi Vàng Lớn",
+      "icon": "💰",
+      "cost": 40,
+      "give": {
+        "gold": 6000
+      }
+    },
+    {
+      "id": "se_gems",
+      "name": "Đá Quý",
+      "icon": "💎",
+      "cost": 80,
+      "give": {
+        "gems": 200
+      }
+    },
+    {
+      "id": "se_gear",
+      "name": "Rương Trang Bị",
+      "icon": "📦",
+      "cost": 150,
+      "give": {
+        "gold": 12000,
+        "gems": 300
+      }
+    }
+  ]
+}

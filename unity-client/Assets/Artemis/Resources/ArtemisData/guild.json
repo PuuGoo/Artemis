@@ -1,0 +1,29 @@
+{
+  "ranks": [
+    {
+      "id": "leader",
+      "name": "Bang Chủ",
+      "icon": "👑",
+      "power": 1
+    },
+    {
+      "id": "elder",
+      "name": "Trưởng Lão",
+      "icon": "🎖️",
+      "power": 0.82
+    },
+    {
+      "id": "member",
+      "name": "Thành Viên",
+      "icon": "⚔️",
+      "power": 0.66
+    },
+    {
+      "id": "recruit",
+      "name": "Tân Binh",
+      "icon": "🌱",
+      "power": 0.45
+    }
+  ],
+  "maxMembers": 20
+}

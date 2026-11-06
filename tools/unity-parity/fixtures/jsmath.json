@@ -1,0 +1,197 @@
+{
+ "round": [
+  {
+   "input": 0,
+   "expected": 0
+  },
+  {
+   "input": 0.4,
+   "expected": 0
+  },
+  {
+   "input": 0.5,
+   "expected": 1
+  },
+  {
+   "input": 0.6,
+   "expected": 1
+  },
+  {
+   "input": 1.5,
+   "expected": 2
+  },
+  {
+   "input": 2.5,
+   "expected": 3
+  },
+  {
+   "input": 3.5,
+   "expected": 4
+  },
+  {
+   "input": -0.4,
+   "expected": 0
+  },
+  {
+   "input": -0.5,
+   "expected": 0
+  },
+  {
+   "input": -1.5,
+   "expected": -1
+  },
+  {
+   "input": -2.5,
+   "expected": -2
+  },
+  {
+   "input": 0.49999999999999994,
+   "expected": 0
+  },
+  {
+   "input": 1.4999999999999998,
+   "expected": 1
+  },
+  {
+   "input": 123.456,
+   "expected": 123
+  },
+  {
+   "input": -123.456,
+   "expected": -123
+  },
+  {
+   "input": 1e-9,
+   "expected": 0
+  },
+  {
+   "input": 0.3333333333333333,
+   "expected": 0
+  }
+ ],
+ "toFixed": [
+  {
+   "value": 1.005,
+   "digits": 2,
+   "expected": 1
+  },
+  {
+   "value": 1.234,
+   "digits": 2,
+   "expected": 1.23
+  },
+  {
+   "value": 1.235,
+   "digits": 2,
+   "expected": 1.24
+  },
+  {
+   "value": 2,
+   "digits": 2,
+   "expected": 2
+  },
+  {
+   "value": 0.30000000000000004,
+   "digits": 2,
+   "expected": 0.3
+  },
+  {
+   "value": 1.9,
+   "digits": 2,
+   "expected": 1.9
+  },
+  {
+   "value": 2.675,
+   "digits": 2,
+   "expected": 2.67
+  },
+  {
+   "value": 1.938,
+   "digits": 2,
+   "expected": 1.94
+  },
+  {
+   "value": 0.2,
+   "digits": 2,
+   "expected": 0.2
+  },
+  {
+   "value": 1.2345,
+   "digits": 3,
+   "expected": 1.234
+  },
+  {
+   "value": -1.235,
+   "digits": 2,
+   "expected": -1.24
+  },
+  {
+   "value": 0.0005,
+   "digits": 2,
+   "expected": 0
+  },
+  {
+   "value": 1e-7,
+   "digits": 2,
+   "expected": 0
+  },
+  {
+   "value": 3.14159,
+   "digits": 4,
+   "expected": 3.1416
+  }
+ ],
+ "hypot": [
+  {
+   "args": [
+    3,
+    4
+   ],
+   "expected": 5
+  },
+  {
+   "args": [
+    0,
+    0
+   ],
+   "expected": 0
+  },
+  {
+   "args": [
+    -3,
+    -4
+   ],
+   "expected": 5
+  },
+  {
+   "args": [
+    3,
+    4,
+    12
+   ],
+   "expected": 13
+  }
+ ],
+ "or": [
+  {
+   "value": 0,
+   "fallback": 1,
+   "expected": 1
+  },
+  {
+   "value": 0.5,
+   "fallback": 1,
+   "expected": 0.5
+  },
+  {
+   "value": null,
+   "fallback": 1,
+   "expected": 1
+  },
+  {
+   "value": 2.5,
+   "fallback": 1,
+   "expected": 2.5
+  }
+ ]
+}

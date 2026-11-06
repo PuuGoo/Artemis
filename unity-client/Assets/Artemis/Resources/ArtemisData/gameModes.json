@@ -1,0 +1,67 @@
+[
+  {
+    "id": "campaign",
+    "name": "Chiến Dịch",
+    "icon": "🗺️",
+    "color": "#38bdf8",
+    "desc": "Đi qua từng chương, hạ trùm cuối để mở khu vực mới.",
+    "rules": "Hết phòng cuối = thắng chương",
+    "hasChapters": true,
+    "endless": false,
+    "bossOnly": false,
+    "practice": false,
+    "maxRooms": null
+  },
+  {
+    "id": "endless",
+    "name": "Vô Tận",
+    "icon": "♾️",
+    "color": "#a855f7",
+    "desc": "Phòng không có hồi kết. Càng sâu, quái càng mạnh.",
+    "rules": "Chết là kết thúc · ghi nhận kỷ lục phòng",
+    "hasChapters": false,
+    "endless": true,
+    "bossOnly": false,
+    "practice": false,
+    "maxRooms": null
+  },
+  {
+    "id": "tower",
+    "name": "Tháp",
+    "icon": "🗼",
+    "color": "#f59e0b",
+    "desc": "Mỗi tầng là một trùm. Càng lên cao, trùm càng trâu.",
+    "rules": "Hạ trùm để lên tầng · thua là dừng",
+    "hasChapters": false,
+    "endless": true,
+    "bossOnly": true,
+    "practice": false,
+    "maxRooms": null
+  },
+  {
+    "id": "bossrush",
+    "name": "Săn Trùm",
+    "icon": "👑",
+    "color": "#ef4444",
+    "desc": "Chuỗi 5 trùm liên tiếp, thưởng tăng theo số trùm đã hạ.",
+    "rules": "Hạ đủ 5 trùm = thắng · thưởng theo tiến độ",
+    "hasChapters": false,
+    "endless": false,
+    "bossOnly": true,
+    "practice": false,
+    "maxRooms": 5
+  },
+  {
+    "id": "practice",
+    "name": "Luyện Tập",
+    "icon": "🎯",
+    "color": "#22c55e",
+    "desc": "Thử nghiệm build thoải mái. Không mất gì, không được gì.",
+    "rules": "Không chết thật · không cộng vàng/kinh nghiệm",
+    "hasChapters": false,
+    "endless": true,
+    "bossOnly": false,
+    "practice": true,
+    "maxRooms": null
+  }
+]

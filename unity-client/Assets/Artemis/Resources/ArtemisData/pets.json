@@ -1,0 +1,29 @@
+[
+  {
+    "id": "flame_sprite",
+    "name": "Tinh Linh Lửa",
+    "icon": "🔥",
+    "desc": "Bay theo sau bạn và bắn cầu lửa gây sát thương thiêu đốt mỗi 1.4 giây.",
+    "color": "#f97316",
+    "fireRate": 1.4,
+    "dmgRatio": 0.45
+  },
+  {
+    "id": "frost_bat",
+    "name": "Dơi Băng Giá",
+    "desc": "Phóng tia băng xuyên thấu làm chậm tốc độ di chuyển của kẻ địch đi 35%.",
+    "icon": "🦇",
+    "color": "#38bdf8",
+    "fireRate": 1.6,
+    "dmgRatio": 0.4
+  },
+  {
+    "id": "spirit_sword",
+    "name": "Kiếm Thần Hộ Vệ",
+    "desc": "Phóng kiếm ánh sáng tốc độ cao gây sát thương chí mạng lên mục tiêu gần nhất.",
+    "icon": "🗡️",
+    "color": "#fde047",
+    "fireRate": 1.15,
+    "dmgRatio": 0.5
+  }
+]

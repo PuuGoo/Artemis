@@ -1,0 +1,152 @@
+[
+  {
+    "id": "common_0_to_uncommon_0",
+    "stage": "A",
+    "fromQuality": "common",
+    "fromAwakening": 0,
+    "reqCount": 3,
+    "toQuality": "uncommon",
+    "toAwakening": 0,
+    "formulaText": "3 Normal ➔ Fine"
+  },
+  {
+    "id": "uncommon_0_to_rare_0",
+    "stage": "A",
+    "fromQuality": "uncommon",
+    "fromAwakening": 0,
+    "reqCount": 3,
+    "toQuality": "rare",
+    "toAwakening": 0,
+    "formulaText": "3 Fine ➔ Rare"
+  },
+  {
+    "id": "rare_0_to_epic_0",
+    "stage": "A",
+    "fromQuality": "rare",
+    "fromAwakening": 0,
+    "reqCount": 3,
+    "toQuality": "epic",
+    "toAwakening": 0,
+    "formulaText": "3 Rare ➔ Epic"
+  },
+  {
+    "id": "epic_0_to_epic_1",
+    "stage": "B",
+    "fromQuality": "epic",
+    "fromAwakening": 0,
+    "reqCount": 2,
+    "toQuality": "epic",
+    "toAwakening": 1,
+    "formulaText": "Epic + 1 Cùng Ô ➔ Epic +1"
+  },
+  {
+    "id": "epic_1_to_epic_2",
+    "stage": "B",
+    "fromQuality": "epic",
+    "fromAwakening": 1,
+    "reqCount": 2,
+    "toQuality": "epic",
+    "toAwakening": 2,
+    "formulaText": "Epic +1 + 2 Cùng Ô ➔ Epic +2"
+  },
+  {
+    "id": "epic_2_to_legendary_0",
+    "stage": "B",
+    "fromQuality": "epic",
+    "fromAwakening": 2,
+    "reqCount": 2,
+    "toQuality": "legendary",
+    "toAwakening": 0,
+    "formulaText": "2 Epic +2 Trùng ➔ Legendary"
+  },
+  {
+    "id": "legendary_0_to_legendary_1",
+    "stage": "C",
+    "fromQuality": "legendary",
+    "fromAwakening": 0,
+    "reqCount": 2,
+    "toQuality": "legendary",
+    "toAwakening": 1,
+    "formulaText": "Legendary + 1 Cùng Ô ➔ Leg +1"
+  },
+  {
+    "id": "legendary_1_to_legendary_2",
+    "stage": "C",
+    "fromQuality": "legendary",
+    "fromAwakening": 1,
+    "reqCount": 2,
+    "toQuality": "legendary",
+    "toAwakening": 2,
+    "formulaText": "Leg +1 + 1 Cùng Ô ➔ Leg +2"
+  },
+  {
+    "id": "legendary_2_to_legendary_3",
+    "stage": "C",
+    "fromQuality": "legendary",
+    "fromAwakening": 2,
+    "reqCount": 2,
+    "toQuality": "legendary",
+    "toAwakening": 3,
+    "formulaText": "Leg +2 + 2 Cùng Ô ➔ Leg +3 (+20% Base)"
+  },
+  {
+    "id": "legendary_3_to_mythic_0",
+    "stage": "C",
+    "fromQuality": "legendary",
+    "fromAwakening": 3,
+    "reqCount": 2,
+    "toQuality": "mythic",
+    "toAwakening": 0,
+    "formulaText": "2 Leg +3 Trùng ➔ Mythic"
+  },
+  {
+    "id": "mythic_0_to_mythic_1",
+    "stage": "D",
+    "fromQuality": "mythic",
+    "fromAwakening": 0,
+    "reqCount": 2,
+    "toQuality": "mythic",
+    "toAwakening": 1,
+    "formulaText": "Mythic + Leg +3 ➔ Mythic +1"
+  },
+  {
+    "id": "mythic_1_to_mythic_2",
+    "stage": "D",
+    "fromQuality": "mythic",
+    "fromAwakening": 1,
+    "reqCount": 2,
+    "toQuality": "mythic",
+    "toAwakening": 2,
+    "formulaText": "Mythic +1 ➔ Mythic +2 (+30% Base)"
+  },
+  {
+    "id": "mythic_2_to_mythic_3",
+    "stage": "D",
+    "fromQuality": "mythic",
+    "fromAwakening": 2,
+    "reqCount": 2,
+    "toQuality": "mythic",
+    "toAwakening": 3,
+    "formulaText": "Mythic +2 ➔ Mythic +3"
+  },
+  {
+    "id": "mythic_3_to_mythic_4",
+    "stage": "D",
+    "fromQuality": "mythic",
+    "fromAwakening": 3,
+    "reqCount": 2,
+    "toQuality": "mythic",
+    "toAwakening": 4,
+    "formulaText": "Mythic +3 ➔ Mythic +4 (+40% Base)"
+  },
+  {
+    "id": "mythic_4_to_chaotic_0",
+    "stage": "D",
+    "fromQuality": "mythic",
+    "fromAwakening": 4,
+    "reqCount": 2,
+    "toQuality": "chaotic",
+    "toAwakening": 0,
+    "formulaText": "Mythic +4 ➔ CHAOTIC (Hỗn Nguyên)"
+  }
+]

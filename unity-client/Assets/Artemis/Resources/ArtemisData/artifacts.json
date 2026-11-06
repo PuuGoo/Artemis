@@ -1,0 +1,685 @@
+[
+  {
+    "id": "cupids_arrow",
+    "name": "Cupid's Arrow (Mũi Tên Thần Ái Tình)",
+    "wikiName": "Cupid's Arrow",
+    "rarity": "mythic",
+    "icon": "💘🏹",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Flame DMG +20%",
+    "specialBonus": {
+      "flameDmgPct": 0.2
+    },
+    "source": "Exchange Shop",
+    "desc": "Mũi tên bùng cháy ngọn lửa đam mê mãnh liệt, thiêu đốt linh hồn mục tiêu (+20% Sát thương Lửa)."
+  },
+  {
+    "id": "demon_kings_eye",
+    "name": "Demon King's Eye (Con Mắt Đại Ma Vương)",
+    "wikiName": "Demon King's Eye",
+    "rarity": "mythic",
+    "icon": "👁️🔮",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Player DMG Reduced +8%",
+    "specialBonus": {
+      "dmgReducPct": 0.08
+    },
+    "source": "Exchange Shop",
+    "desc": "Con mắt Ma Vương phong ấn trong bảo ngọc, tham lam nuốt chửng mọi đòn tấn công (-8% sát thương nhận vào)."
+  },
+  {
+    "id": "goldfinger",
+    "name": "Goldfinger (Ngón Tay Điểm Kim)",
+    "wikiName": "Goldfinger",
+    "rarity": "mythic",
+    "icon": "👆✨",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "DODGE +4%",
+    "specialBonus": {
+      "dodgeBonus": 0.04
+    },
+    "source": "Wish",
+    "desc": "Mọi viên đá chạm vào đều hóa thành vàng ròng lấp lánh (+4% Tỷ lệ Né đòn)."
+  },
+  {
+    "id": "golden_fleece",
+    "name": "Golden Fleece (Bộ Lông Cừu Vàng)",
+    "wikiName": "Golden Fleece",
+    "rarity": "mythic",
+    "icon": "🐏👑",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "ATK SPD +6%",
+    "specialBonus": {
+      "aspdBonus": 0.06
+    },
+    "source": "Wish",
+    "desc": "Báu vật thần thoại mà mọi nhà thám hiểm đều khao khát sở hữu (+6% Tốc độ bắn)."
+  },
+  {
+    "id": "ravenous_chain",
+    "name": "Ravenous Chain (Xiềng Xích Phàm Ăn)",
+    "wikiName": "Ravenous Chain",
+    "rarity": "mythic",
+    "icon": "⛓️👹",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "SPRITE DMG +12%",
+    "specialBonus": {
+      "spriteDmgPct": 0.12
+    },
+    "source": "Event",
+    "desc": "Sợi xích hắc ám được rèn từ nanh vuốt quỷ dữ (+12% Sát thương Tinh Linh / Sprite DMG)."
+  },
+  {
+    "id": "pans_flute",
+    "name": "Pan's Flute (Sáo Thần Pan)",
+    "wikiName": "Pan's Flute",
+    "rarity": "mythic",
+    "icon": "🪈🎶",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "CRIT Rate +4%",
+    "specialBonus": {
+      "critRate": 0.04
+    },
+    "source": "Wish",
+    "desc": "Cây sáo tràn ngập ma lực cổ đại dẫn lối những đòn bắn chí tử (+4% Tỷ lệ Chí mạng)."
+  },
+  {
+    "id": "tidal_conch",
+    "name": "Tidal Conch (Ốc Biển Triều Dâng)",
+    "wikiName": "Tidal Conch",
+    "rarity": "mythic",
+    "icon": "🐚🌊",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "CRIT DMG +16%",
+    "specialBonus": {
+      "critDmgPct": 0.16
+    },
+    "source": "Wish",
+    "desc": "Ẩn chứa sức mạnh cuộn trào của đại dương sâu thẳm (+16% Sát thương Chí mạng)."
+  },
+  {
+    "id": "golden_mask",
+    "name": "Golden Mask (Mặt Nạ Hoàng Kim)",
+    "wikiName": "Golden Mask",
+    "rarity": "mythic",
+    "icon": "🎭👑",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "DMG Reduction +4%",
+    "specialBonus": {
+      "dmgReducPct": 0.04
+    },
+    "source": "Wish",
+    "desc": "Ẩn dưới lớp mặt nạ vàng ròng là quyền năng hộ thể bất diệt (+4% Giảm sát thương)."
+  },
+  {
+    "id": "demon_blood",
+    "name": "Demon Blood (Huyết Quản Ác Quỷ)",
+    "wikiName": "Demon Blood",
+    "rarity": "mythic",
+    "icon": "🩸🧪",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "DMG to Players/Bosses +8%",
+    "specialBonus": {
+      "allDmgPct": 0.08
+    },
+    "source": "Exchange Shop",
+    "desc": "Ống nghiệm chứa máu quỷ dán nhãn \"Dễ Cháy Và Phát Nổ Cực Mạnh\" (+8% Sát thương đầu ra)."
+  },
+  {
+    "id": "swiftwind_jade",
+    "name": "Swiftwind Jade (Ngọc Bội Cuồng Phong)",
+    "wikiName": "Swiftwind Jade",
+    "rarity": "mythic",
+    "icon": "🟢🌪️",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Spawns Whirlwind when Cloudfooted is active",
+    "specialBonus": {
+      "whirlwindProc": true,
+      "movSpdPct": 0.05
+    },
+    "source": "Event",
+    "desc": "Thấm nhuần sức mạnh cuồng phong, tự động phóng Lốc Xoáy (Whirlwind) càn quét khi Cloudfooted kích hoạt!"
+  },
+  {
+    "id": "aeon_spire",
+    "name": "Aeon Spire (Tháp Kiếm Vĩnh Hằng)",
+    "wikiName": "Aeon Spire",
+    "rarity": "mythic",
+    "icon": "🗡️🪐",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Circle DMG +12%",
+    "specialBonus": {
+      "circleDmgPct": 0.12
+    },
+    "source": "Event",
+    "desc": "Được chính thần Vidar rèn đúc, thu hoạch mọi linh hồn trên quỹ đạo xoay (+12% Sát thương Cầu Xoay / Circle DMG)."
+  },
+  {
+    "id": "protective_blazon",
+    "name": "Protective Blazon (Gia Huy Thế Giới Thụ)",
+    "wikiName": "Protective Blazon",
+    "rarity": "mythic",
+    "icon": "🛡️🌳",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Reduced Crit Rate taken +4%",
+    "specialBonus": {
+      "dmgReducPct": 0.04
+    },
+    "source": "Exchange Shop",
+    "desc": "Sinh ra từ rễ Cây Thế Giới Yggdrasil, giúp chiến binh hóa giải các đòn chí mạng."
+  },
+  {
+    "id": "dice_of_destiny",
+    "name": "Dice of Destiny (Xúc Xắc Định Mệnh)",
+    "wikiName": "Dice of Destiny",
+    "rarity": "mythic",
+    "icon": "🎲✨",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Increased Crit Rate +4%",
+    "specialBonus": {
+      "critRate": 0.04
+    },
+    "source": "Exchange Shop",
+    "desc": "Viên xúc xắc của các vị thần tối cao, người đổ ra mặt 6 sẽ bẻ cong cả định mệnh (+4% CRIT Rate)."
+  },
+  {
+    "id": "bladeborne",
+    "name": "Bladeborne (Kiếm Hồn Thức Tỉnh)",
+    "wikiName": "Bladeborne",
+    "rarity": "mythic",
+    "icon": "⚔️🗡️",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Strike DMG +12%",
+    "specialBonus": {
+      "strikeDmgPct": 0.12
+    },
+    "source": "Event",
+    "desc": "Khi Kiếm Hồn thức tỉnh, thanh phi kiếm hóa thành thợ săn có tri giác chém tan mọi kẻ địch (+12% Strike DMG)."
+  },
+  {
+    "id": "everburn_comet",
+    "name": "Everburn Comet (Sao Chổi Bất Diệt)",
+    "wikiName": "Everburn Comet",
+    "rarity": "mythic",
+    "icon": "☄️🔥",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Meteor DMG +12%",
+    "specialBonus": {
+      "meteorDmgPct": 0.12
+    },
+    "source": "Event",
+    "desc": "Ngôi sao lửa mang ý chí của Chiến Thần, vẫn rực cháy dữ dội sau khi giáng xuống mặt đất (+12% Meteor DMG)."
+  },
+  {
+    "id": "boltfang_candy_jar",
+    "name": "Boltfang Candy Jar (Hũ Kẹo Nanh Sét)",
+    "wikiName": "Boltfang Candy Jar",
+    "rarity": "mythic",
+    "icon": "🍬⚡",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Lightning DMG +20%",
+    "specialBonus": {
+      "lightningDmgPct": 0.2
+    },
+    "source": "Event",
+    "desc": "Không có viên kẹo nào trong chiếc hũ xương này, chỉ có những hàm răng phóng hồ quang điện (+20% Sát thương Sét)."
+  },
+  {
+    "id": "gungnir",
+    "name": "Gungnir (Thần Thương Odin)",
+    "wikiName": "Gungnir",
+    "rarity": "mythic",
+    "icon": "🔱⚡",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Hit Rate & Precision +4%",
+    "specialBonus": {
+      "critRate": 0.04,
+      "allDmgPct": 0.04
+    },
+    "source": "Event",
+    "desc": "Ngọn giáo thần của Odin — biểu tượng của sự bách phát bách trúng tuyệt đối (+4% Chính xác & Chí mạng)."
+  },
+  {
+    "id": "voidblade",
+    "name": "Voidblade (Hư Không Thần Kiếm)",
+    "wikiName": "Voidblade",
+    "rarity": "mythic",
+    "icon": "🌌🗡️",
+    "baseAtk": 360,
+    "baseHp": 1440,
+    "specialStatText": "Main Weapon DMG +12%",
+    "specialBonus": {
+      "mainWepDmgPct": 0.12
+    },
+    "source": "Event",
+    "desc": "Vết nứt hư không gắn liền với vũ khí chính của bạn, ban tặng lưỡi sắc vượt qua không gian (+12% Main Weapon DMG)."
+  },
+  {
+    "id": "cupids_bow",
+    "name": "Cupid's Bow (Cung Thần Ái Tình)",
+    "wikiName": "Cupid's Bow",
+    "rarity": "legendary",
+    "icon": "🏹💗",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Poison DMG +10%",
+    "specialBonus": {
+      "poisonDmgPct": 0.1
+    },
+    "source": "Exchange Shop",
+    "desc": "Tình yêu là chất kịch độc ngọt ngào nhất thế gian, một khi trúng tên không thể thoát (+10% Poison DMG)."
+  },
+  {
+    "id": "brisingamen",
+    "name": "Brisingamen (Vòng Cổ Nữ Thần Freya)",
+    "wikiName": "Brisingamen",
+    "rarity": "legendary",
+    "icon": "📿✨",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "DMG vs Elites +4%",
+    "specialBonus": {
+      "allDmgPct": 0.04
+    },
+    "source": "Wish",
+    "desc": "Báu vật do 4 nghệ nhân người lùn rèn đúc khiến các vị thần cũng phải tranh đoạt (+4% DMG lên Tinh Anh)."
+  },
+  {
+    "id": "dragon_heart",
+    "name": "Dragon Heart (Trái Tim Rồng Cổ Đại)",
+    "wikiName": "Dragon Heart",
+    "rarity": "legendary",
+    "icon": "🐉❤️",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Max HP +2%",
+    "specialBonus": {
+      "hpPct": 0.02
+    },
+    "source": "Wish",
+    "desc": "Ngay cả khi đã rời khỏi cơ thể Cự Long, trái tim này vẫn đập những nhịp đầy uy lực (+2% Max HP)."
+  },
+  {
+    "id": "attack_horn",
+    "name": "Attack Horn (Tù Và Xung Trận Viking)",
+    "wikiName": "Attack Horn",
+    "rarity": "legendary",
+    "icon": "📯⚔️",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "DMG vs Ground Enemies +8%",
+    "specialBonus": {
+      "allDmgPct": 0.08
+    },
+    "source": "Wish",
+    "desc": "Xung phong! Hãy để kẻ thù cảm nhận cơn thịnh nộ của các chiến binh Viking (+8% DMG lên quái mặt đất)."
+  },
+  {
+    "id": "healing_grail",
+    "name": "Healing Grail (Chén Thánh Trị Liệu)",
+    "wikiName": "Healing Grail",
+    "rarity": "legendary",
+    "icon": "🏆💧",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Boss DMG +8%",
+    "specialBonus": {
+      "bossDmgPct": 0.08
+    },
+    "source": "Wish",
+    "desc": "Nước trong Chén Thánh có thể thanh tẩy mọi tà khí và khắc chế các Đại Trùm (+8% Boss DMG)."
+  },
+  {
+    "id": "damocles_sword",
+    "name": "Damocles' Sword (Thanh Kiếm Damocles)",
+    "wikiName": "Damocles' Sword",
+    "rarity": "legendary",
+    "icon": "🗡️⚖️",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "DMG vs Minions +4%",
+    "specialBonus": {
+      "allDmgPct": 0.04
+    },
+    "source": "Wish",
+    "desc": "Thanh kiếm hữu hình có thể tránh, nhưng lưỡi kiếm vô hình của số phận luôn lơ lửng trên đầu kẻ địch (+4% DMG lên quái thường)."
+  },
+  {
+    "id": "gargoyle",
+    "name": "Gargoyle (Tượng Quỷ Đá Hộ Thành)",
+    "wikiName": "Gargoyle",
+    "rarity": "legendary",
+    "icon": "🗿🦇",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "CRIT DMG +8%",
+    "specialBonus": {
+      "critDmgPct": 0.08
+    },
+    "source": "Wish",
+    "desc": "Vẻ ngoài dữ tợn được tạc nên để trấn áp mọi bóng ma trong đêm tối (+8% Sát thương Chí mạng)."
+  },
+  {
+    "id": "bull_skull",
+    "name": "Bull Skull (Đầu Lâu Ngưu Ma)",
+    "wikiName": "Bull Skull",
+    "rarity": "legendary",
+    "icon": "🐂💀",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "ATK +3%",
+    "specialBonus": {
+      "atkPct": 0.03
+    },
+    "source": "Wish",
+    "desc": "Khối xương cứng bất hoại theo năm tháng, biểu tượng của sức mạnh thuần túy (+3% Tổng ATK)."
+  },
+  {
+    "id": "fire_phoenix_feather",
+    "name": "Fire Phoenix Feather (Lông Vũ Hỏa Phượng Hoàng)",
+    "wikiName": "Fire Phoenix Feather",
+    "rarity": "legendary",
+    "icon": "🪶🔥",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "DMG vs Airborne Enemies +4%",
+    "specialBonus": {
+      "allDmgPct": 0.04
+    },
+    "source": "Wish",
+    "desc": "Chiếc lông vũ rực sáng ngọn lửa bất diệt của Phượng Hoàng (+4% DMG lên quái bay)."
+  },
+  {
+    "id": "magic_harp",
+    "name": "Magic Harp (Đàn Hạc Ma Thuật)",
+    "wikiName": "Magic Harp",
+    "rarity": "legendary",
+    "icon": "🪕✨",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Gear Base Stats +3%",
+    "specialBonus": {
+      "gearBasePct": 0.03
+    },
+    "source": "Wish",
+    "desc": "Khi tiếng đàn vang lên, toàn bộ trang bị trên người bạn sẽ cộng hưởng ma thuật (+3% Chỉ số cơ bản của mọi Trang Bị)."
+  },
+  {
+    "id": "thronebreaker_shield",
+    "name": "Thronebreaker Shield (Khiên Phá Ngai Vàng)",
+    "wikiName": "Thronebreaker Shield",
+    "rarity": "legendary",
+    "icon": "🛡️🔥",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Reduced Crit DMG taken +8%",
+    "specialBonus": {
+      "dmgReducPct": 0.04
+    },
+    "source": "Exchange Shop",
+    "desc": "Tương truyền đã đỡ trọn đòn cuối cùng của Vua Lửa Địa Ngục mà chỉ để lại một vết xước mờ (+8% Giảm sát thương chí mạng nhận vào)."
+  },
+  {
+    "id": "broodmother_scale",
+    "name": "Broodmother Scale (Vảy Mẫu Long Chắn Thiên Thạch)",
+    "wikiName": "Broodmother Scale",
+    "rarity": "legendary",
+    "icon": "🐉🛡️",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Reduced Main Weapon & Meteor DMG taken +2%",
+    "specialBonus": {
+      "dmgReducPct": 0.02
+    },
+    "source": "Event",
+    "desc": "Chiếc vảy còn sót lại của Mẫu Long từng che chở đàn con khỏi trận bão thiên thạch."
+  },
+  {
+    "id": "thorned_treeheart",
+    "name": "Thorned Treeheart (Trái Tim Gai Rừng Thẳm)",
+    "wikiName": "Thorned Treeheart",
+    "rarity": "legendary",
+    "icon": "🌿💚",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Reduced Sprite & Strike DMG taken +2%",
+    "specialBonus": {
+      "dmgReducPct": 0.02
+    },
+    "source": "Event",
+    "desc": "Sinh ra để ngăn chặn kẻ xâm nhập, từng canh giữ giấc ngủ ngàn năm của công chúa."
+  },
+  {
+    "id": "medusas_eye",
+    "name": "Medusa's Eye (Mắt Đá Medusa)",
+    "wikiName": "Medusa's Eye",
+    "rarity": "legendary",
+    "icon": "🐍👁️",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Reduced Elemental & Circle DMG taken +2%",
+    "specialBonus": {
+      "dmgReducPct": 0.02
+    },
+    "source": "Event",
+    "desc": "Bẻ cong các đòn tấn công nguy hiểm nhất thành những vết sượt nhẹ."
+  },
+  {
+    "id": "frostflame_lamp",
+    "name": "Frostflame Lamp (Đèn Băng Hỏa Cực Hàn)",
+    "wikiName": "Frostflame Lamp",
+    "rarity": "legendary",
+    "icon": "🏮❄️",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Ice Damage +10%",
+    "specialBonus": {
+      "iceDmgPct": 0.1
+    },
+    "source": "Event",
+    "desc": "Khoảnh khắc ngọn đèn này được thắp sáng, luồng hàn khí thấu xương sẽ đóng băng kẻ địch (+10% Ice DMG)."
+  },
+  {
+    "id": "quiet_quill",
+    "name": "Quiet Quill (Bút Lông Dạ Vũ)",
+    "wikiName": "Quiet Quill",
+    "rarity": "legendary",
+    "icon": "🪶🖋️",
+    "baseAtk": 120,
+    "baseHp": 480,
+    "specialStatText": "Effect RES +4%",
+    "specialBonus": {
+      "dmgReducPct": 0.04
+    },
+    "source": "Event",
+    "desc": "Lông vũ từ chim Dạ Vũ làm dịu đi mọi vết bỏng và xuất huyết (+4% Kháng hiệu ứng)."
+  },
+  {
+    "id": "magic_lamp",
+    "name": "Magic Lamp (Đèn Thần Aladin)",
+    "wikiName": "Magic Lamp",
+    "rarity": "epic",
+    "icon": "🪔✨",
+    "baseAtk": 60,
+    "baseHp": 240,
+    "specialStatText": "Ground DMG Reduced +4%",
+    "specialBonus": {
+      "dmgReducPct": 0.04
+    },
+    "source": "Wish",
+    "desc": "Cầm thật chặt và xoa ba lần để triệu hồi phép màu hộ vệ (-4% sát thương từ quái mặt đất)."
+  },
+  {
+    "id": "magic_carpet",
+    "name": "Margic Carpet (Thảm Bay Hoàng Gia)",
+    "wikiName": "Margic Carpet",
+    "rarity": "epic",
+    "icon": " rugs🧶",
+    "baseAtk": 60,
+    "baseHp": 240,
+    "specialStatText": "Gold in Gold Cave +4% & HP +2%",
+    "specialBonus": {
+      "goldPct": 0.04,
+      "hpPct": 0.02
+    },
+    "source": "Wish",
+    "desc": "Tấm thảm bay thần kỳ đưa bạn lướt qua hầm ngục vàng (+4% Vàng nhận được & +2% Max HP)."
+  },
+  {
+    "id": "poison_apple",
+    "name": "Poison Apple (Táo Độc Tím)",
+    "wikiName": "Poison Apple",
+    "rarity": "epic",
+    "icon": "🍎☠️",
+    "baseAtk": 60,
+    "baseHp": 240,
+    "specialStatText": "MOVE SPD +1.6%",
+    "specialBonus": {
+      "movSpdPct": 0.016
+    },
+    "source": "Wish",
+    "desc": "Quả táo tím ngọt ngào nhưng ẩn chứa ma lực tốc hành (+1.6% Tốc độ di chuyển)."
+  },
+  {
+    "id": "laurel_wreath",
+    "name": "Laurel Wreath (Vòng Nguyệt Quế Chiến Thắng)",
+    "wikiName": "Laurel Wreath",
+    "rarity": "epic",
+    "icon": "🌿👑",
+    "baseAtk": 60,
+    "baseHp": 240,
+    "specialStatText": "DMG Reduce vs Elite +3%",
+    "specialBonus": {
+      "dmgReducPct": 0.03
+    },
+    "source": "Wish",
+    "desc": "Đội Vòng Nguyệt Quế để chứng minh bạn là nhà vô địch tối thượng (-3% sát thương từ Tinh Anh)."
+  },
+  {
+    "id": "four_leaf_clover",
+    "name": "Four-Leaf Clover (Cỏ Bốn Lá May Mắn)",
+    "wikiName": "Four-Leaf Clover",
+    "rarity": "epic",
+    "icon": "🍀✨",
+    "baseAtk": 60,
+    "baseHp": 240,
+    "specialStatText": "DMG Reduce vs Minion +4%",
+    "specialBonus": {
+      "dmgReducPct": 0.04
+    },
+    "source": "Wish",
+    "desc": "Nhánh cỏ bốn lá quý hiếm mang lại vận may hộ mệnh (-4% sát thương từ quái thường)."
+  },
+  {
+    "id": "crystal_shoe",
+    "name": "Crystal Shoe (Giày Pha Lê Cổ Tích)",
+    "wikiName": "Crystal Shoe",
+    "rarity": "epic",
+    "icon": "👠💎",
+    "baseAtk": 60,
+    "baseHp": 240,
+    "specialStatText": "DMG Reduce vs Bosses +4%",
+    "specialBonus": {
+      "dmgReducPct": 0.04
+    },
+    "source": "Wish",
+    "desc": "Trong suốt như pha lê nhưng mang sức mạnh chống lại các Đại Trùm (-4% sát thương từ Boss)."
+  },
+  {
+    "id": "red_hood",
+    "name": "Red Hood (Mũ Choàng Đỏ Thợ Săn)",
+    "wikiName": "Red Hood",
+    "rarity": "epic",
+    "icon": "🧣🐺",
+    "baseAtk": 60,
+    "baseHp": 240,
+    "specialStatText": "DMG Reduce vs Airborne +3%",
+    "specialBonus": {
+      "dmgReducPct": 0.03
+    },
+    "source": "Wish",
+    "desc": "Chiếc mũ đỏ giúp bạn không bao giờ lạc lối trong rừng sâu (-3% sát thương từ quái bay)."
+  },
+  {
+    "id": "gladiators_helm",
+    "name": "Gladiator's Helm (Mũ Giáp Võ Sĩ Giác Đấu)",
+    "wikiName": "Gladiator's Helm",
+    "rarity": "rare",
+    "icon": "🪖⚔️",
+    "baseAtk": 40,
+    "baseHp": 160,
+    "specialStatText": "Base Stats +50% per Star",
+    "specialBonus": {},
+    "source": "Wish",
+    "desc": "Chiếc mũ chiến binh in hằn dấu vết của hàng trăm trận quyết đấu sinh tử."
+  },
+  {
+    "id": "pumpkin_lantern",
+    "name": "Pumpkin Lantern (Đèn Lồng Bí Ngô)",
+    "wikiName": "Pumpkin Lantern",
+    "rarity": "rare",
+    "icon": "🎃🕯️",
+    "baseAtk": 40,
+    "baseHp": 160,
+    "specialStatText": "Base Stats +50% per Star",
+    "specialBonus": {},
+    "source": "Wish",
+    "desc": "Người bạn đồng hành mỉm cười xua tan nỗi sợ bóng tối trong hầm ngục."
+  },
+  {
+    "id": "supreme_staff",
+    "name": "Supreme Staff (Quyền Trượng Tối Cao)",
+    "wikiName": "Supreme Staff",
+    "rarity": "rare",
+    "icon": "🦯👑",
+    "baseAtk": 40,
+    "baseHp": 160,
+    "specialStatText": "Base Stats +50% per Star",
+    "specialBonus": {},
+    "source": "Wish",
+    "desc": "Không phải gậy chống thông thường mà là biểu tượng của vương quyền và sự thống trị."
+  },
+  {
+    "id": "iron_throne",
+    "name": "Iron Throne (Ngai Sắt Bá Vương)",
+    "wikiName": "Iron Throne",
+    "rarity": "rare",
+    "icon": "🪑⚔️",
+    "baseAtk": 40,
+    "baseHp": 160,
+    "specialStatText": "Base Stats +50% per Star",
+    "specialBonus": {},
+    "source": "Wish",
+    "desc": "Chiếc ngai sắt được đúc từ hàng ngàn thanh kiếm, khơi mào vô số cuộc đại chiến."
+  },
+  {
+    "id": "sword_in_the_stone",
+    "name": "Sword in the Stone (Thanh Kiếm Trong Đá)",
+    "wikiName": "Sword in the Stone",
+    "rarity": "rare",
+    "icon": "🗡️🪨",
+    "baseAtk": 40,
+    "baseHp": 160,
+    "specialStatText": "Base Stats +50% per Star",
+    "specialBonus": {},
+    "source": "Wish",
+    "desc": "Nằm im lìm trong tảng đá cổ xưa chờ đợi vị chân vương rút kiếm."
+  }
+]

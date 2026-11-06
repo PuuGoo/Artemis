@@ -1,0 +1,186 @@
+{
+  "enhancement": {
+    "normal": {
+      "atk": 20,
+      "hp": 0
+    },
+    "fine": {
+      "atk": 40,
+      "hp": 0
+    },
+    "rare": {
+      "atk": 60,
+      "hp": 0
+    },
+    "epic": {
+      "atk": 80,
+      "hp": 0
+    },
+    "epic_1": {
+      "atk": 120,
+      "hp": 0
+    },
+    "epic_2": {
+      "atk": 200,
+      "hp": 0
+    },
+    "legendary": {
+      "atk": 400,
+      "hp": 0
+    },
+    "legendary_1": {
+      "atk": 700,
+      "hp": 0
+    },
+    "legendary_2": {
+      "atk": 950,
+      "hp": 0
+    },
+    "legendary_3": {
+      "atk": 1200,
+      "hp": 0
+    },
+    "mythic": {
+      "atk": 1500,
+      "hp": 0
+    }
+  },
+  "ability": {
+    "normal": {
+      "atk": 0,
+      "hp": 80
+    },
+    "fine": {
+      "atk": 0,
+      "hp": 160
+    },
+    "rare": {
+      "atk": 0,
+      "hp": 240
+    },
+    "epic": {
+      "atk": 0,
+      "hp": 320
+    },
+    "epic_1": {
+      "atk": 0,
+      "hp": 480
+    },
+    "epic_2": {
+      "atk": 0,
+      "hp": 800
+    },
+    "legendary": {
+      "atk": 0,
+      "hp": 1600
+    },
+    "legendary_1": {
+      "atk": 0,
+      "hp": 2800
+    },
+    "legendary_2": {
+      "atk": 0,
+      "hp": 3800
+    },
+    "legendary_3": {
+      "atk": 0,
+      "hp": 4800
+    },
+    "mythic": {
+      "atk": 0,
+      "hp": 6000
+    }
+  },
+  "blessing": {
+    "normal": {
+      "atk": 36,
+      "hp": 144
+    },
+    "fine": {
+      "atk": 36,
+      "hp": 144
+    },
+    "rare": {
+      "atk": 36,
+      "hp": 144
+    },
+    "epic": {
+      "atk": 48,
+      "hp": 192
+    },
+    "epic_1": {
+      "atk": 72,
+      "hp": 288
+    },
+    "epic_2": {
+      "atk": 86,
+      "hp": 384
+    },
+    "legendary": {
+      "atk": 240,
+      "hp": 960
+    },
+    "legendary_1": {
+      "atk": 420,
+      "hp": 1680
+    },
+    "legendary_2": {
+      "atk": 570,
+      "hp": 2280
+    },
+    "legendary_3": {
+      "atk": 720,
+      "hp": 2880
+    },
+    "mythic": {
+      "atk": 900,
+      "hp": 3600
+    }
+  },
+  "etched": {
+    "normal": {
+      "atk": 180,
+      "hp": 720
+    },
+    "fine": {
+      "atk": 180,
+      "hp": 720
+    },
+    "rare": {
+      "atk": 180,
+      "hp": 720
+    },
+    "epic": {
+      "atk": 240,
+      "hp": 960
+    },
+    "epic_1": {
+      "atk": 360,
+      "hp": 1440
+    },
+    "epic_2": {
+      "atk": 600,
+      "hp": 2400
+    },
+    "legendary": {
+      "atk": 1200,
+      "hp": 4800
+    },
+    "legendary_1": {
+      "atk": 2100,
+      "hp": 8400
+    },
+    "legendary_2": {
+      "atk": 2850,
+      "hp": 11400
+    },
+    "legendary_3": {
+      "atk": 3600,
+      "hp": 14400
+    },
+    "mythic": {
+      "atk": 4500,
+      "hp": 18000
+    }
+  }
+}

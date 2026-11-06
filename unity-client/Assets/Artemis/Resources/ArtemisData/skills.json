@@ -1,0 +1,928 @@
+[
+  {
+    "id": "warriors_soul",
+    "name": "Warrior's Soul (Linh Hồn Chiến Binh)",
+    "wikiName": "Warrior's Soul",
+    "rarity": "legend",
+    "category": "stat",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🔥⚔️",
+    "atkPwrPct": 0.3,
+    "desc": "[ATK PWR ↑↑↑↑] Tăng trực tiếp +30% Sức Tấn Công (Attack Power) cho mọi nguồn sát thương!"
+  },
+  {
+    "id": "power_trio",
+    "name": "Power Trio (Tam Tuyệt Thần Lực)",
+    "wikiName": "Power Trio",
+    "rarity": "legend",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "👑⚡",
+    "atkPwrPct": 0.15,
+    "aspdPct": 0.2,
+    "maxHpPct": 0.2,
+    "desc": "[Max HP ↑↑↑, ATK SPD ↑↑↑, ATK PWR ↑↑↑] Tăng đồng thời +15% ATK PWR, +20% Tốc độ bắn và +20% Máu tối đa!"
+  },
+  {
+    "id": "multishot",
+    "name": "Multishot (Liên Xạ +1 Loạt Đạn)",
+    "wikiName": "Multishot",
+    "rarity": "legend",
+    "category": "weapon",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🏹🏹",
+    "desc": "[Multishot +1] Phóng thêm loạt đạn thứ 2 liên tiếp từ vũ khí chính (cộng 8 frames vào chu kỳ tấn công)."
+  },
+  {
+    "id": "corrosive_field",
+    "name": "Corrosive Field (Trường Ăn Mòn +35% DMG)",
+    "wikiName": "Corrosive Field",
+    "rarity": "legend",
+    "category": "circle",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "☣️🌀",
+    "desc": "Tạo Kết Giới Ăn Mòn quanh người: Quái lân cận bị Suy Yếu nhận +35% sát thương và chịu 0.5x ATK mỗi 0.3 giây!"
+  },
+  {
+    "id": "energy_beam",
+    "name": "Energy Beam (Đại Pháo Tia Laser Xuyên Thấu)",
+    "wikiName": "Energy Beam",
+    "rarity": "legend",
+    "category": "weapon",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "⚡🔦",
+    "chargedMult": 0.6,
+    "desc": "Tụ lực phóng Đại Pháo Tia Laser xuyên thấu gây 0.7x ATK × 4 hits (cộng hưởng Charged Arrow lên 0.85x ATK & nhân đôi nhịp đánh Energy Ring; hệ số tốc bắn 0.6x)."
+  },
+  {
+    "id": "soul_of_strength",
+    "name": "Soul of Strength (Linh Hồn Cường Tráng)",
+    "wikiName": "Soul of Strength",
+    "rarity": "legend",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "💖👑",
+    "maxHpPct": 0.4,
+    "desc": "[Max HP ↑↑↑↑] Tăng đột biến +40% Máu Tối Đa (Max HP) và hồi phục tương ứng!"
+  },
+  {
+    "id": "sacred_protection",
+    "name": "Sacred Protection (Khiên Thánh Chặn Đòn)",
+    "wikiName": "Sacred Protection",
+    "rarity": "legend",
+    "category": "stat",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🛡️✨",
+    "desc": "Nhận Khiên Thánh (SHLD) miễn nhiễm hoàn toàn 1 đòn sát thương mỗi phòng / mỗi 30 giây (tối đa cộng dồn 4 tầng)!"
+  },
+  {
+    "id": "sprite_king",
+    "name": "Sprite King (Vua Tinh Linh Bắn Laser)",
+    "wikiName": "Sprite King",
+    "rarity": "legend",
+    "category": "sprite",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🧚‍♂️👑",
+    "desc": "Triệu hồi Vua Tinh Linh (Sprite King) bay hộ vệ, bắn chùm tia Laser tự động truy kích mục tiêu gây 0.6x ATK × 4 hits!"
+  },
+  {
+    "id": "super_meteor",
+    "name": "Super Meteor (Mưa Siêu Thiên Thạch)",
+    "wikiName": "Super Meteor",
+    "rarity": "legend",
+    "category": "meteor",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "☄️👑",
+    "desc": "Mỗi 4 giây tự động giáng Siêu Thiên Thạch nguyên tố ngẫu nhiên gây 1.25x ATK khi rơi và phát nổ sóng xung kích lớn gây thêm 1.0x ATK diện rộng!"
+  },
+  {
+    "id": "beam_strike",
+    "name": "Beam Strike (Phi Kiếm Phóng Tia Laser)",
+    "wikiName": "Beam Strike",
+    "rarity": "legend",
+    "category": "strike",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🗡️🔦",
+    "desc": "Mỗi 2.5 giây triệu hồi 1 Phi Kiếm bắn chùm tia Laser (0.5x ATK × 4 hits); đồng thời TẤT CẢ các Phi Kiếm khác cũng bắn tia Laser!"
+  },
+  {
+    "id": "circle_web",
+    "name": "Circle Web (Mạng Lưới Điện Quang Cầu Xoay)",
+    "wikiName": "Circle Web",
+    "rarity": "legend",
+    "category": "circle",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🕸️🪐",
+    "desc": "Tất cả Cầu Xoay (Circling Orbs) kết nối với nhau thành Mạng Lưới Năng Lượng cắt qua kẻ địch, gây thêm 0.2x ATK mỗi nhịp chạm!"
+  },
+  {
+    "id": "atk_boost",
+    "name": "ATK Increase (Cường Hóa Tấn Công +25%)",
+    "wikiName": "ATK Increase",
+    "rarity": "epic",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "⚔️🔺",
+    "atkPwrPct": 0.25,
+    "desc": "[ATK PWR ↑↑↑] Tăng +25% Sức Tấn Công (Attack Power) cho nhân vật."
+  },
+  {
+    "id": "giants_strength",
+    "name": "Giant's Strength (Sức Mạnh Khổng Lồ)",
+    "wikiName": "Giant's Strength",
+    "rarity": "epic",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🗿💪",
+    "atkPwrPct": 0.2,
+    "maxHpPct": 0.25,
+    "desc": "[Max HP ↑↑↑, ATK PWR ↑↑↑, Size ↑↑] Tăng +20% ATK PWR và +25% Max HP, hóa khổng lồ uy lực (giảm nhẹ tốc chạy)."
+  },
+  {
+    "id": "weapon_enchantment",
+    "name": "Weapon Enchantment (Vũ Khí Tự Động Tách Rời)",
+    "wikiName": "Weapon Enchantment",
+    "rarity": "epic",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🪄🏹",
+    "atkPwrPct": -0.3,
+    "desc": "Vũ khí tách rời cơ thể và TỰ ĐỘNG TẤN CÔNG liên tục ngay cả khi bạn đang chạy! (-30% ATK PWR, nhưng cộng thêm % hiệu quả tốc bắn từ mọi kỹ năng AS khác)."
+  },
+  {
+    "id": "aspd_boost",
+    "name": "Soul of Swiftness (Linh Hồn Thần Tốc)",
+    "wikiName": "Soul of Swiftness",
+    "rarity": "epic",
+    "category": "stat",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "⚡🌪️",
+    "aspdPct": 0.25,
+    "movSpdPct": 0.2,
+    "desc": "[ATK SPD ↑↑↑↑, MOV SPD ↑↑↑↑] Tăng +25% Tốc độ bắn và tăng mạnh +20% Tốc độ di chuyển!"
+  },
+  {
+    "id": "tracking_eye",
+    "name": "Tracking Eye (Mắt Thần Truy Kích Homing)",
+    "wikiName": "Tracking Eye",
+    "rarity": "epic",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "👁️🎯",
+    "dmgPct": -0.1,
+    "desc": "Mọi đạn bắn ra tự động bẻ lái đuổi theo kẻ địch (Homing cực mạnh với Trượng/Laser; -10% DMG cơ bản nhưng trúng 100% đường đạn Chéo/Liên Xạ)!"
+  },
+  {
+    "id": "diag_arrow",
+    "name": "Diagonal Arrow (Tên Chéo +2)",
+    "wikiName": "Diagonal Arrow",
+    "rarity": "epic",
+    "category": "weapon",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "↗️↖️",
+    "desc": "[Diagonal Arrows +2] Bắn thêm 2 đường đạn chéo góc 35 độ mỗi phát tấn công (kết hợp Tracking Eye sẽ hội tụ toàn bộ vào Boss)!"
+  },
+  {
+    "id": "energy_ring",
+    "name": "Energy Ring (Vòng Năng Lượng Tụ Lực)",
+    "wikiName": "Energy Ring",
+    "rarity": "epic",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "⭕⚡",
+    "chargedMult": 0.6,
+    "desc": "Tụ lực phóng Vòng Năng Lượng khổng lồ xuyên thấu gây 0.7x ATK mỗi hit (tối đa 11 hits! Cộng hưởng với Energy Beam để x2 tần suất đốt và Charged Arrow lên 1.1x ATK)."
+  },
+  {
+    "id": "wall_piercing_arrow",
+    "name": "Wall-Piercing Arrow (Tên Xuyên Tường Đá)",
+    "wikiName": "Wall-Piercing Arrow",
+    "rarity": "epic",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🧱☄️",
+    "desc": "Đạn vũ khí chính xuyên qua mọi bức tường đá và chướng ngại vật trong hầm ngục!"
+  },
+  {
+    "id": "wind_blessing",
+    "name": "Wind Blessing (Phước Lành Gió & Né Đòn)",
+    "wikiName": "Wind Blessing",
+    "rarity": "epic",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🍃💨",
+    "movSpdPct": 0.15,
+    "dodgeBonus": 0.12,
+    "desc": "[MOV SPD ↑, Size ↓↓, Dodge ↑] Tăng +15% Tốc chạy, thu nhỏ hitbox nhân vật và tăng +12% Tỷ lệ Né đòn!"
+  },
+  {
+    "id": "water_walker",
+    "name": "Water Walker (Thuật Đạp Nước Lướt Gió)",
+    "wikiName": "Water Walker",
+    "rarity": "epic",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🌊👟",
+    "movSpdPct": 0.18,
+    "desc": "[Can walk on water, MOV SPD ↑↑] Tăng +18% Tốc độ di chuyển và lướt xuyên qua các địa hình cản trở."
+  },
+  {
+    "id": "slow_field",
+    "name": "Slow Field (Trường Trọng Lực Làm Chậm)",
+    "wikiName": "Slow Field",
+    "rarity": "epic",
+    "category": "circle",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "⏳🛡️",
+    "desc": "Tạo Trường Trọng Lực quanh nhân vật làm giảm mạnh tốc độ bay của đạn địch và làm chậm quái vật tiếp cận!"
+  },
+  {
+    "id": "revive",
+    "name": "Revive (Thánh Ân Hồi Sinh 100% HP)",
+    "wikiName": "Revive",
+    "rarity": "epic",
+    "category": "stat",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🪽💖",
+    "desc": "Khi tử trận, bạn lập tức HỒI SINH 1 LẦN với đầy 100% Máu Tối Đa và quét sạch đạn xung quanh! (Chỉ có từ Valkyrie & Devil)."
+  },
+  {
+    "id": "super_blaze",
+    "name": "Super Blaze (Siêu Hỏa Thiêu +150% Fire DMG)",
+    "wikiName": "Super Blaze",
+    "rarity": "epic",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🔥🌋",
+    "desc": "Cường hóa hiệu ứng Lửa: Tăng +150% sát thương Lửa (Fire DMG) và nhân đôi tốc độ nhảy sát thương đốt lên 10 ticks/giây!"
+  },
+  {
+    "id": "super_bolt",
+    "name": "Super Bolt (Siêu Lôi Phạt 8 Mục Tiêu)",
+    "wikiName": "Super Bolt",
+    "rarity": "epic",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🌩️⚡",
+    "desc": "Cường hóa hiệu ứng Sét: Tăng +50% Lightning DMG và tia sét giật lan tới 8 mục tiêu trong bán kính 12m!"
+  },
+  {
+    "id": "super_venom",
+    "name": "Super Venom (Siêu Kịch Độc +200% & Nổ 400%)",
+    "wikiName": "Super Venom",
+    "rarity": "epic",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "☠️🧪",
+    "desc": "Cường hóa hiệu ứng Độc: Tăng +200% sát thương Độc (Venom DMG) và có cơ hội kích nổ thêm +400% sát thương độc tức thì!"
+  },
+  {
+    "id": "super_freeze",
+    "name": "Super Freeze (Siêu Đông Cứng 3x ATK)",
+    "wikiName": "Super Freeze",
+    "rarity": "epic",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "❄️🧊",
+    "desc": "Cường hóa hiệu ứng Băng: Sát thương khi đóng băng tăng lên 3.0x ATK, kéo dài đóng băng 2.1s và nổ thêm 1.0x ATK khi tan băng!"
+  },
+  {
+    "id": "laser_sprite",
+    "name": "Laser Sprite (Tinh Linh Tia Laser)",
+    "wikiName": "Laser Sprite",
+    "rarity": "epic",
+    "category": "sprite",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🧚🔦",
+    "desc": "Nhận thêm 1 Tinh Linh Laser đồng hành bắn chùm tia năng lượng xuyên thấu gây 0.5x ATK × 4 hits!"
+  },
+  {
+    "id": "sprite_frenzy",
+    "name": "Sprite Frenzy (Tinh Linh Cuồng Nộ +50%)",
+    "wikiName": "Sprite Frenzy",
+    "rarity": "epic",
+    "category": "sprite",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🧚🔥",
+    "desc": "[All Sprite ATK PWR & ATK SPD ↑↑↑↑] Tăng +50% sát thương cơ bản (kể cả sát thương nguyên tố) và tăng vọt Tốc độ bắn cho mọi Tinh Linh!"
+  },
+  {
+    "id": "meteor_shower",
+    "name": "Meteor Pursuit (Thiên Thạch Truy Kích Khi Bắn)",
+    "wikiName": "Meteor Pursuit",
+    "rarity": "epic",
+    "category": "meteor",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "☄️🎯",
+    "desc": "Mỗi khi tấn công có cơ hội triệu hồi Thiên Thạch nguyên tố ngẫu nhiên rơi trúng mục tiêu gây 1.25x ATK!"
+  },
+  {
+    "id": "chain_meteors",
+    "name": "Chain Meteors (Thiên Thạch Liên Hoàn x2)",
+    "wikiName": "Chain Meteors",
+    "rarity": "epic",
+    "category": "meteor",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "☄️☄️",
+    "desc": "[Rapid Fire Meteors] Nhân đôi cơ hội triệu hồi và giáng 2 Thiên Thạch cùng lúc thay vì 1!"
+  },
+  {
+    "id": "beam_circle",
+    "name": "Beam Circle (2 Cầu Xoay Phóng Tia Laser)",
+    "wikiName": "Beam Circle",
+    "rarity": "epic",
+    "category": "circle",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🪐🔦",
+    "desc": "Nhận 2 Cầu Laser xoay quanh người gây 1.25x ATK khi va chạm và định kỳ phóng tia Laser 1.0x ATK bắn thẳng vào kẻ địch!"
+  },
+  {
+    "id": "super_circle",
+    "name": "Super Circle (4 Siêu Cầu Năng Lượng Xoay)",
+    "wikiName": "Super Circle",
+    "rarity": "epic",
+    "category": "circle",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🪐✨",
+    "desc": "[Super Rotating Balls] Nhận 4 Siêu Cầu Vô Cực xoay quanh người tốc độ cao, mỗi quả gây 1.25x ATK sát thương!"
+  },
+  {
+    "id": "magic_strike",
+    "name": "Magic Strike (Phi Kiếm Kế Thừa Nguyên Tố)",
+    "wikiName": "Magic Strike",
+    "rarity": "epic",
+    "category": "strike",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🗡️🌈",
+    "desc": "[Enchanted Swords] Mọi Phi Kiếm (Strikes) kế thừa toàn bộ hiệu ứng của Vũ Khí Chính: Blaze, Venom, Freeze, Bolt, Lightwing & Nổ!"
+  },
+  {
+    "id": "strike_boost",
+    "name": "Strike Boost (Cường Hóa Phi Kiếm +50%)",
+    "wikiName": "Strike Boost",
+    "rarity": "epic",
+    "category": "strike",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🗡️🔺",
+    "desc": "[Strike ATK ↑↑↑↑] Tăng +50% sát thương cơ bản cho toàn bộ các kỹ năng Phi Kiếm (Strikes)!"
+  },
+  {
+    "id": "twin_strike",
+    "name": "Twin Strike (Song Kiếm Nhân Đôi x2)",
+    "wikiName": "Twin Strike",
+    "rarity": "epic",
+    "category": "strike",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🗡️🗡️",
+    "desc": "[Double Sword Shot] Nhân đôi (x2) số lượng Phi Kiếm được triệu hồi từ mọi kỹ năng Strike!"
+  },
+  {
+    "id": "underworld_warrior",
+    "name": "Underworld Warrior (Chiến Binh Minh Giới)",
+    "wikiName": "Underworld Warrior",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "😈⚔️",
+    "atkPwrPct": 0.1,
+    "desc": "Tăng +10% ATK PWR, và đảm bảo 100% Ác Quỷ (Devil) sẽ xuất hiện sau khi đánh bại Trùm!"
+  },
+  {
+    "id": "demon_slayer",
+    "name": "Demon Slayer (Sát Quỷ Cộng Dồn +50% ATK)",
+    "wikiName": "Demon Slayer",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "👹🗡️",
+    "atkPwrPct": 0.15,
+    "desc": "Mỗi khi tiêu diệt quái vật tăng +10% ATK PWR trong 3 giây, cộng dồn tối đa lên tới +50% ATK PWR!"
+  },
+  {
+    "id": "warriors_heart",
+    "name": "Warrior's Heart (Trái Tim Chiến Binh +50% ATK)",
+    "wikiName": "Warrior's Heart",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "❤️⚔️",
+    "atkPwrPct": 0.15,
+    "desc": "Mỗi lần nhặt Tim Đỏ tăng +5% ATK PWR vĩnh viễn trong trận, cộng dồn tối đa tới +50% ATK PWR!"
+  },
+  {
+    "id": "stand_strong",
+    "name": "Stand Strong (Đứng Yên Tích +45% ATK & +150% ASPD)",
+    "wikiName": "Stand Strong",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🏛️🏹",
+    "atkPwrPct": 0.25,
+    "aspdPct": 0.45,
+    "desc": "Đứng yên bắn liên tục tích cộng dồn tối đa +45% ATK PWR (9 tầng) và +150% Tốc độ bắn (10 tầng)!"
+  },
+  {
+    "id": "short_range_strike",
+    "name": "Short-Range Strike (Cận Chiến +20% ATK & +100% ASPD)",
+    "wikiName": "Short-Range Strike",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🥊⚡",
+    "atkPwrPct": 0.2,
+    "aspdPct": 1,
+    "desc": "Tăng +20% ATK PWR và +100% Tốc độ bắn cực đại ở cự ly gần!"
+  },
+  {
+    "id": "perilous_fervor",
+    "name": "Perilous Fervor (Cuồng Huyết <50% HP +30% ATK/ASPD)",
+    "wikiName": "Perilous Fervor",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🩸🔥",
+    "desc": "Khi HP dưới 50%, lập tức tăng +30% ATK PWR và +30% Tốc độ bắn (ATK SPD)!"
+  },
+  {
+    "id": "lightwing_arrow",
+    "name": "Lightwing Arrow (Tên Cánh Ánh Sáng +100% DMG)",
+    "wikiName": "Lightwing Arrow",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🪽🏹",
+    "dmgPct": 0.35,
+    "desc": "Đạn bắn ra mọc Đôi Cánh Ánh Sáng Hoàng Kim, gây thêm +100% DMG lên quái vật (áp dụng cho cả Phi Kiếm nếu có Magic Strike)!"
+  },
+  {
+    "id": "swift_arrow",
+    "name": "Swift Arrow (Tiễn Vũ Cực Tốc +100% ASPD)",
+    "wikiName": "Swift Arrow",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "💨🏹",
+    "aspdPct": 1,
+    "dmgPct": -0.2,
+    "desc": "[ATK SPD ↑↑↑↑↑, DMG ↓↓↓] Tăng +100% Tốc độ bắn như súng máy, giảm 20% DMG đạn thường (không giảm sát thương Tinh Linh & Nguyên Tố)!"
+  },
+  {
+    "id": "front_arrow",
+    "name": "Front Arrow (Tên Phía Trước +1)",
+    "wikiName": "Front Arrow",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "⬆️⬆️",
+    "mainWepDmgPct": -0.15,
+    "desc": "Bắn thêm +1 đường đạn song song về phía trước (-15% Main weapon DMG mỗi bản sao, giữ nguyên 100% sát thương nguyên tố & nổ)!"
+  },
+  {
+    "id": "charged_arrow",
+    "name": "Charged Arrow (Đại Tiễn Tụ Lực 2x ATK Xuyên Tường)",
+    "wikiName": "Charged Arrow",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🏹💥",
+    "chargedMult": 0.7,
+    "desc": "Tụ lực phóng Đại Tiễn Khổng Lồ gây 2.0x ATK xuyên thấu cả kẻ địch lẫn tường đá (hệ số tốc bắn 0.7x; cường hóa mạnh Energy Beam & Energy Ring)!"
+  },
+  {
+    "id": "pierce",
+    "name": "Piercing Arrow (Tên Xuyên Thấu Mục Tiêu)",
+    "wikiName": "Piercing Arrow",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "☄️🏹",
+    "desc": "Đạn vũ khí chính xuyên thấu qua mọi kẻ địch trên đường bay mà không bị biến mất!"
+  },
+  {
+    "id": "split_shot",
+    "name": "Split Shot (Đạn Phân Tách 3 Tia)",
+    "wikiName": "Split Shot",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🔱🏹",
+    "desc": "Đạn bắn về phía trước phân tách thêm các tia đạn phụ (mỗi tia gây 0.33x DMG gốc nhưng giữ 100% hiệu ứng Nguyên Tố & Nổ)!"
+  },
+  {
+    "id": "ricochet",
+    "name": "Ricochet Arrow (Đạn Nảy Giữa Quái Vật)",
+    "wikiName": "Ricochet Arrow",
+    "rarity": "rare",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "⚡🔄",
+    "desc": "Đạn trúng kẻ địch sẽ tự động bật nảy sang kẻ địch lân cận (+1 lần nảy mỗi cấp, gây 60% DMG gốc & giữ 100% sát thương nguyên tố)!"
+  },
+  {
+    "id": "lucky_band_aid",
+    "name": "Lucky Band-Aid (Băng Cá Nhân Nổ Toàn Màn Hình)",
+    "wikiName": "Lucky Band-Aid",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🩹💥",
+    "desc": "Tăng Luck; định kỳ kích hoạt Sóng Ánh Sáng gây 2.0x ATK lên toàn bộ quái trên màn hình và xóa sạch đạn địch!"
+  },
+  {
+    "id": "fountain_of_life",
+    "name": "Fountain of Life (Suối Nguồn Sinh Mệnh +15% HP & Hồi Đầy)",
+    "wikiName": "Fountain of Life",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "⛲💖",
+    "maxHpPct": 0.15,
+    "desc": "Tăng +15% Máu Tối Đa (Max HP) và lập tức HỒI ĐẦY 100% MÁU ngay khi chọn!"
+  },
+  {
+    "id": "angelic_shelter",
+    "name": "Angelic Shelter (Thánh Thuẫn +15% HP & 2s Bất Tử)",
+    "wikiName": "Angelic Shelter",
+    "rarity": "rare",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "👼🛡️",
+    "maxHpPct": 0.15,
+    "desc": "Tăng +15% Max HP và kéo dài thời gian Bất Tử sau khi chịu sát thương lên 2 giây trọn vẹn!"
+  },
+  {
+    "id": "fire_arrow",
+    "name": "Blaze (Hỏa Tiễn Thiêu Đốt)",
+    "wikiName": "Blaze",
+    "rarity": "rare",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🔥🏹",
+    "desc": "[Fire Effect] Đạn gây ngay 0.2x ATK sát thương Lửa khi trúng và thiêu đốt mục tiêu 5 ticks/giây trong 3 giây!"
+  },
+  {
+    "id": "lightning_arrow",
+    "name": "Bolt (Lôi Tiễn Giật Lan 4 Mục Tiêu)",
+    "wikiName": "Bolt",
+    "rarity": "rare",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🌩️🏹",
+    "desc": "[Lightning Effect] Đạn trúng đích phóng tia sét gây 0.3x ATK giật lan tới 4 mục tiêu trong bán kính 6m!"
+  },
+  {
+    "id": "venom_arrow",
+    "name": "Venom (Độc Tiễn Rút Máu Vĩnh Cửu)",
+    "wikiName": "Venom",
+    "rarity": "rare",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🐍🧪",
+    "desc": "[Poison Effect] Đạn gây 0.5x ATK sát thương Độc khi trúng và rút máu độc liên tục mỗi giây cho đến khi mục tiêu bị tiêu diệt!"
+  },
+  {
+    "id": "ice_arrow",
+    "name": "Freeze (Băng Tiễn Đông Cứng 1.5s)",
+    "wikiName": "Freeze",
+    "rarity": "rare",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "❄️🏹",
+    "desc": "[Ice Effect] Đạn gây 1.0x ATK sát thương Băng và Đông Cứng (Freeze) mục tiêu trong 1.5 giây!"
+  },
+  {
+    "id": "bomb_sprite",
+    "name": "Bomb Sprite (Tinh Linh Ném Bom 5 Quả)",
+    "wikiName": "Bomb Sprite",
+    "rarity": "rare",
+    "category": "sprite",
+    "providers": [
+      "valkyrie",
+      "devil"
+    ],
+    "icon": "🧚💣",
+    "desc": "Triệu hồi Tinh Linh Bom bay theo ném loạt 5 quả bom nổ diện rộng, mỗi quả gây 0.4x ATK!"
+  },
+  {
+    "id": "flying_swords",
+    "name": "Instant & Blitz Strike (Phi Kiếm Tự Động Mỗi 1.5s)",
+    "wikiName": "Instant Strike",
+    "rarity": "rare",
+    "category": "strike",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🗡️✨",
+    "desc": "Tự động triệu hồi 1 Phi Kiếm mỗi 1.5 giây (và loạt 5 Phi Kiếm Blitz Strike) lao tới đâm xuyên kẻ địch gây 0.75x ATK!"
+  },
+  {
+    "id": "warriors_breath",
+    "name": "Warrior's Breath (Hơi Thở Chiến Binh +10% ATK)",
+    "wikiName": "Warrior's Breath",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "angel",
+      "valkyrie"
+    ],
+    "icon": "⚔️🌿",
+    "atkPwrPct": 0.1,
+    "desc": "[ATK PWR ↑] Phước lành Thiên Thần tăng +10% Sức Tấn Công (Attack Power)."
+  },
+  {
+    "id": "fairys_breath",
+    "name": "Fairy's Breath (Hơi Thở Tinh Linh +10% ASPD)",
+    "wikiName": "Fairy's Breath",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "angel",
+      "valkyrie"
+    ],
+    "icon": "🧚🌿",
+    "aspdPct": 0.1,
+    "desc": "[ATK SPD ↑] Phước lành Thiên Thần tăng +10% Tốc độ bắn (Attack Speed)."
+  },
+  {
+    "id": "hermes_boots",
+    "name": "Breath of Wind (Hơi Thở Của Gió +10% MOV SPD)",
+    "wikiName": "Breath of Wind",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "angel",
+      "valkyrie"
+    ],
+    "icon": "👟🍃",
+    "movSpdPct": 0.1,
+    "dodgeBonus": 0.08,
+    "desc": "[MOV SPD ↑] Tăng +10% Tốc độ di chuyển và +8% cơ hội Né đòn."
+  },
+  {
+    "id": "max_hp_up",
+    "name": "Strength Blood (Huyết Lực Cường Tráng +10% HP)",
+    "wikiName": "Strength Blood",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "angel",
+      "valkyrie"
+    ],
+    "icon": "💖🌿",
+    "maxHpPct": 0.1,
+    "desc": "[Max HP ↑] Tăng +10% Máu Tối Đa và hồi phục ngay 20% HP."
+  },
+  {
+    "id": "restore_hp",
+    "name": "Restore HP (Thiên Thần Hồi Phục Sinh Lực)",
+    "wikiName": "Restore HP",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "angel"
+    ],
+    "icon": "💚👼",
+    "desc": "Thiên Thần ban phước hồi phục ngay lập tức 45% Máu Tối Đa!"
+  },
+  {
+    "id": "wounded_warrior",
+    "name": "Wounded Warrior (Trọng Thương Phản Kích +50% ATK)",
+    "wikiName": "Wounded Warrior",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "💢⚔️",
+    "desc": "Mỗi khi bị mất máu, lập tức tăng vọt +50% ATK PWR trong 5 giây!"
+  },
+  {
+    "id": "boss_slayer",
+    "name": "Boss Slayer (Khắc Tinh Đại Trùm +25% DMG Boss)",
+    "wikiName": "Boss Slayer",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "👑🎯",
+    "dmgPct": 0.25,
+    "desc": "[Bane of Bosses] Tăng +25% sát thương gây ra lên Trùm (Boss) và tự động hồi đầy máu trước mỗi phòng Boss!"
+  },
+  {
+    "id": "long_range_power",
+    "name": "Long-Range Power (Viễn Kích Tăng Tới +40% DMG)",
+    "wikiName": "Long-Range Power",
+    "rarity": "common",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🔭🏹",
+    "dmgPct": 0.22,
+    "desc": "Đạn bay quãng đường càng xa gây sát thương càng lớn, tăng tuyến tính từ +1% lên tới +40% DMG ở khoảng cách 14m!"
+  },
+  {
+    "id": "bouncy_wall",
+    "name": "Bounce Arrow (Đạn Bật Nảy Tường Hầm Ngục)",
+    "wikiName": "Bounce Arrow",
+    "rarity": "common",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🧱🔄",
+    "desc": "Đạn chạm tường hầm ngục sẽ bật nảy lại thêm +2 lần để tiếp tục truy sát kẻ địch!"
+  },
+  {
+    "id": "rear_arrow",
+    "name": "Rear Arrow (Tên Bảo Vệ Phía Sau +1)",
+    "wikiName": "Rear Arrow",
+    "rarity": "common",
+    "category": "weapon",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "⬇️🏹",
+    "desc": "Bắn thêm +1 đường đạn bảo vệ phía sau lưng mỗi khi tấn công."
+  },
+  {
+    "id": "fiery_path",
+    "name": "Fiery Path (Bước Chân Hỏa Ngục 1.0x ATK)",
+    "wikiName": "Fiery Path",
+    "rarity": "common",
+    "category": "elemental",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "👣🔥",
+    "desc": "Để lại vệt lửa rực cháy trên mặt đất nơi bạn bước qua, gây 1.0x ATK và thiêu đốt mọi kẻ địch dẫm phải!"
+  },
+  {
+    "id": "bloodthirst",
+    "name": "Demon & Perilous Recovery (Hút Máu Diệt Quái)",
+    "wikiName": "Demon Recovery",
+    "rarity": "common",
+    "category": "stat",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🩸💚",
+    "desc": "Hạ gục quái vật hồi ngay +5% Max HP; đồng thời khi máu dưới 30% sẽ tự động hồi phục dần về 30% HP!"
+  },
+  {
+    "id": "orbit_orbs",
+    "name": "Elemental & Vampiric Circles (Cầu Nguyên Tố & Hút Máu Xoay)",
+    "wikiName": "Vampiric Circle",
+    "rarity": "common",
+    "category": "circle",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🪐🩸",
+    "desc": "Triệu hồi +2 Cầu Xoay Nguyên Tố (Fire/Bolt/Poison/Ice) & Hút Máu gây 1.25x ATK và hồi 2% Max HP khi chạm địch!"
+  },
+  {
+    "id": "assault_strike",
+    "name": "Assault, Pursuit & Riposte Strike (Phi Kiếm Liên Kích)",
+    "wikiName": "Assault Strike",
+    "rarity": "common",
+    "category": "strike",
+    "providers": [
+      "valkyrie"
+    ],
+    "icon": "🗡️⚡",
+    "desc": "Triệu hồi Phi Kiếm (0.75x ATK) khi tấn công, khi tiêu diệt quái vật, và phóng 5 Phi Kiếm phản kích khi bị thương!"
+  }
+]

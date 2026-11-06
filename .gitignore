@@ -6,3 +6,7 @@ node_modules
 .vercel
 .env*
 backups/
+
+# ---- .NET / Unity domain build output ----
+bin/
+obj/

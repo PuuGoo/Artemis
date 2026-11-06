@@ -1,0 +1,37 @@
+{
+  "ruby": {
+    "name": "Ruby",
+    "icon": "🔴",
+    "color": "#fb7185",
+    "desc": "+18 ATK",
+    "atk": 18
+  },
+  "sapphire": {
+    "name": "Sapphire",
+    "icon": "🔵",
+    "color": "#60a5fa",
+    "desc": "+90 HP",
+    "hp": 90
+  },
+  "amethyst": {
+    "name": "Amethyst",
+    "icon": "🟣",
+    "color": "#c084fc",
+    "desc": "+2% chí mạng",
+    "crit": 0.02
+  },
+  "emerald": {
+    "name": "Emerald",
+    "icon": "🟢",
+    "color": "#4ade80",
+    "desc": "+2% né tránh",
+    "dodge": 0.02
+  },
+  "topaz": {
+    "name": "Topaz",
+    "icon": "🟡",
+    "color": "#facc15",
+    "desc": "+5% vàng",
+    "gold": 0.05
+  }
+}
