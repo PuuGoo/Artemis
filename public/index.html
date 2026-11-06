@@ -27307,7 +27307,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               atk: Math.max(1, Math.round(
                 playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
               )),
-              speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : (t === 'frostfang_wolf' ? 112 : (t === 'aurora_wisp' ? 76 : (t === 'prism_knight' ? 46 : (t === 'rift_stalker' ? 102 : (t === 'eclipse_oracle' ? 55 : (t === 'obsidian_brute' ? 38 : (t === 'dragon_whelp' ? 88 : (t === 'cloud_wisp' ? 92 : (t === 'sky_sentinel' ? 48 : 64))))))))))),
+              speed: ({ plant_turret: 0, bat: 115, frostfang_wolf: 112, aurora_wisp: 76, prism_knight: 46, rift_stalker: 102, eclipse_oracle: 55, obsidian_brute: 38, dragon_whelp: 88, cloud_wisp: 92, sky_sentinel: 48 }[t] ?? 64),
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,
               attackTimer: 1.1 + Math.random() * 1.4,
