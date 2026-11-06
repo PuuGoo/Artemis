@@ -14437,7 +14437,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        * diễn lại đúng đường đi `path` đã định sẵn.
        * Trả về {bin, mult, win, delta, bet, path} hoặc null nếu thiếu vàng.
        */
-      function plinkoPlay(bet) {
+      function plinkoPlay(bet, opts) {
         const p = ensurePlinko();
         const amount = Number(bet) || p.bet || 200;
         if (SaveState.gold < amount) {
@@ -14460,7 +14460,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // Giữ 20 lần gần nhất — lịch sử không được phình vô hạn trong save.
         if (p.history.length > 20) p.history.length = 20;
 
-        SaveState.save();
+        // Thả hàng loạt: người gọi tự lưu theo lô (save() serialize cả save lớn, không gọi 200 lần).
+        if (!(opts && opts.noSave)) SaveState.save();
         return { bin, mult, win, delta, bet: amount, path };
       }
 
@@ -14468,6 +14469,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       // HIỂN THỊ: canvas — bóng rơi, nảy qua từng chốt rồi vào ô thưởng
       // ---------------------------------------------------------------------
       const PLINKO_MAX_INFLIGHT = 10;
+      const PLINKO_BATCH_COUNT = 200;   // nút "Thả 200 bóng"
+      const PLINKO_BATCH_GAP = 60;      // ms giữa 2 bóng liên tiếp
+      const PLINKO_BATCH_SAVE_EVERY = 5; // lưu theo lô để không nghẽn cloud save
       let plinkoFx = null; // trạng thái animation của bảng đang hiển thị
 
       function plinkoHeat(m) {
@@ -14513,6 +14517,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           // Thời lượng từng đoạn (ms): rơi từ trên → 8 lần nảy → rơi vào ô → nảy nhẹ.
           dur: [320 * k, ...new Array(PLINKO_ROWS).fill(250 * k), 300 * k],
           bounceMs: 380 * k, fadeMs: 600,
+          // Chế độ thả hàng loạt: mỗi lần nảy ~85ms thay vì 250ms.
+          durTurbo: [110, ...new Array(PLINKO_ROWS).fill(85), 100], bounceTurbo: 160, fadeTurbo: 250,
+          batch: null, lastSnd: 0,
           raf: 0, last: 0,
         };
         plinkoFxDraw(plinkoFx);
@@ -14532,12 +14539,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         return pts;
       }
 
-      function plinkoFxSpawn(res) {
+      function plinkoFxSpawn(res, turbo) {
         const fx = plinkoFx;
         if (!fx || !fx.canvas.isConnected) return false;
         fx.balls.push({
           res, pts: plinkoBuildPts(fx, res.path), t0: performance.now(),
-          hitIdx: 0, landed: false, trail: [],
+          hitIdx: 0, landed: false, trail: [], turbo: !!turbo,
+          dur: turbo ? fx.durTurbo : fx.dur,
+          bounceMs: turbo ? fx.bounceTurbo : fx.bounceMs,
+          fadeMs: turbo ? fx.fadeTurbo : fx.fadeMs,
         });
         fx.pending += 1;
         plinkoFxKick();
@@ -14553,16 +14563,18 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
       /** Vị trí bóng tại thời điểm e (ms kể từ lúc thả) + số mốc đã qua. */
       function plinkoBallPos(fx, b, e) {
+        const dur = b.dur || fx.dur;
+        const bounceMs = b.bounceMs || fx.bounceMs;
         let t = e, k = 0;
-        while (k < fx.dur.length && t >= fx.dur[k]) { t -= fx.dur[k]; k++; }
+        while (k < dur.length && t >= dur[k]) { t -= dur[k]; k++; }
         const rest = b.pts[b.pts.length - 1];
-        if (k >= fx.dur.length) {
-          const u = Math.min(1, t / fx.bounceMs);
+        if (k >= dur.length) {
+          const u = Math.min(1, t / bounceMs);
           const bounce = Math.abs(Math.sin(u * Math.PI * 2)) * fx.rowH * 0.22 * (1 - u);
           return { x: rest.x, y: rest.y - bounce, k, t };
         }
         const a = b.pts[k], c = b.pts[k + 1];
-        const u = t / fx.dur[k];
+        const u = t / dur[k];
         const isHop = k >= 1 && k <= PLINKO_ROWS;
         const hop = isHop ? fx.rowH * 0.3 * 4 * u * (1 - u) : 0; // nảy lên khỏi chốt rồi rơi xuống
         return { x: a.x + (c.x - a.x) * u, y: a.y + (c.y - a.y) * u * u - hop, k, t };
@@ -14572,6 +14584,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         let j = 0;
         for (let i = 0; i < row; i++) j += b.res.path[i];
         fx.glow[row][j] = 1;
+        if (b.turbo) return; // thả hàng loạt: không phát tick (200 bóng sẽ thành tiếng ồn)
         try { SoundFX.playTone(380 + row * 55, 'sine', 0.035, 0.02); } catch (e) { /* âm thanh tuỳ chọn */ }
       }
 
@@ -14595,7 +14608,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const rest = b.pts[b.pts.length - 1];
         const col = plinkoHeat(res.mult);
         const big = res.mult >= 2;
-        for (let i = 0; i < (big ? 28 : 12); i++) {
+        const turbo = !!b.turbo;
+        for (let i = 0; i < (turbo ? (big ? 10 : 0) : (big ? 28 : 12)); i++) {
           const ang = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.1;
           const sp = (big ? 2.2 : 1.4) * (0.5 + Math.random());
           fx.particles.push({
@@ -14603,22 +14617,111 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             life: 0, max: 600 + Math.random() * 400, c: col, r: 1.4 + Math.random() * 1.8,
           });
         }
-        fx.floats.push({ x: rest.x, y: rest.y - fx.ballR * 2, text: `${res.mult}×`, c: col, life: 0, max: 1100 });
+        if (!turbo || big) fx.floats.push({ x: rest.x, y: rest.y - fx.ballR * 2, text: `${res.mult}×`, c: col, life: 0, max: turbo ? 700 : 1100 });
         const binEl = document.querySelectorAll('#plinkoBins > div')[res.bin];
-        if (binEl && binEl.animate) {
+        if (binEl && binEl.animate && (!turbo || big)) {
           binEl.animate([
             { transform: 'scale(1)', boxShadow: `0 0 0 ${col}00` },
             { transform: 'scale(1.18)', boxShadow: `0 0 14px ${col}` },
             { transform: 'scale(1)', boxShadow: `0 0 0 ${col}00` },
           ], { duration: 650, easing: 'ease-out' });
         }
-        if (big) SoundFX.levelUp(); else SoundFX.coinPickup();
+        const nowMs = performance.now();
+        if (!turbo || nowMs - fx.lastSnd > 110) { // hàng loạt: giới hạn tần suất âm thanh
+          fx.lastSnd = nowMs;
+          if (big) SoundFX.levelUp(); else SoundFX.coinPickup();
+        }
 
         fx.pending = Math.max(0, fx.pending - 1);
         fx.shownBest = Math.max(fx.shownBest, res.mult);
-        const box = document.getElementById('plinkoResult');
-        if (box) box.innerHTML = plinkoResultHtml(res);
+        if (turbo && fx.batch) plinkoBatchOnLand(fx, res);
+        else {
+          const box = document.getElementById('plinkoResult');
+          if (box) box.innerHTML = plinkoResultHtml(res);
+        }
         plinkoRefreshMeta();
+      }
+
+      // ---------------------------------------------------------------------
+      // THẢ HÀNG LOẠT: 200 bóng rơi liên tục, tốc độ cao, tự dừng khi hết vàng
+      // ---------------------------------------------------------------------
+      function plinkoBatchRunning(fx) {
+        const bt = fx && fx.batch;
+        return !!bt && (bt.spawning || bt.landed < bt.started);
+      }
+
+      function plinkoBatchRender(fx) {
+        const bt = fx && fx.batch;
+        const box = document.getElementById('plinkoResult');
+        if (!bt || !box) return;
+        const net = bt.won - bt.spent;
+        const good = net >= 0;
+        const running = plinkoBatchRunning(fx);
+        box.innerHTML = `
+          <div class="rounded-xl border-2 px-2.5 py-2 ${good
+            ? 'border-emerald-400/60 bg-emerald-500/12' : 'border-rose-400/60 bg-rose-500/12'}">
+            <span class="block text-[9px] text-slate-300 font-bold">
+              ${running ? `⏳ Đang thả ${bt.landed}/${bt.total}` : `✅ Xong ${bt.landed} bóng${bt.reason}`}
+              · cược ${bt.bet.toLocaleString('vi-VN')}/bóng
+            </span>
+            <b class="block text-[15px] font-black text-center ${good ? 'text-emerald-300' : 'text-rose-300'}">
+              ${good ? '+' : ''}${net.toLocaleString('vi-VN')} 💰
+            </b>
+            <span class="block text-[9px] text-slate-400 text-center">
+              Tổng cược ${bt.spent.toLocaleString('vi-VN')} → nhận ${bt.won.toLocaleString('vi-VN')} · cao nhất ×${bt.best}
+            </span>
+            <span class="block text-[8.5px] text-slate-500 text-center mt-0.5">
+              Số bóng mỗi ô: ${bt.counts.join(' · ')}
+            </span>
+          </div>`;
+      }
+
+      function plinkoBatchOnLand(fx, res) {
+        const bt = fx.batch;
+        bt.landed += 1;
+        bt.spent += res.bet;
+        bt.won += res.win;
+        bt.best = Math.max(bt.best, res.mult);
+        bt.counts[res.bin] += 1;
+        fx.shownBest = Math.max(fx.shownBest, res.mult);
+        plinkoBatchRender(fx);
+      }
+
+      function plinkoStartBatch(count) {
+        const fx = plinkoFx;
+        if (!fx || plinkoBatchRunning(fx) || fx.pending > 0) return;
+        const p = ensurePlinko();
+        const bet = PLINKO_BETS.includes(p.bet) ? p.bet : PLINKO_BETS[1];
+        if (SaveState.gold < bet) {
+          showToast(`Cần ${bet.toLocaleString('vi-VN')} vàng để thả bóng.`, 'err');
+          return;
+        }
+        const bt = fx.batch = {
+          total: count, started: 0, landed: 0, spent: 0, won: 0, best: 0, bet,
+          counts: new Array(PLINKO_BINS).fill(0), spawning: true, stop: false, reason: '',
+        };
+        const end = () => {
+          bt.spawning = false;
+          bt.total = bt.started;
+          SaveState.save();
+          plinkoBatchRender(fx);
+          plinkoRefreshMeta();
+        };
+        const step = () => {
+          if (plinkoFx !== fx) { bt.spawning = false; SaveState.save(); return; } // đã rời tab/vẽ lại bảng
+          if (bt.stop) { bt.reason = ' (đã dừng)'; end(); return; }
+          if (bt.started >= bt.total) { end(); return; }
+          if (SaveState.gold < bet) { bt.reason = ' (hết vàng)'; end(); return; }
+          const res = plinkoPlay(bet, { noSave: true });
+          if (!res) { bt.reason = ' (hết vàng)'; end(); return; }
+          bt.started += 1;
+          if (!plinkoFxSpawn(res, true)) { plinkoBatchOnLand(fx, res); }
+          if (bt.started % PLINKO_BATCH_SAVE_EVERY === 0) SaveState.save();
+          plinkoRefreshMeta();
+          setTimeout(step, PLINKO_BATCH_GAP);
+        };
+        plinkoBatchRender(fx);
+        step();
       }
 
       function plinkoFxFrame(now) {
@@ -14639,10 +14742,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           b.x = pos.x; b.y = pos.y;
           b.trail.push({ x: pos.x, y: pos.y });
           if (b.trail.length > 10) b.trail.shift();
-          if (!b.landed && pos.k >= fx.dur.length) plinkoFxLand(fx, b);
-          b.age = e - (fx.dur.reduce((a, v) => a + v, 0) + fx.bounceMs); // >0: đã nằm yên
+          if (!b.landed && pos.k >= b.dur.length) plinkoFxLand(fx, b);
+          b.age = e - (b.dur.reduce((a, v) => a + v, 0) + b.bounceMs); // >0: đã nằm yên
         }
-        fx.balls = fx.balls.filter(b => b.age < fx.fadeMs);
+        fx.balls = fx.balls.filter(b => b.age < b.fadeMs);
 
         for (const p of fx.particles) {
           p.life += dt; p.vy += 0.06 * (dt / 16); p.x += p.vx * (dt / 16); p.y += p.vy * (dt / 16);
@@ -14705,7 +14808,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // Bóng + vệt mờ
         for (const b of fx.balls) {
           if (b.x === undefined) continue;
-          const fade = b.age > 0 ? Math.max(0, 1 - b.age / fx.fadeMs) : 1;
+          const fade = b.age > 0 ? Math.max(0, 1 - b.age / b.fadeMs) : 1;
           ctx.globalAlpha = fade;
           for (let i = 0; i < b.trail.length - 1; i++) {
             const tp = b.trail[i], f = (i + 1) / b.trail.length;
@@ -14779,13 +14882,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           const on = Number(b.getAttribute('data-plinko-bet')) === bet;
           b.className = `flex-1 py-1 rounded-lg text-[9.5px] font-black transition ${on ? PLINKO_BET_ON : PLINKO_BET_OFF}`;
         });
+        const batchOn = plinkoBatchRunning(fx);
+        const bbtn = document.getElementById('btnPlinkoBatch');
+        if (bbtn) {
+          const bt = fx && fx.batch;
+          const can = batchOn || (SaveState.gold >= bet && pend === 0);
+          bbtn.disabled = !can;
+          bbtn.className = `mt-1.5 w-full py-2 rounded-xl font-black text-[11px] transition border ${batchOn
+            ? 'bg-rose-500/20 border-rose-400/60 text-rose-200 hover:bg-rose-500/30'
+            : (can ? 'bg-amber-500/15 border-amber-400/60 text-amber-200 hover:bg-amber-500/25'
+                   : 'bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed')}`;
+          bbtn.textContent = batchOn
+            ? `⏹ Dừng (${bt.started}/${bt.total})`
+            : `🚀 Thả ${PLINKO_BATCH_COUNT} bóng (${bet.toLocaleString('vi-VN')}/bóng)`;
+        }
         const btn = document.getElementById('btnPlinkoDrop');
         if (btn) {
-          const full = pend >= PLINKO_MAX_INFLIGHT;
+          const full = pend >= PLINKO_MAX_INFLIGHT || batchOn;
           const can = SaveState.gold >= bet && !full;
           btn.disabled = !can;
           btn.className = `mt-1.5 w-full py-2.5 rounded-xl font-black text-[12px] transition ${can ? PLINKO_DROP_ON : PLINKO_DROP_OFF}`;
-          btn.textContent = full ? '⏳ Đang thả bóng...' : `🎯 Thả Bóng (${bet.toLocaleString('vi-VN')} 💰)`;
+          btn.textContent = full ? (batchOn ? '⏳ Đang thả hàng loạt...' : '⏳ Đang thả bóng...') : `🎯 Thả Bóng (${bet.toLocaleString('vi-VN')} 💰)`;
         }
       }
 
@@ -14851,6 +14968,14 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               🎯 Thả Bóng (${selBet.toLocaleString('vi-VN')} 💰)
             </button>
 
+            <button type="button" id="btnPlinkoBatch"
+              class="mt-1.5 w-full py-2 rounded-xl font-black text-[11px] transition border ${canPlay
+                ? 'bg-amber-500/15 border-amber-400/60 text-amber-200 hover:bg-amber-500/25'
+                : 'bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed'}"
+              ${canPlay ? '' : 'disabled'}>
+              🚀 Thả ${PLINKO_BATCH_COUNT} bóng (${selBet.toLocaleString('vi-VN')}/bóng)
+            </button>
+
             <div id="plinkoResult" class="mt-2"></div>
 
             <div id="plinkoHistory" class="mt-2">${plinkoHistoryHtml(p, 0)}</div>
@@ -14865,6 +14990,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             SaveState.save();
             plinkoRefreshMeta(); // không vẽ lại panel → bóng đang rơi không bị mất
           });
+        });
+
+        document.getElementById('btnPlinkoBatch')?.addEventListener('click', () => {
+          const bt = plinkoFx && plinkoFx.batch;
+          if (plinkoBatchRunning(plinkoFx)) { bt.stop = true; return; } // bấm lại = dừng
+          plinkoStartBatch(PLINKO_BATCH_COUNT);
+          plinkoRefreshMeta();
         });
 
         document.getElementById('btnPlinkoDrop')?.addEventListener('click', () => {

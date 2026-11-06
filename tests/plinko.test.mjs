@@ -125,11 +125,27 @@ check('ket qua chot truoc: plinkoPlay tra ve path', /return \{ bin, mult, win, d
 check('bin = tong duong di (animation khong tu quyet ket qua)', /const bin = path\.reduce/.test(playFn));
 check('plinkoDropPath 8 buoc 0/1', /function plinkoDropPath\(\)[\s\S]{0,200}Math\.random\(\) < 0\.5 \? 1 : 0/.test(html));
 check('bong cham chot -> chot sang len', /function plinkoFxHitPeg/.test(html) && /fx\.glow\[row\]\[j\] = 1/.test(html));
-check('ket qua chi hien khi bong cham o (plinkoFxLand)', /function plinkoFxLand[\s\S]{0,1800}plinkoResultHtml\(res\)/.test(html));
+check('ket qua chi hien khi bong cham o (plinkoFxLand)', /function plinkoFxLand[\s\S]{0,4000}plinkoResultHtml\(res\)/.test(html));
 check('khong ve lai panel khi doi cuoc (giu bong dang roi)',
   /data-plinko-bet[\s\S]{0,400}plinkoRefreshMeta\(\);/.test(html));
 check('gioi han bong dang roi', /PLINKO_MAX_INFLIGHT = 10/.test(html));
 check('ton trong prefers-reduced-motion', /prefers-reduced-motion: reduce[\s\S]{0,40}/.test(html) && /plinkoReducedMotion/.test(html));
+
+
+// ============================================================ 5c. THA 200 BONG
+console.log('\n=== 5c. THA 200 BONG (HANG LOAT) ===');
+const startBatch = fnBody('plinkoStartBatch');
+check('co nut Tha 200 bong', /id="btnPlinkoBatch"/.test(html) && /PLINKO_BATCH_COUNT = 200/.test(html));
+check('bong roi lien tuc (khoang cach < 100ms)', /PLINKO_BATCH_GAP = (\d+)/.test(html) && Number(html.match(/PLINKO_BATCH_GAP = (\d+)/)[1]) < 100);
+check('turbo nhanh hon 2 lan che do thuong',
+  Number(html.match(/durTurbo: \[\d+, \.\.\.new Array\(PLINKO_ROWS\)\.fill\((\d+)\)/)[1]) * 2 <= 250);
+check('plinkoPlay ho tro noSave (khong luu 200 lan)', /opts && opts\.noSave/.test(fnBody('plinkoPlay')));
+check('luu theo lo + luu khi ket thuc', /PLINKO_BATCH_SAVE_EVERY = \d+/.test(html) && /started % PLINKO_BATCH_SAVE_EVERY === 0\) SaveState\.save\(\)/.test(startBatch) && /const end = \(\) => \{[\s\S]{0,200}SaveState\.save\(\)/.test(startBatch));
+check('tu dung khi het vang', /SaveState\.gold < bet\) \{ bt\.reason = ' \(hết vàng\)'/.test(startBatch));
+check('co nut dung giua chung', /bt\.stop = true/.test(html) && /bt\.stop\) \{ bt\.reason = ' \(đã dừng\)'/.test(startBatch));
+check('luu khi roi tab giua chung (khong mat ket qua)', /plinkoFx !== fx\) \{ bt\.spawning = false; SaveState\.save\(\)/.test(startBatch));
+check('khong bat dau khi dang co bong thuong dang roi', /fx\.pending > 0\) return/.test(startBatch));
+check('tong ket: lai/lo, cao nhat, phan bo o', /Số bóng mỗi ô/.test(html) && /Tổng cược/.test(html));
 
 // Mô phỏng hình học: bóng phải kết thúc đúng tâm ô theo path (chạy thật hàm trong game)
 const vm = await import('node:vm');
