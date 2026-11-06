@@ -28,8 +28,8 @@ check("chuong 2 doi thang chuong 1", /id: 2[\s\S]{0,900}?chapterId: 1/.test(chBl
 check("chuong 3 doi thang chuong 2", /id: 3[\s\S]{0,900}?chapterId: 2/.test(chBlock));
 check("chuong 4 doi thang chuong 3", /id: 4[\s\S]{0,900}?chapterId: 3/.test(chBlock));
 check("chuong 4 co boss va map rieng", /id: 4[\s\S]{0,900}?bossName: 'Cổ Long Thiên Không'[\s\S]{0,500}?map-ch4-dragon-realm\.svg/.test(chBlock));
-check("chuong 5 mo khoa sau chuong 4", /id: 5[\\s\\S]{0,900}?chapterId: 4/.test(chBlock));
-check("chuong 6 mo khoa sau chuong 5", /id: 6[\\s\\S]{0,900}?bossName: 'Cửu Diệu Tinh Long'[\\s\\S]{0,500}?chapterId: 5[\\s\\S]{0,300}?map-ch6-frost-cosmos\\.svg/.test(chBlock));
+check("chuong 5 mo khoa sau chuong 4", /id: 5[\s\S]{0,900}?chapterId: 4/.test(chBlock));
+check("chuong 6 mo khoa sau chuong 5", /id: 6[\s\S]{0,900}?bossName: 'Cửu Diệu Tinh Long'[\s\S]{0,500}?chapterId: 5[\s\S]{0,300}?map-ch6-frost-cosmos\.svg/.test(chBlock));
 
 // ============================================================ 2. Luật khoá chương
 console.log("\n=== 2. LUAT KHOÁ CHUONG ===");
