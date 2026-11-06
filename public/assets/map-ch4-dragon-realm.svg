@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#06162f"/><stop offset=".48" stop-color="#0e4969"/><stop offset="1" stop-color="#102d4d"/></linearGradient>
+    <linearGradient id="horizon" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#67e8f9" stop-opacity=".55"/><stop offset="1" stop-color="#1d4ed8" stop-opacity="0"/></linearGradient>
+    <linearGradient id="island" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#a5f3fc"/><stop offset=".18" stop-color="#347c91"/><stop offset=".58" stop-color="#164e63"/><stop offset="1" stop-color="#061a2c"/></linearGradient>
+    <linearGradient id="rock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#164e63"/><stop offset=".5" stop-color="#0b2944"/><stop offset="1" stop-color="#020817"/></linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ecfeff" stop-opacity=".9"/><stop offset=".45" stop-color="#67e8f9" stop-opacity=".55"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fef3c7"/><stop offset=".45" stop-color="#fbbf24"/><stop offset="1" stop-color="#92400e"/></linearGradient>
+    <linearGradient id="temple" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#cffafe"/><stop offset=".55" stop-color="#0e7490"/><stop offset="1" stop-color="#082f49"/></linearGradient>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%"><stop stop-color="#ecfeff" stop-opacity=".95"/><stop offset=".28" stop-color="#67e8f9" stop-opacity=".45"/><stop offset="1" stop-color="#67e8f9" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cloudGlow"><stop stop-color="#e0f2fe" stop-opacity=".8"/><stop offset="1" stop-color="#7dd3fc" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rift"><stop stop-color="#fef3c7" stop-opacity=".7"/><stop offset=".3" stop-color="#22d3ee" stop-opacity=".3"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="13"/></filter>
+    <filter id="mist" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter>
+  </defs>
+  <rect width="1200" height="600" fill="url(#sky)"/>
+  <circle cx="870" cy="132" r="170" fill="url(#sun)"/>
+  <circle cx="870" cy="132" r="78" fill="none" stroke="#a5f3fc" stroke-opacity=".2" stroke-width="2"/>
+  <circle cx="870" cy="132" r="112" fill="none" stroke="#e0f2fe" stroke-opacity=".12" stroke-dasharray="5 12"/>
+  <g fill="#e0f2fe" opacity=".7">
+    <circle cx="94" cy="79" r="2"/><circle cx="210" cy="147" r="1.5"/><circle cx="350" cy="54" r="2"/><circle cx="493" cy="118" r="1.5"/>
+    <circle cx="615" cy="68" r="2"/><circle cx="1058" cy="74" r="2"/><circle cx="1138" cy="186" r="1.5"/><circle cx="740" cy="212" r="1.2"/>
+  </g>
+  <g fill="url(#cloudGlow)" filter="url(#mist)" opacity=".9">
+    <ellipse cx="180" cy="310" rx="250" ry="75"/><ellipse cx="625" cy="365" rx="310" ry="95"/><ellipse cx="1050" cy="330" rx="270" ry="82"/>
+  </g>
+  <!-- distant floating peaks -->
+  <g opacity=".58">
+    <path d="M-40 370 L110 222 198 304 308 190 425 354 520 270 640 372Z" fill="#164e63"/>
+    <path d="M710 350 L840 205 910 274 1010 155 1168 340 1245 286 1270 420Z" fill="#164e63"/>
+    <path d="M-20 385 L110 222 140 292 198 304 308 190 354 271 425 354 520 270 640 372Z" fill="#67e8f9" opacity=".15"/>
+  </g>
+  <!-- distant cloud waterfalls -->
+  <g opacity=".55" fill="url(#water)" filter="url(#softGlow)">
+    <path d="M210 325 Q230 355 218 580 L274 580 Q254 390 284 325Z"/>
+    <path d="M900 295 Q930 345 915 590 L972 590 Q958 380 984 295Z"/>
+    <path d="M1040 355 Q1060 390 1058 580 L1090 580 Q1080 420 1100 355Z"/>
+  </g>
+  <!-- main central island -->
+  <path d="M270 354 Q330 303 420 312 Q485 262 570 292 Q654 241 738 296 Q826 285 897 347 Q852 394 782 414 Q700 468 586 451 Q465 488 364 430 Q302 410 270 354Z" fill="url(#island)" stroke="#67e8f9" stroke-opacity=".48" stroke-width="3"/>
+  <path d="M293 357 Q370 314 430 324 Q505 279 570 307 Q652 260 736 310 Q827 298 873 352" fill="none" stroke="#ecfeff" stroke-opacity=".65" stroke-width="7" stroke-linecap="round"/>
+  <path d="M330 390 Q420 420 498 391 Q620 430 718 388 Q812 405 862 369 L790 474 680 520 536 508 420 478Z" fill="url(#rock)"/>
+  <path d="M438 440 Q425 494 392 560 L465 535 514 453Z" fill="url(#water)" opacity=".8"/>
+  <path d="M744 435 Q765 482 798 560 L845 529 804 411Z" fill="url(#water)" opacity=".65"/>
+  <!-- crystal spires and terraces -->
+  <g stroke="#cffafe" stroke-width="2">
+    <path d="M338 324 L367 258 397 323Z" fill="#22d3ee" fill-opacity=".75"/><path d="M378 320 L405 276 428 326Z" fill="#a5f3fc" fill-opacity=".55"/>
+    <path d="M757 312 L793 235 824 318Z" fill="#38bdf8" fill-opacity=".8"/><path d="M806 322 L842 268 867 338Z" fill="#67e8f9" fill-opacity=".6"/>
+    <path d="M488 319 L510 280 533 315Z" fill="#7dd3fc" fill-opacity=".65"/>
+  </g>
+  <g fill="none" stroke="#fbbf24" stroke-opacity=".7" stroke-width="3">
+    <path d="M330 364 Q420 340 492 363"/><path d="M672 357 Q755 338 850 369"/>
+    <path d="M420 400 Q560 430 690 397"/>
+  </g>
+  <!-- dragon temple -->
+  <g>
+    <ellipse cx="592" cy="300" rx="160" ry="72" fill="url(#rift)" filter="url(#softGlow)"/>
+    <path d="M492 323 L492 255 532 255 532 218 560 218 560 190 620 190 620 218 648 218 648 255 688 255 688 323Z" fill="url(#temple)" stroke="#a5f3fc" stroke-width="3"/>
+    <path d="M474 258 L592 180 708 258Z" fill="#0e7490" stroke="#fde68a" stroke-width="4"/>
+    <path d="M510 254 L592 202 670 254" fill="none" stroke="#ecfeff" stroke-opacity=".8" stroke-width="3"/>
+    <path d="M550 323 L550 263 592 239 633 263 633 323Z" fill="#082f49" stroke="#67e8f9" stroke-width="3"/>
+    <path d="M572 322 L572 273 Q592 246 612 273 L612 322Z" fill="#020817" stroke="#fbbf24" stroke-width="2"/>
+    <path d="M592 182 L592 140 M578 155 L592 136 606 155" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="592" cy="282" r="13" fill="url(#sun)"/><circle cx="592" cy="282" r="5" fill="#fef3c7"/>
+    <path d="M530 323 L530 277 M654 323 L654 277" stroke="#fde68a" stroke-width="4"/>
+  </g>
+  <!-- foreground floating shards -->
+  <g>
+    <path d="M85 427 L126 333 166 427 144 480 109 488Z" fill="url(#island)" stroke="#67e8f9" stroke-width="2"/>
+    <path d="M1020 420 L1060 314 1100 420 1081 475 1045 482Z" fill="url(#island)" stroke="#67e8f9" stroke-width="2"/>
+    <path d="M150 465 Q205 430 248 462 L215 520 178 534Z" fill="url(#rock)"/>
+    <path d="M945 474 Q1000 430 1045 468 L1024 530 980 536Z" fill="url(#rock)"/>
+    <path d="M170 430 Q204 400 237 433" fill="none" stroke="#a5f3fc" stroke-opacity=".65" stroke-width="4"/>
+    <path d="M966 432 Q1004 400 1037 438" fill="none" stroke="#a5f3fc" stroke-opacity=".65" stroke-width="4"/>
+  </g>
+  <!-- mist ribbons -->
+  <g fill="none" stroke-linecap="round" filter="url(#mist)" opacity=".45">
+    <path d="M-30 470 Q260 400 470 474 T900 455 T1240 470" stroke="#bae6fd" stroke-width="32"/>
+    <path d="M-40 520 Q230 452 470 520 T920 502 T1250 526" stroke="#67e8f9" stroke-width="20"/>
+  </g>
+  <!-- tiny dragon silhouette circling the shrine -->
+  <g fill="#082f49" stroke="#a5f3fc" stroke-width="2" opacity=".92">
+    <path d="M770 190 Q805 166 831 182 L855 169 845 195 867 211 842 207 828 226 818 205 793 213 805 195Z"/>
+    <path d="M806 188 Q790 150 761 157 Q775 178 786 196Z" fill="#0e7490"/>
+    <path d="M831 184 Q846 151 872 156 Q858 181 848 196Z" fill="#0e7490"/>
+    <path d="M845 193 L866 186 858 202Z" fill="#fde68a" stroke="none"/>
+  </g>
+  <!-- atmospheric highlights -->
+  <g fill="none" stroke="#ecfeff" stroke-opacity=".45">
+    <path d="M40 275 Q180 245 300 274"/><path d="M890 390 Q1030 355 1160 384"/>
+    <path d="M465 160 Q530 142 596 156"/><path d="M104 205 Q155 188 207 200"/>
+  </g>
+  <rect width="1200" height="600" fill="url(#horizon)" opacity=".18"/>
+</svg>

@@ -18,6 +18,7 @@ const assets = [
   { file: "map-ch1-ancient-stone.svg", ch: 1 },
   { file: "map-ch2-lava-valley.svg", ch: 2 },
   { file: "map-ch3-void-sanctum.svg", ch: 3 },
+  { file: "map-ch4-dragon-realm.svg", ch: 4 },
 ];
 for (const a of assets) {
   const p = new URL("../public/assets/" + a.file, import.meta.url);
@@ -42,13 +43,14 @@ for (const a of assets) {
 
 // ============================================================ 2. CHAPTERS metadata
 console.log("\n=== 2. METADATA CHAPTERS ===");
-check("moi chuong co mapAsset", (html.match(/mapAsset: '\/assets\//g) || []).length === 3,
+check("moi chuong co mapAsset", (html.match(/mapAsset: '\/assets\//g) || []).length === 4,
   String((html.match(/mapAsset: '\/assets\//g) || []).length));
 check("ch1 tro dung asset", html.includes("mapAsset: '/assets/map-ch1-ancient-stone.svg'"));
 check("ch2 tro dung asset", html.includes("mapAsset: '/assets/map-ch2-lava-valley.svg'"));
 check("ch3 tro dung asset", html.includes("mapAsset: '/assets/map-ch3-void-sanctum.svg'"));
-check("moi chuong co mapRegion", (html.match(/mapRegion:/g) || []).length === 3);
-check("moi chuong co mapTagline", (html.match(/mapTagline:/g) || []).length === 3);
+check("ch4 tro dung asset", html.includes("mapAsset: '/assets/map-ch4-dragon-realm.svg'"));
+check("moi chuong co mapRegion", (html.match(/mapRegion:/g) || []).length === 4);
+check("moi chuong co mapTagline", (html.match(/mapTagline:/g) || []).length === 4);
 check("khong dung URL anh ben ngoai", !/mapAsset: 'https?:/.test(html));
 
 // ============================================================ 3. DOM + CSS
@@ -100,7 +102,7 @@ check("doc winsByChapter", /SaveState\.winsByChapter/.test(block));
 check("ve 1 node cho moi phong", /for \(let r = 1; r <= ch\.rooms; r\+\+\)/.test(block));
 check("phong trum = boi 5 hoac cuoi", /const isBoss = \(r % 5 === 0\) \|\| \(r === ch\.rooms\)/.test(block));
 check("phong trum hinh tron", /boss-node/.test(block));
-check("ve 3 tab chuong", /CHAPTERS\.map\(\(c, i\)/.test(block));
+check("ve danh sach tab chuong dong", /CHAPTERS\.map\(\(c, i\)/.test(block));
 check("nut start goi openRunBriefing (luong cu)", /openRunBriefing\(\)/.test(block));
 check("chot selectedChapterIdx truoc khi start", /SaveState\.selectedChapterIdx = selIdx/.test(block));
 check("export renderMapSelect", /^\s+renderMapSelect,$/m.test(html));
@@ -169,6 +171,11 @@ check("C3 boss o 5, 10 (khong trung)", t.filter(n => n.boss).map(n => n.room).jo
 check("C3: 10 node", t.length === 10);
 check("C3: khong co node trum trung lap", new Set(t.filter(n => n.boss).map(n => n.room)).size === 2);
 
+// Chương 4: 15 phòng Long Vực, boss 5/10/15
+t = buildTrail(15, 0, false);
+check("C4 boss o 5, 10, 15", t.filter(n => n.boss).map(n => n.room).join(",") === "5,10,15");
+check("C4: 15 node", t.length === 15);
+
 // ============================================================ 7. Mô phỏng phân quyền
 console.log("\n=== 7. MO PHONG PHAN QUYEN ===");
 /** Mô phỏng isChapterLocked theo dữ liệu CHAPTERS thật. */
@@ -176,6 +183,7 @@ const CHAPTERS = [
   { id: 1, rooms: 15, unlock: null },
   { id: 2, rooms: 12, unlock: { type: "chapterWin", chapterId: 1 } },
   { id: 3, rooms: 10, unlock: { type: "chapterWin", chapterId: 2 } },
+  { id: 4, rooms: 15, unlock: { type: "chapterWin", chapterId: 3 } },
 ];
 function isWon(id, wins, best) {
   if ((wins[id] || 0) > 0) return true;
@@ -192,6 +200,7 @@ let wins = {}, best = {};
 check("tai khoan moi: C1 mo", !isLocked(CHAPTERS[0], wins, best));
 check("tai khoan moi: C2 khoa", isLocked(CHAPTERS[1], wins, best));
 check("tai khoan moi: C3 khoa", isLocked(CHAPTERS[2], wins, best));
+check("tai khoan moi: C4 khoa", isLocked(CHAPTERS[3], wins, best));
 
 wins = { 1: 1 };
 check("thang C1: C2 mo", !isLocked(CHAPTERS[1], wins, best));
@@ -199,12 +208,17 @@ check("thang C1: C3 van khoa", isLocked(CHAPTERS[2], wins, best));
 
 wins = { 1: 1, 2: 1 };
 check("thang C1+C2: C3 mo", !isLocked(CHAPTERS[2], wins, best));
+check("thang C1+C2: C4 van khoa", isLocked(CHAPTERS[3], wins, best));
+wins = { 1: 1, 2: 1, 3: 1 };
+check("thang C1+C2+C3: C4 mo", !isLocked(CHAPTERS[3], wins, best));
 
 // Nguoi choi cu: khong co winsByChapter nhung bestRooms day du
 wins = {}; best = { 1: 15 };
 check("cu: best 15/15 mo C2 du khong co wins", !isLocked(CHAPTERS[1], wins, best));
 best = { 1: 15, 2: 12 };
 check("cu: best day du mo C3", !isLocked(CHAPTERS[2], wins, best));
+best = { 1: 15, 2: 12, 3: 10 };
+check("cu: best day du mo C4", !isLocked(CHAPTERS[3], wins, best));
 
 // ============================================================ 8. DAI PIPS KHONG TRAN
 // Bug tung gap: .ms-node co width:100% nen moi moc rong bang ca khung,

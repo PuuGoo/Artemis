@@ -18,14 +18,16 @@ console.log("\n=== 1. DU LIEU CHUONG CO DU METADATA UI ===");
 const chStart = html.indexOf("const CHAPTERS = [");
 const chBlock = html.slice(chStart, html.indexOf("\n      ];", chStart) + 8);
 const chapterCount = (chBlock.match(/^\s+id: \d+,/gm) || []).length;
-check("co 3 chuong", chapterCount === 3, String(chapterCount));
+check("co 4 chuong", chapterCount === 4, String(chapterCount));
 for (const field of ["icon", "accent", "gradFrom", "difficulty", "difficultyLabel", "themeName", "bossIcon", "bossName", "unlock"]) {
   const n = (chBlock.match(new RegExp(field + ":", "g")) || []).length;
-  check(`ca 3 chuong deu co '${field}'`, n === 3, `${n}/3`);
+  check(`ca 4 chuong deu co '${field}'`, n === 4, `${n}/4`);
 }
 check("chuong 1 khong co dieu kien mo khoa", /id: 1[\s\S]{0,900}?unlock: null/.test(chBlock));
 check("chuong 2 doi thang chuong 1", /id: 2[\s\S]{0,900}?chapterId: 1/.test(chBlock));
 check("chuong 3 doi thang chuong 2", /id: 3[\s\S]{0,900}?chapterId: 2/.test(chBlock));
+check("chuong 4 doi thang chuong 3", /id: 4[\s\S]{0,900}?chapterId: 3/.test(chBlock));
+check("chuong 4 co boss va map rieng", /id: 4[\s\S]{0,900}?bossName: 'Cổ Long Thiên Không'[\s\S]{0,500}?map-ch4-dragon-realm\.svg/.test(chBlock));
 
 // ============================================================ 2. Luật khoá chương
 console.log("\n=== 2. LUAT KHOÁ CHUONG ===");
