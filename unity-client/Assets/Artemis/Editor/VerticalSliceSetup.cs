@@ -212,6 +212,39 @@ namespace Artemis.EditorTools
 
         // ==================== Nối scene ====================
 
+        /// <summary>
+        /// Bỏ các component thừa do scene viết tay (Bootstrap.unity) gắn nhầm:
+        /// GameBootstrap từng mang thêm RoomController/CombatController/
+        /// PlayerStatsBehaviour/CombatHud/AuthScreen mà không có GameObject chủ
+        /// tương ứng, khiến <c>FindObjectOfType</c> tìm thấy trước khi bản đúng
+        /// được tạo. Dọn ở đây để chạy lại nhiều lần vẫn ra cùng kết quả.
+        /// </summary>
+        private static void CleanStrayComponents(GameBootstrap boot)
+        {
+            var go = boot.gameObject;
+
+            // Các component này chỉ có nghĩa khi gắn đúng chủ (Player / Canvas).
+            RemoveIfPresent<Artemis.Runtime.Dungeons.RoomController>(
+                go, "RoomController", "RoomController");
+            RemoveIfPresent<Artemis.Runtime.Combat.CombatController>(
+                go, "CombatController", "Player");
+            RemoveIfPresent<Artemis.Runtime.Characters.PlayerStatsBehaviour>(
+                go, "PlayerStatsBehaviour", "Player");
+            RemoveIfPresent<CombatHud>(go, "CombatHud (thiếu Canvas)", "HUD");
+            RemoveIfPresent<AuthScreen>(go, "AuthScreen (thiếu Canvas)", "AuthCanvas");
+        }
+
+        private static void RemoveIfPresent<T>(GameObject host, string label, string properHostName)
+            where T : Component
+        {
+            var comp = host.GetComponent<T>();
+            if (comp == null) return;
+
+            Debug.LogWarning("[VerticalSlice] Bỏ " + label + " gắn nhầm trên '" + host.name +
+                             "' (phải nằm trên '" + properHostName + "')");
+            Object.DestroyImmediate(comp);
+        }
+
         private static void WireScene(GameObject projectilePrefab, GameObject enemyPrefab)
         {
             var boot = Object.FindObjectOfType<GameBootstrap>();
@@ -220,6 +253,8 @@ namespace Artemis.EditorTools
                 var bootGo = new GameObject("GameBootstrap");
                 boot = bootGo.AddComponent<GameBootstrap>();
             }
+
+            CleanStrayComponents(boot);
 
             // ---- Player ----
             var playerGo = GameObject.Find("Player");
@@ -314,7 +349,15 @@ namespace Artemis.EditorTools
         private static CombatHud BuildHud()
         {
             var existing = Object.FindObjectOfType<CombatHud>();
-            if (existing != null) return existing;
+            if (existing != null && existing.GetComponent<Canvas>() != null) return existing;
+            if (existing != null)
+            {
+                // CombatHud mồ côi (scene viết tay gắn component nhưng không có Canvas):
+                // bỏ đi rồi dựng lại cho đúng, nếu giữ sẽ ra HUD rỗng không có text.
+                Debug.LogWarning("[VerticalSlice] Bỏ CombatHud không có Canvas: " +
+                                 existing.gameObject.name);
+                Object.DestroyImmediate(existing);
+            }
 
             var canvasGo = new GameObject("HUD", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             var canvas = canvasGo.GetComponent<Canvas>();
@@ -408,7 +451,13 @@ namespace Artemis.EditorTools
         private static AuthScreen BuildAuthPanel()
         {
             var existing = Object.FindObjectOfType<AuthScreen>();
-            if (existing != null) return existing;
+            if (existing != null && existing.GetComponent<Canvas>() != null) return existing;
+            if (existing != null)
+            {
+                Debug.LogWarning("[VerticalSlice] Bỏ AuthScreen không có Canvas: " +
+                                 existing.gameObject.name);
+                Object.DestroyImmediate(existing);
+            }
 
             var canvasGo = new GameObject("AuthCanvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             var canvas = canvasGo.GetComponent<Canvas>();

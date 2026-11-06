@@ -1,34 +1,44 @@
 # Unity — dự án Unity thật (Assets/, Packages/, ProjectSettings/)
-unity-client/[Ll]ibrary/
-unity-client/[Tt]emp/
-unity-client/[Oo]bj/
-unity-client/[Bb]uild/
-unity-client/[Bb]uilds/
-unity-client/[Ll]ogs/
-unity-client/[Uu]ser[Ss]ettings/
-unity-client/[Mm]emoryCaptures/
-unity-client/[Rr]ecordings/
-unity-client/*.csproj
-unity-client/*.sln
-unity-client/*.unityproj
-unity-client/*.user
-unity-client/*.pidb
-unity-client/*.booproj
-unity-client/*.svd
-unity-client/*.pdb
-unity-client/*.mdb
-unity-client/*.opendb
-unity-client/*.VC.db
-unity-client/.vs/
-unity-client/.idea/
-unity-client/.vscode/
-unity-client/Assets/AssetStoreTools*
-unity-client/Assets/Plugins/Editor/JetBrains*
-unity-client/Assets/StreamingAssets/aa.meta
-unity-client/Assets/StreamingAssets/aa/*
-unity-client/Assets/AddressableAssetsData/*.bin
-unity-client/Assets/AddressableAssetsData/*/*.bin
-unity-client/Assets/AddressableAssetsData/*/*.dat
+#
+# QUAN TRỌNG: file này nằm TRONG unity-client/, nên mẫu đường dẫn phải tính từ
+# đây. Bản trước ghi "unity-client/[Ll]ibrary/" (tính từ gốc repo) nên KHÔNG
+# khớp gì — Library/ (1,7 GB) và Builds/ từng hiện ra trong git status.
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+*.sln
+*.unityproj
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+.idea/
+.vscode/
+
+Assets/AssetStoreTools*
+Assets/Plugins/Editor/JetBrains*
+Assets/StreamingAssets/aa.meta
+Assets/StreamingAssets/aa/*
+Assets/AddressableAssetsData/*.bin
+Assets/AddressableAssetsData/*/*.bin
+Assets/AddressableAssetsData/*/*.dat
+
+# Bee / IL2CPP cache
+[Bb]ee/
+*.wasm
+*.data
 
 # Build output
 *.apk
@@ -37,8 +47,11 @@ unity-client/Assets/AddressableAssetsData/*/*.dat
 *.app
 
 # .NET domain build output
-unity-client/**/bin/
-unity-client/**/obj/
-!unity-client/**/*.csproj
+**/bin/
+**/obj/
+# Nhưng GIỮ các .csproj dùng để test bằng dotnet/CI (không phải Unity sinh).
+!UnityStub/*.csproj
+!ArtemisDomain/*.csproj
+!ArtemisDomain.Tests/*.csproj
 tools/unity-parity/.dotnet/
 dotnet8/

@@ -367,22 +367,35 @@ namespace UnityEditor
         public static bool DisplayDialog(string t, string m, string ok) => true;
         public static void SetDirty(UnityEngine.Object o) { }
     }
-    public static class EditorApplication { public static bool isPlaying => false; }
+    public static class EditorApplication
+    {
+        public static bool isPlaying => false;
+        public static void Exit(int code) { }
+    }
     public class MenuItem : System.Attribute { public MenuItem(string path) { } }
 }
 
 namespace UnityEditor.SceneManagement
 {
+    public enum OpenSceneMode { Single, Additive, AdditiveWithoutLoading }
+
     public static class EditorSceneManager
     {
         public static UnityEngine.SceneManagement.Scene GetActiveScene() => new UnityEngine.SceneManagement.Scene();
         public static void MarkSceneDirty(UnityEngine.SceneManagement.Scene s) { }
+        public static UnityEngine.SceneManagement.Scene OpenScene(string path, OpenSceneMode mode)
+            => new UnityEngine.SceneManagement.Scene();
+        public static bool SaveScene(UnityEngine.SceneManagement.Scene s, string path) => true;
     }
 }
 
 namespace UnityEngine.SceneManagement
 {
-    public struct Scene { }
+    public struct Scene
+    {
+        public bool IsValid() => true;
+        public string name => "";
+    }
 }
 
 namespace UnityEngine.InputSystem
@@ -417,5 +430,60 @@ namespace TMPro
         public LineType lineType;
         public enum ContentType { Standard, Password, IntegerNumber, DecimalNumber, Alphanumeric, Name, EmailAddress }
         public enum LineType { SingleLine, MultiLineNewline, MultiLineSubmit }
+    }
+}
+
+// ---- Stub cho BuildWebGL (chỉ typecheck) ----
+namespace UnityEditor.Build.Reporting
+{
+    public enum BuildResult { Unknown, Succeeded, Failed, Cancelled }
+    public struct BuildSummary
+    {
+        public BuildResult result;
+        public int totalErrors;
+        public int totalWarnings;
+        public ulong totalSize;
+        public System.TimeSpan totalTime;
+    }
+    public class BuildReport { public BuildSummary summary; }
+}
+namespace UnityEditor.Build
+{
+    public class NamedBuildTarget { public static NamedBuildTarget WebGL = new NamedBuildTarget(); }
+}
+namespace UnityEditor
+{
+    public enum WebGLCompressionFormat { Brotli, Gzip, Disabled }
+    public enum ManagedStrippingLevel { Disabled, Low, Medium, High }
+    public enum BuildTarget { WebGL }
+    public enum BuildTargetGroup { WebGL }
+    public struct BuildPlayerOptions
+    {
+        public string[] scenes;
+        public string locationPathName;
+        public BuildTarget target;
+        public BuildTargetGroup targetGroup;
+        public BuildOptions options;
+    }
+    public enum BuildOptions { None }
+    public static class BuildPipeline
+    {
+        public static UnityEditor.Build.Reporting.BuildReport BuildPlayer(BuildPlayerOptions o)
+            => new UnityEditor.Build.Reporting.BuildReport();
+    }
+}
+
+namespace UnityEditor
+{
+    public static class PlayerSettings
+    {
+        public static bool runInBackground { get; set; }
+        public static void SetManagedStrippingLevel(UnityEditor.Build.NamedBuildTarget t, ManagedStrippingLevel l) { }
+        public static class WebGL
+        {
+            public static string template { get; set; }
+            public static WebGLCompressionFormat compressionFormat { get; set; }
+            public static bool decompressionFallback { get; set; }
+        }
     }
 }

@@ -58,9 +58,11 @@ const missingMeta = assetFiles.filter((f) => !fs.existsSync(f + ".meta"));
 check("Mọi asset có .meta", missingMeta.length === 0,
   missingMeta.slice(0, 5).map((f) => path.relative(PROJECT, f)).join(", "));
 
-// GUID phải duy nhất và khớp giá trị tất định (để chạy lại script không đổi).
+// GUID phải duy nhất. KHÔNG kiểm tra "khớp hàm băm tất định" nữa: khi Unity
+// Editor thật mở project, nó tự sinh GUID ngẫu nhiên cho asset mới và ghi đè
+// .meta — đó là hành vi đúng của Unity. Hàm guidFor() giờ chỉ dùng để SINH meta
+// lần đầu khi chưa có Editor (xem gen-unity-meta.mjs), không dùng để nghiệm thu.
 const seen = new Map();
-const guidMismatch = [];
 const duplicateGuids = [];
 for (const f of allFiles.filter((x) => x.endsWith(".meta"))) {
   const text = fs.readFileSync(f, "utf8");
@@ -69,13 +71,8 @@ for (const f of allFiles.filter((x) => x.endsWith(".meta"))) {
   const guid = m[1];
   if (seen.has(guid)) duplicateGuids.push(path.relative(PROJECT, f) + " == " + seen.get(guid));
   seen.set(guid, path.relative(PROJECT, f));
-
-  const target = f.slice(0, -5);
-  const rel = path.relative(PROJECT, target).replace(/\\/g, "/");
-  if (guid !== guidFor(rel)) guidMismatch.push(rel);
 }
 check("GUID không trùng", duplicateGuids.length === 0, duplicateGuids.slice(0, 3).join("; "));
-check("GUID khớp hàm tất định", guidMismatch.length === 0, guidMismatch.slice(0, 3).join(", "));
 
 console.log("\n=== 3. SCENE THAM CHIẾU SCRIPT THẬT ===");
 const scenePath = path.join(ASSETS, "Artemis", "Scenes", "Bootstrap.unity");
@@ -94,13 +91,36 @@ if (fs.existsSync(scenePath)) {
   check("Không còn placeholder GUID 0", unresolved.length === 0,
     unresolved.length + " component chưa gán script");
 
+  // Mọi GUID script trong scene phải phân giải được: hoặc là .cs trong Assets,
+  // hoặc là script built-in của package (TMP/UGUI/InputSystem). Scene dựng bằng
+  // Editor script gán component bằng AddComponent nên các GUID này là GUID thật
+  // do Unity/package cấp; kiểm tra chỉ cần bắt GUID mồ côi.
   const brokenLinks = [];
+  const unresolvedGuids = [];
+  const pkgCache = [];
+  const pkgDirs = ["Library/PackageCache", "Packages"];
+  for (const d of pkgDirs) {
+    const p = path.join(PROJECT, d);
+    if (fs.existsSync(p)) pkgCache.push(p);
+  }
+  const packageGuidIndex = new Set();
+  for (const p of pkgCache) {
+    for (const f of walkFiles(p)) {
+      if (!f.endsWith(".meta")) continue;
+      const m = fs.readFileSync(f, "utf8").match(/^guid: ([a-f0-9]{32})$/m);
+      if (m) packageGuidIndex.add(m[1]);
+    }
+  }
+
   for (const g of new Set(scriptGuids)) {
     if (g === zeroGuid) continue;
-    const meta = allFiles.find((f) => f.endsWith(".cs.meta") && fs.readFileSync(f, "utf8").includes("guid: " + g));
-    if (!meta) brokenLinks.push(g);
+    const assetMeta = allFiles.find((f) => f.endsWith(".cs.meta") && fs.readFileSync(f, "utf8").includes("guid: " + g));
+    if (assetMeta) continue;
+    if (packageGuidIndex.has(g)) continue;   // script của package — hợp lệ
+    brokenLinks.push(g);
+    unresolvedGuids.push(g);
   }
-  check("Mọi GUID script trỏ tới .cs.meta tồn tại", brokenLinks.length === 0, brokenLinks.join(", "));
+  check("Mọi GUID script phân giải được (Assets hoặc package)", brokenLinks.length === 0, brokenLinks.join(", "));
 
   // Camera phải orthographic — yêu cầu 2.5D top-down.
   check("Camera orthographic", /orthographic: 1/.test(scene));
