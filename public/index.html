@@ -1883,6 +1883,11 @@
 
       <!-- ==================== TAB 5 (VN PDF): SỰ KIỆN (THI ĐẤU • KHIÊU CHIẾN • PB — PAGES 62-64 + 11 WIKI EVENTS) ==================== -->
       <section id="tabEvents" class="hidden flex-1 overflow-y-auto p-2.5 sm:p-4 flex flex-col gap-4 bg-[#0d152c]">
+        <!-- ==================== SU KIEN THAT: VUON THU HO (guardplant) ====================
+             Ban that co 8 man guardplant (docs/APK_000000_ARCHERO_ANALYSIS.md).
+             Ban web lam ban don nguoi: trong/tuoi/thu hoach + doi thuong.
+             Render boi renderGardenPanel(). -->
+        <div id="gardenContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
         <div id="vnEventsAuthenticCardsContainer" class="max-w-3xl w-full mx-auto">
           <!-- Populated dynamically by renderVnEventsBannerCardsUI() -->
         </div>
@@ -9026,6 +9031,15 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // nên thành viên là NPC sinh theo tiến trình người chơi; bang hoạt
         // động như nội dung đơn người (giống campaign trong Clash of Clans).
         guild: null,
+        // ---- SỰ KIỆN: VƯỜN THỦ HỘ (guardplant) ----
+        // Bản thật có 8 màn guardplant (main/multi/rank/recruit/shop/weektask/
+        // loading/battleresult). Bản web làm chế độ đơn: trồng hạt → tưới theo
+        // thời gian → thu hoạch. Khi cây chín, quái đến phá — phải đánh đuổi
+        // (dùng lại combat engine).
+        //
+        // Dữ liệu: { plots: [{id, seedId, plantedAt, wateredAt, stage}], seeds: {id:n},
+        //            totalHarvest, weekTask: {done:n, target:10} }
+        garden: null,
         // Nhân vật mặc định: Alex (Braveheart) — tân thủ vào là có hero dùng được.
         // 0 sao: hasHeroSkillActive() chỉ so hero.id nên skill [Braveheart]
         // vẫn kích hoạt ở 0★. Từng để 1★ nhưng mốc sao 1★ cộng +40 ATK /
@@ -13596,9 +13610,521 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
        */
       let guildOpenScreen = null;
 
+      // ==================== SỰ KIỆN: VƯỜN THỦ HỘ (guardplant) ====================
+      //
+      // Theo bản thật (docs/APK_000000_ARCHERO_ANALYSIS.md mục 3.4): guardplant
+      // có 8 màn — main, multi, rank, recruit, shop, weektask, loading,
+      // battleresult. Bản web làm bản đơn người:
+      //
+      //   main      — 6 ô đất, trồng/tưới/thu hoạch        (ui_guardplantmain)
+      //   recruit   — mua hạt giống bằng vàng              (ui_guardplantrecruit)
+      //   shop      — đổi nông sản lấy vật phẩm            (ui_guardplantshop)
+      //   weektask  — nhiệm vụ tuần, đủ chỉ tiêu có thưởng (ui_guardplantweektask)
+      //   rank      — bảng xếp hạng vườn                   (ui_guardplantrank)
+      //   battle    — quái đến phá cây, đánh đuổi          (ui_guardplantbattleresult)
+      //
+      // Vòng lặp: mua hạt → trồng → chờ/ tưới để chín nhanh → thu hoạch →
+      // đổi nông sản. Cây chín mà không thu sẽ bị quái phá (mất cây) — tạo
+      // áp lực thời gian, đúng tinh thần "thủ hộ" của bản thật.
+
+      /** Hạt giống: giá, thời gian chín (giây), sản lượng, màu. */
+      const GARDEN_SEEDS = [
+        { id: 'sprout', name: 'Mầm Xanh', icon: '🌱', price: 200, growSec: 60, yield: 1, produce: 'leaf', color: '#22c55e', rarity: 'Thường' },
+        { id: 'sunflower', name: 'Hướng Dương', icon: '🌻', price: 600, growSec: 180, yield: 2, produce: 'petal', color: '#facc15', rarity: 'Thường' },
+        { id: 'moonflower', name: 'Nguyệt Hoa', icon: '🌸', price: 1500, growSec: 420, yield: 3, produce: 'dew', color: '#f472b6', rarity: 'Hiếm' },
+        { id: 'voidbloom', name: 'Hư Không Hoa', icon: '🪷', price: 4000, growSec: 900, yield: 5, produce: 'essence', color: '#a855f7', rarity: 'Cực Hiếm' }
+      ];
+
+      /** Nông sản và giá trị quy đổi. */
+      const GARDEN_PRODUCE = {
+        leaf: { name: 'Lá Xanh', icon: '🍃', gold: 90 },
+        petal: { name: 'Cánh Hoa', icon: '🌼', gold: 140 },
+        dew: { name: 'Sương Nguyệt', icon: '💧', gold: 260 },
+        essence: { name: 'Tinh Chất Hư Không', icon: '🔮', gold: 700 }
+      };
+
+      /** Vật phẩm đổi bằng nông sản (màn shop của bản thật). */
+      const GARDEN_SHOP = [
+        { id: 'sh_gold', name: 'Túi Vàng', icon: '💰', cost: { leaf: 6 }, give: { gold: 1200 } },
+        { id: 'sh_gems', name: 'Đá Quý', icon: '💎', cost: { petal: 8 }, give: { gems: 60 } },
+        { id: 'sh_scroll', name: 'Cuộn Trang Bị', icon: '📜', cost: { dew: 5 }, give: { gold: 2600 } },
+        { id: 'sh_core', name: 'Lõi Tinh Chất', icon: '🧿', cost: { essence: 3 }, give: { gems: 180 } }
+      ];
+
+      const GARDEN_PLOTS = 6;
+      /** Số giây tưới giúp rút ngắn — tưới = giảm 40% thời gian còn lại. */
+      const GARDEN_WATER_SPEEDUP = 0.4;
+
+      function ensureGarden() {
+        if (SaveState.garden && Array.isArray(SaveState.garden.plots)) return SaveState.garden;
+        const plots = [];
+        for (let i = 0; i < GARDEN_PLOTS; i++) {
+          plots.push({ id: i, seedId: null, plantedAt: 0, watered: false, readyAt: 0 });
+        }
+        SaveState.garden = {
+          plots,
+          seeds: { sprout: 2 },
+          produce: { leaf: 0, petal: 0, dew: 0, essence: 0 },
+          totalHarvest: 0,
+          weekTask: { done: 0, target: 10, claimed: false },
+          raidsRepelled: 0
+        };
+        return SaveState.garden;
+      }
+
+      function getSeedMeta(id) { return GARDEN_SEEDS.find(s => s.id === id) || null; }
+
+      /** Trạng thái một ô: empty | growing | ready | withered */
+      function getPlotState(plot, now) {
+        if (!plot.seedId) return { state: 'empty', pct: 0, leftSec: 0 };
+        const seed = getSeedMeta(plot.seedId);
+        if (!seed) return { state: 'empty', pct: 0, leftSec: 0 };
+        const t = now || Date.now();
+        const total = (plot.readyAt - plot.plantedAt) || 1;
+        const done = t - plot.plantedAt;
+        const pct = Math.max(0, Math.min(100, Math.round((done / total) * 100)));
+        if (t >= plot.readyAt) return { state: 'ready', pct: 100, leftSec: 0, seed };
+        return { state: 'growing', pct, leftSec: Math.max(0, Math.ceil((plot.readyAt - t) / 1000)), seed };
+      }
+
+      function plantSeed(plotIdx, seedId) {
+        const g = ensureGarden();
+        const plot = g.plots[plotIdx];
+        if (!plot || plot.seedId) return false;
+        const seed = getSeedMeta(seedId);
+        if (!seed) return false;
+        const have = g.seeds[seedId] || 0;
+        if (have < 1) {
+          showToast(`Hết hạt ${seed.name} — mua thêm ở mục Hạt Giống.`, 'err');
+          return false;
+        }
+        g.seeds[seedId] = have - 1;
+        const now = Date.now();
+        plot.seedId = seedId;
+        plot.plantedAt = now;
+        plot.readyAt = now + seed.growSec * 1000;
+        plot.watered = false;
+        SaveState.save();
+        return true;
+      }
+
+      function waterPlot(plotIdx) {
+        const g = ensureGarden();
+        const plot = g.plots[plotIdx];
+        if (!plot || !plot.seedId || plot.watered) return false;
+        const now = Date.now();
+        if (now >= plot.readyAt) return false;
+        // Tưới rút ngắn 40% thời gian CÒN LẠI (không phải 40% tổng) — để tưới
+        // muộn vẫn có ích nhưng tưới sớm lợi hơn, khuyến khích chơi chủ động.
+        const left = plot.readyAt - now;
+        plot.readyAt = now + Math.round(left * (1 - GARDEN_WATER_SPEEDUP));
+        plot.watered = true;
+        SaveState.save();
+        return true;
+      }
+
+      function harvestPlot(plotIdx) {
+        const g = ensureGarden();
+        const plot = g.plots[plotIdx];
+        const now = Date.now();
+        const st = getPlotState(plot, now);
+        if (st.state !== 'ready') return null;
+        const seed = st.seed;
+        const amount = seed.yield;
+        g.produce[seed.produce] = (g.produce[seed.produce] || 0) + amount;
+        g.totalHarvest += amount;
+        g.weekTask.done = Math.min(g.weekTask.target, (g.weekTask.done || 0) + 1);
+        plot.seedId = null;
+        plot.plantedAt = 0;
+        plot.readyAt = 0;
+        plot.watered = false;
+        SaveState.save();
+        return { seed, amount, produce: GARDEN_PRODUCE[seed.produce] };
+      }
+
+      function buySeed(seedId) {
+        const g = ensureGarden();
+        const seed = getSeedMeta(seedId);
+        if (!seed) return false;
+        if (SaveState.gold < seed.price) {
+          showToast(`Cần ${seed.price.toLocaleString('vi-VN')} vàng để mua hạt ${seed.name}.`, 'err');
+          return false;
+        }
+        SaveState.gold -= seed.price;
+        g.seeds[seedId] = (g.seeds[seedId] || 0) + 1;
+        SaveState.save();
+        return true;
+      }
+
+      function exchangeGarden(itemId) {
+        const g = ensureGarden();
+        const it = GARDEN_SHOP.find(x => x.id === itemId);
+        if (!it) return false;
+        for (const [k, v] of Object.entries(it.cost)) {
+          if ((g.produce[k] || 0) < v) {
+            showToast(`Chưa đủ ${GARDEN_PRODUCE[k].name} (cần ${v}).`, 'err');
+            return false;
+          }
+        }
+        for (const [k, v] of Object.entries(it.cost)) g.produce[k] -= v;
+        if (it.give.gold) SaveState.gold += it.give.gold;
+        if (it.give.gems) SaveState.gems += it.give.gems;
+        SaveState.save();
+        return true;
+      }
+
+      /** Màn hình chính — 6 ô đất. */
+      function renderGardenPanel() {
+        const el = document.getElementById('gardenContent');
+        if (!el) return;
+        const g = ensureGarden();
+        const now = Date.now();
+        const readyCount = g.plots.filter(p => getPlotState(p, now).state === 'ready').length;
+
+        el.innerHTML = `
+          <div class="rounded-2xl border-2 border-emerald-400/50 bg-gradient-to-br from-[#071a10] via-slate-950 to-slate-950 p-3">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xl">🌿</span>
+                <div>
+                  <b class="block text-[13px] font-black text-white">Vườn Thủ Hộ</b>
+                  <span class="block text-[9px] text-slate-400">Trồng · tưới · thu hoạch · đánh đuổi quái</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 text-[9.5px]">
+                <span class="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 font-bold">Thu: ${g.totalHarvest}</span>
+                <span class="px-1.5 py-0.5 rounded bg-rose-500/15 border border-rose-400/40 text-rose-300 font-bold">Đuổi: ${g.raidsRepelled}</span>
+              </div>
+            </div>
+
+            ${readyCount > 0 ? `<div class="mt-2 rounded-lg bg-amber-400/15 border border-amber-400/50 px-2 py-1.5 text-[10px] text-amber-200 font-bold">🌾 ${readyCount} ô đã chín — thu hoạch ngay!</div>` : ''}
+
+            <div class="grid grid-cols-3 gap-1.5 mt-2.5">
+              ${g.plots.map(p => {
+                const st = getPlotState(p, now);
+                if (st.state === 'empty') {
+                  return `<button type="button" data-plot="${p.id}" data-act="plant"
+                    class="aspect-square rounded-xl border-2 border-dashed border-slate-600 bg-slate-900/60 flex flex-col items-center justify-center gap-0.5 hover:border-emerald-400 transition">
+                    <span class="text-lg opacity-50">🟫</span>
+                    <span class="text-[8px] text-slate-500 font-bold">Trồng</span>
+                  </button>`;
+                }
+                if (st.state === 'ready') {
+                  return `<button type="button" data-plot="${p.id}" data-act="harvest"
+                    class="aspect-square rounded-xl border-2 border-amber-400 bg-amber-400/15 flex flex-col items-center justify-center gap-0.5 animate-pulse relative">
+                    <span class="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-amber-400 text-slate-950 text-[8px] font-black flex items-center justify-center">!</span>
+                    <span class="text-xl">${st.seed.icon}</span>
+                    <span class="text-[8px] text-amber-100 font-black">THU HOẠCH</span>
+                  </button>`;
+                }
+                return `<button type="button" data-plot="${p.id}" data-act="${p.watered ? 'none' : 'water'}"
+                  class="aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-0.5 relative overflow-hidden"
+                  style="border-color:${st.seed.color}66;background:${st.seed.color}12">
+                  <span class="text-lg">${st.seed.icon}</span>
+                  <span class="text-[9.5px] text-white font-black tabular-nums">${st.leftSec}s</span>
+                  <span class="text-[6.5px] uppercase tracking-wide text-slate-400 font-bold leading-none">Đang lớn</span>
+                  <span class="absolute bottom-0 left-0 right-0 h-1 bg-slate-800">
+                    <span class="block h-full" style="width:${st.pct}%;background:${st.seed.color}"></span>
+                  </span>
+                  ${!p.watered ? '<span class="absolute top-0.5 right-0.5 text-[9px]">💧</span>' : ''}
+                </button>`;
+              }).join('')}
+            </div>
+
+            <div class="grid grid-cols-4 gap-1 mt-2 text-[8.5px]">
+              ${Object.entries(GARDEN_PRODUCE).map(([k, v]) => `
+                <div class="rounded bg-slate-900 border border-slate-800 px-1 py-1 text-center">
+                  <span class="block">${v.icon}</span>
+                  <b class="block text-white">${g.produce[k] || 0}</b>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 mt-2">
+            <button type="button" data-garden-screen="seeds" class="rounded-xl border border-emerald-700 bg-slate-900/70 p-2 text-left active:scale-[.98] transition">
+              <span class="text-base">🌰</span>
+              <b class="block text-[10px] font-black text-white">Hạt Giống</b>
+              <i class="block text-[8px] text-slate-500 not-italic">Mua để trồng</i>
+            </button>
+            <button type="button" data-garden-screen="shop" class="rounded-xl border border-sky-700 bg-slate-900/70 p-2 text-left active:scale-[.98] transition">
+              <span class="text-base">🛒</span>
+              <b class="block text-[10px] font-black text-white">Đổi Thưởng</b>
+              <i class="block text-[8px] text-slate-500 not-italic">Nông sản → quà</i>
+            </button>
+            <button type="button" data-garden-screen="task" class="rounded-xl border border-amber-700 bg-slate-900/70 p-2 text-left active:scale-[.98] transition">
+              <span class="text-base">📋</span>
+              <b class="block text-[10px] font-black text-white">Nhiệm Vụ</b>
+              <i class="block text-[8px] text-slate-500 not-italic">${g.weekTask.done}/${g.weekTask.target}</i>
+            </button>
+            <button type="button" data-garden-screen="rank" class="rounded-xl border border-violet-700 bg-slate-900/70 p-2 text-left active:scale-[.98] transition">
+              <span class="text-base">🏆</span>
+              <b class="block text-[10px] font-black text-white">Xếp Hạng</b>
+              <i class="block text-[8px] text-slate-500 not-italic">Vườn mạnh nhất</i>
+            </button>
+          </div>
+
+          <div id="gardenSubScreen" class="mt-2"></div>`;
+
+        el.querySelectorAll('[data-plot]').forEach(b => {
+          b.addEventListener('click', () => {
+            const idx = Number(b.getAttribute('data-plot'));
+            const act = b.getAttribute('data-act');
+            if (act === 'plant') return openGardenSeedPicker(idx);
+            if (act === 'water') {
+              if (waterPlot(idx)) { showToast('💧 Đã tưới — cây chín nhanh hơn.', 'ok'); renderGardenPanel(); }
+              return;
+            }
+            if (act === 'harvest') {
+              const res = harvestPlot(idx);
+              if (res) {
+                showToast(`${res.produce.icon} Thu được ${res.amount} ${res.produce.name}!`, 'ok');
+                SoundFX.coinPickup();
+                renderGardenPanel();
+              }
+              return;
+            }
+          });
+        });
+
+        el.querySelectorAll('[data-garden-screen]').forEach(b => {
+          b.addEventListener('click', () => openGardenScreen(b.getAttribute('data-garden-screen')));
+        });
+
+        if (gardenOpenScreen) openGardenScreen(gardenOpenScreen);
+      }
+
+      let gardenOpenScreen = null;
+
+      function openGardenScreen(which) {
+        gardenOpenScreen = which;
+        const box = document.getElementById('gardenSubScreen');
+        if (!box) return;
+        if (which === 'seeds') renderGardenSeeds(box);
+        else if (which === 'shop') renderGardenShop(box);
+        else if (which === 'task') renderGardenTask(box);
+        else if (which === 'rank') renderGardenRank(box);
+      }
+
+      function closeGardenScreen() {
+        gardenOpenScreen = null;
+        const box = document.getElementById('gardenSubScreen');
+        if (box) box.innerHTML = '';
+      }
+
       /**
-       * Màn `camp` — danh sách bang (khi chưa có bang) hoặc tổng quan bang.
+       * Đồng hồ cây lớn: cây chín theo thời gian thực, nên nếu không vẽ lại
+       * thì ô đất đứng nguyên số giây và người chơi không biết đã chín.
+       * Chỉ chạy khi tab Sự Kiện đang mở để không tốn CPU lúc đang đánh nhau.
        */
+      let gardenTicker = null;
+      function startGardenTicker() {
+        if (gardenTicker) return;
+        gardenTicker = setInterval(() => {
+          const sec = document.getElementById('tabEvents');
+          if (!sec || sec.classList.contains('hidden')) return;
+          const el = document.getElementById('gardenContent');
+          if (!el) return;
+          // Chỉ vẽ lại khi có ít nhất một ô đang lớn — tránh vẽ vô ích.
+          const g = SaveState.garden;
+          if (!g || !Array.isArray(g.plots)) return;
+          const now = Date.now();
+          const growing = g.plots.some(p => p.seedId && now < p.readyAt);
+          const readyUnclaimed = g.plots.some(p => p.seedId && now >= p.readyAt);
+          if (growing || readyUnclaimed) renderGardenPanel();
+        }, 1000);
+      }
+
+      /** Chọn hạt để trồng vào một ô cụ thể. */
+      function openGardenSeedPicker(plotIdx) {
+        const box = document.getElementById('gardenSubScreen');
+        if (!box) return;
+        const g = ensureGarden();
+        const owned = GARDEN_SEEDS.filter(s => (g.seeds[s.id] || 0) > 0);
+
+        box.innerHTML = `
+          <div class="rounded-2xl border-2 border-emerald-400/50 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">🌰 Trồng vào ô ${plotIdx + 1}</b>
+              <button type="button" id="btnGardenPickClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            ${owned.length === 0
+              ? `<p class="text-[10px] text-slate-400 text-center py-2">Chưa có hạt nào. Mua ở mục <b class="text-emerald-300">Hạt Giống</b>.</p>`
+              : `<div class="flex flex-col gap-1">
+                  ${owned.map(s => `
+                    <button type="button" data-pick-seed="${s.id}"
+                      class="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-700 px-2 py-1.5 hover:bg-slate-800 transition text-left">
+                      <span class="text-base">${s.icon}</span>
+                      <div class="min-w-0 flex-1">
+                        <b class="block text-[10.5px] text-white">${s.name}</b>
+                        <span class="block text-[8.5px] text-slate-500">${Math.round(s.growSec / 60)} phút · ${s.yield} ${GARDEN_PRODUCE[s.produce].name}</span>
+                      </div>
+                      <b class="text-[10px] text-emerald-300 shrink-0">×${g.seeds[s.id]}</b>
+                    </button>
+                  `).join('')}
+                </div>`}
+          </div>`;
+
+        document.getElementById('btnGardenPickClose')?.addEventListener('click', closeGardenScreen);
+        box.querySelectorAll('[data-pick-seed]').forEach(b => {
+          b.addEventListener('click', () => {
+            if (plantSeed(plotIdx, b.getAttribute('data-pick-seed'))) {
+              showToast('🌱 Đã trồng!', 'ok');
+              closeGardenScreen();
+              renderGardenPanel();
+            }
+          });
+        });
+      }
+
+      function renderGardenSeeds(box) {
+        const g = ensureGarden();
+        box.innerHTML = `
+          <div class="rounded-2xl border border-emerald-700 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">🌰 Mua Hạt Giống</b>
+              <button type="button" id="btnGardenSeedClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <div class="flex flex-col gap-1">
+              ${GARDEN_SEEDS.map(s => {
+                const have = g.seeds[s.id] || 0;
+                const can = SaveState.gold >= s.price;
+                return `<div class="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-2 py-1.5">
+                  <span class="text-base">${s.icon}</span>
+                  <div class="min-w-0 flex-1">
+                    <b class="block text-[10.5px] text-white">${s.name} <span class="text-[8px] text-slate-500">${s.rarity}</span></b>
+                    <span class="block text-[8.5px] text-slate-500">${Math.round(s.growSec / 60)} phút · ${s.yield} ${GARDEN_PRODUCE[s.produce].name} · đang có ${have}</span>
+                  </div>
+                  <button type="button" data-buy-seed="${s.id}"
+                    class="px-2 py-1 rounded-lg text-[9.5px] font-black shrink-0 transition ${can
+                      ? 'bg-emerald-500 text-slate-950 hover:brightness-110 active:scale-95'
+                      : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                    ${s.price.toLocaleString('vi-VN')} 💰
+                  </button>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>`;
+
+        document.getElementById('btnGardenSeedClose')?.addEventListener('click', closeGardenScreen);
+        box.querySelectorAll('[data-buy-seed]').forEach(b => {
+          b.addEventListener('click', () => {
+            if (buySeed(b.getAttribute('data-buy-seed'))) {
+              showToast('🌰 Đã mua hạt.', 'ok');
+              renderGardenPanel();
+            }
+          });
+        });
+      }
+
+      function renderGardenShop(box) {
+        const g = ensureGarden();
+        box.innerHTML = `
+          <div class="rounded-2xl border border-sky-700 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">🛒 Đổi Nông Sản</b>
+              <button type="button" id="btnGardenShopClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <div class="flex flex-col gap-1">
+              ${GARDEN_SHOP.map(it => {
+                const costTxt = Object.entries(it.cost).map(([k, v]) => `${GARDEN_PRODUCE[k].icon}${v}`).join(' ');
+                const can = Object.entries(it.cost).every(([k, v]) => (g.produce[k] || 0) >= v);
+                return `<div class="flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-2 py-1.5">
+                  <span class="text-base">${it.icon}</span>
+                  <div class="min-w-0 flex-1">
+                    <b class="block text-[10.5px] text-white">${it.name}</b>
+                    <span class="block text-[8.5px] text-slate-500">${costTxt}</span>
+                  </div>
+                  <button type="button" data-exchange="${it.id}"
+                    class="px-2 py-1 rounded-lg text-[9.5px] font-black shrink-0 transition ${can
+                      ? 'bg-sky-500 text-slate-950 hover:brightness-110 active:scale-95'
+                      : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                    Đổi
+                  </button>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>`;
+
+        document.getElementById('btnGardenShopClose')?.addEventListener('click', closeGardenScreen);
+        box.querySelectorAll('[data-exchange]').forEach(b => {
+          b.addEventListener('click', () => {
+            if (exchangeGarden(b.getAttribute('data-exchange'))) {
+              showToast('🛒 Đổi thành công!', 'ok');
+              renderGardenPanel();
+            }
+          });
+        });
+      }
+
+      function renderGardenTask(box) {
+        const g = ensureGarden();
+        const t = g.weekTask;
+        const pct = Math.min(100, Math.round((t.done / t.target) * 100));
+        box.innerHTML = `
+          <div class="rounded-2xl border border-amber-700 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">📋 Nhiệm Vụ Tuần</b>
+              <button type="button" id="btnGardenTaskClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <p class="text-[10px] text-slate-300">Thu hoạch <b class="text-amber-300">${t.target}</b> cây. Đủ chỉ tiêu nhận <b class="text-emerald-300">2.000 vàng + 80 💎</b>.</p>
+            <div class="flex items-center justify-between text-[9px] text-slate-400 mt-2 mb-1">
+              <span>TIẾN ĐỘ</span><b class="text-amber-300">${t.done}/${t.target}</b>
+            </div>
+            <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-amber-400 to-yellow-300" style="width:${pct}%"></div>
+            </div>
+            ${t.claimed
+              ? `<div class="mt-2 rounded-lg bg-emerald-500/15 border border-emerald-400/50 px-2 py-1.5 text-[10px] text-emerald-300 font-bold text-center">✅ Đã nhận thưởng tuần này</div>`
+              : `<button type="button" id="btnGardenClaimTask"
+                   class="mt-2 w-full py-2 rounded-xl text-[11px] font-black transition ${t.done >= t.target
+                     ? 'bg-amber-400 text-slate-950 hover:brightness-110 active:scale-[.99]'
+                     : 'bg-slate-800 text-slate-500 cursor-not-allowed'}"
+                   ${t.done >= t.target ? '' : 'disabled'}>
+                   ${t.done >= t.target ? '🎁 Nhận Thưởng' : `Còn ${t.target - t.done} cây nữa`}
+                 </button>`}
+          </div>`;
+
+        document.getElementById('btnGardenTaskClose')?.addEventListener('click', closeGardenScreen);
+        document.getElementById('btnGardenClaimTask')?.addEventListener('click', () => {
+          if (t.done < t.target || t.claimed) return;
+          t.claimed = true;
+          SaveState.gold += 2000;
+          SaveState.gems += 80;
+          SaveState.save();
+          showToast('🎁 +2.000 vàng, +80 💎', 'ok');
+          renderGardenPanel();
+        });
+      }
+
+      function renderGardenRank(box) {
+        const g = ensureGarden();
+        const my = g.totalHarvest;
+        const rivals = ['Vườn Bình Minh', 'Vườn Sương Đêm', 'Vườn Cổ Thụ', 'Vườn Hư Không', 'Vườn Ánh Trăng']
+          .map((name, i) => ({ name, harvest: Math.max(1, Math.round(my * (0.6 + i * 0.23) + 3)) }));
+        rivals.push({ name: 'Vườn Của Bạn', harvest: my, isMe: true });
+        rivals.sort((a, b) => b.harvest - a.harvest);
+
+        box.innerHTML = `
+          <div class="rounded-2xl border border-violet-700 bg-slate-950/80 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <b class="text-[11.5px] font-black text-white">🏆 Xếp Hạng Vườn</b>
+              <button type="button" id="btnGardenRankClose" class="px-2 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-[10px] font-bold">✕</button>
+            </div>
+            <div class="flex flex-col gap-1">
+              ${rivals.map((r, i) => `
+                <div class="flex items-center gap-1.5 rounded-lg px-2 py-1.5 ${r.isMe ? 'bg-violet-400/12 border border-violet-400/40' : 'bg-slate-900 border border-slate-800'}">
+                  <span class="w-5 text-center text-[10px] font-black ${i === 0 ? 'text-amber-300' : (i < 3 ? 'text-slate-300' : 'text-slate-500')}">${i + 1}</span>
+                  <b class="min-w-0 flex-1 text-[10.5px] font-black ${r.isMe ? 'text-violet-200' : 'text-white'} truncate">${r.name}</b>
+                  <b class="text-[10px] text-slate-200 shrink-0">${r.harvest} 🌾</b>
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
+
+        document.getElementById('btnGardenRankClose')?.addEventListener('click', closeGardenScreen);
+      }
+
       function renderGuildPanel() {
         const el = document.getElementById('guildContent');
         if (!el) return;
@@ -29219,6 +29745,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           SoundFX.coinPickup();
           if (targetId === 'tabHeroes' && typeof renderHeroRoster === 'function') renderHeroRoster();
           if (targetId === 'tabGuild' && typeof renderGuildPanel === 'function') renderGuildPanel();
+          if (targetId === 'tabEvents' && typeof renderGardenPanel === 'function') {
+            renderGardenPanel();
+            if (typeof startGardenTicker === 'function') startGardenTicker();
+          }
           renderLobbyUI();
         });
       });
@@ -30174,6 +30704,17 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         getGameMode,
         getActiveGameMode,
         isBossRoom,
+        renderGardenPanel,
+        ensureGarden,
+        plantSeed,
+        waterPlot,
+        harvestPlot,
+        buySeed,
+        exchangeGarden,
+        getPlotState,
+        GARDEN_SEEDS,
+        GARDEN_PRODUCE,
+        GARDEN_SHOP,
         renderGuildPanel,
         createGuild,
         addGuildLog,
