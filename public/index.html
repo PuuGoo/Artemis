@@ -14102,6 +14102,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       let seasonOpenScreen = null;
       let seasonLastCombatResult = null;
 
+      // Định dạng số cho giao diện Mùa Giải theo locale Việt Nam.
+      function seasonFormat(value) {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return '0';
+        return Math.round(number).toLocaleString('vi-VN');
+      }
+
       
 function renderSeasonPanel() {
         const el = document.getElementById('seasonContent');
