@@ -107,7 +107,7 @@ check('hien he so tung o', /\$\{m\}×/.test(html));
 check('co nut chon cuoc', /data-plinko-bet="\$\{b\}"/.test(html));
 check('co nut tha bong', /id="btnPlinkoDrop"/.test(html));
 check('co o hien ket qua', /id="plinkoResult"/.test(html));
-check('hien lich su gan day', /p\.history\.slice\(0, 10\)/.test(html));
+check('hien lich su gan day (bo bong chua ve dich)', /p\.history\.slice\(pend, pend \+ 10\)/.test(html));
 check('tab Su Kien goi renderPlinkoPanel', /renderPlinkoPanel\(\)/.test(html));
 // 3 loi tham my phat hien qua anh chup:
 check('xac suat >=7.5px mau sang (truoc la 6px xam)', /text-\[7\.5px\] text-slate-300 leading-none mt-1 font-bold/.test(html));
@@ -116,9 +116,55 @@ check('co 1 dong giai thich luat cho nguoi moi', /hệ số ô đó × tiền c�
 check('tab Su Kien co padding-bottom tranh nav che nut',
   /id="tabEvents"[^>]*pb-24/.test(html));
 
+
+// ============================================================ 5b. ANIMATION BONG ROI
+console.log('\n=== 5b. ANIMATION BONG ROI ===');
+check('co canvas ban choi', /id="plinkoCanvas"/.test(html));
+check('dung requestAnimationFrame', /plinkoFxFrame[\s\S]{0,4000}requestAnimationFrame\(plinkoFxFrame\)/.test(html));
+check('ket qua chot truoc: plinkoPlay tra ve path', /return \{ bin, mult, win, delta, bet: amount, path \}/.test(playFn));
+check('bin = tong duong di (animation khong tu quyet ket qua)', /const bin = path\.reduce/.test(playFn));
+check('plinkoDropPath 8 buoc 0/1', /function plinkoDropPath\(\)[\s\S]{0,200}Math\.random\(\) < 0\.5 \? 1 : 0/.test(html));
+check('bong cham chot -> chot sang len', /function plinkoFxHitPeg/.test(html) && /fx\.glow\[row\]\[j\] = 1/.test(html));
+check('ket qua chi hien khi bong cham o (plinkoFxLand)', /function plinkoFxLand[\s\S]{0,1800}plinkoResultHtml\(res\)/.test(html));
+check('khong ve lai panel khi doi cuoc (giu bong dang roi)',
+  /data-plinko-bet[\s\S]{0,400}plinkoRefreshMeta\(\);/.test(html));
+check('gioi han bong dang roi', /PLINKO_MAX_INFLIGHT = 10/.test(html));
+check('ton trong prefers-reduced-motion', /prefers-reduced-motion: reduce[\s\S]{0,40}/.test(html) && /plinkoReducedMotion/.test(html));
+
+// Mô phỏng hình học: bóng phải kết thúc đúng tâm ô theo path (chạy thật hàm trong game)
+const vm = await import('node:vm');
+function grab(name){ return fnBody(name); }
+const src = ['plinkoBuildPts','plinkoBallPos'].map(grab).join('\n');
+const ctx = vm.createContext({ PLINKO_ROWS: 8 });
+vm.runInContext(src, ctx);
+const fx = { cx: 150, s: 34, rowH: 29, topPad: 32, pegR: 2.6, ballR: 5.8, lastRowY: 235, H: 280,
+  dur: [320, ...new Array(8).fill(250), 300], bounceMs: 380 };
+let geomOk = true;
+for (let trial = 0; trial < 500; trial++) {
+  const path = Array.from({ length: 8 }, () => (Math.random() < 0.5 ? 1 : 0));
+  const bin = path.reduce((a, b) => a + b, 0);
+  const pts = ctx.plinkoBuildPts(fx, path);
+  const end = ctx.plinkoBallPos(fx, { pts }, 99999);
+  const expectX = fx.cx + (bin - 4) * fx.s;
+  if (Math.abs(end.x - expectX) > 1e-6) geomOk = false;
+}
+check('500 duong di ngau nhien: bong luon dung dung o cua no', geomOk);
+// Vị trí liên tục: không "teleport" giữa 2 frame 16ms
+{
+  const path = [1,0,1,1,0,0,1,0];
+  const pts = ctx.plinkoBuildPts(fx, path);
+  let prev = ctx.plinkoBallPos(fx, { pts }, 0), maxJump = 0;
+  for (let t = 16; t < 3200; t += 16) {
+    const cur = ctx.plinkoBallPos(fx, { pts }, t);
+    maxJump = Math.max(maxJump, Math.hypot(cur.x - prev.x, cur.y - prev.y));
+    prev = cur;
+  }
+  check('chuyen dong muot (nhay toi da < 1 hang chot/frame)', maxJump < fx.rowH, 'max ' + maxJump.toFixed(1) + 'px/frame');
+}
+
 // ============================================================ 6. EXPORT
 console.log('\n=== 6. EXPORT ===');
-for (const n of ['ensurePlinko', 'plinkoDrop', 'plinkoPlay', 'plinkoBinOdds', 'renderPlinkoPanel', 'PLINKO_MULTS', 'PLINKO_ROWS']) {
+for (const n of ['ensurePlinko', 'plinkoDrop', 'plinkoDropPath', 'plinkoPlay', 'plinkoBinOdds', 'renderPlinkoPanel', 'PLINKO_MULTS', 'PLINKO_ROWS']) {
   check(`export ${n}`, new RegExp(`\\n\\s+${n},`).test(html));
 }
 
