@@ -1,0 +1,3888 @@
+[
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 1,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 17283,
+    "maxHp": 17283,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 19357,
+    "maxHp": 19357,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 21258,
+    "maxHp": 21258,
+    "atk": 4243,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 2,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 22989,
+    "maxHp": 22989,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 25247,
+    "maxHp": 25247,
+    "atk": 3846,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 3,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 29518,
+    "maxHp": 29518,
+    "atk": 4035,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 4,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 31024,
+    "maxHp": 31024,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 34072,
+    "maxHp": 34072,
+    "atk": 3795,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 5,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "golem",
+    "hp": 296280,
+    "maxHp": 296280,
+    "atk": 7543,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 6,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 40087,
+    "maxHp": 40087,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 44024,
+    "maxHp": 44024,
+    "atk": 3863,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 7,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 49423,
+    "maxHp": 49423,
+    "atk": 4098,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 8,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 50176,
+    "maxHp": 50176,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 9,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 55606,
+    "maxHp": 55606,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 61067,
+    "maxHp": 61067,
+    "atk": 4321,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 10,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "queen",
+    "hp": 370350,
+    "maxHp": 370350,
+    "atk": 9699,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 11,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 12,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 13,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 87740,
+    "maxHp": 87740,
+    "atk": 5596,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 79893,
+    "maxHp": 79893,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 87740,
+    "maxHp": 87740,
+    "atk": 5596,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 14,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 86607,
+    "maxHp": 86607,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 95113,
+    "maxHp": 95113,
+    "atk": 6192,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 0,
+  "chapterId": 1,
+  "rooms": 15,
+  "enemyScale": 1,
+  "room": 15,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "demon_king",
+    "hp": 567870,
+    "maxHp": 567870,
+    "atk": 13578,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 1,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 17283,
+    "maxHp": 17283,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 19357,
+    "maxHp": 19357,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 21258,
+    "maxHp": 21258,
+    "atk": 4243,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 2,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 22989,
+    "maxHp": 22989,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 25247,
+    "maxHp": 25247,
+    "atk": 3846,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 3,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 29518,
+    "maxHp": 29518,
+    "atk": 4035,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 4,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 31024,
+    "maxHp": 31024,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 34072,
+    "maxHp": 34072,
+    "atk": 3795,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 5,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "golem",
+    "hp": 296280,
+    "maxHp": 296280,
+    "atk": 7543,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 6,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 40087,
+    "maxHp": 40087,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 44024,
+    "maxHp": 44024,
+    "atk": 3863,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 7,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 49423,
+    "maxHp": 49423,
+    "atk": 4098,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 8,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 50176,
+    "maxHp": 50176,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 9,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 55606,
+    "maxHp": 55606,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 61067,
+    "maxHp": 61067,
+    "atk": 4321,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 10,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "queen",
+    "hp": 370350,
+    "maxHp": 370350,
+    "atk": 9699,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 11,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 1,
+  "chapterId": 2,
+  "rooms": 12,
+  "enemyScale": 1.45,
+  "room": 12,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 1,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 17283,
+    "maxHp": 17283,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 19357,
+    "maxHp": 19357,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 21258,
+    "maxHp": 21258,
+    "atk": 4243,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 2,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 22989,
+    "maxHp": 22989,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 25247,
+    "maxHp": 25247,
+    "atk": 3846,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 3,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 29518,
+    "maxHp": 29518,
+    "atk": 4035,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 4,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 31024,
+    "maxHp": 31024,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 34072,
+    "maxHp": 34072,
+    "atk": 3795,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 5,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "golem",
+    "hp": 296280,
+    "maxHp": 296280,
+    "atk": 7543,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 6,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 40087,
+    "maxHp": 40087,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 44024,
+    "maxHp": 44024,
+    "atk": 3863,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 7,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 49423,
+    "maxHp": 49423,
+    "atk": 4098,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 8,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 50176,
+    "maxHp": 50176,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 9,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 55606,
+    "maxHp": 55606,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 61067,
+    "maxHp": 61067,
+    "atk": 4321,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 2,
+  "chapterId": 3,
+  "rooms": 10,
+  "enemyScale": 2,
+  "room": 10,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "queen",
+    "hp": 370350,
+    "maxHp": 370350,
+    "atk": 9699,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 1,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 17283,
+    "maxHp": 17283,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 19357,
+    "maxHp": 19357,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 21258,
+    "maxHp": 21258,
+    "atk": 4243,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 2,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 22989,
+    "maxHp": 22989,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 25247,
+    "maxHp": 25247,
+    "atk": 3846,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 3,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 29518,
+    "maxHp": 29518,
+    "atk": 4035,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 4,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 31024,
+    "maxHp": 31024,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 34072,
+    "maxHp": 34072,
+    "atk": 3795,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 5,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "golem",
+    "hp": 296280,
+    "maxHp": 296280,
+    "atk": 7543,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 6,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 40087,
+    "maxHp": 40087,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 44024,
+    "maxHp": 44024,
+    "atk": 3863,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 7,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 49423,
+    "maxHp": 49423,
+    "atk": 4098,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 8,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 50176,
+    "maxHp": 50176,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 9,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 55606,
+    "maxHp": 55606,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 61067,
+    "maxHp": 61067,
+    "atk": 4321,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 10,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "queen",
+    "hp": 370350,
+    "maxHp": 370350,
+    "atk": 9699,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 11,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 12,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 13,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 87740,
+    "maxHp": 87740,
+    "atk": 5596,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 79893,
+    "maxHp": 79893,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 87740,
+    "maxHp": 87740,
+    "atk": 5596,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 14,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 86607,
+    "maxHp": 86607,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 95113,
+    "maxHp": 95113,
+    "atk": 6192,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 3,
+  "chapterId": 4,
+  "rooms": 15,
+  "enemyScale": 2.35,
+  "room": 15,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "demon_king",
+    "hp": 567870,
+    "maxHp": 567870,
+    "atk": 13578,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 1,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 17283,
+    "maxHp": 17283,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 19357,
+    "maxHp": 19357,
+    "atk": 4243,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 21258,
+    "maxHp": 21258,
+    "atk": 4243,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 2,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 22989,
+    "maxHp": 22989,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 25247,
+    "maxHp": 25247,
+    "atk": 3846,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 20526,
+    "maxHp": 20526,
+    "atk": 3846,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 3,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 29518,
+    "maxHp": 29518,
+    "atk": 4035,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 23999,
+    "maxHp": 23999,
+    "atk": 4035,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 4,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 27700,
+    "maxHp": 27700,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 31024,
+    "maxHp": 31024,
+    "atk": 3795,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 34072,
+    "maxHp": 34072,
+    "atk": 3795,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 5,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "golem",
+    "hp": 296280,
+    "maxHp": 296280,
+    "atk": 7543,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 6,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 40087,
+    "maxHp": 40087,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 44024,
+    "maxHp": 44024,
+    "atk": 3863,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 35792,
+    "maxHp": 35792,
+    "atk": 3863,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 7,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 49423,
+    "maxHp": 49423,
+    "atk": 4098,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 40181,
+    "maxHp": 40181,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 45003,
+    "maxHp": 45003,
+    "atk": 4098,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 8,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 50176,
+    "maxHp": 50176,
+    "atk": 4040,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 55104,
+    "maxHp": 55104,
+    "atk": 4040,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 44800,
+    "maxHp": 44800,
+    "atk": 4040,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 9,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 55606,
+    "maxHp": 55606,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 61067,
+    "maxHp": 61067,
+    "atk": 4321,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 49648,
+    "maxHp": 49648,
+    "atk": 4321,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 10,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "queen",
+    "hp": 370350,
+    "maxHp": 370350,
+    "atk": 9699,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 11,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 60032,
+    "maxHp": 60032,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 67236,
+    "maxHp": 67236,
+    "atk": 4694,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 73839,
+    "maxHp": 73839,
+    "atk": 4694,
+    "speed": 0,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 12,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 73436,
+    "maxHp": 73436,
+    "atk": 5106,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 80648,
+    "maxHp": 80648,
+    "atk": 5106,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 65568,
+    "maxHp": 65568,
+    "atk": 5106,
+    "speed": 115,
+    "r": 13
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 13,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 87740,
+    "maxHp": 87740,
+    "atk": 5596,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 79893,
+    "maxHp": 79893,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 87740,
+    "maxHp": 87740,
+    "atk": 5596,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 71333,
+    "maxHp": 71333,
+    "atk": 5596,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 14,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": false,
+  "enemies": [
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "skeleton_mage",
+    "hp": 86607,
+    "maxHp": 86607,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "plant_turret",
+    "hp": 95113,
+    "maxHp": 95113,
+    "atk": 6192,
+    "speed": 0,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "bat",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 115,
+    "r": 13
+   },
+   {
+    "isBoss": false,
+    "type": "slime",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   },
+   {
+    "isBoss": false,
+    "type": "goblin",
+    "hp": 77327,
+    "maxHp": 77327,
+    "atk": 6192,
+    "speed": 64,
+    "r": 16
+   }
+  ]
+ },
+ {
+  "chapterIdx": 4,
+  "chapterId": 5,
+  "rooms": 15,
+  "enemyScale": 2.62,
+  "room": 15,
+  "maxRooms": 15,
+  "playerAtk": 12345,
+  "playerMaxHp": 67890,
+  "isBossRoom": true,
+  "enemies": [
+   {
+    "isBoss": true,
+    "type": "demon_king",
+    "hp": 567870,
+    "maxHp": 567870,
+    "atk": 13578,
+    "speed": 68,
+    "r": 34
+   }
+  ]
+ }
+]

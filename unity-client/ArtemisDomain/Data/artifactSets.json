@@ -1,0 +1,235 @@
+[
+  {
+    "id": "golden_dragons_treasure",
+    "name": "Golden Dragon's Treasure Set (Kho Báu Kim Long)",
+    "icon": "🐉👑",
+    "members": [
+      "golden_fleece",
+      "golden_mask",
+      "goldfinger"
+    ],
+    "tiersPct": [
+      12,
+      18,
+      24,
+      30,
+      36,
+      42
+    ]
+  },
+  {
+    "id": "heavenly_music",
+    "name": "Heavenly Music Set (Thiên Nhạc Hòa Tấu)",
+    "icon": "🪕🪈",
+    "members": [
+      "magic_harp",
+      "pans_flute",
+      "tidal_conch"
+    ],
+    "tiersPct": [
+      12,
+      18,
+      24,
+      30,
+      36,
+      42
+    ]
+  },
+  {
+    "id": "battle_rite",
+    "name": "Battle Rite Set (Nghi Thức Chiến Trận)",
+    "icon": "🛡️🎲",
+    "members": [
+      "thronebreaker_shield",
+      "dice_of_destiny",
+      "protective_blazon"
+    ],
+    "tiersPct": [
+      8,
+      12,
+      16,
+      20,
+      24,
+      28
+    ]
+  },
+  {
+    "id": "heartseeker_arrow",
+    "name": "Heartseeker Arrow Set (Tiễn Tầm Tâm)",
+    "icon": "💘🏹",
+    "members": [
+      "cupids_arrow",
+      "cupids_bow"
+    ],
+    "tiersPct": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  {
+    "id": "fright_night",
+    "name": "Fright Night Set (Đêm Kinh Hoàng)",
+    "icon": "🏮🍬",
+    "members": [
+      "frostflame_lamp",
+      "boltfang_candy_jar"
+    ],
+    "tiersPct": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  {
+    "id": "lawbreaker",
+    "name": "Lawbreaker Set (Kẻ Phá Luật Hư Không)",
+    "icon": "🌌🪶",
+    "members": [
+      "quiet_quill",
+      "voidblade"
+    ],
+    "tiersPct": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  {
+    "id": "defiance_of_fate",
+    "name": "Defiance of Fate Set (Nghịch Thiên Mệnh)",
+    "icon": "🐍🐉",
+    "members": [
+      "broodmother_scale",
+      "thorned_treeheart",
+      "medusas_eye"
+    ],
+    "tiersPct": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  {
+    "id": "viking_battle_cry",
+    "name": "Viking Battle Cry Set (Tiếng Gầm Chiến Binh Viking)",
+    "icon": "📯🐂",
+    "members": [
+      "attack_horn",
+      "bull_skull",
+      "dragon_heart"
+    ],
+    "tiersPct": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  {
+    "id": "rare_treasure",
+    "name": "Rare Treasure Set (Bảo Vật Hiếm Có)",
+    "icon": "🏆🪶",
+    "members": [
+      "brisingamen",
+      "healing_grail",
+      "fire_phoenix_feather"
+    ],
+    "tiersPct": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  {
+    "id": "sleepless_stories",
+    "name": "Sleepless Stories Set (Chuyện Đêm Không Ngủ)",
+    "icon": "🗿🗡️",
+    "members": [
+      "poison_apple",
+      "gargoyle",
+      "damocles_sword"
+    ],
+    "tiersPct": [
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  {
+    "id": "hypnosis_stories",
+    "name": "Hypnosis Stories Set (Cổ Tích Mê Hoặc)",
+    "icon": "🪔👠",
+    "members": [
+      "crystal_shoe",
+      "red_hood",
+      "magic_lamp",
+      "magic_carpet"
+    ],
+    "tiersPct": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  {
+    "id": "wonderful_plant",
+    "name": "Wonderful Plant Set (Thực Vật Kỳ Diệu)",
+    "icon": "🎃🍀",
+    "members": [
+      "pumpkin_lantern",
+      "four_leaf_clover",
+      "laurel_wreath"
+    ],
+    "tiersPct": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  {
+    "id": "knights_oath",
+    "name": "Knight's Oath Set (Lời Thề Kỵ Sĩ)",
+    "icon": "🪖🗡️",
+    "members": [
+      "gladiators_helm",
+      "sword_in_the_stone",
+      "iron_throne",
+      "supreme_staff"
+    ],
+    "tiersPct": [
+      1,
+      1.5,
+      2,
+      2.5,
+      3,
+      3.5
+    ]
+  }
+]

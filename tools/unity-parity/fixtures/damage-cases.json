@@ -1,0 +1,77 @@
+[
+ {
+  "kind": "damageEnemy",
+  "label": "no-crit raw=100",
+  "raw": 100,
+  "isElemental": false,
+  "isCrit": false,
+  "expected": 100
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "no-crit raw=250",
+  "raw": 250,
+  "isElemental": false,
+  "isCrit": false,
+  "expected": 250
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "no-crit raw=1000",
+  "raw": 1000,
+  "isElemental": false,
+  "isCrit": false,
+  "expected": 1000
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "no-crit raw=12345.67",
+  "raw": 12345.67,
+  "isElemental": false,
+  "isCrit": false,
+  "expected": 12346
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "crit raw=100",
+  "raw": 100,
+  "isElemental": false,
+  "isCrit": true,
+  "critDmgMult": 1.85,
+  "expected": 185
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "crit raw=250",
+  "raw": 250,
+  "isElemental": false,
+  "isCrit": true,
+  "critDmgMult": 1.85,
+  "expected": 463
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "crit raw=1000",
+  "raw": 1000,
+  "isElemental": false,
+  "isCrit": true,
+  "critDmgMult": 1.85,
+  "expected": 1850
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "crit 2.35 raw=500",
+  "raw": 500,
+  "isCrit": true,
+  "critDmgMult": 2.35,
+  "expected": 1175
+ },
+ {
+  "kind": "damageEnemy",
+  "label": "elemental raw=500",
+  "raw": 500,
+  "isElemental": true,
+  "isCrit": false,
+  "expected": 500
+ }
+]

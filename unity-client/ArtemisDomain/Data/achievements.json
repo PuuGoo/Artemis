@@ -1,0 +1,344 @@
+[
+  {
+    "id": "first_blood",
+    "icon": "🩸",
+    "name": "Máu Đầu Tiên",
+    "desc": "Hạ gục kẻ địch đầu tiên trong hành trình.",
+    "cat": "combat",
+    "rarity": "bronze",
+    "stat": "kills",
+    "goal": 1,
+    "reward": {
+      "gold": 300
+    }
+  },
+  {
+    "id": "slayer_100",
+    "icon": "🗡️",
+    "name": "Sát Thủ Tập Sự",
+    "desc": "Hạ gục tổng cộng 100 kẻ địch.",
+    "cat": "combat",
+    "rarity": "bronze",
+    "stat": "kills",
+    "goal": 100,
+    "reward": {
+      "gold": 1200
+    }
+  },
+  {
+    "id": "slayer_1000",
+    "icon": "⚔️",
+    "name": "Chiến Binh Hầm Ngục",
+    "desc": "Hạ gục tổng cộng 1.000 kẻ địch.",
+    "cat": "combat",
+    "rarity": "silver",
+    "stat": "kills",
+    "goal": 1000,
+    "reward": {
+      "gold": 6000,
+      "gems": 60
+    }
+  },
+  {
+    "id": "slayer_10000",
+    "icon": "🔥",
+    "name": "Cỗ Máy Hủy Diệt",
+    "desc": "Hạ gục tổng cộng 10.000 kẻ địch.",
+    "cat": "combat",
+    "rarity": "gold",
+    "stat": "kills",
+    "goal": 10000,
+    "reward": {
+      "gold": 50000,
+      "gems": 400
+    }
+  },
+  {
+    "id": "boss_1",
+    "icon": "👹",
+    "name": "Kẻ Diệt Trùm",
+    "desc": "Đánh bại Trùm đầu tiên.",
+    "cat": "combat",
+    "rarity": "bronze",
+    "stat": "bossKills",
+    "goal": 1,
+    "reward": {
+      "gold": 800
+    }
+  },
+  {
+    "id": "boss_10",
+    "icon": "🐲",
+    "name": "Thợ Săn Trùm",
+    "desc": "Đánh bại 10 Trùm.",
+    "cat": "combat",
+    "rarity": "silver",
+    "stat": "bossKills",
+    "goal": 10,
+    "reward": {
+      "gold": 4000,
+      "gems": 40
+    }
+  },
+  {
+    "id": "boss_50",
+    "icon": "☠️",
+    "name": "Khắc Tinh Trùm",
+    "desc": "Đánh bại 50 Trùm.",
+    "cat": "combat",
+    "rarity": "legendary",
+    "stat": "bossKills",
+    "goal": 50,
+    "reward": {
+      "gold": 40000,
+      "gems": 350
+    }
+  },
+  {
+    "id": "flawless_room",
+    "icon": "🛡️",
+    "name": "Bất Khả Xâm Phạm",
+    "desc": "Dọn sạch một phòng mà không mất máu.",
+    "cat": "combat",
+    "rarity": "silver",
+    "stat": "flawlessRooms",
+    "goal": 1,
+    "reward": {
+      "gold": 2500,
+      "gems": 25
+    }
+  },
+  {
+    "id": "run_1",
+    "icon": "🎯",
+    "name": "Bước Chân Đầu Tiên",
+    "desc": "Hoàn thành trận đấu đầu tiên.",
+    "cat": "journey",
+    "rarity": "bronze",
+    "stat": "runs",
+    "goal": 1,
+    "reward": {
+      "gold": 500
+    }
+  },
+  {
+    "id": "run_25",
+    "icon": "🏃",
+    "name": "Kẻ Nghiện Hầm Ngục",
+    "desc": "Hoàn thành 25 trận đấu.",
+    "cat": "journey",
+    "rarity": "silver",
+    "stat": "runs",
+    "goal": 25,
+    "reward": {
+      "gold": 5000,
+      "gems": 50
+    }
+  },
+  {
+    "id": "run_100",
+    "icon": "🌀",
+    "name": "Linh Hồn Bất Diệt",
+    "desc": "Hoàn thành 100 trận đấu.",
+    "cat": "journey",
+    "rarity": "gold",
+    "stat": "runs",
+    "goal": 100,
+    "reward": {
+      "gold": 30000,
+      "gems": 300
+    }
+  },
+  {
+    "id": "room_10",
+    "icon": "🚪",
+    "name": "Vượt Qua Ngưỡng Cửa",
+    "desc": "Chạm tới Phòng 10 trong một trận.",
+    "cat": "journey",
+    "rarity": "bronze",
+    "stat": "deepestRoom",
+    "goal": 10,
+    "reward": {
+      "gold": 1500
+    }
+  },
+  {
+    "id": "room_20",
+    "icon": "🏛️",
+    "name": "Thám Hiểm Sâu",
+    "desc": "Chạm tới Phòng 20 trong một trận.",
+    "cat": "journey",
+    "rarity": "silver",
+    "stat": "deepestRoom",
+    "goal": 20,
+    "reward": {
+      "gold": 8000,
+      "gems": 80
+    }
+  },
+  {
+    "id": "win_1",
+    "icon": "🏆",
+    "name": "Chiến Thắng Đầu Tiên",
+    "desc": "Chinh phục trọn vẹn một chương.",
+    "cat": "journey",
+    "rarity": "silver",
+    "stat": "wins",
+    "goal": 1,
+    "reward": {
+      "gold": 10000,
+      "gems": 100
+    }
+  },
+  {
+    "id": "win_10",
+    "icon": "👑",
+    "name": "Bá Chủ Hầm Ngục",
+    "desc": "Chinh phục trọn vẹn 10 chương.",
+    "cat": "journey",
+    "rarity": "legendary",
+    "stat": "wins",
+    "goal": 10,
+    "reward": {
+      "gold": 80000,
+      "gems": 800
+    }
+  },
+  {
+    "id": "all_chapters",
+    "icon": "🌌",
+    "name": "Kỷ Nguyên Cung Thủ",
+    "desc": "Chiến thắng ở cả 3 chương.",
+    "cat": "journey",
+    "rarity": "legendary",
+    "stat": "chaptersCleared",
+    "goal": 3,
+    "reward": {
+      "gold": 120000,
+      "gems": 1200
+    }
+  },
+  {
+    "id": "merge_1",
+    "icon": "⚗️",
+    "name": "Lò Rèn Đầu Tay",
+    "desc": "Thực hiện lần hợp nhất trang bị đầu tiên.",
+    "cat": "forge",
+    "rarity": "bronze",
+    "stat": "merges",
+    "goal": 1,
+    "reward": {
+      "gold": 600
+    }
+  },
+  {
+    "id": "merge_50",
+    "icon": "🔨",
+    "name": "Thợ Rèn Lành Nghề",
+    "desc": "Hợp nhất trang bị 50 lần.",
+    "cat": "forge",
+    "rarity": "silver",
+    "stat": "merges",
+    "goal": 50,
+    "reward": {
+      "gold": 7000,
+      "gems": 70
+    }
+  },
+  {
+    "id": "merge_500",
+    "icon": "⚒️",
+    "name": "Bậc Thầy Hợp Nhất",
+    "desc": "Hợp nhất trang bị 500 lần.",
+    "cat": "forge",
+    "rarity": "gold",
+    "stat": "merges",
+    "goal": 500,
+    "reward": {
+      "gold": 60000,
+      "gems": 500
+    }
+  },
+  {
+    "id": "gold_1m",
+    "icon": "🪙",
+    "name": "Thùng Vàng Di Động",
+    "desc": "Tích luỹ tổng cộng 1.000.000 Vàng từ chiến đấu.",
+    "cat": "forge",
+    "rarity": "gold",
+    "stat": "goldEarned",
+    "goal": 1000000,
+    "reward": {
+      "gems": 600
+    }
+  },
+  {
+    "id": "skill_10",
+    "icon": "✨",
+    "name": "Nhà Chiến Lược",
+    "desc": "Chọn tổng cộng 10 kỹ năng Roguelike.",
+    "cat": "collect",
+    "rarity": "bronze",
+    "stat": "skillsPicked",
+    "goal": 10,
+    "reward": {
+      "gold": 1200
+    }
+  },
+  {
+    "id": "skill_100",
+    "icon": "🌟",
+    "name": "Bậc Thầy Kỹ Năng",
+    "desc": "Chọn tổng cộng 100 kỹ năng Roguelike.",
+    "cat": "collect",
+    "rarity": "gold",
+    "stat": "skillsPicked",
+    "goal": 100,
+    "reward": {
+      "gold": 25000,
+      "gems": 250
+    }
+  },
+  {
+    "id": "talent_20",
+    "icon": "🃏",
+    "name": "Người Sưu Tầm Thẻ",
+    "desc": "Rút Thẻ Tài Năng 20 lần.",
+    "cat": "collect",
+    "rarity": "silver",
+    "stat": "talentDraws",
+    "goal": 20,
+    "reward": {
+      "gold": 4500,
+      "gems": 45
+    }
+  },
+  {
+    "id": "chest_25",
+    "icon": "🎁",
+    "name": "Thánh Rương",
+    "desc": "Mở 25 Rương Trang Bị.",
+    "cat": "collect",
+    "rarity": "silver",
+    "stat": "chestPulls",
+    "goal": 25,
+    "reward": {
+      "gold": 5000,
+      "gems": 50
+    }
+  },
+  {
+    "id": "collector",
+    "icon": "🏺",
+    "name": "Nhà Sưu Tầm Vĩ Đại",
+    "desc": "Sở hữu 40 trang bị trong Túi Đồ cùng lúc.",
+    "cat": "collect",
+    "rarity": "gold",
+    "stat": "bagSize",
+    "goal": 40,
+    "reward": {
+      "gold": 20000,
+      "gems": 200
+    }
+  }
+]

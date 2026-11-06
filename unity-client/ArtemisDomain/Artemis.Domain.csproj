@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Artemis.Domain — lớp logic THUẦN của bản port Unity.
+
+    Ràng buộc cố ý:
+      • netstandard2.1  -> Unity 2021.2+ dùng được trực tiếp.
+      • KHÔNG tham chiếu UnityEngine. Nếu ai thêm `using UnityEngine;` thì build
+        gãy ngay tại đây, trước khi kịp làm hỏng kiến trúc. Đó là mục đích.
+      • Không PackageReference: chỉ System.* của BCL. Nhờ vậy build được bằng
+        `dotnet build` trên máy không cài Unity, và test parity chạy được ngay.
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>Artemis.Domain</AssemblyName>
+    <RootNamespace>Artemis.Domain</RootNamespace>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <!-- Data/*.json được copy để Unity đọc qua TextAsset (Resources/Data). -->
+  <ItemGroup>
+    <None Include="Data\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

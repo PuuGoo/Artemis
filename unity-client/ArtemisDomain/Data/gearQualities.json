@@ -1,0 +1,86 @@
+{
+  "common": {
+    "id": "common",
+    "order": 1,
+    "name": "Normal (Thường)",
+    "shortName": "Normal",
+    "maxAwakening": 0,
+    "css": "a2-q-common",
+    "badgeBg": "bg-slate-600/40 text-slate-200 border-slate-400/40",
+    "mult": 1,
+    "next": "uncommon",
+    "passiveBonus": "Trang bị khởi đầu cơ bản (Ghép 3 món trùng tên lên Fine)."
+  },
+  "uncommon": {
+    "id": "uncommon",
+    "order": 2,
+    "name": "Fine (Tốt)",
+    "shortName": "Fine",
+    "maxAwakening": 0,
+    "css": "a2-q-uncommon",
+    "badgeBg": "bg-emerald-500/30 text-emerald-200 border-emerald-400/50",
+    "mult": 1.28,
+    "next": "rare",
+    "passiveBonus": "Mở khóa thuộc tính Fine: +5% ATK PWR (Vũ khí/Nhẫn/Hộ phù) hoặc +5% Max HP (Giáp/Mũ/Giày)."
+  },
+  "rare": {
+    "id": "rare",
+    "order": 3,
+    "name": "Rare (Hiếm)",
+    "shortName": "Rare",
+    "maxAwakening": 0,
+    "css": "a2-q-rare",
+    "badgeBg": "bg-sky-500/30 text-sky-200 border-sky-400/50",
+    "mult": 1.65,
+    "next": "epic",
+    "passiveBonus": "Mở khóa thuộc tính Rare: Tăng CRIT Rate, CRIT DMG, Dodge, Hồi máu Tim hoặc giảm sát thương đạn."
+  },
+  "epic": {
+    "id": "epic",
+    "order": 4,
+    "name": "Epic (Sử Thi)",
+    "shortName": "Epic",
+    "maxAwakening": 2,
+    "css": "a2-q-epic",
+    "badgeBg": "bg-purple-500/30 text-purple-200 border-purple-400/50",
+    "mult": 2.15,
+    "next": "legendary",
+    "passiveBonus": "Mở khóa Kỹ năng Build đặc trưng (Combo / Explosion / Close-Range) theo chuẩn Archero 2 Wiki!"
+  },
+  "legendary": {
+    "id": "legendary",
+    "order": 5,
+    "name": "Legendary (Huyền Thoại)",
+    "shortName": "Legendary",
+    "maxAwakening": 3,
+    "css": "a2-q-legendary",
+    "badgeBg": "bg-amber-500/30 text-amber-200 border-amber-400/60",
+    "mult": 2.85,
+    "next": "mythic",
+    "passiveBonus": "+10% ATK PWR / Max HP; tại mốc Legendary +3 tăng thêm +20% toàn bộ chỉ số cơ bản của trang bị!"
+  },
+  "mythic": {
+    "id": "mythic",
+    "order": 6,
+    "name": "Mythic (Thần Thoại)",
+    "shortName": "Mythic",
+    "maxAwakening": 4,
+    "css": "a2-q-mythic",
+    "badgeBg": "bg-rose-500/30 text-rose-200 border-rose-400/60",
+    "mult": 3.85,
+    "next": "chaotic",
+    "passiveBonus": "Cường hóa gấp đôi Kỹ năng Sử Thi! Mốc Mythic +2 tăng +30% Base Stats, Mythic +4 tăng +40% Base Stats!"
+  },
+  "chaotic": {
+    "id": "chaotic",
+    "order": 7,
+    "name": "Chaotic (Hỗn Nguyên)",
+    "shortName": "Chaotic",
+    "maxAwakening": 0,
+    "css": "a2-q-chaotic",
+    "badgeBg": "bg-gradient-to-r from-rose-500/40 via-fuchsia-500/40 to-amber-400/40 text-amber-100 border-amber-300/80",
+    "mult": 5.2,
+    "next": null,
+    "passiveBonus": "Cảnh giới Tối Thượng Archero 2 Wiki: Thức tỉnh Nội Tại Hỗn Nguyên (Chaotic Passive) độc nhất!"
+  }
+}

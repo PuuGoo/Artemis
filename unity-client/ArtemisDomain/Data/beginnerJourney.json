@@ -1,0 +1,106 @@
+[
+  {
+    "id": "N01",
+    "title": "Chào mừng Cung Thủ",
+    "desc": "Ta là Artemis, người dẫn đường của ngươi. Trước khi bước vào hầm ngục, hãy để ta kể sơ về luật chơi: ngươi chỉ bắn khi ĐỨNG YÊN, nên hãy di chuyển né đòn rồi dừng lại để xả tên.",
+    "hint": "Bấm \"Đã Hiểu\" để bắt đầu hành trình.",
+    "event": "dialogue",
+    "eventLabel": "Hoàn thành hội thoại",
+    "reward": {
+      "gold": 100
+    },
+    "icon": "🐴"
+  },
+  {
+    "id": "N02",
+    "title": "Làm quen chiến đấu",
+    "desc": "Hãy vào phó bản Chương 1 và dọn sạch phòng đầu tiên. Đừng quên: quái chỉ chết khi ngươi ngừng di chuyển và để cung tự động khai hỏa.",
+    "hint": "Vào \"Phó Bản\" → bấm \"Bắt Đầu\" → dọn sạch phòng 1.",
+    "event": "first_room_cleared",
+    "eventLabel": "Dọn sạch 1 phòng",
+    "reward": {
+      "gold": 200,
+      "gems": 10
+    },
+    "icon": "⚔️"
+  },
+  {
+    "id": "N03",
+    "title": "Thu thập chiến lợi phẩm",
+    "desc": "Mỗi quái gục ngã đều rơi ngọc EXP, vàng và đôi khi cả tim hồi máu. Hãy nhặt đủ 10 vật phẩm rơi trên chiến trường.",
+    "hint": "Đi lại gần vật phẩm rơi để tự động nhặt.",
+    "event": "loot_10",
+    "eventLabel": "Nhặt 10 vật phẩm",
+    "reward": {
+      "gold": 150,
+      "scrolls": 2
+    },
+    "icon": "💎"
+  },
+  {
+    "id": "N04",
+    "title": "Trang bị sức mạnh",
+    "desc": "Phần thưởng hoàn thành phòng đầu tiên là thanh kiếm gỗ. Hãy mặc nó vào ô Vũ Khí để tăng sát thương.",
+    "hint": "Tab \"Trang Bị\" → món đồ trong túi → Trang Bị.",
+    "event": "gear_equipped",
+    "eventLabel": "Trang bị 1 món đồ",
+    "reward": {
+      "gold": 250,
+      "scrolls": 3
+    },
+    "icon": "🛡️"
+  },
+  {
+    "id": "N05",
+    "title": "Cường hóa",
+    "desc": "Trang bị có thể nâng cấp để tăng chỉ số. Hãy nâng cấp bất kỳ món nào lên cấp 2.",
+    "hint": "Tab \"Trang Bị\" → chọn món → bấm \"Nâng Cấp\".",
+    "event": "gear_upgraded",
+    "eventLabel": "Nâng cấp trang bị",
+    "reward": {
+      "gold": 300,
+      "scrolls": 2
+    },
+    "icon": "🔨"
+  },
+  {
+    "id": "N06",
+    "title": "Học kỹ năng",
+    "desc": "Trong phó bản, mỗi lần lên cấp ngươi sẽ được Valkyrie ban một kỹ năng. Hãy chọn 1 kỹ năng bất kỳ.",
+    "hint": "Giết quái để lên cấp → bảng chọn kỹ năng hiện ra → chọn 1.",
+    "event": "skill_picked",
+    "eventLabel": "Chọn 1 kỹ năng",
+    "reward": {
+      "gold": 250,
+      "gems": 15
+    },
+    "icon": "✨"
+  },
+  {
+    "id": "N07",
+    "title": "Thử thách đầu tiên",
+    "desc": "Đã đến lúc chứng minh. Hãy hoàn thành toàn bộ Chương 1 — 15 phòng, bao gồm cả trùm cuối.",
+    "hint": "Vượt qua cả 15 phòng của Chương 1.",
+    "event": "chapter_cleared",
+    "eventLabel": "Hoàn thành Chương 1",
+    "reward": {
+      "gold": 800,
+      "gems": 50,
+      "chestKeys": 1
+    },
+    "icon": "🏆"
+  },
+  {
+    "id": "N08",
+    "title": "Chính thức trở thành Cung Thủ",
+    "desc": "Ngươi đã đi hết con đường tân thủ. Từ nay, hầm ngục là của ngươi — hãy cày cuốc, mài giũa trang bị và chinh phục những chương cao hơn.",
+    "hint": "Bấm \"Hoàn Tất\" để kết thúc hành trình tân thủ.",
+    "event": "dialogue",
+    "eventLabel": "Hoàn tất hành trình",
+    "reward": {
+      "gold": 1000,
+      "gems": 80
+    },
+    "icon": "👑"
+  }
+]

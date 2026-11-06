@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Test parity: so sánh Artemis.Domain (C#) với fixture do CHÍNH code
+    production JS sinh ra (tools/unity-parity/gen-fixtures.mjs).
+
+    Chạy: dotnet test
+    Không cần Unity Editor, không cần mạng, không cần database.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>Artemis.Domain.Tests</AssemblyName>
+    <RootNamespace>Artemis.Domain.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArtemisDomain\Artemis.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

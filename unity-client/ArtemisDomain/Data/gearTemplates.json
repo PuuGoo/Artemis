@@ -1,0 +1,843 @@
+{
+  "rusty_bow": {
+    "id": "rusty_bow",
+    "slot": "weapon",
+    "weaponArchetype": "bow",
+    "isSTier": false,
+    "wikiSet": "Starter Gear",
+    "archetypeLabel": "🏹 Khởi Đầu",
+    "name": "Cung Gỉ Sét (Rusty Bow)",
+    "baseStat": 12,
+    "perLv": 3,
+    "desc": "Cây cung cũ kỹ nhặt được ở cửa hầm ngục. Yếu ớt nhưng là khởi đầu của mọi huyền thoại.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "CRIT Rate +3%",
+      "epic": "+1 mũi tên mỗi loạt bắn",
+      "legendary": "ATK PWR +10%",
+      "mythic": "Bắn xuyên 1 mục tiêu",
+      "chaotic": "Mũi tên phát nổ khi trúng đích"
+    }
+  },
+  "wooden_charm": {
+    "id": "wooden_charm",
+    "slot": "necklace",
+    "isSTier": false,
+    "wikiSet": "Starter Gear",
+    "archetypeLabel": "🌿 Khởi Đầu",
+    "name": "Bùa Gỗ (Wooden Charm)",
+    "baseStat": 8,
+    "perLv": 2,
+    "desc": "Mảnh bùa gỗ khắc hình mặt trăng, do thợ săn già trong làng tặng trước khi vào hầm ngục.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "CRIT DMG +12%",
+      "epic": "Hồi 1% HP mỗi khi hạ gục kẻ địch",
+      "legendary": "ATK PWR +10%",
+      "mythic": "Hồi 3% HP mỗi khi hạ gục kẻ địch",
+      "chaotic": "Hồi máu bằng 5% sát thương gây ra"
+    }
+  },
+  "copper_ring": {
+    "id": "copper_ring",
+    "slot": "ring",
+    "isSTier": false,
+    "wikiSet": "Starter Gear",
+    "archetypeLabel": "💍 Khởi Đầu",
+    "name": "Nhẫn Đồng (Copper Ring)",
+    "baseStat": 7,
+    "perLv": 2,
+    "desc": "Chiếc nhẫn đồng xỉn màu, đeo vào vẫn thấy ấm tay lạ thường.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "CRIT Rate +2%",
+      "epic": "Gold nhận được +10%",
+      "legendary": "ATK PWR +10%",
+      "mythic": "Gold nhận được +25%",
+      "chaotic": "Gold nhận được +50%"
+    }
+  },
+  "cloth_vest": {
+    "id": "cloth_vest",
+    "slot": "armor",
+    "isSTier": false,
+    "wikiSet": "Starter Gear",
+    "archetypeLabel": "🧵 Khởi Đầu",
+    "name": "Áo Vải (Cloth Vest)",
+    "baseStat": 26,
+    "perLv": 7,
+    "desc": "Áo vải thô vá chằng chịt. Chỉ che được gió lạnh, không che được vuốt quái.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Giảm 5% sát thương nhận vào",
+      "epic": "Max HP +10%",
+      "legendary": "Max HP +15%",
+      "mythic": "Giảm 12% sát thương nhận vào",
+      "chaotic": "Hồi 1% HP mỗi 3 giây"
+    }
+  },
+  "leather_cap": {
+    "id": "leather_cap",
+    "slot": "helmet",
+    "isSTier": false,
+    "wikiSet": "Starter Gear",
+    "archetypeLabel": "🎩 Khởi Đầu",
+    "name": "Mũ Da (Leather Cap)",
+    "baseStat": 18,
+    "perLv": 5,
+    "desc": "Mũ da mềm, thủng một lỗ do mũi tên lạc. Vẫn đội được.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Dodge +3%",
+      "epic": "Max HP +10%",
+      "legendary": "Max HP +15%",
+      "mythic": "Dodge +8%",
+      "chaotic": "Miễn nhiễm hiệu ứng làm chậm"
+    }
+  },
+  "worn_boots": {
+    "id": "worn_boots",
+    "slot": "boots",
+    "isSTier": false,
+    "wikiSet": "Starter Gear",
+    "archetypeLabel": "👢 Khởi Đầu",
+    "name": "Giày Mòn (Worn Boots)",
+    "baseStat": 14,
+    "perLv": 4,
+    "desc": "Đôi giày đã đi qua ba hầm ngục. Đế mòn nhưng vẫn bám đường.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Tốc chạy +4%",
+      "epic": "Max HP +10%",
+      "legendary": "Max HP +15%",
+      "mythic": "Tốc chạy +10%",
+      "chaotic": "Lướt một đoạn ngắn khi bị đánh trúng"
+    }
+  },
+  "crimson_bow": {
+    "id": "crimson_bow",
+    "slot": "weapon",
+    "weaponArchetype": "bow",
+    "isSTier": true,
+    "wikiSet": "Dragon Knight Set",
+    "archetypeLabel": "💥 Nổ Diện Rộng (Explosion)",
+    "name": "Dragon Knight Crossbow (Nỏ Kỵ Sĩ Rồng)",
+    "baseStat": 64,
+    "perLv": 15,
+    "desc": "Vũ khí S-Tier Bộ Kỵ Sĩ Rồng: Bắn tên lửa rồng gây Nổ diện rộng và chuyển hóa Thiên Thạch thành sát thương Nổ.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "50% cơ hội gây Nổ khi trúng đích (gây 0.5x ATK PWR sát thương vùng nhỏ)",
+      "epic": "Sát thương Nổ (Explosion DMG) +200%, Thiên Thạch chuyển thành sát thương Nổ",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Vũ khí tăng +20%",
+      "mythic": "75% cơ hội gây Nổ lớn khi bắn trúng kẻ địch",
+      "mythic2": "Chỉ số cơ bản của Vũ khí tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Vũ khí tăng +40%",
+      "chaotic": "Tăng +5% Sát thương Vũ khí chính cho mỗi kỹ năng nhận trong trận (tối đa +50%)"
+    }
+  },
+  "sapphire_pendant": {
+    "id": "sapphire_pendant",
+    "slot": "necklace",
+    "isSTier": true,
+    "wikiSet": "Dragon Knight Set",
+    "archetypeLabel": "💥 Nổ Diện Rộng (Explosion)",
+    "name": "Dragon Knight Amulet (Hộ Phù Kỵ Sĩ Rồng)",
+    "baseStat": 38,
+    "perLv": 9,
+    "desc": "Hộ phù S-Tier Bộ Kỵ Sĩ Rồng: Tự động kích nổ quái vật trên chiến trường mỗi 2 giây và thu hút Thiên Thạch.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "Sát thương Chí mạng (CRIT DMG) +12%",
+      "epic": "Mỗi 2 giây tự động kích nổ ngẫu nhiên 2 quái vật trên sân",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Hộ phù tăng +20%",
+      "mythic": "Mỗi 2 giây tự động kích nổ ngẫu nhiên 4 quái vật trên sân",
+      "mythic2": "Chỉ số cơ bản của Hộ phù tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Hộ phù tăng +40%",
+      "chaotic": "Kẻ địch chịu sát thương Nổ sẽ thu hút Thiên Thạch giáng xuống"
+    }
+  },
+  "sun_gold_ring": {
+    "id": "sun_gold_ring",
+    "slot": "ring",
+    "isSTier": true,
+    "wikiSet": "Dragon Knight Set",
+    "archetypeLabel": "💥 Nổ Diện Rộng (Explosion)",
+    "name": "Dragon Knight Ring (Nhẫn Kỵ Sĩ Rồng)",
+    "baseStat": 36,
+    "perLv": 8,
+    "desc": "Nhẫn S-Tier Bộ Kỵ Sĩ Rồng: Tăng tỷ lệ Bạo kích và rải Mìn Nổ (Landmine) dưới chân kẻ địch khi tấn công.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "Tỷ lệ Chí mạng (CRIT Rate) +3%",
+      "epic": "Có cơ hội rải 1 Mìn Nổ (Landmine) khi bắn trúng địch, phát nổ sau thời gian ngắn",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Nhẫn tăng +20%",
+      "mythic": "Nhân đôi (2x) tỷ lệ rải Mìn Nổ khi bắn trúng kẻ địch",
+      "mythic2": "Chỉ số cơ bản của Nhẫn tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Nhẫn tăng +40%",
+      "chaotic": "Định kỳ tự động triệu hồi 1 Mìn Nổ trên chiến trường"
+    }
+  },
+  "golden_plate": {
+    "id": "golden_plate",
+    "slot": "armor",
+    "isSTier": true,
+    "wikiSet": "Dragon Knight Set",
+    "archetypeLabel": "💥 Nổ Diện Rộng (Explosion)",
+    "name": "Dragon Knight Armor (Giáp Kỵ Sĩ Rồng)",
+    "baseStat": 245,
+    "perLv": 52,
+    "desc": "Giáp S-Tier Bộ Kỵ Sĩ Rồng: Tạo [Khiên Lửa - Flame Shield] trong 10s khi nhận sát thương, hồi máu và phát nổ khi vỡ.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Giảm sát thương đạn (Barrage DMG REDUC) +5%",
+      "epic": "Nhận 1 [Flame Shield - Khiên Lửa] trong 10s khi bị đánh; khiên vỡ và phát nổ khi trúng đòn tiếp theo",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Áo giáp tăng +20%",
+      "mythic": "Hồi phục HP liên tục trong khi [Flame Shield - Khiên Lửa] đang tồn tại",
+      "mythic2": "Chỉ số cơ bản của Áo giáp tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Áo giáp tăng +40%",
+      "chaotic": "Hiệu quả hồi máu từ Trái Tim Đỏ +20%"
+    }
+  },
+  "golden_helm": {
+    "id": "golden_helm",
+    "slot": "helmet",
+    "isSTier": true,
+    "wikiSet": "Dragon Knight Set",
+    "archetypeLabel": "💥 Nổ Diện Rộng (Explosion)",
+    "name": "Dragon Knight Helmet (Mũ Kỵ Sĩ Rồng)",
+    "baseStat": 195,
+    "perLv": 43,
+    "desc": "Mũ S-Tier Bộ Kỵ Sĩ Rồng: Cường hóa đòn bắn tiếp theo thành vụ nổ lớn sau mỗi 5s hoặc khi tiêu diệt quái.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Hồi máu Trái Tim Đỏ (Red Heart Heal) +20%",
+      "epic": "Mỗi khi hạ 1 quái hoặc sau mỗi 5s, đòn tấn công tiếp theo gây Nổ diện rộng",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Mũ giáp tăng +20%",
+      "mythic": "Quái vật nằm trong bán kính vụ nổ bị Thiêu Đốt (Ignited)",
+      "mythic2": "Chỉ số cơ bản của Mũ giáp tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Mũ giáp tăng +40%",
+      "chaotic": "Kẻ địch đang bị Thiêu Đốt nhận gấp đôi (2x) sát thương Nổ"
+    }
+  },
+  "titan_boots": {
+    "id": "titan_boots",
+    "slot": "boots",
+    "isSTier": true,
+    "wikiSet": "Dragon Knight Set",
+    "archetypeLabel": "💥 Nổ Diện Rộng (Explosion)",
+    "name": "Dragon Knight Boots (Giày Kỵ Sĩ Rồng)",
+    "baseStat": 190,
+    "perLv": 41,
+    "desc": "Giày S-Tier Bộ Kỵ Sĩ Rồng: Tăng Né tránh (Dodge) và tự động kích nổ kẻ địch mỗi khi Né đòn thành công.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Né tránh (Dodge) +5%",
+      "epic": "Kích hoạt vụ Nổ ngay trên kẻ địch tấn công khi bạn Né đòn thành công",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Giày tăng +20%",
+      "mythic": "Né tránh (Dodge) +10%",
+      "mythic2": "Chỉ số cơ bản của Giày tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Giày tăng +40%",
+      "chaotic": "Giảm 10% mọi sát thương nhận vào (10% DMG REDUC)"
+    }
+  },
+  "dragoon_claw": {
+    "id": "dragoon_claw",
+    "slot": "weapon",
+    "weaponArchetype": "claw",
+    "isSTier": true,
+    "wikiSet": "Griffin Set",
+    "archetypeLabel": "🦅 Cận Chiến Bạo Kích (Close-Range)",
+    "name": "Griffin Claw (Vuốt Điểu Sư Griffin)",
+    "baseStat": 66,
+    "perLv": 15,
+    "desc": "Vũ khí S-Tier Bộ Griffin: Khoảng cách càng gần mục tiêu, sát thương và tỷ lệ Bạo kích càng tăng đột biến.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "Càng gần mục tiêu sát thương càng cao, tối đa +10%",
+      "epic": "Càng gần mục tiêu Tỷ lệ Chí mạng (CRIT Rate) càng cao, tối đa +9%",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Vũ khí tăng +20%",
+      "mythic": "Càng gần mục tiêu Tỷ lệ Chí mạng (CRIT Rate) càng cao, tối đa +18%",
+      "mythic2": "Chỉ số cơ bản của Vũ khí tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Vũ khí tăng +40%",
+      "chaotic": "Giảm 20% sát thương nhận vào ở cự ly gần (Close-range DMG taken -20%)"
+    }
+  },
+  "celestial_amulet": {
+    "id": "celestial_amulet",
+    "slot": "necklace",
+    "isSTier": true,
+    "wikiSet": "Griffin Set",
+    "archetypeLabel": "🦅 Cận Chiến Bạo Kích (Close-Range)",
+    "name": "Griffin Amulet (Hộ Phù Điểu Sư Griffin)",
+    "baseStat": 37,
+    "perLv": 9,
+    "desc": "Hộ phù S-Tier Bộ Griffin: Phản đòn sóng xung kích AoE bán kính 7m gây tới 4x sát thương khi bị tấn công.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "Sát thương Chí mạng (CRIT DMG) +12%",
+      "epic": "Khi bị thương, phản lại sóng xung kích AoE 7m bằng 2x sát thương (hồi mỗi 0.25s)",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Hộ phù tăng +20%",
+      "mythic": "Khi bị thương, phản lại sóng xung kích AoE 7m bằng 4x sát thương (hồi mỗi 0.25s)",
+      "mythic2": "Chỉ số cơ bản của Hộ phù tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Hộ phù tăng +40%",
+      "chaotic": "Khi nhận sát thương trong phạm vi 7m, có cơ hội rơi Trái Tim Đỏ hồi máu"
+    }
+  },
+  "jade_flower_ring": {
+    "id": "jade_flower_ring",
+    "slot": "ring",
+    "isSTier": true,
+    "wikiSet": "Griffin Set",
+    "archetypeLabel": "🦅 Cận Chiến Bạo Kích (Close-Range)",
+    "name": "Griffin Ring (Nhẫn Điểu Sư Griffin)",
+    "baseStat": 35,
+    "perLv": 8,
+    "desc": "Nhẫn S-Tier Bộ Griffin: Quái vây quanh càng đông, tỷ lệ Chí mạng càng cao (tối đa +18%) và tăng hồi máu khi thấp HP.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "Tỷ lệ Chí mạng (CRIT Rate) +3%",
+      "epic": "CRIT Rate tăng theo số lượng quái vật ở gần, tối đa +9%",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Nhẫn tăng +20%",
+      "mythic": "CRIT Rate tăng theo số lượng quái vật ở gần, tối đa +18%",
+      "mythic2": "Chỉ số cơ bản của Nhẫn tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Nhẫn tăng +40%",
+      "chaotic": "Máu càng thấp Trái Tim hồi phục càng nhiều, tối đa +100%"
+    }
+  },
+  "shadow_tunic": {
+    "id": "shadow_tunic",
+    "slot": "armor",
+    "isSTier": true,
+    "wikiSet": "Griffin Set",
+    "archetypeLabel": "🦅 Cận Chiến Bạo Kích (Close-Range)",
+    "name": "Griffin Armor (Giáp Điểu Sư Griffin)",
+    "baseStat": 240,
+    "perLv": 50,
+    "desc": "Giáp S-Tier Bộ Griffin: Tỏa trường lực Điểu Sư bán kính 7m gây sát thương liên tục mỗi 0.3s và khắc sâu vết thương.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Giảm sát thương đạn (Barrage DMG REDUC) +5%",
+      "epic": "Gây 0.3x ATK PWR sát thương mỗi 0.3s lên mọi kẻ địch trong bán kính 7m",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Áo giáp tăng +20%",
+      "mythic": "Nhân đôi (2x) sát thương liên tục gây ra cho kẻ địch trong bán kính 7m",
+      "mythic2": "Chỉ số cơ bản của Áo giáp tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Áo giáp tăng +40%",
+      "chaotic": "Làm suy yếu kẻ địch trong 7m, khiến chúng nhận thêm +30% sát thương"
+    }
+  },
+  "phantom_mask": {
+    "id": "phantom_mask",
+    "slot": "helmet",
+    "isSTier": true,
+    "wikiSet": "Griffin Set",
+    "archetypeLabel": "🦅 Cận Chiến Bạo Kích (Close-Range)",
+    "name": "Griffin Helmet (Mũ Điểu Sư Griffin)",
+    "baseStat": 192,
+    "perLv": 42,
+    "desc": "Mũ S-Tier Bộ Griffin: Tăng tới +72% Sát thương Bạo kích và +100% Tốc độ bắn khi áp sát mục tiêu.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Hồi máu Trái Tim Đỏ (Red Heart Heal) +20%",
+      "epic": "Càng gần mục tiêu CRIT DMG càng cao, tối đa +36%",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Mũ giáp tăng +20%",
+      "mythic": "Càng gần mục tiêu CRIT DMG càng cao, tối đa +72%",
+      "mythic2": "Chỉ số cơ bản của Mũ giáp tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Mũ giáp tăng +40%",
+      "chaotic": "Tăng Tốc độ bắn (ATK SPD) khi ở gần mục tiêu, tối đa +100%"
+    }
+  },
+  "aqua_boots": {
+    "id": "aqua_boots",
+    "slot": "boots",
+    "isSTier": true,
+    "wikiSet": "Griffin Set",
+    "archetypeLabel": "🦅 Cận Chiến Bạo Kích (Close-Range)",
+    "name": "Griffin Boots (Giày Điểu Sư Griffin)",
+    "baseStat": 188,
+    "perLv": 40,
+    "desc": "Giày S-Tier Bộ Griffin: Tăng tới +72% CRIT DMG khi nhiều quái vây quanh và giảm 20% sát thương khi di chuyển.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Né tránh (Dodge) +5%",
+      "epic": "CRIT DMG tăng theo số lượng quái vật ở gần, tối đa +36%",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Giày tăng +20%",
+      "mythic": "CRIT DMG tăng theo số lượng quái vật ở gần, tối đa +72%",
+      "mythic2": "Chỉ số cơ bản của Giày tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Giày tăng +40%",
+      "chaotic": "Giảm 20% sát thương nhận vào khi đang di chuyển (20% DMG REDUC when moving)"
+    }
+  },
+  "oracle_staff": {
+    "id": "oracle_staff",
+    "slot": "weapon",
+    "weaponArchetype": "staff",
+    "isSTier": true,
+    "wikiSet": "Oracle Set",
+    "archetypeLabel": "⚡ Liên Kích Tinh Hà (Combo)",
+    "name": "Oracle Light Spear (Thương Ánh Sáng Tiên Tri)",
+    "baseStat": 65,
+    "perLv": 15,
+    "desc": "Vũ khí S-Tier Bộ Tiên Tri Oracle: Tăng ATK và CRIT Rate cực đại theo chuỗi Combo, đạn ánh sáng tự động dẫn đường.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "ATK PWR tăng theo điểm Combo, tối đa +10% (đạt tối đa ở 20 Combo)",
+      "epic": "Mỗi 5 Combo, Tỷ lệ Chí mạng (CRIT Rate) tăng +2%, tối đa +8%",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Vũ khí tăng +20%",
+      "mythic": "Mỗi 5 Combo, Tỷ lệ Chí mạng (CRIT Rate) tăng +4%, tối đa +16%",
+      "mythic2": "Chỉ số cơ bản của Vũ khí tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Vũ khí tăng +40%",
+      "chaotic": "Vũ khí chính bắn trúng càng nhiều kẻ địch, đòn tấn công tiếp theo càng tăng sát thương"
+    }
+  },
+  "void_prism_necklace": {
+    "id": "void_prism_necklace",
+    "slot": "necklace",
+    "isSTier": true,
+    "wikiSet": "Oracle Set",
+    "archetypeLabel": "⚡ Liên Kích Tinh Hà (Combo)",
+    "name": "Oracle Amulet (Hộ Phù Tiên Tri Oracle)",
+    "baseStat": 39,
+    "perLv": 9,
+    "desc": "Hộ phù S-Tier Bộ Tiên Tri Oracle: Nhân đôi (2x) sát thương đòn kế tiếp mỗi 3–5 Combo và phân tách +3 tia đạn khi Combo > 40.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "Sát thương Chí mạng (CRIT DMG) +12%",
+      "epic": "Mỗi 5 Combo, đòn gây sát thương tiếp theo được nhân đôi (2x DMG)",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Hộ phù tăng +20%",
+      "mythic": "Mỗi 3 Combo, đòn gây sát thương tiếp theo được nhân đôi (2x DMG)",
+      "mythic2": "Chỉ số cơ bản của Hộ phù tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Hộ phù tăng +40%",
+      "chaotic": "Khi chuỗi Combo vượt quá 40, đạn bắn ra tự động phân tách thêm +3 tia"
+    }
+  },
+  "starlight_ring": {
+    "id": "starlight_ring",
+    "slot": "ring",
+    "isSTier": true,
+    "wikiSet": "Oracle Set",
+    "archetypeLabel": "⚡ Liên Kích Tinh Hà (Combo)",
+    "name": "Oracle Ring (Nhẫn Tiên Tri Oracle)",
+    "baseStat": 36,
+    "perLv": 8,
+    "desc": "Nhẫn S-Tier Bộ Tiên Tri Oracle: Tăng Tốc độ bắn (ATK SPD) lên tới +16% theo chuỗi Combo và khắc chế quái đầy máu.",
+    "wikiTiers": {
+      "fine": "ATK PWR +5%",
+      "rare": "Tỷ lệ Chí mạng (CRIT Rate) +3%",
+      "epic": "Mỗi 5 Combo, Tốc độ bắn (ATK SPD) tăng +2% (tối đa +8%)",
+      "legendary": "ATK PWR +10%",
+      "legendary3": "Chỉ số cơ bản của Nhẫn tăng +20%",
+      "mythic": "Mỗi 5 Combo, Tốc độ bắn (ATK SPD) tăng +4%, tối đa +16%",
+      "mythic2": "Chỉ số cơ bản của Nhẫn tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Nhẫn tăng +40%",
+      "chaotic": "Khi chuỗi Combo vượt quá 40, gây thêm sát thương lớn lên kẻ địch đang đầy máu (Max HP)"
+    }
+  },
+  "wind_vest": {
+    "id": "wind_vest",
+    "slot": "armor",
+    "isSTier": true,
+    "wikiSet": "Oracle Set",
+    "archetypeLabel": "⚡ Liên Kích Tinh Hà (Combo)",
+    "name": "Oracle Armor (Giáp Tiên Tri Oracle)",
+    "baseStat": 242,
+    "perLv": 51,
+    "desc": "Giáp S-Tier Bộ Tiên Tri Oracle: Mỗi 5 Combo tự động phóng thêm +4 Tên Chéo (Diagonal Arrows) và tạo Khiên Bất Tử khi nhặt Tim.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Giảm sát thương đạn (Barrage DMG REDUC) +5%",
+      "epic": "Mỗi 5 Combo, đòn bắn tiếp theo cộng thêm +2 Tên Chéo (Diagonal Arrows)",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Áo giáp tăng +20%",
+      "mythic": "Mỗi 5 Combo, đòn bắn tiếp theo cộng thêm +4 Tên Chéo (Diagonal Arrows)",
+      "mythic2": "Chỉ số cơ bản của Áo giáp tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Áo giáp tăng +40%",
+      "chaotic": "Khi nhặt Trái Tim Đỏ, có cơ hội nhận Khiên Bất Tử (Invincibility Shield) trong 2 giây"
+    }
+  },
+  "astral_crown": {
+    "id": "astral_crown",
+    "slot": "helmet",
+    "isSTier": true,
+    "wikiSet": "Oracle Set",
+    "archetypeLabel": "⚡ Liên Kích Tinh Hà (Combo)",
+    "name": "Oracle Helmet (Mũ Tiên Tri Oracle)",
+    "baseStat": 196,
+    "perLv": 43,
+    "desc": "Mũ S-Tier Bộ Tiên Tri Oracle: Nhận 3x điểm Combo mỗi khi Bạo kích (CRIT) và cơ hội kích hoạt +1 Liên Xạ (Multishot).",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Hồi máu Trái Tim Đỏ (Red Heart Heal) +20%",
+      "epic": "Nhận gấp đôi (2x) điểm Combo khi đòn bắn Bạo kích (CRIT)",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Mũ giáp tăng +20%",
+      "mythic": "Nhận gấp ba (3x) điểm Combo khi đòn bắn Bạo kích (CRIT)",
+      "mythic2": "Chỉ số cơ bản của Mũ giáp tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Mũ giáp tăng +40%",
+      "chaotic": "Khi Bạo kích (CRIT), có cơ hội nhận ngay +1 Liên Xạ (Multishot)"
+    }
+  },
+  "starlight_greaves": {
+    "id": "starlight_greaves",
+    "slot": "boots",
+    "isSTier": true,
+    "wikiSet": "Oracle Set",
+    "archetypeLabel": "⚡ Liên Kích Tinh Hà (Combo)",
+    "name": "Oracle Boots (Giày Tiên Tri Oracle)",
+    "baseStat": 192,
+    "perLv": 41,
+    "desc": "Giày S-Tier Bộ Tiên Tri Oracle: Tăng +48% CRIT DMG khi Combo trên 20 và giảm 20% sát thương khi đứng yên xả đạn.",
+    "wikiTiers": {
+      "fine": "Max HP +5%",
+      "rare": "Né tránh (Dodge) +5%",
+      "epic": "Sát thương Chí mạng (CRIT DMG) tăng +32% khi Combo vượt quá 30",
+      "legendary": "Max HP +10%",
+      "legendary3": "Chỉ số cơ bản của Giày tăng +20%",
+      "mythic": "Sát thương Chí mạng (CRIT DMG) tăng +48% khi Combo vượt quá 20",
+      "mythic2": "Chỉ số cơ bản của Giày tăng +30%",
+      "mythic4": "Chỉ số cơ bản của Giày tăng +40%",
+      "chaotic": "Giảm 20% sát thương nhận vào khi đứng yên chiến đấu (20% DMG REDUC when stationary)"
+    }
+  },
+  "beam_staff": {
+    "id": "beam_staff",
+    "slot": "weapon",
+    "weaponArchetype": "staff",
+    "isSTier": false,
+    "wikiSet": "Echo Set",
+    "archetypeLabel": "🌀 Tiếng Vang (Combo)",
+    "name": "Beam Staff (Trượng Tia Sáng • Echo)",
+    "baseStat": 50,
+    "perLv": 11,
+    "desc": "Pháp trượng chuẩn Bộ Echo (Archero 2 Wiki): Tăng ATK và CRIT Rate theo chuỗi Combo (Giới hạn ở Legendary +3).",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "ATK PWR tăng theo Combo, tối đa +10% (ở 20 Combo)",
+      "legendary": "Mỗi 5 Combo, CRIT Rate tăng +2%, tối đa +8%",
+      "legendary3": "Chỉ số cơ bản của Vũ khí tăng +20% (Giới hạn tối đa của trang bị thường)"
+    }
+  },
+  "echo_amulet": {
+    "id": "echo_amulet",
+    "slot": "necklace",
+    "isSTier": false,
+    "wikiSet": "Echo Set",
+    "archetypeLabel": "🌀 Tiếng Vang (Combo)",
+    "name": "Echo Amulet (Hộ Phù Tiếng Vang)",
+    "baseStat": 30,
+    "perLv": 7,
+    "desc": "Hộ phù Bộ Echo (Archero 2 Wiki): Tăng CRIT DMG +12% và nhân đôi sát thương mỗi 5 Combo ở bậc Legendary.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "CRIT DMG +12%",
+      "legendary": "Mỗi 5 Combo, đòn đánh tiếp theo được nhân đôi (2x DMG)",
+      "legendary3": "Chỉ số cơ bản của Hộ phù tăng +20%"
+    }
+  },
+  "echo_ring": {
+    "id": "echo_ring",
+    "slot": "ring",
+    "isSTier": false,
+    "wikiSet": "Echo Set",
+    "archetypeLabel": "🌀 Tiếng Vang (Combo)",
+    "name": "Echo Ring (Nhẫn Tiếng Vang)",
+    "baseStat": 28,
+    "perLv": 6,
+    "desc": "Nhẫn Bộ Echo (Archero 2 Wiki): Tăng CRIT Rate +3% và tăng Tốc độ bắn mỗi 5 Combo.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "CRIT Rate +3%",
+      "legendary": "Mỗi 5 Combo, ATK SPD tăng +2%, tối đa +8%",
+      "legendary3": "Chỉ số cơ bản của Nhẫn tăng +20%"
+    }
+  },
+  "echo_armor": {
+    "id": "echo_armor",
+    "slot": "armor",
+    "isSTier": false,
+    "wikiSet": "Echo Set",
+    "archetypeLabel": "🌀 Tiếng Vang (Combo)",
+    "name": "Echo Armor (Giáp Tiếng Vang)",
+    "baseStat": 210,
+    "perLv": 45,
+    "desc": "Giáp Bộ Echo (Archero 2 Wiki): Giảm sát thương đạn +5% và bắn thêm +2 Tên Chéo mỗi 5 Combo.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Barrage DMG REDUC +5%",
+      "legendary": "Mỗi 5 Combo, đòn bắn kế tiếp nhận +2 Tên Chéo (Diagonal Arrows)",
+      "legendary3": "Chỉ số cơ bản của Áo giáp tăng +20%"
+    }
+  },
+  "echo_helmet": {
+    "id": "echo_helmet",
+    "slot": "helmet",
+    "isSTier": false,
+    "wikiSet": "Echo Set",
+    "archetypeLabel": "🌀 Tiếng Vang (Combo)",
+    "name": "Echo Helmet (Mũ Tiếng Vang)",
+    "baseStat": 170,
+    "perLv": 37,
+    "desc": "Mũ Bộ Echo (Archero 2 Wiki): Tăng hồi máu Tim +20% và nhận 2x Combo khi Bạo kích.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Red Heart Heal +20%",
+      "legendary": "Nhận 2x Combo khi Bạo kích (CRIT)",
+      "legendary3": "Chỉ số cơ bản của Mũ giáp tăng +20%"
+    }
+  },
+  "echo_boots": {
+    "id": "echo_boots",
+    "slot": "boots",
+    "isSTier": false,
+    "wikiSet": "Echo Set",
+    "archetypeLabel": "🌀 Tiếng Vang (Combo)",
+    "name": "Echo Boots (Giày Tiếng Vang)",
+    "baseStat": 168,
+    "perLv": 36,
+    "desc": "Giày Bộ Echo (Archero 2 Wiki): Tăng Dodge +5% và +32% CRIT DMG khi Combo vượt quá 30.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Dodge +5%",
+      "legendary": "CRIT DMG tăng +32% khi Combo vượt quá 30",
+      "legendary3": "Chỉ số cơ bản của Giày tăng +20%"
+    }
+  },
+  "heroic_longbow": {
+    "id": "heroic_longbow",
+    "slot": "weapon",
+    "weaponArchetype": "bow",
+    "isSTier": false,
+    "wikiSet": "Destruction Set",
+    "archetypeLabel": "💣 Hủy Diệt (Explosion)",
+    "name": "Heroic Longbow (Trường Cung Anh Dũng)",
+    "baseStat": 51,
+    "perLv": 11,
+    "desc": "Trường cung chuẩn Bộ Destruction (Archero 2 Wiki): 50% cơ hội gây nổ khi trúng đích và tăng +200% Explosion DMG.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "50% cơ hội gây Nổ khi trúng đích (0.5x ATK PWR AoE)",
+      "legendary": "Explosion DMG +200%, Thiên Thạch chuyển thành sát thương Nổ",
+      "legendary3": "Chỉ số cơ bản của Vũ khí tăng +20%"
+    }
+  },
+  "destruction_amulet": {
+    "id": "destruction_amulet",
+    "slot": "necklace",
+    "isSTier": false,
+    "wikiSet": "Destruction Set",
+    "archetypeLabel": "💣 Hủy Diệt (Explosion)",
+    "name": "Amulet of Destruction (Hộ Phù Hủy Diệt)",
+    "baseStat": 30,
+    "perLv": 7,
+    "desc": "Hộ phù Bộ Destruction (Archero 2 Wiki): Tăng +12% CRIT DMG và tự động kích nổ 2 quái mỗi 2 giây.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "CRIT DMG +12%",
+      "legendary": "Kích nổ ngẫu nhiên 2 quái vật trên sân mỗi 2 giây",
+      "legendary3": "Chỉ số cơ bản của Hộ phù tăng +20%"
+    }
+  },
+  "destruction_ring": {
+    "id": "destruction_ring",
+    "slot": "ring",
+    "isSTier": false,
+    "wikiSet": "Destruction Set",
+    "archetypeLabel": "💣 Hủy Diệt (Explosion)",
+    "name": "Ring of Destruction (Nhẫn Hủy Diệt)",
+    "baseStat": 28,
+    "perLv": 6,
+    "desc": "Nhẫn Bộ Destruction (Archero 2 Wiki): Tăng +3% CRIT Rate và rải Mìn Nổ khi tiêu diệt kẻ địch.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "CRIT Rate +3%",
+      "legendary": "Cơ hội rải Mìn Nổ (Landmine) khi hạ gục kẻ địch",
+      "legendary3": "Chỉ số cơ bản của Nhẫn tăng +20%"
+    }
+  },
+  "destruction_armor": {
+    "id": "destruction_armor",
+    "slot": "armor",
+    "isSTier": false,
+    "wikiSet": "Destruction Set",
+    "archetypeLabel": "💣 Hủy Diệt (Explosion)",
+    "name": "Armor of Destruction (Giáp Hủy Diệt)",
+    "baseStat": 212,
+    "perLv": 45,
+    "desc": "Giáp Bộ Destruction (Archero 2 Wiki): Tạo [Flame Shield] trong 10s khi nhận sát thương.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Barrage DMG REDUC +5%",
+      "legendary": "Nhận 1 [Flame Shield] trong 10s khi bị đánh; phát nổ khi trúng đòn lần nữa",
+      "legendary3": "Chỉ số cơ bản của Áo giáp tăng +20%"
+    }
+  },
+  "destruction_helmet": {
+    "id": "destruction_helmet",
+    "slot": "helmet",
+    "isSTier": false,
+    "wikiSet": "Destruction Set",
+    "archetypeLabel": "💣 Hủy Diệt (Explosion)",
+    "name": "Helmet of Destruction (Mũ Hủy Diệt)",
+    "baseStat": 172,
+    "perLv": 37,
+    "desc": "Mũ Bộ Destruction (Archero 2 Wiki): Đòn bắn kế tiếp gây nổ sau mỗi 5s hoặc khi tiêu diệt 1 quái.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Red Heart Heal +20%",
+      "legendary": "Mỗi khi hạ 1 quái hoặc sau mỗi 5s, đòn bắn tiếp theo gây Nổ",
+      "legendary3": "Chỉ số cơ bản của Mũ giáp tăng +20%"
+    }
+  },
+  "destruction_boots": {
+    "id": "destruction_boots",
+    "slot": "boots",
+    "isSTier": false,
+    "wikiSet": "Destruction Set",
+    "archetypeLabel": "💣 Hủy Diệt (Explosion)",
+    "name": "Boots of Destruction (Giày Hủy Diệt)",
+    "baseStat": 169,
+    "perLv": 36,
+    "desc": "Giày Bộ Destruction (Archero 2 Wiki): Tăng +5% Dodge và kích nổ kẻ địch tấn công khi Né đòn.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Dodge +5%",
+      "legendary": "Kích hoạt vụ Nổ lên kẻ địch tấn công khi Né đòn thành công",
+      "legendary3": "Chỉ số cơ bản của Giày tăng +20%"
+    }
+  },
+  "agile_knuckles": {
+    "id": "agile_knuckles",
+    "slot": "weapon",
+    "weaponArchetype": "claw",
+    "isSTier": false,
+    "wikiSet": "Decisiveness Set",
+    "archetypeLabel": "🥊 Quyết Đoán (Close-Range)",
+    "name": "Agile Knuckles (Nắm Đấm Linh Hoạt)",
+    "baseStat": 52,
+    "perLv": 11,
+    "desc": "Vũ khí chuẩn Bộ Decisiveness (Archero 2 Wiki): Tăng sát thương và CRIT Rate khi áp sát mục tiêu.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "Càng gần mục tiêu sát thương càng cao, tối đa +10%",
+      "legendary": "Càng gần mục tiêu CRIT Rate càng cao, tối đa +9%",
+      "legendary3": "Chỉ số cơ bản của Vũ khí tăng +20%"
+    }
+  },
+  "decisiveness_amulet": {
+    "id": "decisiveness_amulet",
+    "slot": "necklace",
+    "isSTier": false,
+    "wikiSet": "Decisiveness Set",
+    "archetypeLabel": "🥊 Quyết Đoán (Close-Range)",
+    "name": "Amulet of Decisiveness (Hộ Phù Quyết Đoán)",
+    "baseStat": 30,
+    "perLv": 7,
+    "desc": "Hộ phù Bộ Decisiveness (Archero 2 Wiki): Phản đòn sóng xung kích 7m bằng 2x sát thương khi bị thương.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "CRIT DMG +12%",
+      "legendary": "Khi bị thương, phản lại sóng AoE 7m bằng 2x sát thương (hồi 0.25s)",
+      "legendary3": "Chỉ số cơ bản của Hộ phù tăng +20%"
+    }
+  },
+  "decisiveness_ring": {
+    "id": "decisiveness_ring",
+    "slot": "ring",
+    "isSTier": false,
+    "wikiSet": "Decisiveness Set",
+    "archetypeLabel": "🥊 Quyết Đoán (Close-Range)",
+    "name": "Ring of Decisiveness (Nhẫn Quyết Đoán)",
+    "baseStat": 28,
+    "perLv": 6,
+    "desc": "Nhẫn Bộ Decisiveness (Archero 2 Wiki): Tăng CRIT Rate lên tới +9% theo số quái vật ở gần.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "ATK PWR +5%",
+      "epic": "CRIT Rate +3%",
+      "legendary": "CRIT Rate tăng theo số lượng quái vật ở gần, tối đa +9%",
+      "legendary3": "Chỉ số cơ bản của Nhẫn tăng +20%"
+    }
+  },
+  "decisiveness_armor": {
+    "id": "decisiveness_armor",
+    "slot": "armor",
+    "isSTier": false,
+    "wikiSet": "Decisiveness Set",
+    "archetypeLabel": "🥊 Quyết Đoán (Close-Range)",
+    "name": "Armor of Decisiveness (Giáp Quyết Đoán)",
+    "baseStat": 214,
+    "perLv": 45,
+    "desc": "Giáp Bộ Decisiveness (Archero 2 Wiki): Gây 0.3x ATK PWR mỗi 0.3s lên kẻ địch trong bán kính 7m.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Barrage DMG REDUC +5%",
+      "legendary": "Gây 0.3x ATK PWR sát thương mỗi 0.3s lên kẻ địch trong bán kính 7m",
+      "legendary3": "Chỉ số cơ bản của Áo giáp tăng +20%"
+    }
+  },
+  "decisiveness_helmet": {
+    "id": "decisiveness_helmet",
+    "slot": "helmet",
+    "isSTier": false,
+    "wikiSet": "Decisiveness Set",
+    "archetypeLabel": "🥊 Quyết Đoán (Close-Range)",
+    "name": "Helmet of Decisiveness (Mũ Quyết Đoán)",
+    "baseStat": 171,
+    "perLv": 37,
+    "desc": "Mũ Bộ Decisiveness (Archero 2 Wiki): Càng gần mục tiêu CRIT DMG càng cao, tối đa +36%.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Red Heart Heal +20%",
+      "legendary": "Càng gần mục tiêu CRIT DMG càng cao, tối đa +36%",
+      "legendary3": "Chỉ số cơ bản của Mũ giáp tăng +20%"
+    }
+  },
+  "decisiveness_boots": {
+    "id": "decisiveness_boots",
+    "slot": "boots",
+    "isSTier": false,
+    "wikiSet": "Decisiveness Set",
+    "archetypeLabel": "🥊 Quyết Đoán (Close-Range)",
+    "name": "Boots of Decisiveness (Giày Quyết Đoán)",
+    "baseStat": 169,
+    "perLv": 36,
+    "desc": "Giày Bộ Decisiveness (Archero 2 Wiki): CRIT DMG tăng theo số lượng quái vật ở gần, tối đa +36%.",
+    "wikiTiers": {
+      "fine": "Mở khóa ở phẩm chất Rare",
+      "rare": "Max HP +5%",
+      "epic": "Dodge +5%",
+      "legendary": "CRIT DMG tăng theo số lượng quái vật ở gần, tối đa +36%",
+      "legendary3": "Chỉ số cơ bản của Giày tăng +20%"
+    }
+  }
+}

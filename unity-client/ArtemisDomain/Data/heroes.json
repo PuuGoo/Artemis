@@ -1,0 +1,931 @@
+[
+  {
+    "id": "thor",
+    "name": "Thor",
+    "rarity": "Legendary",
+    "title": "Lôi Thần Phán Quyết (God of Thunder)",
+    "skillName": "Storm's Judgment",
+    "role": "Bắn Khi Đang Di Chuyển & Búa Sấm Mjolnir",
+    "bonusAtk": 56,
+    "bonusHp": 210,
+    "globalAllBonus": {
+      "lightningDmgPct": 0.3,
+      "atkPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Storm's Judgment LV.1]: Vũ khí tách rời cơ thể và tự động tấn công kẻ địch ngay cả khi đang di chuyển!"
+      },
+      {
+        "star": 1,
+        "text": "[All] Lightning DMG +30% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Storm's Judgment LV.2]: Khi di chuyển có tỷ lệ triệu hồi Búa Sấm Mjolnir tự động truy kích kẻ địch gây 100% DMG."
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] Lightning DMG +30% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Storm's Judgment LV.3]: Mọi đòn đánh kèm sát thương Lôi Hệ, và đòn Chí mạng làm Tê Liệt (Paralyze) kẻ địch trong 0.5s."
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] Lightning DMG +30% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Storm's Judgment LV.4]: Làm tê liệt kẻ địch có tỷ lệ phóng ra 3 Búa Mini-Mjolnirs giật sét liên hoàn!"
+      }
+    ]
+  },
+  {
+    "id": "wukong",
+    "name": "Wukong",
+    "rarity": "Legendary",
+    "title": "Tề Thiên Đại Thánh (Monkey King)",
+    "skillName": "Monkey Brethren",
+    "role": "Triệu Hồi Phân Thân Khỉ & Tăng ATK/Giảm Thương",
+    "bonusAtk": 58,
+    "bonusHp": 220,
+    "globalAllBonus": {
+      "critDmgPct": 0.2,
+      "atkPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Monkey Brethren LV.1]: Khởi đầu trận đấu triệu hồi vĩnh viễn 3 Phân Thân [Monkey Mirages] cùng tấn công!"
+      },
+      {
+        "star": 1,
+        "text": "[All] CRIT DMG +20% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Monkey Brethren LV.2]: Khi tấn công hoặc nhận sát thương có tỷ lệ triệu hồi thêm Phân Thân Khỉ (Tối đa 6 Phân Thân)."
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] CRIT DMG +20% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Monkey Brethren LV.3]: Mỗi Phân Thân Khỉ trên sân tăng cho Wukong +3.5% ATK và +3.5% Giảm Sát Thương."
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] CRIT DMG +20% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Monkey Brethren LV.4]: Phân Thân tự động nhặt Tim Đỏ giúp hồi máu và tăng +20% ATK cho Wukong trong 7 giây!"
+      }
+    ]
+  },
+  {
+    "id": "cleo",
+    "name": "Cleo",
+    "rarity": "Legendary",
+    "title": "Nữ Hoàng Ngai Lửa (Ember Queen)",
+    "skillName": "Ember Throne",
+    "role": "Siêu Hỏa Thiêu & Nổ Chữ Thập 300% DMG",
+    "bonusAtk": 55,
+    "bonusHp": 200,
+    "globalAllBonus": {
+      "fireDmgPct": 0.3,
+      "atkPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Ember Throne LV.1]: Đòn tấn công của Cleo được cường hóa hiệu ứng Blaze & Super Blaze thiêu đốt cực mạnh!"
+      },
+      {
+        "star": 1,
+        "text": "[All] Fire DMG +30% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Ember Throne LV.2]: Mỗi 20 lần gây sát thương Lửa sẽ khắc Ấn Ký lên kẻ địch cao máu nhất; sau 1s nổ Chữ Thập gây 300% DMG!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] Fire DMG +30% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Ember Throne LV.3]: Khi Ấn Ký phát nổ cũng kích hoạt Nổ Chữ Thập tại vị trí của Cleo và tăng +40% ATK trong 3s!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] Fire DMG +30% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Ember Throne LV.4]: Kẻ địch bị khắc Ấn Ký rơi vào trạng thái Hoảng Sợ (Frightened) và bị giảm -50% ATK!"
+      }
+    ]
+  },
+  {
+    "id": "atreus",
+    "name": "Atreus",
+    "rarity": "Legendary",
+    "title": "Hậu Duệ Ma Vương (Demon King)",
+    "skillName": "Demon King Energy",
+    "role": "Khiên Ma Vương 50% HP & 3 Hắc Cầu Xung Kích",
+    "bonusAtk": 52,
+    "bonusHp": 215,
+    "globalAllBonus": {
+      "shieldHpPct": 0.1,
+      "hpPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Demon King Energy LV.1]: Bắt đầu trận với Khiên bằng 50% Max HP. Khi có Khiên: +10% Elemental DMG & +30% CRIT DMG!"
+      },
+      {
+        "star": 1,
+        "text": "[All] Shield HP +10% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Demon King Energy LV.2]: Đòn đánh trúng đích có tỷ lệ triệu hồi tối đa 3 Hắc Cầu phát sóng xung kích AoE."
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] Shield HP +10% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Demon King Energy LV.3]: Khi HP dưới 50%, tự động hấp thụ Hắc Cầu để hồi phục Khiên (10% Max HP mỗi cầu)."
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] Shield HP +10% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Demon King Energy LV.4]: Hắc Cầu vỡ tạo Trường Trói Buộc 10s làm chậm đạn kẻ địch và tăng sát thương chúng phải nhận!"
+      }
+    ]
+  },
+  {
+    "id": "rolla",
+    "name": "Rolla",
+    "rarity": "Legendary",
+    "title": "Nữ Thần Băng Tuyết (Frostsinger)",
+    "skillName": "Frostsinger",
+    "role": "Đông Cứng Vĩnh Cửu & Thiên Thạch Băng Giá",
+    "bonusAtk": 48,
+    "bonusHp": 195,
+    "globalAllBonus": {
+      "critDmgPct": 0.1,
+      "atkPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Frostsinger LV.1]: Đòn tấn công của Rolla mang nguyên tố Băng, gây hiệu ứng Đông Cứng (Freeze) lên kẻ địch!"
+      },
+      {
+        "star": 1,
+        "text": "[All] CRIT DMG +10% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Frostsinger LV.2]: Sau khi hết đóng băng, ATK của kẻ địch bị giảm mạnh trong 5 giây."
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] CRIT DMG +10% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Frostsinger LV.3]: Cường hóa thành Siêu Đông Cứng (Super Freeze) kéo dài thời gian khống chế và sát thương băng."
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] CRIT DMG +10% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Frostsinger LV.4]: Tấn công kẻ địch đang đóng băng lập tức triệu hồi Thiên Thạch Băng Giá (Frost Meteor) nổ diện rộng!"
+      }
+    ]
+  },
+  {
+    "id": "nezha",
+    "name": "Nezha",
+    "rarity": "Legendary",
+    "title": "Na Tra Tam Thái Tử (Lotus Prince)",
+    "skillName": "Cosmic Hoop",
+    "role": "Càn Khôn Quyền & Phong Hỏa Luân Thiêu Đốt",
+    "bonusAtk": 50,
+    "bonusHp": 205,
+    "globalAllBonus": {
+      "dodgeBonus": 0.03,
+      "hpPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Cosmic Hoop LV.1]: Đường di chuyển của Nezha bốc cháy thành vệt lửa Phong Hỏa Luân thiêu đốt kẻ địch!"
+      },
+      {
+        "star": 1,
+        "text": "[All] CRIT DMG REDUC +15% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Cosmic Hoop LV.2]: Đòn tấn công có tỷ lệ phóng kèm 2 vòng Càn Khôn Quyền [Cosmic Hoops] xuyên thấu."
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] CRIT DMG REDUC +15% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Cosmic Hoop LV.3]: Vòng Càn Khôn Quyền để lại vệt lửa trên đường bay và tự động đuổi theo (Homing) kẻ địch!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] CRIT DMG REDUC +15% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Cosmic Hoop LV.4]: Phóng 3 vòng [Cosmic Hoops] cùng lúc với hiệu ứng dây chuyền hỏa ngục liên hoàn!"
+      }
+    ]
+  },
+  {
+    "id": "otta",
+    "name": "Otta",
+    "rarity": "Legendary",
+    "title": "Cuồng Chiến Thợ Săn (Brutal Hunter)",
+    "skillName": "Brutality",
+    "role": "Bạo Kích Cực Đại & Trảm Sát Quái Dưới 30% HP",
+    "bonusAtk": 51,
+    "bonusHp": 190,
+    "globalAllBonus": {
+      "critRate": 0.04,
+      "atkPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Brutality LV.1]: Máu hiện tại của kẻ địch càng cao, Tỷ lệ Chí mạng của Otta lên chúng càng lớn!"
+      },
+      {
+        "star": 1,
+        "text": "[All] CRIT Rate +4% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Brutality LV.2]: Sau khi nhận sát thương, nhận ngay +40% CRIT Rate và +60% CRIT DMG trong 5 giây!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] CRIT Rate +4% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Brutality LV.3]: Đòn Chí mạng có tỷ lệ Trảm Sát (tiêu diệt tức thì) quái thường có HP dưới 30%!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] CRIT Rate +4% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Brutality LV.4]: Kẻ địch ở càng xa, Otta càng nhận thêm tối đa +15% CRIT Rate!"
+      }
+    ]
+  },
+  {
+    "id": "hou_yi",
+    "name": "Hou Yi",
+    "rarity": "Legendary",
+    "title": "Thần Tiễn Bắn Mặt Trời (Sunpiercer)",
+    "skillName": "Sunpiercer",
+    "role": "Tích Cộng Dồn Sunpiercer Tăng ATK, ASPD & CRIT DMG",
+    "bonusAtk": 53,
+    "bonusHp": 192,
+    "globalAllBonus": {
+      "atkPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Sunpiercer LV.1]: Nhận 1 tầng [Sunpiercer] mỗi khi hạ Boss (+4% ATK SPD mỗi tầng, tối đa 9 tầng)."
+      },
+      {
+        "star": 1,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Sunpiercer LV.2]: Mỗi tầng [Sunpiercer] tăng thêm +4% ATK PWR!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Sunpiercer LV.3]: Hạ Boss nhận +2 tầng [Sunpiercer] và hạ Quái Tinh Anh nhận +1 tầng!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Sunpiercer LV.4]: Khởi đầu trận đấu với sẵn 2 tầng [Sunpiercer], mỗi tầng cộng thêm +4% CRIT DMG!"
+      }
+    ]
+  },
+  {
+    "id": "phynx",
+    "name": "Phynx",
+    "rarity": "Legendary",
+    "title": "Thẩm Phán Sa Mạc (Desert Tribunal)",
+    "skillName": "Desert Tribunal",
+    "role": "Rút Máu Bleed Siêu Tốc & Kích Nổ Sát Thương Nguyên Tố",
+    "bonusAtk": 49,
+    "bonusHp": 196,
+    "globalAllBonus": {
+      "critRate": 0.02,
+      "atkPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Desert Tribunal LV.1]: Sát thương Nguyên Tố có 30% tỷ lệ gây [Bleed] (15% DMG mỗi 0.15s trong 1.5s)."
+      },
+      {
+        "star": 1,
+        "text": "[All] CRIT Rate +2% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Desert Tribunal LV.2]: Mỗi 10 lần nhảy sát thương Bleed giúp Phynx nhận +5% Elemental DMG (tối đa 5 tầng = +25%)."
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] CRIT Rate +2% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Desert Tribunal LV.3]: Tăng +50% sát thương Bleed lên mục tiêu đang Cháy/Trúng Độc và nhảy sát thương nhanh hơn 20%!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] CRIT Rate +2% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Desert Tribunal LV.4]: Gây sát thương Lôi hoặc Băng lên mục tiêu đang Bleed sẽ KÍCH NỔ tức thì toàn bộ sát thương còn lại!"
+      }
+    ]
+  },
+  {
+    "id": "loki",
+    "name": "Loki",
+    "rarity": "Legendary",
+    "title": "Ảo Thuật Gia Tinh Quái (Trickster God)",
+    "skillName": "Fervent Rhythm",
+    "role": "Di Chuyển Kích Hoạt Focus State (+ATK, +ASPD & Miễn Khống Chế)",
+    "bonusAtk": 48,
+    "bonusHp": 190,
+    "globalAllBonus": {
+      "atkPct": 0.05
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Fervent Rhythm LV.1]: Khi đang di chuyển có tỷ lệ tiến vào [Focus State], tăng +20% ATK trong 3 giây."
+      },
+      {
+        "star": 1,
+        "text": "[All] DMG vs Bosses/Players +5% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Fervent Rhythm LV.2]: Mỗi lần kích hoạt [Focus State] thứ 2 sẽ tăng thêm +30% ATK SPD và nhân đôi thời gian duy trì!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] DMG vs Bosses/Players +5% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Fervent Rhythm LV.3]: Khi [Focus State] kết thúc, có 30% cơ hội lập tức tái kích hoạt lại từ đầu!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] DMG vs Bosses/Players +5% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Fervent Rhythm LV.4]: Trong trạng thái [Focus State], miễn nhiễm khống chế và tăng mạnh CRIT Rate + CRIT DMG!"
+      }
+    ]
+  },
+  {
+    "id": "dracoola",
+    "name": "Dracoola",
+    "rarity": "Epic",
+    "title": "Bá Tước Huyết Tộc (Vampire Lord)",
+    "skillName": "Lifesteal",
+    "role": "Hút Máu Mọi Đòn Đánh & +40% ATK Khi Đầy Máu",
+    "bonusAtk": 46,
+    "bonusHp": 210,
+    "globalAllBonus": {
+      "gearBasePct": 0.05,
+      "atkPct": 0.04,
+      "hpPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Lifesteal LV.1]: Đòn tấn công gây sát thương lên kẻ địch sẽ hút máu hồi phục trực tiếp cho Dracoola!"
+      },
+      {
+        "star": 1,
+        "text": "[All] Gears' Base Attributes +5% (Tăng +5% chỉ số cơ bản mọi Trang Bị!)"
+      },
+      {
+        "star": 2,
+        "text": "[Lifesteal LV.2]: Lượng máu hồi vượt quá Max HP được tích trữ và cộng thẳng vào sát thương đòn đánh kế tiếp!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] Gears' Base Attributes +5% (Tăng +5% chỉ số cơ bản mọi Trang Bị!)"
+      },
+      {
+        "star": 5,
+        "text": "[Lifesteal LV.3]: Khi HP trên 50%, nhận thêm +20% Tốc độ di chuyển (MOV SPD)."
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] Gears' Base Attributes +5% (Tăng +5% chỉ số cơ bản mọi Trang Bị!)"
+      },
+      {
+        "star": 8,
+        "text": "[Lifesteal LV.4]: Khi ở trạng thái Đầy Máu (Full HP), tăng thẳng +40% ATK PWR!"
+      }
+    ]
+  },
+  {
+    "id": "seraph",
+    "name": "Seraph",
+    "rarity": "Epic",
+    "title": "Đại Thiên Sứ Hộ Mệnh (Valkyrie Seraph)",
+    "skillName": "Divine Favor",
+    "role": "Triệu Hồi Valkyrie Đầu Trận & Tăng Tỷ Lệ Kỹ Năng Bậc Cao",
+    "bonusAtk": 44,
+    "bonusHp": 205,
+    "globalAllBonus": {
+      "hpPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Divine Favor LV.1]: 50% cơ hội triệu hồi Valkyrie ban tặng thêm 1 Kỹ năng miễn phí ngay khi bắt đầu trận!"
+      },
+      {
+        "star": 1,
+        "text": "[All] CRIT DMG REDUC +15% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Divine Favor LV.2]: Khi nhận hồi máu từ Thiên Thần có cơ hội nhận thêm 1 Kỹ năng đặc biệt!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] CRIT DMG REDUC +15% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Divine Favor LV.3]: Khi giao ước với Ác Quỷ có cơ hội không bị trừ Máu Tối Đa!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] CRIT DMG REDUC +15% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Divine Favor LV.4]: Tăng mạnh xác suất xuất hiện các Kỹ năng Roguelike bậc Cao (Epic / Legendary)!"
+      }
+    ]
+  },
+  {
+    "id": "mymu",
+    "name": "Mymu",
+    "rarity": "Epic",
+    "title": "Pharaoh Bất Tử (Immortal Mummy)",
+    "skillName": "Immortal Curse",
+    "role": "Bất Tử Overdraw (Chống Chết) & Làm Chậm Kẻ Địch -30%",
+    "bonusAtk": 45,
+    "bonusHp": 215,
+    "globalAllBonus": {
+      "atkPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Immortal Curse LV.1]: Khi HP về 0 lần đầu tiên trong trận, tiến vào trạng thái [Overdraw] giúp miễn tử!"
+      },
+      {
+        "star": 1,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Immortal Curse LV.2]: Tiêu diệt kẻ địch trong trạng thái [Overdraw] sẽ hồi phục và xóa bỏ lời nguyền Overdraw!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Immortal Curse LV.3]: Khi đang trong [Overdraw], giảm -30% Tốc chạy và Tốc đánh của toàn bộ kẻ địch xung quanh!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Immortal Curse LV.4]: Nâng giới hạn chịu đựng của [Overdraw] lên 100%–150% Max HP!"
+      }
+    ]
+  },
+  {
+    "id": "hela",
+    "name": "Hela",
+    "rarity": "Epic",
+    "title": "Nữ Chúa Minh Giới (Underworld Queen)",
+    "skillName": "Hadean Blessing",
+    "role": "Hồi 1% HP Mỗi Giây, Tăng ATK Đồng Minh & +20% CRIT DMG",
+    "bonusAtk": 44,
+    "bonusHp": 210,
+    "globalAllBonus": {
+      "hpPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Hadean Blessing LV.1]: Tăng +5% ATK cho bản thân và toàn bộ Linh Thú / Phân Thân đồng hành!"
+      },
+      {
+        "star": 1,
+        "text": "[All] Max HP +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Hadean Blessing LV.2]: Hồi phục liên tục 1% Max HP mỗi giây trong suốt trận đấu!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] Max HP +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Hadean Blessing LV.3]: Tăng thêm +5% CRIT Rate vĩnh viễn."
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] Max HP +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Hadean Blessing LV.4]: Tăng thêm +20% CRIT DMG vĩnh viễn!"
+      }
+    ]
+  },
+  {
+    "id": "helix",
+    "name": "Helix",
+    "rarity": "Rare",
+    "title": "Chiến Binh Cuồng Nộ (Berserker)",
+    "skillName": "Absolute Counter",
+    "role": "Máu Càng Thấp Sát Thương & Tốc Bắn Càng Cao (+40% ATK & ASPD)",
+    "bonusAtk": 42,
+    "bonusHp": 185,
+    "globalAllBonus": {
+      "atkPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Absolute Counter LV.1]: HP càng thấp, ATK của Helix càng tăng cao (Tối đa +20% ATK)!"
+      },
+      {
+        "star": 1,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Absolute Counter LV.2]: Sau khi nhận sát thương, tăng +20% Tốc độ bắn (ATK SPD) trong 5 giây!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Absolute Counter LV.3]: Sau khi nhận sát thương, tăng thêm +20% ATK trong 10 giây!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] ATK PWR +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Absolute Counter LV.4]: Khi HP dưới 50%, nhận thêm +20% Tốc độ bắn (ATK SPD) liên tục!"
+      }
+    ]
+  },
+  {
+    "id": "nyanja",
+    "name": "Nyanja",
+    "rarity": "Rare",
+    "title": "Linh Miêu Cước Phong (Cloudfooted)",
+    "skillName": "Cloudfooted",
+    "role": "Tốc Chạy +10% & Lốc Xoáy Swift Wind Đẩy Lùi Nổ Diện Rộng",
+    "bonusAtk": 38,
+    "bonusHp": 170,
+    "globalAllBonus": {
+      "dodgeBonus": 0.02,
+      "atkPct": 0.02
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Cloudfooted LV.1]: Tăng +10% MOV SPD và định kỳ tạo lốc [Swift Wind] gây sát thương & đẩy lùi kẻ địch!"
+      },
+      {
+        "star": 1,
+        "text": "[All] MOV SPD +2% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Cloudfooted LV.2]: Tăng phạm vi của [Swift Wind] và nhân đôi (2x) sát thương gây ra!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] MOV SPD +2% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Cloudfooted LV.3]: Trong khi lốc [Swift Wind] kích hoạt, va chạm kẻ địch sẽ gây Vụ Nổ Phong Bạo!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] MOV SPD +2% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Cloudfooted LV.4]: Giảm mạnh thời gian hồi chiêu của tuyệt kỹ [Swift Wind]!"
+      }
+    ]
+  },
+  {
+    "id": "alex",
+    "name": "Alex",
+    "rarity": "Rare",
+    "title": "Trái Tim Dũng Cảm (Braveheart)",
+    "skillName": "Braveheart",
+    "role": "Tăng Rơi Tim Đỏ, +10% Tốc Bắn Sau Crit & Chắc Chắn Chí Mạng",
+    "bonusAtk": 36,
+    "bonusHp": 180,
+    "globalAllBonus": {
+      "hpPct": 0.03
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Braveheart LV.1]: Tăng tỷ lệ rơi Tim Đỏ từ quái vật và tăng hiệu quả hồi máu của Tim Đỏ!"
+      },
+      {
+        "star": 1,
+        "text": "[All] MAX HP +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Braveheart LV.2]: Sau khi bắn Chí mạng, tăng +10% Tốc độ bắn (ATK SPD) trong 10 giây!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] MAX HP +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Braveheart LV.3]: Tăng +10% lượng EXP nhận được trong trận để lên cấp nhanh hơn!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] MAX HP +3% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Braveheart LV.4]: Sau khi nhận sát thương, đòn tấn công kế tiếp CHẮC CHẮN CHÍ MẠNG (100% Crit)!"
+      }
+    ]
+  },
+  {
+    "id": "artemis",
+    "name": "Artemis",
+    "rarity": "Legendary",
+    "title": "Nữ Thần Săn Trăng Bạc",
+    "skillName": "Silvermoon Hunt",
+    "role": "Thợ Săn Ánh Trăng & Chim Ưng Tinh Hà",
+    "bonusAtk": 54,
+    "bonusHp": 205,
+    "globalAllBonus": {
+      "atkPct": 0.04
+    },
+    "wikiStarList": [
+      {
+        "star": 0,
+        "text": "[Silvermoon Hunt LV.1]: Đòn đánh khắc Ấn Ký Ánh Trăng và triệu hồi Chim Ưng tấn công mục tiêu mỗi 2 giây!"
+      },
+      {
+        "star": 1,
+        "text": "[All] ATK PWR +4% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 2,
+        "text": "[Silvermoon Hunt LV.2]: Mục tiêu bị khắc Ấn Ký Ánh Trăng nhận thêm +25% sát thương từ mọi nguồn!"
+      },
+      {
+        "star": 3,
+        "text": "Resonance Unlock (Mở khóa Ô Cộng Hưởng 1): Trang bị thêm 1 Kỹ năng Đặc trưng từ Anh Hùng khác đã mở khóa!"
+      },
+      {
+        "star": 4,
+        "text": "[All] ATK PWR +4% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 5,
+        "text": "[Silvermoon Hunt LV.3]: Chim Ưng Ánh Trăng gây sát thương Chí mạng diện rộng và hồi 2.5% HP cho Artemis!"
+      },
+      {
+        "star": 6,
+        "text": "Resonance Slot +1 (Mở khóa Ô Cộng Hưởng 2): Trang bị đồng thời Kỹ năng Đặc trưng thứ 2 từ Anh Hùng khác!"
+      },
+      {
+        "star": 7,
+        "text": "[All] ATK PWR +4% (Áp dụng toàn bộ Anh Hùng)"
+      },
+      {
+        "star": 8,
+        "text": "[Silvermoon Hunt LV.4]: Thức tỉnh Nguyệt Thần: Chim Ưng phóng kèm Bão Tên Ánh Trăng 8 hướng xuyên thấu!"
+      }
+    ]
+  }
+]

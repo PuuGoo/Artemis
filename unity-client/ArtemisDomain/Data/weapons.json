@@ -1,0 +1,44 @@
+[
+  {
+    "id": "bow",
+    "name": "Cung Sấm Sét (Tempest Bow)",
+    "icon": "🏹",
+    "tier": "S-Tier",
+    "desc": "Tốc độ bắn cực nhanh, tên bay thẳng tốc độ cao và tăng +10% Tỷ lệ Chí mạng.",
+    "atkMult": 1,
+    "aspd": 1.9,
+    "projSpeed": 10.5,
+    "critBonus": 0.1,
+    "homing": 0,
+    "pierceDefault": false,
+    "color": "#fde047"
+  },
+  {
+    "id": "staff",
+    "name": "Trượng Tiên Tri (Oracle Staff)",
+    "icon": "🔮",
+    "tier": "S-Tier",
+    "desc": "Bắn cầu năng lượng tự động bẻ lái đuổi theo kẻ địch (Homing) và gây nổ nhẹ khi trúng.",
+    "atkMult": 1.18,
+    "aspd": 1.45,
+    "projSpeed": 7.4,
+    "critBonus": 0.05,
+    "homing": 0.075,
+    "pierceDefault": false,
+    "color": "#c084fc"
+  },
+  {
+    "id": "claw",
+    "name": "Vuốt Cuồng Long (Dragoon Claw)",
+    "icon": "🐾",
+    "tier": "S-Tier",
+    "desc": "Phóng sóng xung kích Long Hỏa xuyên thấu mục tiêu đầu tiên và đẩy lùi kẻ địch.",
+    "atkMult": 1.32,
+    "aspd": 1.55,
+    "projSpeed": 8.8,
+    "critBonus": 0.08,
+    "homing": 0,
+    "pierceDefault": true,
+    "color": "#fb7185"
+  }
+]

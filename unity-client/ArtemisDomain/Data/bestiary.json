@@ -1,0 +1,258 @@
+[
+  {
+    "id": "slime",
+    "name": "Slime Nhớt",
+    "icon": "🟢",
+    "tier": "Thường",
+    "color": "#4ade80",
+    "aura": "#4ade80",
+    "lore": "Khối nhớt sống trong hầm ẩm. Chậm chạp nhưng dai, hay xuất hiện theo bầy.",
+    "behavior": "Di chuyển chậm, lao vào người chơi khi áp sát.",
+    "threat": 1,
+    "stats": {
+      "speed": 64,
+      "contact": true,
+      "ranged": false
+    }
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin Đột Kích",
+    "icon": "👺",
+    "tier": "Thường",
+    "color": "#a3e635",
+    "aura": "#a3e635",
+    "lore": "Lũ cướp nhỏ con nhưng nhanh nhẹn, chuyên đánh lén từ hai bên sườn.",
+    "behavior": "Di chuyển nhanh, đổi hướng liên tục để tránh đạn.",
+    "threat": 1,
+    "stats": {
+      "speed": 64,
+      "contact": true,
+      "ranged": false
+    }
+  },
+  {
+    "id": "skeleton_mage",
+    "name": "Pháp Sư Xương",
+    "icon": "💀",
+    "tier": "Tinh Anh",
+    "color": "#e2e8f0",
+    "aura": "#a855f7",
+    "lore": "Xương cốt biết niệm chú. Đứng xa bắn đạn phép, trâu hơn quái thường.",
+    "behavior": "Bắn đạn phép tầm xa. Máu cao hơn quái thường ~12%.",
+    "threat": 2,
+    "stats": {
+      "speed": 64,
+      "contact": false,
+      "ranged": true
+    }
+  },
+  {
+    "id": "plant_turret",
+    "name": "Hoa Pháo Đài",
+    "icon": "🌸",
+    "tier": "Tinh Anh",
+    "color": "#f472b6",
+    "aura": "#f472b6",
+    "lore": "Rễ cắm sâu vào đá, không di chuyển. Bù lại là giàn pháo sống bắn liên tục.",
+    "behavior": "ĐỨNG YÊN hoàn toàn, bắn đạn liên tục. Trâu nhất trong quái thường (~23% máu cao hơn).",
+    "threat": 2,
+    "stats": {
+      "speed": 0,
+      "contact": false,
+      "ranged": true
+    }
+  },
+  {
+    "id": "bat",
+    "name": "Dơi Huyết Nguyệt",
+    "icon": "🦇",
+    "tier": "Thường",
+    "color": "#a78bfa",
+    "aura": "#c084fc",
+    "lore": "Bay lượn trên đầu, khó trúng vì nhỏ và nhanh. Xuất hiện nhiều ở phòng sâu.",
+    "behavior": "Bay nhanh, di chuyển hình sin. Thân nhỏ nên khó bắn trúng.",
+    "threat": 1,
+    "stats": {
+      "speed": 115,
+      "contact": true,
+      "ranged": false
+    }
+  },
+  {
+    "id": "golem",
+    "name": "Golem Dung Nham",
+    "icon": "🔥",
+    "tier": "TRÙM",
+    "color": "#f97316",
+    "aura": "#f97316",
+    "lore": "Khối đá nóng chảy được triệu hồi để canh giữ Hầm Ngục Đá Cổ. Mỗi bước chân để lại vết cháy.",
+    "behavior": "Lao thẳng vào người chơi với tốc độ cao. Bắn đạn lửa theo hình quạt. Chịu ~9 đòn là bạn gục.",
+    "threat": 4,
+    "stats": {
+      "speed": 68,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "queen",
+    "name": "Nữ Hoàng Nhện Độc",
+    "icon": "🕷️",
+    "tier": "TRÙM",
+    "color": "#a855f7",
+    "aura": "#a855f7",
+    "lore": "Chúa tể Thung Lũng Dung Nham. Tơ độc của ả làm chậm cả những anh hùng nhanh nhất.",
+    "behavior": "Bắn đạn tơ độc gây làm chậm. Di chuyển nhanh hơn Golem. Chịu ~7 đòn là bạn gục.",
+    "threat": 5,
+    "stats": {
+      "speed": 68,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "demon_king",
+    "name": "Đại Ma Vương Atreus",
+    "icon": "👑",
+    "tier": "TRÙM CUỐI",
+    "color": "#e11d48",
+    "aura": "#e11d48",
+    "lore": "Kẻ ngự trị Thánh Điện Hư Không. Hắn không canh giữ kho báu — hắn canh giữ cánh cổng cuối cùng.",
+    "behavior": "Triệu hồi mưa thiên thạch, lao thẳng và bắn đạn tỏa tròn. Chịu CHỈ ~5 đòn là bạn gục.",
+    "threat": 6,
+    "stats": {
+      "speed": 68,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "dragon_whelp",
+    "name": "Ấu Long Lam Ngọc",
+    "icon": "🐲",
+    "tier": "Thường",
+    "color": "#22d3ee",
+    "aura": "#67e8f9",
+    "lore": "Long duệ non canh giữ các cầu mây. Lớp vảy lam ngọc phản chiếu ánh sáng từ những đảo bay.",
+    "behavior": "Lướt nhanh áp sát rồi phóng một loạt hỏa cầu nhỏ theo hình quạt.",
+    "threat": 3,
+    "stats": {
+      "speed": 88,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "cloud_wisp",
+    "name": "Tinh Linh Mây",
+    "icon": "☁️",
+    "tier": "Tinh Anh",
+    "color": "#bae6fd",
+    "aura": "#67e8f9",
+    "lore": "Linh thể kết tinh từ sương trên đỉnh trời. Nó bay lơ lửng, tích tụ năng lượng rồi bắn vòng đạn ánh sáng.",
+    "behavior": "Lơ lửng né tránh và phát xung 6 hướng; hãy luồn qua khe đạn để phản công.",
+    "threat": 3,
+    "stats": {
+      "speed": 92,
+      "contact": false,
+      "ranged": true
+    }
+  },
+  {
+    "id": "sky_sentinel",
+    "name": "Thạch Vệ Thiên Không",
+    "icon": "🛡️",
+    "tier": "Tinh Anh",
+    "color": "#a5f3fc",
+    "aura": "#22d3ee",
+    "lore": "Tượng vệ binh cổ đại được long hồn đánh thức. Khiên tinh thạch che chắn thân thể và phóng mũi giáo băng.",
+    "behavior": "Tiến chậm, chịu đòn tốt và bắn loạt đạn thẳng có độ tỏa nhỏ.",
+    "threat": 4,
+    "stats": {
+      "speed": 48,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "elder_dragon",
+    "name": "Cổ Long Thiên Không",
+    "icon": "🐉",
+    "tier": "TRÙM CUỐI",
+    "color": "#67e8f9",
+    "aura": "#67e8f9",
+    "lore": "Thủy tổ Long Vực ngủ dưới Điện Long Thần. Khi long tâm thức tỉnh, biển mây hóa thành bão tố và bầu trời rực sáng.",
+    "behavior": "Xoay vòng 12 luồng long tức, quét hơi thở theo hình quạt và phóng loạt tinh thạch truy đuổi. Sức mạnh thay đổi khi còn ít máu.",
+    "threat": 6,
+    "stats": {
+      "speed": 82,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "rift_stalker",
+    "name": "Ảnh Lang Khe Nứt",
+    "icon": "🐺",
+    "tier": "Thường",
+    "color": "#c084fc",
+    "aura": "#c084fc",
+    "lore": "Thú săn mồi bước ra từ những vết nứt giữa hai chiều không gian. Bóng của nó thường xuất hiện trước cả thân hình.",
+    "behavior": "Lướt nhanh áp sát và phóng ba mảnh nguyệt tinh theo hình quạt hẹp.",
+    "threat": 4,
+    "stats": {
+      "speed": 102,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "eclipse_oracle",
+    "name": "Tiên Tri Nhật Thực",
+    "icon": "🔮",
+    "tier": "Tinh Anh",
+    "color": "#f0abfc",
+    "aura": "#a78bfa",
+    "lore": "Pháp sư cổ đại đọc điềm báo trong quầng tối. Mỗi lần giơ trượng, năm mảnh hắc tinh khóa vào vị trí của mục tiêu.",
+    "behavior": "Giữ khoảng cách và bắn quạt năm tia bóng tối có tốc độ cao.",
+    "threat": 4,
+    "stats": {
+      "speed": 55,
+      "contact": false,
+      "ranged": true
+    }
+  },
+  {
+    "id": "obsidian_brute",
+    "name": "Hộ Vệ Hắc Tinh",
+    "icon": "🗿",
+    "tier": "Tinh Anh",
+    "color": "#34d399",
+    "aura": "#34d399",
+    "lore": "Khối giáp obsidian được nuôi bằng lõi tinh tú. Những gai hắc tinh trên vai phát nổ thành vòng đạn khi năng lượng đầy.",
+    "behavior": "Di chuyển chậm, rất lì đòn và phát xung tám hướng quanh thân.",
+    "threat": 5,
+    "stats": {
+      "speed": 38,
+      "contact": true,
+      "ranged": true
+    }
+  },
+  {
+    "id": "eclipse_sovereign",
+    "name": "Bạo Chúa Nhật Thực",
+    "icon": "🌑",
+    "tier": "TRÙM CUỐI",
+    "color": "#c084fc",
+    "aura": "#f0abfc",
+    "lore": "Vị quân vương bị phong ấn trong lõi nhật thực. Khi ngai vàng thức tỉnh, cánh trời rách toạc và mọi vì sao đều tắt.",
+    "behavior": "Tạo vòng đạn nhật thực, quét quạt hắc tinh và bắn chéo bốn phương. Dưới 50% máu, boss cuồng nộ và rút ngắn nhịp tấn công.",
+    "threat": 7,
+    "stats": {
+      "speed": 76,
+      "contact": true,
+      "ranged": true
+    }
+  }
+]

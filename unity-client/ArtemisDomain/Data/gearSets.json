@@ -1,0 +1,132 @@
+{
+  "phoenix": {
+    "name": "Dragon Knight (S-Tier Nổ)",
+    "icon": "🐉",
+    "tier": "S-Tier",
+    "archetype": "Explosion / Blast",
+    "desc2": "+8% ATK & Nổ AoE khi bắn trúng",
+    "desc4": "+15% ATK, Mìn Nổ & Khiên Lửa 10s",
+    "desc6": "+24% ATK, +12% HP, Kích nổ 4 quái/2s & Thiên Thạch Nổ x2",
+    "atk2": 0.08,
+    "atk4": 0.15,
+    "atk6": 0.24,
+    "hp6": 0.12,
+    "templates": [
+      "crimson_bow",
+      "sapphire_pendant",
+      "sun_gold_ring",
+      "golden_plate",
+      "golden_helm",
+      "titan_boots"
+    ]
+  },
+  "shadow": {
+    "name": "Griffin (S-Tier Cận Chiến)",
+    "icon": "🦅",
+    "tier": "S-Tier",
+    "archetype": "Close-Range / Crit",
+    "desc2": "+8% CRIT Rate & Tăng DMG cự ly gần",
+    "desc4": "+12% Né tránh & Hào quang 7m (0.6x ATK/0.3s)",
+    "desc6": "+18% CRIT Rate, +72% CRIT DMG, +16% ATK & Phản đòn 4x AoE",
+    "crit2": 0.08,
+    "crit6": 0.18,
+    "atk6": 0.16,
+    "dodge4": 0.12,
+    "dodge6": 0.15,
+    "templates": [
+      "dragoon_claw",
+      "celestial_amulet",
+      "jade_flower_ring",
+      "shadow_tunic",
+      "phantom_mask",
+      "aqua_boots"
+    ]
+  },
+  "celestial": {
+    "name": "Oracle (S-Tier Liên Kích)",
+    "icon": "⚡",
+    "tier": "S-Tier",
+    "archetype": "Combo / Tracking Beam",
+    "desc2": "+10% Tốc bắn & x3 Combo khi Crit",
+    "desc4": "+14% ATK, +16% Tốc bắn & +4 Tên Chéo/5 Combo",
+    "desc6": "+22% ATK, +16% Tốc bắn, +16% CRIT Rate & Nhân đôi DMG mỗi 3 Combo",
+    "aspd2": 0.1,
+    "atk4": 0.14,
+    "aspd4": 0.16,
+    "atk6": 0.22,
+    "aspd6": 0.16,
+    "crit6": 0.16,
+    "templates": [
+      "oracle_staff",
+      "void_prism_necklace",
+      "starlight_ring",
+      "wind_vest",
+      "astral_crown",
+      "starlight_greaves"
+    ]
+  },
+  "echo": {
+    "name": "Echo (Tiếng Vang • Combo)",
+    "icon": "🌀",
+    "tier": "Standard",
+    "archetype": "Combo Build",
+    "desc2": "+5% ATK & +5% Tốc bắn",
+    "desc4": "+10% ATK & +2 Tên Chéo mỗi 5 Combo",
+    "desc6": "+14% ATK, +8% CRIT Rate & Nhân đôi DMG mỗi 5 Combo",
+    "aspd2": 0.05,
+    "atk2": 0.05,
+    "atk4": 0.1,
+    "atk6": 0.14,
+    "crit6": 0.08,
+    "templates": [
+      "beam_staff",
+      "echo_amulet",
+      "echo_ring",
+      "echo_armor",
+      "echo_helmet",
+      "echo_boots"
+    ]
+  },
+  "destruction": {
+    "name": "Destruction (Hủy Diệt • Nổ)",
+    "icon": "💣",
+    "tier": "Standard",
+    "archetype": "Explosion Build",
+    "desc2": "+5% ATK & 50% Nổ AoE",
+    "desc4": "+10% ATK & Khiên Lửa 10s",
+    "desc6": "+15% ATK, +8% HP & Kích nổ 2 quái mỗi 2s",
+    "atk2": 0.05,
+    "atk4": 0.1,
+    "atk6": 0.15,
+    "hp6": 0.08,
+    "templates": [
+      "heroic_longbow",
+      "destruction_amulet",
+      "destruction_ring",
+      "destruction_armor",
+      "destruction_helmet",
+      "destruction_boots"
+    ]
+  },
+  "decisiveness": {
+    "name": "Decisiveness (Quyết Đoán)",
+    "icon": "🥊",
+    "tier": "Standard",
+    "archetype": "Close-Range Build",
+    "desc2": "+5% CRIT Rate cự ly gần",
+    "desc4": "+8% Dodge & Hào quang 7m",
+    "desc6": "+12% CRIT Rate, +36% CRIT DMG & Phản đòn 2x AoE",
+    "crit2": 0.05,
+    "dodge4": 0.08,
+    "crit6": 0.12,
+    "atk6": 0.12,
+    "templates": [
+      "agile_knuckles",
+      "decisiveness_amulet",
+      "decisiveness_ring",
+      "decisiveness_armor",
+      "decisiveness_helmet",
+      "decisiveness_boots"
+    ]
+  }
+}
