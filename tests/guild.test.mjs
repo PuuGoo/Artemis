@@ -98,6 +98,17 @@ check('co noi dung tieng Viet (Bang Chu / Truong Lao)',
   /Bang Chủ/.test(html) && /Trưởng Lão/.test(html));
 check('tab Guild goi renderGuildPanel',
   /targetId === 'tabGuild'[\s\S]{0,80}?renderGuildPanel\(\)/.test(html));
+check('co khoi goi y thu tu choi (lap khoang trong duoi)',
+  /Nên làm gì trước/.test(html) && /Đánh Trùm Bang/.test(html));
+check('khoi goi y chi hien khi chua mo man con (nam ngoai guildContent)',
+  !/Nên làm gì trước/.test(html.slice(html.indexOf('id="guildContent"'), html.indexOf('id="guildContent"') + 200)));
+
+// ============================================================ 7b. MAN CON KHONG MAT
+console.log('\n=== 7b. MAN CON KHONG MAT KHI VE LAI ===');
+check('nho man con dang mo (guildOpenScreen)', /let guildOpenScreen = null/.test(html));
+check('mo man con thi ghi nho', /function openGuildScreen\(which\) \{\s*guildOpenScreen = which/.test(html.replace(/\r/g, '')));
+check('dong man con thi xoa nho', /function closeGuildScreen\(\) \{\s*guildOpenScreen = null/.test(html.replace(/\r/g, '')));
+check('ve lai panel thi khoi phuc man con', /if \(guildOpenScreen\) openGuildScreen\(guildOpenScreen\)/.test(html));
 
 // ============================================================ 8. EXPORT
 console.log('\n=== 8. EXPORT ===');
