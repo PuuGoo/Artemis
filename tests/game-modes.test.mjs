@@ -96,7 +96,7 @@ console.log('\n=== 4. LUYEN TAP KHONG SINH TAI NGUYEN ===');
 const finFn = fnBody('finishRun');
 check('finishRun doc che do', /const curMode = getGameMode\(Game\.mode/.test(finFn));
 check('khong cong vang khi practice', /if \(!curMode\.practice\) \{\s*SaveState\.gold \+= bonusGold/.test(finFn.replace(/\r/g, '')));
-check('khong drop gear khi practice', /if \(!curMode\.practice && \(isVictory \|\| Game\.room >= 3\)\)/.test(finFn));
+check('khong drop gear khi practice hoac Hang Vang', /if \(!curMode\.practice && !curMode\.goldOnly && \(isVictory \|\| Game\.room >= 3\)\)/.test(finFn));
 
 // Chet trong luyen tap -> hoi day mau, khong finishRun(false)
 const deathSlice = html.slice(html.indexOf('Luyện Tập: không chết thật'));
