@@ -3,12 +3,18 @@
   <!--
     Artemis.Domain — lớp logic THUẦN của bản port Unity.
 
+    Vị trí: nguồn C# nằm trong unity-client/Assets/Artemis/Domain/ để Unity
+    compiler thấy nó (asmdef Artemis.Domain). File .csproj này trỏ tới CHÍNH
+    thư mục đó, nhờ vậy:
+      • `dotnet build` / `dotnet test` chạy được trên máy KHÔNG có Unity Editor;
+      • Unity không cần project .csproj riêng, chỉ cần asmdef;
+      • chỉ có MỘT bản source, không phải chép qua lại.
+
     Ràng buộc cố ý:
       • netstandard2.1  -> Unity 2021.2+ dùng được trực tiếp.
-      • KHÔNG tham chiếu UnityEngine. Nếu ai thêm `using UnityEngine;` thì build
-        gãy ngay tại đây, trước khi kịp làm hỏng kiến trúc. Đó là mục đích.
-      • Không PackageReference: chỉ System.* của BCL. Nhờ vậy build được bằng
-        `dotnet build` trên máy không cài Unity, và test parity chạy được ngay.
+      • KHÔNG tham chiếu UnityEngine (asmdef đặt "noEngineReferences": true).
+        Nếu ai thêm `using UnityEngine;` thì build gãy ngay tại đây.
+      • Không PackageReference: chỉ System.* của BCL.
   -->
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -17,13 +23,17 @@
     <AssemblyName>Artemis.Domain</AssemblyName>
     <RootNamespace>Artemis.Domain</RootNamespace>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
-  <!-- Data/*.json được copy để Unity đọc qua TextAsset (Resources/Data). -->
   <ItemGroup>
-    <None Include="Data\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Include="..\Assets\Artemis\Domain\**\*.cs" LinkBase="Domain" />
+  </ItemGroup>
+
+  <!-- JSON nguồn duy nhất: Assets/Artemis/Resources/ArtemisData (Unity đọc qua
+       Resources.Load, còn test dotnet đọc thẳng từ đường dẫn này). -->
+  <ItemGroup>
+    <None Include="..\Assets\Artemis\Resources\ArtemisData\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

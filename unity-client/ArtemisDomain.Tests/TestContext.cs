@@ -34,7 +34,7 @@ namespace Artemis.Domain.Tests
             }
         }
 
-        public static string DataDir => Path.Combine(RepoRoot, "unity-client", "ArtemisDomain", "Data");
+        public static string DataDir => Path.Combine(RepoRoot, "unity-client", "Assets", "Artemis", "Resources", "ArtemisData");
         public static string FixtureDir => Path.Combine(RepoRoot, "tools", "unity-parity", "fixtures");
 
         public static GameData.GameData Data

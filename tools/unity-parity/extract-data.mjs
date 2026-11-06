@@ -5,7 +5,7 @@
 // skill, talent, quái) khớp với bản web mà không chép tay.
 //
 // Chạy: node tools/unity-parity/extract-data.mjs
-// Ra:   unity-client/ArtemisDomain/Data/*.json
+// Ra:   unity-client/Assets/Artemis/Resources/ArtemisData/*.json
 import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
@@ -14,7 +14,7 @@ import { loadOracle } from "./oracle.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..", "..");
-const OUT = path.join(ROOT, "unity-client", "ArtemisDomain", "Data");
+const OUT = path.join(ROOT, "unity-client", "Assets", "Artemis", "Resources", "ArtemisData");
 
 fs.mkdirSync(OUT, { recursive: true });
 

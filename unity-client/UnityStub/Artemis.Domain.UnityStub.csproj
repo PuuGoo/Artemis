@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Artemis.Domain.UnityStub — KIỂM TRA BIÊN DỊCH mã Unity trên máy không có Unity.
+
+    Vì sao tồn tại: máy phát triển này không cài Unity Editor, nên không thể build
+    WebGL/APK và không thể biên dịch mã trong Assets/Artemis/Scripts bằng compiler
+    của Unity. Project này biên dịch CHÍNH các file đó với một stub API Unity tối
+    thiểu, để bắt được lỗi cú pháp, sai kiểu, thiếu using, gọi hàm không tồn tại.
+
+    GIỚI HẠN: xanh ở đây KHÔNG có nghĩa là game chạy được trong Unity. Nó chỉ có
+    nghĩa là mã biên dịch được. Hành vi (vật lý, coroutine, UI, WebGL) chỉ kiểm
+    chứng được bằng Unity Editor.
+
+    Chạy: dotnet build unity-client/UnityStub/Artemis.Domain.UnityStub.csproj
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>Artemis.Domain.UnityStub</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NoWarn>CS0436;CS0108;CS0114;CS0169;CS0649</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Stub API Unity (chỉ namespace UnityEngine/TMPro). -->
+    <Compile Include="UnityEngineStub.cs" />
+    <!-- Nguồn domain thật. -->
+    <Compile Include="..\Assets\Artemis\Domain\**\*.cs" LinkBase="Domain" />
+    <!-- Nguồn runtime Unity cần kiểm tra. -->
+    <Compile Include="..\Assets\Artemis\Scripts\**\*.cs" LinkBase="Scripts" />
+  </ItemGroup>
+
+</Project>
