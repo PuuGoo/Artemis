@@ -373,7 +373,22 @@ const FIXED_MAXHP = 67890;
 
 for (const ch of CHAPTERS) {
   resetSave();
-  api.startNewRun("fresh", ch.idx);
+  // Mở khoá tiến trình: startNewRun TỪ CHỐI chương bị khoá (isChapterLocked) và
+  // trả về false, khiến fixture lặng lẽ dùng lại chương 1 — đúng cái bẫy đã làm
+  // hỏng lần sinh fixture đầu tiên. Đánh dấu đã thắng mọi chương trước.
+  S.winsByChapter = {};
+  for (const prev of CHAPTERS) {
+    if (prev.id < ch.id) S.winsByChapter[prev.id] = 1;
+  }
+  // startNewRun(reason) KHÔNG nhận chỉ số chương — nó đọc
+  // SaveState.selectedChapterIdx. Truyền tham số thứ hai chỉ bị bỏ qua, khiến
+  // fixture lặng lẽ dùng chương 1.
+  S.selectedChapterIdx = ch.idx;
+  const started = api.startNewRun("fresh");
+  if (started === false) throw new Error("Không vào được chương " + ch.id + " (bị khoá?)");
+  if (api.Game.chapter && api.Game.chapter.id !== ch.id) {
+    throw new Error("Sai chương: muốn " + ch.id + " nhưng Game.chapter = " + api.Game.chapter.id);
+  }
   const p = api.Game.player;
   p.atk = FIXED_ATK;
   p.maxHp = FIXED_MAXHP;

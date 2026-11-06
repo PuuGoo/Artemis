@@ -790,6 +790,11 @@ Artemis/
 | 11 | `localStorage` từng gây rò dữ liệu chéo tài khoản | comment `cloud.js` 1–13 | Unity cũng **không** cache save trên đĩa mà không gắn playerId |
 | 12 | 409 khi revision lệch | `api/save.js` | không tự ghi đè; phải hỏi người chơi |
 | 13 | 422 `ECONOMY_*` trả kèm `serverData` | `api/save.js` | nạp lại bản server, không gửi lại mù |
+| 14 | **Lỗi ưu tiên toán tử**: `obsidian_brute` không nhân `baseHits` | `const atkMul = t === 'obsidian_brute' ? 1.28 : (…) * baseHits;` — `?:` thấp hơn `*` nên `* baseHits` chỉ áp cho nhánh sau | Unity **tái hiện đúng hành vi** (`EnemySpawner.MobHpMultiplier`) để không đổi cân bằng; đội game quyết định có vá web hay không |
+| 15 | `startNewRun(reason)` **không** nhận chỉ số chương | đọc `SaveState.selectedChapterIdx`; truyền tham số thứ hai bị bỏ qua | khi scripting/test phải set `selectedChapterIdx` rồi gọi `startNewRun()`; và phải mở khoá `winsByChapter` nếu không `startNewRun` trả `false` |
+| 16 | Lên cấp dùng `if`, không `while` | `updateGame` dòng 29001 | một lần nhặt XP chỉ lên 1 cấp; giữ đúng để không đổi nhịp roguelike |
+| 17 | 14/18 hero **không** có skin trong `HERO_SKINS` | `getHeroSkinsList` sinh động 3 skin với hệ số khác | không được chỉ đọc `heroSkins.json`; phải port nhánh sinh (`SkinsForHero`) |
+| 18 | **Server LỌC BỎ `artifactStars` + `equippedRuneSlots`** | 0/52 save production có hai field này (đo 2026-11-06); mất tới 98,9% ATK | xem `FINDING-save-drops-artifacts-runes.md`. Unity đọc nếu có, KHÔNG ghi đè bằng rỗng; Phase 3 bị chặn |
 
 ---
 

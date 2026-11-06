@@ -1,0 +1,1973 @@
+[
+ {
+  "name": "new-account",
+  "note": "tài khoản trắng, mọi field rỗng",
+  "input": {
+   "gold": 0,
+   "gems": 0,
+   "stamina": 0,
+   "gearLevel": 1,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "artifactStars": {},
+   "talents": {},
+   "runes": {},
+   "heroSelectedSkins": {},
+   "unlockedSkins": {},
+   "equippedGear": {},
+   "gearBag": [],
+   "bestRooms": {},
+   "winsByChapter": {},
+   "lifetimeStats": {},
+   "bestiary": {},
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "equippedRuneSlots": {
+    "etched": [],
+    "blessing": [],
+    "enhancement": [],
+    "ability": []
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   }
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 0,
+   "gems": 0,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 1,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "runes": {},
+   "talents": {},
+   "bestRooms": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "heroSelectedSkins": {},
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {},
+   "lifetimeStats": {},
+   "winsByChapter": {},
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": null,
+    "necklace": null,
+    "ring": null,
+    "armor": null,
+    "helmet": null,
+    "boots": null
+   },
+   "gearBag": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 1225
+ },
+ {
+  "name": "new-account-with-progress",
+  "note": "tài khoản mới chơi được vài phòng, có Hành Trình Tân Thủ",
+  "input": {
+   "gold": 1450,
+   "gems": 70,
+   "stamina": 0,
+   "gearLevel": 4,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "artifactStars": {},
+   "talents": {},
+   "runes": {},
+   "heroSelectedSkins": {},
+   "unlockedSkins": {},
+   "equippedGear": {},
+   "gearBag": [],
+   "bestRooms": {
+    "1": 7
+   },
+   "winsByChapter": {},
+   "lifetimeStats": {
+    "runs": 3,
+    "wins": 0,
+    "kills": 41,
+    "goldEarned": 1450,
+    "deepestRoom": 7,
+    "roomsCleared": 9
+   },
+   "bestiary": {},
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 1762300000000,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N04",
+    "completedSteps": [
+     "N01",
+     "N02",
+     "N03"
+    ],
+    "claimedRewards": [
+     "N01",
+     "N02"
+    ],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "equippedRuneSlots": {
+    "etched": [],
+    "blessing": [],
+    "enhancement": [],
+    "ability": []
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   }
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 1450,
+   "gems": 70,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 4,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 1762300000000,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N04",
+    "completedSteps": [
+     "N01",
+     "N02",
+     "N03"
+    ],
+    "claimedRewards": [
+     "N01",
+     "N02"
+    ],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "runes": {},
+   "talents": {},
+   "bestRooms": {
+    "1": 7
+   },
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "heroSelectedSkins": {},
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {},
+   "lifetimeStats": {
+    "runs": 3,
+    "wins": 0,
+    "kills": 41,
+    "goldEarned": 1450,
+    "deepestRoom": 7,
+    "roomsCleared": 9
+   },
+   "winsByChapter": {},
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": null,
+    "necklace": null,
+    "ring": null,
+    "armor": null,
+    "helmet": null,
+    "boots": null
+   },
+   "gearBag": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 1353
+ },
+ {
+  "name": "mid-game-gear",
+  "note": "giữa game: trang bị epic/legendary, season đang chạy, có boss mùa",
+  "input": {
+   "gold": 250000,
+   "gems": 1200,
+   "stamina": 0,
+   "gearLevel": 30,
+   "selectedHeroId": "artemis",
+   "selectedWeaponId": "staff",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {
+    "alex": 3,
+    "artemis": 4
+   },
+   "heroShards": {},
+   "artifactStars": {},
+   "talents": {
+    "refinement": 3,
+    "glory": 1,
+    "dexterity": 4
+   },
+   "runes": {},
+   "heroSelectedSkins": {
+    "artemis": 1
+   },
+   "unlockedSkins": {
+    "artemis_celestial": true,
+    "alex_default": true
+   },
+   "equippedGear": {
+    "weapon": {
+     "uid": "w1",
+     "templateId": "crimson_bow",
+     "quality": "epic",
+     "level": 25,
+     "awakening": 2,
+     "locked": false,
+     "favorite": true,
+     "sockets": [
+      "ruby",
+      "amethyst"
+     ],
+     "affixes": [
+      {
+       "type": "atk_pct",
+       "val": 6
+      },
+      {
+       "type": "crit_pct",
+       "val": 3
+      }
+     ]
+    },
+    "necklace": {
+     "uid": "n1",
+     "templateId": "sapphire_pendant",
+     "quality": "rare",
+     "level": 20,
+     "awakening": 0,
+     "sockets": [
+      "sapphire"
+     ],
+     "affixes": []
+    },
+    "ring": {
+     "uid": "r1",
+     "templateId": "sun_gold_ring",
+     "quality": "rare",
+     "level": 20,
+     "awakening": 0,
+     "sockets": [],
+     "affixes": [
+      {
+       "type": "hp_pct",
+       "val": 8
+      }
+     ]
+    },
+    "armor": {
+     "uid": "a1",
+     "templateId": "golden_plate",
+     "quality": "epic",
+     "level": 22,
+     "awakening": 1,
+     "sockets": [],
+     "affixes": []
+    },
+    "helmet": {
+     "uid": "h1",
+     "templateId": "golden_helm",
+     "quality": "legendary",
+     "level": 28,
+     "awakening": 3,
+     "sockets": [],
+     "affixes": []
+    },
+    "boots": {
+     "uid": "b1",
+     "templateId": "titan_boots",
+     "quality": "uncommon",
+     "level": 15,
+     "awakening": 0,
+     "sockets": [],
+     "affixes": []
+    }
+   },
+   "gearBag": [
+    {
+     "uid": "b1",
+     "templateId": "rusty_bow",
+     "quality": "common",
+     "level": 1,
+     "awakening": 0
+    },
+    {
+     "uid": "b2",
+     "templateId": "oracle_staff",
+     "quality": "legendary",
+     "level": 30,
+     "awakening": 2,
+     "sockets": [
+      "topaz"
+     ]
+    }
+   ],
+   "bestRooms": {
+    "1": 15,
+    "2": 8
+   },
+   "winsByChapter": {
+    "1": 2
+   },
+   "lifetimeStats": {},
+   "bestiary": {},
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": "blade",
+    "tokens": 180,
+    "boss": "ironhide",
+    "bossHp": 4000,
+    "bossMaxHp": 12000,
+    "bossDefeated": false,
+    "powerSacrificed": 0.06,
+    "log": [
+     {
+      "t": 1762300000000,
+      "text": "Chọn nghề Kiếm Sĩ"
+     }
+    ]
+   },
+   "dungeonCheckpoint": null,
+   "equippedRuneSlots": {
+    "etched": [],
+    "blessing": [],
+    "enhancement": [],
+    "ability": []
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   }
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 250000,
+   "gems": 1200,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "artemis",
+   "selectedWeaponId": "staff",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 30,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": "blade",
+    "tokens": 180,
+    "boss": "ironhide",
+    "bossHp": 4000,
+    "bossMaxHp": 12000,
+    "bossDefeated": false,
+    "powerSacrificed": 0.06,
+    "log": [
+     {
+      "t": 1762300000000,
+      "text": "Chọn nghề Kiếm Sĩ"
+     }
+    ]
+   },
+   "dungeonCheckpoint": null,
+   "runes": {},
+   "talents": {
+    "refinement": 3,
+    "glory": 1,
+    "dexterity": 4
+   },
+   "bestRooms": {
+    "1": 15,
+    "2": 8
+   },
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {
+    "alex": 3,
+    "artemis": 4
+   },
+   "heroShards": {},
+   "heroSelectedSkins": {
+    "artemis": 1
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {
+    "artemis_celestial": true,
+    "alex_default": true
+   },
+   "lifetimeStats": {},
+   "winsByChapter": {
+    "1": 2
+   },
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": {
+     "uid": "w1",
+     "templateId": "crimson_bow",
+     "quality": "epic",
+     "awakening": 2,
+     "level": 25,
+     "locked": false,
+     "favorite": true,
+     "sockets": [],
+     "affixes": [
+      {
+       "stat": null,
+       "tier": null,
+       "value": 0
+      },
+      {
+       "stat": null,
+       "tier": null,
+       "value": 0
+      }
+     ]
+    },
+    "necklace": {
+     "uid": "n1",
+     "templateId": "sapphire_pendant",
+     "quality": "rare",
+     "awakening": 0,
+     "level": 20,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    },
+    "ring": {
+     "uid": "r1",
+     "templateId": "sun_gold_ring",
+     "quality": "rare",
+     "awakening": 0,
+     "level": 20,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": [
+      {
+       "stat": null,
+       "tier": null,
+       "value": 0
+      }
+     ]
+    },
+    "armor": {
+     "uid": "a1",
+     "templateId": "golden_plate",
+     "quality": "epic",
+     "awakening": 1,
+     "level": 22,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    },
+    "helmet": {
+     "uid": "h1",
+     "templateId": "golden_helm",
+     "quality": "legendary",
+     "awakening": 3,
+     "level": 28,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    },
+    "boots": {
+     "uid": "b1",
+     "templateId": "titan_boots",
+     "quality": "uncommon",
+     "awakening": 0,
+     "level": 15,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    }
+   },
+   "gearBag": [
+    {
+     "uid": "b1",
+     "templateId": "rusty_bow",
+     "quality": "common",
+     "awakening": 0,
+     "level": 1,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    },
+    {
+     "uid": "b2",
+     "templateId": "oracle_staff",
+     "quality": "legendary",
+     "awakening": 2,
+     "level": 30,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    }
+   ],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 2484
+ },
+ {
+  "name": "late-game-full",
+  "note": "cuối game: mọi hero 8★, checkpoint phòng 11 chương 5",
+  "input": {
+   "gold": 9000000000,
+   "gems": 400000,
+   "stamina": 0,
+   "gearLevel": 100,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {
+    "thor": 8,
+    "wukong": 8,
+    "cleo": 8,
+    "atreus": 8,
+    "rolla": 8,
+    "nezha": 8,
+    "otta": 8,
+    "hou_yi": 8,
+    "phynx": 8,
+    "loki": 8,
+    "dracoola": 8,
+    "seraph": 8,
+    "mymu": 8,
+    "hela": 8,
+    "helix": 8,
+    "nyanja": 8,
+    "alex": 8,
+    "artemis": 8
+   },
+   "heroShards": {
+    "thor": 5000,
+    "wukong": 5000,
+    "cleo": 5000,
+    "atreus": 5000,
+    "rolla": 5000,
+    "nezha": 5000,
+    "otta": 5000,
+    "hou_yi": 5000,
+    "phynx": 5000,
+    "loki": 5000,
+    "dracoola": 5000,
+    "seraph": 5000,
+    "mymu": 5000,
+    "hela": 5000,
+    "helix": 5000,
+    "nyanja": 5000,
+    "alex": 5000,
+    "artemis": 5000
+   },
+   "artifactStars": {
+    "golden_fleece": 15,
+    "golden_mask": 15,
+    "goldfinger": 15
+   },
+   "talents": {
+    "refinement": 5,
+    "glory": 1,
+    "healer": 5,
+    "dexterity": 5,
+    "might": 5,
+    "vitality": 5
+   },
+   "runes": {
+    "arrow_of_echoes": 3,
+    "sharp_arrow": 5,
+    "guardian": 2,
+    "arrow_rain": 4,
+    "lucky_shadow": 2,
+    "ability_circle": 3
+   },
+   "heroSelectedSkins": {},
+   "unlockedSkins": {},
+   "equippedGear": {},
+   "gearBag": [],
+   "bestRooms": {
+    "1": 15,
+    "2": 12,
+    "3": 10,
+    "4": 15,
+    "5": 15
+   },
+   "winsByChapter": {
+    "1": 9,
+    "2": 5,
+    "3": 3,
+    "4": 1,
+    "5": 1
+   },
+   "lifetimeStats": {
+    "runs": 300,
+    "wins": 19,
+    "kills": 25000,
+    "goldEarned": 9000000000,
+    "deepestRoom": 15,
+    "roomsCleared": 900,
+    "chaptersCleared": 5
+   },
+   "bestiary": {},
+   "achievementsUnlocked": {
+    "a1": 1762300000000,
+    "a2": 1762300000000
+   },
+   "achievementsClaimed": {
+    "a1": 1762300000000
+   },
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 1762000000000,
+    "completedAt": 1762300000000,
+    "skipped": false,
+    "currentStep": "N08",
+    "completedSteps": [
+     "N01",
+     "N02",
+     "N03",
+     "N04",
+     "N05",
+     "N06",
+     "N07",
+     "N08"
+    ],
+    "claimedRewards": [
+     "N01",
+     "N02",
+     "N03",
+     "N04",
+     "N05",
+     "N06",
+     "N07",
+     "N08"
+    ],
+    "isCompleted": true
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": {
+    "v": 1,
+    "chapterIdx": 4,
+    "chapterId": 5,
+    "room": 11,
+    "maxRooms": 15,
+    "kills": 63,
+    "runGold": 900,
+    "savedAt": 1762400000000,
+    "player": {
+     "hp": 900000,
+     "maxHp": 1000000,
+     "atk": 40000,
+     "aspd": 3.1,
+     "critRate": 0.7,
+     "critDmgMult": 2.4,
+     "defFlat": 300,
+     "dmgReduction": 0.12,
+     "level": 14,
+     "xp": 40,
+     "xpNext": 400,
+     "skills": {
+      "wounded_warrior": 2,
+      "charged_arrow": 1,
+      "pierce": 1
+     }
+    }
+   },
+   "equippedRuneSlots": {
+    "etched": [
+     "arrow_of_echoes",
+     "sharp_arrow"
+    ],
+    "blessing": [
+     "guardian"
+    ],
+    "enhancement": [
+     "arrow_rain",
+     "lucky_shadow"
+    ],
+    "ability": [
+     "ability_circle",
+     "ability_circle"
+    ]
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   }
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 9000000000,
+   "gems": 400000,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 100,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 1762000000000,
+    "completedAt": 1762300000000,
+    "skipped": false,
+    "currentStep": "N08",
+    "completedSteps": [
+     "N01",
+     "N02",
+     "N03",
+     "N04",
+     "N05",
+     "N06",
+     "N07",
+     "N08"
+    ],
+    "claimedRewards": [
+     "N01",
+     "N02",
+     "N03",
+     "N04",
+     "N05",
+     "N06",
+     "N07",
+     "N08"
+    ],
+    "isCompleted": true
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": {
+    "v": 1,
+    "chapterIdx": 4,
+    "chapterId": 5,
+    "room": 11,
+    "maxRooms": 15,
+    "kills": 63,
+    "runGold": 900,
+    "savedAt": 1762400000000,
+    "player": {
+     "hp": 900000,
+     "maxHp": 1000000,
+     "atk": 40000,
+     "aspd": 3.1,
+     "critRate": 0.7,
+     "critDmgMult": 2.4,
+     "defFlat": 300,
+     "dmgReduction": 0.12,
+     "level": 14,
+     "xp": 40,
+     "xpNext": 400,
+     "skills": {
+      "wounded_warrior": 2,
+      "charged_arrow": 1,
+      "pierce": 1
+     }
+    }
+   },
+   "runes": {
+    "arrow_of_echoes": 3,
+    "sharp_arrow": 5,
+    "guardian": 2,
+    "arrow_rain": 4,
+    "lucky_shadow": 2,
+    "ability_circle": 3
+   },
+   "talents": {
+    "refinement": 5,
+    "glory": 1,
+    "healer": 5,
+    "dexterity": 5,
+    "might": 5,
+    "vitality": 5
+   },
+   "bestRooms": {
+    "1": 15,
+    "2": 12,
+    "3": 10,
+    "4": 15,
+    "5": 15
+   },
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {
+    "thor": 8,
+    "wukong": 8,
+    "cleo": 8,
+    "atreus": 8,
+    "rolla": 8,
+    "nezha": 8,
+    "otta": 8,
+    "hou_yi": 8,
+    "phynx": 8,
+    "loki": 8,
+    "dracoola": 8,
+    "seraph": 8,
+    "mymu": 8,
+    "hela": 8,
+    "helix": 8,
+    "nyanja": 8,
+    "alex": 8,
+    "artemis": 8
+   },
+   "heroShards": {
+    "thor": 5000,
+    "wukong": 5000,
+    "cleo": 5000,
+    "atreus": 5000,
+    "rolla": 5000,
+    "nezha": 5000,
+    "otta": 5000,
+    "hou_yi": 5000,
+    "phynx": 5000,
+    "loki": 5000,
+    "dracoola": 5000,
+    "seraph": 5000,
+    "mymu": 5000,
+    "hela": 5000,
+    "helix": 5000,
+    "nyanja": 5000,
+    "alex": 5000,
+    "artemis": 5000
+   },
+   "heroSelectedSkins": {},
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {},
+   "lifetimeStats": {
+    "runs": 300,
+    "wins": 19,
+    "kills": 25000,
+    "goldEarned": 9000000000,
+    "deepestRoom": 15,
+    "roomsCleared": 900,
+    "chaptersCleared": 5
+   },
+   "winsByChapter": {
+    "1": 9,
+    "2": 5,
+    "3": 3,
+    "4": 1,
+    "5": 1
+   },
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {
+    "a1": 1762300000000,
+    "a2": 1762300000000
+   },
+   "achievementsClaimed": {
+    "a1": 1762300000000
+   },
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": null,
+    "necklace": null,
+    "ring": null,
+    "armor": null,
+    "helmet": null,
+    "boots": null
+   },
+   "gearBag": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 2657
+ },
+ {
+  "name": "legacy-missing-version-fields",
+  "note": "save cũ thiếu field version — server phải tự điền, không được coi là save hỏng",
+  "input": {
+   "gold": 500,
+   "gems": 0,
+   "stamina": 0,
+   "gearLevel": 1,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "artifactStars": {},
+   "talents": {},
+   "runes": {},
+   "heroSelectedSkins": {},
+   "unlockedSkins": {},
+   "equippedGear": {},
+   "gearBag": [],
+   "bestRooms": {},
+   "winsByChapter": {},
+   "lifetimeStats": {},
+   "achievementsClaimed": {},
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "dungeonCheckpoint": null,
+   "equippedRuneSlots": {
+    "etched": [],
+    "blessing": [],
+    "enhancement": [],
+    "ability": []
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   }
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 500,
+   "gems": 0,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 1,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "runes": {},
+   "talents": {},
+   "bestRooms": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "heroSelectedSkins": {},
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {},
+   "lifetimeStats": {},
+   "winsByChapter": {},
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": null,
+    "necklace": null,
+    "ring": null,
+    "armor": null,
+    "helmet": null,
+    "boots": null
+   },
+   "gearBag": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 826
+ },
+ {
+  "name": "legacy-partial-gear",
+  "note": "trang bị cũ thiếu nhiều field optional",
+  "input": {
+   "gold": 0,
+   "gems": 0,
+   "stamina": 0,
+   "gearLevel": 1,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "artifactStars": {},
+   "talents": {},
+   "runes": {},
+   "heroSelectedSkins": {},
+   "unlockedSkins": {},
+   "equippedGear": {
+    "weapon": {
+     "uid": "old1",
+     "templateId": "rusty_bow",
+     "quality": "common"
+    },
+    "armor": {
+     "uid": "old2",
+     "templateId": "cloth_vest",
+     "quality": "uncommon"
+    }
+   },
+   "gearBag": [
+    {
+     "uid": "old3",
+     "templateId": "wooden_charm",
+     "quality": "rare"
+    }
+   ],
+   "bestRooms": {},
+   "winsByChapter": {},
+   "lifetimeStats": {},
+   "bestiary": {},
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "equippedRuneSlots": {
+    "etched": [],
+    "blessing": [],
+    "enhancement": [],
+    "ability": []
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   }
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 0,
+   "gems": 0,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 1,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "runes": {},
+   "talents": {},
+   "bestRooms": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "heroSelectedSkins": {},
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {},
+   "lifetimeStats": {},
+   "winsByChapter": {},
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": {
+     "uid": "old1",
+     "templateId": "rusty_bow",
+     "quality": "common",
+     "awakening": 0,
+     "level": 1,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    },
+    "necklace": null,
+    "ring": null,
+    "armor": {
+     "uid": "old2",
+     "templateId": "cloth_vest",
+     "quality": "uncommon",
+     "awakening": 0,
+     "level": 1,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    },
+    "helmet": null,
+    "boots": null
+   },
+   "gearBag": [
+    {
+     "uid": "old3",
+     "templateId": "wooden_charm",
+     "quality": "rare",
+     "awakening": 0,
+     "level": 1,
+     "locked": false,
+     "favorite": false,
+     "sockets": [],
+     "affixes": []
+    }
+   ],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 1421
+ },
+ {
+  "name": "unknown-fields",
+  "note": "save có field lạ — server LỌC BỎ; Unity cũng không được giả định chúng tồn tại",
+  "input": {
+   "gold": 100,
+   "gems": 0,
+   "stamina": 0,
+   "gearLevel": 1,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "artifactStars": {},
+   "talents": {},
+   "runes": {},
+   "heroSelectedSkins": {},
+   "unlockedSkins": {},
+   "equippedGear": {},
+   "gearBag": [],
+   "bestRooms": {},
+   "winsByChapter": {},
+   "lifetimeStats": {},
+   "bestiary": {},
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "equippedRuneSlots": {
+    "etched": [],
+    "blessing": [],
+    "enhancement": [],
+    "ability": []
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "somethingFromTheFuture": {
+    "a": 1,
+    "b": [
+     1,
+     2,
+     3
+    ]
+   },
+   "anotherUnknown": "keep-me"
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 100,
+   "gems": 0,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 1,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "runes": {},
+   "talents": {},
+   "bestRooms": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "heroSelectedSkins": {},
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {},
+   "lifetimeStats": {},
+   "winsByChapter": {},
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": null,
+    "necklace": null,
+    "ring": null,
+    "armor": null,
+    "helmet": null,
+    "boots": null
+   },
+   "gearBag": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 1299
+ },
+ {
+  "name": "garden-and-plinko",
+  "note": "garden/plinko/modeBest/gameMode KHÔNG nằm trong whitelist server — kiểm chứng chúng bị lọc",
+  "input": {
+   "gold": 5000,
+   "gems": 0,
+   "stamina": 0,
+   "gearLevel": 1,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "selectedChapterIdx": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "artifactStars": {},
+   "talents": {},
+   "runes": {},
+   "heroSelectedSkins": {},
+   "unlockedSkins": {},
+   "equippedGear": {},
+   "gearBag": [],
+   "bestRooms": {},
+   "winsByChapter": {},
+   "lifetimeStats": {},
+   "bestiary": {},
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "acquiredSkills": {},
+   "starterSkillIds": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wikiOtherItems": {},
+   "wishTokens": 0,
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "equippedRuneSlots": {
+    "etched": [],
+    "blessing": [],
+    "enhancement": [],
+    "ability": []
+   },
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "garden": {
+    "plots": [
+     {
+      "seed": "carrot",
+      "readyAt": 1762400000000
+     }
+    ],
+    "harvested": 12
+   },
+   "plinko": {
+    "plays": 7,
+    "won": 900
+   },
+   "modeBest": {
+    "endless": 23,
+    "tower": 4
+   },
+   "gameMode": "endless"
+  },
+  "sanitizedOk": true,
+  "sanitized": {
+   "maxedAllVersion": 1,
+   "artemisHeroVersion": 1,
+   "wikiCharactersVersion": 2,
+   "gold": 5000,
+   "gems": 0,
+   "stamina": 0,
+   "playerLevel": 1,
+   "playerName": "",
+   "selectedChapterIdx": 0,
+   "selectedHeroId": "alex",
+   "selectedWeaponId": "bow",
+   "selectedPetId": "spirit_sword",
+   "gearLevel": 1,
+   "activePreset": 1,
+   "heroSkinIdx": 0,
+   "sortMode": "quality",
+   "achievementFilter": "all",
+   "beginnerJourney": {
+    "version": 1,
+    "startedAt": 0,
+    "completedAt": 0,
+    "skipped": false,
+    "currentStep": "N01",
+    "completedSteps": [],
+    "claimedRewards": [],
+    "isCompleted": false
+   },
+   "season": {
+    "season": 1,
+    "career": null,
+    "tokens": 0,
+    "boss": null,
+    "bossHp": 0,
+    "bossMaxHp": 0,
+    "bossDefeated": false,
+    "powerSacrificed": 0,
+    "log": []
+   },
+   "dungeonCheckpoint": null,
+   "runes": {},
+   "talents": {},
+   "bestRooms": {},
+   "gemInventory": {},
+   "salvageMaterials": 0,
+   "heroStars": {},
+   "heroShards": {},
+   "heroSelectedSkins": {},
+   "resonanceSlots": {
+    "slot1": null,
+    "slot2": null
+   },
+   "unlockedSkins": {},
+   "lifetimeStats": {},
+   "winsByChapter": {},
+   "bestiary": {},
+   "bestiaryCollapsed": false,
+   "achievementsUnlocked": {},
+   "achievementsClaimed": {},
+   "starterSkillIds": [],
+   "starterWeaponGranted": false,
+   "acquiredSkills": {},
+   "equippedGear": {
+    "weapon": null,
+    "necklace": null,
+    "ring": null,
+    "armor": null,
+    "helmet": null,
+    "boots": null
+   },
+   "gearBag": [],
+   "presets": {},
+   "gearLoadouts": {},
+   "gearScrolls": {
+    "weapon": 0,
+    "armor": 0,
+    "helmet": 0,
+    "ring": 0,
+    "necklace": 0,
+    "boots": 0
+   },
+   "chestKeys": {},
+   "wishTokens": 0,
+   "wikiOtherItems": {},
+   "chestGachaState": {},
+   "runeRuinsState": {},
+   "wikiEventsState": {}
+  },
+  "bytes": 1394
+ }
+]
