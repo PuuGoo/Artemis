@@ -29,7 +29,7 @@
   lần bấm Play có thể chờ 10–30 giây. Đây là trải nghiệm thật trên HD 4000, không
   phải lời cảnh báo chung.
 - **Build WebGL: khả thi** (16,5 GiB đủ cho Editor + WebGL = 8,6 GiB, còn ~7 GiB).
-  Build sẽ mất **15–30 phút** trên máy này.
+  Đã đo thật trên máy này: build đầu **18m47s**, build lại **16–47s**.
 - **Build Android: KHÔNG khuyến nghị.** Cần thêm 2,1 GiB (tổng 10,7 GiB) và
   **IL2CPP cần ~8 GB RAM chỉ để link** — với 7,9 GiB máy sẽ swap và có thể treo
   hoặc lỗi link. Chưa kể Android đang bị **chặn bởi vấn đề xác thực** (xem

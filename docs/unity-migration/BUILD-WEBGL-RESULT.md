@@ -11,10 +11,16 @@
 |---|---|
 | Unity Editor | **2022.3.62f1** (changeset `4af31df58517`) — đúng bản project khoá |
 | Module | WebGL Build Support + Windows Standalone |
-| Build lần đầu (IL2CPP nguội) | **16 phút 59 giây** |
-| Build lại (IL2CPP ấm cache) | **16–25 giây** |
+| Build lần đầu (IL2CPP nguội) | **18 phút 47 giây** wall-clock (1127 s) |
+| Build lại (IL2CPP ấm cache) | **16–47 giây** wall-clock |
 | Kết quả | `BuildResult.Succeeded`, **0 lỗi** |
 | Dung lượng | **7 MB** (5 file) |
+
+> **Về hai con số thời gian:** `BuildReport.summary.totalTime` chỉ đếm thời gian
+> **bên trong** `BuildPipeline.BuildPlayer` (ví dụ `00:16:59`), không tính lúc
+> Unity khởi động, import asset và thoát. Thời gian người dùng thật sự chờ là
+> **1127 s (18m47s)** — đo bằng `date +%s` quanh cả tiến trình. Dùng con số
+> wall-clock khi nói "mất bao lâu".
 
 Cấu trúc ra:
 
