@@ -101,10 +101,12 @@ check('tab Su Kien goi renderGardenPanel',
 // Phan biet trang thai phai dua vao CHU, khong chi mau: 3 loai cay co 3 mau
 // khac nhau nen neu chi doc mau thi tuong la 3 trang thai.
 check('o dang lon co nhan chu "Dang lon"', /Đang lớn<\/span>/.test(html));
-check('o chin co badge "!" de bat mat', /rounded-full bg-amber-400 text-slate-950 text-\[8px\]/.test(html));
+check('o chin co badge "!" to hon (w-4.5 + glow)', /w-4\.5 h-4\.5 rounded-full bg-amber-400/.test(html));
 check('o trong co nhan chu "Trong"', />Trồng<\/span>/.test(html));
-check('dem nguoc du to doc (>=9.5px, chu trang dam)',
-  /text-\[9\.5px\] text-white font-black tabular-nums/.test(html));
+check('dem nguoc du to doc (10px trang dam)',
+  /text-\[10px\] text-white font-black tabular-nums/.test(html));
+check('nhan "Dang lon" du tuong phan (slate-200, khong phai 400)',
+  /text-\[7\.5px\] uppercase tracking-wide text-slate-200 font-black/.test(html));
 
 // ============================================================ 7. ĐỒNG HỒ
 console.log('\n=== 7. DONG HO 1S ===');
