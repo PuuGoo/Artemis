@@ -7,7 +7,7 @@
   var fakeGame = null, activeEntities = [], previewBroken = false;
   var cache = Object.create(null);
   var zodiacSlugs="aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces".split(" ");
-  function bossArt(id){id=Number(id);return Number.isInteger(id)&&id>=8&&id<=19?"/assets/boss-ch"+id+"-"+zodiacSlugs[id-8]+".svg":"";}
+  function bossArt(id){id=Number(id);return Number.isInteger(id)&&id>=8&&id<=19?"zodiac_"+zodiacSlugs[id-8]:"";}
 
   function esc(s) { return helpers.esc(s); }
   function num(n) { return helpers.num(n); }
@@ -23,7 +23,7 @@
   function renderZodiacGallery(){
     var grid=el("ccZodiacGallery");if(!grid)return;
     grid.innerHTML=chapters.filter(function(ch){return !!bossArt(ch.id);}).map(function(ch){
-      return '<button type="button" class="cc-zodiac-card" data-ch="'+ch.id+'" aria-selected="'+(!!current&&current.id===ch.id)+'"><img src="'+bossArt(ch.id)+'" loading="lazy" alt="Boss chibi '+esc(ch.bossName)+'"><b>Chương '+ch.id+'</b><small>'+esc(ch.bossName)+'</small></button>';
+      return '<button type="button" class="cc-zodiac-card" data-ch="'+ch.id+'" aria-selected="'+(!!current&&current.id===ch.id)+'"><canvas width="200" height="170" data-zodiac="'+bossArt(ch.id)+'" aria-label="Boss Canvas '+esc(ch.bossName)+'"></canvas><b>Chương '+ch.id+'</b><small>'+esc(ch.bossName)+'</small></button>';
     }).join("");
   }
   function renderList() {
@@ -122,7 +122,7 @@
       stat("HP boss cuối",last.boss.hp)+stat("ATK boss cuối",last.boss.atk)+
       stat("Số phòng",c.rooms)+stat("Mở khóa sau chương",c.unlockChapter===null?"Tự do":c.unlockChapter)+'</div>' +
       '<p class="cc-help">Boss thực tế có thể khác tên boss quảng bá tại các phòng 5/10. ATK là sát thương đầu vào trước giảm sát thương của nhân vật.</p></div>' +
-      (art?'<div class="cc-panel cc-boss-feature"><img src="'+art+'" loading="lazy" alt="Boss chibi '+esc(finalBoss.name)+'"><div><h3>👑 '+esc(finalBoss.name)+'</h3><p class="cc-caption">Hình SVG boss đang dùng trong game</p><div class="cc-feature-stats"><span>HP '+num(finalBoss.hp)+'</span><span>ATK '+num(finalBoss.atk)+'</span><span>Tốc độ '+num(finalBoss.speed)+'</span></div></div></div>':'') +
+      (art?'<div class="cc-panel cc-boss-feature"><canvas width="220" height="195" data-zodiac="'+art+'" aria-label="Boss Canvas '+esc(finalBoss.name)+'"></canvas><div><h3>👑 '+esc(finalBoss.name)+'</h3><p class="cc-caption">Boss chibi vẽ trực tiếp bằng Canvas 2D, cùng mã với trận đấu</p><div class="cc-feature-stats"><span>HP '+num(finalBoss.hp)+'</span><span>ATK '+num(finalBoss.atk)+'</span><span>Tốc độ '+num(finalBoss.speed)+'</span></div></div></div>':'') +
       '<div class="cc-panel"><div class="cc-section-head"><h3>🎮 Xem phòng và đấu trường thật</h3>' +
       '<span class="cc-caption" id="ccRoomLabel"></span></div>' +
       '<div id="ccRoomNav" class="cc-room-nav" role="group" aria-label="Chọn phòng"></div>' +
@@ -165,7 +165,7 @@
   }
   function entityCard(e,isBoss,uid) {
     var img=isBoss && /^zodiac_/.test(e.type||"")?bossArt(current.id):"";
-    var graphic=img?'<img class="cc-sprite cc-zodiac-sprite" src="'+img+'" loading="lazy" alt="Boss chibi '+esc(e.name)+'">':'<canvas class="cc-sprite" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>';
+    var graphic=img?'<canvas class="cc-sprite cc-zodiac-sprite" width="200" height="136" data-zodiac="'+img+'" aria-label="Boss chibi Canvas '+esc(e.name)+'"></canvas>':'<canvas class="cc-sprite" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>';
     return '<article class="cc-entity'+(isBoss?' boss':'')+'">'+graphic +
       '<div class="cc-entity-title"><b>'+esc(e.name)+'</b><small>'+(isBoss?'BOSS':('x'+(e.quantity||1)))+'</small></div>' +
       '<div class="cc-kvs"><div class="cc-kv">HP<strong>'+num(e.hp)+'</strong></div><div class="cc-kv">ATK<strong>'+num(e.atk)+'</strong></div>' +
@@ -240,6 +240,24 @@
     };
     window.AdminCampaignArenaV2.init(fakeGame);
   }
+  function paintZodiacCards() {
+    var art=window.ArtemisZodiacBosses;
+    if(!art || art.renderMode!=="canvas-paths" || !root)return;
+    root.querySelectorAll("canvas[data-zodiac]").forEach(function(canvas){
+      if(canvas._zodiacRendered)return;
+      var type=canvas.getAttribute("data-zodiac");
+      if(!art.sources[type])return;
+      var ctx=canvas.getContext("2d");
+      if(!ctx)return;
+      var size=Math.min(canvas.width/3.5,canvas.height/3.35);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.save();
+      try {
+        ctx.translate(canvas.width/2,canvas.height*.52);
+        canvas._zodiacRendered=art.draw(ctx,type,size,1500,1,false);
+      } finally {ctx.restore();}
+    });
+  }
   function drawZodiacInArena(ctx,e,now){
     var art=window.ArtemisZodiacBosses;
     if(!e.isBoss||!art||!art.sources[e.type])return false;
@@ -269,6 +287,7 @@
         ctx.font="bold 15px system-ui";ctx.fillText(room.boss.name,390,326);
       }
       drawSprites(now);
+      paintZodiacCards();
     } catch(error) {
       previewBroken=true;
       var st=el("ccCanvasStatus");
@@ -305,7 +324,7 @@
   function tick(now) {
     animationId=0;
     if(!visible||!root||root.closest(".hidden")||document.hidden)return;
-    if(now-lastFrame>120) {lastFrame=now;drawScene(now);}
+    if(now-lastFrame>120) {lastFrame=now;drawScene(now);paintZodiacCards();}
     animationId=requestAnimationFrame(tick);
   }
   function startAnimation() {
