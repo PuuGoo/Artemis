@@ -12620,7 +12620,63 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         return `<svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-white" fill="currentColor"><path d="M8 4h6v8l4 3v4H6v-3l2-2V4z"/></svg>`;
       }
 
+      // ==================== ẢNH PNG TRANG BỊ (256×256, nền trong suốt) ====================
+      // Toàn bộ 36 ảnh trang bị thật (public/assets/gear/*.png) thay cho bộ SVG vector
+      // vẽ tay trước đây. Khoá = GEAR_TEMPLATES id, giá trị = tên file trong assets/gear.
+      // Bộ Khởi Đầu (starter) không có ảnh riêng nên vẫn dùng SVG bên dưới.
+      // Lưu ý: bộ Echo / Destruction / Decisiveness chỉ có mảnh Vòng Tay (Bracelet),
+      // game không có ô Vòng Tay nên ảnh Bracelet dùng cho ô Mũ của bộ đó.
+      const GEAR_ART_FILES = {
+        // ---- Dragon Knight Set (S-Tier) ----
+        crimson_bow: 'dragoon-crossbow',
+        sapphire_pendant: 'dragoon-amulet',
+        sun_gold_ring: 'dragoon-ring',
+        golden_plate: 'dragoon-armor',
+        golden_helm: 'dragoon-helmet',
+        titan_boots: 'dragoon-boots',
+        // ---- Griffin Set (S-Tier) ----
+        dragoon_claw: 'griffin-claw',
+        celestial_amulet: 'griffin-amulet',
+        jade_flower_ring: 'griffin-ring',
+        shadow_tunic: 'griffin-armor',
+        phantom_mask: 'griffin-helmet',
+        aqua_boots: 'griffin-boots',
+        // ---- Oracle Set (S-Tier) ----
+        oracle_staff: 'oracle-spear',
+        void_prism_necklace: 'oracle-amulet',
+        starlight_ring: 'oracle-ring',
+        wind_vest: 'oracle-armor',
+        astral_crown: 'oracle-helmet',
+        starlight_greaves: 'oracle-boots',
+        // ---- Echo Set ----
+        beam_staff: 'beam-staff',
+        echo_amulet: 'amulet-of-echo',
+        echo_ring: 'echo-ring',
+        echo_armor: 'armor-of-echo',
+        echo_helmet: 'bracelet-of-echo',
+        echo_boots: 'boots-of-echo',
+        // ---- Destruction Set ----
+        heroic_longbow: 'heroic-longbow',
+        destruction_amulet: 'amulet-of-destruction',
+        destruction_ring: 'ring-of-destruction',
+        destruction_armor: 'armor-of-destruction',
+        destruction_helmet: 'bracelet-of-destruction',
+        destruction_boots: 'boots-of-destruction',
+        // ---- Decisiveness Set ----
+        agile_knuckles: 'agile-knuckles',
+        decisiveness_amulet: 'amulet-of-decisiveness',
+        decisiveness_ring: 'ring-of-decisiveness',
+        decisiveness_armor: 'armor-of-decisiveness',
+        decisiveness_helmet: 'bracelet-of-decisiveness',
+        decisiveness_boots: 'boots-of-decisiveness'
+      };
+
+      // Trả về <img> PNG cho mọi trang bị có ảnh thật; chỉ bộ Khởi Đầu rơi xuống SVG.
       function getGearItemSvgArt(templateId) {
+        const artFile = GEAR_ART_FILES[templateId];
+        if (artFile) {
+          return `<img src="assets/gear/${artFile}.png" alt="" draggable="false" loading="lazy" decoding="async" class="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_3px_5px_rgba(0,0,0,0.6)]" />`;
+        }
         switch (templateId) {
           // ==================== S-TIER WEAPONS ====================
           case 'crimson_bow':
