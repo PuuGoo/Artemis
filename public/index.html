@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Archero 2: Kỷ Nguyên Cung Thủ Roguelike</title>
   <script src="/cloud.js"></script>
+  <script src="/zodiac-chibi-bosses.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
@@ -4495,6 +4496,9 @@ const ArenaV2 = (() => {
   }
 
   function drawZodiacBoss(ctx, r, t, hr, charge) {
+    // Boss cung hoàng đạo mới: Canvas nhận SVG chibi; lỗi tải ảnh tự quay về hình cũ.
+    const chibi = typeof window !== 'undefined' ? window.ArtemisZodiacBosses : null;
+    if (chibi && chibi.draw(ctx, curBiome?.boss, r, t, hr, charge)) return;
     const B = curBiome, glow = B?.accent || '#a5b4fc';
     ctx.save(); ctx.rotate(Math.sin(t * .0014) * .08);
     ctx.fillStyle = '#0f172a'; ctx.strokeStyle = glow; ctx.lineWidth = 3;

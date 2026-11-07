@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 256 256" role="img" aria-label="Boss chibi Bọ Cạp">
+ <title>Bọ Cạp — boss chibi hoàng đạo</title><defs>
+ <linearGradient id="suit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b789f7"/><stop offset="1" stop-color="#7d5cbe"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff8d4"/><stop offset=".55" stop-color="#f3ca60"/><stop offset="1" stop-color="#c18c35"/></linearGradient>
+ <radialGradient id="aura"><stop stop-color="#b789f7" stop-opacity=".48"/><stop offset="1" stop-color="#b789f7" stop-opacity="0"/></radialGradient></defs>
+ <circle cx="128" cy="126" r="113" fill="url(#aura)"/>
+ <circle cx="128" cy="126" r="107" fill="none" stroke="#b789f7" stroke-opacity=".30" stroke-width="2" stroke-dasharray="5 14"/>
+ <path d="M28 35 L29.2 38.8 L33 40 L29.2 41.2 L28 45 L26.8 41.2 L23 40 L26.8 38.8 Z" fill="#fff4ad" opacity=".92"/><path d="M220 43 L221.92 49.08 L228 51 L221.92 52.92 L220 59 L218.08 52.92 L212 51 L218.08 49.08 Z" fill="#fff4ad" opacity=".92"/><path d="M36 175 L37.2 178.8 L41 180 L37.2 181.2 L36 185 L34.8 181.2 L31 180 L34.8 178.8 Z" fill="#fff4ad" opacity=".92"/><path d="M224 188 L225.44 192.56 L230 194 L225.44 195.44 L224 200 L222.56 195.44 L218 194 L222.56 192.56 Z" fill="#fff4ad" opacity=".92"/>
+ <ellipse cx="128" cy="231" rx="70" ry="12" fill="#070b20" fill-opacity=".40"/>
+ <g stroke="#302447" stroke-width="5" stroke-linejoin="round">
+ <path d="M171 165 Q229 158 223 106 Q219 66 199 66 Q171 66 175 93" fill="none" stroke="#302447" stroke-width="28" stroke-linecap="round"/>
+ <path d="M171 165 Q229 158 223 106 Q219 66 199 66 Q171 66 175 93" fill="none" stroke="#9365d0" stroke-width="20" stroke-linecap="round" stroke-dasharray="14 7"/>
+ <path d="M172 84 L179 57 L191 89 L179 106Z" fill="#f7a2bd"/>
+ <path d="M70 176 Q43 167 38 137 M185 177 Q210 170 218 135" fill="none" stroke="#9a70ce" stroke-width="13" stroke-linecap="round"/>
+ <path d="M72 131 Q33 122 31 93 Q33 76 50 83 L63 111 Q67 76 86 86 Q101 114 72 131Z M184 131 Q223 122 225 93 Q223 76 206 83 L193 111 Q189 76 170 86 Q155 114 184 131Z" fill="#b48aed"/>
+ <path d="M74 166 Q75 121 128 120 Q181 121 182 166 L168 205 Q127 228 88 207Z" fill="url(#suit)"/>
+ <path d="M88 161 Q128 142 167 161" fill="none" stroke="#d5baff" stroke-width="8"/>
+ <ellipse cx="128" cy="153" rx="41" ry="38" fill="#caa8f7"/>
+ </g><g transform="translate(128 150) scale(0.92)">
+ <ellipse cx="-22" cy="0" rx="9.8" ry="14" fill="#312646"/><ellipse cx="22" cy="0" rx="9.8" ry="14" fill="#312646"/>
+ <ellipse cx="-25" cy="-5" rx="3.7" ry="5" fill="white"/><ellipse cx="19" cy="-5" rx="3.7" ry="5" fill="white"/>
+ <circle cx="-18" cy="6" r="2.3" fill="#cdbbff"/><circle cx="26" cy="6" r="2.3" fill="#cdbbff"/>
+ <ellipse cx="-44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/><ellipse cx="44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/>
+ <path d="M-7 20 Q0 29 7 20" stroke="#774364" stroke-width="3.3" fill="none" stroke-linecap="round"/>
+ </g><path d="M110 196 L128 207 L146 196" fill="none" stroke="#703f9b" stroke-width="4"/>
+ <circle cx="128" cy="126" r="112" fill="none" stroke="white" stroke-opacity=".1" stroke-width="2"/>
+ </svg>

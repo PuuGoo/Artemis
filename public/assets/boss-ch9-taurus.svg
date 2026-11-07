@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 256 256" role="img" aria-label="Boss chibi Kim Ngưu">
+ <title>Kim Ngưu — boss chibi hoàng đạo</title><defs>
+ <linearGradient id="suit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffc654"/><stop offset="1" stop-color="#b78634"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff8d4"/><stop offset=".55" stop-color="#f3ca60"/><stop offset="1" stop-color="#c18c35"/></linearGradient>
+ <radialGradient id="aura"><stop stop-color="#ffc654" stop-opacity=".48"/><stop offset="1" stop-color="#ffc654" stop-opacity="0"/></radialGradient></defs>
+ <circle cx="128" cy="126" r="113" fill="url(#aura)"/>
+ <circle cx="128" cy="126" r="107" fill="none" stroke="#ffc654" stroke-opacity=".30" stroke-width="2" stroke-dasharray="5 14"/>
+ <path d="M28 35 L29.2 38.8 L33 40 L29.2 41.2 L28 45 L26.8 41.2 L23 40 L26.8 38.8 Z" fill="#fff4ad" opacity=".92"/><path d="M220 43 L221.92 49.08 L228 51 L221.92 52.92 L220 59 L218.08 52.92 L212 51 L218.08 49.08 Z" fill="#fff4ad" opacity=".92"/><path d="M36 175 L37.2 178.8 L41 180 L37.2 181.2 L36 185 L34.8 181.2 L31 180 L34.8 178.8 Z" fill="#fff4ad" opacity=".92"/><path d="M224 188 L225.44 192.56 L230 194 L225.44 195.44 L224 200 L222.56 195.44 L218 194 L222.56 192.56 Z" fill="#fff4ad" opacity=".92"/>
+ <ellipse cx="128" cy="231" rx="70" ry="12" fill="#070b20" fill-opacity=".40"/>
+ <path d="M68 187 Q47 191 48 215" fill="none" stroke="#8c5832" stroke-width="11" stroke-linecap="round"/>
+ <g stroke="#302447" stroke-width="4.5"><path d="M104 192 L99 227 Q87 234 74 226 L81 212 L86 191Z" fill="#544271"/><path d="M150 192 L157 227 Q169 235 181 226 L174 210 L166 190Z" fill="#544271"/></g>
+ <path d="M82 166 Q91 149 117 155 L140 155 Q170 151 176 167 L189 215 Q165 231 128 233 Q91 232 68 214Z" fill="url(#suit)" stroke="#302447" stroke-width="5"/>
+ <path d="M111 176 L128 218 L145 176" stroke="white" stroke-opacity=".48" stroke-width="3" fill="none"/>
+ <g stroke="#302447" stroke-width="4"><path d="M82 176 Q65 168 61 189 Q57 202 75 210 L91 197" fill="url(#suit)"/><path d="M174 176 Q194 167 198 188 Q201 202 181 209 L165 195" fill="url(#suit)"/></g>
+ <path d="M116 176 L128 164 L140 176 L135 194 L121 194Z" fill="url(#gold)" stroke="#302447" stroke-width="3"/>
+ <path d="M81 90 Q45 90 34 35 Q62 68 87 54Z" fill="#ffd27a" stroke="#302447" stroke-width="5"/><g transform="translate(256 0) scale(-1 1)"><path d="M81 90 Q45 90 34 35 Q62 68 87 54Z" fill="#ffd27a" stroke="#302447" stroke-width="5"/></g><path d="M78 89 L56 72 Q47 59 62 58 L89 72Z" fill="#aa734c" stroke="#302447" stroke-width="4"/><g transform="translate(256 0) scale(-1 1)"><path d="M78 89 L56 72 Q47 59 62 58 L89 72Z" fill="#aa734c" stroke="#302447" stroke-width="4"/></g>
+ <ellipse cx="128" cy="111" rx="63" ry="59" fill="#b88e67" stroke="#302447" stroke-width="5"/>
+ <ellipse cx="110" cy="77" rx="36" ry="13" fill="white" opacity=".22"/>
+ <g transform="translate(128 119) scale(1)">
+ <ellipse cx="-22" cy="0" rx="9.8" ry="14" fill="#312646"/><ellipse cx="22" cy="0" rx="9.8" ry="14" fill="#312646"/>
+ <ellipse cx="-25" cy="-5" rx="3.7" ry="5" fill="white"/><ellipse cx="19" cy="-5" rx="3.7" ry="5" fill="white"/>
+ <circle cx="-18" cy="6" r="2.3" fill="#cdbbff"/><circle cx="26" cy="6" r="2.3" fill="#cdbbff"/>
+ <ellipse cx="-44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/><ellipse cx="44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/>
+ <path d="M-7 20 Q0 29 7 20" stroke="#774364" stroke-width="3.3" fill="none" stroke-linecap="round"/>
+ </g><path d="M104 62 Q127 34 149 63" fill="none" stroke="#754e31" stroke-width="13" stroke-linecap="round"/>
+ <ellipse cx="128" cy="143" rx="30" ry="21" fill="#efb7a1" stroke="#302447" stroke-width="4"/><circle cx="115" cy="142" r="4.5" fill="#83585a"/><circle cx="141" cy="142" r="4.5" fill="#83585a"/><path d="M117 157 Q128 179 139 157" fill="none" stroke="#ffdb6b" stroke-width="5" stroke-linecap="round"/><path d="M68 182 L59 170 L71 162 L85 173Z M172 173 L186 163 L200 174 L187 183Z" fill="url(#gold)" stroke="#302447" stroke-width="3"/>
+ <text x="128" y="210" fill="#fff9dd" font-family="serif" font-size="21" text-anchor="middle" font-weight="bold">♉</text>
+ <circle cx="128" cy="126" r="112" fill="none" stroke="white" stroke-opacity=".1" stroke-width="2"/>
+ </svg>

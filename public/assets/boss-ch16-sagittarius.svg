@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 256 256" role="img" aria-label="Boss chibi Nhân Mã">
+ <title>Nhân Mã — boss chibi hoàng đạo</title><defs>
+ <linearGradient id="suit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9fbdff"/><stop offset="1" stop-color="#8876de"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff8d4"/><stop offset=".55" stop-color="#f3ca60"/><stop offset="1" stop-color="#c18c35"/></linearGradient>
+ <radialGradient id="aura"><stop stop-color="#9fbdff" stop-opacity=".48"/><stop offset="1" stop-color="#9fbdff" stop-opacity="0"/></radialGradient></defs>
+ <circle cx="128" cy="126" r="113" fill="url(#aura)"/>
+ <circle cx="128" cy="126" r="107" fill="none" stroke="#9fbdff" stroke-opacity=".30" stroke-width="2" stroke-dasharray="5 14"/>
+ <path d="M28 35 L29.2 38.8 L33 40 L29.2 41.2 L28 45 L26.8 41.2 L23 40 L26.8 38.8 Z" fill="#fff4ad" opacity=".92"/><path d="M220 43 L221.92 49.08 L228 51 L221.92 52.92 L220 59 L218.08 52.92 L212 51 L218.08 49.08 Z" fill="#fff4ad" opacity=".92"/><path d="M36 175 L37.2 178.8 L41 180 L37.2 181.2 L36 185 L34.8 181.2 L31 180 L34.8 178.8 Z" fill="#fff4ad" opacity=".92"/><path d="M224 188 L225.44 192.56 L230 194 L225.44 195.44 L224 200 L222.56 195.44 L218 194 L222.56 192.56 Z" fill="#fff4ad" opacity=".92"/>
+ <ellipse cx="128" cy="231" rx="70" ry="12" fill="#070b20" fill-opacity=".40"/>
+ <g stroke="#302447" stroke-width="5" stroke-linecap="round">
+ <path d="M87 179 Q64 155 55 175 L34 201 Q26 213 40 221 L49 213 L61 192 L66 222 L82 226 L94 193 L153 195 L170 227 L185 226 L177 190 Q206 172 196 155 Q166 139 111 154Z" fill="#a886d3"/>
+ <path d="M187 164 Q224 146 212 132" fill="none" stroke="#c69cd7" stroke-width="12"/>
+ </g>
+ <path d="M86 194 L85 229 L105 229 L110 194 M157 193 L164 229 L183 229 L176 190" fill="#674d9e" stroke="#302447" stroke-width="5"/>
+ <path d="M82 166 Q91 149 117 155 L140 155 Q170 151 176 167 L189 215 Q165 231 128 233 Q91 232 68 214Z" fill="url(#suit)" stroke="#302447" stroke-width="5"/>
+ <path d="M111 176 L128 218 L145 176" stroke="white" stroke-opacity=".48" stroke-width="3" fill="none"/>
+ <g stroke="#302447" stroke-width="4"><path d="M82 176 Q65 168 61 189 Q57 202 75 210 L91 197" fill="url(#suit)"/><path d="M174 176 Q194 167 198 188 Q201 202 181 209 L165 195" fill="url(#suit)"/></g>
+ <path d="M116 176 L128 164 L140 176 L135 194 L121 194Z" fill="url(#gold)" stroke="#302447" stroke-width="3"/>
+ <path d="M76 98 Q63 66 101 48 Q141 29 171 67" fill="none" stroke="#6152a2" stroke-width="23"/>
+ <ellipse cx="128" cy="111" rx="63" ry="59" fill="#ffe5c8" stroke="#302447" stroke-width="5"/>
+ <ellipse cx="110" cy="77" rx="36" ry="13" fill="white" opacity=".22"/>
+ <g transform="translate(128 119) scale(1)">
+ <ellipse cx="-22" cy="0" rx="9.8" ry="14" fill="#312646"/><ellipse cx="22" cy="0" rx="9.8" ry="14" fill="#312646"/>
+ <ellipse cx="-25" cy="-5" rx="3.7" ry="5" fill="white"/><ellipse cx="19" cy="-5" rx="3.7" ry="5" fill="white"/>
+ <circle cx="-18" cy="6" r="2.3" fill="#cdbbff"/><circle cx="26" cy="6" r="2.3" fill="#cdbbff"/>
+ <ellipse cx="-44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/><ellipse cx="44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/>
+ <path d="M-7 20 Q0 29 7 20" stroke="#774364" stroke-width="3.3" fill="none" stroke-linecap="round"/>
+ </g><path d="M68 90 Q86 58 113 59 L153 61 Q167 81 168 93 Q145 78 128 73 Q105 93 68 90Z" fill="#b4b1f7" stroke="#302447" stroke-width="4"/>
+ <path d="M197 110 Q236 153 201 207 M196 108 Q169 151 199 208" stroke="#f6df9e" stroke-width="7" fill="none"/><path d="M198 153 L158 153 M158 153 L170 143 M158 153 L170 163" stroke="#fff4d5" stroke-width="4" fill="none"/>
+ <text x="128" y="210" fill="#fff9dd" font-family="serif" font-size="21" text-anchor="middle" font-weight="bold">♐</text>
+ <circle cx="128" cy="126" r="112" fill="none" stroke="white" stroke-opacity=".1" stroke-width="2"/>
+ </svg>

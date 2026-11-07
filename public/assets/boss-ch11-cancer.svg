@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 256 256" role="img" aria-label="Boss chibi Cự Giải">
+ <title>Cự Giải — boss chibi hoàng đạo</title><defs>
+ <linearGradient id="suit" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6ed8ff"/><stop offset="1" stop-color="#ec88bf"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#fff8d4"/><stop offset=".55" stop-color="#f3ca60"/><stop offset="1" stop-color="#c18c35"/></linearGradient>
+ <radialGradient id="aura"><stop stop-color="#6ed8ff" stop-opacity=".48"/><stop offset="1" stop-color="#6ed8ff" stop-opacity="0"/></radialGradient></defs>
+ <circle cx="128" cy="126" r="113" fill="url(#aura)"/>
+ <circle cx="128" cy="126" r="107" fill="none" stroke="#6ed8ff" stroke-opacity=".30" stroke-width="2" stroke-dasharray="5 14"/>
+ <path d="M28 35 L29.2 38.8 L33 40 L29.2 41.2 L28 45 L26.8 41.2 L23 40 L26.8 38.8 Z" fill="#fff4ad" opacity=".92"/><path d="M220 43 L221.92 49.08 L228 51 L221.92 52.92 L220 59 L218.08 52.92 L212 51 L218.08 49.08 Z" fill="#fff4ad" opacity=".92"/><path d="M36 175 L37.2 178.8 L41 180 L37.2 181.2 L36 185 L34.8 181.2 L31 180 L34.8 178.8 Z" fill="#fff4ad" opacity=".92"/><path d="M224 188 L225.44 192.56 L230 194 L225.44 195.44 L224 200 L222.56 195.44 L218 194 L222.56 192.56 Z" fill="#fff4ad" opacity=".92"/>
+ <ellipse cx="128" cy="231" rx="70" ry="12" fill="#070b20" fill-opacity=".40"/>
+ <g stroke="#302447" stroke-width="5" stroke-linejoin="round">
+ <path d="M84 169 Q46 169 47 205 M95 188 Q68 193 74 226 M171 169 Q208 169 209 205 M162 189 Q191 194 187 226" fill="none" stroke="#dd83a4" stroke-width="12" stroke-linecap="round"/>
+ <path d="M83 152 Q50 135 44 112 Q24 119 26 92 Q30 74 44 78 Q52 96 63 89 Q67 69 81 76 Q97 93 89 116 L109 139" fill="#ff99b4"/><path d="M173 152 Q206 135 212 112 Q232 119 230 92 Q226 74 212 78 Q204 96 193 89 Q189 69 175 76 Q159 93 167 116 L147 139" fill="#ff99b4"/>
+ <path d="M63 171 Q65 128 99 119 Q132 98 164 119 Q196 135 194 175 Q181 215 128 218 Q74 216 63 171Z" fill="url(#suit)"/>
+ <path d="M80 165 Q100 147 128 153 Q156 147 176 165" fill="none" stroke="#ffe4ef" stroke-width="7"/>
+ <path d="M103 127 Q95 110 99 97 M153 127 Q161 110 157 97" fill="none" stroke="#f8b9cc" stroke-width="8" stroke-linecap="round"/>
+ <circle cx="100" cy="90" r="17" fill="#ffe6d4"/><circle cx="156" cy="90" r="17" fill="#ffe6d4"/>
+ </g><g transform="translate(128 91) scale(0.73)">
+ <ellipse cx="-22" cy="0" rx="9.8" ry="14" fill="#312646"/><ellipse cx="22" cy="0" rx="9.8" ry="14" fill="#312646"/>
+ <ellipse cx="-25" cy="-5" rx="3.7" ry="5" fill="white"/><ellipse cx="19" cy="-5" rx="3.7" ry="5" fill="white"/>
+ <circle cx="-18" cy="6" r="2.3" fill="#cdbbff"/><circle cx="26" cy="6" r="2.3" fill="#cdbbff"/>
+ <ellipse cx="-44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/><ellipse cx="44" cy="14" rx="10" ry="5" fill="#ff90aa" opacity=".5"/>
+ <path d="M-7 20 Q0 29 7 20" stroke="#774364" stroke-width="3.3" fill="none" stroke-linecap="round"/>
+ </g><path d="M121 59 L128 43 L136 59 L150 56 L145 74 L110 74 L105 56Z" fill="url(#gold)" stroke="#302447" stroke-width="4"/>
+ <circle cx="128" cy="126" r="112" fill="none" stroke="white" stroke-opacity=".1" stroke-width="2"/>
+ </svg>
