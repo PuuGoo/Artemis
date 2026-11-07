@@ -1,0 +1,1217 @@
+{
+  "scope": "Chrome thật, mock auth/save localhost, spawner/update/render thật với state-jump fixture; không phải chơi hết chương hay production E2E",
+  "results": [
+    {
+      "name": "real-spawner-and-update-boss-shot-matrix",
+      "checks": [
+        {
+          "chapter": 1,
+          "type": "golem",
+          "phase": 0,
+          "rage": false,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "golem",
+          "phase": 0,
+          "rage": true,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "golem",
+          "phase": 1,
+          "rage": false,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "golem",
+          "phase": 1,
+          "rage": true,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "golem",
+          "phase": 2,
+          "rage": false,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "golem",
+          "phase": 2,
+          "rage": true,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "queen",
+          "phase": 0,
+          "rage": false,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "queen",
+          "phase": 0,
+          "rage": true,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "queen",
+          "phase": 1,
+          "rage": false,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "queen",
+          "phase": 1,
+          "rage": true,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "queen",
+          "phase": 2,
+          "rage": false,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "queen",
+          "phase": 2,
+          "rage": true,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "demon_king",
+          "phase": 0,
+          "rage": false,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "demon_king",
+          "phase": 0,
+          "rage": true,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "demon_king",
+          "phase": 1,
+          "rage": false,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "demon_king",
+          "phase": 1,
+          "rage": true,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "demon_king",
+          "phase": 2,
+          "rage": false,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 1,
+          "type": "demon_king",
+          "phase": 2,
+          "rage": true,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 4,
+          "type": "elder_dragon",
+          "phase": 0,
+          "rage": false,
+          "shots": 5,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 4,
+          "type": "elder_dragon",
+          "phase": 0,
+          "rage": true,
+          "shots": 5,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 4,
+          "type": "elder_dragon",
+          "phase": 1,
+          "rage": false,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 4,
+          "type": "elder_dragon",
+          "phase": 1,
+          "rage": true,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 4,
+          "type": "elder_dragon",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 4,
+          "type": "elder_dragon",
+          "phase": 2,
+          "rage": true,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 5,
+          "type": "eclipse_sovereign",
+          "phase": 0,
+          "rage": false,
+          "shots": 7,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 5,
+          "type": "eclipse_sovereign",
+          "phase": 0,
+          "rage": true,
+          "shots": 9,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 5,
+          "type": "eclipse_sovereign",
+          "phase": 1,
+          "rage": false,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 5,
+          "type": "eclipse_sovereign",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 5,
+          "type": "eclipse_sovereign",
+          "phase": 2,
+          "rage": false,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 5,
+          "type": "eclipse_sovereign",
+          "phase": 2,
+          "rage": true,
+          "shots": 20,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 6,
+          "type": "astral_devourer",
+          "phase": 0,
+          "rage": false,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 6,
+          "type": "astral_devourer",
+          "phase": 0,
+          "rage": true,
+          "shots": 3,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 6,
+          "type": "astral_devourer",
+          "phase": 1,
+          "rage": false,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 6,
+          "type": "astral_devourer",
+          "phase": 1,
+          "rage": true,
+          "shots": 1,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 6,
+          "type": "astral_devourer",
+          "phase": 2,
+          "rage": false,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 6,
+          "type": "astral_devourer",
+          "phase": 2,
+          "rage": true,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 7,
+          "type": "mycelium_queen",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 7,
+          "type": "mycelium_queen",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 7,
+          "type": "mycelium_queen",
+          "phase": 1,
+          "rage": false,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 7,
+          "type": "mycelium_queen",
+          "phase": 1,
+          "rage": true,
+          "shots": 8,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 7,
+          "type": "mycelium_queen",
+          "phase": 2,
+          "rage": false,
+          "shots": 11,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 7,
+          "type": "mycelium_queen",
+          "phase": 2,
+          "rage": true,
+          "shots": 15,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 8,
+          "type": "zodiac_aries",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 8,
+          "type": "zodiac_aries",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 8,
+          "type": "zodiac_aries",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 8,
+          "type": "zodiac_aries",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 8,
+          "type": "zodiac_aries",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 8,
+          "type": "zodiac_aries",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 9,
+          "type": "zodiac_taurus",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 9,
+          "type": "zodiac_taurus",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 9,
+          "type": "zodiac_taurus",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 9,
+          "type": "zodiac_taurus",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 9,
+          "type": "zodiac_taurus",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 9,
+          "type": "zodiac_taurus",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 10,
+          "type": "zodiac_gemini",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 10,
+          "type": "zodiac_gemini",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 10,
+          "type": "zodiac_gemini",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 10,
+          "type": "zodiac_gemini",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 10,
+          "type": "zodiac_gemini",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 10,
+          "type": "zodiac_gemini",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 11,
+          "type": "zodiac_cancer",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 11,
+          "type": "zodiac_cancer",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 11,
+          "type": "zodiac_cancer",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 11,
+          "type": "zodiac_cancer",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 11,
+          "type": "zodiac_cancer",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 11,
+          "type": "zodiac_cancer",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 12,
+          "type": "zodiac_leo",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 12,
+          "type": "zodiac_leo",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 12,
+          "type": "zodiac_leo",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 12,
+          "type": "zodiac_leo",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 12,
+          "type": "zodiac_leo",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 12,
+          "type": "zodiac_leo",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 13,
+          "type": "zodiac_virgo",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 13,
+          "type": "zodiac_virgo",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 13,
+          "type": "zodiac_virgo",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 13,
+          "type": "zodiac_virgo",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 13,
+          "type": "zodiac_virgo",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 13,
+          "type": "zodiac_virgo",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 14,
+          "type": "zodiac_libra",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 14,
+          "type": "zodiac_libra",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 14,
+          "type": "zodiac_libra",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 14,
+          "type": "zodiac_libra",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 14,
+          "type": "zodiac_libra",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 14,
+          "type": "zodiac_libra",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 15,
+          "type": "zodiac_scorpio",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 15,
+          "type": "zodiac_scorpio",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 15,
+          "type": "zodiac_scorpio",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 15,
+          "type": "zodiac_scorpio",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 15,
+          "type": "zodiac_scorpio",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 15,
+          "type": "zodiac_scorpio",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 16,
+          "type": "zodiac_sagittarius",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 16,
+          "type": "zodiac_sagittarius",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 16,
+          "type": "zodiac_sagittarius",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 16,
+          "type": "zodiac_sagittarius",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 16,
+          "type": "zodiac_sagittarius",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 16,
+          "type": "zodiac_sagittarius",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 17,
+          "type": "zodiac_capricorn",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 17,
+          "type": "zodiac_capricorn",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 17,
+          "type": "zodiac_capricorn",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 17,
+          "type": "zodiac_capricorn",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 17,
+          "type": "zodiac_capricorn",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 17,
+          "type": "zodiac_capricorn",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 18,
+          "type": "zodiac_aquarius",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 18,
+          "type": "zodiac_aquarius",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 18,
+          "type": "zodiac_aquarius",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 18,
+          "type": "zodiac_aquarius",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 18,
+          "type": "zodiac_aquarius",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 18,
+          "type": "zodiac_aquarius",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 19,
+          "type": "zodiac_pisces",
+          "phase": 0,
+          "rage": false,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 19,
+          "type": "zodiac_pisces",
+          "phase": 0,
+          "rage": true,
+          "shots": 6,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 19,
+          "type": "zodiac_pisces",
+          "phase": 1,
+          "rage": false,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 19,
+          "type": "zodiac_pisces",
+          "phase": 1,
+          "rage": true,
+          "shots": 10,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 19,
+          "type": "zodiac_pisces",
+          "phase": 2,
+          "rage": false,
+          "shots": 12,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        },
+        {
+          "chapter": 19,
+          "type": "zodiac_pisces",
+          "phase": 2,
+          "rage": true,
+          "shots": 16,
+          "shotsMatch": true,
+          "cooldownMatch": true,
+          "phaseMatch": true
+        }
+      ],
+      "saveUnchanged": true
+    },
+    {
+      "name": "zodiac-radial-desktop",
+      "lines": 12,
+      "expected": 12,
+      "offsets": [
+        -83.15100000000558
+      ],
+      "endpointsMatch": true,
+      "loopRenderFrames": 3,
+      "running": true,
+      "paused": false,
+      "updateError": null,
+      "renderError": null,
+      "saveUnchanged": true,
+      "canvasWidth": 1022
+    },
+    {
+      "name": "mycelium-fan-desktop",
+      "lines": 6,
+      "expected": 6,
+      "offsets": [
+        -96.2414999999944
+      ],
+      "endpointsMatch": true,
+      "loopRenderFrames": 3,
+      "running": true,
+      "paused": false,
+      "updateError": null,
+      "renderError": null,
+      "saveUnchanged": true,
+      "canvasWidth": 1022
+    },
+    {
+      "name": "zodiac-dual-mobile",
+      "lines": 10,
+      "expected": 10,
+      "offsets": [
+        0
+      ],
+      "endpointsMatch": true,
+      "loopRenderFrames": 3,
+      "running": true,
+      "paused": false,
+      "updateError": null,
+      "renderError": null,
+      "saveUnchanged": true,
+      "canvasWidth": 388
+    },
+    {
+      "name": "eclipse-reduced-motion",
+      "lines": 16,
+      "expected": 16,
+      "offsets": [
+        0
+      ],
+      "endpointsMatch": true,
+      "loopRenderFrames": 3,
+      "running": true,
+      "paused": false,
+      "updateError": null,
+      "renderError": null,
+      "saveUnchanged": true,
+      "canvasWidth": 388
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

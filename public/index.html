@@ -16,6 +16,7 @@
   <script src="/skill-art.js"></script>
   <script src="/skill-combat-vfx.js"></script>
   <script src="/combat-status.js"></script>
+  <script src="/boss-attack-patterns.js"></script>
   <script src="/monster-art.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -30445,91 +30446,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (e.attackTimer <= 0) {
             const ang = Math.atan2(p.y - e.y, p.x - e.x);
             if (e.isBoss) {
-              if (e.type.startsWith('zodiac_')) {
-                const rage = e.hp / Math.max(1, e.maxHp) < .45;
-                const sign = e.zodiacIndex || 0;
-                e.phaseTimer = (e.phaseTimer + 1) % 3;
-                if (e.phaseTimer === 0) { // Vòng sao lệch pha, luôn có khe né.
-                  const n = rage ? 18 : 14;
-                  for (let k = 0; k < n; k++) if (k !== 0 && k !== n - 1) {
-                    spawnEnemyBullet(e.x, e.y, ang + (k + sign * .27) * Math.PI * 2 / n, rage ? 260 : 220, e.atk, 6);
-                  }
-                } else if (e.phaseTimer === 1) { // Quạt nhắm theo cung, có khe ở giữa.
-                  for (const k of [-3, -2, -1, 1, 2, 3]) spawnEnemyBullet(e.x, e.y, ang + k * (.16 + sign % 3 * .03), rage ? 305 : 265, e.atk, 6);
-                } else { // Hai cụm sao đan chéo, đổi hướng theo chòm sao.
-                  for (let k = -2; k <= 2; k++) {
-                    spawnEnemyBullet(e.x - 24, e.y, ang + k * .16 + sign * .035, 285, e.atk, 6);
-                    spawnEnemyBullet(e.x + 24, e.y, ang - k * .16 - sign * .035, 285, e.atk, 6);
-                  }
-                }
-                e.attackTimer = rage ? 1.05 : 1.5;
-              } else if (e.type === 'mycelium_queen') {
-                const enraged = e.hp / Math.max(1, e.maxHp) < 0.45;
-                e.phaseTimer = (e.phaseTimer + 1) % 3;
-                if (e.phaseTimer === 0) { // Vòng bào tử có khe trống hướng về người chơi.
-                  const count = enraged ? 18 : 14;
-                  for (let k = 0; k < count; k++) {
-                    const a = ang + k * Math.PI * 2 / count;
-                    if (k !== 0 && k !== 1 && k !== count - 1) spawnEnemyBullet(e.x, e.y, a, enraged ? 250 : 205, e.atk, 7);
-                  }
-                } else if (e.phaseTimer === 1) { // Quạt độc có khoảng hở giữa các tia.
-                  for (const k of [-3, -2, -1, 1, 2, 3]) spawnEnemyBullet(e.x, e.y, ang + k * 0.19, enraged ? 290 : 245, e.atk, 6);
-                } else { // Hai hàng bào tử đan chéo.
-                  for (const offset of [-0.35, -0.18, 0.18, 0.35]) {
-                    spawnEnemyBullet(e.x - 24, e.y, ang + offset, 265, e.atk, 6);
-                    spawnEnemyBullet(e.x + 24, e.y, ang - offset, 265, e.atk, 6);
-                  }
-                }
-                e.attackTimer = enraged ? 1.0 : 1.45;
-              } else if (e.type === 'eclipse_sovereign') {
-                const enraged = e.hp / Math.max(1, e.maxHp) < 0.5;
-                e.phaseTimer = (e.phaseTimer + 1) % 3;
-                if (e.phaseTimer === 0) {
-                  const total = enraged ? 20 : 16;
-                  for (let k = 0; k < total; k++) spawnEnemyBullet(e.x, e.y, ang + (k * Math.PI * 2) / total, enraged ? 248 : 218, e.atk, 7);
-                } else if (e.phaseTimer === 1) {
-                  const spread = enraged ? 4 : 3;
-                  for (let k = -spread; k <= spread; k++) spawnEnemyBullet(e.x, e.y, ang + k * (enraged ? 0.145 : 0.18), enraged ? 305 : 270, e.atk, 7);
-                } else {
-                  for (let k = 0; k < 8; k++) spawnEnemyBullet(e.x, e.y, (k * Math.PI) / 4 + (enraged ? Math.PI / 8 : 0), enraged ? 285 : 235, e.atk, 8);
-                  if (enraged) for (const offset of [-0.12, 0.12]) spawnEnemyBullet(e.x, e.y, ang + offset, 330, e.atk, 6);
-                }
-                e.attackTimer = enraged ? 1.12 : 1.52;
-              } else if (e.type === 'elder_dragon') {
-                // Long tức của Cổ Long: 12 hướng, quạt 5 tia, rồi song long truy kích.
-                e.phaseTimer = (e.phaseTimer + 1) % 3;
-                if (e.phaseTimer === 0) {
-                  for (let k = 0; k < 12; k++) {
-                    const a = ang + (k * Math.PI * 2) / 12;
-                    spawnEnemyBullet(e.x, e.y, a, 205, e.atk, 7);
-                  }
-                } else if (e.phaseTimer === 1) {
-                  for (let k = -2; k <= 2; k++) {
-                    spawnEnemyBullet(e.x, e.y, ang + k * 0.19, 255, e.atk, 7);
-                  }
-                } else {
-                  for (const offset of [-0.13, 0, 0.13]) {
-                    spawnEnemyBullet(e.x, e.y, ang + offset, 320, e.atk, 8);
-                  }
-                }
-                e.attackTimer = 1.55;
-              } else {
-                // Existing boss patterns remain unchanged for Chapters 1–3.
-                e.phaseTimer = (e.phaseTimer + 1) % 3;
-                if (e.phaseTimer === 0) {
-                  for (let k = 0; k < 8; k++) {
-                    const a = ang + (k * Math.PI * 2) / 8;
-                    spawnEnemyBullet(e.x, e.y, a, 210, e.atk, 7);
-                  }
-                } else if (e.phaseTimer === 1) {
-                  for (let k = -1; k <= 1; k++) {
-                    spawnEnemyBullet(e.x, e.y, ang + k * 0.24, 260, e.atk, 7);
-                  }
-                } else {
-                  spawnEnemyBullet(e.x, e.y, ang, 310, e.atk, 8);
-                }
-                e.attackTimer = 1.45;
-              }
+              window.BossAttackPatterns.fire(e, p, spawnEnemyBullet);
             } else if (e.type === 'spore_runner') {
               e.phaseTimer = (e.phaseTimer || 0) + 1;
               for (const k of [-1, 1]) spawnEnemyBullet(e.x, e.y, ang + k * (e.phaseTimer % 2 ? 0.22 : 0.42), 240, e.atk, 5);
@@ -31017,39 +30934,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const p = Game.player;
         if (p) {
           for (const e of Game.enemies) {
-            if (e.isBoss && e.attackTimer > 0 && e.attackTimer < 0.48) {
-              ctx.save();
-              const warnAlpha = (1 - e.attackTimer / 0.48) * 0.65;
-              const baseAng = Math.atan2(p.y - e.y, p.x - e.x);
-              ctx.strokeStyle = `rgba(244, 63, 94, ${warnAlpha})`;
-              ctx.lineWidth = 2.2;
-              ctx.setLineDash([8, 6]);
-              const nextPhase = (e.phaseTimer + 1) % 3;
-              if (nextPhase === 0) {
-                for (let k = 0; k < 8; k++) {
-                  const a = baseAng + (k * Math.PI * 2) / 8;
-                  ctx.beginPath();
-                  ctx.moveTo(e.x, e.y);
-                  ctx.lineTo(e.x + Math.cos(a) * 260, e.y + Math.sin(a) * 260);
-                  ctx.stroke();
-                }
-              } else if (nextPhase === 1) {
-                for (let k = -1; k <= 1; k++) {
-                  const a = baseAng + k * 0.24;
-                  ctx.beginPath();
-                  ctx.moveTo(e.x, e.y);
-                  ctx.lineTo(e.x + Math.cos(a) * 340, e.y + Math.sin(a) * 340);
-                  ctx.stroke();
-                }
-              } else {
-                ctx.lineWidth = 3.5;
-                ctx.beginPath();
-                ctx.moveTo(e.x, e.y);
-                ctx.lineTo(p.x, p.y);
-                ctx.stroke();
-              }
-              ctx.restore();
-            }
+            window.BossAttackPatterns.draw(ctx, e, p, nowMs, Game.lowGfx);
           }
         }
 
