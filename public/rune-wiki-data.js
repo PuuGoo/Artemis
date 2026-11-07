@@ -1,0 +1,673 @@
+// Exact displayed rune text from user-provided Archero 2 wiki HTML.
+window.RuneWikiData = Object.freeze({
+  "arrow_of_echoes": {
+    "name": "Arrow Of Echoes",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Main Weapon damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Main weapon skills have the chance to spawn",
+      "Epic": "When firing 4 or more projectiles at once, they have the chance to form a web",
+      "Legendary": "Starting skill: Diagonal Arrow",
+      "Legendary +1": "For each Main Weapon Skill obtained, Main Weapon DMG is increased (Max 10 stacks)",
+      "Legendary +2": "2x Projectile Web DMG",
+      "Legendary +3": "Main weapon skills have a greatly increased chance to spawn",
+      "Mythic": "When firing 4+ projectiles, Projectile Web chance is increased (Max 10 stakcs)"
+    }
+  },
+  "elemental_domain": {
+    "name": "Elemental Domain",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Elemental damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Elemental skills have increased chance to spawn",
+      "Epic": "When enemies fall from Elemental DMG, 30% chance to form an elemental area for 5s. Enemies in it take 1x ATK PWR of elemental damage every 0.5s (doesn't apply any elemental effects)",
+      "Legendary": "Elemental Domain lasts 10s with increased DMG",
+      "Legendary +1": "For ech Element skill obtained, Elemental DMG is increased (Max 10 stacks)",
+      "Legendary +2": "Elemental DMG +15% to enemies below 50% HP",
+      "Legendary +3": "Elemental skills have greatly increased chance to spawn",
+      "Mythic": "Elemental DMG +30% to enemies below 50% HP"
+    }
+  },
+  "pulsing_orb": {
+    "name": "Pulsing Orb",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Circle damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Circle skills have increased chance to spawn",
+      "Epic": "Circle pulses shrink and expand",
+      "Legendary": "Circle trails deal DMG to monsters",
+      "Legendary +1": "For each Circle skill obtained, Circle DMG is increased (Max 10 stacks)",
+      "Legendary +2": "All Circle attacks have a very small chance to fire lasers",
+      "Legendary +3": "Circle skills have greatly increased chance to spawn",
+      "Mythic": "All Circle attacks have a small chance to fire lasers"
+    }
+  },
+  "meteor_split": {
+    "name": "Meteor Split",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Meteor damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Meteor skills have increased chance to spawn",
+      "Epic": "Meteors have a chance to split into 3 smaller non-elemental meteors dealing 0.33x ATK PWR each",
+      "Legendary": "Split meteors will bounce forever",
+      "Legendary +1": "For each Meteor Skill obtained, Meteor DMG is increased (Max 10 stacks)",
+      "Legendary +2": "Meteor impact zones Burn for 2s",
+      "Legendary +3": "Meteor skills have greatly increased chance to spawn",
+      "Mythic": "Meteor impact zones Burn for 4s"
+    }
+  },
+  "sprites_awe": {
+    "name": "Sprite's Awe",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Sprite damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Sprite skills have increased chance to spawn",
+      "Epic": "When hero is hurt, Sprites have a chance to trigger clones that last 5s",
+      "Legendary": "For every additional Sprite or Sprite clone, monsters in battle take 5% more DMG",
+      "Legendary +1": "For each Sprite skill obtained, Sprite DMG is increased (Max 10 stacks)",
+      "Legendary +2": "When Sprites attack, there is a small chance to unleash 1 Spinning Slash",
+      "Legendary +3": "Sprite skills have a greatly increased chance to spawn",
+      "Mythic": "In battle, Sprite summon skills can be picked +1 more time"
+    }
+  },
+  "sword_strike_split": {
+    "name": "Sword Strike Split",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Strike damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Sword Strike skills have increased chance to spawn",
+      "Epic": "When Strike fade, they have a chance to split into 3 mini-strikes dealing 33% of the original Strike's damage each.",
+      "Legendary": "Sword Strikes have chance to split into 5 homing strikes when they fade",
+      "Legendary +1": "For each Sword Strike skill obtained, Strike DMG is increased (Max 10 stacks)",
+      "Legendary +2": "When Sword Strikes defeat enemies, there is a small chance to restore 2% HP",
+      "Legendary +3": "Sword Strike skills have a greatly increased chance to spawn",
+      "Mythic": "Strike DMG +20% to enemies below 50% HP"
+    }
+  },
+  "sprite_assist": {
+    "name": "Sprite Assist",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Sprite damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Sprite skills have increased chance to spawn",
+      "Epic": "Each time the character attacks, sprites have a 40% chance to launch 1 attack as well",
+      "Legendary": "Each time the character attacks, sprites have a 80% chance to launch 1 attack as well",
+      "Legendary +1": "For each Sprite skill obtained, Sprite DMG is increased (Max 10 tacks)",
+      "Legendary +2": "Sprites inherit 40% of owner´s Crit Rate",
+      "Legendary +3": "Sprite skills have a greatly increased chance to spawn",
+      "Mythic": "Sprites inherit 40% of owner´s Crit DMG"
+    }
+  },
+  "sword_strike_aerie": {
+    "name": "Sword Strike Aerie",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Strike damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Sword Strike skills have increased chance to spawn",
+      "Epic": "Sword strike hits have a 25% chance to spawn 1 minor strike that deals half damage",
+      "Legendary": "Sword strike hits have a 50% chance to spawn 1 minor strike that deals half damage",
+      "Legendary +1": "For each Sword Strike skill obtained, Strike DMG is increased (Max 10 stacks)",
+      "Legendary +2": "Sword Strikes have a very small chance to fire 1 more strike",
+      "Legendary +3": "Sword Strike skills have a greatly increased chance to spawn",
+      "Mythic": "Sword Strikes have a small chance to fire 1 more strike"
+    }
+  },
+  "potion_spring": {
+    "name": "Potion Spring",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Meteor damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Increased chance for Potion skills to spawn",
+      "Epic": "25% chance to summon Potion Spring. Standing within the spring´s range activates it, spraying forth large amounts of the same potion",
+      "Legendary": "Doubles potions spawned by Potion Spring",
+      "Legendary +1": "For each Potion skill obtained, Meteor DMG is increased (Max 10 stacks)",
+      "Legendary +2": "When looting potions, there is a small chance to trigger a minor meteor bombardment",
+      "Legendary +3": "Greatly increased chance for Potion skills to spawn",
+      "Mythic": "When looting potions, there is a chance to trigger a major meteor bombardment"
+    }
+  },
+  "elemental_crit": {
+    "name": "Elemental Crit",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Elemental damage +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Increased chance for Elemental skills to spawn",
+      "Epic": "Elemental DMG inherits 10% of the character´s CRIT Rate and 10% of the character's CRIT DMG",
+      "Legendary": "Elemental DMG inherits 30% of the character´s CRIT Rate and 30% of the character's CRIT DMG",
+      "Legendary +1": "For each Elemental skill obtained, Elemental DMG is increased (Max 10 stacks)",
+      "Legendary +2": "Elemental critical hits trigger a small area elemental splash attack",
+      "Legendary +3": "Greatly increased chance for Elemental skills to spawn",
+      "Mythic": "Elemental critical hits trigger a large area elemental splash attack"
+    }
+  },
+  "life_surge": {
+    "name": "Life Surge",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Plant DMG +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Increased chance for Plant-related skills to appear",
+      "Epic": "Cast 1 Life Surge for every 5 plant deaths",
+      "Legendary": "Cast 1 Life Surge for every 2 plant deaths",
+      "Legendary +1": "Plant DMG increases for each Plant-related skill obtained, up to 10 stacks",
+      "Legendary +2": "Cast 1 Life Surge for every 2 Plant deaths, with a 10% chance to summon a Plant Guardian when it hits a boss player",
+      "Legendary +3": "Greatly increased chance for Plant-related skills to appear",
+      "Mythic": "Cast 1 Life Surge for every 2 Plant deaths, with a 30% chance to summon a Plant Guardian when it hits a boss or player"
+    }
+  },
+  "orbital_orb": {
+    "name": "Orbital Orb",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Circle DMG +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Circle skills have increased chance to spawn",
+      "Epic": "When a Circle defeats an enemy, 50% chance to gain an Orbital Orb orbiting that circle, up to 3",
+      "Legendary": "When a Circle defeats an enemy, gain 1 Orbital Orb orbiting that circle, up to 7",
+      "Legendary +1": "For each Circle skill obtained, Circle DMG is increased (Max 10 stacks",
+      "Legendary +2": "When a Circle hits an enemy, small chance to gain an Orbital Orb",
+      "Legendary +3": "Circle skills have greatly increased chance to spawn",
+      "Mythic": "For each Orbital Orb owned, main Circle DMG +20%"
+    }
+  },
+  "echo_scythe": {
+    "name": "Echo Scythe",
+    "type": "Etched",
+    "base": "ATK PWR + 180 /Max HP + 720",
+    "effects": {
+      "Normal": "Main Weapon DMG +100",
+      "Fine": "ATK PWR +100",
+      "Rare": "Main Weapon skills have increased chance to spawn",
+      "Epic": "Main Weapon attacks have a chance to fire [Echo Scythes] in a fixed vertical direction (CD:5s). [Echo Scythes] deals 60% character's ATK DMG, pierces enemies, bounces off walls 9 times, and lasts 15s",
+      "Legendary": "Each [Echo Scythe] bounce deals 115% of previous bounce's DMG. Projectile size increases to 115% of previous bounce's size",
+      "Legendary +1": "For each Main Weapon skill obtained, Main Weapon DMG is increased (Max 10 stacks",
+      "Legendary +2": "[Echo Scythe] base DMG is increased to 100% of character's ATK",
+      "Legendary +3": "Main Weapon skills have greatly increased chance to spawn",
+      "Mythic": "When launching [Echo Scythe], 2 additional scythes are launched in a fixed horizontal direction"
+    }
+  },
+  "rune_valkyrie": {
+    "name": "Revive",
+    "type": "Blessing",
+    "base": "ATK PWR + 36 /Max HP + 144",
+    "effects": {
+      "Normal": "",
+      "Fine": "",
+      "Rare": "Max HP +240",
+      "Epic": "50% Chance to revive upon death, with half of HP restored",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Increases ATK PWR by 20% after revival",
+      "Mythic": "100% Chance to revive upon death, with half of HP restored"
+    }
+  },
+  "lucky_shadow": {
+    "name": "Lucky Shadow",
+    "type": "Blessing",
+    "base": "ATK PWR + 36 /Max HP + 144",
+    "effects": {
+      "Normal": "",
+      "Fine": "",
+      "Rare": "Max HP +240",
+      "Epic": "Increases luck by 5% and dodge by 2%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Increases luck by 10% and dodge by 5%",
+      "Mythic": "Increases luck by 15% and dodge by 10%"
+    }
+  },
+  "intelligence": {
+    "name": "Intelligence",
+    "type": "Blessing",
+    "base": "ATK PWR + 36 /Max HP + 144",
+    "effects": {
+      "Normal": "",
+      "Fine": "",
+      "Rare": "Max HP +240",
+      "Epic": "Increases EXP gain rate by 10%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Increases EXP gain rate to 20%",
+      "Mythic": "Max level cap +1 during battle"
+    }
+  },
+  "rabbits_foot": {
+    "name": "Rabbit's Foot",
+    "type": "Blessing",
+    "base": "ATK PWR + 36 /Max HP + 144",
+    "effects": {
+      "Normal": "",
+      "Fine": "",
+      "Rare": "ATK PWR +60",
+      "Epic": "Chance of obtaining rare skill upon level-up increases to 20%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Increases the chance of landing on Valkyrie in the Roulette by 15%",
+      "Mythic": "Chance of obtaining high-quality rewards upon meeting Valkyrie increases by 20%"
+    }
+  },
+  "guardian": {
+    "name": "Guardian",
+    "type": "Blessing",
+    "base": "ATK PWR + 36 /Max HP + 144",
+    "effects": {
+      "Normal": "",
+      "Fine": "",
+      "Rare": "ATK PWR +60",
+      "Epic": "Reduces DMG taken by 5%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "DMG taken -10%",
+      "Mythic": "DMG taken -15%"
+    }
+  },
+  "devil_pact": {
+    "name": "Devil Pact",
+    "type": "Blessing",
+    "base": "ATK PWR + 36 /Max HP + 144",
+    "effects": {
+      "Normal": "",
+      "Fine": "",
+      "Rare": "ATK PWR +60",
+      "Epic": "Devil encounter chance increases by 10% and reduces HP loss when exchanging abilities by 25%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Devil encounter chance increases to 20%",
+      "Mythic": "Reduces HP Loss to 50% when exchanging abilities with a devil"
+    }
+  },
+  "resilience": {
+    "name": "Resilience",
+    "type": "Blessing",
+    "base": "ATK PWR + 36 /Max HP + 144",
+    "effects": {
+      "Normal": "",
+      "Fine": "",
+      "Rare": "Max HP +240",
+      "Epic": "Converts 15% ATK to 20% Max HP (at the start of the game applies -15% ATK PWR debuff, +20% Max HP buff)",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Converts 15% ATK to 25% Max HP (at the start of the game applies -15% ATK PWR debuff, +25% Max HP buff)",
+      "Mythic": "Converts 15% ATK to 30% Max HP (at the start of the game applies -15% ATK PWR debuff, +30% Max HP buff)"
+    }
+  },
+  "sharp_arrow": {
+    "name": "Sharp Arrow",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Main Weapon damage +5",
+      "Fine": "Main Weapon damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Main weapon DMG increases by 10%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Main weapon DMG increases by 20%",
+      "Mythic": "Main weapon DMG increases by 30%"
+    }
+  },
+  "rune_flame": {
+    "name": "Flame-Poison Seal",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Fire damage +5",
+      "Fine": "Poison damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Fire DMG +50%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Poison DMG +50%",
+      "Mythic": "When Fire and Poison are present, an explosion occurs every second"
+    }
+  },
+  "rune_frost": {
+    "name": "Frost-Thunder Seal",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Ice damage + 10",
+      "Fine": "Lightning damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Lightning strikes have a chance to cause paralysis",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Freezing deepens enemy injuries by 30%",
+      "Mythic": "Lightning strike DMG to frozen monsters increases by 30%"
+    }
+  },
+  "rotating_spd_up": {
+    "name": "Rotating SPD Up",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Circle damage +5",
+      "Fine": "Circle damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Circle speed increases by 50%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Circle speed increases by 100%",
+      "Mythic": "Circles increase from 2 orbs per group to 3"
+    }
+  },
+  "sawblade_circle": {
+    "name": "Sawblade Circle",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Circle damage +5",
+      "Fine": "Circle damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Circles become Sawblade Circle",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Sawblade Circle DMG increases by 50%",
+      "Mythic": "Sawblade Circle inherit main weapon's CRIT rate"
+    }
+  },
+  "giant_meteor": {
+    "name": "Giant Meteor",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Meteor damage +5",
+      "Fine": "Meteor damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Meteors have a 20% chance to become Giant Meteors, DMG increases by 50%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "After absorbing a Meteor Potion, 50% chance to summon 1 extra Meteor",
+      "Mythic": "After summoning 5 Meteors, the next summon will be 1 Giant Meteor"
+    }
+  },
+  "potion_magnet": {
+    "name": "Potion Magnet",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Meteor damage +5",
+      "Fine": "Meteor damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Auto absorbs Meteor Potions when dropped",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Meteor DMG increases by 25%",
+      "Mythic": "Meteor DMG increases by 50%"
+    }
+  },
+  "sprite_multishot": {
+    "name": "Sprite Multishot",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Sprite damage +5",
+      "Fine": "Sprite damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Sprites have a 30% chance to fire multiple shots",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Sprite ATK SPD increases by 25%",
+      "Mythic": "Sprite ATK SPD increases by 50%"
+    }
+  },
+  "sprite_link": {
+    "name": "Sprite Link",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Sprite damage +5",
+      "Fine": "Sprite damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Every extra sprite increases all Sprite DMG by 5%",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Every extra sprite increases all Sprite DMG by 10%",
+      "Mythic": "Every extra sprite increases all Sprite DMG by 15%"
+    }
+  },
+  "dragonflight_sword": {
+    "name": "Dragonflight Sword",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Strike damage +5",
+      "Fine": "Strike damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Strikes have a 35% chance to become Dragon Strike dealing 1x ATK PWR as damage (Dragon Beam Strikes do 4 hits, 0.55x ATK PWR each, and have tracking)",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Dragon Strike chance increases to 70%",
+      "Mythic": "Dragon Strike chance increases to 100%"
+    }
+  },
+  "ricocheting_strike": {
+    "name": "Ricocheting Strike",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Strike damage +5",
+      "Fine": "Strike damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Strike has a 35% chance to ricochet",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Strike ricochet chance increases to 70%",
+      "Mythic": "Strike always ricochets"
+    }
+  },
+  "rootguard": {
+    "name": "Rootguard",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Plant damage +5",
+      "Fine": "Plant damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Gain a shield while standing still. The more Plant Guardians there are, the faster the shield is gained",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "When shield breaks, summons 2 Plant Guardians",
+      "Mythic": "Max Plant Guardian Count +4"
+    }
+  },
+  "vine_bind": {
+    "name": "Vine Bind",
+    "type": "Enhancement",
+    "base": "ATK PWR + 20",
+    "effects": {
+      "Normal": "Plant damage +5",
+      "Fine": "Plant damage +10",
+      "Rare": "ATK PWR +50",
+      "Epic": "Plant Guardians link to 1 other Plant Guardian, dealing Poison DMG along the link path and Slowing enemies hit",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Plant Guardians preferentially spawn near the highest-HP enemy",
+      "Mythic": "Plant Guardians link to 2 other Plant Guardians, dealing Poison DMG along the link path and Slowing enemies hit"
+    }
+  },
+  "arrow_rain": {
+    "name": "Arrow Rain",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Main Weapon damage +5",
+      "Fine": "Main Weapon damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Initial Ability: Every 7 shots trigger an AoE Arrow Rain",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Main weapon ATK SPD increases by 15%",
+      "Mythic": "Main weapon ATK SPD increases by 30%"
+    }
+  },
+  "flame_poison_touch": {
+    "name": "Flame-Poison Touch",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Poison damage +10",
+      "Fine": "Fire damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Initial Ability: Ignite a random monster every 2s",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Initial Ability: Poison a random monster every 2s",
+      "Mythic": "Flame-Poison touch cooldown shortened to 1.5s"
+    }
+  },
+  "rune_thunder": {
+    "name": "Frost-Thunder Touch",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Ice damage +5",
+      "Fine": "Lightning damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Initial Ability: Strike a random enemy with lightning every 2s",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Initial Ability: Freeze a random enemy every 2s",
+      "Mythic": "Lightning Touch can hit 2 enemies instead"
+    }
+  },
+  "ring_of_agony": {
+    "name": "Ring of Agony",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Circle damage +5",
+      "Fine": "Circle damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Start with Ring of Agony. Monsters within the ring take 20% more DMG",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Ring of Agony deals 1x ATK PWR as damage every second to enemies inside the ring",
+      "Mythic": "Ring of Agony deals 1x ATK PWR as damage every 0.5s and applies Bolt effect"
+    }
+  },
+  "ability_circle": {
+    "name": "Circle",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Circle damage +5",
+      "Fine": "Circle damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Start with 2 weak circling orbs dealing 0.75x ATK PWR as damage per hit",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Start with 2 strong circling orbs dealing 1.25x ATK PWR as damage per hit",
+      "Mythic": "Start with 4 strong circling orbs dealing 1.25x ATK PWR as damage per hit"
+    }
+  },
+  "star_of_fury": {
+    "name": "Star of Fury",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Meteor damage +5",
+      "Fine": "Meteor damage +5",
+      "Rare": "Max HP +200",
+      "Epic": "Initial Ability: Upon taking DMG, summon 3 Meteors to randomly bombard the field",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Recover 0.5% Max HP when a Meteor hits",
+      "Mythic": "Upon taking DMG, summon 7 Meteors to randomly bombard the field"
+    }
+  },
+  "star_of_time": {
+    "name": "Star of Time",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Meteor damage +5",
+      "Fine": "Meteor damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Initial Ability: Summon 1 Meteor every 10s",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Star of Time's Meteor summoning time reduced to 5s",
+      "Mythic": "Star of Time has a 50% chance to summon double Meteors"
+    }
+  },
+  "healing_sprite": {
+    "name": "Healing Sprite",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Sprite damage +5",
+      "Fine": "Sprite damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Start with a Healing Sprite that deals 0.5x ATK PWR as damage, and heals for 1% Max HP per hit.",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Healing Sprite ATK increases by 50%",
+      "Mythic": "Healing Sprite ATK SPD increases by 50%"
+    }
+  },
+  "melee_sprite": {
+    "name": "Melee Sprite",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Sprite damage +5",
+      "Fine": "Sprite damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Start with a Melee Sprite that deals 1.25x ATK PWR as damage in a small area",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Melee Sprite DMG increases by 50%",
+      "Mythic": "Melee Sprite ATK SPD increases by 50%"
+    }
+  },
+  "sword_of_time": {
+    "name": "Sword of Time",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Strike damage +5",
+      "Fine": "Strike damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Initial Ability: Summon 1 Strike every 3s",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Sword of Time's Strike summoning is reduced to 1.5s",
+      "Mythic": "Sword of Time has a 50% chance to summon double Strike swords"
+    }
+  },
+  "strike_potion": {
+    "name": "Strike Potion",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Strike damage +5",
+      "Fine": "Strike damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Start with a Strike Potion",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Summon 3 Strikes upon absorbing any potion",
+      "Mythic": "Strike Potion has a 50% chance to summon double Strike Swords"
+    }
+  },
+  "plant_summon": {
+    "name": "Plant Summon",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Plant damage +5",
+      "Fine": "Plant damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "Summons 1 Plant Guardian around the player every 8s",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "Summons 1 Plant Guardian around the player every 4s",
+      "Mythic": "50% chance to summon 2 Plant Guardians"
+    }
+  },
+  "equinox_bloom": {
+    "name": "Equinox Bloom",
+    "type": "Ability",
+    "base": "Max HP + 80",
+    "effects": {
+      "Normal": "Plant damage +5",
+      "Fine": "Plant damage +10",
+      "Rare": "Max HP +200",
+      "Epic": "When a Plant Guardian dies, chance to cast [Berserk] on 1 random Plant Guardian, increasing its CRIT DMG, CRIT Rate, and ATK SPD for 5s",
+      "Epic +2": "Unlocks Rune Enchantment",
+      "Legendary": "When a Plant Guardian dies, chance to create an Acid Swamp",
+      "Mythic": "When a Plant Guardian dies, chance to cast [Berserk] on 2 random Plant Guardian, increasing their CRIT DMG, CRIT Rate, and ATK SPD for 5s"
+    }
+  }
+});

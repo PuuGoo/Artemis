@@ -105,7 +105,7 @@ export async function PUT(request) {
 
   const existing = await saves.findOne({ playerId }, { projection: {
     revision: 1, ledger: 1,
-    "data.gold": 1, "data.gems": 1, "data.vipCoins": 1, "data.vipPasses": 1, "data.runes": 1, "data.runeMythicEnchant": 1, "data.lifetimeStats": 1, "data.season": 1,
+    "data.gold": 1, "data.gems": 1, "data.vipCoins": 1, "data.vipPasses": 1, "data.runes": 1, "data.runeStones": 1, "data.runeIntroClaimed": 1, "data.runeMythicEnchant": 1, "data.lifetimeStats": 1, "data.season": 1,
     "data.gameMode": 1, "data.modeBest": 1, "data.guild": 1, "data.garden": 1, "data.plinko": 1,
   } });
   const currentRevision = existing ? (existing.revision || 1) : 0;
@@ -132,6 +132,8 @@ export async function PUT(request) {
   // Rune copies can only be created by /api/runes. Equipping remains a free
   // choice, but the chosen stone must already belong to this account.
   check.data.runes = existing?.data?.runes && typeof existing.data.runes === 'object' ? existing.data.runes : {};
+  check.data.runeStones = existing?.data?.runeStones && typeof existing.data.runeStones === 'object' ? existing.data.runeStones : {};
+  check.data.runeIntroClaimed = existing?.data?.runeIntroClaimed === true;
   check.data.runeMythicEnchant = existing?.data?.runeMythicEnchant === true;
   for (const slots of Object.values(check.data.equippedRuneSlots || {})) {
     if (!Array.isArray(slots)) continue;

@@ -68,7 +68,7 @@ check('Rare 15%', /: 15;/.test(src) || /: 15\b/.test(src));
 // ============================================================ 4. RUNE + SERAPH
 console.log('\n=== 4. RUNE DEVIL PACT VA SERAPH ===');
 check('Seraph mien phi', /hasHeroSkillActive\(p, 'seraph'\)[\s\S]{0,120}?pct = 0/.test(src));
-check('Rune Devil Pact duoc kiem tra', /isRuneEquipped\('devil_pact'\)/.test(src));
+check('Rune Devil Pact duoc kiem tra', /runeHasEffect\('devil_pact'\)/.test(src));
 check('Mythic Enchant mien tru hoan toan',
   /runeMythicEnchant === true[\s\S]{0,150}?copies\(SaveState\.runes\?\.devil_pact\) >= 6[\s\S]{0,120}?pct = 0/.test(src));
 check('Blessing thuong giam 50%', /pct = basePct \/ 2/.test(src));

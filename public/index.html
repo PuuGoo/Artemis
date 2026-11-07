@@ -10,6 +10,7 @@
   <script src="/rune-economy.js"></script>
   <script src="/rune-art.js"></script>
   <script src="/rune-wiki-images.js"></script>
+  <script src="/rune-wiki-data.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
@@ -180,6 +181,13 @@
     .rune-socket .rune-wiki-icon { width:80%; height:80%; }
     .rune-rank { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:8px; font-weight:1000; color:#ffe89b; }
     .rune-economy-note { font-size:10px; font-weight:800; color:#e8d5ff; }
+    .rune-ruins-expedition{padding:16px;border:2px solid #a855f7aa;border-radius:24px;background:radial-gradient(circle at 85% 8%,#a855f744,transparent 35%),linear-gradient(145deg,#24134a,#11142e 62%,#121b35);box-shadow:0 16px 36px #050315a8;color:#fff}
+    .rune-ruins-banner{display:flex;align-items:center;gap:15px;padding:14px;border:1px solid #e9d5ff66;border-radius:18px;background:#180f35bb}.rune-ruins-banner-icon{font-size:54px;filter:drop-shadow(0 0 15px #e879f9);animation:runeHeroFloat 3s infinite}.rune-ruins-banner h3{font-size:25px;font-weight:1000;color:#f5d0fe}.rune-ruins-banner p,.rune-ruins-side p{font-size:11px;color:#cbd5e1}
+    .rune-ruins-stats{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.rune-ruins-stats span{padding:6px 10px;border:1px solid #c084fc77;border-radius:999px;background:#100d2d;color:#f5d0fe;font-size:11px;font-weight:900}
+    .rune-ruins-explain{padding:11px;border:1px solid #a78bfa66;border-radius:13px;background:#0c1131bb;font-size:11px;color:#e9d5ff}.rune-ruins-explain p{margin-top:4px;color:#cbd5e1}
+    .rune-ruins-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.72fr);gap:12px;margin-top:12px}.rune-ruins-map,.rune-ruins-side{padding:12px;border:1px solid #a78bfa55;border-radius:17px;background:#090c24bb}.rune-ruins-map-head{display:flex;justify-content:space-between;gap:8px;color:#f5d0fe;font-size:12px}.rune-ruins-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.rune-ruins-tile{min-height:72px;border:2px solid #a78bfa;border-radius:14px;background:radial-gradient(circle at 50% 20%,#7c3aed,#291455 70%);box-shadow:0 5px #291350,inset 0 2px #ffffff55;color:#fff;transition:transform .2s,box-shadow .2s}.rune-ruins-tile:hover:not(:disabled){transform:translateY(-4px) rotate(-2deg);box-shadow:0 8px 18px #d946ef99}.rune-ruins-tile span{display:block;font-size:28px}.rune-ruins-tile small{font-weight:900}.rune-ruins-tile.is-open{background:#14534d;border-color:#5eead4;opacity:.78}.rune-ruins-side{display:flex;flex-direction:column;gap:9px}.rune-ruins-log{padding:10px;border-radius:12px;background:#2d1b48;color:#fde68a;font-size:11px;font-weight:800}
+    .rune-detail-modal{position:fixed;inset:0;z-index:9995;display:flex;align-items:center;justify-content:center;padding:15px;background:#030312d9;backdrop-filter:blur(7px);animation:cloudCardIn .25s both}.rune-detail-dialog{width:min(100%,570px);max-height:min(88vh,770px);overflow:auto;padding:18px;border:2px solid #e9a9f6;border-radius:24px;background:radial-gradient(circle at 80% 0%,#a855f744,transparent 38%),linear-gradient(145deg,#332054,#11152f 70%);box-shadow:0 24px 55px #000b,0 0 35px #a855f777;color:#fff}.rune-detail-top{display:flex;gap:14px;align-items:center}.rune-detail-top img{width:86px;height:86px;object-fit:contain;filter:drop-shadow(0 0 18px #e879f9)}.rune-detail-top h3{font-size:21px;font-weight:1000;color:#fde68a}.rune-detail-badges{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.rune-detail-badges span{padding:5px 9px;border:1px solid #ffffff55;border-radius:999px;background:#0005;font-size:10px;font-weight:900}.rune-detail-base{padding:10px;border-radius:12px;background:#0f1737;color:#dbeafe;font-size:12px}.rune-detail-tier{margin-top:7px;padding:10px;border:1px solid #ffffff25;border-radius:12px;background:#10152e;color:#d1d5db}.rune-detail-tier.is-active{border-color:#fbbf24;background:#6b3e1955;color:#fff;box-shadow:0 0 14px #f59e0b55}.rune-detail-tier b{display:block;font-size:12px}.rune-detail-tier p{margin-top:3px;font-size:11px}.rune-detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    @media(max-width:580px){.rune-ruins-layout{grid-template-columns:1fr}.rune-ruins-banner h3{font-size:20px}.rune-ruins-banner-icon{font-size:40px}}
     .rune-vault-head { background:radial-gradient(circle at 82% 20%,#fcd34d33,transparent 28%),radial-gradient(circle at 15% 80%,#e879f944,transparent 35%),linear-gradient(145deg,#30144f,#130e2e 62%,#38184d); }
     .rune-vault-head::after { content:'✦ ✦ ✦'; position:absolute; top:12px; right:12px; color:#f5d0fe88; font-size:24px; letter-spacing:13px; animation:eventsTwinkle 3s ease-in-out infinite; pointer-events:none; }
     .rune-inventory-card.is-equipped .rune-wiki-icon { animation:runeHeroFloat 3.5s ease-in-out infinite; }
@@ -2022,7 +2030,7 @@
             <div class="rune-vault-head">
               <div class="rune-vault-title">💠 Đài Cổ Ngữ</div>
               <div class="rune-vault-subtitle">13 ô khảm quanh anh hùng · Chạm một ô, chọn viên trong kho để khảm</div>
-              <button id="btnEngraveRune" type="button" class="rune-gold-btn relative mt-3 text-xs font-black">✨ Khắc Cổ Ngữ (200 🪙)</button>
+              <button id="btnOpenRuneRuins" type="button" class="rune-gold-btn relative mt-3 text-xs font-black">⛏️ Khám phá Ngọc tại Tàn Tích</button>
             </div>
             <div id="runeSocketsGrid" class="space-y-3 mt-3"></div>
           </div>
@@ -9476,6 +9484,35 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       function runeOwned(id) { return RuneEconomy.copies(SaveState.runes?.[id]) > 0; }
       function runeImage(rune) { return RuneWikiImages[rune.id] || RuneArt.src(rune); }
       function runeFallback(img) { img.onerror = null; img.src = RuneArt.src({ id:img.dataset.runeId, type:img.dataset.runeType }); }
+      function openRuneDetailPopup(runeId) {
+        const rune=RUNES_DATA.find(r=>r.id===runeId);
+        const wiki=RuneWikiData[runeId];
+        if (!rune || !wiki) return;
+        document.querySelector('.rune-detail-modal')?.remove();
+        const rank=RuneEconomy.copies(SaveState.runes?.[runeId]);
+        const tierNames={Normal:1,Fine:2,Rare:3,Epic:4,'Epic +2':6,Legendary:7,'Legendary +1':8,'Legendary +2':9,'Legendary +3':10,Mythic:11};
+        const rows=Object.entries(wiki.effects);
+        const modal=document.createElement('div');
+        modal.className='rune-detail-modal';
+        modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label',`Chi tiết Ngọc ${wiki.name}`);
+        modal.innerHTML=`<div class="rune-detail-dialog"><div class="rune-detail-top"><img src="${runeImage(rune)}" data-rune-id="${rune.id}" data-rune-type="${rune.type}" alt="${wiki.name}"><div><div class="text-[10px] uppercase tracking-widest text-fuchsia-200">Hồ sơ cổ ngữ · Archero 2 Wiki</div><h3>${wiki.name}</h3><p class="text-xs text-slate-300">${rune.name}</p></div></div>
+          <div class="rune-detail-badges"><span>${wiki.type}</span><span>${rank?`Đang sở hữu · ${RuneEconomy.tier(rank).replaceAll('_',' ')}`:'🔒 Chưa sở hữu'}</span><span>${isRuneEquipped(runeId)?'✓ Đang khảm':'13 ô khảm'}</span></div>
+          <div class="rune-detail-base"><b>Chỉ số gốc theo Wiki</b><div>${wiki.base}</div></div>
+          <div class="mt-3 text-xs font-black text-amber-200">Thuộc tính theo phẩm chất</div>
+          ${rows.map(([tier,effect])=>`<div class="rune-detail-tier ${rank>=tierNames[tier]?'is-active':''}"><b>${rank>=tierNames[tier]?'✦':'🔒'} ${tier}</b><p>${effect && effect!=='-'?effect:'Không có thuộc tính riêng ở bậc này'}</p></div>`).join('')}
+          <div class="rune-detail-actions">${rank?'<button type="button" data-rune-popup-equip class="rune-gold-btn">💠 Khảm viên này</button>':'<button type="button" data-rune-popup-ruins class="rune-gold-btn">⛏️ Khám phá Tàn Tích</button>'}<button type="button" data-rune-popup-close class="rune-gold-btn">Đóng</button></div>
+          <p class="mt-3 text-[10px] text-slate-400">Nguồn: Archero 2 Wiki · Ngọc chỉ nhận qua sự kiện khám phá.</p></div>`;
+        document.body.appendChild(modal);
+        const image=modal.querySelector('img[data-rune-id]');if(image) image.onerror=()=>runeFallback(image);
+        const close=()=>modal.remove();
+        modal.addEventListener('click',event=>{if(event.target===modal) close();});
+        modal.querySelector('[data-rune-popup-close]').onclick=close;
+        modal.querySelector('[data-rune-popup-equip]')?.addEventListener('click',()=>{close();equipRuneIntoCategorySlot(runeId);});
+        modal.querySelector('[data-rune-popup-ruins]')?.addEventListener('click',()=>{close();document.getElementById('btnOpenRuneRuins')?.click();});
+        modal.addEventListener('keydown',event=>{if(event.key==='Escape') close();});
+        modal.querySelector('.rune-detail-dialog').tabIndex=-1;
+        modal.querySelector('.rune-detail-dialog').focus({preventScroll:true});
+      }
 
       function getEquippedRuneSlots() {
         if (!SaveState.equippedRuneSlots || typeof SaveState.equippedRuneSlots !== 'object') {
@@ -9493,6 +9530,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (!runeOwned(runeId)) return false;
         const eq = getEquippedRuneSlots();
         return Object.values(eq).some(arr => Array.isArray(arr) && arr.includes(runeId));
+      }
+      function runeHasEffect(runeId, minRank = 4) {
+        return isRuneEquipped(runeId) && RuneEconomy.copies(SaveState.runes?.[runeId]) >= minRank;
       }
 
       function computeTotalEquippedRunesStats() {
@@ -9525,19 +9565,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             }
           }
         }
-        if (isRuneEquipped('sharp_arrow')) critBonus += enchantOn && RuneEconomy.copies(SaveState.runes.sharp_arrow) >= 6 ? 0.12 : 0.05;
-        if (isRuneEquipped('arrow_rain')) aspdBonus += 0.30;
-        if (isRuneEquipped('lucky_shadow')) dodgeBonus += 0.10;
-        if (isRuneEquipped('resilience')) {
-          hp = Math.round(hp * 1.30);
-        }
+        if (runeHasEffect('sharp_arrow',6) && enchantOn) critBonus += 0.04;
+        if (runeHasEffect('arrow_rain',11)) aspdBonus += 0.30;
+        else if (runeHasEffect('arrow_rain',7)) aspdBonus += 0.15;
+        if (runeHasEffect('lucky_shadow',11)) dodgeBonus += 0.10;
+        else if (runeHasEffect('lucky_shadow',7)) dodgeBonus += 0.05;
+        else if (runeHasEffect('lucky_shadow',4)) dodgeBonus += 0.02;
         return { atk, hp, critBonus, aspdBonus, dodgeBonus };
       }
 
       function equipRuneIntoCategorySlot(runeId) {
         const runeObj = RUNES_DATA.find(r => r.id === runeId);
         if (!runeObj) return;
-        if (!runeOwned(runeId)) { showToast('🔒 Chưa sở hữu viên ngọc này. Hãy Khắc Cổ Ngữ để nhận.', 'err'); return; }
+        if (!runeOwned(runeId)) { showToast('🔒 Chưa sở hữu viên ngọc này. Hãy khám phá Tàn Tích Ngọc để nhận.', 'err'); return; }
         const eq = getEquippedRuneSlots();
         const list = eq[runeObj.type] || [];
         const maxSlots = RUNE_CATEGORIES_META[runeObj.type]?.slots || 4;
@@ -10714,6 +10754,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         equippedRuneSlots: { etched: [], blessing: [], enhancement: [], ability: [] },
         runeQualityTier: 'normal',
         runeMythicEnchant: false,
+        runeStones: {},
+        runeIntroClaimed: false,
         runes: {
           rune_flame: 0,
           rune_frost: 0,
@@ -11099,6 +11141,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               garden: this.garden,
               plinko: this.plinko,
               runes: this.runes,
+              runeStones: this.runeStones,
+              runeIntroClaimed: this.runeIntroClaimed,
               equippedRuneSlots: this.equippedRuneSlots,
               runeQualityTier: this.runeQualityTier,
               runeMythicEnchant: this.runeMythicEnchant,
@@ -12451,8 +12495,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // +230 HP) cho ra khoảng 112 / 650 — nằm giữa dải mục tiêu. Nếu để
         // 48/300 như trước, tân thủ chỉ còn ~82/750 (sát sàn) và trận đầu
         // quá chậm vì không có crit từ gear.
-        const baseAtk = Math.round((78 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25 + careerAtkPct) * _sacMul);
-        const baseHp = Math.round((420 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25 + careerHpPct) * _sacMul);
+        const resilienceRank = runeHasEffect('resilience') ? RuneEconomy.copies(SaveState.runes?.resilience) : 0;
+        const resilienceHp = resilienceRank >= 11 ? .30 : resilienceRank >= 7 ? .25 : resilienceRank >= 4 ? .20 : 0;
+        const baseAtk = Math.round((78 + gearAtk + gemAtk + affAtkFlat + runeAtk + heroStarAtk + (SaveState.gearLevel - 1) * 12 + talentTotals.flatAtk) * weapon.atkMult * (1 + setAtkRate + affAtkPct + globalAll.atkPct + (artifactTotals.totalAtkPct || 0) + starMilestone.atkMult * 0.25 + careerAtkPct) * _sacMul * (resilienceHp ? .85 : 1));
+        const baseHp = Math.round((420 + gearHp + gemHp + affHpFlat + runeHp + heroStarHp + (SaveState.gearLevel - 1) * 45 + talentTotals.flatHp) * (1 + setHpRate + affHpPct + globalAll.hpPct + (artifactTotals.totalHpPct || 0) + starMilestone.hpMult * 0.25 + careerHpPct) * _sacMul * (1 + resilienceHp));
         const baseAspd = +(weapon.aspd * (1 + talentTotals.aspdBonus + epicCount * 0.03 + setAspdRate + affAspd + (runeTotals.aspdBonus || 0) + (artifactTotals.aspdBonus || 0) + starMilestone.aspdBonus + (activeSkin.bonusAspd || 0) + careerAspdPct)).toFixed(2);
         const setCrit = setBonuses.reduce((n,b)=>n+b.crit,0);
         const gearDodge = Math.min(.68, +(gemDodge + affDodge + talentTotals.dodgeBonus + (runeTotals.dodgeBonus || 0) + (artifactTotals.dodgeBonus || 0) + starMilestone.dodgeBonus + globalAll.dodgeBonus + setBonuses.reduce((n,b)=>n+b.dodge,0) + careerDodgeFlat).toFixed(3));
@@ -18690,9 +18736,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const curCatFilter = SaveState.runeTypeFilter || 'all';
           const enchantActive = SaveState.runeMythicEnchant === true;
           const ownedCount = RuneEconomy.ownedRunes(SaveState.runes);
-          const engraveCost = RuneEconomy.engravingCost(SaveState.gearLevel,ownedCount);
-          const engraveButton = document.getElementById('btnEngraveRune');
-          if (engraveButton) engraveButton.textContent = `✨ Khắc ngọc ngẫu nhiên · ${engraveCost.toLocaleString('vi-VN')} vàng`;
 
           const hero = HEROES.find(h => h.id === SaveState.selectedHeroId) || HEROES[0];
           const slotOrder = Object.entries(RUNE_CATEGORIES_META).flatMap(([cat, meta]) =>
@@ -18722,7 +18765,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </div>
             <div class="rune-vault-controls" aria-label="Điều khiển cổ ngữ">
               <span class="text-xs font-black text-white mr-auto">✦ Đã khảm ${activeCount}/13 <span class="text-amber-200">· +${runeTotals.atk.toLocaleString('vi-VN')} ATK · +${runeTotals.hp.toLocaleString('vi-VN')} HP</span></span>
-              <span class="rune-economy-note">💠 ${ownedCount}/${RUNES_DATA.length} đã sở hữu · Phẩm chất tăng khi khắc trùng · ${enchantActive ? '✨ Đã mở phù phép' : '🔒 Phù phép: Epic +2 và 10 Enchantium'}</span>
+              <span class="rune-economy-note">💠 ${ownedCount}/${RUNES_DATA.length} đã sở hữu · Chỉ nhận từ khám phá Tàn Tích · Ghép 3 viên cùng bậc để tăng phẩm chất · ${enchantActive ? '✨ Đã mở phù phép' : '🔒 Phù phép: Epic +2 và 10 Enchantium'}</span>
             </div>
             <div class="rune-catalog" id="runeCatalog">
               <div class="rune-catalog-head">
@@ -18746,8 +18789,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </div>
             <div class="rune-detail">
               <div class="min-w-0"><strong class="text-fuchsia-200 text-xs">${selectedRune ? selectedRune.name : 'Ô khảm đang chọn'}</strong>
-                <p class="text-[10px] text-slate-300 mt-1">${selectedRune ? selectedRune.desc : selected ? 'Ô trống · chọn một viên cùng nhóm trong kho.' : 'Chọn một ô để xem chi tiết hoặc tháo ngọc.'}</p>
-                ${selectedRune && enchantActive ? `<p class="text-[10px] text-fuchsia-300 mt-1">${selectedRune.enchantText}</p>` : ''}</div>
+                <p class="text-[10px] text-slate-300 mt-1">${selectedRune ? `${RuneWikiData[selectedRune.id]?.base||''} · ${RuneEconomy.tier(SaveState.runes[selectedRune.id]).replaceAll('_',' ')}. Chạm viên trong kho để xem đủ thuộc tính từng bậc.` : selected ? 'Ô trống · chọn một viên cùng nhóm trong kho.' : 'Chọn một ô để xem chi tiết hoặc tháo ngọc.'}</p></div>
               ${selectedRune ? '<button type="button" id="btnUnequipSelectedRune" class="rune-gold-btn shrink-0 text-xs">↩ Tháo ngọc</button>' : ''}
             </div>
             <details class="rune-presets"><summary>⚡ Bộ khảm nhanh</summary>
@@ -18788,7 +18830,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             };
           });
           runeGrid.querySelectorAll('[data-equip-wiki-rune]').forEach(card => {
-            card.onclick = () => equipRuneIntoCategorySlot(card.getAttribute('data-equip-wiki-rune'));
+            card.onclick = () => openRuneDetailPopup(card.getAttribute('data-equip-wiki-rune'));
           });
         }
         renderArtifactsSubtabUI();
@@ -19098,7 +19140,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           rarity: 'rare',
           gemPrice: 120,
           guildGoldPrice: 600,
-          desc: 'Dùng để đào Cổ Ngữ trong Rune Ruins (Rusty Chest: 7.2% Fine / 28.8% Normal • Sturdy Chest: 10% Rare / 40% Fine • Glorious Chest: 2.8% Epic / 11.2% Rare, Revive Rune 0.15%).',
+          desc: 'Dùng để khám phá Ngọc thật trong Tàn Tích: mỗi lượt một viên (76% Normal, 19% Fine, 4% Rare, 1% Epic).',
           actionLabel: '⛏️ Đào Rune Ruins'
         },
         {
@@ -19110,7 +19152,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           rarity: 'legendary',
           gemPrice: 250,
           guildGoldPrice: 1200,
-          desc: 'Dùng trong Promised Ruins (cùng tỷ lệ Glorious/Sturdy như Rune Ruins nhưng giới hạn bể rơi xoay vòng: Elemental/Circle ➔ Weapon/Meteor ➔ Sprite/Strike).',
+          desc: 'Dùng trong Tàn Tích Hứa Hẹn: chọn bể Ngọc và tăng cơ hội Fine/Rare/Epic (50%/12%/3%).',
           actionLabel: '🌟 Đào Promised Ruins'
         },
         {
@@ -19493,82 +19535,24 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       // Perform a Rune Ruins / Promised Ruins Dig using Shovel or Promised Relic Shovel
       // Following https://archero-2.game-vault.net/wiki/Pull_Rates#Rune_Ruins_Pull_Rates
-      function executeRuneRuinsDig(isPromised = false, count = 1, tileIdx = -1) {
-        ensureWikiCurrencyAndItemsState();
-        const itemKey = isPromised ? 'promised_relic_shovel' : 'shovel';
-        const itemName = isPromised ? 'Promised Relic Shovel' : 'Shovel';
-        const curShovels = SaveState.wikiOtherItems[itemKey] || 0;
-
-        if (curShovels < count) {
-          const gemCost = (isPromised ? 250 : 120) * (count - curShovels);
-          if ((SaveState.gems || 0) < gemCost) {
-            showToast(`⚠️ Không đủ ${itemName} hoặc 💎 Đá Quý!`);
-            return;
-          }
-          SaveState.wikiOtherItems[itemKey] = 0;
-          SaveState.gems -= gemCost;
-        } else {
-          SaveState.wikiOtherItems[itemKey] -= count;
-        }
-
-        const rState = SaveState.runeRuinsState;
-        if (tileIdx >= 0 && tileIdx < 9) {
-          rState.gridRevealed[tileIdx] = true;
-          if (rState.gridRevealed.every(Boolean)) {
-            rState.gridRevealed = [false, false, false, false, false, false, false, false, false];
-          }
-        }
-
-        // Filter pool if Promised Ruins is active
-        let candidateRunes = typeof WIKI_RUNES_DATA !== 'undefined' ? [...WIKI_RUNES_DATA] : [];
-        if (isPromised && candidateRunes.length > 0) {
-          const poolKey = rState.promisedPool || 'elemental_circle';
-          const filtered = candidateRunes.filter(r => {
-            const nm = (r.name + ' ' + r.wikiName + ' ' + r.desc).toLowerCase();
-            if (poolKey === 'elemental_circle') return nm.includes('flame') || nm.includes('frost') || nm.includes('orb') || nm.includes('ring') || nm.includes('seal') || nm.includes('touch');
-            if (poolKey === 'weapon_meteor') return nm.includes('sword') || nm.includes('arrow') || nm.includes('weapon') || nm.includes('meteor') || nm.includes('potion') || nm.includes('star');
-            return nm.includes('sprite') || nm.includes('strike') || nm.includes('dragon') || nm.includes('revive') || nm.includes('guardian');
+      let runeDigging = false;
+      async function executeRuneRuinsDig(isPromised = false, count = 1, tileIdx = -1) {
+        if (runeDigging) return;
+        runeDigging = true;
+        try {
+          const response = await fetch('/api/runes', { method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},
+            body:JSON.stringify({action:'explore',promised:isPromised,count,pool:SaveState.runeRuinsState?.promisedPool||'elemental_circle',tileIdx,boardCell:SaveState.wikiEventsState?.selectedEventId==='rune_ruins'?tileIdx:-1}) });
+          const result = await response.json();
+          if (!response.ok || !result.ok) { showToast(result.error || 'Không đào được Ngọc lúc này.','err'); return; }
+          const names = result.drops.map(drop => {
+            const rune = RUNES_DATA.find(r=>r.id===drop.runeId);
+            return `${rune?.wikiName||drop.runeId} (${RuneEconomy.tier(drop.rank).replaceAll('_',' ')})`;
           });
-          if (filtered.length > 0) candidateRunes = filtered;
-        }
-
-        const pulledNames = [];
-        for (let i = 0; i < count; i++) {
-          // Determine chest tier uncovered: Glorious (4x icon), Sturdy (2x icon), or Rusty Chest
-          const chestRoll = Math.random() * 100;
-          let chestLabel = 'Rusty Chest';
-          let runeRarityLabel = 'Fine (7.2%) / Normal (28.8%)';
-          if (chestRoll < 14.0) {
-            // Glorious Chest: 2.8% Epic, 11.20% Rare
-            chestLabel = 'Glorious Chest (4x Shengjie)';
-            runeRarityLabel = Math.random() < (2.8 / 14.0) ? 'Epic (2.8%)' : 'Rare (11.2%)';
-            rState.foundGloriousIcons = (rState.foundGloriousIcons || 0) + 1;
-          } else if (chestRoll < 64.0) {
-            // Sturdy Chest: 10% Rare, 40% Fine (Revive Rune 0.15% pull rate vs 0.30% other blessing)
-            chestLabel = 'Sturdy Chest (2x Shengjie)';
-            runeRarityLabel = Math.random() < (10.0 / 50.0) ? 'Rare (10%)' : 'Fine (40%)';
-            rState.foundSturdyIcons = (rState.foundSturdyIcons || 0) + 1;
-          }
-
-          if (candidateRunes.length > 0) {
-            // Respect canonical Wiki rule: Revive Rune has half the probability of other blessing runes (0.15% vs 0.30%)
-            let pickedRune = candidateRunes[Math.floor(Math.random() * candidateRunes.length)];
-            if (pickedRune.id === 'blessing_revive' && Math.random() < 0.5) {
-              const nonRevive = candidateRunes.filter(r => r.id !== 'blessing_revive');
-              if (nonRevive.length > 0) pickedRune = nonRevive[Math.floor(Math.random() * nonRevive.length)];
-            }
-            pulledNames.push(`${pickedRune.icon} ${pickedRune.wikiName} [${chestLabel} • ${runeRarityLabel}]`);
-          }
-          // Also grant bonus Enchantium on dig
-          SaveState.wikiOtherItems.enchantium = (SaveState.wikiOtherItems.enchantium || 0) + (isPromised ? 8 : 4);
-        }
-
-        rState.lastDigLog = `⛏️ Đã đào ×${count} (${itemName}): Khai quật ${pulledNames.slice(0, 3).join(' • ')}${pulledNames.length > 3 ? ` (+${pulledNames.length - 3} Cổ Ngữ khác)` : ''} & nhận +${count * (isPromised ? 8 : 4)} 🔮 Enchantium!`;
-        SaveState.save();
-        SoundFX.levelUp();
-        StageHeroAnim.triggerPose();
-        renderLobbyUI();
-        showToast(rState.lastDigLog);
+          SoundFX.levelUp(); StageHeroAnim.triggerPose();
+          showToast(`⛏️ Khám phá được ${names.slice(0,2).join(', ')}${names.length>2?` và ${names.length-2} viên khác`:''}!`);
+          setTimeout(()=>window.location.reload(),850);
+        } catch { showToast('Không kết nối được máy chủ. Hãy thử lại.','err'); }
+        finally { runeDigging = false; }
       }
 
       // Execute Interactive Activity for any of the 11 Canonical Wiki "Other Items"
@@ -20146,16 +20130,16 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           <div class="${(curCat === 'all' || curCat === 'ruins' || curCat === 'other_items') ? '' : 'hidden'} rounded-3xl bg-gradient-to-br from-indigo-950/90 via-slate-900 to-slate-950 border-2 border-indigo-400/60 p-4 shadow-xl space-y-3">
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
               <div>
-                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-indigo-500/25 text-indigo-200 border border-indigo-400/40">Rune Ruins &amp; Promised Ruins • Pull Rates Wiki</span>
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-indigo-500/25 text-indigo-200 border border-indigo-400/40">Khám phá Ngọc · Tỷ lệ trong game</span>
                 <h3 class="text-sm sm:text-lg font-black text-white mt-0.5">⛏️ Tàn Tích Cổ Ngữ (Rune Ruins) &amp; Tàn Tích Hứa Hẹn (Promised Ruins)</h3>
-                <p class="text-[11px] text-slate-300">Dùng <strong class="text-amber-300">Shovel</strong> hoặc <strong class="text-fuchsia-300">Promised Relic Shovel</strong> để khai quật 3 bậc Rương Cổ Ngữ: <strong class="text-slate-300">Rusty Chest</strong> (7.2% Fine, 28.8% Normal), <strong class="text-sky-300">Sturdy Chest [2x Icon]</strong> (10% Rare, 40% Fine • Revive Rune 0.15%) &amp; <strong class="text-amber-300">Glorious Chest [4x Icon]</strong> (2.8% Epic, 11.2% Rare)!</p>
+                <p class="text-[11px] text-slate-300">Dùng <strong class="text-amber-300">Shovel</strong> hoặc <strong class="text-fuchsia-300">Promised Relic Shovel</strong> để nhận Ngọc trực tiếp vào kho. Mỗi lượt luôn nhận một viên; phẩm chất cao hiếm hơn. Ba viên cùng loại và cùng phẩm chất tự ghép lên bậc tiếp theo.</p>
               </div>
               <div class="flex items-center gap-2 flex-wrap">
                 <button type="button" id="btnDigStandardRuins10" class="px-3 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs shadow transition">
-                  ⛏️ Đào ×10 Rune Ruins (10 Shovel)
+                  ⛏️ Khám phá ×10 (10 Shovel)
                 </button>
                 <button type="button" id="btnDigPromisedRuins10" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 hover:brightness-110 text-slate-950 font-black text-xs shadow transition">
-                  🌟 Đào ×10 Promised Ruins (10 Promised Shovel)
+                  🌟 Tàn Tích Hứa Hẹn ×10
                 </button>
               </div>
             </div>
@@ -20181,19 +20165,19 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
                 <div class="grid grid-cols-3 gap-2 text-[10px]">
                   <div class="rounded-xl bg-slate-950/90 border border-slate-700 p-2">
-                    <div class="font-black text-slate-200">📦 Rusty Chest</div>
-                    <div class="text-slate-400">Yêu cầu: Không</div>
-                    <div class="text-emerald-300 font-bold mt-0.5">7.2% Fine • 28.8% Normal</div>
+                    <div class="font-black text-slate-200">💠 Normal</div>
+                    <div class="text-slate-400">Tàn Tích thường</div>
+                    <div class="text-emerald-300 font-bold mt-0.5">76% mỗi lượt</div>
                   </div>
                   <div class="rounded-xl bg-slate-950/90 border border-sky-500/40 p-2">
-                    <div class="font-black text-sky-300">🧰 Sturdy Chest (Đã mở: ${rState.foundSturdyIcons || 0})</div>
-                    <div class="text-slate-400">Yêu cầu: 2x Ấn Shengjie</div>
-                    <div class="text-sky-200 font-bold mt-0.5">10% Rare • 40% Fine</div>
+                    <div class="font-black text-sky-300">🧰 Fine / Rare</div>
+                    <div class="text-slate-400">Tàn Tích thường</div>
+                    <div class="text-sky-200 font-bold mt-0.5">19% Fine • 4% Rare</div>
                   </div>
                   <div class="rounded-xl bg-slate-950/90 border border-amber-400/50 p-2">
-                    <div class="font-black text-amber-300">👑 Glorious Chest (Đã mở: ${rState.foundGloriousIcons || 0})</div>
-                    <div class="text-slate-400">Yêu cầu: 4x Ấn Shengjie</div>
-                    <div class="text-purple-300 font-bold mt-0.5">2.8% Epic • 11.2% Rare</div>
+                    <div class="font-black text-amber-300">👑 Epic</div>
+                    <div class="text-slate-400">Tàn Tích thường</div>
+                    <div class="text-purple-300 font-bold mt-0.5">1% mỗi lượt</div>
                   </div>
                 </div>
 
@@ -20208,12 +20192,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 <div class="grid grid-cols-3 gap-2 w-full max-w-[220px]">
                   ${rState.gridRevealed.map((rev, idx) => `
                     <button type="button" data-ruins-tile="${idx}" class="h-14 rounded-xl border-2 font-black text-sm flex flex-col items-center justify-center transition ${rev ? 'bg-amber-500/25 border-amber-300 text-amber-200' : 'bg-slate-800 hover:bg-slate-700 border-slate-600 text-slate-200 shadow-inner'}">
-                      <span>${rev ? (idx % 3 === 0 ? '👑' : (idx % 2 === 0 ? '🧰' : '💠')) : '🪨'}</span>
+                      <span>${rev ? '💠' : '🪨'}</span>
                       <span class="text-[9px] font-bold">${rev ? 'Đã Đào' : `Ô #${idx + 1}`}</span>
                     </button>
                   `).join('')}
                 </div>
-                <div class="text-[10px] text-slate-400 text-center">Mỗi lần chạm ô tiêu hao 1 Promised Shovel (hoặc Shovel)</div>
+                <div class="text-[10px] text-slate-400 text-center">Mỗi ô dùng 1 Promised Shovel; nếu thiếu, dùng đá quý.</div>
               </div>
             </div>
           </div>
@@ -22543,88 +22527,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </section>
           `;
         } else if (activeEventMeta.id === 'rune_ruins') {
-          const board = ev.runeRuinsBoard;
-          const shovels = SaveState.wikiOtherItems.shovel || 0;
-          const mult = board.multiplier || 1;
-          const rarityTier = board.upgradesFound >= 4 ? 'Glorious Chest (Blue/Purple Runes)' : (board.upgradesFound >= 2 ? 'Sturdy Chest (Green/Blue Runes)' : 'Rusty Chest (White/Green Runes)');
-          const chestCount = (board.x2Found >= 2 ? 2 : 1) * mult;
-
-          detailHtml = `
-            <div class="rounded-3xl bg-slate-900/95 border-2 border-indigo-400/60 p-4 shadow-2xl space-y-4">
-              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-                <div>
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-indigo-400 text-slate-950">Regular Event #5 • Rune Ruins Wiki</span>
-                    <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">1 Ruin Shovel or 200 Gems • x1 / x5 Tries</span>
-                    <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">4 Upgrades • 2 ×2 Tiles • 3 Keys (Ends on 2nd Key)</span>
-                  </div>
-                  <h3 class="text-base sm:text-xl font-black text-white mt-1">⛏️ Tàn Tích Cổ Ngữ 3×3 Chuẩn Wiki (Rune Ruins Minigame)</h3>
-                  <p class="text-xs text-slate-300">Bàn 3×3 gồm đúng 9 biểu tượng ẩn: <strong class="text-sky-300">4 Ô Upgrade</strong> (Mở đủ 2 ô tăng bậc Rương: Rusty ➔ Sturdy ➔ Glorious), <strong class="text-fuchsia-300">2 Ô ×2</strong> (Mở đủ 2 ô nhân đôi số Rương nhận được), và <strong class="text-amber-300">3 Ô Chìa Khóa (Key)</strong> (Khi lật trúng Key thứ 2 sẽ kết thúc ván và trao thưởng Rương)!</p>
-                </div>
-                <div class="flex items-center gap-2 flex-wrap shrink-0">
-                  <span class="px-3 py-2 rounded-xl bg-slate-950 border border-indigo-400/50 text-xs font-black text-indigo-200">⛏️ Ruin Shovel: ${shovels}</span>
-                  <button type="button" id="btnRuneRuinsToggleMult" class="px-3 py-2 rounded-xl border text-xs font-black transition ${mult === 5 ? 'bg-amber-400 text-slate-950 border-white shadow' : 'bg-slate-800 text-slate-200 border-slate-600'}">
-                    🔢 Hệ Số Đào: ×${mult} (${mult} Shovel / ${mult * 200} 💎)
-                  </button>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center">
-                <div class="lg:col-span-2 space-y-3">
-                  <div class="grid grid-cols-3 gap-2.5 text-xs">
-                    <div class="rounded-2xl bg-slate-950/90 border border-sky-400/40 p-3">
-                      <div class="text-[10px] text-slate-400 font-bold">⬆️ Upgrade Tiles (Cần 2/4)</div>
-                      <div class="text-base font-black text-sky-300 mt-0.5">${board.upgradesFound} / 4 Đã Mở</div>
-                      <div class="text-[10px] text-amber-200 mt-0.5">${rarityTier}</div>
-                    </div>
-                    <div class="rounded-2xl bg-slate-950/90 border border-fuchsia-400/40 p-3">
-                      <div class="text-[10px] text-slate-400 font-bold">✨ ×2 Chest Tiles (Cần 2/2)</div>
-                      <div class="text-base font-black text-fuchsia-300 mt-0.5">${board.x2Found} / 2 Đã Mở</div>
-                      <div class="text-[10px] text-emerald-300 mt-0.5">Số rương: ${chestCount} Rương</div>
-                    </div>
-                    <div class="rounded-2xl bg-slate-950/90 border border-amber-400/40 p-3">
-                      <div class="text-[10px] text-slate-400 font-bold">🗝️ Keys (2 Key = Mở Rương)</div>
-                      <div class="text-base font-black text-amber-300 mt-0.5">${board.keysFound} / 2 Chìa Khóa</div>
-                      <div class="text-[10px] text-slate-300 mt-0.5">${board.finished ? '✅ Đã Mở Rương!' : 'Đang đào...'}</div>
-                    </div>
-                  </div>
-
-                  <div class="rounded-2xl bg-slate-950/90 border border-indigo-400/40 p-3 text-xs font-bold text-indigo-200">
-                    📢 ${board.lastRewardSummary}
-                  </div>
-
-                  <div class="flex flex-wrap items-center gap-2">
-                    <button type="button" id="btnRuneRuinsNewBoard" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow">
-                      🔄 Tạo Bàn 3×3 Mới (-${mult} Shovel hoặc ${mult * 200} 💎)
-                    </button>
-                    <button type="button" id="btnRuneRuinsAutoComplete" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-300 text-white font-black text-xs shadow">
-                      ⚡ Đào Tự Động Hết Ván 3×3
-                    </button>
-                  </div>
-                </div>
-
-                <div class="rounded-2xl bg-slate-950/95 border-2 border-indigo-400/50 p-3.5 flex flex-col items-center gap-2.5">
-                  <div class="text-xs font-black text-amber-300 uppercase">⛏️ Bàn 3×3 Rune Ruins (Chạm Từng Ô)</div>
-                  <div class="grid grid-cols-3 gap-2 w-full max-w-[240px]">
-                    ${board.symbols.map((sym, idx) => {
-                      const rev = board.revealed[idx];
-                      const icon = !rev ? '🪨' : (sym === 'upgrade' ? '⬆️' : (sym === 'x2' ? '✨×2' : '🗝️'));
-                      const label = !rev ? `Ô #${idx + 1}` : (sym === 'upgrade' ? 'Upgrade' : (sym === 'x2' ? '×2 Rương' : 'Key'));
-                      const style = !rev
-                        ? 'bg-slate-900 hover:bg-slate-800 border-slate-700 text-slate-200'
-                        : (sym === 'upgrade' ? 'bg-sky-950/80 border-sky-400 text-sky-200' : (sym === 'x2' ? 'bg-fuchsia-950/80 border-fuchsia-400 text-fuchsia-200' : 'bg-amber-950/80 border-amber-400 text-amber-200'));
-                      return `
-                        <button type="button" data-wiki-ruins-cell="${idx}" class="h-16 rounded-xl border-2 font-black flex flex-col items-center justify-center transition ${style}">
-                          <span class="text-base">${icon}</span>
-                          <span class="text-[9px] font-bold mt-0.5">${label}</span>
-                        </button>
-                      `;
-                    }).join('')}
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
+          const board=ev.runeRuinsBoard;
+          const mult=board.multiplier===5?5:1;
+          const shovels=SaveState.wikiOtherItems.shovel||0;
+          detailHtml=`<section class="rune-ruins-expedition">
+            <div class="rune-ruins-banner"><span class="rune-ruins-banner-icon" aria-hidden="true">💎</span><div><span class="text-[10px] font-black uppercase tracking-widest text-fuchsia-200">Sự kiện khám phá · Nguồn Ngọc duy nhất</span><h3> Tàn Tích Ngọc</h3><p>Đào từng ô để nhận Ngọc thật vào kho. Mỗi ô dùng xẻng; thiếu xẻng có thể dùng đá quý. Không có cách khắc Ngọc bằng vàng.</p></div></div>
+            <div class="rune-ruins-stats"><span>⛏️ ${shovels} xẻng</span><span>💎 ${SaveState.gems||0} đá quý</span><span>🔮 ${SaveState.wikiOtherItems.enchantium||0} Enchantium</span>${!SaveState.runeIntroClaimed?'<span>🎁 Lượt đào đầu miễn phí</span>':''}</div>
+            <div class="rune-ruins-explain"><b>Phẩm chất khi khai quật</b><p>Normal 76% · Fine 19% · Rare 4% · Epic 1%. Một viên nhận được ở mỗi lượt. Ba viên cùng loại và cùng bậc tự ghép thành một viên bậc cao hơn; ô khảm luôn dùng bậc cao nhất.</p></div>
+            <div class="rune-ruins-layout"><div class="rune-ruins-map"><div class="rune-ruins-map-head"><b>✦ Bản đồ cổ 3 × 3</b><span>${board.revealed.filter(Boolean).length}/9 ô đã mở</span></div>
+              <div class="rune-ruins-tiles">${Array.from({length:9},(_,idx)=>`<button type="button" data-wiki-ruins-cell="${idx}" class="rune-ruins-tile ${board.revealed[idx]?'is-open':''}" ${board.revealed[idx]?'disabled':''} aria-label="${board.revealed[idx]?'Ô đã đào':'Đào ô '+(idx+1)}"><span>${board.revealed[idx]?'💠':'✧'}</span><small>Ô ${idx+1}</small></button>`).join('')}</div>
+              <p class="text-xs text-slate-300 mt-3">Chạm một ô để đào ${mult} lượt. Bản đồ mới chỉ đổi vị trí ô, không tốn tài nguyên.</p>
+            </div><div class="rune-ruins-side"><div class="rune-ruins-log">📜 ${SaveState.runeRuinsState?.lastDigLog||'Chưa khai quật viên Ngọc nào.'}</div>
+              <button type="button" id="btnRuneRuinsToggleMult" class="rune-gold-btn">🔢 Mỗi ô: ×${mult} lượt</button>
+              <button type="button" id="btnRuneRuinsNewBoard" class="rune-gold-btn">↻ Bản đồ mới</button>
+              <button type="button" id="btnRuneRuinsAutoComplete" class="rune-gold-btn">⚡ Đào nhanh ×10 · Cần thẻ VIP</button>
+              <p>Đào ×10 dùng 10 xẻng; mỗi xẻng thiếu thay bằng 120 đá quý. Tàn Tích Hứa Hẹn có bể Ngọc chọn lọc và dùng xẻng riêng.</p>
+            </div></div>
+          </section>`;
         } else if (activeEventMeta.id === 'island_treasure') {
           const rotMeta = WIKI_ISLAND_ROTATIONS_META[ev.islandRotation] || WIKI_ISLAND_ROTATIONS_META.key;
           const diceCount = SaveState.wikiOtherItems.dice || 0;
@@ -23714,26 +23633,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const revealRuinsCell = (idx) => {
           const b = ev.runeRuinsBoard;
           if (b.finished || b.revealed[idx]) return;
-          b.revealed[idx] = true;
-          const sym = b.symbols[idx];
-          if (sym === 'upgrade') b.upgradesFound++;
-          if (sym === 'x2') b.x2Found++;
-          if (sym === 'key') b.keysFound++;
-
-          if (b.keysFound >= 2) {
-            b.finished = true;
-            const mult = b.multiplier || 1;
-            const chests = (b.x2Found >= 2 ? 2 : 1) * mult;
-            const tierName = b.upgradesFound >= 4 ? 'Glorious Chest (Blue/Purple Runes)' : (b.upgradesFound >= 2 ? 'Sturdy Chest (Green/Blue Runes)' : 'Rusty Chest (White/Green Runes)');
-            SaveState.wikiOtherItems.enchantium = (SaveState.wikiOtherItems.enchantium || 0) + chests * 10;
-            b.lastRewardSummary = `🎉 Đã mở trúng Chìa Khóa thứ 2! Tổng kết ván: Nhận ${chests}× [${tierName}] + ${chests * 10} 🔮 Enchantium!`;
-            SoundFX.levelUp();
-            showToast(b.lastRewardSummary);
-          } else {
-            SoundFX.coinPickup();
-          }
-          SaveState.save();
-          renderLobbyUI();
+          executeRuneRuinsDig(false,b.multiplier||1,idx);
         };
 
         container.querySelectorAll('[data-wiki-ruins-cell]').forEach(btn => {
@@ -23747,17 +23647,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (btnRrNew) {
           btnRrNew.onclick = () => {
             const mult = ev.runeRuinsBoard.multiplier || 1;
-            if ((SaveState.wikiOtherItems.shovel || 0) >= mult) {
-              SaveState.wikiOtherItems.shovel -= mult;
-            } else if ((SaveState.gems || 0) >= mult * 200) SaveState.gems -= mult * 200;
-            else { showToast('Cần xẻng hoặc đá quý để tạo bàn mới.', 'err'); return; }
             const nextB = createFreshRuneRuins3x3Board();
             nextB.multiplier = mult;
             ev.runeRuinsBoard = nextB;
             SaveState.save();
             SoundFX.coinPickup();
             renderLobbyUI();
-            showToast(`⛏️ Đã tạo bàn 3×3 Rune Ruins mới (Hệ số ×${mult})!`);
+            showToast(`⛏️ Đã tạo bản đồ 3×3 mới. Mỗi ô đào tiêu ${mult} xẻng hoặc đá quý.`);
           };
         }
 
@@ -23765,18 +23661,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (btnRrAuto) {
           btnRrAuto.onclick = () => {
             if (!requireVipCard('cave', 'Cave Explorer')) return;
-            if (ev.runeRuinsBoard.finished) {
-              const mult = ev.runeRuinsBoard.multiplier || 1;
-              if ((SaveState.wikiOtherItems.shovel || 0) >= mult) SaveState.wikiOtherItems.shovel -= mult;
-              else if ((SaveState.gems || 0) >= mult * 200) SaveState.gems -= mult * 200;
-              else { showToast('Cần xẻng hoặc đá quý để tạo bàn mới.', 'err'); return; }
-              const nextB = createFreshRuneRuins3x3Board();
-              nextB.multiplier = mult;
-              ev.runeRuinsBoard = nextB;
-            }
-            for (let i = 0; i < 9; i++) {
-              if (!ev.runeRuinsBoard.finished) revealRuinsCell(i);
-            }
+            executeRuneRuinsDig(false,10);
           };
         }
 
@@ -28771,7 +28656,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (p && hasHeroSkillActive(p, 'seraph')) {
           pct = 0;
           freeReason = 'Seraph [Divine Favor LV.3]';
-        } else if (isRuneEquipped('devil_pact')) {
+        } else if (runeHasEffect('devil_pact')) {
           // Mythic Enchant: miễn trừ hoàn toàn việc mất Max HP vĩnh viễn.
           if (SaveState.runeMythicEnchant === true && RuneEconomy.copies(SaveState.runes?.devil_pact) >= 6) {
             pct = 0;
@@ -28911,7 +28796,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // Arrow Rain [Mythic Ability Rune]: Every 7 shots triggers an AoE Arrow Rain weakening enemies!
-        if (isRuneEquipped('arrow_rain')) {
+        if (runeHasEffect('arrow_rain',4)) {
           Game.arrowRainShotCounter = (Game.arrowRainShotCounter || 0) + 1;
           if (Game.arrowRainShotCounter >= 7) {
             Game.arrowRainShotCounter = 0;
@@ -28927,15 +28812,16 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // Echo Scythe [Mythic Etched Rune]: Launches 3 piercing Echo Scythes (1 vertical + 2 horizontal) bouncing 9 times!
-        if (isRuneEquipped('echo_scythe') && Math.random() < 0.35) {
-          for (const scAng of [-Math.PI / 2, 0, Math.PI]) {
+        if (runeHasEffect('echo_scythe',4) && Math.random() < 0.35) {
+          const echoRank=RuneEconomy.copies(SaveState.runes?.echo_scythe);
+          for (const scAng of echoRank>=11?[-Math.PI / 2, 0, Math.PI]:[-Math.PI / 2]) {
             Game.playerBullets.push({
               x: p.x,
               y: p.y,
               vx: Math.cos(scAng) * 420,
               vy: Math.sin(scAng) * 420,
               r: 13,
-              dmg: p.atk * 1.0,
+              dmg: p.atk * (echoRank>=9?1.0:.6),
               bouncesLeft: 9,
               ricochetsLeft: 1,
               pierce: true,
@@ -28950,7 +28836,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // Sprite Assist [Mythic Etched Rune]: 80% chance for Sprites to launch an extra attack when character attacks!
-        if (isRuneEquipped('sprite_assist') && Math.random() < 0.80) {
+        if (runeHasEffect('sprite_assist') && Math.random() < 0.80) {
           const sTarget = findNearestEnemy(p.x, p.y);
           if (sTarget) {
             const sAng = Math.atan2(sTarget.y - p.y, sTarget.x - p.x);
@@ -30006,7 +29892,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // --- ARCHERO 2 WIKI PERIODIC SKILL LOOPS (CORROSIVE FIELD, SUPER METEOR, BEAM STRIKE, SPRITE KING, CIRCLES) ---
         // 0) Archero 2 Wiki Equipped Ability & Enhancement Rune Combat Loops:
         // Ring of Agony [Ability Rune]: 7m radius deals 1.0x ATK + Bolt every 0.5s and increases DMG taken by +20%!
-        if (isRuneEquipped('ring_of_agony') && Game.enemies.length > 0) {
+        if (runeHasEffect('ring_of_agony') && Game.enemies.length > 0) {
           Game.ringOfAgonyTimer = (Game.ringOfAgonyTimer || 0) + dt;
           if (Game.ringOfAgonyTimer >= 0.50) {
             Game.ringOfAgonyTimer = 0;
@@ -30019,7 +29905,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }
         }
         // Sword of Time [Ability Rune]: Summons 1-2 Elemental Strikes every 1.5s!
-        if (isRuneEquipped('sword_of_time') && Game.enemies.length > 0) {
+        if (runeHasEffect('sword_of_time') && Game.enemies.length > 0) {
           Game.swordOfTimeTimer = (Game.swordOfTimeTimer || 0) + dt;
           if (Game.swordOfTimeTimer >= 1.50) {
             Game.swordOfTimeTimer = 0;
@@ -30028,9 +29914,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }
         }
         // Star of Time [Ability Rune]: Summons 1-2 Meteors every 5s (reduced to 2.5s with Giant Meteor -50% CD)!
-        if (isRuneEquipped('star_of_time') && Game.enemies.length > 0) {
+        if (runeHasEffect('star_of_time') && Game.enemies.length > 0) {
           Game.starOfTimeTimer = (Game.starOfTimeTimer || 0) + dt;
-          const cd = isRuneEquipped('giant_meteor') ? 2.5 : 4.5;
+          const cd = runeHasEffect('giant_meteor') ? 2.5 : 4.5;
           if (Game.starOfTimeTimer >= cd) {
             Game.starOfTimeTimer = 0;
             const mTarget = Game.enemies[Math.floor(Math.random() * Game.enemies.length)];
@@ -30044,7 +29930,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }
         }
         // Flame-Poison Touch & Frost-Thunder Touch [Ability Runes]: Ignite/Poison/Freeze/Shock random enemies every 1.5s!
-        if ((isRuneEquipped('flame_poison_touch') || isRuneEquipped('rune_thunder')) && Game.enemies.length > 0) {
+        if ((runeHasEffect('flame_poison_touch') || runeHasEffect('rune_thunder')) && Game.enemies.length > 0) {
           Game.runeTouchTimer = (Game.runeTouchTimer || 0) + dt;
           if (Game.runeTouchTimer >= 1.65) {
             Game.runeTouchTimer = 0;
@@ -30054,7 +29940,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               tEnemy.burnDmg = Math.round(p.atk * 0.45);
               tEnemy.slowTimer = 2.0;
               damageEnemy(tEnemy, p.atk * 0.90, true);
-              if (isRuneEquipped('rune_flame')) {
+              if (runeHasEffect('rune_flame')) {
                 spawnShockwave(tEnemy.x, tEnemy.y, 68, '#ef4444', 0.28);
               }
             }
@@ -30692,11 +30578,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           dmg = Math.max(1, Math.round(dmg * (1 - p.dmgReduction)));
         }
         // Guardian [Mythic Blessing Rune]: Reduces all DMG taken by -15%!
-        if (isRuneEquipped('guardian')) {
-          dmg = Math.max(1, Math.round(dmg * 0.85));
+        if (runeHasEffect('guardian')) {
+          const guardianRank=RuneEconomy.copies(SaveState.runes?.guardian);
+          dmg = Math.max(1, Math.round(dmg * (guardianRank>=11?.85:guardianRank>=7?.90:.95)));
         }
         // Star of Fury [Mythic Ability Rune]: Upon taking DMG, summon 7 Huge Meteors to bombard the field!
-        if (isRuneEquipped('star_of_fury') && Game.enemies.length > 0) {
+        if (runeHasEffect('star_of_fury') && Game.enemies.length > 0) {
           for (let m = 0; m < Math.min(7, Game.enemies.length * 2); m++) {
             const mt = Game.enemies[m % Game.enemies.length];
             if (mt) {
@@ -30768,13 +30655,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         if (p.hp <= 0) {
           // Revive Blessing Rune [Mythic Blessing]: 100% Chance to revive upon death with 50% HP & +20% ATK PWR!
-          if (isRuneEquipped('rune_valkyrie') && !p.runeReviveUsed) {
+          const reviveRank=RuneEconomy.copies(SaveState.runes?.rune_valkyrie);
+          if (runeHasEffect('rune_valkyrie') && !p.runeReviveUsed && (reviveRank>=11 || Math.random()<.5)) {
             p.runeReviveUsed = true;
             p.hp = Math.round(p.maxHp * 0.50);
-            p.atk = Math.round(p.atk * 1.20);
+            if (reviveRank>=7) p.atk = Math.round(p.atk * 1.20);
             p.invulnTimer = 2.2;
             spawnShockwave(p.x, p.y, 150, '#fde047', 0.45);
-            spawnFloatText(p.x, p.y - 38, '🪽 CỔ NGỮ REVIVE: PHỤC SINH +20% ATK!', '#fde047', 14);
+            spawnFloatText(p.x, p.y - 38, `🪽 CỔ NGỮ REVIVE: PHỤC SINH${reviveRank>=7?' +20% ATK':''}!`, '#fde047', 14);
             updateInGameHUD();
             return;
           }
@@ -33972,24 +33860,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         applyDevCheatVisibility
       };
 
-      // Engrave Elemental Rune
-      document.getElementById('btnEngraveRune').addEventListener('click', async (event) => {
-        const cost = RuneEconomy.engravingCost(SaveState.gearLevel,RuneEconomy.ownedRunes(SaveState.runes));
-        if (SaveState.gold < cost) {
-          showToast(`⚠️ Cần ${cost.toLocaleString('vi-VN')} vàng để khắc Cổ Ngữ!`);
-          return;
-        }
-        const button = event.currentTarget;
-        button.disabled = true;
-        try {
-          const response = await fetch('/api/runes',{ method:'POST',credentials:'same-origin' });
-          const result = await response.json();
-          if (!response.ok || !result.ok) { showToast(result.error || 'Không khắc được Ngọc lúc này.','err'); button.disabled=false; return; }
-          const pick = RUNES_DATA.find(r=>r.id===result.runeId);
-          SoundFX.levelUp(); StageHeroAnim.triggerPose();
-          showToast(`💠 Nhận ${pick?.wikiName || result.runeId} · ${RuneEconomy.tier(result.rank).replaceAll('_',' ')} (${result.rank}/11)!`);
-          setTimeout(()=>window.location.reload(),700);
-        } catch { showToast('Không kết nối được máy chủ. Hãy thử lại.','err'); button.disabled=false; }
+      document.getElementById('btnOpenRuneRuins').addEventListener('click', () => {
+        ensureFullWikiEventsHubState();
+        SaveState.wikiEventsState.selectedEventId = 'rune_ruins';
+        SaveState.save();
+        document.querySelector('#bottomNavBar [data-tab="tabEvents"]')?.click();
+        renderLobbyUI();
       });
 
       function grantAllRogueSkillsInRun() {

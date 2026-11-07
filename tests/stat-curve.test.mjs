@@ -80,7 +80,7 @@ check("bo qua tuong chua so huu", /if \(!isHeroOwned\(h\.id\)\) continue;/.test(
 
 // ============================================================ 5. Base stats
 console.log("\n=== 5. BASE STATS ===");
-const csFn = fnBody("getComputedStats", 8000);
+const csFn = fnBody("getComputedStats", 10000);
 // Base stat phải đủ để TÂN THỦ KHÔNG CÓ GEAR vẫn sống được (80-150 ATK /
 // 400-800 HP). 78/420 + bonus hero 1★ Alex (~+34/+230) => khoảng 112/650.
 check("base ATK = 78 (du cho tan thu khong gear)", /\(78 \+ gearAtk/.test(csFn));
