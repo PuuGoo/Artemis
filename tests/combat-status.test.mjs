@@ -22,7 +22,7 @@ function fixture({ skills = {}, hero = 'alex' } = {}) {
   c.Math.random=()=>.99;
   c.collidesObstacle=()=>false;
   if (fs.existsSync(new URL('../public/combat-status.js',import.meta.url))) vm.runInContext(read('public/combat-status.js'),c);
-  vm.runInContext(['hasHeroSkillActive','runeOwned','getEquippedRuneSlots','isRuneEquipped','runeHasEffect','findNearestEnemy','damageEnemy','spawnEnemyBullet','updateGame','clearRunState'].map(fn).join('\n'),c);
+  vm.runInContext(['hasHeroSkillActive','runeOwned','getEquippedRuneSlots','isRuneEquipped','runeHasEffect','getCombatElementalMultiplier','findNearestEnemy','damageEnemy','spawnEnemyBullet','updateGame','clearRunState'].map(fn).join('\n'),c);
   c.onEnemyKilled=e=>{assert.ok(!e.testKilled,'death once');e.testKilled=true;Game.kills++;Game.enemies=Game.enemies.filter(x=>x.hp>0);};
   const enemy=(extra={})=>{const e={x:100,y:100,r:14,hp:100000,maxHp:100000,atk:10,type:'goblin',speed:0,vx:0,vy:0,attackTimer:10000,...extra};Game.enemies.push(e);return e;};
   return {c,Game,p,S,enemy,tick:dt=>c.updateGame(dt),hit:(e,d=100,el=false)=>c.damageEnemy(e,d,el)};
@@ -156,4 +156,92 @@ test('Freeze cannot shorten Rolla frost; a slow expiring mid-step only reduces t
   const rolla=fixture({hero:'rolla',skills:{ice_arrow:1}}),r=rolla.enemy();rolla.hit(r);assert.equal(r.slowTimer,3.2);
   const f=fixture(),e=f.enemy({x:100,y:500,type:'bat',speed:100,slowTimer:.05,attackTimer:10});f.tick(.1);
   assert.ok(Math.abs(e.x-107.75)<1e-9);assert.ok(Math.abs(e.attackTimer-9.9225)<1e-9);assert.equal(e.slowTimer,0);
+});
+
+test('Hỏa Độc Ấn chỉ tăng cháy từ Epic và độc từ Legendary khi đã sở hữu/khảm',()=>{
+  for(const [rank,equipped,fire,impact,poison] of [
+    [0,true,28,50,25],[3,true,28,50,25],[4,false,28,50,25],
+    [4,true,42,50,25],[6,true,42,50,25],[7,true,42,75,38],[11,true,42,75,38],
+  ]){
+    const f=fixture({skills:{fire_arrow:1,venom_arrow:1}}),e=f.enemy();
+    vm.runInContext(read('public/rune-economy.js'),f.c);
+    f.S.runes.rune_flame=rank;
+    if(equipped)f.S.equippedRuneSlots.enhancement=['rune_flame'];
+    const before=JSON.stringify(f.S);
+    f.hit(e);assert.equal(100000-e.hp,100+impact,`impact rank=${rank}/eq=${equipped}`);
+    const hp=e.hp;f.tick(1);assert.equal(hp-e.hp,3*fire+poison,`tick rank=${rank}/eq=${equipped}`);
+    assert.equal(e.burnDmg,28,'lưu raw potency, không nhân trước rồi nhân lại mỗi nhịp');
+    assert.equal(e.poisonDmg,25);
+    assert.equal(JSON.stringify(f.S),before,'đọc bonus không sửa save');
+  }
+});
+
+test('Ấn không khuếch đại đòn vật lý, sét hay nguồn chưa định danh; sai nhóm ô không có tác dụng',()=>{
+  const f=fixture(),e=f.enemy();
+  f.S.runes.rune_flame=11;f.S.equippedRuneSlots.enhancement=['rune_flame'];
+  for(const [secondary,element,expected] of [[false,'fire',100],[true,null,100],[true,'lightning',100],[true,'fire',150],[true,'poison',150]]){
+    const hp=e.hp;f.c.damageEnemy(e,100,secondary,element);assert.equal(hp-e.hp,expected);
+  }
+  f.S.equippedRuneSlots.enhancement=[];f.S.equippedRuneSlots.ability=['rune_flame'];
+  const hp=e.hp;f.c.damageEnemy(e,100,true,'fire');assert.equal(hp-e.hp,100);
+});
+
+test('số sát thương trên map chỉ ghi LỬA/ĐỘC khi handler nhận đúng nguyên tố',()=>{
+  const f=fixture({skills:{fire_arrow:1,venom_arrow:1}}),e=f.enemy();
+  f.S.runes.rune_flame=7;f.S.equippedRuneSlots.enhancement=['rune_flame'];
+  const text=[];f.c.spawnFloatText=(...args)=>text.push(args);
+  f.hit(e);f.tick(1);
+  assert.ok(text.some(a=>a[2]==='LỬA 42'&&a[3]==='#fb923c'));
+  assert.ok(text.some(a=>a[2]==='ĐỘC 38'&&a[3]==='#a3e635'));
+  const next=f.enemy({x:130});text.length=0;f.c.damageEnemy(next,10,true);
+  assert.ok(text.some(a=>a[2]==='10'),'nguồn trung tính không bị gán lửa theo màu');
+  assert.ok(!text.some(a=>/LỬA|ĐỘC/.test(a[2])));
+});
+
+test('lửa Nezha dùng cùng bonus Ấn cho sát thương chạm và DoT, không nhân hai lần',()=>{
+  const f=fixture({hero:'nezha'}),e=f.enemy({x:300,y:500});
+  f.S.runes.rune_flame=4;f.S.equippedRuneSlots.enhancement=['rune_flame'];
+  f.p.speed=100;f.Game.keys.KeyD=true;f.tick(.22);
+  assert.equal(100000-e.hp,63,'lửa chạm 42 × 1.5');
+  assert.equal(e.burnDmg,25,'potency vẫn raw');
+  f.Game.keys={};const hp=e.hp;f.tick(1/3-.22);
+  assert.equal(hp-e.hp,38,'nhịp lửa 25 × 1.5 làm tròn một lần');
+});
+
+test('Ấn giữ potency mạnh nhất, đổi khảm không nhân dồn và nhịp chí tử chỉ ghi một lần chết',()=>{
+  const f=fixture({hero:'cleo',skills:{fire_arrow:1}}),e=f.enemy();
+  f.S.runes.rune_flame=4;f.S.equippedRuneSlots.enhancement=['rune_flame'];
+  f.hit(e);assert.equal(e.burnDmg,38);const hp=e.hp;f.tick(1/3);assert.equal(hp-e.hp,57);
+  f.hit(e);assert.equal(e.burnDmg,38);
+  f.S.equippedRuneSlots.enhancement=[];const next=e.hp;f.tick(1/3);assert.equal(next-e.hp,38);
+  f.S.equippedRuneSlots.enhancement=['rune_flame'];e.hp=50;f.tick(1/3);
+  assert.equal(f.Game.kills,1);f.tick(1);assert.equal(f.Game.kills,1);
+});
+
+test('hồ sơ Ấn tách tác dụng đã làm khỏi wiki và không quảng cáo nổ Mythic đang hoạt động',()=>{
+  const f=fixture();let modal;
+  const node={focus(){}};
+  f.c.document={querySelector:()=>null,createElement:()=>modal={setAttribute(){},addEventListener(){},querySelector:s=>s.includes('img')||s.includes('equip')||s.includes('ruins')?null:node},body:{appendChild(){}}};
+  f.c.RUNES_DATA=[{id:'rune_flame',name:'Ấn',type:'enhancement'}];f.c.RuneWikiData={rune_flame:{name:'Seal',effects:{},base:'ATK'}};
+  f.c.RuneEconomy.tier=()=>'epic';f.c.runeImage=()=>'';vm.runInContext(fn('openRuneDetailPopup'),f.c);
+  f.c.openRuneDetailPopup('rune_flame');
+  assert.match(modal.innerHTML,/data-rune-combat-note/);
+  assert.match(modal.innerHTML,/Epic.*50%.*Legendary.*50%/);
+  assert.match(modal.innerHTML,/chưa.*nổ Mythic/i);
+});
+
+test('Hỏa Độc Chạm + Ấn tăng đúng DoT theo thời gian, không biến Băng Lôi thành lửa',()=>{
+  for(const step of [.01,.033,.1]){
+    const f=fixture(),e=f.enemy();
+    f.S.runes={rune_flame:7,flame_poison_touch:4};
+    f.S.equippedRuneSlots.ability=['flame_poison_touch'];f.S.equippedRuneSlots.enhancement=['rune_flame'];
+    f.tick(1.64);f.tick(.01);
+    const hp=e.hp;f.S.equippedRuneSlots.ability=[];
+    let elapsed=0;while(elapsed<3-1e-10){const dt=Math.min(step,3-elapsed);f.tick(dt);elapsed+=dt;}
+    // 9 nhịp × round(15×1.5) + 3 nhịp × (20×1.5), potency không được scale sẵn.
+    assert.equal(hp-e.hp,9*Math.round(15*1.5)+3*30);assert.equal(e.burnDmg,15);assert.equal(e.poisonDmg,20);
+  }
+  const f=fixture(),e=f.enemy();f.S.runes={rune_flame:11,rune_thunder:4};
+  f.S.equippedRuneSlots.ability=['rune_thunder'];f.S.equippedRuneSlots.enhancement=['rune_flame'];
+  f.tick(1.65);assert.equal(100000-e.hp,90);assert.ok(!e.burnTimer&&!e.poisonActive);
 });

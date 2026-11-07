@@ -26,12 +26,36 @@ Chu kỳ hiện tại là 1.65s. Hiệu ứng trạng thái làm mới, không x
 
 ## Kiểm chứng
 
-- 13 test `combat-status.test.mjs`: VM thực thi `damageEnemy`, `updateGame`, spawner và renderer production; kiểm .01/.033/.1s partition, nhịp hết hạn, nonstack, cổng sở hữu/rank, Cleo+Blaze, Rolla, chết một lần, không ghi save, lowGfx/reduced-motion.
+- 20 test `combat-status.test.mjs`: VM thực thi `damageEnemy`, `updateGame`, spawner và renderer production; kiểm .01/.033/.1s partition, nhịp hết hạn, nonstack, cổng sở hữu/rank, Cleo+Blaze, Rolla, chết một lần, không ghi save, lowGfx/reduced-motion; thêm phẩm chất/đúng nhóm ô của Hỏa Độc Ấn, raw potency, Nezha và nhãn sát thương.
 - 3 test `gem-combat-impact.test.mjs`: chạy `getComputedStats` thật với fixture trung tính. Ruby +18 ATK; Sapphire +90 HP và DEF; Amethyst +2% crit; Emerald +2% dodge; Topaz +5% vàng. Chỉ sockets trên đồ đang mặc có tác dụng; ngọc trong túi/kho không bị tính nhầm; HP/ATK quái cùng chương/phòng không tăng theo ngọc.
-- Chrome thật qua `tools/verify-combat-status-browser.mjs`, mock auth/save localhost, không DB/tài khoản thật: Độc Tiễn gây một nhịp 38 HP khi ATK152; quái thường đi 0.25px bình thường và 0.1375px lúc chậm trong bước đo. Không thay save, 0 lỗi JS và 0 tài nguyên local lỗi. Renderer tiếp tục chạy với 3 quái và canvas có alpha. Probe sàn trống tách va chạm chướng ngại khỏi phép đo.
+- Chrome thật qua `tools/verify-combat-status-browser.mjs`, mock auth/save localhost, không DB/tài khoản thật: Độc Tiễn gây một nhịp 38 HP khi ATK152; quái thường đi 0.25px bình thường và 0.1375px lúc chậm trong bước đo. Không thay save trong probe combat, 0 lỗi JS và 0 tài nguyên local lỗi. Probe sàn trống tách va chạm chướng ngại khỏi phép đo.
+- Đính chính bằng chứng renderer cũ: sau `stopGameLoop()`, Resume chỉ bỏ pause chứ không tự nối lại rAF; ảnh không rỗng trước đó chưa đủ chứng minh hiệu ứng mới được vẽ. Harness nay nối lại **vòng gameLoop thật qua export chỉ trong HTML fixture**, kiểm số lần hook status tăng (24 lần trong lần chạy lưu), không có lỗi update/render, rồi chụp lại. Không thêm API debug vào production.
 - Đây là state-jump/run fixture, không phải người chơi tự đi hết chương, không phải production E2E, chưa có số FPS. Ảnh tổng quan không đủ để khẳng định biểu tượng nhỏ dễ đọc ở mọi cỡ màn hình.
 - Bộ test hồi quy skill-art, monster-art, admin campaign và sở hữu anh hùng đã chạy cùng nhóm: 58/58 đạt trước lần tăng độ rõ huy hiệu; nhóm trạng thái/ngọc đã chạy lại 16/16 sau sửa.
 
 ## Giới hạn và phần chưa làm
 
-Không tuyên bố toàn bộ mô tả wiki đã hoạt động: Super Venom/Blaze/Freeze/Bolt, Elemental Domain/Crit, hiệu ứng Seal theo phẩm chất và enchant meteor/phi kiếm chưa được triển khai trong task này. Bonus lửa theo roster chưa được nối; không dùng mô tả để giả vờ cộng damage. Sét thường vẫn dùng cơ chế cũ. Ngọc Ruby/Sapphire là bonus stat, không tự biến thành lửa/băng. Dấu vết trên sàn chỉ là đồ họa, không phải vùng sát thương mới. Không sửa save schema, quyền sở hữu, inventory, giá hoặc bảng `CAMPAIGN_TUNING`.
+Không tuyên bố toàn bộ mô tả wiki đã hoạt động: Super Venom/Blaze/Freeze/Bolt, Elemental Domain/Crit, Băng Lôi Ấn và enchant meteor/phi kiếm chưa được triển khai trong task này. Bonus lửa theo roster chưa được nối; không dùng mô tả để giả vờ cộng damage. Sét thường vẫn dùng cơ chế cũ. Ngọc Ruby/Sapphire là bonus stat, không tự biến thành lửa/băng. Dấu vết trên sàn chỉ là đồ họa, không phải vùng sát thương mới. Không sửa save schema, quyền sở hữu, inventory, giá hoặc bảng `CAMPAIGN_TUNING`.
+
+## Hỏa Độc Ấn — bonus theo phẩm chất đã nối
+
+Nguồn dữ liệu đã có trong repo: `public/rune-wiki-data.js`, Epic: Fire DMG +50%, Legendary: Poison DMG +50%. `RuneEconomy` ánh xạ Epic = 4, Legendary = 7, Mythic = 11. Phần trăm không tăng theo mọi bản sao trung gian.
+
+- Chỉ có tác dụng khi rune thật sự thuộc bộ sưu tập và nằm trong nhóm ô `enhancement`. Rune trong túi, chưa sở hữu hoặc khảm sai nhóm không tạo bonus. Không cấp rune hay nâng hạng tài khoản.
+- Từ hạng 4: +50% trên các nhịp cháy thật (Blaze, Cleo, Nezha, bộ trang bị, Hỏa Độc Chạm) và lửa chạm của Nezha. Từ hạng 7: thêm +50% trên độc tức thì của Độc Tiễn và DoT độc (Độc Tiễn/Hỏa Độc Chạm).
+- `damageEnemy` nhận element riêng bên cạnh cờ secondary hiện có. Chỉ nguồn `'fire'`/`'poison'` được hưởng bonus; đòn vật lý, sét, ultimate, meteor/Touch hỗn hợp chưa định danh không bị tăng bừa theo màu VFX.
+- Potency lưu trên quái vẫn raw, chỉ scale một lần lúc trừ máu, rồi làm tròn ở cuối pipeline hiện hành. Tháo/khảm lại không nhân dồn; không thay nhịp, thời lượng hay quy tắc strongest-source. Hệ số hero/mark cũ vẫn áp dụng như trước.
+- Số sát thương thật hiện `LỬA` cam / `ĐỘC` xanh, dùng chính final damage đã trừ. Không sinh thêm vòng AoE/hazard giả hoặc animation loop mới.
+- Hồ sơ rune mở bằng card thật có khối “Đã hoạt động trong Artemis”; giữ bảng wiki riêng và ghi rõ chưa có nổ Mythic, bonus phẳng Normal/Fine và phù phép. Không đoán hệ số nổ từ mô tả thiếu số.
+
+Chrome với ATK100, hero trung tính, Blaze + Độc Tiễn, một mục tiêu sống:
+
+| Rune | Sát thương lúc trúng (100 vật lý + độc) | Sát thương trong giây kế tiếp (3 cháy + 1 độc) |
+|---|---:|---:|
+| Hạng 0/3 hoặc hạng 4 chưa khảm | 150 | 109 |
+| Hạng 4/6 đã khảm | 150 | 151 |
+| Hạng 7/11 đã khảm | 175 | 164 |
+
+7/7 biến thể sở hữu/phẩm chất/khảm trong Chrome khớp, snapshot save sau khi khôi phục fixture không đổi. Flow UI thật: về sảnh → Trang Bị → Ngọc → card Hỏa Độc Ấn → đọc ghi chú → đóng, không thay collection. Ảnh mobile nằm trong `docs/combat-status-evidence/seal-detail-mobile.png`. Screenshot combat chỉ là một thời điểm nên không bảo đảm đồng thời đọc được mọi nhãn.
+
+Toàn suite hiện hành: **349 test, 342 đạt, 0 lỗi, 7 integration bỏ qua** (không có DB/server thật). `npm run check`, compile inline scripts và `git diff --check` đạt. Đây vẫn là Chrome/mock-services và production functions/VM, không phải production E2E hay số liệu tỉ lệ thắng/FPS.

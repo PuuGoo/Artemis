@@ -13,14 +13,115 @@
       }
     },
     {
+      "name": "flame-poison-seal-real-damage-rank-and-ownership-gates",
+      "details": {
+        "checks": [
+          {
+            "rank": 0,
+            "equipped": true,
+            "initialDamage": 150,
+            "secondDamage": 109,
+            "matches": true,
+            "labels": [
+              "LỬA 28",
+              "LỬA 28",
+              "ĐỘC 25"
+            ]
+          },
+          {
+            "rank": 3,
+            "equipped": true,
+            "initialDamage": 150,
+            "secondDamage": 109,
+            "matches": true,
+            "labels": [
+              "LỬA 28",
+              "LỬA 28",
+              "ĐỘC 25"
+            ]
+          },
+          {
+            "rank": 4,
+            "equipped": false,
+            "initialDamage": 150,
+            "secondDamage": 109,
+            "matches": true,
+            "labels": [
+              "LỬA 28",
+              "LỬA 28",
+              "ĐỘC 25"
+            ]
+          },
+          {
+            "rank": 4,
+            "equipped": true,
+            "initialDamage": 150,
+            "secondDamage": 151,
+            "matches": true,
+            "labels": [
+              "LỬA 42",
+              "LỬA 42",
+              "ĐỘC 25"
+            ]
+          },
+          {
+            "rank": 6,
+            "equipped": true,
+            "initialDamage": 150,
+            "secondDamage": 151,
+            "matches": true,
+            "labels": [
+              "LỬA 42",
+              "LỬA 42",
+              "ĐỘC 25"
+            ]
+          },
+          {
+            "rank": 7,
+            "equipped": true,
+            "initialDamage": 175,
+            "secondDamage": 164,
+            "matches": true,
+            "labels": [
+              "LỬA 42",
+              "LỬA 42",
+              "ĐỘC 38"
+            ]
+          },
+          {
+            "rank": 11,
+            "equipped": true,
+            "initialDamage": 175,
+            "secondDamage": 164,
+            "matches": true,
+            "labels": [
+              "LỬA 42",
+              "LỬA 42",
+              "ĐỘC 38"
+            ]
+          }
+        ],
+        "saveUnchanged": true
+      }
+    },
+    {
       "name": "production-renderer-browser-smoke",
       "details": {
         "running": true,
         "paused": false,
         "enemies": 3,
         "filledPixels": 850304,
+        "statusDrawCalls": 24,
+        "updateError": null,
+        "renderError": null,
         "saveUnchanged": true
       }
+    },
+    {
+      "name": "seal-detail-real-ui-flow",
+      "noteText": "Đã hoạt động trong Artemis\n\nKhảm đúng nhóm Cường Hóa: Epic (hạng 4+) tăng 50% sát thương cháy; Legendary (hạng 7+) tăng thêm 50% sát thương độc. Cần có nguồn gây lửa/độc; chưa triển khai nổ Mythic, bonus phẳng Normal/Fine và phù phép. Các bảng dưới đây chỉ là nguồn tham khảo.",
+      "ownershipUnchanged": true,
+      "closeWorks": true
     }
   ],
   "errors": [],

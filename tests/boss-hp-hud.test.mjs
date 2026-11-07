@@ -47,7 +47,7 @@ check('loi goi HUD nam o CUOI updateGame (khong tre 1 frame)',
   hudCallIdx > ugBody.length - 700);
 
 // KP: HUD khong duoc chi nam trong damageEnemy sau filter
-const dmgStart = html.indexOf('      function damageEnemy(e, rawDmg, isElemental = false) {');
+const dmgStart = html.indexOf('      function damageEnemy(');
 check('tim thay damageEnemy', dmgStart > 0);
 const dmgSection = html.slice(dmgStart, dmgStart + 16000);
 const filterIdx = dmgSection.indexOf('Game.enemies = Game.enemies.filter(en => en.hp > 0);');

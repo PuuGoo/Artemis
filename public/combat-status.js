@@ -17,10 +17,10 @@
     e.burnTick = (e.burnTick || 0) + active;
     while (e.burnTick + EPS >= 1 / 3 && e.hp > 0) {
       e.burnTick = Math.max(0, e.burnTick - 1 / 3);
-      damage(e, e.burnDmg, true);
+      damage(e, e.burnDmg, true, 'fire');
     }
     // Đuôi thời lượng lẻ (ví dụ 2,5s) không mất sát thương và không kéo dài sang khung sau.
-    if (!e.burnTimer && e.burnTick > EPS && e.hp > 0) damage(e, e.burnDmg * e.burnTick * 3, true);
+    if (!e.burnTimer && e.burnTick > EPS && e.hp > 0) damage(e, e.burnDmg * e.burnTick * 3, true, 'fire');
     if (!e.burnTimer || e.hp <= 0) e.burnTick = 0;
   }
   function applyPoison(e, dps, duration = Infinity) {
@@ -39,9 +39,9 @@
     e.poisonTick = (e.poisonTick || 0) + active;
     while (e.poisonTick + EPS >= 1 && e.hp > 0) {
       e.poisonTick = Math.max(0, e.poisonTick - 1);
-      damage(e, e.poisonDmg, true);
+      damage(e, e.poisonDmg, true, 'poison');
     }
-    if (!e.poisonTimer && e.poisonTick > EPS && e.hp > 0) damage(e, e.poisonDmg * e.poisonTick, true);
+    if (!e.poisonTimer && e.poisonTick > EPS && e.hp > 0) damage(e, e.poisonDmg * e.poisonTick, true, 'poison');
     if (!e.poisonTimer || e.hp <= 0) { e.poisonActive = false; e.poisonTick = 0; }
   }
   root.CombatStatus = { applyBurn, tickBurn, applyPoison, tickPoison };

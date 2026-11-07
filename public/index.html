@@ -9402,13 +9402,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         },
         {
           id: 'rune_flame',
-          name: 'Flame-Poison Seal (Hỏa Độc Ấn • Nổ Mỗi Giây)',
+          name: 'Flame-Poison Seal (Hỏa Độc Ấn)',
           wikiName: 'Flame-Poison Seal',
           type: 'enhancement',
           archetype: 'elemental',
           icon: '🔥☠️',
           color: '#ef4444',
-          desc: '[Mythic Enhancement]: Tăng +50% Fire DMG, +50% Poison DMG; Khi kẻ địch dính cả Lửa và Độc sẽ PHÁT NỔ DUNG NHAM mỗi 1 giây!',
+          desc: 'Trong Artemis: khảm đúng nhóm Cường Hóa, Epic (hạng 4+) tăng 50% sát thương cháy; Legendary (hạng 7+) tăng thêm 50% sát thương độc. Chưa triển khai nổ Mythic và phù phép; không tự tạo lửa/độc nếu chưa có nguồn gây trạng thái.',
           enchantText: '[Mythic Enchant]: Elemental DMG +30%, Elemental CRIT Rate +30%; Tấn công mục tiêu đang Cháy/Trúng Độc nhận thêm +15% CRIT Rate & +30% CRIT DMG!'
         },
         {
@@ -9711,6 +9711,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label',`Chi tiết Ngọc ${wiki.name}`);
         modal.innerHTML=`<div class="rune-detail-dialog"><div class="rune-detail-top"><img src="${runeImage(rune)}" data-rune-id="${rune.id}" data-rune-type="${rune.type}" alt="${wiki.name}"><div><div class="text-[10px] uppercase tracking-widest text-fuchsia-200">Hồ sơ cổ ngữ · Archero 2 Wiki</div><h3>${wiki.name}</h3><p class="text-xs text-slate-300">${rune.name}</p></div></div>
           <div class="rune-detail-badges"><span>${wiki.type}</span><span>${rank?`Đang sở hữu · ${RuneEconomy.tier(rank).replaceAll('_',' ')}`:'🔒 Chưa sở hữu'}</span><span>${equippedAt?`✓ Đang khảm · ${RUNE_CATEGORIES_META[equippedAt.cat].name}, ô ${equippedAt.index+1}`:'13 ô khảm'}</span></div>
+          ${runeId === 'rune_flame' ? '<div data-rune-combat-note class="rune-detail-base"><b>Đã hoạt động trong Artemis</b><p>Khảm đúng nhóm Cường Hóa: Epic (hạng 4+) tăng 50% sát thương cháy; Legendary (hạng 7+) tăng thêm 50% sát thương độc. Cần có nguồn gây lửa/độc; chưa triển khai nổ Mythic, bonus phẳng Normal/Fine và phù phép. Các bảng dưới đây chỉ là nguồn tham khảo.</p></div>' : ''}
           <div class="rune-detail-base"><b>Chỉ số gốc theo Wiki</b><div>${wiki.base}</div></div>
           <div class="mt-3 text-xs font-black text-amber-200">Thuộc tính theo phẩm chất</div>
           ${rows.map(([tier,effect])=>`<div class="rune-detail-tier ${rank>=tierNames[tier]?'is-active':''}"><b>${rank>=tierNames[tier]?'✦':'🔒'} ${tier}</b><p>${effect && effect!=='-'?effect:'Không có thuộc tính riêng ở bậc này'}</p></div>`).join('')}
@@ -29220,9 +29221,20 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
       }
 
-      function damageEnemy(e, rawDmg, isElemental = false) {
+      function getCombatElementalMultiplier(element) {
+        // Chỉ cộng cho nguyên tố được nguồn sát thương xác định, không đoán theo màu VFX.
+        const sealEquipped = Array.isArray(SaveState.equippedRuneSlots?.enhancement)
+          && SaveState.equippedRuneSlots.enhancement.includes('rune_flame');
+        if (!sealEquipped || !runeHasEffect('rune_flame')) return 1;
+        if (element === 'fire') return 1.5;
+        if (element === 'poison' && runeHasEffect('rune_flame', 7)) return 1.5;
+        return 1;
+      }
+
+      function damageEnemy(e, rawDmg, isElemental = false, element = null) {
         if (e.hp <= 0) return;
         const p = Game.player;
+        if (isElemental) rawDmg *= getCombatElementalMultiplier(element);
         const ottaActive = hasHeroSkillActive(p, 'otta');
         const enemyHpRatio = e.maxHp ? (e.hp / e.maxHp) : 1;
         const bonusCritFromHero = (ottaActive && enemyHpRatio > 0.6 ? 0.18 : 0) + (p.alexNextGuaranteedCrit ? 1.0 : 0);
@@ -29350,13 +29362,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         SoundFX.hitEnemy(isCrit);
+        const elementLabel = isElemental ? (element === 'fire' ? 'LỬA' : element === 'poison' ? 'ĐỘC' : '') : '';
         // Phân loại phản hồi theo ngữ cảnh: crit > đánh trùm > đánh thường.
         // Trước đây mọi cú đánh cùng cỡ chữ nên không phân biệt được.
         spawnFloatText(
           e.x + (Math.random() - 0.5) * 16,
           e.y - e.r - 6,
-          isCrit ? `💥 ${finalDmg}!` : `${finalDmg}`,
-          isCrit ? '#fde047' : (e.isBoss ? '#fda4af' : (isElemental ? '#fb923c' : '#f8fafc')),
+          isCrit ? `💥 ${finalDmg}!` : (elementLabel ? `${elementLabel} ${finalDmg}` : `${finalDmg}`),
+          isCrit ? '#fde047' : (elementLabel ? (element === 'fire' ? '#fb923c' : '#a3e635') : (e.isBoss ? '#fda4af' : '#f8fafc')),
           isCrit ? 17 : (e.isBoss ? 14 : 12),
           { kind: isCrit ? 'crit' : (e.isBoss ? 'boss' : 'normal') }
         );
@@ -29398,7 +29411,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         } else if (!isElemental && (p.skills.venom_arrow || 0) > 0) {
           // Độc tiễn: chỉ đòn chính gieo độc; nhịp độc không kích lại enchantment.
           CombatStatus.applyPoison(e, p.atk * 0.25);
-          damageEnemy(e, p.atk * 0.50, true);
+          damageEnemy(e, p.atk * 0.50, true, 'poison');
         }
       }
 
@@ -29861,7 +29874,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               spawnParticles(p.x, p.y + 12, '#f97316', 5);
               for (const ne of Game.enemies) {
                 if (ne.hp > 0 && Math.hypot(ne.x - p.x, ne.y - p.y) < 75) {
-                  damageEnemy(ne, p.atk * 0.42, true);
+                  damageEnemy(ne, p.atk * 0.42, true, 'fire');
                   CombatStatus.applyBurn(ne, Math.round(p.atk * 0.25), 2);
                 }
               }
