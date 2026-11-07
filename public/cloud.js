@@ -173,6 +173,8 @@
     var css = document.createElement("style");
     css.textContent =
       "html.cloud-locked body{overflow:hidden!important}" +
+      "#cloudGate input{font-size:16px!important;user-select:text!important;-webkit-user-select:text!important;" +
+      "-webkit-touch-callout:default!important;touch-action:auto!important}" +
       "@keyframes cloudToastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}" +
       "@keyframes cloudCardIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}";
     document.head.appendChild(css);
@@ -217,7 +219,8 @@
       lb.style.cssText = "display:block;font-size:11px;font-weight:800;color:#cbd5e1;margin-bottom:5px;letter-spacing:.4px;";
       inputEl.style.cssText =
         "width:100%;box-sizing:border-box;background:#020617;border:1.5px solid #334155;border-radius:12px;" +
-        "padding:11px 13px;color:#f8fafc;font-size:14px;font-weight:600;outline:none;font-family:inherit;";
+        "padding:11px 13px;color:#f8fafc;font-size:16px;font-weight:600;outline:none;font-family:inherit;" +
+        "user-select:text;-webkit-user-select:text;-webkit-touch-callout:default;touch-action:auto;";
       inputEl.addEventListener("focus", function () { inputEl.style.borderColor = "#f59e0b"; });
       inputEl.addEventListener("blur", function () { inputEl.style.borderColor = "#334155"; });
       box.appendChild(lb);
@@ -234,6 +237,9 @@
     userInput.type = "text";
     userInput.name = "username";
     userInput.autocomplete = "username";
+    userInput.autocapitalize = "none";
+    if (userInput.setAttribute) userInput.setAttribute("autocorrect", "off");
+    userInput.spellcheck = false;
     userInput.maxLength = 20;
     userInput.placeholder = "3-20 ký tự: chữ, số, gạch dưới";
 
@@ -346,7 +352,13 @@
     document.body.appendChild(wrap);
     gateEl = wrap;
     hideLoading();
-    setTimeout(function () { userInput.focus(); }, 60);
+    // iOS can dismiss the keyboard if a delayed scripted focus races the first tap.
+    // Desktop keeps the convenience focus; touch users choose the field themselves.
+    if (window.matchMedia && window.matchMedia("(pointer: fine)").matches) {
+      setTimeout(function () {
+        if (gateEl === wrap && (!document.activeElement || document.activeElement === document.body)) userInput.focus();
+      }, 60);
+    }
   }
 
   function closeGate() {

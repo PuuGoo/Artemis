@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Archero 2: Kỷ Nguyên Cung Thủ Roguelike</title>
   <script src="/cloud.js"></script>
   <script src="/zodiac-chibi-bosses.js"></script>
@@ -20,6 +20,14 @@
       user-select: none;
       -webkit-user-select: none;
       -webkit-touch-callout: none;
+    }
+    /* WebKit inherits the game's selection lock into form fields unless it is
+       explicitly reversed. Keep the login keyboard and text caret usable. */
+    input, textarea, [contenteditable="true"] {
+      user-select: text;
+      -webkit-user-select: text;
+      -webkit-touch-callout: default;
+      touch-action: auto;
     }
     body {
       margin: 0;
