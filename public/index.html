@@ -1236,7 +1236,7 @@
           <div class="flex items-center gap-1.5">
             <span id="topPlayerLevelNum" class="px-1.5 py-0.2 rounded bg-sky-600 text-xs sm:text-sm font-black text-white">1</span>
             <h1 id="topPlayerNameText" class="font-black text-xs sm:text-sm tracking-tight text-white">Người chơi</h1>
-            <span class="px-1.5 py-0.2 rounded bg-amber-500/25 border border-amber-400/60 text-[9px] font-black text-amber-300">MAX VIP</span>
+            <span id="topRankBadge" class="px-1.5 py-0.2 rounded bg-amber-500/25 border border-amber-400/60 text-[9px] font-black text-amber-300">TÂN BINH</span>
           </div>
           <div class="w-24 sm:w-28 h-1 bg-slate-800 rounded-full overflow-hidden my-0.5">
             <div class="h-full bg-gradient-to-r from-amber-400 to-yellow-300 w-3/4"></div>
@@ -1400,6 +1400,10 @@
             </div>
           </div>
         </div>
+
+        <!-- Nhiệm vụ tân thủ hiện tại: MỘT việc cần làm + MỘT nút hành động.
+             Danh sách đầy đủ N01–N08 vẫn nằm ở tab Thẻ Tài Năng. -->
+        <div id="beginnerQuickCard" class="hidden rounded-2xl border-2 border-amber-500/60 bg-gradient-to-br from-amber-950/70 via-slate-900 to-slate-950 p-3 shadow-lg"></div>
 
         <!-- Big Start Button -->
         <div class="mt-auto pt-1 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -2266,6 +2270,8 @@
             <span class="text-slate-400 font-semibold">Sau khi lên cấp (+1 Lv):</span>
             <span id="gearModalNextStatValue" class="font-extrabold text-amber-300">+162 ATK</span>
           </div>
+          <!-- Tác động lên tổng chỉ số nhân vật, tính bằng getComputedStats() thật -->
+          <div id="gearModalTotalImpact" class="text-[11px] font-bold text-emerald-300"></div>
           <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800/60">
             <span class="text-slate-400 font-semibold">Trạng thái bảo vệ Fusion:</span>
             <span id="gearModalProtectStatus" class="font-bold text-emerald-300">Có thể ghép</span>
@@ -19943,6 +19949,52 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         document.getElementById('gearModalNextStatValue').textContent = `+${nextStat} ${unit} (+${nextStat - currStat})`;
+
+        // ---- Tác động lên TỔNG chỉ số nhân vật (trước -> sau) ----
+        // Người chơi cần biết "nâng món này thì lực chiến tăng bao nhiêu", không chỉ
+        // biết riêng món đồ tăng bao nhiêu. Tính bằng CHÍNH getComputedStats() trên
+        // một bản sao state, rồi khôi phục ngay — không ghi vào save.
+        const impactEl = document.getElementById('gearModalTotalImpact');
+        if (impactEl) {
+          try {
+            const snapshot = {
+              weapon: SaveState.equippedGear.weapon,
+              necklace: SaveState.equippedGear.necklace,
+              ring: SaveState.equippedGear.ring,
+              armor: SaveState.equippedGear.armor,
+              helmet: SaveState.equippedGear.helmet,
+              boots: SaveState.equippedGear.boots,
+            };
+            const before = getComputedStats();
+            const current = isEquipped ? SaveState.equippedGear[slotKey] : item;
+            const target = isEquipped
+              ? SaveState.equippedGear[slotKey]
+              : SaveState.gearBag.find(i => i.uid === uid);
+            if (target) {
+              const originalLevel = target.level;
+              target.level = originalLevel + 1;
+              let after;
+              try { after = getComputedStats(); }
+              finally { target.level = originalLevel; }
+              const dAtk = after.baseAtk - before.baseAtk;
+              const dHp = after.baseHp - before.baseHp;
+              const dPower = Math.round((after.powerScore || 0) - (before.powerScore || 0));
+              const bits = [];
+              if (dAtk) bits.push(`${dAtk > 0 ? '+' : ''}${dAtk} ATK`);
+              if (dHp) bits.push(`${dHp > 0 ? '+' : ''}${dHp} HP`);
+              const canLevel = (originalLevel || 1) < 25;
+              impactEl.className = canLevel
+                ? 'text-[11px] font-bold text-emerald-300'
+                : 'text-[11px] font-bold text-slate-400';
+              impactEl.textContent = canLevel
+                ? `Tổng nhân vật: ${bits.join(' • ') || 'không đổi'}${dPower ? ` (lực chiến ${dPower > 0 ? '+' : ''}${dPower})` : ''}`
+                : 'Đã đạt cấp tối đa 25 — không thể nâng thêm.';
+            }
+            void snapshot;
+          } catch (e) {
+            impactEl.textContent = '';
+          }
+        }
         document.getElementById('gearModalPassiveDesc').textContent = `${tpl.desc} (${q.passiveBonus})`;
         document.getElementById('gearModalUpgradeCost').textContent = upCost;
         ensureWikiCurrencyAndItemsState();
@@ -25479,7 +25531,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           id: 'N02',
           title: 'Làm quen chiến đấu',
           desc: 'Hãy vào phó bản Chương 1 và dọn sạch phòng đầu tiên. Đừng quên: quái chỉ chết khi ngươi ngừng di chuyển và để cung tự động khai hỏa.',
-          hint: 'Vào "Phó Bản" → bấm "Bắt Đầu" → dọn sạch phòng 1.',
+          hint: 'Bấm "⚔️ BẮT ĐẦU CHIẾN ĐẤU" ở màn Chiến Đấu → dọn sạch phòng 1.',
           event: 'first_room_cleared',
           eventLabel: 'Dọn sạch 1 phòng',
           reward: { gold: 200, gems: 10 },
@@ -25499,7 +25551,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           id: 'N04',
           title: 'Trang bị sức mạnh',
           desc: 'Phần thưởng hoàn thành phòng đầu tiên là Cung Gỉ Sét. Hãy mặc nó vào ô Vũ Khí để tăng sát thương.',
-          hint: 'Tab "Trang Bị" → món đồ trong túi → Trang Bị.',
+          hint: 'Tab "Trang bị" → chọn Cung Gỉ Sét trong túi → bấm "Trang Bị".',
           event: 'gear_equipped',
           eventLabel: 'Trang bị 1 món đồ',
           reward: { gold: 250, scrolls: 3 },
@@ -25509,7 +25561,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           id: 'N05',
           title: 'Cường hóa',
           desc: 'Trang bị có thể nâng cấp để tăng chỉ số. Hãy nâng cấp bất kỳ món nào lên cấp 2.',
-          hint: 'Tab "Trang Bị" → chọn món → bấm "Nâng Cấp".',
+          hint: 'Tab "Trang bị" → chọn món → bấm "Nâng cấp".',
           event: 'gear_upgraded',
           eventLabel: 'Nâng cấp trang bị',
           reward: { gold: 300, scrolls: 2 },
@@ -25760,6 +25812,39 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         onFinalStepDone() { completeBeginnerStep('N08'); },
       };
 
+      // ==================== DANH HIỆU THẬT (thay nhãn "MAX VIP" trang trí) ====================
+      // Nhãn cũ là chữ tĩnh, ai cũng thấy "MAX VIP" ngay từ cấp 1 — vừa sai sự thật
+      // vừa gợi ý một đặc quyền không tồn tại. Nay danh hiệu suy ra từ tiến trình
+      // thật: đang học việc -> tân binh, đã xong N01–N08 -> cung thủ, thắng chương -> ...
+      const RANK_TITLES = [
+        { min: 0, id: 'recruit', label: 'TÂN BINH' },
+        { min: 1, id: 'archer', label: 'CUNG THỦ' },
+        { min: 3, id: 'veteran', label: 'LÃO LUYỆN' },
+        { min: 5, id: 'master', label: 'BẬC THẦY' },
+      ];
+
+      /** Danh hiệu hiện tại — chỉ dựa trên dữ liệu người chơi thật. */
+      function getPlayerRankTitle() {
+        const bj = SaveState.beginnerJourney || {};
+        const wins = Object.values(SaveState.winsByChapter || {})
+          .reduce((n, v) => n + (Number(v) || 0), 0);
+        const chaptersCleared = Number((SaveState.lifetimeStats || {}).chaptersCleared) || 0;
+        // Chưa xong hành trình tân thủ -> vẫn là tân binh, dù đã thắng chương nào đó.
+        if (!bj.isCompleted && !bj.skipped) return RANK_TITLES[0];
+        const score = Math.max(wins, chaptersCleared);
+        let best = RANK_TITLES[1];
+        for (const r of RANK_TITLES) if (score >= r.min) best = r;
+        return best;
+      }
+
+      function renderRankBadge() {
+        const el = document.getElementById('topRankBadge');
+        if (!el) return;
+        const rank = getPlayerRankTitle();
+        el.textContent = rank.label;
+        el.dataset.rank = rank.id;
+      }
+
       /** HTML cho panel Hành Trình Tân Thủ. */
       function buildBeginnerJourneyPanelHtml() {
         const bj = SaveState.beginnerJourney || {};
@@ -25842,6 +25927,144 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </div>
             <div class="flex flex-col gap-2">${rows}</div>
           </div>`;
+      }
+
+      // ==================== THẺ NHIỆM VỤ NHANH (lobby) ====================
+      // Mục tiêu của Đợt 5: người mới mở game thấy NGAY "việc cần làm tiếp theo" và
+      // MỘT nút để làm việc đó, thay vì phải mò vào tab Thẻ Tài Năng giữa hàng trăm thứ.
+      // Danh sách đầy đủ N01–N08 vẫn giữ nguyên trong panel chi tiết.
+
+      /** Nút hành động chính tương ứng với bước hiện tại. */
+      function getBeginnerQuickAction(step) {
+        if (!step) return null;
+        switch (step.event) {
+          case 'dialogue':
+            return { id: 'done', label: step.id === 'N08' ? '✔ Hoàn Tất Hành Trình' : '✔ Đã Hiểu, Bắt Đầu' };
+          case 'gear_equipped':
+            return { id: 'equip', label: '🎒 Mở Trang Bị' };
+          case 'gear_upgraded':
+            return { id: 'upgrade', label: '🔨 Mở Trang Bị Để Nâng Cấp' };
+          case 'first_room_cleared':
+          case 'loot_10':
+          case 'skill_picked':
+          case 'chapter_cleared':
+            return { id: 'battle', label: '⚔️ Vào Trận Ngay' };
+          default:
+            return null;
+        }
+      }
+
+      /** Tiến độ dạng chữ cho những bước có bộ đếm. */
+      function getBeginnerStepProgressText(step) {
+        const bj = SaveState.beginnerJourney || {};
+        if (!step) return '';
+        if (step.id === 'N03') {
+          const n = Math.min(10, Math.max(0, Number(bj._lootCount) || 0));
+          return `${n}/10 vật phẩm`;
+        }
+        return '';
+      }
+
+      function buildBeginnerQuickCardHtml() {
+        const bj = SaveState.beginnerJourney || {};
+        if (!isBeginnerJourneyActive()) return '';
+        // Ưu tiên bước hiện tại; nếu bước đó đã xong mà chưa nhận thưởng thì nhắc nhận.
+        const step = getBeginnerStep(bj.currentStep) || BEGINNER_STEPS[0];
+        const done = (bj.completedSteps || []).includes(step.id);
+        const claimed = (bj.claimedRewards || []).includes(step.id);
+        const progress = getBeginnerStepProgressText(step);
+        const total = BEGINNER_STEPS.length;
+        const doneCount = getBeginnerCompletedCount();
+
+        if (done && !claimed) {
+          return `<div class="flex items-center gap-2.5 flex-wrap">
+            <span class="text-2xl">🎁</span>
+            <div class="flex-1 min-w-[140px]">
+              <div class="text-[10px] font-black uppercase tracking-wider text-emerald-400">Thưởng đang chờ</div>
+              <b class="text-white text-sm">Bạn đã xong ${step.id} — nhận thưởng ngay</b>
+            </div>
+            <button type="button" data-bj-quick-claim="${step.id}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition">Nhận thưởng</button>
+          </div>`;
+        }
+
+        const action = getBeginnerQuickAction(step);
+        const actionBtn = action
+          ? `<button type="button" data-bj-quick="${action.id}" data-bj-step-id="${step.id}" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition shadow">${action.label}</button>`
+          : '';
+
+        return `<div class="flex items-start gap-2.5 flex-wrap">
+          <span class="text-2xl leading-none">${step.icon}</span>
+          <div class="flex-1 min-w-[160px]">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[10px] font-black uppercase tracking-wider text-amber-400">Việc cần làm · ${step.id}</span>
+              <span class="text-[10px] font-bold text-slate-400">${doneCount}/${total} bước</span>
+            </div>
+            <b class="text-white text-sm">${step.title}</b>
+            <p class="text-[11px] text-slate-300 leading-snug mt-0.5">${step.hint}</p>
+            ${progress ? `<div class="mt-1 flex items-center gap-1.5">
+              <div class="flex-1 h-1.5 rounded-full bg-slate-800 overflow-hidden"><div class="h-full bg-emerald-500" style="width:${Math.round((Number(bj._lootCount) || 0) / 10 * 100)}%"></div></div>
+              <span class="text-[10px] font-bold text-emerald-300">${progress}</span>
+            </div>` : ''}
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            ${actionBtn}
+            <button type="button" data-bj-quick="all" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-[11px] font-bold transition">Tất cả</button>
+          </div>
+        </div>`;
+      }
+
+      /** Vẽ thẻ nhiệm vụ nhanh trong lobby (ẩn với tài khoản không có tutorial). */
+      function renderBeginnerQuickCard() {
+        const card = document.getElementById('beginnerQuickCard');
+        if (!card) return;
+        const html = buildBeginnerQuickCardHtml();
+        if (!html) {
+          card.classList.add('hidden');
+          card.innerHTML = '';
+          return;
+        }
+        card.innerHTML = html;
+        card.classList.remove('hidden');
+
+        card.querySelectorAll('[data-bj-quick-claim]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-bj-quick-claim');
+            if (claimBeginnerReward(id)) {
+              renderBeginnerJourneyUI();
+              renderBeginnerQuickCard();
+              renderLobbyUI();
+            }
+          });
+        });
+
+        card.querySelectorAll('[data-bj-quick]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const action = btn.getAttribute('data-bj-quick');
+            const stepId = btn.getAttribute('data-bj-step-id');
+            if (action === 'all') {
+              document.querySelector('.nav-tab-btn[data-tab="tabTalents"]')?.click();
+              return;
+            }
+            if (action === 'done') {
+              completeBeginnerStep(stepId);
+              claimBeginnerReward(stepId);
+              renderBeginnerJourneyUI();
+              renderBeginnerQuickCard();
+              renderLobbyUI();
+              return;
+            }
+            if (action === 'equip' || action === 'upgrade') {
+              // Đưa thẳng người chơi tới tab Trang Bị thay vì bắt tự tìm.
+              document.querySelector('.nav-tab-btn[data-tab="tabEquip"]')?.click();
+              return;
+            }
+            if (action === 'battle') {
+              // Vào trận đúng luồng của game (briefing -> bắt đầu).
+              document.getElementById('btnStartGame')?.click();
+              return;
+            }
+          });
+        });
       }
 
       /** Gắn sự kiện cho panel vừa render. */
@@ -26282,6 +26505,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       function renderLobbyUI() {
         const stats = getComputedStats();
+        // Danh hiệu thật + thẻ "việc cần làm" (Đợt 5). Bọc try để một lỗi UI nhỏ
+        // không làm sập toàn bộ lobby.
+        try { renderRankBadge(); } catch (e) { console.warn('[rank] ', e); }
+        try { renderBeginnerQuickCard(); } catch (e) { console.warn('[beginner quick] ', e); }
         // Chương đang chọn có thể bị khoá (save cũ) -> lùi về chương mở cao nhất.
         normalizeSelectedChapter();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
@@ -32869,6 +33096,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         getBeginnerCompletedCount,
         buildBeginnerJourneyPanelHtml,
         renderBeginnerJourneyUI,
+        renderBeginnerQuickCard,
+        buildBeginnerQuickCardHtml,
+        renderRankBadge,
+        getPlayerRankTitle,
         // Mở modal chi tiết trang bị (đường UI thật cho equip/upgrade).
         openGearDetailModal,
         // ===== API session / reset phó bản =====
