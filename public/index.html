@@ -112,43 +112,42 @@
     .vip-currency-pill:hover,.vip-currency-pill:focus-visible { box-shadow:0 0 22px #e879f9aa,inset 0 1px 0 #fff8; outline:2px solid #f5d0fe; }
     .vip-currency-pill span:last-child { font-size:12px; font-weight:1000; }
     .rune-vault { --rune-gold:#ffcf50; color:#f8f2ff; }
-    .rune-vault-head { position:relative; overflow:hidden; border:2px solid #d794ff88; border-radius:24px; padding:15px;
-      background:radial-gradient(circle at 48% 10%,#7026a858,transparent 42%),linear-gradient(140deg,#221444,#120f2b 65%,#38184d);
-      box-shadow:0 18px 46px #050411b8,inset 0 1px 0 #ffffff55; }
-    .rune-vault-head::before { content:''; position:absolute; inset:0; pointer-events:none; opacity:.27;
-      background:repeating-linear-gradient(115deg,transparent 0 42px,#ffdcff0e 43px 44px); }
-    .rune-vault-title { position:relative; font-size:clamp(20px,4vw,30px); font-weight:1000; line-height:1.05;
-      color:#fff; text-shadow:0 3px 0 #3d1667,0 0 24px #e879f988; }
-    .rune-vault-subtitle { position:relative; font-size:11px; color:#ebd5ff; margin-top:5px; }
-    .rune-board { position:relative; width:100%; max-width:760px; height:clamp(330px,62vw,470px); margin:12px auto 0;
-      isolation:isolate; border-radius:50%; background:radial-gradient(circle,#4b266b 0 22%,#281d4e 23% 37%,#493574 38% 39%,#1a173c 40% 59%,#a354c0 60% 61%,#241938 62% 100%);
-      box-shadow:inset 0 0 52px #08031d,inset 0 0 0 4px #ab65db88,0 0 48px #a855f744; }
-    .rune-board::before { content:''; position:absolute; inset:5%; border:2px dashed #f0abfc55; border-radius:50%;
-      animation:runeSpin 80s linear infinite; pointer-events:none; }
-    .rune-board::after { content:''; position:absolute; inset:18%; border:2px solid #ffdd9255; border-radius:50%;
-      box-shadow:0 0 28px #f0abfc55,inset 0 0 35px #c026d366; pointer-events:none; }
-    .rune-hero { position:absolute; z-index:2; left:50%; top:50%; width:clamp(130px,27%,214px); aspect-ratio:1;
+    .rune-altar-top { display:flex; align-items:center; justify-content:space-between; gap:8px; width:min(100%,600px); margin:auto; padding:7px 3px; }
+    .rune-altar-top strong { display:block; font-size:16px; color:#fde68a; text-shadow:0 0 14px #e879f977; }
+    .rune-altar-top p { margin:2px 0 0; color:#c4b5fd; font-size:10px; }
+    .rune-altar-top .rune-gold-btn { flex-shrink:0; border-radius:12px; font-size:11px; font-weight:900; }
+    .rune-altar { position:relative; isolation:isolate; width:min(100%,600px); height:clamp(365px,94vw,480px); margin:12px auto 0;
+      overflow:visible; border:2px solid #c685ef88; border-radius:44% 44% 17% 17% / 42% 42% 12% 12%;
+      background:radial-gradient(ellipse at 50% 43%,#62518b 0 16%,#31295f 17% 29%,#64538d 30% 31%,#27204e 32% 56%,#4b3575 57% 60%,#20183d 61% 100%);
+      box-shadow:inset 0 0 60px #08031ed9,inset 0 0 0 5px #a162d188,0 14px 35px #070319b3,0 0 38px #a855f755; }
+    .rune-altar::before { content:''; position:absolute; inset:8% 12% 15%; border:2px dashed #f4c86f77; border-radius:50%;
+      animation:runeSpin 90s linear infinite; pointer-events:none; }
+    .rune-altar::after { content:''; position:absolute; inset:23% 29% 28%; border:6px solid #aa84ce66; border-radius:50%;
+      box-shadow:0 0 0 13px #1e17383d,0 0 34px #e879f944,inset 0 0 30px #c026d366; pointer-events:none; }
+    .rune-hero { position:absolute; z-index:2; left:50%; top:43%; width:clamp(132px,37%,210px); aspect-ratio:1;
       transform:translate(-50%,-50%); display:grid; place-items:center; border-radius:50%;
-      background:radial-gradient(circle at 50% 30%,#a855f766,#211239 64%); filter:drop-shadow(0 12px 15px #130521); }
-    .rune-hero img { width:100%; height:100%; object-fit:cover; border-radius:50%; mask-image:radial-gradient(circle,#000 52%,transparent 72%); animation:runeHeroFloat 3.8s ease-in-out infinite; }
-    .rune-hero-name { position:absolute; bottom:-9px; max-width:150%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      background:radial-gradient(circle at 50% 32%,#bd85e47a,#38265066 62%,transparent 74%); filter:drop-shadow(0 12px 15px #130521); }
+    .rune-hero img { width:100%; height:100%; object-fit:contain; border-radius:45%; mask-image:radial-gradient(circle,#000 56%,transparent 78%); animation:runeHeroFloat 3.8s ease-in-out infinite; }
+    .rune-hero-name { position:absolute; bottom:-11px; max-width:150%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       padding:4px 12px; border-radius:999px; border:1px solid #facc15a8; background:#241033e8;
       font-size:11px; font-weight:900; color:#fde68a; }
     .rune-socket { position:absolute; z-index:3; left:var(--x); top:var(--y); transform:translate(-50%,-50%);
-      width:clamp(47px,10vw,74px); aspect-ratio:1; display:grid; place-items:center; cursor:pointer;
-      color:#fff; font-size:clamp(20px,4vw,31px); border:3px solid #b8a1e2; border-radius:25%;
-      background:radial-gradient(circle at 42% 25%,#8d40c7,#391459 65%,#210c3b);
-      box-shadow:0 5px 0 #2d124b,0 0 0 3px #542177,0 0 18px #ed5cff99,inset 0 2px 9px #ffffff55;
-      transition:transform .16s,box-shadow .16s,filter .16s; }
-    .rune-socket:hover,.rune-socket:focus-visible,.rune-socket.is-picked { transform:translate(-50%,-50%) scale(1.13);
-      box-shadow:0 5px 0 #2d124b,0 0 0 4px #fbbf24,0 0 30px #fbbf24b3,inset 0 2px 9px #ffffff77; outline:none; }
-    .rune-socket.is-filled { border-color:var(--rune-color,#f0abfc); }
-    .rune-socket.is-empty { color:#d6bce9; background:radial-gradient(circle,#43335d,#18152f); border-style:dashed; }
-    .rune-socket small { position:absolute; right:-7px; bottom:-8px; min-width:19px; height:19px; display:grid; place-items:center;
-      border-radius:50%; background:#fbbf24; color:#351035; border:2px solid #fff; font-size:10px; font-weight:1000; }
-    .rune-vault-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:11px;
-      border:2px solid #7c80d7; border-radius:19px; background:linear-gradient(#334b92,#202e63); box-shadow:0 6px 0 #13183b; }
-    .rune-vault-controls button,.rune-vault-controls select { min-height:38px; border-radius:11px; font-size:11px; font-weight:900; }
+      width:clamp(48px,13vw,70px); aspect-ratio:1; display:grid; place-items:center; cursor:pointer;
+      color:#fff; font-size:clamp(23px,5vw,34px); border:3px solid #f4b8fc; border-radius:30%;
+      background:radial-gradient(circle at 47% 25%,#bc46e8,#7c1ca4 57%,#390b65);
+      box-shadow:0 5px 0 #39115c,0 0 0 3px #662483,0 0 19px #ed5cffb3,inset 0 2px 11px #ffffffa0;
+      filter:drop-shadow(0 3px 3px #170623); transition:transform .2s,box-shadow .2s,filter .2s; }
+    .rune-socket:hover,.rune-socket:focus-visible,.rune-socket.is-picked { transform:translate(-50%,-50%) scale(1.1);
+      box-shadow:0 5px 0 #39115c,0 0 0 4px #fbbf24,0 0 28px #fbbf24b3,inset 0 2px 11px #fff; outline:none; }
+    .rune-socket.is-filled { border-color:#f8da77; box-shadow:0 5px 0 #39115c,0 0 0 3px #fbbf24,0 0 23px var(--rune-color,#f0abfc),inset 0 2px 11px #fff9; }
+    .rune-socket.is-empty { color:#f8dbff; }
+    .rune-socket[data-rune-cat="blessing"] { border-color:#ffe894; background:radial-gradient(circle at 40% 25%,#ea7bea,#9a25b7 57%,#481265); }
+    .rune-socket[data-rune-cat="etched"] { border-color:#b7a5e4; background:radial-gradient(circle at 45% 28%,#785da9,#392655 65%,#19142f); }
+    .rune-socket[data-rune-cat="etched"].is-filled { border-color:#f8da77; }
+    .rune-altar-legend { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; width:min(100%,600px); margin:8px auto 0; }
+    .rune-altar-legend span { min-width:0; padding:5px 3px; border:1px solid #9c64c288; border-radius:8px; background:#221735; color:#f0d6ff; text-align:center; font-size:10px; font-weight:900; }
+    .rune-altar-summary { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; width:min(100%,600px); margin:8px auto 0; }
+    .rune-altar-summary span { padding:5px 9px; border:1px solid #d9b4fa77; border-radius:999px; background:#211638; color:#f8eaff; font-size:11px; font-weight:900; }
     .rune-gold-btn { border:2px solid #fff0a6; color:#4b2608; padding:7px 12px;
       background:linear-gradient(#fff19d,#ffca30 48%,#ed8e04); box-shadow:0 3px 0 #9a4c0a,inset 0 2px 0 #fff8; }
     .rune-catalog { border:2px solid #666bc2; border-radius:20px; padding:12px;
@@ -157,16 +156,11 @@
     .rune-catalog-head h4 { margin:0; font-size:17px; font-weight:1000; color:#fff; }
     .rune-catalog-head h4 span { color:#f0abfc; }
     .rune-catalog-head p { margin:4px 0 0; font-size:11px; color:#c7d2fe; }
-    .rune-catalog-selection { font-size:11px; font-weight:900; color:#fde68a; }
     .rune-filter-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
     .rune-filter { padding:7px 10px; border:1px solid #a5b4fc99; border-radius:9px; background:#211d58; color:#ede9fe;
       font-size:11px; font-weight:900; cursor:pointer; transition:transform .15s,background .15s,box-shadow .15s; }
     .rune-filter:hover,.rune-filter:focus-visible { transform:translateY(-2px); box-shadow:0 0 12px #e879f988; }
     .rune-filter.is-active { border-color:#fff4a3; background:linear-gradient(#ffe688,#f6a719); color:#49200b; box-shadow:0 2px 0 #995306; }
-    .rune-detail { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; padding:12px;
-      border:1px solid #d36cf188; border-radius:16px; background:linear-gradient(135deg,#351648,#211638); }
-    .rune-detail strong { color:#f5c4ff; font-size:13px; }
-    .rune-detail p { margin:5px 0 0; color:#cbd5e1; font-size:11px; }
     .rune-presets { padding:12px; border:1px solid #818cf866; border-radius:14px; background:#151831; color:#cbd5e1; font-size:12px; }
     .rune-presets summary { cursor:pointer; color:#fde68a; font-weight:900; }
     .rune-presets > div { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
@@ -188,7 +182,6 @@
     .rune-socket>span { display:grid; place-items:center; width:100%; height:100%; }
     .rune-socket .rune-wiki-icon { width:80%; height:80%; }
     .rune-rank { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:8px; font-weight:1000; color:#ffe89b; }
-    .rune-economy-note { font-size:10px; font-weight:800; color:#e8d5ff; }
     .rune-ruins-expedition{padding:16px;border:2px solid #a855f7aa;border-radius:24px;background:radial-gradient(circle at 85% 8%,#a855f744,transparent 35%),linear-gradient(145deg,#24134a,#11142e 62%,#121b35);box-shadow:0 16px 36px #050315a8;color:#fff}
     .rune-ruins-banner{display:flex;align-items:center;gap:15px;padding:14px;border:1px solid #e9d5ff66;border-radius:18px;background:#180f35bb}.rune-ruins-banner-icon{font-size:54px;filter:drop-shadow(0 0 15px #e879f9);animation:runeHeroFloat 3s infinite}.rune-ruins-banner h3{font-size:25px;font-weight:1000;color:#f5d0fe}.rune-ruins-banner p,.rune-ruins-side p{font-size:11px;color:#cbd5e1}
     .rune-ruins-stats{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.rune-ruins-stats span{padding:6px 10px;border:1px solid #c084fc77;border-radius:999px;background:#100d2d;color:#f5d0fe;font-size:11px;font-weight:900}
@@ -207,8 +200,6 @@
     .character-visual-settings summary{cursor:pointer}
     .character-visual-settings button{margin-top:9px}
     @media(max-width:580px){.rune-ruins-layout{grid-template-columns:1fr}.rune-ruins-banner h3{font-size:20px}.rune-ruins-banner-icon{font-size:40px}}
-    .rune-vault-head { background:radial-gradient(circle at 82% 20%,#fcd34d33,transparent 28%),radial-gradient(circle at 15% 80%,#e879f944,transparent 35%),linear-gradient(145deg,#30144f,#130e2e 62%,#38184d); }
-    .rune-vault-head::after { content:'✦ ✦ ✦'; position:absolute; top:12px; right:12px; color:#f5d0fe88; font-size:24px; letter-spacing:13px; animation:eventsTwinkle 3s ease-in-out infinite; pointer-events:none; }
     .rune-inventory-card.is-equipped .rune-wiki-icon { animation:runeHeroFloat 3.5s ease-in-out infinite; }
     .rune-inventory-glyph { width:70%; aspect-ratio:1; margin:auto; display:grid; place-items:center; font-size:clamp(19px,4vw,36px);
       border:2px solid #ffffffa0; border-radius:27%; background:radial-gradient(circle,#f0abfc80,#571271 75%);
@@ -219,12 +210,12 @@
     .rune-inventory-card .rune-short-name { display:block; margin-top:4px; font-size:9px; font-weight:900; line-height:1.1;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     @keyframes runeHeroFloat { 50% { transform:translateY(-7px); } }
-    @media(max-width:540px) { .rune-vault-head { padding:10px 5px; } .rune-board { height:350px; }
-      .rune-socket { width:clamp(39px,11vw,52px); font-size:20px; border-width:2px; }
+    @media(max-width:540px) { .rune-altar { height:clamp(345px,94vw,380px); }
+      .rune-socket { width:clamp(43px,13vw,52px); font-size:22px; border-width:2px; }
       .rune-inventory-card { border-width:2px; border-radius:12px; } .rune-inventory-card .rune-short-name { font-size:7px; }
-      .rune-vault-controls { gap:5px; } .rune-vault-controls button,.rune-vault-controls select { font-size:10px; } }
-    @media(prefers-reduced-motion:reduce) { .rune-board::before,.rune-hero img { animation:none; }
-      .rune-socket,.rune-inventory-card,.rune-vault-head::after,.rune-inventory-card.is-equipped .rune-wiki-icon { transition:none; animation:none; } }
+      .rune-altar-summary span { font-size:10px; } }
+    @media(prefers-reduced-motion:reduce) { .rune-altar::before,.rune-hero img { animation:none; }
+      .rune-socket,.rune-inventory-card,.rune-inventory-card.is-equipped .rune-wiki-icon { transition:none; animation:none; } }
     /* Artifact gallery: set shelves and a separate upgrade codex. */
     .artifact-gallery { color:#fff; font-family:inherit; }
     .artifact-gallery button { font-family:inherit; }
@@ -2084,10 +2075,9 @@
         <!-- 3C. SUB-PANEL: ARCHERO 2 OFFICIAL WIKI 13-SLOT RUNES & RUNE WORKSHOP -->
         <div id="subpanelRunes" class="hidden flex-1 px-2 sm:px-6 py-3" style="background:linear-gradient(#10142d,#171333 50%,#11152e)">
           <div class="max-w-5xl mx-auto rune-vault">
-            <div class="rune-vault-head">
-              <div class="rune-vault-title">💠 Đài Cổ Ngữ</div>
-              <div class="rune-vault-subtitle">13 ô khảm quanh anh hùng · Chạm một ô, chọn viên trong kho để khảm</div>
-              <button id="btnOpenRuneRuins" type="button" class="rune-gold-btn relative mt-3 text-xs font-black">⛏️ Khám phá Ngọc tại Tàn Tích</button>
+            <div class="rune-altar-top">
+              <div><strong>💠 Đài Khảm Ngọc</strong><p>Chạm ô khảm để chọn hoặc tháo Ngọc</p></div>
+              <button id="btnOpenRuneRuins" type="button" class="rune-gold-btn">⛏️ Khám phá</button>
             </div>
             <div id="runeSocketsGrid" class="space-y-3 mt-3"></div>
           </div>
@@ -18810,37 +18800,42 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const ownedCount = RuneEconomy.ownedRunes(SaveState.runes);
 
           const hero = HEROES.find(h => h.id === SaveState.selectedHeroId) || HEROES[0];
+          // Fixed Archero-style layout: outer Ability left, Enhancement right,
+          // Blessing beside the hero, and the three Etched slots below.
+          const altarPositions = {
+            ability: [[14,15],[10,36],[10,58],[15,78]],
+            enhancement: [[86,15],[90,36],[90,58],[85,78]],
+            blessing: [[29,47],[71,47]],
+            etched: [[34,88],[50,88],[66,88]]
+          };
+          const runePlaceholders = { ability:'✦', enhancement:'❋', blessing:'✧', etched:'◇' };
           const slotOrder = Object.entries(RUNE_CATEGORIES_META).flatMap(([cat, meta]) =>
             Array.from({ length: meta.slots }, (_, index) => ({ cat, index, meta })));
           const selected = selectedRuneSocket;
-          const selectedId = selected && runeOwned(eqSlots[selected.cat]?.[selected.index]) ? eqSlots[selected.cat][selected.index] : null;
-          const selectedRune = RUNES_DATA.find(r => r.id === selectedId);
           const activeCount = slotOrder.filter(({ cat, index }) => runeOwned(eqSlots[cat]?.[index])).length;
           const filteredCatalog = RUNES_DATA.filter(r => curCatFilter === 'all' || r.type === curCatFilter).sort((a,b)=>
             Number(runeOwned(b.id))-Number(runeOwned(a.id)) ||
             (SaveState.runeSortByQuality ? RuneEconomy.copies(SaveState.runes?.[b.id])-RuneEconomy.copies(SaveState.runes?.[a.id]) : 0) ||
             a.name.localeCompare(b.name, 'vi'));
           runeGrid.innerHTML = `
-            <div class="rune-board" aria-label="Đài khảm 13 ô cổ ngữ">
+            <div class="rune-altar" aria-label="Đài khảm: Ability bên trái, Enhancement bên phải, Blessing sát nhân vật, Etched phía dưới">
               <div class="rune-hero"><img src="${hero.avatar}" alt="${hero.name}" draggable="false"><span class="rune-hero-name">${hero.icon || '✦'} ${hero.name}</span></div>
-              ${slotOrder.map(({ cat, index, meta }, n) => {
+              ${slotOrder.map(({ cat, index, meta }) => {
                 const id = runeOwned(eqSlots[cat]?.[index]) ? eqSlots[cat][index] : null;
                 const rune = RUNES_DATA.find(r => r.id === id);
-                const angle = -Math.PI / 2 + n * Math.PI * 2 / slotOrder.length;
-                const x = (50 + Math.cos(angle) * 43).toFixed(2);
-                const y = (50 + Math.sin(angle) * 40).toFixed(2);
+                const [x,y] = altarPositions[cat][index];
                 const picked = selected?.cat === cat && selected?.index === index;
                 return `<button type="button" class="rune-socket ${rune ? 'is-filled' : 'is-empty'} ${picked ? 'is-picked' : ''}"
                   style="--x:${x}%;--y:${y}%;--rune-color:${rune?.color || meta.color}"
-                  data-rune-slot="${cat}:${index}" title="${meta.name} · Ô ${index + 1}${rune ? ' · ' + rune.name : ' · Trống'}"
+                  data-rune-slot="${cat}:${index}" data-rune-cat="${cat}" title="${meta.name} · Ô ${index + 1}${rune ? ' · ' + rune.name : ' · Trống'}"
                   aria-label="${meta.name}, ô ${index + 1}: ${rune?.name || 'trống'}" aria-pressed="${picked}">
-                  <span aria-hidden="true">${rune ? `<img class="rune-wiki-icon" src="${runeImage(rune)}" data-rune-id="${rune.id}" data-rune-type="${rune.type}" alt="">` : '✧'}</span><small>${index + 1}</small>
+                  <span aria-hidden="true">${rune ? `<img class="rune-wiki-icon" src="${runeImage(rune)}" data-rune-id="${rune.id}" data-rune-type="${rune.type}" alt="">` : runePlaceholders[cat]}</span>
                 </button>`;
               }).join('')}
             </div>
-            <div class="rune-vault-controls" aria-label="Điều khiển cổ ngữ">
-              <span class="text-xs font-black text-white mr-auto">✦ Đã khảm ${activeCount}/13 <span class="text-amber-200">· +${runeTotals.atk.toLocaleString('vi-VN')} ATK · +${runeTotals.hp.toLocaleString('vi-VN')} HP</span></span>
-              <span class="rune-economy-note">💠 ${ownedCount}/${RUNES_DATA.length} đã sở hữu · Chỉ nhận từ khám phá Tàn Tích · Ghép 3 viên cùng bậc để tăng phẩm chất · ${enchantActive ? '✨ Đã mở phù phép' : '🔒 Phù phép: Epic +2 và 10 Enchantium'}</span>
+            <div class="rune-altar-legend" aria-label="Vị trí các loại Ngọc"><span>✦ Ability ×4 · Trái</span><span>✧ Blessing ×2 · Cạnh</span><span>❋ Enhancement ×4 · Phải</span><span>◇ Etched ×3 · Dưới</span></div>
+            <div class="rune-altar-summary" aria-label="Chỉ số Ngọc đã khảm">
+              <span>✦ Đã khảm ${activeCount}/13</span><span>⚔️ +${runeTotals.atk.toLocaleString('vi-VN')} ATK</span><span>♥ +${runeTotals.hp.toLocaleString('vi-VN')} HP</span>
             </div>
             <div class="rune-catalog" id="runeCatalog">
               <div class="rune-workshop-row">
@@ -18848,9 +18843,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 <button type="button" id="btnRuneWorkshop" class="rune-gold-btn">✦ Xưởng Ngọc</button>
               </div>
               <div class="rune-catalog-head">
-                <div><h4 class="font-black text-base text-white">Kho Cổ Ngữ <span class="text-fuchsia-300">${RUNES_DATA.length} viên</span></h4>
-                  <p class="text-[11px] text-indigo-200">${selected ? `Đang chọn ô ${selected.index + 1} · ${RUNE_CATEGORIES_META[selected.cat].name}. Chạm viên cùng nhóm để khảm.` : 'Chạm ô trên vòng tròn rồi chọn viên; hoặc chạm viên để khảm vào ô trống đầu tiên.'}</p></div>
-                <span class="rune-catalog-selection">${selectedRune ? `${selectedRune.icon} ${selectedRune.name}` : '✦ Chọn ô khảm'}</span>
+                <div><h4 class="font-black text-base text-white">Kho Ngọc <span class="text-fuchsia-300">${ownedCount}/${RUNES_DATA.length} đã sở hữu</span></h4>
+                  <p class="text-[11px] text-indigo-200">${selected ? `Ô ${selected.index + 1} · ${RUNE_CATEGORIES_META[selected.cat].name}. Chạm viên cùng nhóm để khảm.` : 'Chạm ô trên đài, rồi chọn viên Ngọc cùng loại trong kho.'}</p></div>
               </div>
               <div class="rune-filter-row" aria-label="Lọc loại cổ ngữ">
                 ${[{ id:'all', label:'Tất cả' }, ...Object.values(RUNE_CATEGORIES_META).map(m => ({ id:m.id, label:`${m.icon} ${{ etched:'Khắc Ấn', blessing:'Chúc Phúc', enhancement:'Tăng Cường', ability:'Kỹ Năng' }[m.id]}` }))].map(f =>
@@ -18866,14 +18860,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 </button>`).join('')}
               </div>
             </div>
-            <div class="rune-detail">
-              <div class="min-w-0"><strong class="text-fuchsia-200 text-xs">${selectedRune ? selectedRune.name : 'Ô khảm đang chọn'}</strong>
-                <p class="text-[10px] text-slate-300 mt-1">${selectedRune ? `${RuneWikiData[selectedRune.id]?.base||''} · ${RuneEconomy.tier(SaveState.runes[selectedRune.id]).replaceAll('_',' ')}. Chạm viên trong kho để xem đủ thuộc tính từng bậc.` : selected ? 'Ô trống · chọn một viên cùng nhóm trong kho.' : 'Chọn một ô để xem chi tiết hoặc tháo ngọc.'}</p></div>
-              ${selectedRune ? '<button type="button" id="btnUnequipSelectedRune" class="rune-gold-btn shrink-0 text-xs">↩ Tháo ngọc</button>' : ''}
-            </div>
             <details class="rune-presets"><summary>✦ Xưởng Ngọc · Bộ khảm nhanh</summary>
               <div>
-                <p class="w-full text-xs text-slate-200">Ngọc tìm được ở sự kiện Khám phá Tàn Tích. Ba viên trùng loại và phẩm chất tự ghép thành một bậc cao hơn. Chọn bộ khảm để lắp các viên đang sở hữu.</p>
+                <p class="w-full text-xs text-slate-200">Ngọc chỉ nhận từ sự kiện Khám phá Tàn Tích. Ba viên trùng loại và phẩm chất tự ghép lên một bậc. ${enchantActive ? '✨ Đã mở phù phép.' : '🔒 Phù phép mở tại Epic +2 với 10 Enchantium.'} Chọn bộ khảm để lắp các viên đang sở hữu.</p>
                 <button type="button" data-rune-preset="oracle_weapon" class="rune-gold-btn">🏹 Oracle</button>
                 <button type="button" data-rune-preset="strike_master" class="rune-gold-btn">🗡️ Strike</button>
                 <button type="button" data-rune-preset="meteor_cataclysm" class="rune-gold-btn">☄️ Meteor</button>
@@ -18901,16 +18890,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             if (details) { details.open=true; details.scrollIntoView({behavior:'smooth',block:'center'}); }
           });
           runeGrid.querySelectorAll('img[data-rune-id]').forEach(img => { img.onerror = () => runeFallback(img); });
-          runeGrid.querySelector('#btnUnequipSelectedRune')?.addEventListener('click', () => {
-            if (!selectedRuneSocket) return;
-            const slots = getEquippedRuneSlots()[selectedRuneSocket.cat];
-            if (!slots?.[selectedRuneSocket.index]) return;
-            slots[selectedRuneSocket.index] = null;
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderLobbyUI();
-            showToast('Đã tháo cổ ngữ khỏi ô khảm.');
-          });
           runeGrid.querySelectorAll('[data-rune-preset]').forEach(btn => {
             btn.onclick = () => applyRuneBuildPreset(btn.getAttribute('data-rune-preset'));
           });
