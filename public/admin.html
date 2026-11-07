@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Artemis Admin — Quản Trị Hệ Thống</title>
+<link rel="stylesheet" href="/admin-campaign.css">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -160,6 +161,11 @@
     </div>
   </header>
 
+  <nav aria-label="Các mục quản trị" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+    <button type="button" id="tabPlayers" class="btn">👥 Người chơi &amp; Thống kê</button>
+    <button type="button" id="tabCampaign" class="btn-ghost">🗺️ Chiến dịch &amp; Quái / Boss</button>
+  </nav>
+  <section id="adminUsersPane">
   <!-- Stats -->
   <div class="grid g4" id="statsGrid" style="margin-bottom:16px"></div>
 
@@ -206,6 +212,10 @@
     <div class="card-title">🏆 Top 5 người chơi theo số quái hạ gục</div>
     <div id="topList" style="display:flex;flex-direction:column;gap:7px;font-size:13px"></div>
   </div>
+  </section>
+  <section id="adminCampaignPane" class="hidden" aria-label="Thư viện chiến dịch">
+    <div id="campaignApp"></div>
+  </section>
 </div>
 
 <!-- ============ MODAL ============ -->
@@ -310,7 +320,9 @@
       $("gate").classList.add("hidden");
       $("main").classList.remove("hidden");
       renderStats(r.data);
-      return loadPlayers();
+      return loadPlayers().then(function () {
+        showAdminTab(location.hash.indexOf("#campaign") === 0 ? "campaign" : "players");
+      });
     });
   }
 
@@ -485,6 +497,57 @@
     });
   }
 
+  // ---------- campaign tabs (chỉ bật sau khi stats API xác minh quyền admin) ----------
+  var campaignUiLoader = null, campaignMounted = false, activeTab = "players";
+
+  function loadCampaignUi() {
+    if (window.AdminCampaignUI) return Promise.resolve(window.AdminCampaignUI);
+    if (campaignUiLoader) return campaignUiLoader;
+    campaignUiLoader = new Promise(function (resolve, reject) {
+      var script = document.createElement("script");
+      script.src = "/admin-campaign.js";
+      script.onload = function () {
+        window.AdminCampaignUI ? resolve(window.AdminCampaignUI) : reject(new Error("Không khởi tạo được thư viện chiến dịch."));
+      };
+      script.onerror = function () { reject(new Error("Không tải được màn hình chiến dịch.")); };
+      document.head.appendChild(script);
+    });
+    return campaignUiLoader;
+  }
+  function showAdminTab(tab) {
+    activeTab = tab === "campaign" ? "campaign" : "players";
+    $("adminUsersPane").classList.toggle("hidden", activeTab !== "players");
+    $("adminCampaignPane").classList.toggle("hidden", activeTab !== "campaign");
+    $("tabPlayers").className = activeTab === "players" ? "btn" : "btn-ghost";
+    $("tabCampaign").className = activeTab === "campaign" ? "btn" : "btn-ghost";
+    $("tabPlayers").setAttribute("aria-current", activeTab === "players" ? "page" : "false");
+    $("tabCampaign").setAttribute("aria-current", activeTab === "campaign" ? "page" : "false");
+    if (activeTab === "players") {
+      if (window.AdminCampaignUI) window.AdminCampaignUI.hide();
+      return;
+    }
+    loadCampaignUi().then(function (ui) {
+      if (activeTab !== "campaign") return;
+      if (!campaignMounted) {
+        campaignMounted = true;
+        ui.mount($("campaignApp"), { api: api, esc: esc, num: num, toast: toast });
+      } else {
+        ui.show();
+        ui.syncHash();
+      }
+    }).catch(function (error) {
+      $("campaignApp").textContent = error.message || "Không tải được chiến dịch.";
+      toast(error.message || "Lỗi tải dữ liệu chiến dịch.", "err");
+    });
+  }
+
+  $("tabPlayers").addEventListener("click", function () { location.hash = "players"; showAdminTab("players"); });
+  $("tabCampaign").addEventListener("click", function () { location.hash = "campaign"; showAdminTab("campaign"); });
+  window.addEventListener("hashchange", function () {
+    if ($("main").classList.contains("hidden")) return;
+    showAdminTab(location.hash.indexOf("#campaign") === 0 ? "campaign" : "players");
+  });
+
   // ---------- toolbar ----------
   $("btnSearch").addEventListener("click", function () {
     state.q = $("searchBox").value.trim();
@@ -505,7 +568,10 @@
   $("btnNext").addEventListener("click", function () {
     if (state.page < state.pages) { state.page++; loadPlayers(); }
   });
-  $("btnRefresh").addEventListener("click", function () { loadPlayers().then(refreshStats); });
+  $("btnRefresh").addEventListener("click", function () {
+    if (activeTab === "campaign" && window.AdminCampaignUI) window.AdminCampaignUI.refresh();
+    else loadPlayers().then(refreshStats);
+  });
   $("btnLogout").addEventListener("click", function () {
     api("/api/auth/logout", { method: "POST" }).then(function () { location.reload(); });
   });
