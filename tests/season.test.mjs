@@ -103,7 +103,7 @@ check('tra ve phan so truc tiep (khong nhan lai)', /return Math\.min\(SEASON_SAC
 // ============================================================ 6. UI
 console.log('\n=== 6. UI ===');
 check('co #seasonContent trong tab Su Kien',
-  /id="tabEvents"[\s\S]{0,1200}?id="seasonContent"/.test(html));
+  /id="tabEvents"[\s\S]{0,6000}?id="seasonContent"/.test(html));
 check('co man nghe + trum + doi', (html.match(/data-season-screen="/g) || []).length >= 3);
 check('co nut chon tung nghe', /data-pick-career="\$\{c\.id\}"/.test(html));
 check('co nut tuyen tung trum', /data-pick-boss="\$\{b\.id\}"/.test(html));

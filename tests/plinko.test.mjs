@@ -101,7 +101,7 @@ check('ghi bestMult', /p\.bestMult = Math\.max/.test(playFn));
 // ============================================================ 5. UI
 console.log('\n=== 5. UI ===');
 check('co #plinkoContent trong tab Su Kien',
-  /id="tabEvents"[\s\S]{0,1800}?id="plinkoContent"/.test(html));
+  /id="tabEvents"[\s\S]{0,7000}?id="plinkoContent"/.test(html));
 check('hien xac suat tung o', /Math\.round\(odds\[i\] \* 1000\) \/ 10/.test(html));
 check('hien he so tung o', /\$\{m\}×/.test(html));
 check('co nut chon cuoc', /data-plinko-bet="\$\{b\}"/.test(html));

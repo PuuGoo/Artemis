@@ -254,6 +254,72 @@
     @media(max-width:540px) { .artifact-hero { padding:12px; } .artifact-set { padding-left:6px; padding-right:6px; } .artifact-shelf { min-height:138px; }
       .artifact-object { height:62px; } .artifact-cushion { height:29px; } .artifact-set-title { font-size:15px; } }
     @media(prefers-reduced-motion:reduce) { .artifact-hero::after,.artifact-set,.artifact-object { animation:none; } .artifact-piece,.artifact-codex-card { transition:none; } }
+    /* Events hub: one clear activity at a time, with discoverable shortcuts. */
+    #tabEvents { background:radial-gradient(circle at 50% -100px,#442b87 0,transparent 430px),linear-gradient(#171936,#0c1229 52%,#0a1123); }
+    #tabEvents [data-event-area]:not(.is-active) { display:none; }
+    .events-home { width:100%; max-width:960px; margin:0 auto; }
+    .events-hero { position:relative; overflow:hidden; padding:18px; border:2px solid #f7c969; border-radius:24px;
+      background:radial-gradient(circle at 80% 20%,#ffb6db88,transparent 35%),linear-gradient(135deg,#75324d,#4a285d 50%,#25215d);
+      box-shadow:0 8px 0 #281532,0 18px 32px #03071288,inset 0 2px 0 #fff7; }
+    .events-hero::before { content:'✦ ✧ ✦'; position:absolute; right:5%; top:8%; color:#ffdc9088; font-size:36px; letter-spacing:12px; animation:eventsTwinkle 4s ease-in-out infinite; }
+    .events-hero-badge { display:inline-block; padding:4px 10px; border:1px solid #fff2b9; border-radius:999px; background:#3b1b4fbb; color:#ffe9a0; font-size:10px; font-weight:1000; letter-spacing:.12em; }
+    .events-hero h2 { position:relative; margin:8px 0 5px; color:#fff; font-size:clamp(26px,6vw,42px); font-weight:1000; text-shadow:0 4px 0 #361439,0 0 20px #ff91ba; }
+    .events-hero p { position:relative; max-width:520px; margin:0; color:#fff2f3; font-size:12px; line-height:1.5; }
+    .events-hero-stats { position:relative; display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+    .events-hero-stats span { padding:6px 9px; border:1px solid #fff5; border-radius:9px; background:#1b163baa; color:#ffeebc; font-size:10px; font-weight:900; }
+    .events-picker-title { margin:20px 2px 9px; color:#f8e8ff; font-size:16px; font-weight:1000; }
+    .events-picker { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
+    .events-choice { position:relative; min-width:0; min-height:112px; padding:13px 10px; border:2px solid #786fae; border-radius:17px; background:linear-gradient(145deg,#312b61,#191d43); color:#fff;
+      text-align:left; cursor:pointer; box-shadow:0 5px 0 #111631,inset 0 1px 0 #ffffff33; transition:transform .18s,border-color .18s,box-shadow .18s; }
+    .events-choice:hover,.events-choice:focus-visible { transform:translateY(-4px); border-color:#ffd685; outline:none; box-shadow:0 9px 0 #111631,0 0 20px #ffd68555; }
+    .events-choice.is-active { border-color:#ffe08c; background:linear-gradient(145deg,#8b4b7d,#503279); box-shadow:0 5px 0 #43213c,0 0 18px #ffbf6c66; }
+    .events-choice-icon { display:block; font-size:27px; line-height:1; filter:drop-shadow(0 3px 3px #05031b); }
+    .events-choice-name { display:block; margin-top:8px; font-size:13px; font-weight:1000; }
+    .events-choice-desc { display:block; margin-top:3px; color:#dcd5f7; font-size:10px; line-height:1.2; }
+    .events-section-heading { max-width:960px; width:100%; margin:5px auto 0; color:#ffde98; font-size:16px; font-weight:1000; text-shadow:0 2px 0 #311c44; }
+    .events-discover { width:100%; }
+    .events-banner-shell { overflow:hidden; border:2px solid #e5a958; border-radius:22px; background:linear-gradient(#39234f,#1b2246); box-shadow:0 7px 0 #342044,0 15px 25px #05061577; }
+    .events-banner-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; padding:14px; border-bottom:1px solid #f4d79677; background:linear-gradient(120deg,#683347,#38255b); }
+    .events-banner-head h3 { margin:0; color:#fff; font-size:18px; font-weight:1000; }
+    .events-banner-head p { margin:3px 0 0; color:#e7d8ec; font-size:11px; }
+    .events-wiki-toggle { padding:8px 10px; border:1px solid #ffe7a5; border-radius:10px; background:linear-gradient(#ffea9b,#eeb332); color:#4a2810; font-size:11px; font-weight:1000; cursor:pointer; }
+    .events-banner-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:12px; }
+    .events-banner-card { position:relative; display:flex; gap:10px; align-items:center; min-width:0; min-height:112px; padding:10px; border:2px solid #ffffff88; border-radius:15px; color:#fff; text-align:left; cursor:pointer;
+      box-shadow:inset 0 2px 0 #ffffff55,0 5px 0 #130b32; transition:transform .18s,filter .18s; animation:eventsCardIn .35s both; }
+    .events-banner-card:hover,.events-banner-card:focus-visible { transform:translateY(-4px); filter:brightness(1.14); outline:2px solid #ffef96; }
+    .events-banner-art { display:grid; place-items:center; width:64px; height:64px; flex:none; border:1px solid #ffffff77; border-radius:16px; background:radial-gradient(circle,#ffffff77,#130c3488 75%); font-size:33px; animation:eventsFloat 4s ease-in-out infinite; }
+    .events-banner-copy { min-width:0; }
+    .events-banner-copy strong { display:block; color:#fff; font-size:clamp(12px,2.6vw,16px); font-weight:1000; line-height:1.1; text-shadow:0 2px 0 #231243; }
+    .events-banner-copy small { display:block; margin-top:5px; color:#fff4d7; font-size:10px; line-height:1.2; }
+    .events-banner-reward { display:block; margin-top:6px; color:#ffe778; font-size:10px; font-weight:1000; }
+    .events-banner-foot { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; padding:10px 13px; background:#181c40; color:#c9c1e9; font-size:10px; }
+    .events-quick-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; padding:10px; background:#191634; }
+    .events-quick-tab { padding:9px 4px; border:1px solid #8781af; border-radius:10px; background:#2c2856; color:#ece6ff; font-size:11px; font-weight:900; cursor:pointer; }
+    .events-quick-tab.is-active { border-color:#fff2ab; background:linear-gradient(#ffe69b,#f0ac25); color:#4a280d; }
+    .events-wiki-shell { padding:14px; border:2px solid #a898ec; border-radius:20px; background:linear-gradient(145deg,#372b6a,#1b2147 72%); box-shadow:0 8px 0 #17183b,0 16px 24px #04051888; }
+    .events-wiki-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:9px; }
+    .events-wiki-head h3 { margin:0; color:#fff; font-size:19px; font-weight:1000; }
+    .events-wiki-head p { margin:4px 0 0; color:#d8d0f4; font-size:11px; }
+    .events-wiki-dev { margin-top:7px; font-size:10px; color:#c7bfee; }
+    .events-wiki-dev summary { cursor:pointer; }
+    .events-wiki-dev button { margin-top:6px; padding:6px 9px; border:1px solid #f2c963; border-radius:8px; background:#3b295c; color:#ffe6a0; font-size:10px; }
+    .events-wiki-filters { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
+    .events-wiki-filter { padding:7px 10px; border:1px solid #a99bde; border-radius:9px; background:#221e4c; color:#ebe6ff; font-size:11px; font-weight:900; cursor:pointer; }
+    .events-wiki-filter.is-active { border-color:#fff2ad; background:linear-gradient(#ffe899,#f1ac2d); color:#492a0d; }
+    .events-wiki-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .events-wiki-card { min-width:0; min-height:102px; padding:10px; border:2px solid #ffffff88; border-radius:13px; background:linear-gradient(145deg,#51428d,#252b5e); color:#fff; text-align:left; cursor:pointer;
+      box-shadow:0 4px 0 #14113d; transition:transform .16s,filter .16s; }
+    .events-wiki-card:hover,.events-wiki-card:focus-visible { transform:translateY(-3px); filter:brightness(1.16); outline:none; }
+    .events-wiki-card.is-active { border-color:#ffdd72; box-shadow:0 4px 0 #73501d,0 0 16px #facc1588; }
+    .events-wiki-card .icon { display:block; font-size:25px; }
+    .events-wiki-card strong { display:block; margin-top:4px; font-size:12px; line-height:1.1; }
+    .events-wiki-card small { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; margin-top:4px; color:#e4ddfa; font-size:10px; line-height:1.25; }
+    @keyframes eventsTwinkle { 50% { opacity:.3; transform:translateY(-5px) scale(1.1); } }
+    @keyframes eventsFloat { 50% { transform:translateY(-5px) rotate(3deg); } }
+    @keyframes eventsCardIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @media(max-width:650px) { .events-picker { grid-template-columns:repeat(2,minmax(0,1fr)); } .events-choice { min-height:103px; } .events-wiki-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:430px) { .events-banner-grid { grid-template-columns:1fr; } .events-banner-card { min-height:93px; } .events-hero { padding:13px; } }
+    @media(prefers-reduced-motion:reduce) { .events-hero::before,.events-banner-card,.events-banner-art { animation:none; } .events-choice,.events-banner-card { transition:none; } }
     .hd-panel {
       background: linear-gradient(165deg, rgba(15, 23, 42, 0.92) 0%, rgba(9, 13, 22, 0.96) 100%);
       box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
@@ -2080,24 +2146,40 @@
 
       <!-- ==================== TAB 5 (VN PDF): SỰ KIỆN (THI ĐẤU • KHIÊU CHIẾN • PB — PAGES 62-64 + 11 WIKI EVENTS) ==================== -->
       <section id="tabEvents" class="hidden flex-1 overflow-y-auto p-2.5 sm:p-4 pb-24 sm:pb-28 flex flex-col gap-4 bg-[#0d152c]">
+        <div class="events-home">
+          <div class="events-hero">
+            <span class="events-hero-badge">✦ LỄ HỘI ARTEMIS ✦</span>
+            <h2>Thế Giới Sự Kiện</h2>
+            <p>Chọn một hoạt động, tham gia thử thách và nhận phần thưởng. Mọi tiến độ đều được lưu vào tài khoản của bạn.</p>
+            <div class="events-hero-stats"><span>🎪 11 hoạt động</span><span>🌿 Vườn thủ hộ</span><span>🎰 Plinko</span><span>⚔️ Mùa giải</span></div>
+          </div>
+          <h3 class="events-picker-title">Bạn muốn chơi gì hôm nay?</h3>
+          <nav class="events-picker" aria-label="Chọn khu vực sự kiện">
+            <button type="button" class="events-choice is-active" data-event-area-target="discover" aria-pressed="true"><span class="events-choice-icon">🎪</span><span class="events-choice-name">Khám phá</span><span class="events-choice-desc">Sự kiện, nhiệm vụ và quà tặng</span></button>
+            <button type="button" class="events-choice" data-event-area-target="season" aria-pressed="false"><span class="events-choice-icon">⚔️</span><span class="events-choice-name">Mùa giải</span><span class="events-choice-desc">Chọn nghề, đánh trùm, leo hạng</span></button>
+            <button type="button" class="events-choice" data-event-area-target="garden" aria-pressed="false"><span class="events-choice-icon">🌿</span><span class="events-choice-name">Vườn thủ hộ</span><span class="events-choice-desc">Trồng cây và đổi thưởng</span></button>
+            <button type="button" class="events-choice" data-event-area-target="plinko" aria-pressed="false"><span class="events-choice-icon">🎰</span><span class="events-choice-name">Plinko</span><span class="events-choice-desc">Thả bóng, nhận xu và quà</span></button>
+          </nav>
+        </div>
+        <h3 id="eventsCurrentHeading" class="events-section-heading">🎪 Khám phá sự kiện</h3>
         <!-- ==================== SU KIEN THAT: MUA GIAI (season) ====================
              Ban that co 5 man season*; ban web lam 4 man co co che that:
              careerselect / bossrecruit / bossspecial / powerexchange.
              Render boi renderSeasonPanel(). -->
-        <div id="seasonContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
+        <div id="seasonContent" data-event-area="season" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
         <!-- ==================== SU KIEN THAT: VUON THU HO (guardplant) ====================
              Ban that co 8 man guardplant (docs/APK_000000_ARCHERO_ANALYSIS.md).
              Ban web lam ban don nguoi: trong/tuoi/thu hoach + doi thuong.
              Render boi renderGardenPanel(). -->
-        <div id="gardenContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
+        <div id="gardenContent" data-event-area="garden" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
         <!-- ==================== SU KIEN THAT: PLINKO ====================
              Ban that co 2 man: ui_activityplinko + ui_plinkoactivitychoosereward.
              Render boi renderPlinkoPanel(). -->
-        <div id="plinkoContent" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
-        <div id="vnEventsAuthenticCardsContainer" class="max-w-3xl w-full mx-auto">
+        <div id="plinkoContent" data-event-area="plinko" class="max-w-3xl w-full mx-auto flex flex-col gap-2"></div>
+        <div id="vnEventsAuthenticCardsContainer" data-event-area="discover" class="events-discover is-active max-w-3xl w-full mx-auto">
           <!-- Populated dynamically by renderVnEventsBannerCardsUI() -->
         </div>
-        <div id="wikiEventsHubMainContainer" class="max-w-5xl w-full mx-auto flex flex-col gap-4">
+        <div id="wikiEventsHubMainContainer" data-event-area="discover" class="events-discover is-active max-w-5xl w-full mx-auto flex flex-col gap-4">
           <!-- Populated dynamically by renderWikiEventsHubUI() -->
         </div>
       </section>
@@ -23114,53 +23196,25 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         container.innerHTML = `
-          <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-[#15193b] to-slate-950 border-2 border-amber-400/70 p-4 shadow-2xl space-y-3">
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950">Chuẩn 100% Archero 2 Events Wiki</span>
-                  <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/40">5 Regular Events • 4 Occasional Events • 2 One-time Events</span>
-                </div>
-                <h2 class="text-base sm:text-xl font-black text-white mt-1">🎪 Trung Tâm Toàn Bộ 11 Sự Kiện Chuẩn Archero 2 Wiki (Regular • Occasional • One-time)</h2>
-                <p class="text-xs text-slate-300">Tái hiện đầy đủ 100% cơ chế, bảng nhiệm vụ, vòng quay, bể cá cố định, đào mỏ và tiệm đổi thưởng từ trang <strong class="text-amber-300">Archero 2 Wiki Events</strong>.</p>
-              </div>
-              <div class="flex items-center gap-2 flex-wrap shrink-0">
-                <button type="button" id="btnMaxAllWikiEventsCurrencies" class="px-3.5 py-2 rounded-xl gold-gradient text-slate-950 font-black text-xs shadow hover:brightness-110">
-                  👑 +9,999 Toàn Bộ Vé, Xúc Xắc, Mồi Câu, Cuốc &amp; Xu Sự Kiện
-                </button>
-              </div>
+          <div class="events-wiki-shell">
+            <div class="events-wiki-head">
+              <div><h3>🧭 Thư viện sự kiện</h3><p>11 hoạt động với nhiệm vụ, luật chơi và phần thưởng riêng. Chọn thẻ để xem chi tiết.</p></div>
+              <details class="events-wiki-dev"><summary>Công cụ thử nghiệm</summary><button type="button" id="btnMaxAllWikiEventsCurrencies">👑 Tăng tài nguyên sự kiện</button></details>
             </div>
-
-            <div class="flex flex-wrap items-center gap-1.5">
+            <div class="events-wiki-filters" aria-label="Lọc sự kiện">
               ${[
-                { id: 'all', label: '🌟 Tất Cả 11 Sự Kiện Wiki' },
-                { id: 'regular', label: '📅 Regular Events (5 Hoạt Động Hàng Ngày/Tuần)' },
-                { id: 'occasional', label: '🎲 Occasional Events (4 Sự Kiện Xoay Vòng Lớn)' },
-                { id: 'onetime', label: '🎪 One-time Events (2 Lễ Hội Tân Thủ Carnival 1 & 2)' }
-              ].map(cat => `
-                <button type="button" data-wiki-event-cat="${cat.id}" class="px-3 py-1.5 rounded-xl text-xs font-black transition ${curCat === cat.id ? 'bg-amber-400 text-slate-950 shadow' : 'bg-slate-950 text-slate-300 border border-slate-700 hover:border-slate-500'}">
-                  ${cat.label}
-                </button>
-              `).join('')}
+                { id:'all', label:'Tất cả (11)' },
+                { id:'regular', label:'📅 Thường kỳ (5)' },
+                { id:'occasional', label:'🎲 Xoay vòng (4)' },
+                { id:'onetime', label:'🎪 Một lần (2)' }
+              ].map(cat => `<button type="button" data-wiki-event-cat="${cat.id}" class="events-wiki-filter ${curCat === cat.id ? 'is-active' : ''}">${cat.label}</button>`).join('')}
             </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-              ${filteredEvents.map(evItem => {
-                const isSelected = evItem.id === activeEventMeta.id;
-                return `
-                  <button type="button" data-select-wiki-event="${evItem.id}" class="p-2.5 rounded-2xl bg-gradient-to-br ${evItem.color} border-2 text-left transition flex flex-col justify-between gap-1 ${isSelected ? 'ring-2 ring-amber-300 scale-[1.01] shadow-xl' : 'opacity-85 hover:opacity-100'}">
-                    <div class="flex items-center justify-between gap-1">
-                      <span class="text-lg">${evItem.icon}</span>
-                      <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-slate-950/80 text-amber-300">${evItem.badge}</span>
-                    </div>
-                    <div class="font-black text-xs sm:text-sm text-white leading-tight mt-0.5">${evItem.wikiTitle}</div>
-                    <div class="text-[10px] text-slate-300 line-clamp-2 leading-snug">${evItem.summary}</div>
-                  </button>
-                `;
-              }).join('')}
+            <div class="events-wiki-grid">
+              ${filteredEvents.map(evItem => `<button type="button" data-select-wiki-event="${evItem.id}" class="events-wiki-card ${evItem.id === activeEventMeta.id ? 'is-active' : ''}" title="${evItem.summary}">
+                <span class="icon" aria-hidden="true">${evItem.icon}</span><strong>${evItem.wikiTitle}</strong><small>${{regular:'📅 Thường kỳ',occasional:'🎲 Xoay vòng',onetime:'🎪 Một lần'}[evItem.category]} · ${evItem.summary}</small>
+              </button>`).join('')}
             </div>
           </div>
-
           ${detailHtml}
         `;
 
@@ -26914,6 +26968,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       // 5. RENDER TAB 5: SỰ KIỆN (THI ĐẤU | KHIÊU CHIẾN | PB — PAGES 62-64)
+      let activeEventsArea = 'discover';
+      function setActiveEventsArea(area, scroll = false) {
+        const labels = { discover:'🎪 Khám phá sự kiện', season:'⚔️ Mùa giải', garden:'🌿 Vườn thủ hộ', plinko:'🎰 Plinko' };
+        if (!Object.hasOwn(labels, area)) return;
+        activeEventsArea = area;
+        document.querySelectorAll('#tabEvents [data-event-area]').forEach(panel => panel.classList.toggle('is-active', panel.dataset.eventArea === area));
+        document.querySelectorAll('#tabEvents [data-event-area-target]').forEach(button => {
+          const active = button.dataset.eventAreaTarget === area;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        const heading = document.getElementById('eventsCurrentHeading');
+        if (heading) {
+          heading.textContent = labels[area];
+          if (scroll) heading.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      }
       function renderVnEventsBannerCardsUI() {
         ensureVnAuthenticUIState();
         const el = document.getElementById('vnEventsAuthenticCardsContainer');
@@ -26928,57 +26999,32 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         el.innerHTML = `
-          <div class="rounded-3xl bg-[#111827] border-2 border-amber-500/60 overflow-hidden shadow-2xl flex flex-col">
-            <!-- Ornate Red & Gold Header: Sự kiện (Matches Pages 62-64) -->
-            <div class="bg-gradient-to-r from-[#450a0a] via-[#991b1b] to-[#450a0a] border-b-2 border-amber-400 py-2.5 px-4 flex items-center justify-between shadow-lg">
-              <span class="text-xs font-bold text-amber-300">⚜️ Archero 2</span>
-              <h2 class="text-lg sm:text-xl font-black text-white tracking-wide drop-shadow">Sự kiện</h2>
-              <button type="button" id="btnToggleFullWiki11Events" class="px-2.5 py-1 rounded-xl bg-amber-400 text-slate-950 font-black text-[10px] shadow">
-                ${st.showWiki11EventsDrawer ? '🔼 Thu Gọn Chi Tiết 11 Sự Kiện' : '🎪 Mở Chi Tiết 11 Sự Kiện Wiki'}
+          <div class="events-banner-shell">
+            <div class="events-banner-head">
+              <div><h3>✨ Sự kiện nổi bật</h3><p>Chọn nhóm hoạt động, rồi chạm thẻ để xem chi tiết và phần thưởng.</p></div>
+              <button type="button" id="btnToggleFullWiki11Events" class="events-wiki-toggle" aria-expanded="${st.showWiki11EventsDrawer}">
+                ${st.showWiki11EventsDrawer ? '▴ Thu gọn 11 sự kiện' : '🎪 Xem đủ 11 sự kiện'}
               </button>
             </div>
-
-            <!-- 4 Large Horizontal Banner Cards (Matches Pages 62, 63, 64) -->
-            <div class="p-3 sm:p-4 space-y-3 bg-[#182238]">
-              ${cards.map(c => `
-                <div data-vn-event-card="${c.wikiEventId}" data-vn-event-title="${c.title}" class="cursor-pointer relative rounded-2xl border-2 border-slate-600/80 hover:border-amber-400 p-3.5 sm:p-4 flex items-center justify-between gap-3 shadow-xl transition hover:scale-[1.01]" style="background:${c.bgGrad}">
-                  ${c.tag === 'UP' ? '<span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-lime-500 border border-white text-slate-950 font-black text-xs shadow">UP⬆️</span>' : ''}
-                  ${c.tag === '!' ? '<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-600 border-2 border-white text-white font-black text-[10px] flex items-center justify-center shadow">!</span>' : ''}
-
-                  <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-black/30 border border-white/20 flex items-center justify-center text-4xl sm:text-5xl shrink-0 shadow-inner">
-                    ${c.artEmoji}
-                  </div>
-
-                  <div class="flex-1 flex flex-col items-end text-right justify-between gap-1.5">
-                    <h3 class="text-base sm:text-xl font-black text-white italic drop-shadow">${c.title}</h3>
-                    ${c.sub1 ? `<div class="text-[11px] font-bold text-slate-200">${c.sub1}</div>` : ''}
-                    ${c.sub2 ? `<div class="text-[11px] font-bold text-amber-200">${c.sub2}</div>` : ''}
-                    <div class="flex items-center gap-2 mt-1">
-                      ${c.pills.map(p => `
-                        <div class="px-3 py-0.5 rounded-full bg-black/55 border border-white/20 flex items-center gap-1.5 text-xs font-black text-white">
-                          <span>${p.icon}</span>
-                          <span>${p.val}</span>
-                        </div>
-                      `).join('')}
-                    </div>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-
-            <!-- Bottom 3-Tab Sub-Navigation Bar: Thi Đấu | Khiêu Chiến | PB (Matches Pages 62-64) -->
-            <div class="bg-[#0f172a] border-t-2 border-slate-700 p-2 grid grid-cols-3 gap-2">
+            <div class="events-quick-tabs" role="tablist" aria-label="Nhóm sự kiện">
               ${[
-                { id: 'thi_dau', label: 'Thi Đấu', alert: true },
-                { id: 'khieu_chien', label: 'Khiêu Chiến', alert: true },
-                { id: 'pb', label: 'PB', alert: false }
-              ].map(tb => `
-                <button type="button" data-vn-events-subtab="${tb.id}" class="relative py-2.5 rounded-2xl font-black text-xs sm:text-sm transition ${curSub === tb.id ? 'bg-gradient-to-b from-[#fde047] to-[#eab308] text-slate-950 border-2 border-white shadow-lg' : 'bg-[#1e293b] text-slate-200 hover:text-white'}">
-                  <span>${tb.label}</span>
-                  ${tb.alert ? '<span class="absolute -top-1.5 -right-1 w-4 h-4 rounded-full bg-red-600 border border-white text-white text-[9px] flex items-center justify-center">!</span>' : ''}
-                </button>
-              `).join('')}
+                { id:'thi_dau', label:'🏆 Thi đấu' },
+                { id:'khieu_chien', label:'⚔️ Khiêu chiến' },
+                { id:'pb', label:'🗺️ Phó bản' }
+              ].map(tb => `<button type="button" role="tab" data-vn-events-subtab="${tb.id}" aria-selected="${curSub === tb.id}" class="events-quick-tab ${curSub === tb.id ? 'is-active' : ''}">${tb.label}</button>`).join('')}
             </div>
+            <div class="events-banner-grid">
+              ${cards.map((c, index) => `<button type="button" data-vn-event-card="${c.wikiEventId}" data-vn-event-title="${c.title}"
+                class="events-banner-card" style="background:${c.bgGrad};animation-delay:${index * 60}ms" title="Mở ${c.title}">
+                <span class="events-banner-art" aria-hidden="true">${c.artEmoji}</span>
+                <span class="events-banner-copy"><strong>${c.title}</strong>
+                  ${c.sub1 ? `<small>${c.sub1}</small>` : ''}
+                  ${c.sub2 ? `<small>${c.sub2}</small>` : ''}
+                  <span class="events-banner-reward">${c.pills.map(p => `${p.icon} ${p.val}`).join(' · ')} &nbsp; ›</span>
+                </span>
+              </button>`).join('')}
+            </div>
+            <div class="events-banner-foot"><span>✦ Chọn thẻ để mở hướng dẫn và nhiệm vụ</span><span>Tiến độ lưu tự động</span></div>
           </div>
         `;
 
@@ -32762,6 +32808,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       canvas.addEventListener('touchend', handlePointerEnd);
 
       // ==================== UI BUTTON EVENT LISTENERS ====================
+      document.querySelectorAll('#tabEvents [data-event-area-target]').forEach(button => {
+        button.addEventListener('click', () => { SoundFX.coinPickup(); setActiveEventsArea(button.dataset.eventAreaTarget, true); });
+      });
       // Navigation Tabs — 6 tab theo chuẩn Archero 2 thật
       const NAV_TAB_IDS = ['tabBattle', 'tabHeroes', 'tabEquip', 'tabEvents', 'tabShopVn', 'tabGuild'];
       document.querySelectorAll('.nav-tab-btn').forEach(btn => {
@@ -32783,6 +32832,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           // Khởi tạo từng khu vực Sự Kiện độc lập: một module lỗi/thiếu
           // không được chặn Season hoặc các sự kiện còn lại hiển thị.
           if (targetId === 'tabEvents') {
+            setActiveEventsArea(activeEventsArea);
             if (typeof renderSeasonPanel === 'function') {
               try {
                 renderSeasonPanel();
