@@ -93,6 +93,10 @@
       100% { transform: rotate(360deg); }
     }
     /* Rune vault: the same socket wheel and five-column inventory on phones and desktop. */
+    .vip-currency-pill { display:flex; align-items:center; gap:4px; padding:5px 8px; border:1px solid #e879f9; border-radius:999px;
+      background:linear-gradient(135deg,#361450,#672077,#241644); color:#fff; box-shadow:0 0 15px #d946ef66,inset 0 1px 0 #fff6; cursor:pointer; }
+    .vip-currency-pill:hover,.vip-currency-pill:focus-visible { box-shadow:0 0 22px #e879f9aa,inset 0 1px 0 #fff8; outline:2px solid #f5d0fe; }
+    .vip-currency-pill span:last-child { font-size:12px; font-weight:1000; }
     .rune-vault { --rune-gold:#ffcf50; color:#f8f2ff; }
     .rune-vault-head { position:relative; overflow:hidden; border:2px solid #d794ff88; border-radius:24px; padding:15px;
       background:radial-gradient(circle at 48% 10%,#7026a858,transparent 42%),linear-gradient(140deg,#221444,#120f2b 65%,#38184d);
@@ -1507,6 +1511,9 @@
           <span class="text-sm">💎</span>
           <span id="gemCountText" class="text-xs sm:text-sm font-black text-white">0</span>
           <span class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 font-black text-[11px] flex items-center justify-center">+</span>
+        </button>
+        <button id="btnTopVipCoins" type="button" class="vip-currency-pill" title="Xu VIP chỉ do quản trị viên cấp · xem trong Kho Vật Phẩm">
+          <span aria-hidden="true">🟣</span><span id="vipCoinCountText">0</span>
         </button>
         <!-- Quick Jump to Wiki Currency & Items Vault / Chest Shop -->
         <button id="btnTopOpenItemsVault" type="button" class="hidden md:flex items-center gap-1 bg-slate-950/95 border border-cyan-400/55 px-2.5 py-1 rounded-full shadow-inner hover:border-cyan-300 hover:brightness-110 transition" title="Mở Kho Tiền Tệ, 6 Cuộn Trang Bị, 3 Chìa Khóa Rương, Xẻng Cổ Ngữ & Vật Phẩm Sự Kiện Chuẩn Wiki">
@@ -10547,6 +10554,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         // Tài nguyên khởi đầu của người chơi mới (phải cày để tăng).
         gold: 500,
         gems: 50,
+        vipCoins: 0,
         stamina: 20,
         playerLevel: 1,
         playerName: 'JohnBowman',
@@ -10986,6 +10994,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               resonanceSlots: this.resonanceSlots || { slot1: null, slot2: null },
               gold: this.gold,
               gems: this.gems,
+              vipCoins: this.vipCoins,
               stamina: this.stamina,
               playerLevel: this.playerLevel,
               playerName: this.playerName,
@@ -19823,10 +19832,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               <div>
                 <div class="flex items-center gap-2 flex-wrap">
                   <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950">Chuẩn Archero 2 Currency &amp; Items + Pull Rates Wiki</span>
-                  <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-cyan-500/25 text-cyan-200 border border-cyan-400/40">2 Tiền Tệ • 6 Gear Scrolls • 3 Chest Keys • 8+10 Shards • 11 Other Items</span>
+                  <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-cyan-500/25 text-cyan-200 border border-cyan-400/40">3 Tiền Tệ • 6 Gear Scrolls • 3 Chest Keys • 8+10 Shards • 11 Other Items</span>
                 </div>
                 <h2 class="text-base sm:text-xl font-black text-white mt-1">🎒 Kho Tiền Tệ, Vật Phẩm, Cửa Hàng Rương Gacha &amp; Tàn Tích Cổ Ngữ</h2>
-                <p class="text-xs text-slate-300">Tất cả 22+ loại Tiền tệ, Cuộn cường hóa, Chìa khóa Rương, Mảnh Tướng và Vật phẩm Sự kiện theo đúng <strong class="text-amber-300">Archero 2 Wiki</strong> kèm tỷ lệ mở Rương &amp; Đào Cổ Ngữ chính xác 100%!</p>
+                <p class="text-xs text-slate-300">Vàng và đá quý phục vụ tiến trình chơi; xu VIP là số dư riêng do quản trị viên cấp. Các vé, chìa khóa và vật phẩm sự kiện nằm bên dưới.</p>
               </div>
               <div class="flex items-center gap-2 flex-wrap shrink-0">
                 <button id="btnMaxAllWikiItems" type="button" class="px-3.5 py-2 rounded-xl gold-gradient text-slate-950 font-black text-xs shadow hover:brightness-110 active:scale-95 transition">
@@ -19839,7 +19848,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </div>
 
             <!-- Live Summary Strip of Main Currencies, Keys, Shovels & Tokens -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 text-xs">
               <div class="rounded-2xl bg-slate-950/90 border border-amber-400/40 p-2.5 flex items-center justify-between">
                 <div>
                   <div class="text-[10px] text-slate-400 font-bold">Gold (Vàng chính)</div>
@@ -19853,6 +19862,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   <div class="font-black text-emerald-300 text-sm">${(SaveState.gems || 0).toLocaleString('vi-VN')} 💎</div>
                 </div>
                 <span class="text-lg">💎</span>
+              </div>
+              <div class="rounded-2xl bg-slate-950/90 border border-fuchsia-400/60 p-2.5 flex items-center justify-between">
+                <div>
+                  <div class="text-[10px] text-fuchsia-200 font-bold">Xu VIP · Admin cấp</div>
+                  <div class="font-black text-fuchsia-100 text-sm">${(SaveState.vipCoins || 0).toLocaleString('vi-VN')} 🟣</div>
+                </div>
+                <span class="text-lg">🟣</span>
               </div>
               <div class="rounded-2xl bg-slate-950/90 border border-rose-400/40 p-2.5 flex items-center justify-between">
                 <div>
@@ -19882,6 +19898,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 </div>
                 <span class="text-lg">🏛️</span>
               </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+              <div class="rounded-xl border border-amber-400/35 bg-amber-950/20 p-2.5"><strong class="text-amber-200">🪙 Vàng</strong><p class="text-slate-300">Kiếm khi chơi, dùng để nâng cấp trang bị và các hoạt động thường.</p></div>
+              <div class="rounded-xl border border-emerald-400/35 bg-emerald-950/20 p-2.5"><strong class="text-emerald-200">💎 Đá quý</strong><p class="text-slate-300">Nhận từ nhiệm vụ, thành tựu; dùng cho rương và mảnh tướng.</p></div>
+              <div class="rounded-xl border border-fuchsia-400/35 bg-fuchsia-950/20 p-2.5"><strong class="text-fuchsia-200">🟣 Xu VIP</strong><p class="text-slate-300">Chỉ admin cấp. Không thể tự cộng bằng bản lưu game.</p></div>
             </div>
 
             <!-- Category Filter Pills -->
@@ -27091,6 +27113,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (stamEl) stamEl.textContent = `${Math.max(0, Math.floor(Number(SaveState.stamina) || 0))}/60`;
         document.getElementById('goldCountText').textContent = formatCompactNumberVn(SaveState.gold, '0');
         document.getElementById('gemCountText').textContent = formatCompactNumberVn(SaveState.gems, '0');
+        document.getElementById('vipCoinCountText').textContent = formatCompactNumberVn(SaveState.vipCoins, '0');
         const shieldEl = document.getElementById('topPowerShieldVal');
         // Lực chiến lấy từ getComputedStats(). Trước đây hardcode '10.06M'.
         if (shieldEl) shieldEl.textContent = formatCompactNumberVn(stats.powerScore, '0');
@@ -33208,6 +33231,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const itemsSubBtn = document.querySelector('.gear-subtab-btn[data-gear-subtab="items"]');
         if (itemsSubBtn) itemsSubBtn.click();
         SoundFX.coinPickup();
+      });
+      document.getElementById('btnTopVipCoins')?.addEventListener('click', () => {
+        document.getElementById('btnTopOpenItemsVault')?.click();
       });
 
       // Hero Stage Click Pose

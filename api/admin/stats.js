@@ -34,6 +34,7 @@ export async function GET(request) {
           _id: null,
           totalGold: { $sum: "$data.gold" },
           totalGems: { $sum: "$data.gems" },
+          totalVipCoins: { $sum: "$data.vipCoins" },
           totalKills: { $sum: "$data.lifetimeStats.kills" },
           totalRuns: { $sum: "$data.lifetimeStats.runs" },
           totalRooms: { $sum: "$data.lifetimeStats.roomsCleared" },
@@ -76,6 +77,7 @@ export async function GET(request) {
     economy: {
       totalGold: Math.round(totals.totalGold || 0),
       totalGems: Math.round(totals.totalGems || 0),
+      totalVipCoins: Math.round(totals.totalVipCoins || 0),
       avgGold: Math.round(totals.avgGold || 0),
     },
     gameplay: {

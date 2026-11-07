@@ -5,6 +5,13 @@ import { sanitizeSave } from "../../lib/saveSchema.js";
 export const config = { runtime: "nodejs" };
 
 const PAGE_SIZE = 25;
+const VIP_CAP = 1_000_000_000;
+
+function grantAmount(value, max) {
+  if (value === undefined || value === "") return 0;
+  const n = Number(value);
+  return Number.isSafeInteger(n) && n >= 0 && n <= max ? n : null;
+}
 
 /** GET /api/admin/players?q=&page=1&sort=recent|kills|gold */
 export async function GET(request) {
@@ -52,6 +59,7 @@ export async function GET(request) {
       updatedAt: s?.updatedAt || null,
       gold: data.gold ?? 0,
       gems: data.gems ?? 0,
+      vipCoins: data.vipCoins ?? 0,
       playerLevel: data.playerLevel ?? 1,
       kills: data.lifetimeStats?.kills ?? 0,
       runs: data.lifetimeStats?.runs ?? 0,
@@ -62,6 +70,7 @@ export async function GET(request) {
 
   if (sort === "kills") rows.sort((a, b) => b.kills - a.kills);
   else if (sort === "gold") rows.sort((a, b) => b.gold - a.gold);
+  else if (sort === "vip") rows.sort((a, b) => b.vipCoins - a.vipCoins);
 
   return json({
     ok: true,
@@ -107,25 +116,41 @@ export async function PATCH(request) {
 
   // ---------- Các hành động ----------
   if (action === "grant") {
-    // Cộng vàng / đá quý / vật phẩm cho người chơi
-    const gold = Math.max(0, Math.min(1e12, Math.round(Number(payload.gold) || 0)));
-    const gems = Math.max(0, Math.min(1e12, Math.round(Number(payload.gems) || 0)));
-    const stamina = Math.max(0, Math.min(1e9, Math.round(Number(payload.stamina) || 0)));
-    if (!gold && !gems && !stamina) return fail("Không có giá trị nào để cộng.", 400);
+    const gold = grantAmount(payload.gold, 1e9);
+    const gems = grantAmount(payload.gems, 1e9);
+    const stamina = grantAmount(payload.stamina, 1e6);
+    const vipCoins = grantAmount(payload.vipCoins, 1e6);
+    if ([gold, gems, stamina, vipCoins].includes(null)) return fail("Số cấp phải là số nguyên không âm và nằm trong giới hạn.", 400);
+    if (!gold && !gems && !stamina && !vipCoins) return fail("Chọn ít nhất một loại tiền hoặc năng lượng để cộng.", 400);
 
-    const save = await saves.findOne({ playerId });
-    if (!save) return fail("Người chơi chưa có save.", 404);
-
-    const data = save.data || {};
-    data.gold = Math.min(1e12, (Number(data.gold) || 0) + gold);
-    data.gems = Math.min(1e12, (Number(data.gems) || 0) + gems);
-    data.stamina = Math.min(1e9, (Number(data.stamina) || 0) + stamina);
-
-    await saves.updateOne(
-      { playerId },
-      { $set: { data, revision: (save.revision || 0) + 1, updatedAt: new Date(), adminNote: `grant by ${guard.player.username}` } },
-    );
-    return json({ ok: true, message: `Đã cộng ${gold} vàng, ${gems} đá quý, ${stamina} năng lượng.` });
+    // Revision CAS prevents a grant from overwriting a concurrent player save.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const save = await saves.findOne({ playerId });
+      if (!save) return fail("Người chơi chưa có save.", 404);
+      const data = { ...(save.data || {}) };
+      if ((Number(data.gold) || 0) + gold > 1e12 || (Number(data.gems) || 0) + gems > 1e12 ||
+          (Number(data.stamina) || 0) + stamina > 1e9 || (Number(data.vipCoins) || 0) + vipCoins > VIP_CAP) {
+        return fail("Số dư sau khi cấp sẽ vượt giới hạn. Hãy nhập số nhỏ hơn.", 422);
+      }
+      data.gold = (Number(data.gold) || 0) + gold;
+      data.gems = (Number(data.gems) || 0) + gems;
+      data.stamina = (Number(data.stamina) || 0) + stamina;
+      data.vipCoins = (Number(data.vipCoins) || 0) + vipCoins;
+      const now = new Date();
+      const revision = (save.revision || 1) + 1;
+      const grantLog = [...(Array.isArray(save.adminCurrencyLog) ? save.adminCurrencyLog : []), {
+        at: now, by: guard.player.username, gold, gems, stamina, vipCoins,
+      }].slice(-20);
+      const result = await saves.updateOne(
+        { playerId, revision: save.revision === undefined ? { $exists: false } : save.revision },
+        { $set: { data, revision, updatedAt: now, adminNote: `grant by ${guard.player.username}`, adminCurrencyLog: grantLog } },
+      );
+      if (result.matchedCount === 1) {
+        return json({ ok: true, revision, balance: { gold: data.gold, gems: data.gems, stamina: data.stamina, vipCoins: data.vipCoins },
+          message: `Đã cộng ${gold} vàng, ${gems} đá quý, ${vipCoins} xu VIP, ${stamina} năng lượng.` });
+      }
+    }
+    return fail("Tiến trình vừa thay đổi. Hãy thử cấp tiền lại.", 409);
   }
 
   if (action === "reset-password") {

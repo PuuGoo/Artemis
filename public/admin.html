@@ -65,7 +65,7 @@
 
   /* ---------- Table ---------- */
   .table-wrap { overflow: auto; border-radius: 14px; border: 1px solid var(--border); max-height: 62vh; }
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 900px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 990px; }
   thead { background: #0b1224; position: sticky; top: 0; z-index: 10; }
   th {
     text-align: left; padding: 11px 12px; font-size: 10.5px; text-transform: uppercase;
@@ -172,6 +172,7 @@
         <option value="recent">Mới nhất</option>
         <option value="kills">Nhiều kills</option>
         <option value="gold">Nhiều vàng</option>
+        <option value="vip">Nhiều xu VIP</option>
       </select>
       <button class="btn-ghost btn-sm" id="btnSearch">Tìm</button>
     </div>
@@ -182,6 +183,7 @@
             <th>Tên đăng nhập</th>
             <th>Vàng</th>
             <th>Đá quý</th>
+            <th>Xu VIP</th>
             <th>Kills</th>
             <th>Trận</th>
             <th>Túi đồ</th>
@@ -319,6 +321,7 @@
       { t: "Hoạt động 24h", v: num(d.players.activeToday), s: "+" + num(d.players.newWeek) + " trong 7 ngày", c: "green" },
       { t: "Tổng vàng", v: num(d.economy.totalGold), s: "TB " + num(d.economy.avgGold) + " / người", c: "gold" },
       { t: "Tổng đá quý", v: num(d.economy.totalGems), s: num(d.saves.total) + " bản lưu", c: "blue" },
+      { t: "Tổng xu VIP", v: num(d.economy.totalVipCoins), s: "Chỉ quản trị viên cấp", c: "purple" },
       { t: "Quái đã hạ", v: num(d.gameplay.totalKills), s: num(d.gameplay.totalRuns) + " trận đã chơi", c: "purple" },
     ];
     $("statsGrid").innerHTML = cards.map(function (c) {
@@ -345,11 +348,11 @@
 
   // ---------- players ----------
   function loadPlayers() {
-    $("tbody").innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Đang tải…</td></tr>';
+    $("tbody").innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">Đang tải…</td></tr>';
     var qs = "?page=" + state.page + "&sort=" + encodeURIComponent(state.sort) + (state.q ? "&q=" + encodeURIComponent(state.q) : "");
     return api("/api/admin/players" + qs).then(function (r) {
       if (!r.data || !r.data.ok) {
-        $("tbody").innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--red);padding:24px">' +
+        $("tbody").innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--red);padding:24px">' +
           esc((r.data && r.data.error) || "Không tải được danh sách.") + "</td></tr>";
         return;
       }
@@ -362,7 +365,7 @@
 
   function renderRows() {
     if (state.rows.length === 0) {
-      $("tbody").innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Không có người chơi nào.</td></tr>';
+      $("tbody").innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">Không có người chơi nào.</td></tr>';
       return;
     }
     $("tbody").innerHTML = state.rows.map(function (p) {
@@ -371,6 +374,7 @@
           '<span style="font-size:10px;color:var(--muted)">' + fmtDate(p.createdAt) + "</span></td>" +
         '<td class="mono" style="color:var(--gold)">' + num(p.gold) + "</td>" +
         '<td class="mono" style="color:var(--blue)">' + num(p.gems) + "</td>" +
+        '<td class="mono" style="color:var(--purple)">' + num(p.vipCoins) + " 🟣</td>" +
         '<td class="mono">' + num(p.kills) + "</td>" +
         '<td class="mono">' + num(p.runs) + "</td>" +
         '<td class="mono">' + num(p.bagCount) + "</td>" +
@@ -378,7 +382,7 @@
           ? '<span class="tag tag-ok">rev ' + p.revision + "</span>"
           : '<span class="tag tag-none">chưa có</span>') + "</td>" +
         '<td><div class="row-actions">' +
-          '<button class="btn btn-sm" data-act="grant" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Cộng</button>' +
+          '<button class="btn btn-sm" data-act="grant" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Cấp tiền</button>' +
           '<button class="btn-ghost btn-sm" data-act="passwd" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Đổi MK</button>' +
           '<button class="btn-ghost btn-sm" data-act="resetsave" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Xoá save</button>' +
           '<button class="btn-danger btn-sm" data-act="delete" data-id="' + esc(p.id) + '" data-name="' + esc(p.username) + '">Xoá TK</button>' +
@@ -423,17 +427,24 @@
   });
 
   function openGrant(id, name) {
-    openModal("Cộng tài nguyên", "Cộng thêm cho " + name,
-      '<div class="field"><label>VÀNG 🪙</label><input type="number" id="gGold" value="10000" min="0" /></div>' +
-      '<div class="field"><label>ĐÁ QUÝ 💎</label><input type="number" id="gGems" value="500" min="0" /></div>' +
-      '<div class="field"><label>NĂNG LƯỢNG ⚡</label><input type="number" id="gStam" value="0" min="0" /></div>',
+    var player = state.rows.find(function (p) { return p.id === id; }) || {};
+    openModal("Cấp tiền cho " + name, "Số dư hiện tại: " + num(player.gold) + " vàng · " + num(player.gems) + " đá · " + num(player.vipCoins) + " VIP. Chỉ nhập số muốn cộng thêm.",
+      '<div class="field"><label>VÀNG 🪙</label><input type="number" id="gGold" value="0" min="0" max="1000000000" step="1" /></div>' +
+      '<div class="field"><label>ĐÁ QUÝ 💎</label><input type="number" id="gGems" value="0" min="0" max="1000000000" step="1" /></div>' +
+      '<div class="field"><label>XU VIP 🟣 (CHỈ ADMIN CẤP)</label><input type="number" id="gVip" value="0" min="0" max="1000000" step="1" /></div>' +
+      '<div class="field"><label>NĂNG LƯỢNG ⚡</label><input type="number" id="gStam" value="0" min="0" max="1000000" step="1" /></div>',
       function () {
         var payload = {
-          gold: Number($("gGold").value) || 0,
-          gems: Number($("gGems").value) || 0,
-          stamina: Number($("gStam").value) || 0,
+          gold: Number($("gGold").value),
+          gems: Number($("gGems").value),
+          vipCoins: Number($("gVip").value),
+          stamina: Number($("gStam").value),
         };
-        act(id, "grant", payload, "Đã cộng tài nguyên cho " + name + ".");
+        if (Object.values(payload).some(function (n) { return !Number.isSafeInteger(n) || n < 0; }) ||
+            !Object.values(payload).some(function (n) { return n > 0; })) {
+          toast("Nhập ít nhất một số nguyên dương để cấp.", "err"); return;
+        }
+        act(id, "grant", payload);
       });
   }
 
