@@ -40,7 +40,11 @@ export async function POST(request) {
   // Dang nhap thanh cong -> xoa bo dem sai.
   await db.collection(COLLECTIONS.loginAttempts).deleteMany({ key: `login-user:${usernameKey(username)}` });
 
-  const token = await signSession({ sub: String(doc._id), username: doc.username });
+  const token = await signSession({
+    sub: String(doc._id),
+    username: doc.username,
+    ep: Number(doc.sessionEpoch) || 0,
+  });
 
   return new Response(
     JSON.stringify({
