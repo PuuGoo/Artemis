@@ -14,32 +14,62 @@
       background:linear-gradient(155deg,#35274d,#161d38 75%);box-shadow:0 16px 30px #05061655}
     .picture{aspect-ratio:1;display:grid;place-items:center;border-radius:18px;
       background:radial-gradient(circle,#4f457baa 0%,#1b213b 74%);overflow:hidden}
-    img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 9px 11px #08082188)}
-    img:hover{transform:translateY(-4px) scale(1.06);transition:transform .25s ease}
+    canvas{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 9px 11px #08082188)}
+    canvas:hover{transform:translateY(-4px) scale(1.06);transition:transform .25s ease}
     h2{font-size:18px;margin:11px 0 4px}small{color:#b5acd4;font-size:13px}
     a{color:#f9cc81;text-decoration:none}a:hover{text-decoration:underline}
-    @media(prefers-reduced-motion:reduce){img:hover{transform:none}}
+    @media(prefers-reduced-motion:reduce){canvas:hover{transform:none}}
   </style>
 </head>
 <body>
   <main>
     <h1>✦ 12 Hộ Vệ Hoàng Đạo ✦</h1>
-    <p>Thiết kế boss chibi mới cho chương 8–19. Đây là hình SVG được dùng trực tiếp khi chiến đấu.<br/>
+    <p>Thiết kế boss chibi mới cho chương 8–19. Tất cả boss đều được vẽ trực tiếp bằng Canvas 2D từ các đường nét, hình khối và hiệu ứng chuyển động. Rê chuột vào boss để xem trạng thái chuẩn bị tấn công.<br/>
       <a href="/">← Quay lại game Artemis</a></p>
     <section class="grid">
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch8-aries.svg" alt="Chiến binh cừu Bạch Dương sừng xoắn" loading="lazy"></div><h2>♈ Bạch Dương</h2><small>Chương 8 · Hỏa Dương Chiến Vương</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch9-taurus.svg" alt="Bò thần Kim Ngưu sừng vàng" loading="lazy"></div><h2>♉ Kim Ngưu</h2><small>Chương 9 · Kim Ngưu Cự Thần</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch10-gemini.svg" alt="Cặp song sinh phép thuật" loading="lazy"></div><h2>♊ Song Tử</h2><small>Chương 10 · Song Tử Huyễn Vương</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch11-cancer.svg" alt="Cua hoàng gia Cự Giải" loading="lazy"></div><h2>♋ Cự Giải</h2><small>Chương 11 · Cự Giải Nguyệt Giáp</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch12-leo.svg" alt="Sư tử chibi đội vương miện" loading="lazy"></div><h2>♌ Sư Tử</h2><small>Chương 12 · Sư Vương Thái Dương</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch13-virgo.svg" alt="Nữ thần Xử Nữ cầm lúa" loading="lazy"></div><h2>♍ Xử Nữ</h2><small>Chương 13 · Tinh Nữ Thánh Vệ</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch14-libra.svg" alt="Thần Thiên Bình với cán cân" loading="lazy"></div><h2>♎ Thiên Bình</h2><small>Chương 14 · Phán Quan Thiên Bình</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch15-scorpio.svg" alt="Bọ cạp tím với cặp càng và ngòi độc" loading="lazy"></div><h2>♏ Bọ Cạp</h2><small>Chương 15 · Hạt Vương Độc Vĩ</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch16-sagittarius.svg" alt="Nhân mã chibi cầm cung" loading="lazy"></div><h2>♐ Nhân Mã</h2><small>Chương 16 · Nhân Mã Thần Xạ</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch17-capricorn.svg" alt="Dê biển Ma Kết với đuôi cá" loading="lazy"></div><h2>♑ Ma Kết</h2><small>Chương 17 · Sơn Thần Ma Kết</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch18-aquarius.svg" alt="Bảo Bình chibi với bình nước" loading="lazy"></div><h2>♒ Bảo Bình</h2><small>Chương 18 · Thủy Sứ Bảo Bình</small></article>
-      <article class="boss"><div class="picture"><img src="/assets/boss-ch19-pisces.svg" alt="Cặp cá thần Song Ngư" loading="lazy"></div><h2>♓ Song Ngư</h2><small>Chương 19 · Song Ngư Mộng Chủ</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_aries" aria-label="Chiến binh cừu Bạch Dương sừng xoắn"></canvas></div><h2>♈ Bạch Dương</h2><small>Chương 8 · Hỏa Dương Chiến Vương</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_taurus" aria-label="Bò thần Kim Ngưu sừng vàng"></canvas></div><h2>♉ Kim Ngưu</h2><small>Chương 9 · Kim Ngưu Cự Thần</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_gemini" aria-label="Cặp song sinh phép thuật"></canvas></div><h2>♊ Song Tử</h2><small>Chương 10 · Song Tử Huyễn Vương</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_cancer" aria-label="Cua hoàng gia Cự Giải"></canvas></div><h2>♋ Cự Giải</h2><small>Chương 11 · Cự Giải Nguyệt Giáp</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_leo" aria-label="Sư tử chibi đội vương miện"></canvas></div><h2>♌ Sư Tử</h2><small>Chương 12 · Sư Vương Thái Dương</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_virgo" aria-label="Nữ thần Xử Nữ cầm lúa"></canvas></div><h2>♍ Xử Nữ</h2><small>Chương 13 · Tinh Nữ Thánh Vệ</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_libra" aria-label="Thần Thiên Bình với cán cân"></canvas></div><h2>♎ Thiên Bình</h2><small>Chương 14 · Phán Quan Thiên Bình</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_scorpio" aria-label="Bọ cạp tím với cặp càng và ngòi độc"></canvas></div><h2>♏ Bọ Cạp</h2><small>Chương 15 · Hạt Vương Độc Vĩ</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_sagittarius" aria-label="Nhân mã chibi cầm cung"></canvas></div><h2>♐ Nhân Mã</h2><small>Chương 16 · Nhân Mã Thần Xạ</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_capricorn" aria-label="Dê biển Ma Kết với đuôi cá"></canvas></div><h2>♑ Ma Kết</h2><small>Chương 17 · Sơn Thần Ma Kết</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_aquarius" aria-label="Bảo Bình chibi với bình nước"></canvas></div><h2>♒ Bảo Bình</h2><small>Chương 18 · Thủy Sứ Bảo Bình</small></article>
+      <article class="boss"><div class="picture"><canvas width="256" height="256" data-boss="zodiac_pisces" aria-label="Cặp cá thần Song Ngư"></canvas></div><h2>♓ Song Ngư</h2><small>Chương 19 · Song Ngư Mộng Chủ</small></article>
     </section>
   </main>
+  <script src="/zodiac-chibi-bosses.js"></script>
+  <script>
+  (function(){
+    'use strict';
+    const art=window.ArtemisZodiacBosses;
+    const canvases=Array.from(document.querySelectorAll('canvas[data-boss]'));
+    for(const canvas of canvases){
+      canvas.dataset.charging='0';
+      canvas.addEventListener('pointerenter',function(){canvas.dataset.charging='1';});
+      canvas.addEventListener('pointerleave',function(){canvas.dataset.charging='0';});
+      canvas.addEventListener('click',function(){canvas.dataset.charging=canvas.dataset.charging==='1'?'0':'1';});
+    }
+    let last=0;
+    function frame(now){
+      requestAnimationFrame(frame);
+      if(document.hidden||now-last<55)return;
+      last=now;
+      for(const canvas of canvases){
+        const ctx=canvas.getContext('2d');
+        if(!ctx)continue;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.save();
+        ctx.translate(128,128);
+        art.draw(ctx,canvas.dataset.boss,60,now,1,canvas.dataset.charging==='1');
+        ctx.restore();
+      }
+    }
+    requestAnimationFrame(frame);
+  })();
+  </script>
 </body>
 </html>
