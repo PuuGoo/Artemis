@@ -71,6 +71,15 @@ test('confirmed no-save resets a stale buffer, but existing saves retain their d
   }
 });
 
+test('a failed character rebuild never marks the game ready', async () => {
+  const h = harness(path => path.endsWith('/me') ? me() : saved({ gold: 9000000 }));
+  h.window.Archero2FusionAPI.reloadSaveFromStorage = () => false;
+  await h.boot();
+  assert.equal(h.starts(), 0);
+  assert.equal(h.cloud.getState().ready, false);
+  assert.equal(h.cloud.getState().authenticated, true);
+});
+
 test('a failed reload preserves unsent data and blocks outgoing PUTs', async () => {
   let fail = false;
   const h = harness(path => path.endsWith('/me') ? me() : fail ? response({ ok: false }, 503) : saved());

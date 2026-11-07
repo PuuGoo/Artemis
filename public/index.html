@@ -1529,11 +1529,47 @@
 #seasonContent #seasonSubScreen #btnSeasonBossClose,#seasonContent #seasonSubScreen #btnSeasonCareerClose,#seasonContent #seasonSubScreen #btnSeasonExClose{width:auto;min-width:32px;min-height:30px;padding:6px 10px!important;border-radius:9px!important;background:rgba(9,17,28,.8)!important;color:#d7e0e9!important}
 #seasonContent #seasonSubScreen .bg-rose-500\\/12{background:rgba(125,48,59,.12)!important}
 @media(max-width:540px){#seasonContent #seasonSubScreen>.rounded-2xl{padding:11px!important}#seasonContent #seasonSubScreen button[data-pick-career],#seasonContent #seasonSubScreen button[data-pick-boss]{min-height:68px;padding:10px!important}}
+  html:not(.artemis-ready) #appRoot{visibility:hidden}
+  #cloudLoading{position:fixed;inset:0;z-index:100001;display:grid;place-items:center;padding:20px;overflow:hidden;color:#fff;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at 50% 42%,#301662 0,#120f36 42%,#050716 78%)}
+  #cloudLoading[hidden]{display:none}
+  #cloudLoading.is-leaving{opacity:0;pointer-events:none;transition:opacity .3s ease}
+  #cloudLoading::before{content:"";position:absolute;inset:-45%;background:repeating-conic-gradient(from 0deg at 50% 50%,#a855f711 0deg 2deg,transparent 3deg 24deg);animation:cloudLoadSpin 50s linear infinite}
+  #cloudLoading::after{content:"✦       ✧     ✦       ✧       ✦";position:absolute;inset:8%;color:#f9caff6b;font-size:clamp(16px,3vw,28px);letter-spacing:clamp(12px,4vw,56px);line-height:7;white-space:normal;pointer-events:none;animation:cloudLoadStars 3s ease-in-out infinite alternate}
+  .cloud-loading-card{position:relative;z-index:1;width:min(100%,440px);padding:28px 24px 25px;overflow:hidden;text-align:center;border:2px solid #f4c87c;border-radius:28px;background:radial-gradient(circle at 50% 0,#743ac458,transparent 43%),linear-gradient(160deg,#241744f5,#10152ff8 75%);box-shadow:0 28px 80px #000b,0 0 45px #b445ed55,inset 0 2px #fff5;animation:cloudLoadEnter .45s cubic-bezier(.2,.9,.3,1) both}
+  .cloud-loading-emblem{position:relative;width:118px;height:118px;margin:4px auto 18px;display:grid;place-items:center;border:2px solid #ffdb8c;border-radius:50%;background:radial-gradient(circle,#7e39bb,#22133f 68%);box-shadow:0 0 30px #f4aef177,inset 0 0 24px #f9c6ff66}
+  .cloud-loading-emblem::before,.cloud-loading-emblem::after{content:"";position:absolute;inset:-12px;border:2px dashed #f8c4fb99;border-radius:50%;animation:cloudLoadSpin 9s linear infinite}
+  .cloud-loading-emblem::after{inset:-22px;border-style:solid;border-color:#facc15 transparent #a78bfa transparent;animation-duration:5s;animation-direction:reverse}
+  .cloud-loading-emblem span{font-size:58px;filter:drop-shadow(0 0 12px #ffe8a4);animation:cloudLoadFloat 2.6s ease-in-out infinite}
+  .cloud-loading-eyebrow{color:#fcd34d;font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase}
+  .cloud-loading-card h2{margin:9px 0 5px;color:#fff;font-size:clamp(23px,6vw,31px);font-weight:1000;text-shadow:0 2px 14px #d946efa1}
+  .cloud-loading-message{min-height:36px;margin:0;color:#ddd6fe;font-size:13px;line-height:1.5}
+  .cloud-loading-track{height:13px;margin:20px 0 16px;padding:2px;border:1px solid #f9d68d8c;border-radius:99px;background:#080b20;box-shadow:inset 0 2px 5px #000a}
+  .cloud-loading-fill{display:block;width:100%;height:100%;border-radius:99px;background:linear-gradient(90deg,#a855f7,#f472b6,#fbbf24);box-shadow:0 0 14px #e879f9;transform:scaleX(.08);transform-origin:left;transition:transform .45s ease}
+  .cloud-loading-steps{display:flex;justify-content:space-between;gap:5px;color:#877ba5;font-size:10px;font-weight:900}
+  .cloud-loading-steps span{flex:1;padding:5px 2px;border-radius:8px}
+  .cloud-loading-steps .is-current{color:#fff;background:#a855f733;box-shadow:inset 0 0 0 1px #e9a9f67c}
+  .cloud-loading-steps .is-done{color:#fcd34d}
+  .cloud-loading-retry{display:none;margin:17px auto 0;padding:10px 22px;border:2px solid #fff0a6;border-radius:12px;background:linear-gradient(#fff19d,#ffbf2d,#e48605);color:#45250c;font-weight:900;cursor:pointer}
+  #cloudLoading.is-error .cloud-loading-retry{display:block}
+  @keyframes cloudLoadSpin{to{transform:rotate(360deg)}}@keyframes cloudLoadStars{to{opacity:.3;transform:translateY(14px)}}@keyframes cloudLoadFloat{50%{transform:translateY(-8px)}}@keyframes cloudLoadEnter{from{opacity:0;transform:translateY(18px) scale(.95)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){#cloudLoading::before,#cloudLoading::after,.cloud-loading-card,.cloud-loading-emblem::before,.cloud-loading-emblem::after,.cloud-loading-emblem span{animation:none}.cloud-loading-fill{transition:none}}
 </style>
 
 
 </head>
 <body class="flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
+
+  <div id="cloudLoading" role="status" aria-live="polite" aria-label="Đang tải dữ liệu nhân vật">
+    <div class="cloud-loading-card">
+      <div class="cloud-loading-emblem" aria-hidden="true"><span>🏹</span></div>
+      <div class="cloud-loading-eyebrow">Artemis · Kỷ Nguyên Cung Thủ</div>
+      <h2>Đang mở cổng hành trình</h2>
+      <p class="cloud-loading-message">Đang kiểm tra phiên đăng nhập…</p>
+      <div class="cloud-loading-track" aria-hidden="true"><i class="cloud-loading-fill"></i></div>
+      <div class="cloud-loading-steps" aria-hidden="true"><span class="is-current">01 · Xác thực</span><span>02 · Tải dữ liệu</span><span>03 · Vào game</span></div>
+      <button type="button" class="cloud-loading-retry">Thử tải lại</button>
+    </div>
+  </div>
 
   <!-- MAIN CONTAINER -->
   <div id="appRoot" class="relative w-full h-full max-w-5xl mx-auto flex flex-col bg-slate-950/90 shadow-2xl border-x border-slate-800/80 overflow-hidden">
@@ -34037,8 +34073,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       // Cloud save: khong chay game ngay, doi xac thuc xong moi vao (xem cloud.js).
       function __artemisBootGame() {
         if (window.__artemisBooted) return;
-        window.__artemisBooted = true;
         renderLobbyUI();
+        window.__artemisBooted = true;
       }
 /* ===== ARENA V2 — nối HUD mới (pips tiến trình, huy hiệu cấp, tên chương) ===== */
 (function () {

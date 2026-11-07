@@ -34,9 +34,10 @@ check("KHONG dung playerLevel de xac dinh tai khoan moi", !activeBody.includes("
 // Kích hoạt chỉ từ đường đăng ký
 check("activateBeginnerJourney idempotent (chan startedAt > 0)",
   src.includes("if (bj.startedAt > 0) return false;"));
+const cloudSrc = fs.readFileSync(new URL("../public/cloud.js", import.meta.url), "utf8");
 check("cloud.js CHI kich hoat khi mode === 'register'",
-  fs.readFileSync(new URL("../public/cloud.js", import.meta.url), "utf8")
-    .includes('if (mode === "register" && window.Archero2FusionAPI'));
+  cloudSrc.includes('pendingRegister = mode === "register";')
+  && cloudSrc.includes('if (pendingRegister && window.Archero2FusionAPI'));
 
 // ---------------------------------------------------------------- 3. Reward idempotent
 console.log("\n=== 3. REWARD KHONG THE NHAN HAI LAN ===");

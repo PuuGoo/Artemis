@@ -109,6 +109,63 @@
   // ---------- Cong dang nhap ----------
   var gateEl = null;
   var styleInjected = false;
+  var pendingRegister = false;
+  var loadingRetryBound = false;
+
+  function loadingElement() { return document.getElementById("cloudLoading"); }
+  function loadingStage(step, message) {
+    var root = loadingElement();
+    if (!root) return;
+    root.hidden = false;
+    root.classList.remove("is-error", "is-leaving");
+    var label = root.querySelector(".cloud-loading-message");
+    if (label) label.textContent = message;
+    var bar = root.querySelector(".cloud-loading-fill");
+    if (bar) bar.style.transform = "scaleX(" + [0.12, 0.55, 0.86, 1][step] + ")";
+    var steps = root.querySelectorAll ? root.querySelectorAll(".cloud-loading-steps span") : [];
+    for (var i = 0; i < steps.length; i++) {
+      steps[i].classList.toggle("is-current", i === step);
+      steps[i].classList.toggle("is-done", i < step);
+    }
+  }
+  function hideLoading() {
+    var root = loadingElement();
+    if (root) root.hidden = true;
+  }
+  function showLoadError(error) {
+    var root = loadingElement();
+    if (!root) return;
+    loadingStage(1, (error && error.message) || "Không tải được dữ liệu. Vui lòng thử lại.");
+    root.classList.add("is-error");
+    var retry = root.querySelector(".cloud-loading-retry");
+    if (retry && !loadingRetryBound) {
+      loadingRetryBound = true;
+      retry.addEventListener("click", function () {
+        loadingStage(1, "Đang tải lại tiến trình từ máy chủ…");
+        loadCloudSave().then(finishEnter).catch(showLoadError);
+      });
+    }
+  }
+  function finishEnter() {
+    loadingStage(2, "Đang dựng nhân vật và trang bị…");
+    enterGame();
+    if (pendingRegister && window.Archero2FusionAPI
+        && typeof window.Archero2FusionAPI.activateBeginnerJourney === "function") {
+      var activated = window.Archero2FusionAPI.activateBeginnerJourney();
+      if (activated && typeof window.Archero2FusionAPI.renderBeginnerJourneyUI === "function") {
+        window.Archero2FusionAPI.renderBeginnerJourneyUI();
+      }
+    }
+    pendingRegister = false;
+    loadingStage(3, "Sẵn sàng lên đường!");
+    document.documentElement.classList.add("artemis-ready");
+    closeGate();
+    var root = loadingElement();
+    if (root) {
+      root.classList.add("is-leaving");
+      setTimeout(hideLoading, 320);
+    }
+  }
 
   function injectStyle() {
     if (styleInjected) return;
@@ -246,12 +303,14 @@
       submit.disabled = true;
       submit.style.opacity = ".65";
       submit.textContent = "⏳ Đang xử lý...";
+      loadingStage(0, "Đang xác thực tài khoản…");
 
       api(mode === "login" ? API.login : API.register, {
         method: "POST",
         body: { username: username, password: password },
       }).then(function (r) {
         if (!r.data || !r.data.ok) {
+          hideLoading();
           errBox.textContent = (r.data && r.data.error) || "Không kết nối được máy chủ. Thử lại.";
           errBox.style.display = "block";
           resetSubmit();
@@ -259,21 +318,19 @@
         }
         state.authenticated = true;
         state.player = r.data.player;
+        pendingRegister = mode === "register";
+        loadingStage(1, "Đang tải tiến trình thật từ máy chủ…");
         // Tai khoan vua dang ky: server tra ve hasSave=false -> loadCloudSave()
         // dat buffer = null -> SaveState.load() ve dung tan thu.
         return loadCloudSave().then(function () {
-          closeGate();
-          enterGame();
-          if (mode === "register" && window.Archero2FusionAPI
-              && typeof window.Archero2FusionAPI.activateBeginnerJourney === "function") {
-            var activated = window.Archero2FusionAPI.activateBeginnerJourney();
-            if (activated && typeof window.Archero2FusionAPI.renderBeginnerJourneyUI === "function") {
-              window.Archero2FusionAPI.renderBeginnerJourneyUI();
-            }
-          }
+          finishEnter();
           toast(mode === "login" ? "Chào mừng trở lại, " + (state.player.username || "") + "!" : "Tạo tài khoản thành công! Chúc may mắn!", "ok");
+        }).catch(function (error) {
+          resetSubmit();
+          showLoadError(error);
         });
       }).catch(function () {
+        hideLoading();
         errBox.textContent = "Lỗi mạng. Kiểm tra kết nối và thử lại.";
         errBox.style.display = "block";
         resetSubmit();
@@ -288,6 +345,7 @@
     wrap.appendChild(card);
     document.body.appendChild(wrap);
     gateEl = wrap;
+    hideLoading();
     setTimeout(function () { userInput.focus(); }, 60);
   }
 
@@ -487,18 +545,20 @@
     // Xoa du lieu client cu NGAY khi trang tai, truoc ca khi biet phien nao.
     purgeLegacyLocalSave();
     document.documentElement.classList.add("cloud-locked");
+    loadingStage(0, "Đang kiểm tra phiên đăng nhập…");
     api(API.me).then(function (r) {
       if (r.data && r.data.ok && r.data.authenticated) {
         state.authenticated = true;
         state.player = r.data.player;
+        loadingStage(1, "Đang tải tiến trình thật từ máy chủ…");
         return loadCloudSave().then(function () {
-          closeGate();
-          enterGame();
+          finishEnter();
         });
       }
       buildGate("login");
       return null;
-    }).catch(function () {
+    }).catch(function (error) {
+      if (state.authenticated) { showLoadError(error); return; }
       buildGate("login");
       var box = gateEl && gateEl.querySelector("form");
       if (box) {
@@ -511,11 +571,16 @@
 
   /** Game script da tai xong -> cho no chay. */
   function startGame() {
-    state.ready = true;
     if (window.Archero2FusionAPI && typeof window.Archero2FusionAPI.reloadSaveFromStorage === "function") {
-      window.Archero2FusionAPI.reloadSaveFromStorage();
+      if (window.Archero2FusionAPI.reloadSaveFromStorage() === false) {
+        throw new Error("Không thể dựng tiến trình nhân vật. Vui lòng thử lại.");
+      }
     }
-    if (typeof window.__artemisStartGame === "function") window.__artemisStartGame();
+    if (typeof window.__artemisStartGame !== "function") {
+      throw new Error("Game chưa tải xong. Vui lòng thử lại.");
+    }
+    window.__artemisStartGame();
+    state.ready = true;
   }
 
   // Game goi ham nay khi DOM xong; ta giu no lai cho den khi xac thuc xong.
