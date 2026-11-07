@@ -17,7 +17,7 @@ test('12 hình SVG chibi tồn tại, riêng biệt và không nhúng ảnh bên
     assert.match(source, /<svg\b[^>]*viewBox="0 0 256 256"/);
     assert.match(source, /<title>[^<]+<\/title>/);
     assert.match(source, /<path\b/);
-    assert.doesNotMatch(source, /https?:\/\/|<script\b|<foreignObject\b/i);
+    assert.doesNotMatch(source, /<(?:script|foreignObject|image|use)\b|(?:href|src)=["']https?:\/\//i);
     assert.match(code, new RegExp('boss-ch' + chap + '-' + sign + '\\.svg'));
     artworks.push(source);
   });
