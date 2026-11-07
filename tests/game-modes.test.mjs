@@ -121,10 +121,10 @@ check('render 5 the', /GAME_MODES\.map\(m =>/.test(modeUi));
 check('bam the doi SaveState.gameMode', /SaveState\.gameMode = id/.test(modeUi));
 check('hien ky luc neu co', /Kỷ lục: phòng/.test(modeUi));
 check('duoc goi trong render lobby', /safeRender\('gameMode'/.test(html));
-check('an dai chon chuong khi khong phai Chien Dich',
-  /classList\.toggle\('hidden', !_m\.hasChapters\)/.test(html));
-check('che do khac co nut Bat dau rieng', /id="btnStartModeRun"/.test(html));
-check('nut Bat dau goi startNewRun', /btnStartModeRun'\)\?\.addEventListener\('click', \(\) => \{\s*startNewRun/.test(html.replace(/\r/g, '')));
+check('dai chon chuong cu luon an va rong',
+  /el\.classList\.add\('hidden'\);\s*el\.innerHTML = '';/.test(fnBody('renderChapterSelectStrip')));
+check('che do khac khong tao nut Bat dau trung', !/id="btnStartModeRun"/.test(html));
+check('briefing cho moi che do goi startNewRun', /btnBriefingStart[\s\S]{0,200}?startNewRun\('fresh'\)/.test(html));
 
 // ============================================================ 7. EXPORT
 console.log('\n=== 7. EXPORT ===');

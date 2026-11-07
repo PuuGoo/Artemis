@@ -1,0 +1,123 @@
+{
+  "scope": "Chrome local + mocked auth/save, không phải production E2E",
+  "results": [
+    {
+      "name": "baseline-desktop",
+      "details": {
+        "width": 1280,
+        "documentOverflow": 0,
+        "tabOverflow": 0,
+        "tabHeight": 754,
+        "contentHeight": 2594,
+        "start": {
+          "x": 480,
+          "y": 2585.75,
+          "width": 320,
+          "height": 56,
+          "bottom": 2641.75,
+          "visible": true
+        },
+        "map": {
+          "x": 149,
+          "y": 244.25,
+          "width": 982,
+          "height": 506.75,
+          "bottom": 751,
+          "visible": true
+        },
+        "legacy": {
+          "x": 149,
+          "y": 1056.5,
+          "width": 982,
+          "height": 404.5,
+          "bottom": 1461,
+          "visible": true
+        },
+        "startAtLoad": false,
+        "topmost": false,
+        "modes": [
+          {
+            "name": "🗺️\nChiến Dịch\nCHỌN\n\nĐi qua từng chương, hạ trùm cuối để mở khu vực mới.\n\nHết phòng cuối = thắng chương",
+            "height": 91.25
+          },
+          {
+            "name": "♾️\nVô Tận\n\nPhòng không có hồi kết. Càng sâu, quái càng mạnh.\n\nChết là kết thúc · ghi nhận kỷ lục phòng",
+            "height": 91.25
+          },
+          {
+            "name": "🗼\nTháp\n\nMỗi tầng là một trùm. Càng lên cao, trùm càng trâu.\n\nHạ trùm để lên tầng · thua là dừng",
+            "height": 91.25
+          },
+          {
+            "name": "👑\nSăn Trùm\n\nChuỗi 5 trùm liên tiếp, thưởng tăng theo số trùm đã hạ.\n\nHạ đủ 5 trùm = thắng · thưởng theo tiến độ",
+            "height": 91.25
+          },
+          {
+            "name": "🎯\nLuyện Tập\n\nThử nghiệm build thoải mái. Không mất gì, không được gì.\n\nKhông chết thật · không cộng vàng/kinh nghiệm",
+            "height": 91.25
+          }
+        ]
+      }
+    },
+    {
+      "name": "baseline-mobile",
+      "details": {
+        "width": 390,
+        "documentOverflow": 0,
+        "tabOverflow": 0,
+        "tabHeight": 705,
+        "contentHeight": 4081,
+        "start": {
+          "x": 13,
+          "y": 4085.875,
+          "width": 364,
+          "height": 52,
+          "bottom": 4137.875,
+          "visible": true
+        },
+        "map": {
+          "x": 13,
+          "y": 427.25,
+          "width": 364,
+          "height": 287.375,
+          "bottom": 714.625,
+          "visible": true
+        },
+        "legacy": {
+          "x": 13,
+          "y": 1034.625,
+          "width": 364,
+          "height": 1213.5,
+          "bottom": 2248.125,
+          "visible": true
+        },
+        "startAtLoad": false,
+        "topmost": false,
+        "modes": [
+          {
+            "name": "🗺️\nChiến Dịch\nCHỌN\n\nĐi qua từng chương, hạ trùm cuối để mở khu vực mới.\n\nHết phòng cuối = thắng chương",
+            "height": 91.25
+          },
+          {
+            "name": "♾️\nVô Tận\n\nPhòng không có hồi kết. Càng sâu, quái càng mạnh.\n\nChết là kết thúc · ghi nhận kỷ lục phòng",
+            "height": 91.25
+          },
+          {
+            "name": "🗼\nTháp\n\nMỗi tầng là một trùm. Càng lên cao, trùm càng trâu.\n\nHạ trùm để lên tầng · thua là dừng",
+            "height": 91.25
+          },
+          {
+            "name": "👑\nSăn Trùm\n\nChuỗi 5 trùm liên tiếp, thưởng tăng theo số trùm đã hạ.\n\nHạ đủ 5 trùm = thắng · thưởng theo tiến độ",
+            "height": 91.25
+          },
+          {
+            "name": "🎯\nLuyện Tập\n\nThử nghiệm build thoải mái. Không mất gì, không được gì.\n\nKhông chết thật · không cộng vàng/kinh nghiệm",
+            "height": 91.25
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

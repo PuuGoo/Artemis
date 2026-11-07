@@ -108,8 +108,8 @@ check("ve 1 node cho moi phong", /for \(let r = 1; r <= ch\.rooms; r\+\+\)/.test
 check("phong trum = boi 5 hoac cuoi", /const isBoss = \(r % 5 === 0\) \|\| \(r === ch\.rooms\)/.test(block));
 check("phong trum hinh tron", /boss-node/.test(block));
 check("ve danh sach tab chuong dong", /CHAPTERS\.map\(\(c, i\)/.test(block));
-check("nut start goi openRunBriefing (luong cu)", /openRunBriefing\(\)/.test(block));
-check("chot selectedChapterIdx truoc khi start", /SaveState\.selectedChapterIdx = selIdx/.test(block));
+check("ban do khong tao nut start trung lap", !/id="msBtnStart"/.test(block));
+check("chon chuong ghi dung index", /SaveState\.selectedChapterIdx = idx/.test(block));
 check("export renderMapSelect", /^\s+renderMapSelect,$/m.test(html));
 check("goi trong renderChapterHeader", /safeRender\('mapSelect', \(\) => renderMapSelect\(\)\)/.test(html));
 

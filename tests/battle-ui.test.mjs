@@ -21,13 +21,13 @@ check("btnStartGame mo briefing (khong vao tran ngay)",
 check("briefing co nut Xuat Chinh goi startNewRun",
   /btnBriefingStart[\s\S]{0,200}?startNewRun\('fresh'\)/.test(html));
 check("briefing co nut Quay Lai dong modal",
-  /btnBriefingCancel[\s\S]{0,200}?classList\.add\('hidden'\)/.test(html));
+  /function closeRunBriefing\(\)[\s\S]{0,200}?classList\.add\('hidden'\)/.test(html));
 check("briefing hien luc chien", /LỰC CHIẾN/.test(html));
 check("briefing hien ky luc", /KỶ LỤC/.test(html));
 check("briefing hien so lan thang", /SỐ LẦN THẮNG/.test(html));
 check("briefing hien trum cuoi", /TRÙM CUỐI/.test(html));
-check("briefing co loi khuyen theo luc chien", /Bạn mạnh hơn mức cần thiết|Lực chiến phù hợp|Lực chiến còn thấp/.test(html));
-check("briefing canh bao khi yeu", /Nên cường hóa trang bị trước/.test(html));
+check("briefing noi ro luot moi tu phong 1", /Lượt mới từ phòng 1\. Tiến trình kỷ lục không phải điểm lưu/.test(html));
+check("khong danh gia manh yeu bang moc power hardcode", !/const expectedPower = \[200000, 420000, 800000\]/.test(html));
 
 // ============================================================ 2. Boss intro
 console.log("\n=== 2. BOSS INTRO BANNER ===");

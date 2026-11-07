@@ -1,0 +1,278 @@
+{
+  "scope": "Chrome local + mocked auth/save, không phải production E2E",
+  "results": [
+    {
+      "name": "desktop",
+      "details": {
+        "width": 1280,
+        "documentOverflow": 0,
+        "tabOverflow": 0,
+        "tabHeight": 754,
+        "contentHeight": 957,
+        "start": {
+          "x": 924.765625,
+          "y": 753,
+          "width": 177.234375,
+          "height": 52,
+          "bottom": 805,
+          "visible": true
+        },
+        "map": {
+          "x": 157,
+          "y": 393.0899963378906,
+          "width": 612.765625,
+          "height": 402.8905944824219,
+          "bottom": 795.9805908203125,
+          "visible": true
+        },
+        "legacy": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false
+        },
+        "startAtLoad": true,
+        "topmost": true,
+        "modes": [
+          {
+            "name": "🗺️\nChiến Dịch",
+            "height": 83
+          },
+          {
+            "name": "♾️\nVô Tận",
+            "height": 83
+          },
+          {
+            "name": "🗼\nTháp",
+            "height": 83
+          },
+          {
+            "name": "👑\nSăn Trùm",
+            "height": 83
+          },
+          {
+            "name": "🎯\nLuyện Tập",
+            "height": 83
+          }
+        ]
+      }
+    },
+    {
+      "name": "geometry-1024",
+      "details": {
+        "width": 1024,
+        "documentOverflow": 0,
+        "tabOverflow": 0,
+        "tabHeight": 698,
+        "contentHeight": 951,
+        "start": {
+          "x": 796.765625,
+          "y": 697,
+          "width": 177.234375,
+          "height": 52,
+          "bottom": 749,
+          "visible": true
+        },
+        "map": {
+          "x": 29,
+          "y": 378.890625,
+          "width": 612.765625,
+          "height": 402.890625,
+          "bottom": 781.78125,
+          "visible": true
+        },
+        "legacy": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false
+        },
+        "startAtLoad": true,
+        "topmost": true,
+        "modes": [
+          {
+            "name": "🗺️\nChiến Dịch",
+            "height": 83
+          },
+          {
+            "name": "♾️\nVô Tận",
+            "height": 83
+          },
+          {
+            "name": "🗼\nTháp",
+            "height": 83
+          },
+          {
+            "name": "👑\nSăn Trùm",
+            "height": 83
+          },
+          {
+            "name": "🎯\nLuyện Tập",
+            "height": 83
+          }
+        ]
+      }
+    },
+    {
+      "name": "geometry-390",
+      "details": {
+        "width": 390,
+        "documentOverflow": 0,
+        "tabOverflow": 0,
+        "tabHeight": 705,
+        "contentHeight": 1374,
+        "start": {
+          "x": 32,
+          "y": 709,
+          "width": 326,
+          "height": 50,
+          "bottom": 759,
+          "visible": true
+        },
+        "map": {
+          "x": 17,
+          "y": 447.390625,
+          "width": 356,
+          "height": 354.828125,
+          "bottom": 802.21875,
+          "visible": true
+        },
+        "legacy": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false
+        },
+        "startAtLoad": true,
+        "topmost": true,
+        "modes": [
+          {
+            "name": "🗺️\nChiến Dịch",
+            "height": 64.390625
+          },
+          {
+            "name": "♾️\nVô Tận",
+            "height": 64.390625
+          },
+          {
+            "name": "🗼\nTháp",
+            "height": 64.390625
+          },
+          {
+            "name": "👑\nSăn Trùm",
+            "height": 64.390625
+          },
+          {
+            "name": "🎯\nLuyện Tập",
+            "height": 64.390625
+          }
+        ]
+      }
+    },
+    {
+      "name": "geometry-360",
+      "details": {
+        "width": 360,
+        "documentOverflow": 0,
+        "tabOverflow": 0,
+        "tabHeight": 692,
+        "contentHeight": 1377,
+        "start": {
+          "x": 29,
+          "y": 696,
+          "width": 302,
+          "height": 50,
+          "bottom": 746,
+          "visible": true
+        },
+        "map": {
+          "x": 14,
+          "y": 451.703125,
+          "width": 332,
+          "height": 353.578125,
+          "bottom": 805.28125,
+          "visible": true
+        },
+        "legacy": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "bottom": 0,
+          "visible": false
+        },
+        "startAtLoad": true,
+        "topmost": true,
+        "modes": [
+          {
+            "name": "🗺️\nChiến Dịch",
+            "height": 65.390625
+          },
+          {
+            "name": "♾️\nVô Tận",
+            "height": 65.390625
+          },
+          {
+            "name": "🗼\nTháp",
+            "height": 65.390625
+          },
+          {
+            "name": "👑\nSăn Trùm",
+            "height": 65.390625
+          },
+          {
+            "name": "🎯\nLuyện Tập",
+            "height": 65.390625
+          }
+        ]
+      }
+    },
+    {
+      "name": "locked-preview-return",
+      "status": "PASS"
+    },
+    {
+      "name": "prepare-and-ownership",
+      "status": "PASS"
+    },
+    {
+      "name": "help-and-bestiary",
+      "status": "PASS"
+    },
+    {
+      "name": "five-mode-briefings-keyboard",
+      "status": "PASS"
+    },
+    {
+      "name": "motion",
+      "details": {
+        "animation": {
+          "orbit": "battle-orbit",
+          "aura": "battle-aurora"
+        },
+        "reducedAnimations": 0,
+        "hiddenPlayState": "paused"
+      }
+    },
+    {
+      "name": "real-start-smoke-not-complete-playthrough",
+      "details": {
+        "running": true,
+        "paused": false,
+        "room": 1,
+        "enemies": 2,
+        "hp": 775,
+        "lastTime": 13181.5,
+        "filledPixels": 300700
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

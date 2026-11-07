@@ -57,14 +57,14 @@ console.log("\n=== 3. UI CHON CHUONG ===");
 check("co the chua chapterSelectStrip", html.includes('id="chapterSelectStrip"'));
 check("co ham renderChapterSelectStrip", /function renderChapterSelectStrip\(\)/.test(html));
 check("renderLobbyUI goi renderChapterSelectStrip", /safeRender\('chapterStrip'/.test(html));
-check("the chuong co data-chapter-card", /data-chapter-card="\$\{idx\}"/.test(html));
+check("chi bo chon moi co data-map-tab", /data-map-tab="\$\{i\}"/.test(html) && !/data-chapter-card=/.test(html));
 check("the chuong hien so phong", /\$\{ch\.rooms\} phòng/.test(html));
-check("the chuong hien ky luc tot nhat", /Tốt nhất \$\{best\}\/\$\{ch\.rooms\}/.test(html));
-check("the chuong hien ten trum", /\$\{ch\.bossIcon\} \$\{ch\.bossName\}/.test(html));
+check("ban do hien tien trinh tot nhat", /\$\{reach\}\/\$\{ch\.rooms\}/.test(html));
+check("ban do hien ten trum", /Trùm: <b>\$\{ch\.bossName\}/.test(html));
 check("the chuong hien thanh do kho 3 bac", /\[1, 2, 3\]\.map\(n =>/.test(html));
-check("the chuong co lop khoa khi chua mo", /const lockOverlay = locked/.test(html));
+check("the chuong co trang thai khoa khi chua mo", /if \(cLocked\) cls\.push\('is-locked'\)/.test(html));
 check("bam the khoa thi bao, khong doi chuong",
-  /if \(isChapterLocked\(ch\)\) \{[\s\S]{0,200}?return;/.test(html));
+  /if \(isChapterLocked\(target\)\) \{\s*previewChapterIdx = idx;\s*renderMapSelect\(\);[\s\S]{0,160}?return;/.test(html));
 
 console.log("\n=== 4. CHUYEN CHUONG TON TRONG LUAT KHOA ===");
 // Nút ◀ ▶ đã bỏ khỏi UI (thay bằng 3 tab chương trong mapSelectPanel).

@@ -103,6 +103,8 @@ for (const anchor of [prev, next]) test(`${anchor}: one owned hero stays usable 
 });
 function runFixture(extra = {}) {
   const f = fixture(extra);
+  // Phụ thuộc mới của startNewRun: chạy module thật, không bỏ hook ngoại hình.
+  f.run(fs.readFileSync(new URL('../public/monster-art.js', import.meta.url), 'utf8'));
   const zero = new Proxy({}, { get: () => 0 });
   Object.assign(f.S, { gearLevel: 1, equippedGear: {}, selectedWeaponId: 'bow', selectedPetId: 'pet' });
   Object.assign(f.ctx, { Game: { width: 600, height: 800 }, WEAPONS: [{ id: 'bow', atkMult: 1, aspd: 1, critBonus: 0 }],

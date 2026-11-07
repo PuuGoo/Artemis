@@ -1575,7 +1575,7 @@
   @keyframes cloudLoadSpin{to{transform:rotate(360deg)}}@keyframes cloudLoadStars{to{opacity:.3;transform:translateY(14px)}}@keyframes cloudLoadFloat{50%{transform:translateY(-8px)}}@keyframes cloudLoadEnter{from{opacity:0;transform:translateY(18px) scale(.95)}to{opacity:1;transform:none}}
   @media(prefers-reduced-motion:reduce){#cloudLoading::before,#cloudLoading::after,.cloud-loading-card,.cloud-loading-emblem::before,.cloud-loading-emblem::after,.cloud-loading-emblem span{animation:none}.cloud-loading-fill{transition:none}}
 </style>
-
+  <link rel="stylesheet" href="/battle-hub.css">
 
 </head>
 <body class="flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
@@ -1678,7 +1678,13 @@
     <main class="relative flex-1 w-full overflow-hidden flex flex-col cyber-grid-bg">
 
       <!-- ==================== TAB 1: BATTLE LOBBY ==================== -->
-      <section id="tabBattle" class="hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-4">
+      <section id="tabBattle" class="battle-hub hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-4" aria-label="Chuẩn bị chiến đấu">
+        <div class="battle-header">
+          <div><span class="battle-eyebrow">ARTEMIS / VIỄN CHINH</span><h1>Hành trình của bạn</h1><p>Chọn điểm đến. Chuẩn bị đội hình. Chinh phục thử thách.</p></div>
+          <button type="button" class="battle-help" id="btnBattleHelp" aria-label="Mở hướng dẫn chiến đấu">? <span>Cách chơi</span></button>
+        </div>
+        <div class="battle-layout">
+        <div class="battle-route">
         <!-- ==================== CHỌN CHẾ ĐỘ CHƠI (GAME MODE) ====================
              Màn `ui_world_main` của Archero 2 thật cho chọn chế độ TRƯỚC khi
              vào bản đồ. Chiến Dịch hiện panel chọn chương; các chế độ khác
@@ -1693,8 +1699,11 @@
              startNewRun — chỉ thay cách hiển thị và cách chọn. -->
         <div id="mapSelectPanel" class="shrink-0"></div>
 
-        <!-- Nút ◀ ▶ cũ vẫn giữ cho người quen dùng, đặt dưới bản đồ -->
+        <!-- Vùng tương thích cũ: luôn rỗng, chỉ còn bộ chọn trong bản đồ. -->
         <div id="chapterSelectStrip" class="hidden"></div>
+        </div>
+        <aside class="battle-prep" aria-label="Đội hình xuất chiến">
+          <div id="battleSquadSummary"></div>
 
         <!-- SỔ TAY QUÁI VẬT: cho người chơi biết mình đang đánh cái gì -->
         <!-- Sổ tay quái vật: mặc định ẩn trong modal, mở bằng nút ở panel chọn map -->
@@ -1709,7 +1718,9 @@
         </div>
 
         <!-- Middle Grid: Hero Selection & Current Loadout Summary -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <details id="battlePrepDetails" class="battle-prep-details">
+            <summary>Đổi anh hùng &amp; xem trang bị <span aria-hidden="true">⌄</span></summary>
+        <div class="battle-prep-content">
           <!-- Hero Selector -->
           <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between gap-3">
             <div class="flex items-center justify-between">
@@ -1721,7 +1732,7 @@
                 </button>
               </div>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="heroSelectList">
+            <div class="grid grid-cols-2 gap-2" id="heroSelectList">
               <!-- Populated by JS -->
             </div>
             <div id="heroPassiveBox" class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-2.5 text-xs text-slate-300">
@@ -1736,7 +1747,7 @@
               <span id="bestRecordText" class="text-[11px] font-bold text-amber-300">Kỷ lục: Phòng 1/15</span>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="battle-gear-summary grid grid-cols-2 gap-2 text-xs">
               <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5 flex items-center gap-2.5">
                 <div id="summaryWeaponIcon" class="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-lg">🏹</div>
                 <div>
@@ -1753,7 +1764,7 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-4 gap-1.5 text-center bg-slate-950/90 p-2 rounded-xl border border-slate-800">
+            <div class="battle-squad-stats grid grid-cols-4 gap-1.5 text-center bg-slate-950/90 p-2 rounded-xl border border-slate-800">
               <div>
                 <div class="text-[10px] text-slate-400">Tấn Công</div>
                 <div id="statAtkText" class="text-xs sm:text-sm font-black text-rose-400">120</div>
@@ -1774,19 +1785,24 @@
           </div>
         </div>
 
+          </details>
+          <p class="battle-controls-hint">Kéo để di chuyển · Thả tay để tự bắn.<br>Máy tính: WASD hoặc phím mũi tên.</p>
+        </aside>
+        </div>
         <!-- Nhiệm vụ tân thủ hiện tại: MỘT việc cần làm + MỘT nút hành động.
              Danh sách đầy đủ N01–N08 vẫn nằm ở tab Thẻ Tài Năng. -->
         <div id="beginnerQuickCard" class="hidden rounded-2xl border-2 border-amber-500/60 bg-gradient-to-br from-amber-950/70 via-slate-900 to-slate-950 p-3 shadow-lg"></div>
 
         <!-- Big Start Button -->
-        <div class="mt-auto pt-1 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <button id="btnStartGame" type="button" class="w-full sm:w-80 py-3.5 rounded-2xl gold-gradient text-slate-950 font-black text-base sm:text-lg tracking-wide shadow-lg glow-gold hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2">
-            <span>⚔️ BẮT ĐẦU CHIẾN ĐẤU</span>
-          </button>
+        <div class="battle-launch">
+          <div class="battle-launch-copy"><b id="battleLaunchTitle">Sẵn sàng xuất chiến</b><span id="battleLaunchHint">Lượt mới bắt đầu từ phòng 1.</span></div>
+          <div class="battle-launch-actions">
           <!-- Continue: chỉ hiện khi có checkpoint của đúng chương đang chọn -->
-          <button id="btnContinueRun" type="button" class="hidden w-full sm:w-56 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base tracking-wide shadow-lg border border-emerald-300/50 active:scale-95 transition flex items-center justify-center gap-2">
+          <button id="btnContinueRun" type="button" class="hidden battle-launch-continue">
             <span id="btnContinueRunLabel">▶ TIẾP TỤC</span>
           </button>
+          <button id="btnStartGame" type="button" class="battle-launch-primary">⚔️ Bắt đầu lượt mới</button>
+          </div>
         </div>
       </section>
 
@@ -2512,10 +2528,10 @@
     </div>
 
     <!-- ==================== MODAL 0: BRIEFING TRƯỚC TRẬN ====================
-         Hiện rõ: chương, độ khó, số phòng, trùm, kỷ lục, và cảnh báo nếu người
-         chơi yếu so với chương. Bấm "Xuất Chinh" mới vào trận — tránh việc bấm
+         Hiện rõ: chương/chế độ, luật, số phòng, trùm và kỷ lục. Bấm "Xuất Chinh"
+         mới vào trận — tránh việc bấm
          nhầm chương rồi chết ngay mà không hiểu vì sao. -->
-    <div id="runBriefingModal" class="hidden absolute inset-0 z-45 bg-slate-950/92 backdrop-blur-md flex flex-col items-center justify-center p-4">
+    <div id="runBriefingModal" role="dialog" aria-modal="true" aria-labelledby="battleBriefingTitle" class="hidden absolute inset-0 z-45 bg-slate-950/92 backdrop-blur-md flex flex-col items-center justify-center p-4">
       <div id="runBriefingCard" class="w-full max-w-lg rounded-3xl overflow-hidden border-2 shadow-2xl flex flex-col"></div>
     </div>
 
@@ -17802,39 +17818,29 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const el = document.getElementById('gameModePanel');
         if (!el) return;
 
-        const active = SaveState.gameMode || 'campaign';
-
+        const active = getActiveGameMode();
         el.innerHTML = `
-          <div class="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-2.5 sm:p-3">
-            <div class="flex items-center justify-between gap-2 mb-2">
-              <span class="text-[10px] font-black uppercase tracking-[.16em] text-slate-400">Chọn chế độ</span>
-              <span class="text-[10px] text-slate-500">${GAME_MODES.length} chế độ</span>
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 sm:gap-2">
+          <div class="battle-modes">
+            <div class="battle-section-label">01 / CHẾ ĐỘ</div>
+            <div class="battle-mode-tabs" role="group" aria-label="Chọn chế độ chiến đấu">
               ${GAME_MODES.map(m => {
-                const on = m.id === active;
-                const best = (SaveState.modeBest || {})[m.id];
+                const on = m.id === active.id;
                 return `
-                <button type="button" data-mode-pick="${m.id}"
-                  class="relative overflow-hidden rounded-xl border-2 p-2 text-left transition active:scale-[.98]"
-                  style="border-color:${on ? m.color : 'rgba(71,85,105,.55)'};background:linear-gradient(160deg,${m.color}${on ? '2e' : '12'},rgba(2,6,23,.5))">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-lg leading-none">${m.icon}</span>
-                    <b class="text-[11px] font-black text-white truncate">${m.name}</b>
-                    ${on ? `<span class="ml-auto text-[7.5px] font-black px-1 py-0.5 rounded" style="background:${m.color};color:#020617">CHỌN</span>` : ''}
-                  </div>
-                  <p class="text-[8.5px] text-slate-300/85 leading-tight mt-1 line-clamp-2">${m.desc}</p>
-                  <p class="text-[8px] mt-1 font-bold" style="color:${m.color}">${best ? `Kỷ lục: phòng ${best}` : m.rules}</p>
+                <button type="button" data-mode-pick="${m.id}" class="battle-mode" aria-pressed="${on}" style="--mode-color:${m.color}">
+                  <span class="battle-mode-icon" aria-hidden="true">${m.icon}</span><b>${m.name}</b>
                 </button>`;
               }).join('')}
             </div>
+            <div class="battle-mode-caption"><p>${active.desc}</p><span class="battle-mode-record">${(SaveState.modeBest || {})[active.id] ? `Kỷ lục: phòng ${SaveState.modeBest[active.id]}` : active.rules}</span></div>
           </div>`;
 
         el.querySelectorAll('[data-mode-pick]').forEach(btn => {
           btn.addEventListener('click', () => {
             const id = btn.getAttribute('data-mode-pick');
             if (id === (SaveState.gameMode || 'campaign')) return;
+            if (!GAME_MODES.some(m => m.id === id)) return;
             SaveState.gameMode = id;
+            previewChapterIdx = null;
             SaveState.save();
             SoundFX.coinPickup();
             renderGameModePanel();
@@ -17842,52 +17848,54 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // màn hình không hiện bản đồ thừa.
             renderChapterSelectStrip();
             renderMapSelect();
+            el.querySelector(`[data-mode-pick="${id}"]`)?.focus({ preventScroll: true });
           });
         });
       }
 
       let previewChapterIdx = null; // Xem tranh chương khóa mà không đổi chương đang chơi.
+      function syncBattleLaunch() {
+        const mode = getActiveGameMode();
+        const ch = CHAPTERS[mode.hasChapters ? (previewChapterIdx ?? SaveState.selectedChapterIdx) : SaveState.selectedChapterIdx] || CHAPTERS[0];
+        const locked = mode.hasChapters && isChapterLocked(ch);
+        const checkpoint = mode.hasChapters && !locked ? getUsableCheckpoint() : null;
+        const start = document.getElementById('btnStartGame');
+        const title = document.getElementById('battleLaunchTitle');
+        const hint = document.getElementById('battleLaunchHint');
+        if (title) title.textContent = mode.hasChapters ? `Chương ${ch.id} · ${ch.themeName}` : mode.name;
+        if (hint) hint.textContent = locked
+          ? `Chưa mở · Cần ${ch.unlock ? ch.unlock.label : 'mở khóa chương trước'}.`
+          : (checkpoint ? `Có lượt đã lưu ở phòng ${checkpoint.room}. Tiếp tục hoặc bắt đầu lại từ phòng 1.` : (mode.practice ? 'Luyện tập không nhận thưởng. Lượt mới từ phòng 1.' : 'Sẵn sàng. Lượt mới bắt đầu từ phòng 1.'));
+        if (start) {
+          start.disabled = locked;
+          start.textContent = locked ? '🔒 Chương chưa mở' : '⚔️ Bắt đầu lượt mới';
+        }
+        syncContinueButton();
+        const resume = document.getElementById('btnContinueRun');
+        if (resume && (locked || !mode.hasChapters)) resume.classList.add('hidden');
+      }
+
       function renderMapSelect() {
         const el = document.getElementById('mapSelectPanel');
         if (!el) return;
 
         const mode = getActiveGameMode();
+        const pickerWasOpen = document.getElementById('battleChapterPicker')?.open || false;
+        syncBattleLaunch();
 
         // Chế độ không phải Chiến Dịch: không có bản đồ chương để chọn, thay
         // bằng thẻ tóm tắt luật chơi + nút Bắt đầu.
         if (!mode.hasChapters) {
           const best = (SaveState.modeBest || {})[mode.id];
           el.innerHTML = `
-            <div class="rounded-2xl border-2 overflow-hidden"
-              style="border-color:${mode.color}66;background:linear-gradient(150deg,${mode.color}1c,rgba(2,6,23,.72))">
-              <div class="p-3 sm:p-4">
-                <div class="flex items-center gap-2">
-                  <span class="text-2xl leading-none">${mode.icon}</span>
-                  <div class="min-w-0">
-                    <b class="block text-sm font-black text-white">${mode.name}</b>
-                    <span class="block text-[10px] text-slate-300/80">${mode.desc}</span>
-                  </div>
-                </div>
-                <div class="mt-2.5 grid grid-cols-2 gap-2 text-[10px]">
-                  <div class="rounded-lg bg-slate-950/60 border border-slate-700/60 px-2 py-1.5">
-                    <span class="block text-slate-400 text-[8.5px] uppercase tracking-wider">Luật</span>
-                    <b class="text-slate-100 font-bold">${mode.rules}</b>
-                  </div>
-                  <div class="rounded-lg bg-slate-950/60 border border-slate-700/60 px-2 py-1.5">
-                    <span class="block text-slate-400 text-[8.5px] uppercase tracking-wider">Kỷ lục</span>
-                    <b class="font-black" style="color:${mode.color}">${best ? `Phòng ${best}` : 'Chưa có'}</b>
-                  </div>
-                </div>
-                <button type="button" id="btnStartModeRun"
-                  class="mt-3 w-full py-2.5 rounded-xl font-black text-sm text-slate-950 transition active:scale-[.99] hover:brightness-110"
-                  style="background:linear-gradient(135deg,${mode.color},${mode.color}bb)">
-                  ▶ Bắt đầu ${mode.name}
-                </button>
-              </div>
+            <div class="battle-mode-stage" style="--battle-accent:${mode.color}">
+              <div class="battle-mode-emblem" aria-hidden="true">${mode.icon}</div>
+              <span class="battle-section-label">THỬ THÁCH / ${mode.name.toUpperCase()}</span>
+              <h2 class="battle-mode-title">${mode.name}</h2>
+              <p>${mode.desc}</p>
+              <dl class="battle-mode-facts"><div><dt>Mục tiêu</dt><dd>${mode.rules}</dd></div><div><dt>Kỷ lục</dt><dd>${best ? `Phòng ${best}` : 'Chưa có'}</dd></div></dl>
+              ${mode.practice ? '<p class="battle-mode-notice">Không nhận vàng hay kinh nghiệm. Thử đội hình mà không ảnh hưởng tiến trình.</p>' : ''}
             </div>`;
-          document.getElementById('btnStartModeRun')?.addEventListener('click', () => {
-            startNewRun('fresh');
-          });
           return;
         }
 
@@ -17930,12 +17938,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const cls = ['ms-tab'];
           if (active) cls.push('is-active');
           if (cLocked) cls.push('is-locked');
-          return `<button type="button" class="${cls.join(' ')}" data-map-tab="${i}"
+          return `<button type="button" class="${cls.join(' ')}" data-map-tab="${i}" aria-current="${active}" aria-label="Chương ${c.id}: ${c.themeName}${cLocked ? ' — Xem trước, chưa mở' : ''}"
                     style="color:${c.accent}"${cLocked ? ' data-locked="1"' : ''}
                     title="${c.name}${cLocked ? ' — chưa mở khoá' : ''}">
             <span class="ms-tab-ico">${c.icon}</span>
             <span class="ms-tab-txt">
-              <b>${c.themeName}</b>
+              <b>${c.id}. ${c.themeName}</b>
               <i>${cLocked ? 'Chưa mở' : (cWins > 0 ? 'Đã phá đảo' : (cPct > 0 ? cPct + '% hoàn thành' : 'Chưa chơi'))}</i>
             </span>
             ${cLocked ? '<span class="ms-tab-lock">🔒</span>' : ''}
@@ -17943,16 +17951,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           </button>`;
         }).join('');
 
-        const startLabel = locked
-          ? `🔒 Cần ${ch.unlock ? ch.unlock.label : 'mở khoá'}`
-          : (reach > 0 && reach < ch.rooms ? `▶ Chơi Tiếp · Phòng ${reach + 1}` : '▶ Bắt Đầu Hành Trình');
-
         el.innerHTML = `
-          <div class="ms-stage">
+          <div class="ms-stage" style="--battle-accent:${ch.accent}">
             <!-- ẢNH BẢN ĐỒ -->
             <div class="ms-art${ch.id >= 8 ? ' is-zodiac' : ''}${locked ? ' is-locked' : ''}${!locked ? ' is-active' : ''}" style="--zodiac-glow:${ch.accent}88">
               <img src="${ch.mapAsset}" alt="Bản đồ ${ch.mapRegion}" draggable="false">
               <div class="ms-aura" style="background:radial-gradient(ellipse at 50% 68%, ${ch.accent}3a, transparent 62%)"></div>
+              <div class="battle-map-orbit" aria-hidden="true"></div>
               <div class="ms-scrim"></div>
 
               <!-- TIÊU ĐỀ TRÊN ẢNH: mỗi thông tin 1 lần -->
@@ -17984,17 +17989,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </div>
           </div>
 
-          <!-- CHỌN CHƯƠNG: đặt TRƯỚC nút bắt đầu — chọn map rồi mới chơi -->
-          <div class="ms-tabs">${tabs}</div>
-
-          <div class="ms-actions">
-            <button type="button" id="msBtnBestiary" class="ms-btn ms-btn-icon" title="Sổ tay quái vật" aria-label="Sổ tay quái vật">
-              <span class="ms-bi-ico">📖</span><span class="ms-bi-txt">Sổ tay</span>
-            </button>
-            <button type="button" id="msBtnStart" class="ms-btn ms-btn-start"
-              style="background:linear-gradient(135deg,${ch.accent},${ch.accent2});box-shadow:0 8px 22px -9px ${ch.accent}cc"
-              ${locked ? 'disabled' : ''}>${startLabel}</button>
+          <div class="battle-map-tools">
+            <span class="battle-section-label">02 / ĐIỂM ĐẾN</span>
+            <button type="button" id="msBtnBestiary" class="battle-tool" aria-label="Sổ tay quái vật">📖 Sổ tay quái</button>
           </div>
+          <details id="battleChapterPicker" class="battle-chapter-picker"${pickerWasOpen ? ' open' : ''}>
+            <summary><span>Đổi chương</span><b>${ch.id} / ${CHAPTERS.length} <span aria-hidden="true">⌄</span></b></summary>
+            <div class="ms-tabs" role="group" aria-label="Danh sách chương">${tabs}</div>
+          </details>
+          ${locked ? '<div class="battle-preview-note">Đang xem trước, chưa đổi chương xuất chiến. <button type="button" class="battle-preview-return" id="btnBattleReturnChapter">← Về chương đang chơi</button></div>' : ''}
         `;
 
         // ---- Sự kiện ----
@@ -18006,24 +18009,21 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             if (isChapterLocked(target)) {
               previewChapterIdx = idx;
               renderMapSelect();
+              el.querySelector(`[data-map-tab="${idx}"]`)?.focus({ preventScroll: true });
               return;
             }
             previewChapterIdx = null;
             SaveState.selectedChapterIdx = idx;
             SaveState.save();
             renderMapSelect();
-            renderChapterHeader();
+            el.querySelector(`[data-map-tab="${idx}"]`)?.focus({ preventScroll: true });
           });
         });
-        const startBtn = document.getElementById('msBtnStart');
-        if (startBtn && !locked) {
-          startBtn.addEventListener('click', () => {
-            SaveState.selectedChapterIdx = selIdx;
-            SaveState.save();
-            if (typeof openRunBriefing === 'function') openRunBriefing();
-            else document.getElementById('btnStartGame')?.click();
-          });
-        }
+        document.getElementById('btnBattleReturnChapter')?.addEventListener('click', () => {
+          previewChapterIdx = null;
+          renderMapSelect();
+          document.querySelector('#battleChapterPicker summary')?.focus({ preventScroll: true });
+        });
         const bestiaryBtn = document.getElementById('msBtnBestiary');
         if (bestiaryBtn) bestiaryBtn.addEventListener('click', () => openBestiaryModal());
       }
@@ -18041,124 +18041,51 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       function renderChapterSelectStrip() {
-        /**
-         * Vẽ dải thẻ chọn chương.
-         * Mỗi thẻ hiện đủ: số + tên chương, độ khó (3 bậc), số phòng, tiến trình
-         * tốt nhất, trùm cuối. Chương chưa mở thì phủ lớp khoá + điều kiện.
-         */
+        // Tương thích các đường gọi cũ, không dựng bộ chọn chương thứ hai.
         const el = document.getElementById('chapterSelectStrip');
         if (!el) return;
-        // Dải chọn chương chỉ có nghĩa ở Chiến Dịch. Đặt ngay trong hàm vẽ
-        // (không chỉ trong renderLobby) để mọi đường gọi đều ẩn đúng.
-        const _m = getActiveGameMode();
-        el.classList.toggle('hidden', !_m.hasChapters);
-        if (!_m.hasChapters) return;
-        const selIdx = SaveState.selectedChapterIdx || 0;
-
-        el.innerHTML = CHAPTERS.map((ch, idx) => {
-          const active = idx === selIdx;
-          const locked = isChapterLocked(ch);
-          const best = getChapterBest(ch.id);
-          const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
-          const cleared = wins > 0;
-          const pct = Math.min(100, Math.round((best / ch.rooms) * 100));
-          const diffColor = ch.difficulty === 1 ? '#4ade80' : (ch.difficulty === 2 ? '#fbbf24' : '#f87171');
-
-          const pips = [1, 2, 3].map(n =>
-            `<span style="flex:1;height:4px;border-radius:2px;background:${n <= ch.difficulty ? diffColor : 'rgba(255,255,255,.13)'}"></span>`
-          ).join('');
-
-          const lockOverlay = locked
-            ? `<div style="position:absolute;inset:0;border-radius:0.85rem;background:linear-gradient(180deg,rgba(2,6,23,.5),rgba(2,6,23,.9));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;z-index:3">
-                 <div style="font-size:24px;filter:grayscale(1) drop-shadow(0 2px 4px #000)">🔒</div>
-                 <div style="font-size:10px;font-weight:900;color:#e2e8f0">${ch.unlock.label}</div>
-                 <div style="font-size:9px;color:#94a3b8">để mở khoá</div>
-               </div>`
-            : '';
-
-          return `
-            <button type="button" data-chapter-card="${idx}"${locked ? ' data-locked="1"' : ''}
-              style="position:relative;overflow:hidden;border-radius:0.85rem;padding:9px 10px;text-align:left;
-                     border:2px solid ${active ? ch.accent : 'rgba(148,163,184,.2)'};
-                     background:linear-gradient(135deg,${ch.gradFrom},${ch.gradTo});
-                     box-shadow:${active ? `0 0 0 1px ${ch.accent}55,0 8px 20px -8px ${ch.accent}99` : '0 3px 10px -5px rgba(0,0,0,.8)'};
-                     transition:transform .16s ease,border-color .16s ease;cursor:${locked ? 'not-allowed' : 'pointer'}">
-              <div style="position:absolute;top:-28px;right:-28px;width:84px;height:84px;border-radius:50%;background:radial-gradient(circle,${ch.accent}30,transparent 70%);pointer-events:none"></div>
-
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
-                <span style="font-size:19px;line-height:1">${ch.icon}</span>
-                <div style="min-width:0;flex:1">
-                  <div style="font-size:8.5px;font-weight:900;letter-spacing:.07em;color:${ch.accent};text-transform:uppercase">
-                    Chương ${ch.id}${cleared ? ' · ĐÃ PHÁ ĐẢO' : ''}
-                  </div>
-                  <div style="font-size:12.5px;font-weight:900;color:#f8fafc;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-                    ${ch.themeName}
-                  </div>
-                </div>
-                ${active ? `<span style="font-size:8px;font-weight:900;color:#0f172a;background:${ch.accent};padding:1px 5px;border-radius:999px;white-space:nowrap">ĐANG CHỌN</span>` : ''}
-              </div>
-
-              <div style="display:flex;align-items:center;gap:3px;margin-bottom:4px">${pips}</div>
-
-              <div style="display:flex;align-items:center;justify-content:space-between;font-size:9.5px;font-weight:800;color:#cbd5e1;margin-bottom:4px">
-                <span>${ch.rooms} phòng</span>
-                <span style="color:${diffColor}">${ch.difficultyLabel.split(' — ')[0]}</span>
-              </div>
-
-              <div style="height:4px;border-radius:2px;background:rgba(0,0,0,.5);overflow:hidden;margin-bottom:4px">
-                <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${ch.accent},${ch.accent2})"></div>
-              </div>
-
-              <div style="display:flex;align-items:center;justify-content:space-between;font-size:8.5px;font-weight:800">
-                <span style="color:#94a3b8">Tốt nhất ${best}/${ch.rooms}</span>
-                <span style="color:#fbbf24;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:56%">${ch.bossIcon} ${ch.bossName}</span>
-              </div>
-
-              ${lockOverlay}
-            </button>
-          `;
-        }).join('');
-
-        el.querySelectorAll('[data-chapter-card]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const idx = Number(btn.getAttribute('data-chapter-card'));
-            const ch = CHAPTERS[idx];
-            if (!ch) return;
-            if (isChapterLocked(ch)) {
-              showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
-              return;
-            }
-            SaveState.selectedChapterIdx = idx;
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderLobbyUI();
-          });
-        });
+        el.classList.add('hidden');
+        el.innerHTML = '';
       }
 
       /**
        * Màn hình briefing trước khi vào trận.
        * Mục đích: người chơi biết CHÍNH XÁC mình sắp đánh gì trước khi cam kết —
-       * chương nào, bao nhiêu phòng, trùm nào, kỷ lục cũ, và cảnh báo nếu lực
-       * chiến còn thấp so với chương. Bấm "Xuất Chinh" mới thật sự vào trận.
+       * chương/chế độ nào, luật, số phòng, trùm và kỷ lục cũ.
+       * Bấm "Xuất Chinh" mới thật sự vào trận.
        */
       function openRunBriefing() {
         const modal = document.getElementById('runBriefingModal');
         const card = document.getElementById('runBriefingCard');
         if (!modal || !card) return;
+        const mode = getActiveGameMode();
         const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
+        if (mode.hasChapters && isChapterLocked(ch)) {
+          showToast('🔒 Chương chưa mở. Hãy chọn một chương đã mở.', 'err');
+          return;
+        }
+        modal.dataset.returnFocus = document.activeElement?.id || 'btnStartGame';
+        if (!mode.hasChapters) {
+          card.style.borderColor = mode.color;
+          card.style.background = '#091424';
+          card.innerHTML = `<div class="battle-briefing-content"><span class="battle-eyebrow">XÁC NHẬN XUẤT CHIẾN</span><h2 id="battleBriefingTitle">${mode.icon} ${mode.name}</h2><p>${mode.desc}</p><div class="battle-briefing-rule">${mode.rules}</div><p>${mode.practice ? 'Không nhận vàng hay kinh nghiệm.' : 'Lượt mới bắt đầu từ phòng 1.'}</p><div class="battle-briefing-actions"><button type="button" id="btnBriefingCancel">← Quay lại</button><button type="button" id="btnBriefingStart">⚔️ Xuất chinh</button></div></div>`;
+          modal.classList.remove('hidden');
+          document.getElementById('btnBriefingCancel').addEventListener('click', closeRunBriefing);
+          document.getElementById('btnBriefingStart').addEventListener('click', () => {
+            modal.classList.add('hidden');
+            startNewRun('fresh');
+          });
+          document.getElementById('btnBriefingCancel').focus();
+          return;
+        }
         const stats = getComputedStats();
         const best = getChapterBest(ch.id);
         const wins = (SaveState.winsByChapter || {})[ch.id] || 0;
         const diffColor = ch.difficulty === 1 ? '#4ade80' : (ch.difficulty === 2 ? '#fbbf24' : '#f87171');
 
-        // Ước lượng sức: so powerScore với mốc kỳ vọng của từng chương.
-        const expectedPower = [200000, 420000, 800000][SaveState.selectedChapterIdx] || 200000;
-        const ratio = stats.powerScore / expectedPower;
-        let advice, adviceColor, adviceIcon;
-        if (ratio >= 1.15) { advice = 'Bạn mạnh hơn mức cần thiết — trận này sẽ khá nhẹ nhàng.'; adviceColor = '#4ade80'; adviceIcon = '💪'; }
-        else if (ratio >= 0.85) { advice = 'Lực chiến phù hợp với chương này. Hãy tập trung né đòn của trùm.'; adviceColor = '#fbbf24'; adviceIcon = '⚖️'; }
-        else { advice = 'Lực chiến còn thấp so với chương này. Nên cường hóa trang bị trước, hoặc chấp nhận thử thách!'; adviceColor = '#f87171'; adviceIcon = '⚠️'; }
+        // Không đánh giá mạnh/yếu bằng mốc lực chiến hardcode chưa được hiệu chỉnh.
+        const advice = 'Lượt mới từ phòng 1. Tiến trình kỷ lục không phải điểm lưu. Kéo để né đòn, thả tay để tự bắn.';
+        const adviceColor = '#7dd3fc', adviceIcon = '💡';
 
         const pips = [1, 2, 3].map(n =>
           `<span style="flex:1;height:6px;border-radius:3px;background:${n <= ch.difficulty ? diffColor : 'rgba(255,255,255,.12)'}"></span>`
@@ -18178,7 +18105,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 <div style="font-size:10px;font-weight:900;letter-spacing:.1em;color:${ch.accent};text-transform:uppercase">
                   Chuẩn bị xuất chinh
                 </div>
-                <div style="font-size:19px;font-weight:900;color:#f8fafc;line-height:1.15">${ch.name}</div>
+                <h2 id="battleBriefingTitle" style="font-size:19px;font-weight:900;color:#f8fafc;line-height:1.15">${ch.name}</h2>
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:5px;margin-top:10px">${pips}</div>
@@ -18235,13 +18162,21 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         modal.classList.remove('hidden');
         document.getElementById('btnBriefingCancel').addEventListener('click', () => {
-          modal.classList.add('hidden');
+          closeRunBriefing();
           SoundFX.coinPickup();
         });
         document.getElementById('btnBriefingStart').addEventListener('click', () => {
           modal.classList.add('hidden');
           startNewRun('fresh');
         });
+        document.getElementById('btnBriefingCancel').focus();
+      }
+
+      function closeRunBriefing() {
+        const modal = document.getElementById('runBriefingModal');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        document.getElementById(modal.dataset.returnFocus || 'btnStartGame')?.focus();
       }
 
       /**
@@ -27324,6 +27259,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       function renderLobbyUI() {
         const stats = getComputedStats();
+        const squad = document.getElementById('battleSquadSummary');
+        if (squad) squad.innerHTML = `<span class="battle-section-label">03 / ĐỘI HÌNH</span><img class="battle-hero-portrait" src="${stats.hero.avatar}" alt="${stats.hero.name}" draggable="false"><div class="battle-squad-copy"><small>ANH HÙNG XUẤT CHIẾN</small><h2>${stats.hero.name}</h2><p>${stats.hero.role}</p></div><div class="battle-power"><span>Lực chiến</span><b>${formatCompactNumberVn(stats.powerScore, '0')}</b></div>`;
         // Danh hiệu thật + thẻ "việc cần làm" (Đợt 5). Bọc try để một lỗi UI nhỏ
         // không làm sập toàn bộ lobby.
         try { renderRankBadge(); } catch (e) { console.warn('[rank] ', e); }
@@ -27404,24 +27341,25 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         safeRender('gameMode', () => renderGameModePanel());
         safeRender('mapSelect', () => renderMapSelect());
         safeRender('bestiary', () => renderBestiaryUI());
-        const bestRm = getChapterBest(ch.id) || 1;
+        const bestRm = getChapterBest(ch.id) || 0;
         document.getElementById('bestRecordText').textContent = `Kỷ lục: Phòng ${bestRm}/${ch.rooms}`;
 
         // Hero Selector (Displays dynamic Star Level 1★-6★ & Equipped Luxury Skin)
         const heroListEl = document.getElementById('heroSelectList');
         heroListEl.innerHTML = HEROES.map(h => {
           const active = h.id === SaveState.selectedHeroId;
+          const owned = isHeroOwned(h.id);
           const hStar = getHeroStarLevel(h.id);
           const hSkin = getActiveHeroSkin(h.id);
           return `
-            <button type="button" data-hero-id="${h.id}" class="hero-card-btn card-shine p-2 rounded-2xl border-2 text-left transition flex flex-col items-center text-center gap-1 ${active ? 'bg-amber-500/20 border-amber-400 shadow-lg scale-[1.02]' : 'bg-slate-950/80 border-slate-800 hover:border-slate-600'}">
+            <button type="button" data-hero-id="${h.id}" aria-pressed="${active}" aria-disabled="${!owned}" aria-label="${h.name}${!owned ? ' — chưa mở khóa' : (active ? ' — đang xuất chiến' : ' — chọn xuất chiến')}" class="hero-card-btn card-shine p-2 rounded-2xl border-2 text-left transition flex flex-col items-center text-center gap-1 ${active ? 'bg-amber-500/20 border-amber-400 shadow-lg scale-[1.02]' : 'bg-slate-950/80 border-slate-800 hover:border-slate-600'}">
               <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 shadow-md" style="border-color:${active ? '#fbbf24' : (hSkin.trimColor || h.color)}">
                 <img src="${h.avatar}" alt="${h.name}" class="w-full h-full object-cover" />
                 <span class="absolute top-0.5 right-0.5 px-1 rounded bg-slate-950/85 text-[8px] font-black text-fuchsia-300 border border-fuchsia-400/40">${hSkin.tier === 'mythic' ? '👑 Skin Thần Thoại' : (hSkin.tier === 'legendary' ? '★ Skin Sử Thi' : 'Mặc Định')}</span>
                 <span class="absolute bottom-0 inset-x-0 bg-slate-950/85 text-[9px] font-black ${hStar >= 6 ? 'text-rose-300' : 'text-amber-300'} py-0.5">${'★'.repeat(hStar)} (${hStar}★)</span>
               </div>
               <div class="font-extrabold text-xs sm:text-sm text-white">${h.name}</div>
-              <div class="text-[9px] font-black text-fuchsia-300 leading-tight truncate max-w-full">🧥 ${hSkin.name}</div>
+              <div class="text-[9px] font-black text-fuchsia-300 leading-tight truncate max-w-full">${owned ? `🧥 ${hSkin.name}` : '🔒 Chưa mở khóa'}</div>
               <div class="text-[10px] text-slate-300 font-semibold leading-tight">${h.title}</div>
             </button>
           `;
@@ -28148,7 +28086,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const label = document.getElementById('btnContinueRunLabel');
         if (!btn) return;
         const cp = getUsableCheckpoint();
-        if (!cp) {
+        const mode = getActiveGameMode();
+        if (!cp || !mode.hasChapters || (previewChapterIdx !== null && previewChapterIdx !== SaveState.selectedChapterIdx)) {
           btn.classList.add('hidden');
           return;
         }
@@ -32741,6 +32680,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       let _perfCooldown = 0;
 
       function setLowGfx(on) {
+        document.getElementById('tabBattle')?.classList.toggle('battle-motion-low', on);
+        document.getElementById('runBriefingModal')?.classList.toggle('battle-motion-low', on);
         if (Game.lowGfx === on) return;
         Game.lowGfx = on;
         Game.ultraGfx = !on;
@@ -33165,6 +33106,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       document.getElementById('btnStartGame').addEventListener('click', () => {
         openRunBriefing();
       });
+      document.getElementById('btnBattleHelp')?.addEventListener('click', () => {
+        document.getElementById('btnOpenGuide')?.click();
+      });
+      // Đóng bằng nút, nền và bàn phím đều trả focus về nút đã mở.
+      (function wireBattleBriefing() {
+        const modal = document.getElementById('runBriefingModal');
+        if (!modal) return;
+        modal.addEventListener('click', ev => { if (ev.target === modal) closeRunBriefing(); });
+        modal.addEventListener('keydown', ev => {
+          if (ev.key === 'Escape') { ev.preventDefault(); closeRunBriefing(); }
+          if (ev.key !== 'Tab') return;
+          const controls = [...modal.querySelectorAll('button:not([disabled])')];
+          const first = controls[0], last = controls[controls.length - 1];
+          if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last?.focus(); }
+          else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first?.focus(); }
+        });
+      })();
 
       // ---- Sổ tay quái vật (modal) ----
       // Mặc định ẩn. Trước đây nó chiếm nửa màn hình lobby, đẩy nút Bắt Đầu

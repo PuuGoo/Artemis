@@ -1,0 +1,1882 @@
+/*
+ * Artemis / Moonlit expedition
+ * Route-owned overrides; the page's fonts, assets and gameplay stay intact.
+ * Keep display off the tab, Continue button and briefing overlay: their existing
+ * .hidden / [hidden] state must remain authoritative.
+ */
+
+#tabBattle.battle-hub {
+  --battle-ink: #f5f1e7;
+  --battle-muted: #b4c4ce;
+  --battle-faint: #91a8b5;
+  --battle-gold: #e5c88b;
+  --battle-teal: #8cd8cd;
+  --battle-line: rgba(164, 197, 207, .19);
+  --battle-surface: #0d1c2b;
+  --battle-accent: #8cd8cd;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  gap: 22px;
+  padding: 26px 28px 0;
+  color: var(--battle-ink);
+  background:
+    radial-gradient(ellipse at 94% 0%, rgba(41, 104, 112, .15), transparent 48%),
+    radial-gradient(ellipse at 0% 34%, rgba(34, 69, 91, .17), transparent 52%),
+    #07111e;
+  font-size: 14px;
+  line-height: 1.55;
+  scrollbar-width: thin;
+  scrollbar-color: #526f7b #091522;
+  scroll-padding-block: 20px 164px;
+}
+
+#tabBattle *,
+#tabBattle *::before,
+#tabBattle *::after {
+  box-sizing: border-box;
+}
+
+#tabBattle :where(button, summary) {
+  min-height: 44px;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#tabBattle :where(button, a, summary, [tabindex]):focus-visible,
+#runBriefingModal :where(button, a, summary, [tabindex]):focus-visible {
+  outline: 2px solid #f3dba5;
+  outline-offset: 4px;
+}
+
+#tabBattle :where(button:disabled, button[aria-disabled="true"]) {
+  cursor: not-allowed;
+}
+
+#tabBattle .battle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+#tabBattle .battle-header > div,
+#tabBattle .battle-layout > *,
+#tabBattle .battle-route > *,
+#tabBattle .battle-prep > *,
+#tabBattle .battle-launch > * {
+  min-width: 0;
+}
+
+#tabBattle.battle-hub > * {
+  flex-shrink: 0;
+}
+
+#tabBattle .battle-eyebrow {
+  display: block;
+  margin: 0 0 7px;
+  color: var(--battle-gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+#tabBattle .battle-header h1 {
+  margin: 0;
+  color: var(--battle-ink);
+  font-size: clamp(28px, 3.2vw, 38px);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+#tabBattle .battle-header p {
+  max-width: 52ch;
+  margin: 9px 0 0;
+  color: var(--battle-muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+#tabBattle .battle-help,
+#tabBattle .battle-tool,
+#tabBattle .battle-preview-return {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border: 1px solid var(--battle-line);
+  border-radius: 12px;
+  color: #e0e9e9;
+  background: #112232;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+#tabBattle .battle-help {
+  flex: 0 0 auto;
+  max-width: 150px;
+}
+
+/* A clear route on the left; optional preparation on the right. */
+#tabBattle .battle-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(268px, 1fr);
+  align-items: start;
+  gap: 22px;
+}
+
+#tabBattle .battle-route,
+#tabBattle .battle-prep {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+#tabBattle #gameModePanel,
+#tabBattle #mapSelectPanel {
+  min-width: 0;
+}
+
+#tabBattle #mapSelectPanel {
+  gap: 14px;
+}
+
+#tabBattle .battle-modes {
+  padding: 0;
+}
+
+#tabBattle .battle-section-label {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: var(--battle-faint);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  line-height: 1.5;
+}
+
+#tabBattle .battle-section-label :where(small, span) {
+  color: inherit;
+  font-size: 12px;
+}
+
+#tabBattle .battle-mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+  min-width: 0;
+}
+
+#tabBattle .battle-mode {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 83px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 5px;
+  border: 1px solid var(--battle-line);
+  border-radius: 14px;
+  color: #c4d2d9;
+  background: #0c1a29;
+  cursor: pointer;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+#tabBattle .battle-mode-icon {
+  display: block;
+  font-size: 23px;
+  line-height: 1;
+}
+
+#tabBattle .battle-mode b {
+  max-width: 100%;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+#tabBattle .battle-mode[aria-pressed="true"] {
+  border-color: var(--mode-color, var(--battle-gold));
+  color: #fff5dd;
+  background: linear-gradient(165deg, #243535, #122331);
+  box-shadow: inset 0 -2px 0 var(--mode-color, var(--battle-gold));
+}
+
+#tabBattle .battle-mode[aria-pressed="true"]::after {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mode-color, var(--battle-gold));
+  content: "";
+}
+
+#tabBattle .battle-mode-caption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px 16px;
+  min-height: 38px;
+  padding: 11px 1px 0;
+}
+
+#tabBattle .battle-mode-caption p {
+  flex: 1 1 240px;
+  margin: 0;
+  color: var(--battle-muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+#tabBattle .battle-mode-record {
+  color: var(--battle-gold);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+#tabBattle .battle-map-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#tabBattle .battle-map-tools .battle-section-label {
+  margin: 0;
+}
+
+#tabBattle .battle-tool {
+  flex: 0 0 auto;
+  background: #0d1d2b;
+}
+
+/* The existing chapter illustration is the hero, not a blurred backdrop. */
+#tabBattle .ms-stage {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(157, 197, 202, .27);
+  border-radius: 23px;
+  background: #081422;
+  box-shadow: 0 12px 32px -22px rgba(0, 0, 0, .8);
+  animation: battle-reveal 420ms ease-out both;
+}
+
+#tabBattle .ms-art {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+  isolation: isolate;
+  background: #102632;
+}
+
+#tabBattle .ms-art img,
+#tabBattle .ms-art.is-active img,
+#tabBattle .ms-art.is-zodiac img,
+#tabBattle .ms-art.is-locked img,
+#tabBattle .ms-art.is-zodiac.is-locked img {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 52%;
+  filter: none;
+  transform: none;
+  animation: none;
+  transition: opacity 240ms ease;
+}
+
+/* Retire the old zodiac background-position / blend effects. */
+#tabBattle .ms-art.is-zodiac::before,
+#tabBattle .ms-art.is-zodiac::after {
+  content: none;
+  mix-blend-mode: normal;
+  animation: none;
+}
+
+#tabBattle .ms-scrim {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(4, 12, 23, .27), transparent 29%, rgba(4, 12, 23, .25) 46%, rgba(4, 12, 23, .94) 100%),
+    linear-gradient(90deg, rgba(4, 12, 23, .12), transparent 65%);
+}
+
+#tabBattle .ms-aura,
+#tabBattle .ms-art.is-active .ms-aura {
+  z-index: 1;
+  inset: 5% -5%;
+  opacity: .62;
+  mix-blend-mode: normal;
+  animation: battle-aurora 9s ease-in-out infinite alternate;
+  transition: none;
+}
+
+#tabBattle .battle-map-orbit {
+  position: absolute;
+  z-index: 1;
+  top: 43%;
+  left: 59%;
+  width: 43%;
+  max-width: 240px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(237, 216, 163, .42);
+  border-radius: 50%;
+  opacity: .68;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: battle-orbit 48s linear infinite;
+}
+
+#tabBattle .battle-map-orbit::before {
+  position: absolute;
+  inset: 11%;
+  border: 1px dashed rgba(166, 224, 216, .43);
+  border-radius: inherit;
+  content: "";
+}
+
+#tabBattle .battle-map-orbit::after {
+  position: absolute;
+  top: 49%;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f0d9a5;
+  box-shadow: 0 0 0 5px rgba(240, 217, 165, .12);
+  content: "";
+}
+
+#tabBattle .ms-art.is-locked .battle-map-orbit {
+  opacity: .32;
+}
+
+#tabBattle .ms-topbar,
+#tabBattle .ms-art.is-zodiac .ms-topbar {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 24px;
+  pointer-events: none;
+}
+
+#tabBattle .ms-topbar > div {
+  min-width: 0;
+  max-width: 100%;
+}
+
+#tabBattle .ms-kicker {
+  margin-bottom: 7px;
+  color: #f1d69e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  line-height: 1.5;
+  text-shadow: 0 2px 5px #06101b;
+}
+
+#tabBattle .ms-name {
+  margin-top: 0;
+  color: #fff7e9;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .55);
+}
+
+#tabBattle .ms-tagline {
+  max-width: 42ch;
+  margin-top: 8px;
+  color: #dfE8e7;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.6;
+  text-shadow: 0 1px 4px #06101b;
+}
+
+#tabBattle .ms-diff {
+  position: absolute;
+  top: 17px;
+  right: 17px;
+  display: inline-flex;
+  max-width: calc(100% - 34px);
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid rgba(222, 232, 229, .3);
+  border-radius: 9px;
+  background: rgba(6, 17, 29, .94);
+  backdrop-filter: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+#tabBattle .ms-diff-pip {
+  width: 5px;
+  height: 5px;
+}
+
+#tabBattle .ms-diff-pip.on {
+  box-shadow: none;
+}
+
+#tabBattle .ms-info {
+  padding: 18px 22px 20px;
+  border-top: 1px solid rgba(174, 203, 202, .12);
+  background: linear-gradient(135deg, #102331, #0a1827);
+}
+
+#tabBattle .ms-progline {
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  margin-bottom: 12px;
+}
+
+#tabBattle .ms-prog-main,
+#tabBattle .ms-prog-atk {
+  color: var(--battle-muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+#tabBattle .ms-prog-main b {
+  margin-right: 4px;
+  color: var(--battle-ink);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.025em;
+}
+
+#tabBattle .ms-prog-atk b {
+  color: var(--battle-gold);
+  font-size: 13px;
+}
+
+#tabBattle .ms-trail {
+  gap: 3px;
+  overflow: visible;
+  padding: 3px 0;
+}
+
+#tabBattle .ms-node {
+  min-width: 0;
+  height: 8px;
+  border: 1px solid rgba(155, 189, 201, .2);
+  border-radius: 3px;
+  background: #263e4e;
+  animation: none;
+  transition: none;
+}
+
+#tabBattle .ms-node.done {
+  border-color: #7dcdbb;
+  background: #72bbaa;
+}
+
+#tabBattle .ms-node.now {
+  border: 2px solid #f3d292;
+  background: transparent;
+  box-shadow: 0 0 0 2px rgba(243, 210, 146, .13);
+  animation: none;
+}
+
+#tabBattle .ms-node.boss-node {
+  width: 19px;
+  min-width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #3c2635;
+  font-size: 10px;
+}
+
+#tabBattle .ms-node.boss-node.done {
+  border-color: #e7b6ab;
+  color: #171722;
+  background: #d6a195;
+  box-shadow: none;
+}
+
+#tabBattle .ms-node.boss-node.now {
+  border-color: #f3d292;
+  color: #fff1d7;
+  background: #573741;
+  box-shadow: 0 0 0 2px rgba(243, 210, 146, .13);
+}
+
+#tabBattle .ms-bossline {
+  margin-top: 12px;
+  color: var(--battle-muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+#tabBattle .ms-bossline b {
+  color: var(--battle-gold);
+  font-weight: 700;
+}
+
+#tabBattle .ms-lockbar,
+#tabBattle .battle-preview-note {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(230, 189, 124, .28);
+  border-radius: 13px;
+  color: #e9d4b3;
+  background: #26252a;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+#tabBattle .battle-preview-note p {
+  flex: 1 1 180px;
+  min-width: 0;
+  margin: 0;
+}
+
+#tabBattle .battle-preview-return {
+  min-height: 44px;
+  border-color: rgba(230, 189, 124, .35);
+  color: #f2dcaf;
+  background: #1a2631;
+}
+
+/* Native details keep the overview quiet without an inner scroll area. */
+#tabBattle .battle-chapter-picker,
+#tabBattle .battle-prep-details {
+  min-width: 0;
+  border: 1px solid var(--battle-line);
+  border-radius: 16px;
+  background: #0c1b29;
+}
+
+#tabBattle .battle-chapter-picker > summary,
+#tabBattle .battle-prep-details > summary {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: inherit;
+  color: #e4e9e4;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  list-style: none;
+  cursor: pointer;
+}
+
+#tabBattle .battle-chapter-picker > summary::-webkit-details-marker,
+#tabBattle .battle-prep-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+#tabBattle .battle-chapter-picker > summary::marker,
+#tabBattle .battle-prep-details > summary::marker {
+  content: "";
+}
+
+#tabBattle .battle-chapter-picker > summary span {
+  flex: 1;
+  min-width: 0;
+}
+
+#tabBattle .battle-chapter-picker > summary b {
+  margin-left: auto;
+  color: var(--battle-gold);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#tabBattle .battle-chapter-picker > summary::after,
+#tabBattle .battle-prep-details > summary::after {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  place-items: center;
+  margin-left: auto;
+  border: 1px solid rgba(157, 191, 201, .27);
+  border-radius: 50%;
+  color: var(--battle-teal);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  content: "+";
+}
+
+#tabBattle .battle-chapter-picker[open] > summary::after,
+#tabBattle .battle-prep-details[open] > summary::after {
+  content: "−";
+}
+
+#tabBattle .battle-chapter-picker .ms-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  max-height: none;
+  overflow: visible;
+  padding: 0 12px 12px;
+}
+
+#tabBattle .ms-tab {
+  display: flex;
+  min-width: 0;
+  min-height: 78px;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px 15px;
+  overflow: hidden;
+  border: 1px solid rgba(157, 191, 201, .23);
+  border-radius: 11px;
+  color: #dbe8e6;
+  background: #102332;
+  filter: none;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+#tabBattle .ms-tab.is-active,
+#tabBattle .ms-tab[aria-current="true"] {
+  border-color: #e5c88b;
+  background: #263335;
+  box-shadow: inset 0 0 0 1px rgba(229, 200, 139, .22);
+}
+
+#tabBattle .ms-tab.is-locked {
+  border-style: dashed;
+  background: #0c1927;
+  filter: none;
+  opacity: 1;
+  cursor: pointer;
+}
+
+#tabBattle .ms-tab-ico {
+  flex: 0 0 auto;
+  font-size: 19px;
+  line-height: 1;
+}
+
+#tabBattle .ms-tab-txt {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#tabBattle .ms-tab-txt b {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #ecf0e9;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+#tabBattle .ms-tab-txt i {
+  display: block;
+  color: #adc0ca;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+#tabBattle .ms-tab-lock {
+  top: 5px;
+  right: 5px;
+  font-size: 10px;
+  opacity: 1;
+}
+
+#tabBattle .ms-tab-bar {
+  height: 3px;
+  background: #06111e;
+}
+
+/* Non-campaign destinations share the same restrained portal language. */
+#tabBattle .battle-mode-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 350px;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 30px 26px 24px;
+  border: 1px solid rgba(157, 197, 202, .27);
+  border-radius: 23px;
+  background: linear-gradient(145deg, #183337, #0b1c2d 62%, #101e30);
+  animation: battle-reveal 420ms ease-out both;
+}
+
+#tabBattle .battle-mode-stage::before {
+  position: absolute;
+  z-index: -1;
+  inset: -15% -10% 15% 5%;
+  background: radial-gradient(ellipse at 70% 25%, rgba(112, 207, 190, .13), transparent 58%);
+  background: radial-gradient(ellipse at 70% 25%, color-mix(in srgb, var(--battle-accent) 19%, transparent), transparent 58%);
+  pointer-events: none;
+  animation: battle-aurora 11s ease-in-out infinite alternate;
+  content: "";
+}
+
+#tabBattle .battle-mode-stage::after {
+  position: absolute;
+  z-index: -1;
+  top: -70px;
+  right: -65px;
+  width: 255px;
+  height: 255px;
+  border: 1px solid rgba(229, 200, 139, .14);
+  border-radius: 50%;
+  box-shadow: 0 0 0 23px rgba(141, 211, 201, .025), 0 0 0 46px rgba(141, 211, 201, .025);
+  pointer-events: none;
+  content: "";
+}
+
+#tabBattle .battle-mode-emblem {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  margin-bottom: 24px;
+  border: 1px solid rgba(223, 208, 167, .38);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(169, 207, 186, .12), rgba(8, 22, 36, .5));
+  font-size: 36px;
+  line-height: 1;
+}
+
+#tabBattle .battle-mode-title,
+#tabBattle .battle-mode-title h2,
+#tabBattle .battle-mode-stage > h2 {
+  margin: 0;
+  color: var(--battle-ink);
+  font-size: clamp(25px, 3vw, 33px);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.22;
+  text-wrap: balance;
+}
+
+#tabBattle .battle-mode-title p,
+#tabBattle .battle-mode-stage > p {
+  max-width: 46ch;
+  margin: 12px 0 0;
+  color: var(--battle-muted);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.7;
+}
+
+#tabBattle .battle-mode-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 25px 0 0;
+}
+
+#tabBattle .battle-mode-facts > div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--battle-line);
+  border-radius: 13px;
+  background: rgba(5, 17, 30, .47);
+}
+
+#tabBattle .battle-mode-facts dt {
+  margin: 0 0 7px;
+  color: var(--battle-faint);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  line-height: 1.45;
+}
+
+#tabBattle .battle-mode-facts dd {
+  margin: 0;
+  color: #e8eee5;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+#tabBattle .battle-mode-stage .battle-mode-notice,
+#tabBattle .battle-controls-hint {
+  margin: 16px 0 0;
+  color: #c1d6d5;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#tabBattle .battle-mode-stage .battle-mode-notice {
+  padding: 12px 14px;
+  border: 1px solid rgba(140, 216, 205, .23);
+  border-radius: 12px;
+  background: rgba(112, 207, 190, .07);
+}
+
+#tabBattle .battle-controls-hint {
+  margin: 0;
+  padding: 0 2px;
+  color: var(--battle-muted);
+}
+
+#tabBattle .battle-controls-hint kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid #47606d;
+  border-radius: 5px;
+  color: #e4ebe7;
+  background: #132737;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* The squad is readable at a glance; its editor is intentionally optional. */
+#tabBattle #battleSquadSummary {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  align-items: center;
+  gap: 15px 13px;
+  padding: 20px;
+  border: 1px solid rgba(193, 189, 151, .27);
+  border-radius: 20px;
+  background: linear-gradient(140deg, #172d35, #102130 66%);
+}
+
+#tabBattle #battleSquadSummary > .battle-section-label {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+#tabBattle .battle-hero-portrait {
+  display: block;
+  width: 68px;
+  height: 82px;
+  overflow: hidden;
+  border: 1px solid rgba(229, 200, 139, .55);
+  border-radius: 15px;
+  background: #193a42;
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+#tabBattle .battle-hero-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+#tabBattle .battle-squad-copy {
+  min-width: 0;
+}
+
+#tabBattle .battle-squad-copy small {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--battle-gold);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+#tabBattle .battle-squad-copy h2 {
+  margin: 0;
+  color: var(--battle-ink);
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+#tabBattle .battle-squad-copy p {
+  margin: 6px 0 0;
+  color: #bfd0d5;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+#tabBattle .battle-power {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  min-width: 0;
+  padding-top: 15px;
+  border-top: 1px solid var(--battle-line);
+  color: var(--battle-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#tabBattle .battle-power :where(b, strong) {
+  color: #f0d8a1;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+#tabBattle .battle-prep-details > :not(summary) {
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  border: 0;
+  border-top: 1px solid var(--battle-line);
+  border-radius: 0;
+  background: transparent;
+}
+
+#tabBattle .battle-prep-details > summary > [aria-hidden="true"] {
+  display: none;
+}
+
+#tabBattle .battle-prep-content {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+#tabBattle .battle-prep-content > div {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+#tabBattle .battle-prep-content > div > .flex:first-child {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+#tabBattle .battle-prep-content > div > .flex:first-child > div {
+  min-width: 0;
+}
+
+#tabBattle .battle-prep-details h3 {
+  color: #d9dfcf;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.6;
+}
+
+#tabBattle #activeHeroRole,
+#tabBattle #bestRecordText {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#tabBattle #btnBattleOpenStarSkin {
+  min-height: 44px;
+  padding: 9px 11px;
+  border: 1px solid rgba(229, 200, 139, .32);
+  border-radius: 10px;
+  color: #f0d6a2;
+  background: #283034;
+  box-shadow: none;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+#tabBattle #heroSelectList {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  min-width: 0;
+}
+
+#tabBattle #heroSelectList .hero-card-btn {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 3px;
+  min-width: 0;
+  min-height: 96px;
+  padding: 10px;
+  border-width: 1px;
+  border-radius: 13px;
+  background: #0d1d2b;
+  box-shadow: none;
+  transform: none;
+  text-align: left;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+#tabBattle #heroSelectList .hero-card-btn > div:first-child {
+  grid-column: 1;
+  grid-row: 1 / span 4;
+  width: 64px;
+  height: 76px;
+  border-width: 1px;
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+#tabBattle #heroSelectList .hero-card-btn > div:not(:first-child) {
+  grid-column: 2;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+#tabBattle #heroSelectList .hero-card-btn > div:nth-child(2) {
+  align-self: end;
+  font-size: 14px;
+}
+
+#tabBattle #heroSelectList .hero-card-btn > div:first-child span {
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+#tabBattle #heroSelectList .hero-card-btn[aria-pressed="true"],
+#tabBattle #heroSelectList .hero-card-btn.border-amber-400 {
+  border-color: #e5c88b;
+  background: #263335;
+  transform: none;
+}
+
+#tabBattle #heroSelectList .hero-card-btn.card-shine::after {
+  animation: none;
+  opacity: 0;
+}
+
+#tabBattle #heroPassiveBox {
+  margin-top: 12px;
+  padding: 12px;
+  border-color: var(--battle-line);
+  border-radius: 12px;
+  color: #c4d3d9;
+  background: #091725;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+#tabBattle .battle-gear-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  min-width: 0;
+}
+
+#tabBattle .battle-gear-summary > div {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid var(--battle-line);
+  border-radius: 12px;
+  background: #0b1927;
+}
+
+#tabBattle .battle-gear-summary > div > div {
+  min-width: 0;
+}
+
+#tabBattle .battle-gear-summary > div > div:last-child > div:first-child {
+  margin-bottom: 4px;
+  color: var(--battle-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#tabBattle #summaryWeaponIcon,
+#tabBattle #summaryPetIcon {
+  width: 36px;
+  height: 36px;
+  padding: 3px;
+  border-color: rgba(180, 204, 206, .3);
+  background: #1a2b38;
+}
+
+#tabBattle #summaryWeaponIcon svg,
+#tabBattle #summaryPetIcon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#tabBattle #summaryWeaponName,
+#tabBattle #summaryPetName {
+  color: #edf0e6;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+#tabBattle .battle-squad-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: center;
+}
+
+#tabBattle .battle-squad-stats > div {
+  min-width: 0;
+  padding: 11px 3px;
+  border: 1px solid rgba(164, 197, 207, .12);
+  border-radius: 10px;
+  background: #0b1927;
+}
+
+#tabBattle .battle-squad-stats > div > div:first-child {
+  min-height: 36px;
+  color: var(--battle-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#tabBattle .battle-squad-stats :where(#statAtkText, #statHpText, #statAspdText, #statCritText) {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+#tabBattle #beginnerQuickCard {
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(229, 200, 139, .36);
+  border-radius: 16px;
+  background: linear-gradient(110deg, #292b2c, #102130 70%);
+  box-shadow: none;
+}
+
+#tabBattle #beginnerQuickCard :where(p, small) {
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#tabBattle #beginnerQuickCard button {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 11px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* One launch destination, sticky within this tab rather than the viewport. */
+#tabBattle .battle-launch {
+  position: sticky;
+  z-index: 12;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  padding: 17px 20px;
+  padding-bottom: max(17px, env(safe-area-inset-bottom, 0px));
+  border: 1px solid rgba(202, 198, 159, .33);
+  border-bottom: 0;
+  border-radius: 19px 19px 0 0;
+  background: linear-gradient(115deg, #192c34, #102130 65%);
+  box-shadow: 0 -10px 30px -14px rgba(0, 0, 0, .75);
+}
+
+#tabBattle .battle-launch-copy {
+  flex: 1 1 200px;
+}
+
+#tabBattle #battleLaunchTitle {
+  display: block;
+  margin: 0;
+  color: var(--battle-ink);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+#tabBattle #battleLaunchHint {
+  display: block;
+  margin: 4px 0 0;
+  color: #b6c8cf;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#tabBattle .battle-launch-actions {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+}
+
+#tabBattle .battle-launch-actions > button:not(.hidden):not([hidden]) {
+  display: inline-flex;
+  min-width: 0;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+#tabBattle #btnStartGame,
+#tabBattle #btnContinueRun {
+  width: auto;
+  max-width: 100%;
+  padding: 13px 19px;
+  border: 1px solid rgba(240, 220, 174, .48);
+  border-radius: 13px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .015em;
+  line-height: 1.45;
+  white-space: normal;
+  cursor: pointer;
+  filter: none;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+#tabBattle #btnStartGame.battle-launch-primary {
+  min-width: 172px;
+  color: #12202a;
+  background: linear-gradient(115deg, #f1dbab, #e1bd78);
+  box-shadow: 0 5px 16px -9px rgba(232, 198, 133, .55);
+  animation: none;
+}
+
+#tabBattle #btnContinueRun {
+  min-width: 135px;
+  border-color: rgba(140, 216, 205, .46);
+  color: #caf1e7;
+  background: #1c403f;
+  box-shadow: none;
+}
+
+#tabBattle #btnStartGame:disabled,
+#tabBattle #btnContinueRun:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+  transform: none;
+}
+
+/* This existing overlay is outside the tab; scope it explicitly. */
+#runBriefingModal {
+  z-index: 60;
+  min-width: 0;
+  padding: 20px;
+  background: rgba(3, 10, 20, .96);
+  backdrop-filter: none;
+}
+
+#runBriefingModal #runBriefingCard {
+  flex: 0 1 auto;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-width: 1px;
+  border-radius: 22px;
+  color: #f3f0e7;
+  box-shadow: 0 22px 70px -34px #000;
+  scrollbar-width: thin;
+  scrollbar-color: #6b827f #0c1a29;
+}
+
+#runBriefingModal:not(.hidden):not([hidden]) #runBriefingCard {
+  animation: battle-reveal 240ms ease-out both;
+}
+
+#runBriefingModal #runBriefingCard > div {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* The legacy briefing renderer emits inline microtype. Lift only that text. */
+#runBriefingModal #runBriefingCard [style*="font-size:8.5px"],
+#runBriefingModal #runBriefingCard [style*="font-size:10px"],
+#runBriefingModal #runBriefingCard [style*="font-size:10.5px"],
+#runBriefingModal #runBriefingCard [style*="font-size:11px"] {
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+}
+
+#runBriefingModal #runBriefingCard [style*="color:#64748b"] {
+  color: #b5c5cf !important;
+}
+
+#runBriefingModal #runBriefingCard button {
+  min-width: 0;
+  min-height: 48px;
+  font-family: inherit;
+  line-height: 1.5;
+  white-space: normal;
+  touch-action: manipulation;
+}
+
+#runBriefingModal #btnBriefingStart {
+  color: #11202b !important;
+  background: linear-gradient(115deg, #f1dbab, #e1bd78) !important;
+  box-shadow: none !important;
+}
+
+@keyframes battle-reveal {
+  from { opacity: 0; transform: translateY(9px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes battle-aurora {
+  from { opacity: .4; transform: translate(-1%, 1%) scale(1); }
+  to { opacity: .72; transform: translate(2%, -1%) scale(1.045); }
+}
+
+@keyframes battle-orbit {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #tabBattle .battle-mode:hover,
+  #tabBattle .ms-tab:hover,
+  #tabBattle .battle-help:hover,
+  #tabBattle .battle-tool:hover,
+  #tabBattle .battle-preview-return:hover,
+  #tabBattle #heroSelectList .hero-card-btn:hover {
+    background-color: #1c3440;
+    transform: translateY(-2px);
+  }
+
+  #tabBattle .battle-chapter-picker > summary:hover,
+  #tabBattle .battle-prep-details > summary:hover {
+    background: rgba(176, 214, 214, .05);
+  }
+
+  #tabBattle #btnStartGame:not(:disabled):hover,
+  #tabBattle #btnContinueRun:not(:disabled):hover {
+    opacity: .92;
+    filter: none;
+    transform: translateY(-2px);
+  }
+}
+
+#tabBattle :where(.battle-mode, .ms-tab, .battle-help, .battle-tool, .battle-preview-return):active,
+#tabBattle #btnStartGame:not(:disabled):active,
+#tabBattle #btnContinueRun:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+/* At tablet widths the preparation stays in document flow, not a tiny rail. */
+@media (max-width: 879px) {
+  #tabBattle.battle-hub {
+    gap: 20px;
+    padding: 23px 22px 0;
+  }
+
+  #tabBattle .battle-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  #tabBattle .battle-prep {
+    gap: 12px;
+  }
+
+  #tabBattle #battleSquadSummary {
+    grid-template-columns: 68px minmax(0, 1fr) auto;
+    padding: 18px;
+  }
+
+  #tabBattle .battle-power {
+    grid-column: auto;
+    align-items: flex-end;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 0 0 18px;
+    border-top: 0;
+    border-left: 1px solid var(--battle-line);
+  }
+
+  #tabBattle .ms-art {
+    min-height: 220px;
+    aspect-ratio: 21 / 9;
+  }
+
+  #tabBattle .battle-launch-copy {
+    flex-basis: 160px;
+  }
+
+  #tabBattle #btnStartGame.battle-launch-primary {
+    min-width: 150px;
+  }
+
+  #tabBattle #btnStartGame,
+  #tabBattle #btnContinueRun {
+    padding-inline: 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  #tabBattle.battle-hub {
+    gap: 18px;
+    padding: 20px 16px 0;
+    scroll-padding-bottom: 175px;
+  }
+
+  #tabBattle .battle-header {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  #tabBattle .battle-eyebrow {
+    max-width: 24ch;
+    font-size: 12px;
+    letter-spacing: .09em;
+  }
+
+  #tabBattle .battle-header h1 {
+    font-size: 25px;
+  }
+
+  #tabBattle .battle-header p {
+    margin-top: 8px;
+    font-size: 13px;
+  }
+
+  #tabBattle .battle-help {
+    max-width: 104px;
+    min-height: 44px;
+    padding: 9px 11px;
+  }
+
+  #tabBattle .battle-mode-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  #tabBattle .battle-mode {
+    min-height: 58px;
+    flex-direction: column;
+    gap: 6px;
+    padding: 9px 7px;
+    border-radius: 12px;
+  }
+
+  #tabBattle .battle-mode-icon {
+    flex: 0 0 auto;
+    font-size: 21px;
+  }
+
+  #tabBattle .battle-mode b {
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  #tabBattle .battle-mode-caption {
+    gap: 6px;
+    padding-top: 10px;
+  }
+
+  #tabBattle .battle-mode-caption p {
+    flex-basis: 100%;
+    font-size: 13px;
+  }
+
+  #tabBattle .battle-section-label {
+    margin-bottom: 10px;
+    letter-spacing: .04em;
+  }
+
+  #tabBattle .battle-map-tools {
+    gap: 8px;
+  }
+
+  #tabBattle .ms-stage,
+  #tabBattle .battle-mode-stage {
+    border-radius: 19px;
+  }
+
+  #tabBattle .ms-art {
+    min-height: 220px;
+    aspect-ratio: 16 / 10;
+  }
+
+  #tabBattle .ms-art img {
+    object-position: center 47%;
+  }
+
+  #tabBattle .ms-topbar,
+  #tabBattle .ms-art.is-zodiac .ms-topbar {
+    padding: 19px;
+  }
+
+  #tabBattle .ms-kicker {
+    margin-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: .1em;
+  }
+
+  #tabBattle .ms-name {
+    font-size: 28px;
+  }
+
+  #tabBattle .ms-tagline {
+    max-width: 34ch;
+    margin-top: 7px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  #tabBattle .ms-diff {
+    top: 13px;
+    right: 13px;
+    max-width: calc(100% - 26px);
+    font-size: 12px;
+  }
+
+  #tabBattle .battle-map-orbit {
+    top: 39%;
+    left: 61%;
+    width: 47%;
+  }
+
+  #tabBattle .ms-info {
+    padding: 16px 17px 18px;
+  }
+
+  #tabBattle .ms-prog-main b {
+    font-size: 19px;
+  }
+
+  #tabBattle .ms-trail {
+    gap: 2px;
+  }
+
+  #tabBattle .ms-node {
+    height: 7px;
+  }
+
+  #tabBattle .ms-node.boss-node {
+    width: 17px;
+    min-width: 17px;
+    height: 17px;
+    font-size: 9px;
+  }
+
+  #tabBattle .battle-chapter-picker .ms-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0 10px 10px;
+  }
+
+  #tabBattle .ms-tab {
+    min-height: 86px;
+    gap: 7px;
+    padding-inline: 9px;
+  }
+
+  #tabBattle .ms-tab-txt b,
+  #tabBattle .ms-tab-txt i {
+    font-size: 12px;
+  }
+
+  #tabBattle .battle-mode-stage {
+    min-height: 330px;
+    padding: 25px 20px 22px;
+  }
+
+  #tabBattle .battle-mode-emblem {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 22px;
+    border-radius: 21px;
+    font-size: 32px;
+  }
+
+  #tabBattle .battle-mode-facts {
+    gap: 9px;
+    margin-top: 20px;
+  }
+
+  #tabBattle .battle-mode-facts > div {
+    padding: 12px;
+  }
+
+  #tabBattle #battleSquadSummary {
+    grid-template-columns: 60px minmax(0, 1fr);
+    gap: 14px 12px;
+    padding: 17px;
+    border-radius: 17px;
+  }
+
+  #tabBattle .battle-hero-portrait {
+    width: 60px;
+    height: 74px;
+    border-radius: 13px;
+  }
+
+  #tabBattle .battle-squad-copy h2 {
+    font-size: 22px;
+  }
+
+  #tabBattle .battle-power {
+    grid-column: 1 / -1;
+    align-items: baseline;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5px 12px;
+    padding: 13px 0 0;
+    border-top: 1px solid var(--battle-line);
+    border-left: 0;
+  }
+
+  #tabBattle .battle-power :where(b, strong) {
+    font-size: 24px;
+  }
+
+  #tabBattle .battle-prep-details > :not(summary) {
+    padding: 14px;
+  }
+
+  #tabBattle #beginnerQuickCard {
+    padding: 15px;
+  }
+
+  #tabBattle .battle-launch {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 11px;
+    padding: 14px;
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+    border-radius: 17px 17px 0 0;
+  }
+
+  #tabBattle .battle-launch-copy {
+    flex: 0 0 auto;
+  }
+
+  #tabBattle #battleLaunchTitle {
+    font-size: 14px;
+  }
+
+  #tabBattle #battleLaunchHint {
+    margin-top: 3px;
+    font-size: 12px;
+  }
+
+  #tabBattle .battle-launch-actions {
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #tabBattle .battle-launch-actions > button:not(.hidden):not([hidden]) {
+    flex: 1 1 120px;
+    min-height: 50px;
+  }
+
+  #tabBattle #btnStartGame.battle-launch-primary,
+  #tabBattle #btnContinueRun {
+    min-width: 0;
+    padding: 12px 10px;
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+
+  #runBriefingModal {
+    padding: 14px;
+  }
+
+  #runBriefingModal #runBriefingCard {
+    max-height: calc(100vh - 28px);
+    max-height: calc(100dvh - 28px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    border-radius: 19px;
+  }
+}
+
+@media (max-width: 374px) {
+  #tabBattle.battle-hub {
+    padding-inline: 13px;
+  }
+
+  #tabBattle .battle-header h1 {
+    font-size: 27px;
+  }
+
+  #tabBattle .battle-help {
+    max-width: 90px;
+    padding-inline: 9px;
+  }
+
+  #tabBattle .battle-mode {
+    flex-direction: column;
+    gap: 7px;
+    min-height: 58px;
+  }
+
+  #tabBattle .battle-mode b {
+    text-align: center;
+  }
+
+  #tabBattle .ms-name {
+    font-size: 26px;
+  }
+}
+
+/* Pause every descendant and pseudo when the tab is not rendered. */
+#tabBattle.hidden,
+#tabBattle[hidden],
+#tabBattle.hidden *,
+#tabBattle[hidden] *,
+#tabBattle.hidden::before,
+#tabBattle.hidden::after,
+#tabBattle[hidden]::before,
+#tabBattle[hidden]::after,
+#tabBattle.hidden *::before,
+#tabBattle.hidden *::after,
+#tabBattle[hidden] *::before,
+#tabBattle[hidden] *::after,
+#runBriefingModal.hidden *,
+#runBriefingModal[hidden] *,
+#runBriefingModal.hidden *::before,
+#runBriefingModal.hidden *::after,
+#runBriefingModal[hidden] *::before,
+#runBriefingModal[hidden] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Manual low-motion mode works on the body, tab, or its surrounding shell. */
+.battle-motion-low #tabBattle,
+#tabBattle.battle-motion-low,
+.battle-motion-low #tabBattle *,
+#tabBattle.battle-motion-low *,
+.battle-motion-low #tabBattle::before,
+.battle-motion-low #tabBattle::after,
+#tabBattle.battle-motion-low::before,
+#tabBattle.battle-motion-low::after,
+.battle-motion-low #tabBattle *::before,
+.battle-motion-low #tabBattle *::after,
+#tabBattle.battle-motion-low *::before,
+#tabBattle.battle-motion-low *::after,
+.battle-motion-low #runBriefingModal,
+#runBriefingModal.battle-motion-low,
+.battle-motion-low #runBriefingModal *,
+#runBriefingModal.battle-motion-low *,
+.battle-motion-low #runBriefingModal::before,
+.battle-motion-low #runBriefingModal::after,
+#runBriefingModal.battle-motion-low::before,
+#runBriefingModal.battle-motion-low::after,
+.battle-motion-low #runBriefingModal *::before,
+.battle-motion-low #runBriefingModal *::after,
+#runBriefingModal.battle-motion-low *::before,
+#runBriefingModal.battle-motion-low *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tabBattle,
+  #tabBattle *,
+  #tabBattle::before,
+  #tabBattle::after,
+  #tabBattle *::before,
+  #tabBattle *::after,
+  #runBriefingModal,
+  #runBriefingModal *,
+  #runBriefingModal::before,
+  #runBriefingModal::after,
+  #runBriefingModal *::before,
+  #runBriefingModal *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  #tabBattle .battle-mode[aria-pressed="true"],
+  #tabBattle .ms-tab[aria-current="true"] {
+    border: 2px solid Highlight;
+  }
+
+  #tabBattle :where(button, a, summary, [tabindex]):focus-visible,
+  #runBriefingModal :where(button, a, summary, [tabindex]):focus-visible {
+    outline-color: Highlight;
+  }
+}

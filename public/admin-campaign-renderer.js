@@ -1859,10 +1859,15 @@ const ArenaV2 = (() => {
     // thân (squash & stretch)
     const bounce = Math.sin(nowMs * (e.type === 'bat' ? 0.02 : 0.009) + e.x * 0.1);
     const hover = e.type === 'bat' ? Math.sin(nowMs * 0.012 + e.y) * 4 - 6 : 0;
-    ctx.save(); ctx.translate(0, hover + drop); ctx.globalAlpha = big ? 1 : clamp(k * 1.6, 0, 1); ctx.scale((1 + bounce * (big ? 0.025 : 0.05)) * sc * S, (1 - bounce * (big ? 0.025 : 0.05)) * sc * S);
+    ctx.save(); ctx.translate(0, hover + drop); ctx.globalAlpha = big ? 1 : clamp(k * 1.6, 0, 1);
+    // PNG giữ tỉ lệ; chỉ thân vector cũ dùng squash/stretch.
+    ctx.scale(sc * S, sc * S);
     const flash = e.hitFlashTimer > 0;
     if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
-    drawBody(ctx, e, nowMs, B, v);
+    if (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e)) {
+      ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
+      drawBody(ctx, e, nowMs, B, v); ctx.restore();
+    }
     if (flash) { ctx.filter = 'none'; orb(ctx, 0, 0, r * 1.25, '#ffffff', Math.min(1, e.hitFlashTimer / 0.14) * 0.8); }
     ctx.restore();
 

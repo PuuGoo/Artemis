@@ -32,7 +32,9 @@ for (const [index, sign] of signs.entries()) {
 }
 
 test('Có thể xem chương khóa nhưng không thể vào trận', () => {
-  assert.match(html, /previewChapterIdx = idx;\s*renderMapSelect\(\);\s*return;/);
-  assert.match(html, /\$\{locked \? 'disabled' : ''\}/);
-  assert.match(html, /if \(mode\.hasChapters && isChapterLocked\(ch\)\)/);
+  const map = html.slice(html.indexOf('function renderMapSelect()'), html.indexOf('function openBestiaryModal()'));
+  assert.ok(/previewChapterIdx = idx;\s*renderMapSelect\(\);[\s\S]{0,160}?return;/.test(map));
+  const launch = html.slice(html.indexOf('function syncBattleLaunch()'), html.indexOf('function renderMapSelect()'));
+  assert.ok(/start\.disabled = locked/.test(launch));
+  assert.ok(/if \(mode\.hasChapters && isChapterLocked\(ch\)\)/.test(html));
 });
