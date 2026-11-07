@@ -3219,23 +3219,6 @@ const ArenaV2 = (() => {
       g.fillStyle = cg; g.fillRect(cx, iy0, cw, ih); g.strokeStyle = '#fbbf24'; g.lineWidth = 2; g.strokeRect(cx + 4, iy0 - 2, cw - 8, ih + 4); g.strokeStyle = 'rgba(253,224,71,0.3)'; g.lineWidth = 1;
       for (let y = iy0 + 14; y < iy0 + ih; y += 30) { g.beginPath(); g.moveTo(cx + 12, y); g.lineTo(w / 2, y + 8); g.lineTo(cx + cw - 12, y); g.stroke(); }
     }
-    if (B.zodiac) {
-      // Quỹ đạo sao, tia sáng và vệt sao chuyển động theo thời gian; không tạo DOM mỗi khung hình.
-      const cx = w / 2, cy = h / 2, radius = Math.min(w, h) * .34;
-      ctx.save(); ctx.translate(cx, cy);
-      for (let ring = 0; ring < 3; ring++) {
-        const rr = radius * (.55 + ring * .2), turn = t * (.12 + ring * .07) * (ring % 2 ? -1 : 1);
-        ctx.strokeStyle = rgba(B.accent, .2 + .11 * Math.sin(t * 1.3 + ring)); ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.ellipse(0, 0, rr, rr * .55, turn, 0, TAU); ctx.stroke();
-        for (let j = 0; j < 4; j++) {
-          const a = j * TAU / 4 + turn;
-          orb(ctx, Math.cos(a) * rr, Math.sin(a) * rr * .55, 5 + ring * 2, B.trim, .45);
-        }
-      }
-      ctx.fillStyle = rgba(B.trim, .38 + .13 * Math.sin(t * 2));
-      ctx.font = `bold ${Math.round(radius * .78)}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(B.zodiac, 0, 0); ctx.restore();
-    }
     if (B.id === 'forge') { // bệ rèn tròn ở giữa
       const pr = Math.min(w, h) * 0.3; g.save(); g.translate(w / 2, h / 2 + 10);
       const pg = g.createRadialGradient(0, 0, pr * 0.2, 0, 0, pr); pg.addColorStop(0, '#3b2a22'); pg.addColorStop(1, '#17100c'); g.fillStyle = pg; g.beginPath(); g.arc(0, 0, pr, 0, TAU); g.fill();
@@ -3419,6 +3402,25 @@ const ArenaV2 = (() => {
   // hiệu ứng riêng của đấu trường boss
   function drawArenaSpecial(ctx, w, h, pad, now, B) {
     const t = now * 0.001;
+    // Quỹ đạo cung hoàng đạo chuyển động: vẽ mỗi frame trên ctx, không ở nền cache.
+    if (B.zodiac) {
+      // Quỹ đạo sao, tia sáng và vệt sao chuyển động theo thời gian; không tạo DOM mỗi khung hình.
+      const cx = w / 2, cy = h / 2, radius = Math.min(w, h) * .34;
+      ctx.save(); ctx.translate(cx, cy);
+      for (let ring = 0; ring < 3; ring++) {
+        const rr = radius * (.55 + ring * .2), turn = t * (.12 + ring * .07) * (ring % 2 ? -1 : 1);
+        ctx.strokeStyle = rgba(B.accent, .2 + .11 * Math.sin(t * 1.3 + ring)); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.ellipse(0, 0, rr, rr * .55, turn, 0, TAU); ctx.stroke();
+        for (let j = 0; j < 4; j++) {
+          const a = j * TAU / 4 + turn;
+          orb(ctx, Math.cos(a) * rr, Math.sin(a) * rr * .55, 5 + ring * 2, B.trim, .45);
+        }
+      }
+      ctx.fillStyle = rgba(B.trim, .38 + .13 * Math.sin(t * 2));
+      ctx.font = `bold ${Math.round(radius * .78)}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(B.zodiac, 0, 0); ctx.restore();
+    }
+
     if (B.id === 'forge') {   // 4 lỗ xì hơi nóng ở góc, phun theo nhịp
       const vents = [[pad + 26, h - pad - 26], [w - pad - 26, h - pad - 26], [pad + 26, pad + 70], [w - pad - 26, pad + 70]];
       vents.forEach(([vx, vy], i) => {
