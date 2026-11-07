@@ -6,6 +6,8 @@
   var rendererPromise = null, animationId = 0, lastFrame = 0, visible = false;
   var fakeGame = null, activeEntities = [], previewBroken = false;
   var cache = Object.create(null);
+  var zodiacSlugs="aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces".split(" ");
+  function bossArt(id){id=Number(id);return Number.isInteger(id)&&id>=8&&id<=19?"/assets/boss-ch"+id+"-"+zodiacSlugs[id-8]+".svg":"";}
 
   function esc(s) { return helpers.esc(s); }
   function num(n) { return helpers.num(n); }
@@ -18,6 +20,12 @@
       '<span class="cc-chapter-info"><b>' + esc(c.icon) + " " + esc(c.name) + '</b><small>' +
       esc(c.rooms) + ' phòng • ' + esc(c.difficultyLabel) + '</small></span></button>';
   }
+  function renderZodiacGallery(){
+    var grid=el("ccZodiacGallery");if(!grid)return;
+    grid.innerHTML=chapters.filter(function(ch){return !!bossArt(ch.id);}).map(function(ch){
+      return '<button type="button" class="cc-zodiac-card" data-ch="'+ch.id+'" aria-selected="'+(!!current&&current.id===ch.id)+'"><img src="'+bossArt(ch.id)+'" loading="lazy" alt="Boss chibi '+esc(ch.bossName)+'"><b>Chương '+ch.id+'</b><small>'+esc(ch.bossName)+'</small></button>';
+    }).join("");
+  }
   function renderList() {
     var list = el("ccChapters"); if (!list) return;
     var q = filter.toLocaleLowerCase("vi");
@@ -25,12 +33,14 @@
       return !q || (c.name + " " + c.mapRegion + " " + c.bossName + " " + c.id).toLocaleLowerCase("vi").includes(q);
     });
     list.innerHTML = shown.length ? shown.map(summaryCard).join("") : '<p class="cc-caption">Không có chương phù hợp.</p>';
+    if(el("ccZodiacGallery"))el("ccZodiacGallery").querySelectorAll("[data-ch]").forEach(function(b){b.setAttribute("aria-selected",String(!!current&&Number(b.dataset.ch)===current.id));});
   }
   function initMarkup() {
     root.innerHTML = '<div class="cc-app">' +
       '<div class="cc-heading"><div><h2>🗺️ Thư viện Chiến dịch</h2>' +
       '<p class="cc-caption">Xem dữ liệu thực tế đang dùng trong game • Chỉ đọc, không thay đổi quái, tài khoản hay save.</p></div>' +
       '<div id="ccSummary" class="cc-summary"></div></div>' +
+      '<section class="cc-panel"><div class="cc-section-head"><h3>👑 12 Boss Hoàng Đạo Chibi • Chương 8–19</h3><span class="cc-caption">Bấm boss để xem chương và thông số</span></div><div id="ccZodiacGallery" class="cc-zodiac-grid"></div></section>'+
       '<div class="cc-layout"><aside class="cc-sidebar"><label class="cc-caption" for="ccSearch"><b>TÌM CHƯƠNG / BOSS</b></label>' +
       '<input id="ccSearch" type="text" placeholder="Tên chương hoặc boss…" autocomplete="off" />' +
       '<div id="ccChapters" class="cc-chapters"><p class="cc-caption">Đang tải danh sách…</p></div></aside>' +
@@ -54,6 +64,7 @@
         '<span class="cc-pill">' + chapters.reduce(function(n,c){return n+c.rooms;},0) + ' phòng</span>' +
         '<span class="cc-pill">🔒 Chỉ quản trị viên</span>';
       var preferred = parseChapterHash() || 1;
+      renderZodiacGallery();
       renderList();
       return selectChapter(chapterById(preferred)?preferred:chapters[0].id,false);
     }).catch(function(error) {
@@ -99,7 +110,7 @@
   function renderDetail() {
     var c=current;
     var first=c.roomsDetail[0], last=c.roomsDetail[c.roomsDetail.length-1];
-    var banner=asset(c.mapAsset);
+    var banner=asset(c.mapAsset), art=bossArt(c.id), finalBoss=c.bosses[c.bosses.length-1];
     el("ccDetail").innerHTML =
       '<div class="cc-panel"><div class="cc-banner"><img src="'+esc(banner)+'" alt="Ảnh bản đồ '+esc(c.name)+'">' +
       '<div class="cc-banner-text"><span class="cc-pill">CHƯƠNG '+c.id+' • '+c.rooms+' PHÒNG</span>' +
@@ -111,6 +122,7 @@
       stat("HP boss cuối",last.boss.hp)+stat("ATK boss cuối",last.boss.atk)+
       stat("Số phòng",c.rooms)+stat("Mở khóa sau chương",c.unlockChapter===null?"Tự do":c.unlockChapter)+'</div>' +
       '<p class="cc-help">Boss thực tế có thể khác tên boss quảng bá tại các phòng 5/10. ATK là sát thương đầu vào trước giảm sát thương của nhân vật.</p></div>' +
+      (art?'<div class="cc-panel cc-boss-feature"><img src="'+art+'" loading="lazy" alt="Boss chibi '+esc(finalBoss.name)+'"><div><h3>👑 '+esc(finalBoss.name)+'</h3><p class="cc-caption">Hình SVG boss đang dùng trong game</p><div class="cc-feature-stats"><span>HP '+num(finalBoss.hp)+'</span><span>ATK '+num(finalBoss.atk)+'</span><span>Tốc độ '+num(finalBoss.speed)+'</span></div></div></div>':'') +
       '<div class="cc-panel"><div class="cc-section-head"><h3>🎮 Xem phòng và đấu trường thật</h3>' +
       '<span class="cc-caption" id="ccRoomLabel"></span></div>' +
       '<div id="ccRoomNav" class="cc-room-nav" role="group" aria-label="Chọn phòng"></div>' +
@@ -152,7 +164,9 @@
     }).join("");
   }
   function entityCard(e,isBoss,uid) {
-    return '<article class="cc-entity'+(isBoss?' boss':'')+'"><canvas class="cc-sprite" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>' +
+    var img=isBoss && /^zodiac_/.test(e.type||"")?bossArt(current.id):"";
+    var graphic=img?'<img class="cc-sprite cc-zodiac-sprite" src="'+img+'" loading="lazy" alt="Boss chibi '+esc(e.name)+'">':'<canvas class="cc-sprite" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>';
+    return '<article class="cc-entity'+(isBoss?' boss':'')+'">'+graphic +
       '<div class="cc-entity-title"><b>'+esc(e.name)+'</b><small>'+(isBoss?'BOSS':('x'+(e.quantity||1)))+'</small></div>' +
       '<div class="cc-kvs"><div class="cc-kv">HP<strong>'+num(e.hp)+'</strong></div><div class="cc-kv">ATK<strong>'+num(e.atk)+'</strong></div>' +
       '<div class="cc-kv">Tốc độ<strong>'+num(e.speed)+'</strong></div><div class="cc-kv">Hệ số HP<strong>x'+(e.hpMultiplier||1)+'</strong></div></div></article>';
@@ -197,6 +211,9 @@
       script.onerror=function(){reject(Error("Không tải được mã Canvas của game"));};
       document.head.appendChild(script);
     });
+    if(!window.ArtemisZodiacBosses && !document.querySelector('script[data-admin-zodiac]')){
+      var zodiacScript=document.createElement("script");zodiacScript.src="/zodiac-chibi-bosses.js";zodiacScript.dataset.adminZodiac="1";document.head.appendChild(zodiacScript);
+    }
     return rendererPromise;
   }
   function buildFakeGame() {
@@ -223,6 +240,15 @@
     };
     window.AdminCampaignArenaV2.init(fakeGame);
   }
+  function drawZodiacInArena(ctx,e,now){
+    var art=window.ArtemisZodiacBosses;
+    if(!e.isBoss||!art||!art.sources[e.type])return false;
+    var st=art.preload(e.type);if(!st||!st.ready||st.failed)return false;
+    ctx.save();try{
+      ctx.translate(e.x,e.y);
+      return art.draw(ctx,e.type,e.r*1.15,now,e.hp/Math.max(1,e.maxHp),e.attackTimer>0&&e.attackTimer<.48);
+    }catch(error){return false;}finally{ctx.restore();}
+  }
   function drawScene(now) {
     if(!visible||!current ||!current.roomsDetail ||!fakeGame ||!window.AdminCampaignArenaV2 || previewBroken)return;
     var api=window.AdminCampaignArenaV2, canvas=el("ccArena");
@@ -235,7 +261,7 @@
       api.drawArena(ctx,780,420,36,now,current.id);
       var biome=api._debug.pickBiome();
       el("ccBiomeName").textContent=biome.label||"Đấu trường "+biome.id;
-      activeEntities.forEach(function(e){api.drawMonster(ctx,e,now);});
+      activeEntities.forEach(function(e){if(!drawZodiacInArena(ctx,e,now))api.drawMonster(ctx,e,now);});
       var room=current.roomsDetail[roomNo-1];
       if(room.isBoss){
         ctx.fillStyle="rgba(5,10,22,.76)";ctx.fillRect(220,305,340,40);
