@@ -105,7 +105,7 @@ export async function PUT(request) {
 
   const existing = await saves.findOne({ playerId }, { projection: {
     revision: 1, ledger: 1,
-    "data.gold": 1, "data.gems": 1, "data.vipCoins": 1, "data.vipPasses": 1, "data.lifetimeStats": 1, "data.season": 1,
+    "data.gold": 1, "data.gems": 1, "data.vipCoins": 1, "data.vipPasses": 1, "data.runes": 1, "data.runeMythicEnchant": 1, "data.lifetimeStats": 1, "data.season": 1,
     "data.gameMode": 1, "data.modeBest": 1, "data.guild": 1, "data.garden": 1, "data.plinko": 1,
   } });
   const currentRevision = existing ? (existing.revision || 1) : 0;
@@ -129,6 +129,16 @@ export async function PUT(request) {
   // but they never get to create, increase, or erase the server balance.
   check.data.vipCoins = Math.max(0, Math.min(1e9, Number(existing?.data?.vipCoins) || 0));
   check.data.vipPasses = normalizeVipPasses(existing?.data?.vipPasses);
+  // Rune copies can only be created by /api/runes. Equipping remains a free
+  // choice, but the chosen stone must already belong to this account.
+  check.data.runes = existing?.data?.runes && typeof existing.data.runes === 'object' ? existing.data.runes : {};
+  check.data.runeMythicEnchant = existing?.data?.runeMythicEnchant === true;
+  for (const slots of Object.values(check.data.equippedRuneSlots || {})) {
+    if (!Array.isArray(slots)) continue;
+    for (let index=0;index<slots.length;index++) {
+      if (slots[index] && !(Number(check.data.runes[slots[index]])>0)) slots[index] = null;
+    }
+  }
   if (!hasVipPass(check.data.vipPasses, 'hunting') && check.data.wikiEventsState?.huntingWarriorCard) {
     check.data.wikiEventsState.huntingWarriorCard = false;
   }

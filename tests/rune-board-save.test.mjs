@@ -36,5 +36,5 @@ test('rune board rejects wrong categories, duplicate runes, and extra sockets', 
   assert.deepEqual(data.equippedRuneSlots.blessing, ['rune_valkyrie', null]);
   assert.deepEqual(data.equippedRuneSlots.enhancement, ['sharp_arrow', 'rune_flame', 'rune_frost', 'dragonflight_sword']);
   assert.deepEqual(data.equippedRuneSlots.ability, ['arrow_rain', 'rune_thunder', 'ability_circle', 'healing_sprite']);
-  assert.equal(data.runeQualityTier, 'mythic');
+  assert.equal(data.runeQualityTier, 'normal');
 });
