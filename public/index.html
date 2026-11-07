@@ -92,6 +92,92 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    /* Rune vault: the same socket wheel and five-column inventory on phones and desktop. */
+    .rune-vault { --rune-gold:#ffcf50; color:#f8f2ff; }
+    .rune-vault-head { position:relative; overflow:hidden; border:2px solid #d794ff88; border-radius:24px; padding:15px;
+      background:radial-gradient(circle at 48% 10%,#7026a858,transparent 42%),linear-gradient(140deg,#221444,#120f2b 65%,#38184d);
+      box-shadow:0 18px 46px #050411b8,inset 0 1px 0 #ffffff55; }
+    .rune-vault-head::before { content:''; position:absolute; inset:0; pointer-events:none; opacity:.27;
+      background:repeating-linear-gradient(115deg,transparent 0 42px,#ffdcff0e 43px 44px); }
+    .rune-vault-title { position:relative; font-size:clamp(20px,4vw,30px); font-weight:1000; line-height:1.05;
+      color:#fff; text-shadow:0 3px 0 #3d1667,0 0 24px #e879f988; }
+    .rune-vault-subtitle { position:relative; font-size:11px; color:#ebd5ff; margin-top:5px; }
+    .rune-board { position:relative; width:100%; max-width:760px; height:clamp(330px,62vw,470px); margin:12px auto 0;
+      isolation:isolate; border-radius:50%; background:radial-gradient(circle,#4b266b 0 22%,#281d4e 23% 37%,#493574 38% 39%,#1a173c 40% 59%,#a354c0 60% 61%,#241938 62% 100%);
+      box-shadow:inset 0 0 52px #08031d,inset 0 0 0 4px #ab65db88,0 0 48px #a855f744; }
+    .rune-board::before { content:''; position:absolute; inset:5%; border:2px dashed #f0abfc55; border-radius:50%;
+      animation:runeSpin 80s linear infinite; pointer-events:none; }
+    .rune-board::after { content:''; position:absolute; inset:18%; border:2px solid #ffdd9255; border-radius:50%;
+      box-shadow:0 0 28px #f0abfc55,inset 0 0 35px #c026d366; pointer-events:none; }
+    .rune-hero { position:absolute; z-index:2; left:50%; top:50%; width:clamp(130px,27%,214px); aspect-ratio:1;
+      transform:translate(-50%,-50%); display:grid; place-items:center; border-radius:50%;
+      background:radial-gradient(circle at 50% 30%,#a855f766,#211239 64%); filter:drop-shadow(0 12px 15px #130521); }
+    .rune-hero img { width:100%; height:100%; object-fit:cover; border-radius:50%; mask-image:radial-gradient(circle,#000 52%,transparent 72%); animation:runeHeroFloat 3.8s ease-in-out infinite; }
+    .rune-hero-name { position:absolute; bottom:-9px; max-width:150%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      padding:4px 12px; border-radius:999px; border:1px solid #facc15a8; background:#241033e8;
+      font-size:11px; font-weight:900; color:#fde68a; }
+    .rune-socket { position:absolute; z-index:3; left:var(--x); top:var(--y); transform:translate(-50%,-50%);
+      width:clamp(47px,10vw,74px); aspect-ratio:1; display:grid; place-items:center; cursor:pointer;
+      color:#fff; font-size:clamp(20px,4vw,31px); border:3px solid #b8a1e2; border-radius:25%;
+      background:radial-gradient(circle at 42% 25%,#8d40c7,#391459 65%,#210c3b);
+      box-shadow:0 5px 0 #2d124b,0 0 0 3px #542177,0 0 18px #ed5cff99,inset 0 2px 9px #ffffff55;
+      transition:transform .16s,box-shadow .16s,filter .16s; }
+    .rune-socket:hover,.rune-socket:focus-visible,.rune-socket.is-picked { transform:translate(-50%,-50%) scale(1.13);
+      box-shadow:0 5px 0 #2d124b,0 0 0 4px #fbbf24,0 0 30px #fbbf24b3,inset 0 2px 9px #ffffff77; outline:none; }
+    .rune-socket.is-filled { border-color:var(--rune-color,#f0abfc); }
+    .rune-socket.is-empty { color:#d6bce9; background:radial-gradient(circle,#43335d,#18152f); border-style:dashed; }
+    .rune-socket small { position:absolute; right:-7px; bottom:-8px; min-width:19px; height:19px; display:grid; place-items:center;
+      border-radius:50%; background:#fbbf24; color:#351035; border:2px solid #fff; font-size:10px; font-weight:1000; }
+    .rune-vault-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:11px;
+      border:2px solid #7c80d7; border-radius:19px; background:linear-gradient(#334b92,#202e63); box-shadow:0 6px 0 #13183b; }
+    .rune-vault-controls button,.rune-vault-controls select { min-height:38px; border-radius:11px; font-size:11px; font-weight:900; }
+    .rune-gold-btn { border:2px solid #fff0a6; color:#4b2608; padding:7px 12px;
+      background:linear-gradient(#fff19d,#ffca30 48%,#ed8e04); box-shadow:0 3px 0 #9a4c0a,inset 0 2px 0 #fff8; }
+    .rune-catalog { border:2px solid #666bc2; border-radius:20px; padding:12px;
+      background:linear-gradient(160deg,#252e5c,#1b244b 48%,#1b173f); box-shadow:inset 0 1px 0 #ffffff2a; }
+    .rune-catalog-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; }
+    .rune-catalog-head h4 { margin:0; font-size:17px; font-weight:1000; color:#fff; }
+    .rune-catalog-head h4 span { color:#f0abfc; }
+    .rune-catalog-head p { margin:4px 0 0; font-size:11px; color:#c7d2fe; }
+    .rune-catalog-selection { font-size:11px; font-weight:900; color:#fde68a; }
+    .rune-filter-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+    .rune-filter { padding:7px 10px; border:1px solid #a5b4fc99; border-radius:9px; background:#211d58; color:#ede9fe;
+      font-size:11px; font-weight:900; cursor:pointer; transition:transform .15s,background .15s,box-shadow .15s; }
+    .rune-filter:hover,.rune-filter:focus-visible { transform:translateY(-2px); box-shadow:0 0 12px #e879f988; }
+    .rune-filter.is-active { border-color:#fff4a3; background:linear-gradient(#ffe688,#f6a719); color:#49200b; box-shadow:0 2px 0 #995306; }
+    .rune-detail { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; padding:12px;
+      border:1px solid #d36cf188; border-radius:16px; background:linear-gradient(135deg,#351648,#211638); }
+    .rune-detail strong { color:#f5c4ff; font-size:13px; }
+    .rune-detail p { margin:5px 0 0; color:#cbd5e1; font-size:11px; }
+    .rune-presets { padding:12px; border:1px solid #818cf866; border-radius:14px; background:#151831; color:#cbd5e1; font-size:12px; }
+    .rune-presets summary { cursor:pointer; color:#fde68a; font-weight:900; }
+    .rune-presets > div { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .rune-inventory-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:clamp(6px,1.4vw,13px); max-height:480px; overflow-y:auto; padding:6px 4px 10px; }
+    .rune-inventory-card { position:relative; min-width:0; aspect-ratio:1; padding:3px; cursor:pointer; border:3px solid #ef71f4;
+      border-radius:19px; background:linear-gradient(145deg,#9b36de,#6b23b5 55%,#af32cf); color:white;
+      box-shadow:0 5px 0 #5b1b8a,0 9px 16px #0a0a27a6,inset 0 2px 0 #ffffff66;
+      transition:transform .16s,filter .16s,box-shadow .16s; }
+    .rune-inventory-card:hover,.rune-inventory-card:focus-visible { transform:translateY(-4px) scale(1.04); filter:brightness(1.15); outline:none; }
+    .rune-inventory-card.is-equipped { border-color:#ffe567; box-shadow:0 5px 0 #8f590d,0 0 16px #ffdd55aa,inset 0 2px 0 #fff9; }
+    .rune-inventory-card[data-type="etched"] { background:linear-gradient(145deg,#813bd3,#6821aa 55%,#b72fbf); }
+    .rune-inventory-card[data-type="blessing"] { background:linear-gradient(145deg,#8650c4,#3d49a6 55%,#8a48c5); }
+    .rune-inventory-card[data-type="enhancement"] { border-color:#70b7ff; background:linear-gradient(145deg,#4260bb,#28489d 55%,#3675ca); box-shadow:0 5px 0 #1a4387,0 9px 16px #0a0a27a6,inset 0 2px 0 #ffffff66; }
+    .rune-inventory-card[data-type="ability"] { background:linear-gradient(145deg,#a337c9,#762aa7 55%,#e047cc); }
+    .rune-inventory-glyph { width:70%; aspect-ratio:1; margin:auto; display:grid; place-items:center; font-size:clamp(19px,4vw,36px);
+      border:2px solid #ffffffa0; border-radius:27%; background:radial-gradient(circle,#f0abfc80,#571271 75%);
+      text-shadow:0 0 12px #fff; box-shadow:0 3px 8px #150d47,inset 0 0 13px #f0abfc80; }
+    .rune-inventory-card[data-type="enhancement"] .rune-inventory-glyph { background:radial-gradient(circle,#93c5fd99,#1e3a8a 75%); }
+    .rune-inventory-card .rune-count { position:absolute; top:-6px; right:-6px; border:2px solid #fff; border-radius:999px; background:#18ba56;
+      min-width:19px; height:19px; font-size:10px; font-weight:1000; box-shadow:0 0 9px #4ade80; }
+    .rune-inventory-card .rune-short-name { display:block; margin-top:4px; font-size:9px; font-weight:900; line-height:1.1;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    @keyframes runeHeroFloat { 50% { transform:translateY(-7px); } }
+    @media(max-width:540px) { .rune-vault-head { padding:10px 5px; } .rune-board { height:350px; }
+      .rune-socket { width:clamp(39px,11vw,52px); font-size:20px; border-width:2px; }
+      .rune-inventory-card { border-width:2px; border-radius:12px; } .rune-inventory-card .rune-short-name { font-size:7px; }
+      .rune-vault-controls { gap:5px; } .rune-vault-controls button,.rune-vault-controls select { font-size:10px; } }
+    @media(prefers-reduced-motion:reduce) { .rune-board::before,.rune-hero img { animation:none; }
+      .rune-socket,.rune-inventory-card { transition:none; } }
     .hd-panel {
       background: linear-gradient(165deg, rgba(15, 23, 42, 0.92) 0%, rgba(9, 13, 22, 0.96) 100%);
       box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
@@ -1731,29 +1817,14 @@
         </div>
 
         <!-- 3C. SUB-PANEL: ARCHERO 2 OFFICIAL WIKI 13-SLOT RUNES & RUNE WORKSHOP -->
-        <div id="subpanelRunes" class="hidden flex-1 bg-gradient-to-b from-[#111a3a] to-[#090d1e] px-3 sm:px-6 py-4 flex flex-col gap-4">
-          <div class="max-w-5xl w-full mx-auto flex flex-col gap-3.5">
-            <!-- Top Header & Mythic Rune Action Bar -->
-            <div class="bg-slate-900/95 border-2 border-indigo-400/50 rounded-3xl p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-2xl">
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950">Chuẩn Archero 2 Runes Wiki</span>
-                  <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/25 text-indigo-200 border border-indigo-400/40">3 Etched • 2 Blessing • 4 Enhancement • 4 Ability</span>
-                </div>
-                <h3 class="text-base sm:text-xl font-black text-white mt-1">💠 Bảng 13 Ô Cổ Ngữ Thần Thoại &amp; Xưởng Ghép Rune Workshop</h3>
-                <p class="text-xs text-slate-300">Trang bị tối đa <strong class="text-amber-300">13 Cổ Ngữ cùng lúc</strong> theo đúng cấu trúc Wiki, mở khóa <strong class="text-fuchsia-300">Phù Phép Cổ Ngữ (Rune Enchantment ở Epic +2 ➔ Mythic)</strong> và kích hoạt kỹ năng khởi đầu trận!</p>
-              </div>
-              <div class="flex items-center gap-2 flex-wrap shrink-0">
-                <button id="btnEngraveRune" type="button" class="a2-yellow-btn px-4 py-2 rounded-xl font-black text-xs sm:text-sm shrink-0">
-                  💠 Khắc Cổ Ngữ (200 🪙)
-                </button>
-              </div>
+        <div id="subpanelRunes" class="hidden flex-1 px-2 sm:px-6 py-3" style="background:linear-gradient(#10142d,#171333 50%,#11152e)">
+          <div class="max-w-5xl mx-auto rune-vault">
+            <div class="rune-vault-head">
+              <div class="rune-vault-title">💠 Đài Cổ Ngữ</div>
+              <div class="rune-vault-subtitle">13 ô khảm quanh anh hùng · Chạm một ô, chọn viên trong kho để khảm</div>
+              <button id="btnEngraveRune" type="button" class="rune-gold-btn relative mt-3 text-xs font-black">✨ Khắc Cổ Ngữ (200 🪙)</button>
             </div>
-
-            <!-- Dynamic 13-Slot Equipped Rune Board + Build Presets + 46-Rune Catalog -->
-            <div id="runeSocketsGrid" class="flex flex-col gap-4">
-              <!-- Populated dynamically by renderGearSystemUI -->
-            </div>
+            <div id="runeSocketsGrid" class="space-y-3 mt-3"></div>
           </div>
         </div>
 
@@ -9179,6 +9250,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         enhancement: [],
         ability:     []
       };
+      let selectedRuneSocket = null;
 
       function getEquippedRuneSlots() {
         if (!SaveState.equippedRuneSlots || typeof SaveState.equippedRuneSlots !== 'object') {
@@ -9210,7 +9282,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         for (const [cat, ids] of Object.entries(eq)) {
           const statTbl = RUNE_BASE_STATS_BY_TYPE[cat] || RUNE_BASE_STATS_BY_TYPE.enhancement;
           const tierStat = statTbl[tierId] || statTbl.mythic;
-          const count = Array.isArray(ids) ? ids.length : 0;
+          const count = Array.isArray(ids) ? ids.filter(Boolean).length : 0;
           atk += tierStat.atk * count;
           hp += tierStat.hp * count;
           if (enchantOn) {
@@ -9240,16 +9312,25 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const eq = getEquippedRuneSlots();
         const list = eq[runeObj.type] || [];
         const maxSlots = RUNE_CATEGORIES_META[runeObj.type]?.slots || 4;
+        if (selectedRuneSocket && selectedRuneSocket.cat !== runeObj.type) {
+          showToast(`Chọn cổ ngữ nhóm ${RUNE_CATEGORIES_META[selectedRuneSocket.cat].name} cho ô đang chọn.`, 'err');
+          return;
+        }
+        const firstEmpty = Array.from({ length: maxSlots }, (_, i) => i).find(i => !list[i]);
+        const targetIndex = selectedRuneSocket ? selectedRuneSocket.index : firstEmpty;
+        if (targetIndex === undefined || targetIndex >= maxSlots) {
+          showToast('Các ô nhóm này đã đầy. Chạm một ô để thay viên đang khảm.', 'err');
+          return;
+        }
         const existingIdx = list.indexOf(runeId);
-        if (existingIdx >= 0) {
+        if (existingIdx >= 0 && existingIdx !== targetIndex) {
           showToast(`✨ [${runeObj.name}] đang được khảm sẵn trên Bảng Cổ Ngữ!`);
           return;
         }
-        if (list.length >= maxSlots) {
-          list.shift();
-        }
-        list.push(runeId);
+        if (list[targetIndex] === runeId) return;
+        list[targetIndex] = runeId;
         eq[runeObj.type] = list;
+        selectedRuneSocket = { cat: runeObj.type, index: targetIndex };
         SaveState.save();
         SoundFX.levelUp();
         StageHeroAnim.triggerPose();
@@ -10401,6 +10482,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         salvageMaterials: 0,
         presets: createDefaultPresets(),
         gearLoadouts: createDefaultGearLoadouts(), // Saved full equipment builds by stable item UID
+        equippedRuneSlots: { etched: [], blessing: [], enhancement: [], ability: [] },
+        runeQualityTier: 'mythic',
+        runeMythicEnchant: true,
         runes: {
           rune_flame: 0,
           rune_frost: 0,
@@ -10782,6 +10866,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               garden: this.garden,
               plinko: this.plinko,
               runes: this.runes,
+              equippedRuneSlots: this.equippedRuneSlots,
+              runeQualityTier: this.runeQualityTier,
+              runeMythicEnchant: this.runeMythicEnchant,
               talents: this.talents,
               bestRooms: this.bestRooms,
               // Thành tựu & chỉ số vĩnh viễn
@@ -18371,147 +18458,91 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const curCatFilter = SaveState.runeTypeFilter || 'all';
           const enchantActive = SaveState.runeMythicEnchant !== false;
 
-          const buildCategoryEquippedHTML = (catKey) => {
-            const meta = RUNE_CATEGORIES_META[catKey];
-            const ids = eqSlots[catKey] || [];
-            const tierStat = (RUNE_BASE_STATS_BY_TYPE[catKey] || RUNE_BASE_STATS_BY_TYPE.enhancement)[curTierId] || { atk: 0, hp: 0 };
-            const cardsHTML = [];
-            for (let i = 0; i < meta.slots; i++) {
-              const rId = ids[i];
-              const rObj = RUNES_DATA.find(x => x.id === rId) || RUNES_DATA.find(x => x.type === catKey);
-              if (rObj) {
-                cardsHTML.push(`
-                  <div class="rounded-2xl bg-slate-950/95 border-2 p-2.5 flex flex-col justify-between gap-1.5 shadow-lg" style="border-color:${rObj.color}">
-                    <div class="flex items-center justify-between gap-1">
-                      <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-gradient-to-r from-rose-500/40 to-amber-500/40 text-amber-200 border border-amber-300/60">
-                        Ô #${i + 1} • ${curTierId.toUpperCase().replace('_', ' +')}
-                      </span>
-                      <span class="text-[9px] font-black text-emerald-300">
-                        ${tierStat.atk ? `+${tierStat.atk.toLocaleString('vi-VN')} ATK ` : ''}${tierStat.hp ? `+${tierStat.hp.toLocaleString('vi-VN')} HP` : ''}
-                      </span>
-                    </div>
-                    <div class="flex items-center gap-2 my-0.5">
-                      <div class="w-10 h-10 rounded-xl bg-slate-900 border flex items-center justify-center text-xl shrink-0" style="border-color:${rObj.color}">${rObj.icon}</div>
-                      <div>
-                        <div class="font-black text-xs text-white leading-tight">${rObj.name}</div>
-                        <div class="text-[9px] font-bold text-cyan-300">${rObj.wikiName}</div>
-                      </div>
-                    </div>
-                    <p class="text-[10px] text-slate-200 leading-snug">${rObj.desc}</p>
-                    ${enchantActive ? `<div class="text-[9px] font-bold text-fuchsia-300 bg-fuchsia-950/50 border border-fuchsia-400/40 rounded-lg px-2 py-1">✨ ${rObj.enchantText}</div>` : ''}
-                  </div>
-                `);
-              }
-            }
-            return `
-              <div class="rounded-2xl bg-slate-900/95 border border-slate-700/90 p-3 space-y-2">
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-1.5">
-                  <div class="flex items-center gap-2">
-                    <span class="text-base">${meta.icon}</span>
-                    <span class="font-black text-xs sm:text-sm text-white">${meta.name} (${ids.length}/${meta.slots} Ô)</span>
-                  </div>
-                  <span class="text-[10px] font-black text-amber-300">${meta.statLabel}</span>
-                </div>
-                <div class="grid grid-cols-1 ${meta.slots === 2 ? 'sm:grid-cols-2' : (meta.slots === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4')} gap-2.5">
-                  ${cardsHTML.join('')}
-                </div>
-              </div>
-            `;
-          };
-
+          const hero = HEROES.find(h => h.id === SaveState.selectedHeroId) || HEROES[0];
+          const slotOrder = Object.entries(RUNE_CATEGORIES_META).flatMap(([cat, meta]) =>
+            Array.from({ length: meta.slots }, (_, index) => ({ cat, index, meta })));
+          const selected = selectedRuneSocket;
+          const selectedId = selected ? eqSlots[selected.cat]?.[selected.index] : null;
+          const selectedRune = RUNES_DATA.find(r => r.id === selectedId);
+          const activeCount = slotOrder.filter(({ cat, index }) => !!eqSlots[cat]?.[index]).length;
           const filteredCatalog = RUNES_DATA.filter(r => curCatFilter === 'all' || r.type === curCatFilter);
-
           runeGrid.innerHTML = `
-            <!-- Summary Banner & Quick Presets -->
-            <div class="rounded-2xl bg-slate-950/90 border-2 border-amber-400/50 p-3.5 space-y-3">
-              <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
-                <div>
-                  <div class="text-xs sm:text-sm font-black text-amber-300">
-                    ⚡ Tổng Chỉ Số 13 Ô Cổ Ngữ Đang Khảm: <span class="text-emerald-300">+${runeTotals.atk.toLocaleString('vi-VN')} ATK PWR</span> • <span class="text-rose-300">+${runeTotals.hp.toLocaleString('vi-VN')} MAX HP</span> • <span class="text-cyan-300">+${Math.round((runeTotals.aspdBonus || 0) * 100)}% Tốc Bắn</span>
-                  </div>
-                  <div class="text-[10px] text-slate-400 mt-0.5">
-                    Công thức Xưởng Ghép Rune Workshop: Ghép 3 Cổ Ngữ cùng bậc (1 chính + 2 phôi trùng/cùng loại) để thăng từ Normal ➔ Fine ➔ Rare ➔ Epic (+1/+2) ➔ Legendary (+1/+2/+3) ➔ Mythic!
-                  </div>
-                </div>
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <select id="selectRuneQualityTier" class="rounded-xl bg-slate-900 border border-amber-400/50 px-2.5 py-1.5 text-[11px] font-black text-amber-200">
-                    ${RUNE_QUALITY_TIERS.map(t => `<option value="${t.id}" ${t.id === curTierId ? 'selected' : ''}>Phẩm chất: ${t.name}</option>`).join('')}
-                  </select>
-                  <button type="button" id="btnToggleRuneEnchant" class="px-2.5 py-1.5 rounded-xl border text-[11px] font-black transition ${enchantActive ? 'bg-fuchsia-600 text-white border-fuchsia-300 shadow' : 'bg-slate-800 text-slate-300 border-slate-600'}">
-                    ${enchantActive ? '✨ Đang Bật Mythic Enchantment' : 'Bật Mythic Enchantment'}
-                  </button>
-                </div>
+            <div class="rune-board" aria-label="Đài khảm 13 ô cổ ngữ">
+              <div class="rune-hero"><img src="${hero.avatar}" alt="${hero.name}" draggable="false"><span class="rune-hero-name">${hero.icon || '✦'} ${hero.name}</span></div>
+              ${slotOrder.map(({ cat, index, meta }, n) => {
+                const id = eqSlots[cat]?.[index];
+                const rune = RUNES_DATA.find(r => r.id === id);
+                const angle = -Math.PI / 2 + n * Math.PI * 2 / slotOrder.length;
+                const x = (50 + Math.cos(angle) * 43).toFixed(2);
+                const y = (50 + Math.sin(angle) * 40).toFixed(2);
+                const picked = selected?.cat === cat && selected?.index === index;
+                return `<button type="button" class="rune-socket ${rune ? 'is-filled' : 'is-empty'} ${picked ? 'is-picked' : ''}"
+                  style="--x:${x}%;--y:${y}%;--rune-color:${rune?.color || meta.color}"
+                  data-rune-slot="${cat}:${index}" title="${meta.name} · Ô ${index + 1}${rune ? ' · ' + rune.name : ' · Trống'}"
+                  aria-label="${meta.name}, ô ${index + 1}: ${rune?.name || 'trống'}" aria-pressed="${picked}">
+                  <span aria-hidden="true">${rune?.icon || '✧'}</span><small>${index + 1}</small>
+                </button>`;
+              }).join('')}
+            </div>
+            <div class="rune-vault-controls" aria-label="Điều khiển cổ ngữ">
+              <span class="text-xs font-black text-white mr-auto">✦ Đã khảm ${activeCount}/13 <span class="text-amber-200">· +${runeTotals.atk.toLocaleString('vi-VN')} ATK · +${runeTotals.hp.toLocaleString('vi-VN')} HP</span></span>
+              <select id="selectRuneQualityTier" class="rune-gold-btn" aria-label="Phẩm chất ngọc">
+                ${RUNE_QUALITY_TIERS.map(t => `<option value="${t.id}" ${t.id === curTierId ? 'selected' : ''}>${t.name}</option>`).join('')}
+              </select>
+              <button type="button" id="btnToggleRuneEnchant" class="rune-gold-btn" aria-pressed="${enchantActive}">${enchantActive ? '✨ Phù phép: Bật' : '✨ Phù phép: Tắt'}</button>
+            </div>
+            <div class="rune-catalog" id="runeCatalog">
+              <div class="rune-catalog-head">
+                <div><h4 class="font-black text-base text-white">Kho Cổ Ngữ <span class="text-fuchsia-300">${RUNES_DATA.length} viên</span></h4>
+                  <p class="text-[11px] text-indigo-200">${selected ? `Đang chọn ô ${selected.index + 1} · ${RUNE_CATEGORIES_META[selected.cat].name}. Chạm viên cùng nhóm để khảm.` : 'Chạm ô trên vòng tròn rồi chọn viên; hoặc chạm viên để khảm vào ô trống đầu tiên.'}</p></div>
+                <span class="rune-catalog-selection">${selectedRune ? `${selectedRune.icon} ${selectedRune.name}` : '✦ Chọn ô khảm'}</span>
               </div>
-
-              <!-- 5 Canonical Archetype Rune Build Presets -->
-              <div class="flex flex-wrap items-center gap-1.5">
-                <span class="text-[10px] font-black uppercase text-slate-400 mr-1">Bộ Build 13 Cổ Ngữ Nhanh:</span>
-                <button type="button" data-rune-preset="oracle_weapon" class="px-2.5 py-1 rounded-xl bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/50 text-[10px] font-black text-sky-200 transition">🏹 Vũ Khí Chính &amp; Echo Scythe</button>
-                <button type="button" data-rune-preset="strike_master" class="px-2.5 py-1 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/35 border border-cyan-400/50 text-[10px] font-black text-cyan-200 transition">🗡️ Hoàng Long Phi Kiếm (Strike)</button>
-                <button type="button" data-rune-preset="meteor_cataclysm" class="px-2.5 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/50 text-[10px] font-black text-amber-200 transition">☄️ Đại Thiên Thạch (Meteor)</button>
-                <button type="button" data-rune-preset="circle_sawblade" class="px-2.5 py-1 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/50 text-[10px] font-black text-emerald-200 transition">🪐 Lưỡi Cưa Cầu Xoay (Circle)</button>
-                <button type="button" data-rune-preset="sprite_legion" class="px-2.5 py-1 rounded-xl bg-purple-500/20 hover:bg-purple-500/35 border border-purple-400/50 text-[10px] font-black text-purple-200 transition">🧚 Quân Đoàn Tinh Linh (Sprite)</button>
+              <div class="rune-filter-row" aria-label="Lọc loại cổ ngữ">
+                ${[{ id:'all', label:'Tất cả' }, ...Object.values(RUNE_CATEGORIES_META).map(m => ({ id:m.id, label:`${m.icon} ${{ etched:'Khắc Ấn', blessing:'Chúc Phúc', enhancement:'Tăng Cường', ability:'Kỹ Năng' }[m.id]}` }))].map(f =>
+                  `<button type="button" data-rune-cat-filter="${f.id}" class="rune-filter ${curCatFilter === f.id ? 'is-active' : ''}">${f.label}</button>`).join('')}
+              </div>
+              <div class="rune-inventory-grid" aria-label="Danh sách cổ ngữ">
+                ${filteredCatalog.map(r => `<button type="button" data-equip-wiki-rune="${r.id}" data-type="${r.type}"
+                  class="rune-inventory-card ${isRuneEquipped(r.id) ? 'is-equipped' : ''}" title="${r.name} — ${r.desc}" aria-label="${r.name}${isRuneEquipped(r.id) ? ', đã khảm' : ', chạm để khảm'}">
+                  <span class="rune-inventory-glyph" aria-hidden="true">${r.icon}</span>
+                  ${isRuneEquipped(r.id) ? '<span class="rune-count" aria-hidden="true">✓</span>' : ''}
+                  <span class="rune-short-name">${r.wikiName || r.name}</span>
+                </button>`).join('')}
               </div>
             </div>
-
-            <!-- 13 Active Rune Slots Grouped by the 4 Official Wiki Categories -->
-            <div class="space-y-3">
-              ${buildCategoryEquippedHTML('etched')}
-              ${buildCategoryEquippedHTML('blessing')}
-              ${buildCategoryEquippedHTML('enhancement')}
-              ${buildCategoryEquippedHTML('ability')}
+            <div class="rune-detail">
+              <div class="min-w-0"><strong class="text-fuchsia-200 text-xs">${selectedRune ? selectedRune.name : 'Ô khảm đang chọn'}</strong>
+                <p class="text-[10px] text-slate-300 mt-1">${selectedRune ? selectedRune.desc : selected ? 'Ô trống · chọn một viên cùng nhóm trong kho.' : 'Chọn một ô để xem chi tiết hoặc tháo ngọc.'}</p>
+                ${selectedRune && enchantActive ? `<p class="text-[10px] text-fuchsia-300 mt-1">${selectedRune.enchantText}</p>` : ''}</div>
+              ${selectedRune ? '<button type="button" id="btnUnequipSelectedRune" class="rune-gold-btn shrink-0 text-xs">↩ Tháo ngọc</button>' : ''}
             </div>
-
-            <!-- Full 46-Rune Wiki Catalog & Picker -->
-            <div class="rounded-2xl bg-slate-900/95 border border-indigo-500/40 p-3.5 space-y-3">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
-                <div>
-                  <h4 class="font-black text-sm text-white">📖 Kho Toàn Bộ ${RUNES_DATA.length} Cổ Ngữ Chuẩn Archero 2 Wiki (Bấm Để Khảm Vào Ô)</h4>
-                  <p class="text-[10px] text-slate-400">Chọn bất kỳ viên Cổ Ngữ nào bên dưới để khảm trực tiếp vào nhánh tương ứng (Etched / Blessing / Enhancement / Ability).</p>
-                </div>
-                <div class="flex flex-wrap gap-1.5">
-                  ${[
-                    { id: 'all', label: `Tất Cả (${RUNES_DATA.length})` },
-                    { id: 'etched', label: '💠 Etched (13)' },
-                    { id: 'blessing', label: '🪽 Blessing (7)' },
-                    { id: 'enhancement', label: '⚔️ Enhancement (13)' },
-                    { id: 'ability', label: '🌟 Ability (13)' }
-                  ].map(f => `
-                    <button type="button" data-rune-cat-filter="${f.id}" class="px-2.5 py-1 rounded-xl text-[10px] font-black border transition ${
-                      curCatFilter === f.id ? 'bg-amber-400 text-slate-950 border-white shadow' : 'bg-slate-950 text-slate-300 border-slate-700 hover:border-slate-500'
-                    }">${f.label}</button>
-                  `).join('')}
-                </div>
+            <details class="rune-presets"><summary>⚡ Bộ khảm nhanh</summary>
+              <div>
+                <button type="button" data-rune-preset="oracle_weapon" class="rune-gold-btn">🏹 Oracle</button>
+                <button type="button" data-rune-preset="strike_master" class="rune-gold-btn">🗡️ Strike</button>
+                <button type="button" data-rune-preset="meteor_cataclysm" class="rune-gold-btn">☄️ Meteor</button>
+                <button type="button" data-rune-preset="circle_sawblade" class="rune-gold-btn">🪐 Circle</button>
+                <button type="button" data-rune-preset="sprite_legion" class="rune-gold-btn">🧚 Sprite</button>
               </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[460px] overflow-y-auto pr-1">
-                ${filteredCatalog.map(r => {
-                  const equipped = isRuneEquipped(r.id);
-                  const catMeta = RUNE_CATEGORIES_META[r.type];
-                  return `
-                    <div data-equip-wiki-rune="${r.id}" class="cursor-pointer rounded-2xl p-3 bg-slate-950/90 border-2 ${equipped ? 'border-amber-400 ring-1 ring-amber-300 bg-amber-950/20' : 'border-slate-800 hover:border-indigo-400'} transition flex flex-col justify-between gap-2 shadow">
-                      <div>
-                        <div class="flex items-center justify-between gap-1 mb-1">
-                          <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-slate-900 border border-slate-700" style="color:${catMeta.color}">${catMeta.icon} ${r.type.toUpperCase()}</span>
-                          <span class="text-[9px] font-black ${equipped ? 'text-emerald-300' : 'text-slate-400'}">${equipped ? '✓ Đang Khảm' : 'Bấm để Khảm'}</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                          <div class="w-10 h-10 rounded-xl bg-slate-900 border flex items-center justify-center text-xl shrink-0" style="border-color:${r.color}">${r.icon}</div>
-                          <div>
-                            <h5 class="font-black text-xs text-white leading-tight">${r.name}</h5>
-                            <span class="text-[10px] font-bold text-cyan-300">${r.wikiName}</span>
-                          </div>
-                        </div>
-                        <p class="text-[10px] text-slate-300 leading-snug mt-1.5">${r.desc}</p>
-                        <div class="text-[9px] text-fuchsia-300 mt-1">${r.enchantText}</div>
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          `;
-
+            </details>`;
+          runeGrid.querySelectorAll('[data-rune-slot]').forEach(button => {
+            button.onclick = () => {
+              const [cat, index] = button.dataset.runeSlot.split(':');
+              selectedRuneSocket = { cat, index: Number(index) };
+              SaveState.runeTypeFilter = cat;
+              renderLobbyUI();
+            };
+          });
+          runeGrid.querySelector('#btnUnequipSelectedRune')?.addEventListener('click', () => {
+            if (!selectedRuneSocket) return;
+            const slots = getEquippedRuneSlots()[selectedRuneSocket.cat];
+            if (!slots?.[selectedRuneSocket.index]) return;
+            slots[selectedRuneSocket.index] = null;
+            SaveState.save();
+            SoundFX.coinPickup();
+            renderLobbyUI();
+            showToast('Đã tháo cổ ngữ khỏi ô khảm.');
+          });
           const tierSel = document.getElementById('selectRuneQualityTier');
           if (tierSel) {
             tierSel.onchange = () => {
