@@ -27585,6 +27585,47 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       // Setup Room Obstacles & Enemies
+      // ==================== ĐỘ KHÓ CHIẾN DỊCH: TUYỆT ĐỐI, KHÔNG NEO NGƯỜI CHƠI ====================
+      // Trước đây HP quái = playerAtk × hits, ATK quái = playerMaxHp / hits. Hệ quả đo được
+      // (docs/audit/artemis-new-player/13-GAME-BALANCE-MEASURED.md): ATK tăng 39× mà TTK chỉ
+      // giảm 1,96×; HP tăng 25× mà số đòn chịu vẫn đúng 16,1 — nâng cấp gần như vô nghĩa, và
+      // người mặc đồ tân thủ đứng ở chương 5 vẫn chịu đúng 16 đòn như chương 1.
+      //
+      // Nay chiến dịch dùng số TUYỆT ĐỐI theo chương/phòng. Mạnh lên thì giết nhanh hơn, sống
+      // lâu hơn, và quay lại màn cũ thấy dễ thật. Chế độ Vô Tận/Tháp/Săn Trùm/Luyện Tập vẫn
+      // giữ công thức thích ứng cũ (độ sâu vô hạn nên cần neo theo người chơi).
+      const CAMPAIGN_TUNING = {
+        //        HP quái nền  ATK quái nền  HP trùm   ATK trùm
+        1: { mobHp: 300, mobAtk: 70, bossHp: 5200, bossAtk: 190 },
+        2: { mobHp: 520, mobAtk: 95, bossHp: 9000, bossAtk: 260 },
+        3: { mobHp: 820, mobAtk: 130, bossHp: 15000, bossAtk: 350 },
+        4: { mobHp: 1250, mobAtk: 220, bossHp: 33000, bossAtk: 460 },
+        5: { mobHp: 1750, mobAtk: 380, bossHp: 34000, bossAtk: 600 },
+        6: { mobHp: 2400, mobAtk: 520, bossHp: 48000, bossAtk: 760 },
+      };
+
+      /** Chỉ số địch tuyệt đối cho một phòng chiến dịch (không phụ thuộc người chơi). */
+      function getCampaignTuning(chapterId, room, maxRooms) {
+        const t = CAMPAIGN_TUNING[Number(chapterId)] || CAMPAIGN_TUNING[1];
+        const depth = Math.min(1, Math.max(0, (Number(room) - 1) / Math.max(1, Number(maxRooms) - 1)));
+        return {
+          mobHp: Math.round(t.mobHp * (1 + depth * 1.2)),
+          mobAtk: Math.round(t.mobAtk * (1 + depth * 0.5)),
+          bossHp: Math.round(t.bossHp * (1 + depth * 0.35)),
+          bossAtk: Math.round(t.bossAtk * (1 + depth * 0.3)),
+        };
+      }
+
+      /** Chế độ đang chơi có dùng độ khó chiến dịch tuyệt đối không? */
+      function usesCampaignTuning() {
+        try {
+          const m = getGameMode(Game.mode || 'campaign');
+          return m && m.hasChapters === true;
+        } catch (e) {
+          return true;
+        }
+      }
+
       function setupRoom(roomNum) {
         // Overlay "phòng đã sạch" của phòng trước phải tắt khi sang phòng mới.
         if (typeof hideRoomClearOverlay === 'function') hideRoomClearOverlay();
@@ -27730,6 +27771,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const chapterMul = Game.chapter.enemyScale || 1;
         const roomMul = 1 + (roomNum - 1) * 0.13;
         const scale = chapterMul * roomMul;
+        // Chiến dịch: số tuyệt đối. Các chế độ vô hạn: giữ thích ứng (cần neo người chơi).
+        const campaign = usesCampaignTuning()
+          ? getCampaignTuning(Game.chapter.id, roomNum, Game.maxRooms)
+          : null;
 
         if (isBossRoomNow) {
           SoundFX.bossSpawn();
@@ -27749,7 +27794,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           // Scale phòng KHÔNG nhân vào HP nữa — đã tính bằng hitsToKill, nếu nhân
           // thêm roomMul thì trùm cuối thành bức tường 53 giây.
           const hitsToKill = roomNum === 5 ? 24 : (roomNum === 10 ? 30 : 40);
-          const maxHp = Math.round(playerAtk * hitsToKill * chapterMul * (bossType === 'demon_king' ? 1.15 : 1.0));
+          // Chiến dịch dùng HP trùm tuyệt đối; chế độ vô hạn vẫn neo theo ATK người chơi.
+          const maxHp = campaign
+            ? Math.round(campaign.bossHp * (bossType === 'demon_king' ? 1.15 : 1.0))
+            : Math.round(playerAtk * hitsToKill * chapterMul * (bossType === 'demon_king' ? 1.15 : 1.0));
           Game.enemies.push({
             isBoss: true,
             type: bossType,
@@ -27762,7 +27810,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // ATK boss = số đòn phải chịu, khó dần: trùm đầu 9 đòn, trùm giữa 7,
             // trùm cuối 5. Trước đây dùng % maxHp × scale nên trùm cuối lại chịu
             // đòn tốt hơn trùm đầu (6 vs 9 đòn) — ngược đường cong.
-            atk: Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
+            atk: campaign
+              ? Math.max(1, campaign.bossAtk)
+              : Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
             speed: bossType === 'eclipse_sovereign' ? 76 : 68,
             vx: 45,
             vy: 30,
@@ -27800,8 +27850,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // đã 1,2-1,5s mỗi con — người mới thấy quái trâu ngay từ đầu.
             const depth = Math.min(1, (roomNum - 1) / Math.max(1, Game.maxRooms - 1));
             const baseHits = 1.4 + depth * 1.0;   // 1,4 -> 2,4 đòn
-            const atkMul = t === 'obsidian_brute' ? 1.28 : (t === 'eclipse_oracle' ? 1.16 : (t === 'rift_stalker' ? 1.04 : (t === 'sky_sentinel' ? 1.25 : (t === 'cloud_wisp' ? 0.96 : (t === 'dragon_whelp' ? 1.08 : (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0))))))) * baseHits;
-            const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale));
+            // Hệ số riêng của từng loại quái (không gồm baseHits).
+            const typeMul = t === 'obsidian_brute' ? 1.28 : (t === 'eclipse_oracle' ? 1.16 : (t === 'rift_stalker' ? 1.04 : (t === 'sky_sentinel' ? 1.25 : (t === 'cloud_wisp' ? 0.96 : (t === 'dragon_whelp' ? 1.08 : (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0)))))));
+            // Chiến dịch: HP tuyệt đối (type chỉ chỉnh nhẹ). Vô hạn: giữ công thức cũ.
+            const enemyHp = campaign
+              ? Math.max(1, Math.round(campaign.mobHp * typeMul))
+              : Math.max(1, Math.round(playerAtk * typeMul * baseHits * scale));
             Game.enemies.push({
               isBoss: false,
               type: t,
@@ -27816,9 +27870,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               // Chia theo sqrt(số quái) để phòng đông không one-shot, nhưng vẫn
               // giữ đúng đường cong khó dần (trước đây chia theo count khiến
               // càng về sau càng dễ chịu đòn — ngược hoàn toàn ý đồ).
-              atk: Math.max(1, Math.round(
-                playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
-              )),
+              // Chiến dịch: ATK tuyệt đối (vẫn chia theo độ đông để phòng 8 con không one-shot).
+              atk: campaign
+                ? Math.max(1, Math.round(campaign.mobAtk / Math.max(1, Math.sqrt(count / 3))))
+                : Math.max(1, Math.round(
+                    playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
+                  )),
               speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : (t === 'rift_stalker' ? 102 : (t === 'eclipse_oracle' ? 55 : (t === 'obsidian_brute' ? 38 : (t === 'dragon_whelp' ? 88 : (t === 'cloud_wisp' ? 92 : (t === 'sky_sentinel' ? 48 : 64))))))),
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,

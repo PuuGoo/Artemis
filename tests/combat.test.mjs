@@ -60,20 +60,26 @@ check("speed co fallback so", src.includes("Number(stats.hero && stats.hero.bonu
 
 // ---------------------------------------------------------------- 4. Cân bằng
 console.log("\n=== 4. CAN BANG QUAI / BOSS ===");
-check("quai HP neo theo playerAtk", src.includes("const enemyHp = Math.max(1, Math.round(playerAtk * atkMul * scale))"));
-// Cong thuc CÂN BẰNG MỚI (khó dần theo tiến trình):
-//   quái HP  = playerAtk × baseHits(1.4→2.4) × scale
-//   quái ATK = playerMaxHp / (16 - depth*10) / sqrt(count/3)
-//   boss HP  = playerAtk × hitsToKill(24/30/40) × chapterMul
-//   boss ATK = playerMaxHp / (9 / 7 / 5)
-// Kiểm tra theo Ý NGHĨA (neo vào chỉ số người chơi) chứ không theo chuỗi ký tự
-// cũ, để lần cân bằng sau không phải viết lại test.
-check("quai ATK neo theo playerMaxHp", /playerMaxHp\s*\/\s*\(16\s*-\s*depth\s*\*\s*10\)/.test(src));
-check("quai HP neo theo playerAtk + duong cong do sau", /playerAtk\s*\*\s*atkMul\s*\*\s*scale/.test(src) &&
-  /const baseHits = 1\.4 \+ depth \* 1\.0/.test(src));
-check("boss HP neo theo playerAtk voi hitsToKill", /playerAtk \* hitsToKill \* chapterMul/.test(src) &&
+// CÂN BẰNG MỚI (Đợt 6): chiến dịch dùng số TUYỆT ĐỐI theo chương, không neo người chơi.
+//   quái HP  = CAMPAIGN_TUNING[chương].mobHp × typeMul × (1 + depth*1.2)
+//   quái ATK = ...mobAtk × (1 + depth*0.5) / sqrt(count/3)
+//   boss HP  = ...bossHp × (1 + depth*0.35)   |  boss ATK = ...bossAtk × (1 + depth*0.3)
+// Lý do đổi: đo thật cho thấy neo theo người chơi làm nâng cấp vô nghĩa
+// (ATK ×39 → TTK chỉ giảm 1,96×; HP ×25 → số đòn chịu vẫn 16,1). Xem
+// docs/audit/artemis-new-player/13-GAME-BALANCE-MEASURED.md và 15-CAMPAIGN-DIFFICULTY.md.
+// Vô Tận/Tháp vẫn giữ công thức thích ứng cũ.
+check("chien dich dung bang tuyet doi CAMPAIGN_TUNING", /const CAMPAIGN_TUNING = \{/.test(src) &&
+  /const campaign = usesCampaignTuning\(\)/.test(src));
+check("quai HP chien dich lay tu bang tuyet doi", /campaign\s*\?\s*Math\.max\(1, Math\.round\(campaign\.mobHp \* typeMul\)\)/.test(src));
+check("quai ATK chien dich lay tu bang tuyet doi", /campaign\.mobAtk \/ Math\.max\(1, Math\.sqrt\(count \/ 3\)\)/.test(src));
+check("Vô Tận vẫn gĩu cong thuc thich ung (quai HP neo playerAtk)", /playerAtk \* typeMul \* baseHits \* scale/.test(src));
+check("Vô Tận vẫn giu ATK neo playerMaxHp", /playerMaxHp\s*\/\s*\(16\s*-\s*depth\s*\*\s*10\)/.test(src));
+check("Vô Tận vẫn giu duong cong baseHits", /const baseHits = 1\.4 \+ depth \* 1\.0/.test(src));
+check("boss chien dich dung bossHp tuyet doi", /campaign\.bossHp/.test(src));
+check("boss chien dich dung bossAtk tuyet doi", /campaign\.bossAtk/.test(src));
+check("Vô Tận vẫn giu boss HP theo hitsToKill", /playerAtk \* hitsToKill \* chapterMul/.test(src) &&
   /const hitsToKill = roomNum === 5 \? 24 : \(roomNum === 10 \? 30 : 40\)/.test(src));
-check("boss ATK neo theo playerMaxHp voi so don giam dan",
+check("Vô Tận vẫn giu boss ATK theo so don giam dan",
   /playerMaxHp \/ \(roomNum === 5 \? 9 : \(roomNum === 10 \? 7 : 5\)\)/.test(src));
 check("quai ATK giam so don chiu duoc khi cang sau", /16 - depth \* 10/.test(src));
 check("khong con so tuyet doi 1450 cho boss HP", !src.includes("Math.round(1450 * scale"));

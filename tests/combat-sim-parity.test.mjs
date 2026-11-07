@@ -20,9 +20,12 @@ test('combat-sim đọc được mọi hằng số từ source (không lệch c�
   });
   assert.match(out, /BASE_ATK=78/);
   assert.match(out, /Hệ số quái: \{/);
-  assert.match(out, /Chương: C1\(15 phòng ×1\)/);
-  assert.match(out, /C6/);
-  assert.match(out, /Không NaN\/Infinity/);
+  // Độ khó chiến dịch nay là bảng tuyệt đối; parity nghĩa là đọc được cả bảng đó.
+  assert.match(out, /CHIẾN DỊCH \(tuyệt đối\): C1 300HP\/70ATK/);
+  assert.match(out, /C6 2400HP\/520ATK/);
+  assert.match(out, /Chương: C1\(15 phòng\)/);
+  assert.match(out, /không NaN\/Infinity, TTK > 0/);
+  assert.match(out, /=== \d+ PASS \/ 0 FAIL ===/);
 });
 
 test('hồ sơ cân bằng phải được ĐO, không phải gõ tay', () => {
