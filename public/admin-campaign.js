@@ -290,6 +290,10 @@
       loadSummaries();
     },
     show:function(){visible=true;startAnimation();},
+    syncHash:function(){
+      var id=parseChapterHash();
+      if(id && chapterById(id) && (!current || current.id!==id)) selectChapter(id,false);
+    },
     hide:function(){visible=false;stopAnimation();},
     refresh:function(){cache=Object.create(null);if(root)loadSummaries();}
   };
