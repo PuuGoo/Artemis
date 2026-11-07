@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import vm from 'node:vm';
 import { RUNE_IDS, RUNE_TIERS, addRuneDrop } from '../lib/runeCatalog.js';
 
@@ -41,11 +41,34 @@ test('three same-quality stones merge into one next-quality stone', () => {
   assert.equal(RUNE_TIERS.length,11);
 });
 
-test('wiki image mapping covers every referenced stone and has a fallback for Echo Scythe', () => {
+test('user-labelled local icons preserve duplicate Fury names without inventing Arrow Rain', () => {
   const imageContext = vm.createContext({ window:{} });
   vm.runInContext(readFileSync(new URL('../public/rune-wiki-images.js', import.meta.url),'utf8'),imageContext);
   const images = imageContext.window.RuneWikiImages;
-  assert.equal(Object.keys(images).length,45);
-  assert.ok(RUNE_IDS.every(id => images[id] || id==='echo_scythe'));
-  assert.ok(Object.values(images).every(url => url.startsWith('https://img-archero-2.game-vault.net/')));
+  assert.equal(Object.keys(images).length,44);
+  assert.equal(Object.keys(imageContext.window.RuneImageManifest).length,45);
+  assert.ok(RUNE_IDS.every(id => images[id] || ['echo_scythe','arrow_rain'].includes(id)));
+  assert.ok(Object.values(images).every(url => url.startsWith('assets/runes/') && existsSync(new URL('../public/' + url, import.meta.url))));
+  const variants = Object.values(imageContext.window.RuneImageManifest).filter(x => x.id === 'star_of_fury');
+  assert.equal(variants.length,2);
+  assert.notEqual(variants[0].asset,variants[1].asset);
+  assert.equal(images.arrow_rain,undefined);
+});
+
+test('wiki retains empty tier cells and includes specific and shared enchantment tables', () => {
+  const c = vm.createContext({window:{}});
+  vm.runInContext(readFileSync(new URL('../public/rune-wiki-data.js',import.meta.url),'utf8'),c);
+  const d = c.window.RuneWikiData;
+  assert.equal(d.rune_valkyrie.effects.Normal,'');
+  assert.equal(d.rune_valkyrie.effects.Rare,'Max HP +240');
+  assert.match(d.rune_valkyrie.enchantments.Mythic,/ATK SPD/);
+  assert.match(d.sharp_arrow.sharedEnchantments.Mythic,/CRIT DMG/);
+  assert.equal(c.window.RuneWikiSource.snapshotDate,'2026-03-16');
+  for (const r of Object.values(d)) {
+    assert.ok(r.name && r.base && r.effects.Mythic);
+    if (r.type !== 'Etched') {
+      assert.equal(Object.keys(r.enchantments).length,6);
+      assert.equal(Object.keys(r.sharedEnchantments).length,6);
+    }
+  }
 });

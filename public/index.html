@@ -177,6 +177,14 @@
     .rune-inventory-card[data-type="ability"] { background:linear-gradient(145deg,#a337c9,#762aa7 55%,#e047cc); }
     .rune-inventory-card.is-locked { filter:saturate(.52); opacity:.72; }
     .rune-inventory-card.is-locked:hover { filter:saturate(.8) brightness(1.1); opacity:1; }
+    /* Màu theo phẩm chất ngọc (Normal -> Mythic) do JS gắn qua --tier-color/--tier-glow */
+    .rune-inventory-card[data-tier],.rune-socket.is-filled[data-tier] { border-color:var(--tier-color,#ef71f4); }
+    .rune-inventory-card[data-tier] { box-shadow:0 5px 0 #00000055,0 0 15px var(--tier-glow,#ffffff33),inset 0 2px 0 #ffffff66; }
+    .rune-inventory-card[data-tier] .rune-wiki-icon { filter:drop-shadow(0 3px 4px #12062499) drop-shadow(0 0 11px var(--tier-glow,#ffbaff88)); }
+    .rune-inventory-card[data-tier="mythic"] { border-color:var(--tier-color,#e65355); box-shadow:0 5px 0 #651b25,0 0 22px var(--tier-glow,#e65355aa),inset 0 2px 0 #fff; }
+    .rune-socket.is-filled[data-tier] { box-shadow:0 5px 0 #39115c,0 0 0 3px #00000066,0 0 24px var(--tier-glow,#f0abfc),inset 0 2px 11px #ffffff99; }
+    .rune-tier-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px;
+      background:var(--tier-color,#9aa7bd); color:#0b1020; font-size:9px; font-weight:1000; letter-spacing:.03em; }
     .rune-wiki-icon { display:block; width:82%; height:82%; margin:auto; object-fit:contain; filter:drop-shadow(0 4px 5px #120624) drop-shadow(0 0 9px #ffbaff88); transition:transform .28s,filter .28s; }
     .rune-inventory-card:hover .rune-wiki-icon,.rune-socket:hover .rune-wiki-icon { transform:scale(1.15) rotate(-5deg); filter:drop-shadow(0 4px 5px #120624) drop-shadow(0 0 16px #ffffffbb); }
     .rune-socket>span { display:grid; place-items:center; width:100%; height:100%; }
@@ -9075,11 +9083,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       };
 
+      // Màu phẩm chất lấy từ các tiêu đề bảng Wiki (bản lưu 2026-03-16).
+      // Các bậc +1/+2/+3 giữ cùng màu phẩm chất chính, không tự đổi sang cầu vồng.
+      const RUNE_TIER_COLORS = {
+        normal:      { color: '#cecddb', glow: 'rgba(206,205,219,0.55)' },
+        fine:        { color: '#3fa43d', glow: 'rgba(63,164,61,0.55)' },
+        rare:        { color: '#4695d1', glow: 'rgba(70,149,209,0.60)' },
+        epic:        { color: '#a260ec', glow: 'rgba(162,96,236,0.62)' },
+        epic_1:      { color: '#a260ec', glow: 'rgba(162,96,236,0.65)' },
+        epic_2:      { color: '#a260ec', glow: 'rgba(162,96,236,0.68)' },
+        legendary:   { color: '#ff9753', glow: 'rgba(255,151,83,0.68)' },
+        legendary_1: { color: '#ff9753', glow: 'rgba(255,151,83,0.72)' },
+        legendary_2: { color: '#ff9753', glow: 'rgba(255,151,83,0.75)' },
+        legendary_3: { color: '#ff9753', glow: 'rgba(255,151,83,0.78)' },
+        mythic:      { color: '#e65355', glow: 'rgba(230,83,85,0.90)' }
+      };
+
       const RUNE_CATEGORIES_META = {
-        etched:      { id: 'etched',      name: 'Etched Runes (Cổ Ngữ Khắc Ấn)',       slots: 3, icon: '💠', color: '#f43f5e', statLabel: 'Mythic: +4.500 ATK & +18.000 HP / viên' },
-        blessing:    { id: 'blessing',    name: 'Blessing Runes (Cổ Ngữ Phước Lành)',   slots: 2, icon: '🪽', color: '#fde047', statLabel: 'Mythic: +900 ATK & +3.600 HP / viên' },
-        enhancement: { id: 'enhancement', name: 'Enhancement Runes (Cổ Ngữ Cường Hóa)', slots: 4, icon: '⚔️', color: '#38bdf8', statLabel: 'Mythic: +1.500 ATK PWR / viên' },
-        ability:     { id: 'ability',     name: 'Ability Runes (Cổ Ngữ Kỹ Năng Đầu Trận)',slots: 4, icon: '🌟', color: '#34d399', statLabel: 'Mythic: +6.000 MAX HP / viên' }
+        etched:      { id: 'etched',      name: 'Etched Runes (Cổ Ngữ Khắc Ấn)',       slots: 3, icon: '💠', color: '#ff74ef', statLabel: 'Mythic: +4.500 ATK & +18.000 HP / viên' },
+        blessing:    { id: 'blessing',    name: 'Blessing Runes (Cổ Ngữ Phước Lành)',   slots: 2, icon: '🪽', color: '#FCC539', statLabel: 'Mythic: +900 ATK & +3.600 HP / viên' },
+        enhancement: { id: 'enhancement', name: 'Enhancement Runes (Cổ Ngữ Cường Hóa)', slots: 4, icon: '⚔️', color: '#2A86E5', statLabel: 'Mythic: +1.500 ATK PWR / viên' },
+        ability:     { id: 'ability',     name: 'Ability Runes (Cổ Ngữ Kỹ Năng Đầu Trận)',slots: 4, icon: '🌟', color: '#0dd0ba', statLabel: 'Mythic: +6.000 MAX HP / viên' }
       };
 
       const RUNES_DATA = [
@@ -9598,6 +9622,16 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       ];
 
+      // Tên và mô tả tham chiếu phải lấy từ cùng bảng Wiki, không dùng tiêu đề
+      // cũ chứa số liệu Mythic phóng đại cho mọi phẩm chất.
+      for (const rune of RUNES_DATA) {
+        const reference = RuneWikiData[rune.id];
+        if (!reference) continue;
+        rune.wikiName = reference.name;
+        rune.name = reference.name;
+        rune.desc = Object.entries(reference.effects).filter(([, effect]) => effect).map(([tier, effect]) => `${tier}: ${effect}`).join(' · ');
+      }
+
       // Người chơi mới bắt đầu với rune TRỐNG: rune phải kiếm qua chiến đấu/sự kiện.
       // Danh sách cũ trang bị sẵn 12 rune, khiến ATK/Hp tăng vọt dù trang bị Lv.1.
       const DEFAULT_EQUIPPED_RUNE_SLOTS = {
@@ -9608,7 +9642,19 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       };
       let selectedRuneSocket = null;
       function runeOwned(id) { return RuneEconomy.copies(SaveState.runes?.[id]) > 0; }
-      function runeImage(rune) { return RuneWikiImages[rune.id] || RuneArt.src(rune); }
+      // 45 ảnh được gắn đúng tên người dùng: 44 rune + 2 biến thể Star of Fury.
+      // Arrow Rain và Echo Scythe chưa có ảnh được xác định, giữ fallback SVG.
+      function runeImage(rune) {
+        const id = rune && rune.id;
+        if (id && RuneWikiImages[id]) return RuneWikiImages[id];
+        return RuneArt.src(rune);
+      }
+      function runeTierStyle(rune) {
+        const copies = RuneEconomy.copies(SaveState.runes?.[rune?.id]);
+        const id = RuneEconomy.tier(copies);
+        const tier = RUNE_TIER_COLORS[id] || RUNE_TIER_COLORS.normal;
+        return { id, color: tier.color, glow: tier.glow, style: `--tier-color:${tier.color};--tier-glow:${tier.glow};` };
+      }
       function runeFallback(img) { img.onerror = null; img.src = RuneArt.src({ id:img.dataset.runeId, type:img.dataset.runeType }); }
       function openRuneDetailPopup(runeId, socket = null) {
         const rune=RUNES_DATA.find(r=>r.id===runeId);
@@ -9621,7 +9667,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           ? socket
           : Object.entries(equippedSlots).flatMap(([cat, ids]) => ids.map((id, index) => ({ cat, index, id }))).find(slot => slot.id===runeId);
         const tierNames={Normal:1,Fine:2,Rare:3,Epic:4,'Epic +2':6,Legendary:7,'Legendary +1':8,'Legendary +2':9,'Legendary +3':10,Mythic:11};
+
         const rows=Object.entries(wiki.effects);
+        const enchantRows = Object.entries(wiki.enchantments || {});
+        const sharedRows = Object.entries(wiki.sharedEnchantments || {});
         const modal=document.createElement('div');
         modal.className='rune-detail-modal';
         modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label',`Chi tiết Ngọc ${wiki.name}`);
@@ -9631,7 +9680,9 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           <div class="mt-3 text-xs font-black text-amber-200">Thuộc tính theo phẩm chất</div>
           ${rows.map(([tier,effect])=>`<div class="rune-detail-tier ${rank>=tierNames[tier]?'is-active':''}"><b>${rank>=tierNames[tier]?'✦':'🔒'} ${tier}</b><p>${effect && effect!=='-'?effect:'Không có thuộc tính riêng ở bậc này'}</p></div>`).join('')}
           <div class="rune-detail-actions">${rank&&!equippedAt?'<button type="button" data-rune-popup-equip class="rune-gold-btn">💠 Khảm viên này</button>':''}${equippedAt?'<button type="button" data-rune-popup-unequip class="rune-gold-btn rune-remove-btn">↩ Tháo Ngọc</button>':''}${!rank?'<button type="button" data-rune-popup-ruins class="rune-gold-btn">⛏️ Khám phá Tàn Tích</button>':''}<button type="button" data-rune-popup-close class="rune-gold-btn">Đóng</button></div>
-          <p class="mt-3 text-[10px] text-slate-400">Nguồn: Archero 2 Wiki · Ngọc chỉ nhận qua sự kiện khám phá.</p></div>`;
+          <details class="mt-3"><summary>Phù phép riêng · mở từ Epic +2</summary>${enchantRows.map(([tier,text])=>`<div class="rune-detail-tier"><b>${tier}</b><p>${text || 'Không có thuộc tính riêng ở bậc này'}</p></div>`).join('')}</details>
+          <details class="mt-3"><summary>Phù phép chung theo nhóm</summary>${sharedRows.map(([tier,text])=>`<div class="rune-detail-tier"><b>${tier}</b><p>${text || 'Không có thuộc tính ở bậc này'}</p></div>`).join('')}</details>
+          <p class="mt-3 text-[10px] text-slate-400">Nguồn: Archero 2 Wiki · bản lưu 16/03/2026. Đây là bảng tham chiếu; không khẳng định mọi hiệu ứng đã được mô phỏng trong chiến đấu.</p></div>`;
         document.body.appendChild(modal);
         const image=modal.querySelector('img[data-rune-id]');if(image) image.onerror=()=>runeFallback(image);
         const close=()=>modal.remove();
@@ -18968,8 +19019,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 const rune = RUNES_DATA.find(r => r.id === id);
                 const [x,y] = altarPositions[cat][index];
                 const picked = selected?.cat === cat && selected?.index === index;
+                const tierInfo = rune ? runeTierStyle(rune) : null;
                 return `<button type="button" class="rune-socket ${rune ? 'is-filled' : 'is-empty'} ${picked ? 'is-picked' : ''}"
-                  style="--x:${x}%;--y:${y}%;--rune-color:${rune?.color || meta.color}"
+                  style="--x:${x}%;--y:${y}%;--rune-color:${rune?.color || meta.color};${tierInfo ? tierInfo.style : ''}"
+                  ${tierInfo ? `data-tier="${tierInfo.id}"` : ''}
                   data-rune-slot="${cat}:${index}" data-rune-cat="${cat}" title="${meta.name} · Ô ${index + 1}${rune ? ' · ' + rune.name : ' · Trống'}"
                   aria-label="${meta.name}, ô ${index + 1}: ${rune?.name || 'trống'}" aria-pressed="${picked}">
                   <span aria-hidden="true">${rune ? `<img class="rune-wiki-icon" src="${runeImage(rune)}" data-rune-id="${rune.id}" data-rune-type="${rune.type}" alt="">` : runePlaceholders[cat]}</span>
@@ -18994,13 +19047,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   `<button type="button" data-rune-cat-filter="${f.id}" class="rune-filter ${curCatFilter === f.id ? 'is-active' : ''}">${f.label}</button>`).join('')}
               </div>
               <div class="rune-inventory-grid" aria-label="Danh sách cổ ngữ">
-                ${filteredCatalog.map(r => `<button type="button" data-equip-wiki-rune="${r.id}" data-type="${r.type}"
-                  class="rune-inventory-card ${isRuneEquipped(r.id) ? 'is-equipped' : ''} ${runeOwned(r.id)?'':'is-locked'}" title="${r.name} — ${r.desc}" aria-label="${r.name}${isRuneEquipped(r.id) ? ', đã khảm' : runeOwned(r.id)?', chạm để khảm':', chưa sở hữu'}">
+                ${filteredCatalog.map(r => { const tierInfo = runeTierStyle(r); return `<button type="button" data-equip-wiki-rune="${r.id}" data-type="${r.type}"
+                  class="rune-inventory-card ${isRuneEquipped(r.id) ? 'is-equipped' : ''} ${runeOwned(r.id)?'':'is-locked'}" style="${tierInfo.style}${runeOwned(r.id) ? `--rune-color:${tierInfo.color};` : ''}" ${runeOwned(r.id) ? `data-tier="${tierInfo.id}"` : ''} title="${r.name} — ${r.desc}" aria-label="${r.name}${isRuneEquipped(r.id) ? ', đã khảm' : runeOwned(r.id)?', chạm để khảm':', chưa sở hữu'}">
                   <span class="rune-inventory-glyph" aria-hidden="true"><img class="rune-wiki-icon" src="${runeImage(r)}" data-rune-id="${r.id}" data-rune-type="${r.type}" alt=""></span>
                   ${isRuneEquipped(r.id) ? '<span class="rune-count" aria-hidden="true">✓</span>' : ''}
                   <span class="rune-rank">${runeOwned(r.id)?`${RuneEconomy.tier(SaveState.runes[r.id]).replaceAll('_',' ').toUpperCase()} · ${RuneEconomy.copies(SaveState.runes[r.id])}/11`:'🔒 CHƯA SỞ HỮU'}</span>
                   <span class="rune-short-name">${r.wikiName || r.name}</span>
-                </button>`).join('')}
+                </button>`; }).join('')}
               </div>
             </div>
             <details class="rune-presets"><summary>✦ Xưởng Ngọc · Bộ khảm nhanh</summary>
