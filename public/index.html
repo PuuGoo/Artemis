@@ -11,6 +11,7 @@
   <script src="/rune-art.js"></script>
   <script src="/rune-wiki-images.js"></script>
   <script src="/rune-wiki-data.js"></script>
+  <script src="/artifact-reference.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
@@ -263,6 +264,10 @@
       box-shadow:0 12px 0 #b5a4cf; }
     .artifact-piece { min-width:0; padding:0 1px; border:0; background:none; color:#fff; cursor:pointer; transition:transform .2s,filter .2s; }
     .artifact-piece:hover { transform:translateY(-6px); filter:brightness(1.15); }
+    .artifact-art { position:relative; display:inline-grid; place-items:center; width:1.2em; height:1.2em; }
+    .artifact-art img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; }
+    .artifact-art-fallback { pointer-events:none; }
+    .artifact-art-fallback[hidden] { display:none; }
     .artifact-piece.is-missing .artifact-object { filter:grayscale(.75) brightness(.72); }
     .artifact-object { position:relative; z-index:1; display:grid; place-items:center; height:74px; font-size:clamp(39px,9vw,70px); line-height:1;
       background:radial-gradient(circle,#efbfff66,transparent 68%); filter:drop-shadow(0 6px 3px #1e1749bb); animation:artifactFloat 3.5s ease-in-out infinite; }
@@ -10562,6 +10567,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         }
       ];
 
+      // Chỉ đồng bộ dữ liệu tham chiếu và hình ảnh; giữ nguyên ID và save hiện có.
+      ArtifactReference.applyCatalog(ARTIFACTS_DATA);
+
+      function renderArtifactIcon(artifact) {
+        return ArtifactReference.renderIcon(artifact);
+      }
+
       function getArtifactStarMap() {
         if (!SaveState.artifactStars || typeof SaveState.artifactStars !== 'object') {
           SaveState.artifactStars = {};
@@ -19127,6 +19139,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             <span class="artifact-eyebrow">✦ Thánh Điện Cổ Vật ✦</span>
             <h3>🏺 Bảo Điện Thánh Vật</h3>
             <p>Sưu tầm 46 thánh vật, hoàn thiện 13 bộ và đánh thức sức mạnh cộng hưởng.</p>
+            <details class="artifact-reference-note"><summary>Nguồn tham chiếu và giới hạn</summary>
+              <p><a href="https://archero-2.game-vault.net/w/index.php?title=Artifacts&amp;oldid=1781" target="_blank" rel="noopener noreferrer">Archero 2 Wiki · bản 1781</a> · HTML và 44 PNG do người dùng cung cấp.</p>
+              <p>Quiet Quill và Voidblade chưa có ảnh, dùng biểu tượng dự phòng. Mô tả wiki là tham chiếu, không khẳng định mọi hiệu ứng đã được mô phỏng trong chiến đấu.</p>
+              <p>Margic Carpet: cột Base Stats của wiki ghi “Gold in Gold Cave +4%”, không ghi ATK/HP; game giữ chỉ số cũ. Wiki không nêu nơi nhận của nhóm Sử Thi và Hiếm.</p>
+            </details>
             <div class="artifact-totals" aria-label="Tổng chỉ số thánh vật">
               <span>✦ ${ownedCount}/46 đã sở hữu</span>
               <span>🔗 ${activeSetIds.size}/13 bộ kích hoạt</span>
@@ -19163,7 +19180,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                       const a = ARTIFACTS_DATA.find(x => x.id === id);
                       const star = getArtifactStarLevel(id);
                       return `<button type="button" class="artifact-piece ${star ? '' : 'is-missing'}" data-artifact-focus="${id}" data-rarity="${a.rarity}" title="${a.name} · ${star}★ · chạm để xem">
-                        <span class="artifact-object" aria-hidden="true">${a.icon}</span><span class="artifact-cushion" aria-hidden="true"></span>
+                        <span class="artifact-object" aria-hidden="true">${renderArtifactIcon(a)}</span><span class="artifact-cushion" aria-hidden="true"></span>
                         <span class="artifact-piece-name">${a.wikiName}</span><span class="artifact-piece-stars">${star ? `${star}★` : 'Chưa sở hữu'}</span>
                       </button>`;
                     }).join('')}
@@ -19186,12 +19203,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 ${filteredArtifacts.map(a => {
                   const starLv = getArtifactStarLevel(a.id);
                   const curStats = computeSingleArtifactStats(a, starLv);
-                  return `<button type="button" data-upgrade-artifact="${a.id}" data-rarity="${a.rarity}" class="artifact-codex-card ${artifactFocusId === a.id ? 'is-focused' : ''}" title="${a.desc}">
-                    <span class="artifact-object" aria-hidden="true">${a.icon}</span>
+                  return `<button type="button" data-upgrade-artifact="${a.id}" data-rarity="${a.rarity}" class="artifact-codex-card ${artifactFocusId === a.id ? 'is-focused' : ''}" title="${ArtifactReference.escapeHtml(a.desc)}">
+                    <span class="artifact-object" aria-hidden="true">${renderArtifactIcon(a)}</span>
                     <h5>${a.wikiName}</h5>
                     <p>${rarityNames[a.rarity]} · ${starLv}★ / 15★ · ${a.source}</p>
                     <p>+${curStats.atk.toLocaleString('vi-VN')} ATK · +${curStats.hp.toLocaleString('vi-VN')} HP</p>
                     <p>${a.specialStatText}</p>
+                    <p>Wiki · ${a.reference.baseStats}</p>
                     <span class="artifact-upgrade">${starLv >= 15 ? '👑 Đã đạt 15★' : `⬆ Chạm để nâng lên ${starLv + 1}★`}</span>
                   </button>`;
                 }).join('')}
@@ -26970,6 +26988,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         ensureVnAuthenticUIState();
         const el = document.getElementById('vnCollectiblesAuthenticContainer');
         if (!el) return;
+        // Mọi lối vào bộ sưu tập dùng cùng danh mục và sao thật, không dùng mẫu minh hoạ.
+        const VN_VELVET_ARTIFACTS = ARTIFACTS_DATA.map(a => ({ ...a, stars: getArtifactStarLevel(a.id) }));
+        const VN_VELVET_ARTIFACT_SETS = ARTIFACT_SETS_DATA.map(s => ({
+          ...s,
+          items: s.members.map(id => ARTIFACTS_DATA.find(a => a.id === id)),
+          bonuses: s.tiersPct.map((pct, idx) => `[${['Kích hoạt', 'Đủ 3★', 'Đủ 6★', 'Đủ 9★', 'Đủ 12★', 'Đủ 15★'][idx]}] ATK +${pct}% · HP +${pct}%`)
+        }));
         const st = SaveState.vnUiState;
         const mainTab = st.collectMainTab || 'artifacts';
         const subView = st.collectSubView || 'library';
@@ -27013,7 +27038,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                     ${VN_VELVET_ARTIFACTS.map(art => `
                       <div data-vn-velvet-art="${art.id}" class="cursor-pointer group flex flex-col items-center">
                         <!-- Artifact Icon Floating Above Red Velvet Pillow -->
-                        <div class="text-5xl z-10 -mb-3 group-hover:scale-110 transition drop-shadow-[0_8px_10px_rgba(0,0,0,0.5)]">${art.icon}</div>
+                        <div class="text-5xl z-10 -mb-3 group-hover:scale-110 transition drop-shadow-[0_8px_10px_rgba(0,0,0,0.5)]">${renderArtifactIcon(art)}</div>
                         <!-- Red Velvet & Gold Trim Pillow -->
                         <div class="w-full h-14 rounded-2xl bg-gradient-to-b from-[#ef4444] to-[#b91c1c] border-b-4 border-amber-400 shadow-xl flex flex-col items-center justify-end pb-1">
                           <div class="text-[11px] tracking-tighter">${'⭐'.repeat(art.stars)}</div>
@@ -27032,7 +27057,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                         <div class="grid grid-cols-3 gap-3">
                           ${setObj.items.map(it => `
                             <div class="flex flex-col items-center">
-                              <div class="text-4xl z-10 -mb-2 drop-shadow">${it.icon}</div>
+                              <div class="text-4xl z-10 -mb-2 drop-shadow">${renderArtifactIcon(it)}</div>
                               <div class="w-full h-12 rounded-2xl bg-gradient-to-b from-[#ef4444] to-[#b91c1c] border-b-4 border-amber-400 shadow flex items-center justify-center"></div>
                               <div class="mt-1 font-black text-[11px] text-white text-center">${it.name}</div>
                             </div>
@@ -27125,10 +27150,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const id = card.getAttribute('data-vn-velvet-art');
             const art = VN_VELVET_ARTIFACTS.find(x => x.id === id);
             if (art) {
-              art.stars = Math.min(5, (art.stars || 1) + 1);
-              SoundFX.levelUp();
-              renderVnCollectiblesTabUI();
-              showToast(`🏺 Đã nâng cấp Thánh Vật [${art.name}] lên ${art.stars}⭐!`);
+              showToast(`🏺 ${art.wikiName} · ${art.stars}★ · ${art.specialStatText}`);
             }
           };
         });
