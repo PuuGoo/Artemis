@@ -283,6 +283,21 @@
     .vip-pass-buy { width:100%; min-height:42px; padding:9px; border:2px solid #fff1a7; border-radius:11px; background:linear-gradient(#fff49f,#ffbd2d 58%,#e4870e); color:#4c2708; font-size:12px; font-weight:1000; cursor:pointer; box-shadow:0 3px 0 #8b4c0b; }
     .vip-pass-buy:hover,.vip-pass-buy:focus-visible { filter:brightness(1.1); transform:translateY(-2px); }
     .vip-pass-buy:disabled { opacity:.6; cursor:wait; }
+    .gold-cave-shell{position:relative;overflow:hidden;padding:20px;border:1px solid #fbbf24aa;border-radius:26px;color:#fff;background:radial-gradient(circle at 82% 9%,#f59e0b43,transparent 31%),radial-gradient(circle at 12% 82%,#7c3aed31,transparent 38%),linear-gradient(145deg,#231c35,#10152e 60%,#0a1226);box-shadow:0 18px 45px #030712a8,inset 0 1px #fff4}
+    .gold-cave-shell:before{content:'✦  ·  ✦  ·  ✦';position:absolute;right:5%;top:54px;color:#facc1570;font-size:30px;letter-spacing:28px;pointer-events:none;animation:eventsTwinkle 3s ease-in-out infinite}
+    .gold-cave-hero{position:relative;display:flex;align-items:center;gap:16px;padding:16px;border:1px solid #fbbf2466;border-radius:20px;background:linear-gradient(100deg,#6b3e13bb,#27214688)}
+    .gold-cave-hero-icon{font-size:60px;line-height:1;filter:drop-shadow(0 8px 7px #0009);animation:eventsFloat 3s ease-in-out infinite}
+    .gold-cave-title{font-size:clamp(20px,4vw,30px);font-weight:1000;line-height:1.1;color:#fff2b2;text-shadow:0 3px 10px #0009}
+    .gold-cave-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.gold-cave-meta span{padding:5px 9px;border:1px solid #facc1555;border-radius:99px;background:#0006;color:#fde68a;font-size:11px;font-weight:800}
+    .gold-cave-panel{position:relative;margin-top:14px;padding:14px;border:1px solid #ffffff20;border-radius:19px;background:#080c21aa}
+    .gold-cave-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:12px}
+    .gold-cave-wave{min-width:0;padding:9px 4px;border:1px solid #ffffff26;border-radius:14px;background:#141b35;text-align:center;transition:transform .25s,box-shadow .25s,border-color .25s}.gold-cave-wave b{display:block;color:#fef3c7;font-size:11px}.gold-cave-wave span{display:block;font-size:21px;margin:3px}.gold-cave-wave small{display:block;color:#cbd5e1;font-size:10px}.gold-cave-wave.done{border-color:#34d399;background:#064e3b88}.gold-cave-wave.next{border-color:#fbbf24;box-shadow:0 0 18px #fbbf2466;transform:translateY(-3px);animation:goldCavePulse 1.8s infinite}.gold-cave-wave.boss{background:#641c33aa}.gold-cave-wave.final{background:#78500faa}
+    .gold-cave-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.gold-cave-button{min-height:42px;padding:9px 15px;border:1px solid #facc1599;border-radius:12px;background:linear-gradient(#fde68a,#f59e0b);color:#422006;font-size:12px;font-weight:1000;box-shadow:0 4px #713f12;transition:transform .18s,filter .18s}.gold-cave-button:hover{filter:brightness(1.12);transform:translateY(-3px)}.gold-cave-button:active{transform:translateY(2px);box-shadow:0 1px #713f12}.gold-cave-button.secondary{border-color:#a5b4fc;background:#312e81;color:#e0e7ff;box-shadow:0 4px #17124c}.gold-cave-button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .gold-cave-choice{flex:1 1 120px;min-height:85px;border:1px solid #facc1588;border-radius:15px;background:linear-gradient(140deg,#503115,#1b1c39);color:#fff2ae;font-weight:900;font-size:13px;transition:transform .25s,box-shadow .25s}.gold-cave-choice:hover{transform:translateY(-5px) rotate(-1deg);box-shadow:0 8px 20px #f59e0b44}.gold-cave-choice span{display:block;font-size:28px}
+    .gold-cave-reveal{position:fixed;z-index:9998;left:50%;top:38%;width:min(88vw,320px);padding:24px 18px;border:2px solid #fde68a;border-radius:20px;background:radial-gradient(circle at 50% 0%,#fbbf24,#92400e 65%,#422006);color:white;text-align:center;font-size:19px;font-weight:1000;text-shadow:0 2px 6px #000a;box-shadow:0 0 55px #f59e0baa,0 20px 40px #0009;pointer-events:none;animation:goldCaveReveal 1.05s ease-out forwards}
+    .gold-cave-progress{height:9px;overflow:hidden;border-radius:99px;background:#151a2b}.gold-cave-progress i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#fde68a);box-shadow:0 0 12px #fbbf24;transition:width .45s}
+    @keyframes goldCavePulse{50%{box-shadow:0 0 27px #fbbf24aa}}@keyframes goldCaveReveal{0%{opacity:0;transform:translate(-50%,30px) scale(.6) rotate(-7deg)}25%{opacity:1;transform:translate(-50%,-10px) scale(1.08) rotate(2deg)}65%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-40px) scale(.9)}}@media(max-width:520px){.gold-cave-shell{padding:12px}.gold-cave-grid{gap:4px}.gold-cave-wave{padding:7px 2px}.gold-cave-wave small{font-size:9px}.gold-cave-hero-icon{font-size:43px}}
+    @media(prefers-reduced-motion:reduce){.gold-cave-shell:before,.gold-cave-hero-icon,.gold-cave-wave.next{animation:none}.gold-cave-button,.gold-cave-choice{transition:none}.gold-cave-reveal{animation:none;opacity:1}}
     @media(max-width:700px) { .vip-pass-grid { grid-template-columns:1fr; } .vip-pass-benefits { min-height:0; } .vip-pass-card { padding:12px; } }
     .events-hero { position:relative; overflow:hidden; padding:18px; border:2px solid #f7c969; border-radius:24px;
       background:radial-gradient(circle at 80% 20%,#ffb6db88,transparent 35%),linear-gradient(135deg,#75324d,#4a285d 50%,#25215d);
@@ -19615,22 +19630,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
         if (itemId === 'gold_cave_ticket') {
-          if (!requireVipCard('cave', 'Cave Explorer')) return;
-          if ((items.gold_cave_ticket || 0) < 1) {
-            showToast('⚠️ Không đủ Gold Cave Ticket!');
-            return;
-          }
-          items.gold_cave_ticket -= 1;
-          const goldReward = 25000;
-          SaveState.gold = (SaveState.gold || 0) + goldReward;
-          for (const sk of Object.keys(WIKI_GEAR_SCROLLS_META)) {
-            SaveState.gearScrolls[sk] = (SaveState.gearScrolls[sk] || 0) + 15;
-          }
-          ev.lastEventLog = `🪙 Càn quét Gold Cave thành công: Nhận +${goldReward.toLocaleString('vi-VN')} 🪙 Vàng & +15 mỗi loại Gear Scroll (Tổng +90 Cuộn)!`;
+          ev.selectedEventId = 'gold_cave';
           SaveState.save();
-          SoundFX.coinPickup();
+          document.getElementById('bottomNavBar')?.querySelector('[data-tab="tabEvents"]')?.click();
           renderLobbyUI();
-          showToast(ev.lastEventLog);
+          document.getElementById('wikiEventsHubContainer')?.scrollIntoView({ behavior:'smooth', block:'start' });
           return;
         }
         if (itemId === 'seal_battle_ticket') {
@@ -22015,9 +22019,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         if (typeof ev.goldCaveDifficulty !== 'number') ev.goldCaveDifficulty = 1;
+        ev.goldCaveDifficulty = Math.max(1, Math.min(25, ev.goldCaveDifficulty, goldCaveMaxFloor()));
+        if (!ev.goldCaveRun || typeof ev.goldCaveRun !== 'object') ev.goldCaveRun = null;
+        if (!Number.isFinite(ev.goldCaveBestLevel)) ev.goldCaveBestLevel = 0;
         if (typeof ev.goldCaveCurrentWave !== 'number') ev.goldCaveCurrentWave = 0;
         if (typeof ev.goldCaveAdClaimed !== 'boolean') ev.goldCaveAdClaimed = false;
-        if (!ev.goldCaveLastRoulette) ev.goldCaveLastRoulette = 'Vượt 10 Đợt Quái Hang Vàng + Quay Roulette Xen Kẽ (Đợt 9 Boss • Đợt 10 Roulette Nhân Đôi Phần Thưởng)!';
+        if (!ev.goldCaveLastRoulette || ev.goldCaveLastRoulette.startsWith('Vượt 10 Đợt Quái Hang Vàng')) ev.goldCaveLastRoulette = 'Chọn tầng và dùng 1 vé để bắt đầu. Vàng trong kho sẽ được nhận khi rời hang.';
 
         if (!ev.runeRuinsBoard || !Array.isArray(ev.runeRuinsBoard.symbols)) {
           ev.runeRuinsBoard = createFreshRuneRuins3x3Board();
@@ -22125,6 +22132,28 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
       }
 
+      function goldCaveMaxFloor() {
+        return Math.min(25, Math.max(1, Math.floor(((SaveState.playerLevel || 1) + (SaveState.gearLevel || 1)) / 2)));
+      }
+      function goldCaveFullGold(floor) {
+        // About 5-8 current weapon upgrades per run, bounded by the server's 27k save burst.
+        return Math.min(22000, 1800 + Math.max(1,floor) * 650 + (SaveState.gearLevel || 1) * 120);
+      }
+      function goldCaveUpgradeCount(gold) {
+        let count = 0, level = SaveState.gearLevel || 1, remaining = gold;
+        while (count < 100 && remaining >= 200 + (level - 1) * 120) {
+          remaining -= 200 + (level - 1) * 120;
+          level++; count++;
+        }
+        return count;
+      }
+      function showGoldCaveReveal(message) {
+        const banner = document.createElement('div');
+        banner.className = 'gold-cave-reveal';
+        banner.textContent = message;
+        document.body.appendChild(banner);
+        setTimeout(() => banner.remove(), 1150);
+      }
       function renderWikiEventsHubUI() {
         ensureFullWikiEventsHubState();
         const container = document.getElementById('wikiEventsHubMainContainer');
@@ -22475,73 +22504,46 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </div>
           `;
         } else if (activeEventMeta.id === 'gold_cave') {
-          const diff = ev.goldCaveDifficulty || 15;
-          const wave = ev.goldCaveCurrentWave || 0;
+          const run = ev.goldCaveRun;
+          const diff = run ? run.difficulty : ev.goldCaveDifficulty;
+          const wave = run?.wave || 0;
           const tickets = SaveState.wikiOtherItems.gold_cave_ticket || 0;
-
+          const maxFloor = goldCaveMaxFloor();
+          const fullGold = goldCaveFullGold(diff);
+          const next = wave + 1;
+          const roulette = run?.pendingRoulette;
           detailHtml = `
-            <div class="rounded-3xl bg-slate-900/95 border-2 border-yellow-400/60 p-4 shadow-2xl space-y-4">
-              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-                <div>
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950">Regular Event #4 • Gold Cave Wiki</span>
-                    <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">10 Relentless Waves + Alternating Roulettes</span>
-                    <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/40">Wave 9 Boss • Wave 10 Double Roulette (×2)</span>
-                  </div>
-                  <h3 class="text-base sm:text-xl font-black text-white mt-1">🪙 Phó Bản Hang Vàng (Gold Cave • Độ Khó Tầng Lv.${diff})</h3>
-                  <p class="text-xs text-slate-300">Tiêu diệt 10 đợt quái vật liên tiếp rơi đầy Vàng, xen kẽ các vòng quay <strong class="text-amber-300">Roulette</strong> thưởng Gear Scrolls, Gold &amp; Gems. <strong class="text-rose-300">Đợt 9 là Trùm Hang Vàng</strong> và <strong class="text-emerald-300">Đợt 10 là Roulette Cuối Nhân Đôi Phần Thưởng (2×)</strong>! Có thể chọn đánh tầng thấp hơn bất kỳ lúc nào.</p>
+            <section class="gold-cave-shell" aria-label="Phó bản Hang Vàng">
+              <div class="gold-cave-hero"><div class="gold-cave-hero-icon" aria-hidden="true">🏛️</div><div>
+                <div class="text-[10px] font-black uppercase tracking-widest text-amber-200">Phó bản hằng ngày · Kho báu 10 đợt</div>
+                <h3 class="gold-cave-title">Hang Vàng</h3>
+                <p class="text-xs text-amber-50/80 mt-1">Chiến đấu qua các đợt, mở túi vàng ở vòng quay và nhận thưởng khi rời hang.</p>
+                <div class="gold-cave-meta"><span>🎟️ ${tickets} vé</span><span>⚒️ Sức mạnh: Lv.${SaveState.gearLevel || 1}</span><span>🏆 Tầng cao nhất: ${ev.goldCaveBestLevel || 0}</span></div>
+              </div></div>
+              <div class="gold-cave-panel">
+                <div class="flex justify-between gap-3 text-xs font-black text-amber-100"><span>${run ? `ĐANG KHÁM PHÁ · TẦNG ${diff}` : `CHỌN TẦNG · TỐI ĐA ${maxFloor}`}</span><span>${wave}/10 đợt</span></div>
+                <div class="gold-cave-progress mt-3" role="progressbar" aria-valuenow="${wave}" aria-valuemin="0" aria-valuemax="10"><i style="width:${wave * 10}%"></i></div>
+                <div class="gold-cave-grid">${Array.from({length:10},(_,i)=>{const n=i+1;return `<div class="gold-cave-wave ${n<=wave?'done':n===next?'next':''} ${n===9?'boss':''} ${n===10?'final':''}"><b>${n}</b><span>${n<=wave?'✓':n===9?'👹':n%2===0?'🎰':'⚔️'}</span><small>${n===9?'Trùm':n===10?'Kho báu ×2':n%2===0?'Vòng quay':'Quái vàng'}</small></div>`}).join('')}</div>
+              </div>
+              <div class="gold-cave-panel">
+                <div class="text-xs font-black text-amber-200 mb-2">🏔️ Chọn tầng theo tiến độ sức mạnh</div>
+                <div class="flex flex-wrap gap-2">${[1,5,10,15,20,25].map(lv=>`<button type="button" data-goldcave-diff="${lv}" class="gold-cave-button ${diff===lv?'':'secondary'}" ${run||lv>maxFloor?'disabled':''}>Tầng ${lv}${lv>maxFloor?' 🔒':''}</button>`).join('')}</div>
+                <p class="text-xs text-slate-300 mt-3">Tầng ${diff}: dự kiến <b class="text-yellow-300">${fullGold.toLocaleString('vi-VN')} vàng</b> cho 10 đợt, tương đương khoảng <b>${goldCaveUpgradeCount(fullGold)}</b> lần cường hóa vũ khí liên tiếp. Vòng quay thêm cuộn trang bị và một ít vàng.</p>
+              </div>
+              <div class="gold-cave-panel">
+                <div class="text-xs font-black text-yellow-200">${run?roulette?'🎰 Chọn một túi bí mật để nhận thưởng':'⚔️ Đợt tiếp theo đang chờ bạn':'🎟️ Bắt đầu chuyến khám phá'}</div>
+                <p class="text-xs text-slate-300 mt-1">${run?`Kho đang giữ: <b class="text-amber-300">${Math.floor(run.gold||0).toLocaleString('vi-VN')} vàng</b> · ${run.scrolls||0} cuộn mỗi loại. Rời hang sẽ nhận toàn bộ kho này.`:'Mỗi lượt tốn 1 vé. Bạn có thể rời hang và nhận phần đã kiếm bất kỳ lúc nào.'}</p>
+                ${roulette?`<div class="gold-cave-actions">${[0,1,2].map(i=>`<button type="button" class="gold-cave-choice" data-goldcave-choice="${i}"><span>🎁</span>Túi bí mật ${i+1}</button>`).join('')}</div>`:''}
+                <div class="gold-cave-actions">
+                  ${!run?`<button type="button" id="btnGoldCaveStart" class="gold-cave-button" ${tickets<1?'disabled':''}>🎟️ Vào Hang Vàng · 1 vé</button>`:!roulette?`<button type="button" id="btnGoldCaveNextWave" class="gold-cave-button">${next===9?'👹 Đánh Trùm Hang Vàng':next===10?'✨ Mở kho báu cuối':`⚔️ Chinh phục đợt ${next}`}</button>`:''}
+                  ${run?`<button type="button" id="btnGoldCaveCashout" class="gold-cave-button secondary">↩ Rời hang, nhận kho</button>`:''}
+                  <button type="button" id="btnGoldCaveSweep10" class="gold-cave-button secondary" ${run||tickets<1||diff>(ev.goldCaveBestLevel||0)?'disabled':''}>⚡ Càn quét tầng đã vượt · 1 vé + thẻ VIP</button>
                 </div>
-                <div class="flex items-center gap-2 flex-wrap shrink-0">
-                  <span class="px-3 py-2 rounded-xl bg-slate-950 border border-amber-400/50 text-xs font-black text-amber-300">🎟️ Vé Gold Cave: ${tickets}</span>
-                  <button type="button" id="btnGoldCaveWatchAd" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow">
-                    🎟️ Mua +1 Vé Hang Vàng (100 💎)
-                  </button>
-                </div>
+                ${!run&&diff>(ev.goldCaveBestLevel||0)?'<p class="text-[11px] text-slate-400 mt-2">Vượt tầng bằng tay một lần để mở càn quét tầng đó.</p>':''}
               </div>
-
-              <div class="rounded-2xl bg-slate-950/90 border border-slate-800 p-3 flex flex-wrap items-center justify-between gap-2">
-                <div class="text-xs font-black text-amber-300">🎚️ Chọn Tầng Độ Khó Gold Cave (Có thể chọn lại tầng thấp hơn):</div>
-                <div class="flex flex-wrap gap-1.5">
-                  ${[1, 5, 10, 15, 20, 25].map(lv => `
-                    <button type="button" data-goldcave-diff="${lv}" class="px-3 py-1 rounded-xl text-xs font-black transition ${diff === lv ? 'bg-amber-400 text-slate-950 shadow' : 'bg-slate-900 text-slate-300 border border-slate-700 hover:border-amber-400/50'}">
-                      Tầng Lv.${lv} (×${(1 + lv * 0.15).toFixed(2)} Thưởng)
-                    </button>
-                  `).join('')}
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2">
-                ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(w => {
-                  const done = wave >= w;
-                  const isRoulette = w % 2 === 0 && w < 10;
-                  const isBoss = w === 9;
-                  const isFinal2x = w === 10;
-                  return `
-                    <div class="p-2 rounded-xl border text-center ${done ? 'bg-emerald-950/60 border-emerald-400 text-emerald-200' : (isFinal2x ? 'bg-amber-500/20 border-amber-400 text-amber-200' : (isBoss ? 'bg-rose-950/60 border-rose-400/60 text-rose-200' : 'bg-slate-950 border-slate-800 text-slate-300'))}">
-                      <div class="text-[10px] font-black">Wave ${w}</div>
-                      <div class="text-lg my-0.5">${done ? '✅' : (isFinal2x ? '🎰×2' : (isBoss ? '👹' : (isRoulette ? '🎡' : '🪙')))}</div>
-                      <div class="text-[9px] font-bold">${isFinal2x ? '2× Roulette' : (isBoss ? 'Boss Wave' : (isRoulette ? 'Roulette' : 'Gold Mobs'))}</div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-
-              <div class="rounded-2xl bg-slate-950/90 border border-amber-400/40 p-3 text-xs font-bold text-amber-200">
-                🎰 Kết Quả Vòng Quay &amp; Đợt Quái: ${ev.goldCaveLastRoulette}
-              </div>
-
-              <div class="flex flex-wrap items-center gap-2">
-                <button type="button" id="btnGoldCaveNextWave" class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow">
-                  🎡 Đánh Tiếp Đợt ${(wave % 10) + 1}/10 &amp; Quay Roulette
-                </button>
-                <button type="button" id="btnGoldCaveSweep10" class="px-4 py-2.5 rounded-xl gold-gradient text-slate-950 font-black text-xs shadow hover:brightness-110">
-                  🪙 Càn Quét Trọn 10 Đợt + Roulette Nhân Đôi (-1 🎟️)
-                </button>
-                <button type="button" id="btnGoldCavePlayCanvas" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 border border-indigo-300 text-white font-black text-xs shadow">
-                  ⚔️ Vào Đấu Trường Gold Cave Trực Tiếp (Canvas)
-                </button>
-              </div>
-            </div>
+              <div class="gold-cave-panel text-xs text-amber-100" aria-live="polite">📜 ${ev.goldCaveLastRoulette}</div>
+              <div class="gold-cave-actions"><button type="button" id="btnGoldCaveWatchAd" class="gold-cave-button secondary">🎟️ Mua vé · 100 💎</button></div>
+            </section>
           `;
         } else if (activeEventMeta.id === 'rune_ruins') {
           const board = ev.runeRuinsBoard;
@@ -23619,88 +23621,89 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         const btnGcAd = document.getElementById('btnGoldCaveWatchAd');
-        if (btnGcAd) {
-          btnGcAd.onclick = () => {
-            if ((SaveState.gems || 0) < 100) { showToast('Cần 100 💎 để mua vé Hang Vàng.', 'err'); return; }
-            SaveState.gems -= 100;
-            SaveState.wikiOtherItems.gold_cave_ticket = (SaveState.wikiOtherItems.gold_cave_ticket || 0) + 1;
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderLobbyUI();
-            showToast('🎟️ Đã mua +1 vé Hang Vàng bằng 100 💎!');
-          };
-        }
+        if (btnGcAd) btnGcAd.onclick = () => {
+          if ((SaveState.gems || 0) < 100) { showToast('Cần 100 💎 để mua vé Hang Vàng.', 'err'); return; }
+          SaveState.gems -= 100;
+          SaveState.wikiOtherItems.gold_cave_ticket = (SaveState.wikiOtherItems.gold_cave_ticket || 0) + 1;
+          SaveState.save(); renderLobbyUI(); showToast('🎟️ Đã mua 1 vé Hang Vàng.');
+        };
 
         container.querySelectorAll('[data-goldcave-diff]').forEach(btn => {
           btn.onclick = () => {
-            ev.goldCaveDifficulty = parseInt(btn.getAttribute('data-goldcave-diff') || '15', 10);
-            SaveState.save();
-            renderWikiEventsHubUI();
+            const floor = Number(btn.dataset.goldcaveDiff);
+            if (ev.goldCaveRun || floor > goldCaveMaxFloor()) return;
+            ev.goldCaveDifficulty = floor;
+            SaveState.save(); renderWikiEventsHubUI();
           };
         });
 
+        const btnGcStart = document.getElementById('btnGoldCaveStart');
+        if (btnGcStart) btnGcStart.onclick = () => {
+          if (ev.goldCaveRun || (SaveState.wikiOtherItems.gold_cave_ticket || 0) < 1) return;
+          SaveState.wikiOtherItems.gold_cave_ticket -= 1;
+          ev.goldCaveRun = { difficulty:Math.min(ev.goldCaveDifficulty,goldCaveMaxFloor()), wave:0, gold:0, scrolls:0, pendingRoulette:false };
+          ev.goldCaveLastRoulette = 'Cửa hang đã mở. Chinh phục đợt 1 để thu thập vàng!';
+          SaveState.save(); renderLobbyUI(); SoundFX.coinPickup();
+        };
+
+        const finishGoldCaveRun = () => {
+          const run = ev.goldCaveRun;
+          if (!run) return;
+          const gold = Math.min(25000, Math.max(0,Math.floor(run.gold||0)));
+          SaveState.gold = (SaveState.gold || 0) + gold;
+          if (run.scrolls) grantAll6GearScrolls(Math.min(24,run.scrolls));
+          if (run.wave >= 10) ev.goldCaveBestLevel = Math.max(ev.goldCaveBestLevel||0,run.difficulty);
+          ev.goldCaveLastRoulette = `🏆 Rời hang tầng ${run.difficulty} sau ${run.wave}/10 đợt: +${gold.toLocaleString('vi-VN')} vàng và +${run.scrolls||0} cuộn mỗi loại!`;
+          ev.goldCaveRun = null;
+          ev.goldCaveCurrentWave = 0;
+          SaveState.save(); SoundFX.levelUp(); renderLobbyUI(); showToast(ev.goldCaveLastRoulette);
+        };
+        const btnGcCashout = document.getElementById('btnGoldCaveCashout');
+        if (btnGcCashout) btnGcCashout.onclick = finishGoldCaveRun;
+
         const btnGcWave = document.getElementById('btnGoldCaveNextWave');
-        if (btnGcWave) {
-          btnGcWave.onclick = () => {
-            const nextW = ((ev.goldCaveCurrentWave || 0) % 10) + 1;
-            ev.goldCaveCurrentWave = nextW;
-            const mult = 1 + (ev.goldCaveDifficulty || 15) * 0.15;
-            const goldDrop = Math.round(2500 * mult);
-            SaveState.gold = (SaveState.gold || 0) + goldDrop;
-            if (nextW === 10) {
-              const bonusGem = 120;
-              const bonusSc = 20;
-              SaveState.gems = (SaveState.gems || 0) + bonusGem;
-              grantAll6GearScrolls(bonusSc);
-              ev.goldCaveLastRoulette = `🎰 Đợt 10/10 (FINAL ROULETTE ×2 PHẦN THƯỞNG): Nhận +${(goldDrop * 2).toLocaleString('vi-VN')} 🪙 Vàng, +${bonusGem} 💎 Gems & +${bonusSc} mỗi loại Gear Scroll!`;
-            } else if (nextW === 9) {
-              ev.goldCaveLastRoulette = `👹 Đợt 9/10 (BOSS WAVE): Đánh bại Trùm Hang Vàng nhận +${(goldDrop * 1.5).toLocaleString('vi-VN')} 🪙 Vàng! Chuẩn bị quay Roulette Nhân Đôi ở Đợt 10!`;
-            } else if (nextW % 2 === 0) {
-              grantAll6GearScrolls(8);
-              SaveState.gems = (SaveState.gems || 0) + 30;
-              ev.goldCaveLastRoulette = `🎡 Đợt ${nextW}/10 (Vòng Quay Roulette): Trúng +${goldDrop.toLocaleString('vi-VN')} 🪙 Vàng, +30 💎 Gems & +8 mỗi loại Gear Scroll!`;
-            } else {
-              ev.goldCaveLastRoulette = `🪙 Đợt ${nextW}/10 (Relentless Enemies): Quái rơi +${goldDrop.toLocaleString('vi-VN')} 🪙 Vàng!`;
-            }
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderLobbyUI();
-            showToast(ev.goldCaveLastRoulette);
+        if (btnGcWave) btnGcWave.onclick = () => {
+          const run = ev.goldCaveRun;
+          if (!run || run.pendingRoulette || run.wave >= 10) return;
+          run.wave++;
+          const reward = Math.round(goldCaveFullGold(run.difficulty) * [0,.07,.08,.08,.09,.09,.10,.10,.11,.14,.14][run.wave]);
+          run.gold = Math.min(23500,run.gold + reward);
+          run.pendingRoulette = run.wave % 2 === 0;
+          ev.goldCaveCurrentWave = run.wave;
+          ev.goldCaveLastRoulette = run.pendingRoulette ? `🎰 Đợt ${run.wave} hoàn thành! Chọn một túi bí mật để mở phần thưởng.` : `⚔️ Thắng đợt ${run.wave}! Kho thêm +${reward.toLocaleString('vi-VN')} vàng.${run.wave===9?' Trùm đã bị hạ!':''}`;
+          showGoldCaveReveal(run.wave===9?'👑 ĐÃ HẠ TRÙM HANG VÀNG':`⚔️ ĐỢT ${run.wave} HOÀN THÀNH`);
+          SaveState.save(); SoundFX.coinPickup(); renderLobbyUI();
+        };
+        container.querySelectorAll('[data-goldcave-choice]').forEach(btn => {
+          btn.onclick = () => {
+            const run = ev.goldCaveRun;
+            if (!run?.pendingRoulette) return;
+            const picked = Number(btn.dataset.goldcaveChoice);
+            const luckyBag = Math.floor(Math.random() * 3);
+            const bonus = Math.round(goldCaveFullGold(run.difficulty) * (run.wave===10?.045:.02) * (picked===luckyBag?1.3:.9));
+            run.gold = Math.min(25000,run.gold + bonus);
+            const scrolls = run.wave===10?8:3;
+            run.scrolls = Math.min(24,run.scrolls + scrolls);
+            run.pendingRoulette = false;
+            ev.goldCaveLastRoulette = `🎁 Túi ${picked+1}: +${bonus.toLocaleString('vi-VN')} vàng và +${scrolls} cuộn mỗi loại!`;
+            showGoldCaveReveal(`🎁 +${bonus.toLocaleString('vi-VN')} VÀNG`);
+            if (run.wave===10) finishGoldCaveRun();
+            else { SaveState.save(); SoundFX.levelUp(); renderLobbyUI(); showToast(ev.goldCaveLastRoulette); }
           };
-        }
+        });
 
         const btnGcSweep = document.getElementById('btnGoldCaveSweep10');
-        if (btnGcSweep) {
-          btnGcSweep.onclick = () => {
-            if (!requireVipCard('cave', 'Cave Explorer')) return;
-            if ((SaveState.wikiOtherItems.gold_cave_ticket || 0) < 1) {
-              showToast('Cần 1 🎟️ vé Hang Vàng để càn quét.', 'err'); return;
-            }
-            SaveState.wikiOtherItems.gold_cave_ticket -= 1;
-            ev.goldCaveCurrentWave = 10;
-            const mult = 1 + (ev.goldCaveDifficulty || 15) * 0.15;
-            const totalGold = Math.min(25000, Math.round(5500 * mult));
-            SaveState.gold = (SaveState.gold || 0) + totalGold;
-            SaveState.gems = (SaveState.gems || 0) + 100;
-            grantAll6GearScrolls(35);
-            ev.goldCaveLastRoulette = `🪙 Càn quét trọn 10 Đợt Hang Vàng Lv.${ev.goldCaveDifficulty}: Nhận +${totalGold.toLocaleString('vi-VN')} 🪙 Vàng, +100 💎 Gems & +35 mỗi loại Gear Scroll!`;
-            SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast(ev.goldCaveLastRoulette);
-          };
-        }
-
-        const btnGcCanvas = document.getElementById('btnGoldCavePlayCanvas');
-        if (btnGcCanvas) {
-          btnGcCanvas.onclick = () => {
-            launchEventCanvasRun(
-              `Gold Cave Lv.${ev.goldCaveDifficulty} • 10 Waves + Roulette`,
-              `Gold Cave Floor Lv.${ev.goldCaveDifficulty}`,
-              '#422006', '#271203', '#eab308', 1.35
-            );
-          };
-        }
+        if (btnGcSweep) btnGcSweep.onclick = () => {
+          if (!requireVipCard('cave','Cave Explorer')) return;
+          if (ev.goldCaveRun || ev.goldCaveDifficulty > (ev.goldCaveBestLevel||0)) return;
+          if ((SaveState.wikiOtherItems.gold_cave_ticket||0)<1) { showToast('Cần 1 vé Hang Vàng.','err'); return; }
+          SaveState.wikiOtherItems.gold_cave_ticket--;
+          const gold = Math.round(goldCaveFullGold(ev.goldCaveDifficulty)*.9);
+          SaveState.gold = (SaveState.gold||0)+gold;
+          grantAll6GearScrolls(18);
+          ev.goldCaveLastRoulette = `⚡ Càn quét tầng ${ev.goldCaveDifficulty}: +${gold.toLocaleString('vi-VN')} vàng và +18 cuộn mỗi loại.`;
+          SaveState.save(); SoundFX.levelUp(); renderLobbyUI(); showToast(ev.goldCaveLastRoulette);
+        };
 
         const btnRrMult = document.getElementById('btnRuneRuinsToggleMult');
         if (btnRrMult) {
