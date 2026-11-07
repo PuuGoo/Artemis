@@ -12,6 +12,9 @@
   <script src="/rune-wiki-images.js"></script>
   <script src="/rune-wiki-data.js"></script>
   <script src="/artifact-reference.js"></script>
+  <script src="/skill-art-data.js"></script>
+  <script src="/skill-art.js"></script>
+  <script src="/skill-combat-vfx.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
@@ -27846,7 +27849,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 </div>
                 <div class="flex items-center gap-2.5">
                   <div class="w-11 h-11 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-xl shrink-0 shadow-inner">
-                    ${sk.icon}
+                    ${renderSkillIcon(sk)}
                   </div>
                   <div>
                     <h4 class="font-black text-xs sm:text-sm text-white leading-tight">${sk.name}</h4>
@@ -27854,6 +27857,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   </div>
                 </div>
                 <p class="text-[11px] text-slate-300 leading-snug mt-2">${sk.desc}</p>
+                ${renderSkillReference(sk)}
               </div>
               <div class="pt-1 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-black">
                 <span class="${isPinned ? 'text-emerald-300' : 'text-slate-400'}">${isPinned ? '📌 Đã Ghim Đem Vào Trận' : 'Bấm để Ghim vào trận'}</span>
@@ -27864,7 +27868,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }).join('');
 
         gridEl.querySelectorAll('[data-toggle-pin-skill]').forEach(card => {
-          card.onclick = () => {
+          card.onclick = (event) => {
+            if (event.target.closest('details')) return;
             const sId = card.getAttribute('data-toggle-pin-skill');
             if (!Array.isArray(SaveState.starterSkillIds)) SaveState.starterSkillIds = [];
             const idx = SaveState.starterSkillIds.indexOf(sId);
@@ -28787,7 +28792,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           strip._lastSig = skillSig;
           strip.innerHTML = Game.player.skillList.map(sk => `
             <span class="px-1.5 py-0.5 rounded-md bg-slate-900/90 border border-slate-700 text-[11px] font-bold text-white shadow" title="${sk.name}">
-              ${sk.icon}
+              ${renderSkillIcon(sk)}
             </span>
           `).join('');
         }
@@ -28847,7 +28852,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 ${st.label} ${currentStack > 0 ? `(Bậc ${currentStack + 1})` : ''}
               </span>
               <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center text-2xl my-1 shadow-inner">
-                ${sk.icon}
+                ${renderSkillIcon(sk)}
               </div>
               <div>
                 <h4 class="font-black text-xs sm:text-sm text-white">${sk.name}</h4>
@@ -30301,7 +30306,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 vx: Math.cos(ang) * 620, vy: Math.sin(ang) * 620,
                 r: 7, dmg: p.atk * 0.85 * frenzyMult,
                 bouncesLeft: 0, ricochetsLeft: 1, pierce: true, wallPierce: true, homing: 0.09,
-                hitSet: new Set(), color: '#fde047'
+                hitSet: new Set(), color: '#fde047',
+                spriteKind: p.skills.sprite_king ? 'king' : p.skills.laser_sprite ? 'laser' : 'bomb'
               });
             }
           }
@@ -31252,26 +31258,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
             for (let i = 0; i < orbCount; i++) {
               const ang = timeAng + (i * Math.PI * 2) / orbCount;
-              const isFire = i % 2 === 0;
-              for (let t = 4; t >= 1; t--) {
-                const tang = ang - t * 0.13;
-                const tx = p.x + Math.cos(tang) * orbRadius;
-                const ty = p.y + Math.sin(tang) * orbRadius;
-                ctx.fillStyle = isFire ? `rgba(251, 146, 60, ${0.32 / t})` : `rgba(56, 189, 248, ${0.32 / t})`;
-                ctx.beginPath();
-                ctx.arc(tx, ty, 9.5 - t * 1.4, 0, Math.PI * 2);
-                ctx.fill();
-              }
               const ox = p.x + Math.cos(ang) * orbRadius;
               const oy = p.y + Math.sin(ang) * orbRadius;
-              const grad = ctx.createRadialGradient(ox - 2, oy - 2, 1, ox, oy, 13);
-              grad.addColorStop(0, '#ffffff');
-              grad.addColorStop(0.45, isFire ? '#fb923c' : '#38bdf8');
-              grad.addColorStop(1, isFire ? 'rgba(225,29,72,0)' : 'rgba(2,132,199,0)');
-              ctx.fillStyle = grad;
-              ctx.beginPath();
-              ctx.arc(ox, oy, 13, 0, Math.PI * 2);
-              ctx.fill();
+              SkillCombatVfx.orb(ctx, ox, oy, i, p.skills, nowMs, Game);
             }
             ctx.restore();
           }
@@ -31280,6 +31269,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             drawSpiritPetSprite(ctx, Game.pet, nowMs);
           }
 
+          SkillCombatVfx.companions(ctx, p, nowMs, Game);
           drawChibiHeroSprite(ctx, p, nowMs);
         }
 
@@ -31341,43 +31331,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           ctx.restore();
         }
 
-        // 19. Falling Dragoon Meteors (Mưa Thiên Thạch with Flame Tail)
+        // Mưa thiên thạch: vẽ thuần theo progress hiện có, không đổi nhịp rơi.
         for (const mt of Game.meteors) {
-          ctx.save();
-          ctx.strokeStyle = 'rgba(244, 63, 94, 0.82)';
-          ctx.fillStyle = 'rgba(244, 63, 94, 0.18)';
-          ctx.lineWidth = 2.2;
-          ctx.beginPath();
-          ctx.arc(mt.targetX, mt.targetY, 40 * mt.progress, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-
-          const mx = mt.startX + (mt.targetX - mt.startX) * mt.progress;
-          const my = mt.startY + (mt.targetY - mt.startY) * mt.progress;
-
-          if (Game.ultraGfx) ctx.globalCompositeOperation = 'lighter';
-          // Meteor Wake Tail
-          const tailGrad = ctx.createLinearGradient(mx, my, mx - 45, my - 80);
-          tailGrad.addColorStop(0, 'rgba(251, 146, 60, 0.85)');
-          tailGrad.addColorStop(1, 'rgba(244, 63, 94, 0)');
-          ctx.strokeStyle = tailGrad;
-          ctx.lineWidth = 14;
-          ctx.lineCap = 'round';
-          ctx.beginPath();
-          ctx.moveTo(mx, my);
-          ctx.lineTo(mx - 42, my - 76);
-          ctx.stroke();
-
-          const mGrad = ctx.createRadialGradient(mx, my, 2, mx, my, 26);
-          mGrad.addColorStop(0, '#ffffff');
-          mGrad.addColorStop(0.35, '#fde047');
-          mGrad.addColorStop(0.7, '#f97316');
-          mGrad.addColorStop(1, 'rgba(225, 29, 72, 0)');
-          ctx.fillStyle = mGrad;
-          ctx.beginPath();
-          ctx.arc(mx, my, 26, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
+          SkillCombatVfx.meteor(ctx, mt, nowMs, Game);
         }
 
         // 20. Glowing Combat Particles & Floating Atmosphere Motes
@@ -32634,6 +32590,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       function drawProjectileSprite(ctx, b, nowMs) {
+        if (SkillCombatVfx.projectile(ctx, b, nowMs, Game)) return;
         // 1. Draw Smooth Additive Motion Ribbon & Double-Helix Energy Wake in world coordinates
         if (b.trail && b.trail.length > 1) {
           ctx.save();
@@ -33006,7 +32963,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const skContainer = document.getElementById('summarySkillsList');
         if (Game.player && Game.player.skillList.length > 0) {
           skContainer.innerHTML = Game.player.skillList.map(sk => `
-            <span class="px-2 py-1 rounded-lg bg-slate-900 border border-slate-700 font-bold text-slate-200">${sk.icon} ${sk.name}</span>
+            <span class="px-2 py-1 rounded-lg bg-slate-900 border border-slate-700 font-bold text-slate-200">${renderSkillIcon(sk)} ${sk.name}</span>
           `).join('');
         } else {
           skContainer.innerHTML = `<span class="text-slate-500">Chưa nhận kỹ năng nào trong trận này.</span>`;
