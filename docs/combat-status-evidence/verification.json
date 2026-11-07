@@ -1,0 +1,28 @@
+{
+  "scope": "Chrome thật với mock auth/save local; state jump/run fixture, không phải chơi hết chương hay production E2E",
+  "results": [
+    {
+      "name": "production-damage-and-update-with-run-only-fixture",
+      "details": {
+        "afterHit": 9923,
+        "afterSecond": 9885,
+        "poisonTickDamage": 38,
+        "normalDistance": 0.2500000000000274,
+        "slowedDistance": 0.13749999999997287,
+        "saveUnchanged": true
+      }
+    },
+    {
+      "name": "production-renderer-browser-smoke",
+      "details": {
+        "running": true,
+        "paused": false,
+        "enemies": 3,
+        "filledPixels": 850304,
+        "saveUnchanged": true
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

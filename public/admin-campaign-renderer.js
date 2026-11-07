@@ -1844,7 +1844,10 @@ const ArenaV2 = (() => {
     ctx.save(); ctx.globalAlpha = 0.5 * (big ? k : 1); if (Game.ultraGfx) addMode(ctx);
     const ag = ctx.createRadialGradient(0, r * 0.7, 0, 0, r * 0.7, r * 1.7 * S); ag.addColorStop(0, aura); ag.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = ag; ctx.beginPath(); ctx.ellipse(0, r * 0.9 * S, r * 1.6 * S, r * 0.7 * S, 0, 0, TAU); ctx.fill(); ctx.restore();
-    if (e.slowTimer > 0) { ctx.strokeStyle = 'rgba(125,211,252,0.9)'; ctx.fillStyle = 'rgba(56,189,248,0.22)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(0, r, r * 1.2, r * 0.52, 0, 0, TAU); ctx.fill(); ctx.stroke(); }
+    // Dấu trạng thái dùng chung cho PNG và thân vector; gọi theo tọa độ bản đồ.
+    if (typeof SkillCombatVfx !== 'undefined') {
+      ctx.save(); ctx.translate(-e.x, -e.y); SkillCombatVfx.status(ctx, e, nowMs, Game); ctx.restore();
+    }
     // vòng triệu hồi lúc xuất hiện
     if (!big && k < 1) { ctx.save(); ctx.strokeStyle = aura; ctx.globalAlpha = 0.9 * (1 - k); ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, r * 0.9, r * (2.2 - 1.1 * k), r * (2.2 - 1.1 * k) * 0.4, 0, 0, TAU); ctx.stroke(); ctx.setLineDash([4, 4]); ctx.rotate(0.5); ctx.beginPath(); ctx.ellipse(0, r * 0.9, r * (1.6 - 0.6 * k), r * (1.6 - 0.6 * k) * 0.4, 0, 0, TAU); ctx.stroke(); ctx.restore(); }
     // boss: pháp trận + lúc tiếp đất
@@ -1877,7 +1880,7 @@ const ArenaV2 = (() => {
       ctx.beginPath(); ctx.arc(0, 0, r * (1.9 - q * 0.7), 0, TAU); ctx.stroke();
       ctx.fillStyle = `rgba(248,113,113,${q * 0.9})`; ctx.font = '900 13px Inter'; ctx.textAlign = 'center'; ctx.fillText('!', 0, -r - 18);
     }
-    if (e.burnTimer > 0) { for (let i = 0; i < 3; i++) orb(ctx, Math.sin(nowMs * 0.02 + i * 2) * r * 0.6, -r * 0.4 - ((nowMs * 0.05 + i * 9) % 18), 5, '#fb923c', 0.85); }
+
 
     // thanh máu quái thường
     if (!big && k >= 0.6) {

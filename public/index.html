@@ -15,6 +15,7 @@
   <script src="/skill-art-data.js"></script>
   <script src="/skill-art.js"></script>
   <script src="/skill-combat-vfx.js"></script>
+  <script src="/combat-status.js"></script>
   <script src="/monster-art.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -4717,7 +4718,10 @@ const ArenaV2 = (() => {
     ctx.save(); ctx.globalAlpha = 0.5 * (big ? k : 1); if (Game.ultraGfx) addMode(ctx);
     const ag = ctx.createRadialGradient(0, r * 0.7, 0, 0, r * 0.7, r * 1.7 * S); ag.addColorStop(0, aura); ag.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = ag; ctx.beginPath(); ctx.ellipse(0, r * 0.9 * S, r * 1.6 * S, r * 0.7 * S, 0, 0, TAU); ctx.fill(); ctx.restore();
-    if (e.slowTimer > 0) { ctx.strokeStyle = 'rgba(125,211,252,0.9)'; ctx.fillStyle = 'rgba(56,189,248,0.22)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(0, r, r * 1.2, r * 0.52, 0, 0, TAU); ctx.fill(); ctx.stroke(); }
+    // Dấu trạng thái dùng chung cho PNG và thân vector; gọi theo tọa độ bản đồ.
+    if (typeof SkillCombatVfx !== 'undefined') {
+      ctx.save(); ctx.translate(-e.x, -e.y); SkillCombatVfx.status(ctx, e, nowMs, Game); ctx.restore();
+    }
     // vòng triệu hồi lúc xuất hiện
     if (!big && k < 1) { ctx.save(); ctx.strokeStyle = aura; ctx.globalAlpha = 0.9 * (1 - k); ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(0, r * 0.9, r * (2.2 - 1.1 * k), r * (2.2 - 1.1 * k) * 0.4, 0, 0, TAU); ctx.stroke(); ctx.setLineDash([4, 4]); ctx.rotate(0.5); ctx.beginPath(); ctx.ellipse(0, r * 0.9, r * (1.6 - 0.6 * k), r * (1.6 - 0.6 * k) * 0.4, 0, 0, TAU); ctx.stroke(); ctx.restore(); }
     // boss: pháp trận + lúc tiếp đất
@@ -4750,7 +4754,7 @@ const ArenaV2 = (() => {
       ctx.beginPath(); ctx.arc(0, 0, r * (1.9 - q * 0.7), 0, TAU); ctx.stroke();
       ctx.fillStyle = `rgba(248,113,113,${q * 0.9})`; ctx.font = '900 13px Inter'; ctx.textAlign = 'center'; ctx.fillText('!', 0, -r - 18);
     }
-    if (e.burnTimer > 0) { for (let i = 0; i < 3; i++) orb(ctx, Math.sin(nowMs * 0.02 + i * 2) * r * 0.6, -r * 0.4 - ((nowMs * 0.05 + i * 9) % 18), 5, '#fb923c', 0.85); }
+
 
     // thanh máu quái thường
     if (!big && k >= 0.6) {
@@ -8082,7 +8086,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           category: 'elemental',
           providers: ['valkyrie'],
           icon: '🔥🏹',
-          desc: '[Fire Effect] Đạn gây ngay 0.2x ATK sát thương Lửa khi trúng và thiêu đốt mục tiêu 5 ticks/giây trong 3 giây!'
+          desc: 'Trong Artemis: đòn chính gây cháy 3 giây, mỗi giây 3 nhịp × 0.28 ATK. Không cộng dồn lớp; làm mới không ghi đè nguồn cháy mạnh hơn.'
         },
         {
           id: 'lightning_arrow',
@@ -8102,17 +8106,17 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           category: 'elemental',
           providers: ['valkyrie'],
           icon: '🐍🧪',
-          desc: '[Poison Effect] Đạn gây 0.5x ATK sát thương Độc khi trúng và rút máu độc liên tục mỗi giây cho đến khi mục tiêu bị tiêu diệt!'
+          desc: 'Trong Artemis: đòn chính gây thêm 0.50 ATK sát thương độc, rồi 0.25 ATK mỗi giây đến khi mục tiêu chết. Chỉ giữ một lớp độc mạnh nhất; không cộng dồn.'
         },
         {
           id: 'ice_arrow',
-          name: 'Freeze (Băng Tiễn Đông Cứng 1.5s)',
+          name: 'Freeze (Băng Tiễn Làm Chậm)',
           wikiName: 'Freeze',
           rarity: 'rare',
           category: 'elemental',
           providers: ['valkyrie'],
           icon: '❄️🏹',
-          desc: '[Ice Effect] Đạn gây 1.0x ATK sát thương Băng và Đông Cứng (Freeze) mục tiêu trong 1.5 giây!'
+          desc: 'Trong Artemis: đòn chính làm chậm 45% di chuyển và nhịp tấn công trong 2.5 giây. Không làm ngắn hiệu ứng băng mạnh hơn từ Rolla; chưa phải đóng băng hoàn toàn.'
         },
         {
           id: 'bomb_sprite',
@@ -9564,24 +9568,24 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         },
         {
           id: 'flame_poison_touch',
-          name: 'Flame-Poison Touch (Hỏa Độc Chạm Mỗi 1.5s & Gọi Meteor)',
+          name: 'Flame-Poison Touch (Hỏa Độc Chạm)',
           wikiName: 'Flame-Poison Touch',
           type: 'ability',
           archetype: 'elemental',
           icon: '🔥🐍',
           color: '#f97316',
-          desc: '[Mythic Ability]: Khởi đầu trận đấu: Mỗi 1.5 giây tự động Thiêu Đốt (Ignite) và Tẩm Độc (Poison) kẻ địch ngẫu nhiên trên sân!',
+          desc: 'Trong Artemis (đã khảm, hạng 4+): mỗi 1.65 giây chạm một mục tiêu, gây 0.45 ATK tức thì, cháy 0.45 ATK/giây và độc 0.20 ATK/giây trong 3 giây. Không làm chậm. Chưa triển khai thiên thạch cường hóa.',
           enchantText: '[Mythic Enchant]: Elemental DMG +30%, Elemental CRIT DMG +30%, và mỗi lần kích hoạt sẽ giáng kèm 1 Thiên Thạch!'
         },
         {
           id: 'rune_thunder',
-          name: 'Frost-Thunder Touch (Băng Lôi Chạm & Phóng 1–3 Strikes)',
+          name: 'Frost-Thunder Touch (Băng Lôi Chạm)',
           wikiName: 'Frost-Thunder Touch',
           type: 'ability',
           archetype: 'elemental',
           icon: '❄️🌩️',
           color: '#67e8f9',
-          desc: '[Mythic Ability]: Khởi đầu trận đấu: Mỗi 2 giây tự động giáng Sét và Đóng Băng lên 2 kẻ địch ngẫu nhiên!',
+          desc: 'Trong Artemis (đã khảm, hạng 4+): mỗi 1.65 giây làm chậm mục tiêu 2 giây và giáng sét 0.90 ATK, lan một địch trong 170px thêm 0.45 ATK. Không gây cháy/độc. Chưa triển khai phi kiếm cường hóa.',
           enchantText: '[Mythic Enchant]: Elemental DMG +30%, Elemental CRIT DMG +30%, và mỗi lần kích hoạt sẽ phóng kèm 1–3 Phi Kiếm!'
         },
         {
@@ -28193,6 +28197,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         Game.screenFlashTimer = 0;
         Game.cleoFireHitCount = 0;
         Game.pausedNoModalFrames = 0;
+        Game.flamePoisonTouchTimer = 0;
+        Game.frostThunderTouchTimer = 0;
 
         // Joystick (không để di chuyển cũ dính sang trận mới)
         if (Game.joy) {
@@ -28435,6 +28441,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         Game.wallTorches = [];
         Game.ambientMotes = [];
         Game.roomBannerTimer = 2.1;
+        Game.flamePoisonTouchTimer = 0;
+        Game.frostThunderTouchTimer = 0;
         const isBossRm = isBossRoom(roomNum);
         Game.roomBannerTitle = isBossRm ? `⚠️ CẢNH BÁO TRÙM • PHÒNG ${roomNum}` : `⚔️ PHÒNG ${roomNum} / ${Game.maxRooms}`;
         Game.roomBannerSub = Game.chapter ? Game.chapter.name : 'Hầm Ngục Archero 2';
@@ -29270,8 +29278,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // --- ARCHERO 2 WIKI CHARACTER & RESONANCE ON-HIT PASSIVES ---
         // 1) Cleo [Ember Throne]: Super Blaze + every 12 hits triggers 300% DMG Cross-Explosion on highest-HP enemy!
         if (hasHeroSkillActive(p, 'cleo') && !isElemental) {
-          e.burnTimer = Math.max(e.burnTimer || 0, 3.0);
-          e.burnDmg = Math.round(p.atk * 0.38);
+          CombatStatus.applyBurn(e, Math.round(p.atk * 0.38), 3);
           Game.cleoFireHitCount = (Game.cleoFireHitCount || 0) + 1;
           if (Game.cleoFireHitCount >= 12) {
             Game.cleoFireHitCount = 0;
@@ -29328,8 +29335,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           for (const nearE of Game.enemies) {
             if (nearE !== e && nearE.hp > 0 && Math.hypot(nearE.x - e.x, nearE.y - e.y) < 68) {
               nearE.hp -= Math.round(p.atk * 0.55);
-              nearE.burnTimer = 2.5;
-              nearE.burnDmg = Math.round(p.atk * 0.3);
+              CombatStatus.applyBurn(nearE, Math.round(p.atk * 0.3), 2.5);
             }
           }
         }
@@ -29357,11 +29363,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // Apply Elemental Enchantments
         if (!isElemental) {
           if ((p.skills.fire_arrow || 0) > 0) {
-            e.burnTimer = 3.0;
-            e.burnDmg = Math.round(p.atk * 0.28);
+            CombatStatus.applyBurn(e, Math.round(p.atk * 0.28), 3);
           }
           if ((p.skills.ice_arrow || 0) > 0) {
-            e.slowTimer = 2.5;
+            e.slowTimer = Math.max(e.slowTimer || 0, 2.5);
           }
           if ((p.skills.lightning_arrow || 0) > 0) {
             const neighbor = findNearestEnemy(e.x, e.y, e);
@@ -29389,6 +29394,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // Check enemy death
         if (e.hp <= 0) {
           onEnemyKilled(e);
+        } else if (!isElemental && (p.skills.venom_arrow || 0) > 0) {
+          // Độc tiễn: chỉ đòn chính gieo độc; nhịp độc không kích lại enchantment.
+          CombatStatus.applyPoison(e, p.atk * 0.25);
+          damageEnemy(e, p.atk * 0.50, true);
         }
       }
 
@@ -29852,8 +29861,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               for (const ne of Game.enemies) {
                 if (ne.hp > 0 && Math.hypot(ne.x - p.x, ne.y - p.y) < 75) {
                   damageEnemy(ne, p.atk * 0.42, true);
-                  ne.burnTimer = 2.0;
-                  ne.burnDmg = Math.round(p.atk * 0.25);
+                  CombatStatus.applyBurn(ne, Math.round(p.atk * 0.25), 2);
                 }
               }
             }
@@ -30173,23 +30181,39 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             }
           }
         }
-        // Flame-Poison Touch & Frost-Thunder Touch [Ability Runes]: Ignite/Poison/Freeze/Shock random enemies every 1.5s!
-        if ((runeHasEffect('flame_poison_touch') || runeHasEffect('rune_thunder')) && Game.enemies.length > 0) {
-          Game.runeTouchTimer = (Game.runeTouchTimer || 0) + dt;
-          if (Game.runeTouchTimer >= 1.65) {
-            Game.runeTouchTimer = 0;
-            const tEnemy = Game.enemies[Math.floor(Math.random() * Game.enemies.length)];
-            if (tEnemy && tEnemy.hp > 0) {
-              tEnemy.burnTimer = 3.0;
-              tEnemy.burnDmg = Math.round(p.atk * 0.45);
-              tEnemy.slowTimer = 2.0;
-              damageEnemy(tEnemy, p.atk * 0.90, true);
-              if (runeHasEffect('rune_flame')) {
-                spawnShockwave(tEnemy.x, tEnemy.y, 68, '#ef4444', 0.28);
+        // Hỏa Độc: một mục tiêu/1,65s; 0,45 ATK tức thì + cháy 0,45 ATK/s + độc 0,20 ATK/s trong 3s.
+        if (runeHasEffect('flame_poison_touch') && Game.enemies.length > 0) {
+          Game.flamePoisonTouchTimer = (Game.flamePoisonTouchTimer || 0) + dt;
+          if (Game.flamePoisonTouchTimer >= 1.65) {
+            Game.flamePoisonTouchTimer %= 1.65;
+            const live = Game.enemies.filter(e => e.hp > 0);
+            const target = live[Math.floor(Math.random() * live.length)];
+            if (target) {
+              CombatStatus.applyBurn(target, Math.round(p.atk * 0.15), 3);
+              CombatStatus.applyPoison(target, p.atk * 0.20, 3);
+              damageEnemy(target, p.atk * 0.45, true);
+            }
+          }
+        } else Game.flamePoisonTouchTimer = 0;
+        // Băng Lôi: làm chậm + sét 0,90 ATK, lan một địch gần 0,45 ATK; không gây cháy.
+        if (runeHasEffect('rune_thunder') && Game.enemies.length > 0) {
+          Game.frostThunderTouchTimer = (Game.frostThunderTouchTimer || 0) + dt;
+          if (Game.frostThunderTouchTimer >= 1.65) {
+            Game.frostThunderTouchTimer %= 1.65;
+            const live = Game.enemies.filter(e => e.hp > 0);
+            const target = live[Math.floor(Math.random() * live.length)];
+            if (target) {
+              target.slowTimer = Math.max(target.slowTimer || 0, 2);
+              Game.lightningBolts.push({ x1:p.x, y1:p.y, x2:target.x, y2:target.y, life:0.22, maxLife:0.22, color:'#7dd3fc' });
+              const neighbor = findNearestEnemy(target.x, target.y, target);
+              damageEnemy(target, p.atk * 0.90, true);
+              if (neighbor && neighbor.hp > 0 && Math.hypot(neighbor.x - target.x, neighbor.y - target.y) < 170) {
+                Game.lightningBolts.push({ x1:target.x, y1:target.y, x2:neighbor.x, y2:neighbor.y, life:0.22, maxLife:0.22, color:'#38bdf8' });
+                damageEnemy(neighbor, p.atk * 0.45, true);
               }
             }
           }
-        }
+        } else Game.frostThunderTouchTimer = 0;
 
         // 1) Corrosive Field [Legendary Skill]: Nearby monsters take 0.5x ATK every 0.3s and receive +35% more damage!
         if ((p.skills.corrosive_field || 0) > 0 && Game.enemies.length > 0) {
@@ -30380,30 +30404,30 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // 5. Update Enemies & Boss AI
-        for (const e of Game.enemies) {
-          // Burn DoT
-          if (e.burnTimer > 0) {
-            e.burnTimer -= dt;
-            if (Math.random() < dt * 3) {
-              damageEnemy(e, e.burnDmg, true);
-            }
-          }
-          const slowMult = e.slowTimer > 0 ? 0.55 : 1.0;
-          if (e.slowTimer > 0) e.slowTimer -= dt;
+        for (const e of [...Game.enemies]) {
+          if (e.hp <= 0) continue;
+          // Nhịp cháy xác định theo thời gian, không phụ thuộc FPS hay RNG.
+          CombatStatus.tickBurn(e, dt, damageEnemy);
+          CombatStatus.tickPoison(e, dt, damageEnemy);
+          // onEnemyKilled có thể thay mảng; quái chết không được chạy AI cùng khung.
+          if (e.hp <= 0) continue;
+          const slowActive = Math.min(Math.max(0, e.slowTimer || 0), dt);
+          const slowMult = dt > 0 ? 1 - 0.45 * slowActive / dt : 1;
+          if (e.slowTimer > 0) e.slowTimer = Math.max(0, e.slowTimer - dt);
 
           // Movement
           if (e.speed > 0) {
             const angToPlayer = Math.atan2(p.y - e.y, p.x - e.x);
             if (e.type === 'bat' || e.isBoss) {
-              e.vx = Math.cos(angToPlayer) * e.speed * slowMult;
-              e.vy = Math.sin(angToPlayer) * e.speed * slowMult;
+              e.vx = Math.cos(angToPlayer) * e.speed;
+              e.vy = Math.sin(angToPlayer) * e.speed;
             } else {
               // Slight wandering + chasing
               e.vx += (Math.cos(angToPlayer) * e.speed - e.vx) * 2 * dt;
               e.vy += (Math.sin(angToPlayer) * e.speed - e.vy) * 2 * dt;
             }
 
-            ArtemisObstacleClearance.moveEntity(e, e.vx * dt, e.vy * dt, Game.obstacles,
+            ArtemisObstacleClearance.moveEntity(e, e.vx * dt * slowMult, e.vy * dt * slowMult, Game.obstacles,
               { width: Game.width, height: Game.height, wallPad: Game.wallPad });
           } else {
             // Stationary turrets also must be rescued if a legacy spawn embedded them in cover.

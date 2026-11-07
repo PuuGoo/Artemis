@@ -81,7 +81,7 @@ test('knockback into a prop is rescued and all collision hooks are wired into ga
   valid(e);
   assert.match(html,/<script src="\/obstacle-clearance\.js"><\/script>/);
   assert.match(html,/ArtemisObstacleClearance\.findSafeSpawn\(ex, ey, enemyRadius/);
-  assert.match(html,/ArtemisObstacleClearance\.moveEntity\(e, e\.vx \* dt, e\.vy \* dt/);
+  assert.ok(/ArtemisObstacleClearance\.moveEntity\(e, e\.vx \* dt \* slowMult, e\.vy \* dt \* slowMult/.test(html));
   assert.match(html,/ArtemisObstacleClearance\.resolveEntity\(e, Game\.obstacles/);
   assert.match(html,/if \(!safePos\) throw new Error/);
 });

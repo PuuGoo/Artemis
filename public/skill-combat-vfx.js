@@ -80,5 +80,26 @@
       glyph(c,kind==='bomb'?'fire':'beam',6,t,simple);if(kind==='king'){c.fillStyle='#fbbf24';c.fillRect(-5,-12,10,3);}c.restore();}
     if(p.sacredShieldStacks>0){c.save();c.strokeStyle='#fde68a';c.lineWidth=2;c.beginPath();c.arc(p.x,p.y-8,23,0,Math.PI*2);c.stroke();c.restore();}
   }
-  root.SkillCombatVfx={projectile,orb,meteor,companions,element,quiet};
+  function status(c,e,now,game) {
+    if (!(e.hp > 0) || !Number.isFinite(e.x + e.y + e.r)) return;
+    const simple=quiet(game), t=simple?0:now, r=Math.max(6,e.r);
+    let slot=0;
+    // Tối đa ba dấu/địch, không mảng hạt, ảnh, gradient hay vòng lặp animation riêng.
+    for(let kind=0;kind<3;kind++) {
+      if (!(kind===0?e.burnTimer>0:kind===1?e.slowTimer>0:e.poisonActive)) continue;
+      const color=kind===0?colors.fire:kind===1?colors.ice:colors.poison;
+      c.save();c.translate(e.x,e.y);c.strokeStyle=color;c.lineWidth=1.7;c.globalAlpha=.9;
+      c.beginPath();c.ellipse(0,r+3+slot*2,r*(1.08+slot*.16),r*(.34+slot*.05),0,kind*2.05,kind*2.05+1.9);c.stroke();
+      c.translate(-16+slot*16,-r-16);
+      c.fillStyle='#07111e';c.beginPath();c.arc(0,0,7,0,Math.PI*2);c.fill();
+      c.save();c.translate(0,2);
+      if(kind===1) { c.beginPath();for(let i=0;i<3;i++){const a=i*Math.PI/3;c.moveTo(-Math.cos(a)*4,-Math.sin(a)*4);c.lineTo(Math.cos(a)*4,Math.sin(a)*4);}c.stroke(); }
+      else if(kind===0) { c.beginPath();c.moveTo(-4,2);c.quadraticCurveTo(-5,-2,0,-7);c.quadraticCurveTo(5,-1,4,2);c.closePath();c.stroke(); }
+      else { c.beginPath();c.moveTo(0,-6);c.quadraticCurveTo(7,2,0,4);c.quadraticCurveTo(-7,2,0,-6);c.closePath();c.stroke(); }
+      c.restore();
+      if(!simple){c.globalAlpha=.45;c.beginPath();c.arc(Math.sin(t*.005+kind)*r*.7,-r*.5-((t*.018+kind*7)%12),2,0,Math.PI*2);c.stroke();}
+      c.restore();slot++;
+    }
+  }
+  root.SkillCombatVfx={projectile,orb,meteor,companions,element,quiet,status};
 })(globalThis);
