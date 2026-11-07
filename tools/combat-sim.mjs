@@ -44,13 +44,13 @@ const DEF_CAP = num(/Math\.min\((0\.\d+), defFlat \/ \(defFlat \+ defK\)\)/, 'DE
 const CAMPAIGN_TUNING = (() => {
   const blk = block('const CAMPAIGN_TUNING = {', '};', 'CAMPAIGN_TUNING');
   const out = {};
-  for (const m of blk.matchAll(/(\d): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)) {
+  for (const m of blk.matchAll(/(\d+): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)) {
     out[Number(m[1])] = {
       mobHp: Number(m[2]), mobAtk: Number(m[3]),
       bossHp: Number(m[4]), bossAtk: Number(m[5]),
     };
   }
-  if (Object.keys(out).length !== 7) throw new Error('CAMPAIGN_TUNING phải có 7 chương, đọc được ' + Object.keys(out).length);
+  if (Object.keys(out).length !== 19) throw new Error('CAMPAIGN_TUNING phải có 19 chương, đọc được ' + Object.keys(out).length);
   return out;
 })();
 
@@ -109,8 +109,10 @@ const CHAPTER_ENEMIES = (() => {
 // Boss theo chương (C4–C6 có trùm riêng; C1–C3 dùng golem/queen/demon_king theo phòng).
 const CHAPTER_BOSS = (() => {
   const out = {};
-  const re = /Number\(Game\.chapter\.id\) === (\d) \? '([a-z_]+)'/g;
+  const re = /Number\(Game\.chapter\.id\) === (\d+) \? '([a-z_]+)'/g;
   for (const m of html.matchAll(re)) out[Number(m[1])] = m[2];
+  const signs = html.match(/const ZODIAC_IDS = \[([^\]]+)\]/);
+  if (signs) [...signs[1].matchAll(/'([a-z_]+)'/g)].forEach((m, i) => { out[i + 8] = 'zodiac_' + m[1]; });
   return out;
 })();
 
@@ -313,7 +315,7 @@ ok(rows.every((r) => Number.isFinite(r.ttk) && r.ttk > 0), 'không NaN/Infinity,
 ok(rows.every((r) => r.hits >= 1), 'số đòn chịu được ≥ 1');
 // Trùm phải vừa sức với hồ sơ ĐÚNG TẦM của chương đó (10–60s), và người yếu ở
 // chương cao phải bị chặn thật (không thể gặm trùm cuối bằng đồ tân thủ).
-const APPROPRIATE = { 1: 'A.', 2: 'B.', 3: 'D.', 4: 'E.', 5: 'E.', 6: 'E.', 7: 'E.' };
+const APPROPRIATE = { 1: 'A.', 2: 'B.', 3: 'D.', 4: 'E.', 5: 'E.', 6: 'E.', 7: 'E.', ...Object.fromEntries(Array.from({ length: 12 }, (_, i) => [i + 8, i < 6 ? 'E.' : 'F.'])) };
 for (const ch of CHAPTERS) {
   const key = APPROPRIATE[ch.id];
   const boss = rows.find((r) => r.profileKey === key && r.ch === ch.id && r.kind === 'boss' && r.room === ch.rooms);

@@ -29,11 +29,11 @@ function fnBody(marker) {
   throw new Error('không tìm thấy điểm kết của ' + marker);
 }
 
-test('có bảng độ khó tuyệt đối cho cả 7 chương', () => {
+test('có bảng độ khó tuyệt đối cho cả 19 chương', () => {
   assert.match(html, /const CAMPAIGN_TUNING = \{/);
   const blk = html.slice(html.indexOf('const CAMPAIGN_TUNING = {'), html.indexOf('};', html.indexOf('const CAMPAIGN_TUNING = {')));
-  const rows = [...blk.matchAll(/(\d): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)];
-  assert.equal(rows.length, 7, 'phải có đủ 7 chương');
+  const rows = [...blk.matchAll(/(\d+): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)];
+  assert.equal(rows.length, 19, 'phải có đủ 19 chương');
   for (const m of rows) {
     for (let k = 2; k <= 5; k++) assert.ok(Number(m[k]) > 0, `giá trị không dương ở chương ${m[1]}`);
   }
@@ -41,7 +41,7 @@ test('có bảng độ khó tuyệt đối cho cả 7 chương', () => {
 
 test('bảng tuyệt đối đơn điệu: chương sau khó hơn chương trước', () => {
   const blk = html.slice(html.indexOf('const CAMPAIGN_TUNING = {'), html.indexOf('};', html.indexOf('const CAMPAIGN_TUNING = {')));
-  const rows = [...blk.matchAll(/(\d): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)]
+  const rows = [...blk.matchAll(/(\d+): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)]
     .map((m) => ({ ch: Number(m[1]), mobHp: Number(m[2]), mobAtk: Number(m[3]), bossHp: Number(m[4]), bossAtk: Number(m[5]) }))
     .sort((a, b) => a.ch - b.ch);
   for (let i = 1; i < rows.length; i++) {

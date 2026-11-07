@@ -64,6 +64,10 @@ DB_BACKEND=memory JWT_SECRET="$(node -e 'process.stdout.write(require("node:cryp
 
 Mở `http://localhost:3000`, tạo tài khoản thử và chơi. Dữ liệu trong bộ nhớ sẽ mất khi tắt server. Chương 7 mở sau khi hoàn thành Chương 6. Các test kết nối MongoDB thật chỉ chạy khi có `TEST_MONGODB_URI` riêng cho test; không dùng database production.
 
+### Xem bản đồ 12 cung hoàng đạo
+
+Trong màn chọn chương, bấm các thẻ Chương 8–19 để xem trước bản đồ và hiệu ứng dù chương còn khóa. Muốn vào trận, hãy hoàn thành chương liền trước; việc xem trước không thay đổi tiến trình hoặc chương đang chơi. Các map có chuyển động nhẹ và tôn trọng tùy chọn giảm chuyển động của thiết bị.
+
 ## Deploy Vercel
 
 Biến môi trường cần đặt trong Vercel Project Settings → Environment Variables:
