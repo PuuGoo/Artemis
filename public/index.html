@@ -6,6 +6,7 @@
   <title>Archero 2: Kỷ Nguyên Cung Thủ Roguelike</title>
   <script src="/cloud.js"></script>
   <script src="/zodiac-chibi-bosses.js"></script>
+  <script src="/obstacle-clearance.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
@@ -28456,6 +28457,19 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const t = types[(roomNum + i) % types.length];
             const ex = Game.wallPad + 35 + Math.random() * Math.max(80, Game.width - (Game.wallPad + 35) * 2);
             const ey = Game.wallPad + 45 + Math.random() * (Game.height * 0.42);
+            const enemyRadius = ({ hive_guardian: 20, mire_shaman: 17, spore_runner: 14, bat: 13, cloud_wisp: 14, sky_sentinel: 19, obsidian_brute: 19, rift_stalker: 14 })[t] || 16;
+            const spawnOpts = { width: Game.width, height: Game.height, wallPad: Game.wallPad,
+              player: Game.player, others: Game.enemies, enemyGap: 8, playerGap: 18 };
+            // Random positions can fall inside the large illustrated cover props.
+            // Search a nearby free spot, then sacrifice excess cover (never enemies)
+            // if a very cramped room has no viable location.
+            let safePos = ArtemisObstacleClearance.findSafeSpawn(ex, ey, enemyRadius, Game.obstacles, spawnOpts);
+            while (!safePos && Game.obstacles.length) {
+              Game.obstacles.pop();
+              safePos = ArtemisObstacleClearance.findSafeSpawn(ex, ey, enemyRadius, Game.obstacles, spawnOpts);
+            }
+            if (!safePos) safePos = ArtemisObstacleClearance.findSafeSpawn(ex, ey, enemyRadius, [], spawnOpts);
+            if (!safePos) throw new Error('Không tìm được vị trí sinh quái hợp lệ');
             // HP quái neo theo ATK người chơi -> TTK ổn định ở mọi mức trang bị.
             // ĐƯỜNG CONG CHO NGƯỜI MỚI: phòng 1-3 là "học cách chơi" nên quái
             // chỉ ~1,4 đòn; tăng dần tới ~2,4 đòn ở phòng cuối. Trước đây phòng 1
@@ -28471,9 +28485,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             Game.enemies.push({
               isBoss: false,
               type: t,
-              x: ex,
-              y: ey,
-              r: ({ hive_guardian: 20, mire_shaman: 17, spore_runner: 14, bat: 13, cloud_wisp: 14, sky_sentinel: 19, obsidian_brute: 19, rift_stalker: 14 })[t] || 16,
+              x: safePos.x,
+              y: safePos.y,
+              r: enemyRadius,
               hp: enemyHp,
               maxHp: enemyHp,
               // Sát thương quái — thiết kế theo SỐ ĐÒN PHẢI CHỊU, không theo %:
@@ -30212,11 +30226,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               e.vy += (Math.sin(angToPlayer) * e.speed - e.vy) * 2 * dt;
             }
 
-            const nx = e.x + e.vx * dt;
-            const ny = e.y + e.vy * dt;
-            const pad = Game.wallPad + e.r;
-            if (!collidesObstacle(nx, e.y, e.r)) e.x = Math.max(pad, Math.min(Game.width - pad, nx));
-            if (!collidesObstacle(e.x, ny, e.r)) e.y = Math.max(pad, Math.min(Game.height - pad, ny));
+            ArtemisObstacleClearance.moveEntity(e, e.vx * dt, e.vy * dt, Game.obstacles,
+              { width: Game.width, height: Game.height, wallPad: Game.wallPad });
+          } else {
+            // Stationary turrets also must be rescued if a legacy spawn embedded them in cover.
+            ArtemisObstacleClearance.resolveEntity(e, Game.obstacles,
+              { width: Game.width, height: Game.height, wallPad: Game.wallPad });
           }
 
           // Contact damage with Player
