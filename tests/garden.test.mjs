@@ -86,7 +86,7 @@ check('4 vat pham doi', (html.slice(html.indexOf('GARDEN_SHOP = ['), html.indexO
 // ============================================================ 6. UI
 console.log('\n=== 6. UI ===');
 check('co #gardenContent trong tab Su Kien',
-  /id="tabEvents"[\s\S]{0,600}?id="gardenContent"/.test(html));
+  /id="tabEvents"[\s\S]{0,3000}?id="gardenContent"/.test(html));
 check('co 6 o dat hien thi', /g\.plots\.map\(p =>/.test(fnBody('renderGardenPanel')));
 check('o rong co nut Trong', /data-act="plant"/.test(html));
 check('o chin co nut Thu hoach', /data-act="harvest"/.test(html));
@@ -97,7 +97,7 @@ for (const s of ['seeds', 'shop', 'task', 'rank']) {
   check(`co man "${s}"`, new RegExp(`data-garden-screen="${s}"`).test(html));
 }
 check('tab Su Kien goi renderGardenPanel',
-  /targetId === 'tabEvents'[\s\S]{0,120}?renderGardenPanel\(\)/.test(html));
+  /targetId === 'tabEvents'[\s\S]{0,1200}?renderGardenPanel\(\)/.test(html));
 // Phan biet trang thai phai dua vao CHU, khong chi mau: 3 loai cay co 3 mau
 // khac nhau nen neu chi doc mau thi tuong la 3 trang thai.
 check('o dang lon co nhan chu "Dang lon"', /Đang lớn<\/span>/.test(html));
@@ -116,7 +116,7 @@ check('chi ve lai khi tab dang mo',
   /sec\.classList\.contains\('hidden'\)\) return;/.test(html));
 check('chi ve khi co o dang lon hoac chin', /if \(growing \|\| readyUnclaimed\) renderGardenPanel\(\)/.test(html));
 check('khoi dong khi mo tab',
-  /renderGardenPanel\(\);[\s\S]{0,200}?if \(typeof startGardenTicker === 'function'\) startGardenTicker\(\)/.test(html.replace(/\r/g, '')));
+  /renderGardenPanel\(\);[\s\S]{0,1200}?if \(typeof startGardenTicker === 'function'\) startGardenTicker\(\)/.test(html.replace(/\r/g, '')));
 
 // ============================================================ 8. NHIỆM VỤ TUẦN
 console.log('\n=== 8. NHIEM VU TUAN ===');

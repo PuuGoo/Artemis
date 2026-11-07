@@ -4,7 +4,8 @@ Ngày chạy: 07/11/2026 (UTC+07:00). Nhánh `codex/artemis-new-player-hardening
 
 > **Cập nhật sau Đợt 1 + 2 + 3** (xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`,
 > `12-E2E-NEW-PLAYER.md`, `13-GAME-BALANCE-MEASURED.md`): tổng suite nay là
-> **181 test — 173 pass / 6 fail / 2 skip**.
+> **188 test — 186 pass / 0 fail / 2 skip**. Sáu suite baseline cũ đã được bảo trì
+> đúng cách (khoá bất biến thay vì hằng số cứng) — xem `09-TEST-MAINTENANCE.md`.
 > Suite mới đều pass: `canonical-new-account` (15), `subsystem-save-persistence` (12),
 > `subsystem-save-roundtrip` (1), `beginner-journey-decisions` (4). Thêm
 > `tools/e2e-new-player.mjs`: **17/17 PASS** trên server thật + DB bộ nhớ.

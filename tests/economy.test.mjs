@@ -19,7 +19,10 @@ function check(name, cond, extra = "") {
 
 // ---------------------------------------------------------------- 1. Nối vào API
 console.log("\n=== 1. DA NOI VAO /api/save ===");
-check("api/save.js import validateEconomyDelta", saveSrc.includes('import { validateEconomyDelta } from "../lib/economy.js"'));
+// Import có thể kèm nhiều tên (validateSeasonDelta...) — kiểm tra THÀNH PHẦN,
+// không so khớp nguyên chuỗi.
+check("api/save.js import validateEconomyDelta",
+  /import \{[^}]*\bvalidateEconomyDelta\b[^}]*\} from "\.\.\/lib\/economy\.js"/.test(saveSrc));
 check("goi validateEconomyDelta truoc khi ghi", /validateEconomyDelta\(existing\?\.data \|\| null, check\.data, 1\)/.test(saveSrc));
 check("tra 422 kem code khi bi chan", saveSrc.includes("code: economy.code"));
 check("tra serverData de client khong ghi de", saveSrc.includes("serverData: save?.data || null"));

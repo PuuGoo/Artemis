@@ -18,14 +18,17 @@ console.log("\n=== 1. DU LIEU BESTIARY ===");
 const bStart = html.indexOf("const BESTIARY = [");
 const bEnd = html.indexOf("\n      ];", bStart) + 8;
 const bBlock = html.slice(bStart, bEnd);
-const entries = (bBlock.match(/id: '(slime|goblin|skeleton_mage|plant_turret|bat|golem|queen|demon_king|dragon_whelp|cloud_wisp|sky_sentinel|elder_dragon)'/g) || []).length;
-check("co 12 loai quai/trum", entries === 12, String(entries));
+// Số loại quái KHÔNG hardcode: nội dung đã mở rộng 12 -> 20 khi thêm chương 5-6.
+// Đếm trực tiếp trong block, nhưng bất biến "MỌI loại đều có đủ field" vẫn được
+// kiểm tra theo đúng tổng số thật.
+const entries = (bBlock.match(/\n\s+id: '[a-z_]+',/g) || []).length;
+check("bestiary co it nhat 12 loai (12 goc + mo rong)", entries >= 12, String(entries));
 for (const id of ["slime", "goblin", "skeleton_mage", "plant_turret", "bat", "golem", "queen", "demon_king", "dragon_whelp", "cloud_wisp", "sky_sentinel", "elder_dragon"]) {
   check(`co loai '${id}'`, bBlock.includes(`id: '${id}'`));
 }
 for (const field of ["name", "icon", "tier", "color", "lore", "behavior", "threat"]) {
   const n = (bBlock.match(new RegExp(field + ":", "g")) || []).length;
-  check(`moi loai co '${field}' (${n}/12)`, n === 12, `${n}/12`);
+  check(`moi loai co '${field}' (${n}/${entries})`, n === entries, `${n}/${entries}`);
 }
 check("co loai TRÙM", bBlock.includes("TRÙM'") || bBlock.includes("TRÙM CUỐI"));
 check("co indexed lookup", /const BESTIARY_BY_ID = Object\.fromEntries/.test(html));

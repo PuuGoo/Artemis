@@ -43,14 +43,19 @@ for (const a of assets) {
 
 // ============================================================ 2. CHAPTERS metadata
 console.log("\n=== 2. METADATA CHAPTERS ===");
-check("moi chuong co mapAsset", (html.match(/mapAsset: '\/assets\//g) || []).length === 4,
-  String((html.match(/mapAsset: '\/assets\//g) || []).length));
+// Đếm theo số chương thật trong CHAPTERS (campaign đã lên 6 chương).
+const chapterTotal = (html.slice(html.indexOf("const CHAPTERS = ["), html.indexOf("\n      ];", html.indexOf("const CHAPTERS = [")))
+  .match(/\n {10}id: \d+,/g) || []).length;
+check("moi chuong co mapAsset", (html.match(/mapAsset: '\/assets\//g) || []).length === chapterTotal,
+  `${(html.match(/mapAsset: '\/assets\//g) || []).length}/${chapterTotal}`);
 check("ch1 tro dung asset", html.includes("mapAsset: '/assets/map-ch1-ancient-stone.svg'"));
 check("ch2 tro dung asset", html.includes("mapAsset: '/assets/map-ch2-lava-valley.svg'"));
 check("ch3 tro dung asset", html.includes("mapAsset: '/assets/map-ch3-void-sanctum.svg'"));
 check("ch4 tro dung asset", html.includes("mapAsset: '/assets/map-ch4-dragon-realm.svg'"));
-check("moi chuong co mapRegion", (html.match(/mapRegion:/g) || []).length === 4);
-check("moi chuong co mapTagline", (html.match(/mapTagline:/g) || []).length === 4);
+check("moi chuong co mapRegion", (html.match(/mapRegion:/g) || []).length === chapterTotal,
+  `${(html.match(/mapRegion:/g) || []).length}/${chapterTotal}`);
+check("moi chuong co mapTagline", (html.match(/mapTagline:/g) || []).length === chapterTotal,
+  `${(html.match(/mapTagline:/g) || []).length}/${chapterTotal}`);
 check("khong dung URL anh ben ngoai", !/mapAsset: 'https?:/.test(html));
 
 // ============================================================ 3. DOM + CSS

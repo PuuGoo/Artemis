@@ -18,10 +18,12 @@ console.log("\n=== 1. DU LIEU CHUONG CO DU METADATA UI ===");
 const chStart = html.indexOf("const CHAPTERS = [");
 const chBlock = html.slice(chStart, html.indexOf("\n      ];", chStart) + 8);
 const chapterCount = (chBlock.match(/^\s+id: \d+,/gm) || []).length;
-check("co 4 chuong", chapterCount === 4, String(chapterCount));
+// Campaign đã mở rộng lên 6 chương: khoá bất biến "mọi chương có đủ metadata"
+// theo số chương thật, không hardcode 4.
+check("co it nhat 4 chuong", chapterCount >= 4, String(chapterCount));
 for (const field of ["icon", "accent", "gradFrom", "difficulty", "difficultyLabel", "themeName", "bossIcon", "bossName", "unlock"]) {
   const n = (chBlock.match(new RegExp(field + ":", "g")) || []).length;
-  check(`ca 4 chuong deu co '${field}'`, n === 4, `${n}/4`);
+  check(`ca ${chapterCount} chuong deu co '${field}'`, n === chapterCount, `${n}/${chapterCount}`);
 }
 check("chuong 1 khong co dieu kien mo khoa", /id: 1[\s\S]{0,900}?unlock: null/.test(chBlock));
 check("chuong 2 doi thang chuong 1", /id: 2[\s\S]{0,900}?chapterId: 1/.test(chBlock));
@@ -42,7 +44,9 @@ check("co ham getChapterBest kep ky luc ve so phong cua chuong",
 check("isChapterWon dung getChapterBest (khong doc bestRooms tho)",
   !/\(SaveState\.bestRooms \|\| \{\}\)\[chapterId\] >= ch\.rooms/.test(html));
 check("co ham normalizeSelectedChapter", /function normalizeSelectedChapter\(\)/.test(html));
-check("renderLobbyUI goi normalizeSelectedChapter", /function renderLobbyUI\(\)[\s\S]{0,300}?normalizeSelectedChapter\(\)/.test(html));
+// Cửa sổ phải đủ rộng: đầu renderLobbyUI còn vẽ danh hiệu + thẻ nhiệm vụ tân thủ
+// trước khi chuẩn hoá chương đang chọn.
+check("renderLobbyUI goi normalizeSelectedChapter", /function renderLobbyUI\(\)[\s\S]{0,1200}?normalizeSelectedChapter\(\)/.test(html));
 const snrStart = html.indexOf("function startNewRun(reason = 'fresh')");
 const snrBlock = html.slice(snrStart, snrStart + 1600);
 check("startNewRun chan chuong khoa", /isChapterLocked\(ch\)/.test(snrBlock));

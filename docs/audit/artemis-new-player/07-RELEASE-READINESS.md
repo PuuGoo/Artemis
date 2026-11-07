@@ -22,7 +22,11 @@ Chi tiết: `03-BUG-REPORT.md`, `04-CHANGES.md`, `06-REGRESSION.md`, `11-NEW-PLA
 1. **Economy provenance sau lần lưu đầu vẫn mở (P0).** Tài khoản mới không còn tự khai được số dư khởi tạo, nhưng snapshot các lần sau vẫn tự khai vàng/đá quý trong giới hạn delta (`500.000`/revision, `20.000` gem/revision) mà không có chứng cứ đã chơi/nhận thưởng. Cần server-authoritative action ledger. Tài khoản legacy (không `initVersion`) vẫn đi đường cũ ở lần lưu đầu.
 2. Chưa có Mongo test cô lập, chưa xác minh atomic behavior/index options thực, chưa chạy auth/register/logout/login persistence integration thật. Concurrency fake DB không là Mongo proof.
 3. **Chưa tạo tài khoản production.** E2E tân thủ đã chạy đủ trên **server local + DB bộ nhớ** (17/17), nhưng production vẫn BLOCKED: chưa tạo account thật, chưa xác minh deployment SHA, chưa kiểm cookie `Secure`/`SameSite` trên HTTPS thật.
-4. Full suite vẫn có failures baseline chưa xử lý. Không xem PASS-focused hoặc skip2 suite DB là regression toàn repo xanh.
+4. ~~Full suite còn failures baseline~~ — **ĐÃ XONG**: 6 suite (`bestiary`, `chapter-select`,
+   `economy`, `garden`, `map-select`, `season`) đã xanh bằng cách khoá *bất biến* thay vì
+   hằng số cứng (12→20 quái, 4→6 chương, regex quá khít, markup đã redesign). Full suite:
+   **188 test — 186 pass / 0 fail / 2 skip**. Chi tiết: `09-TEST-MAINTENANCE.md`.
+   Hai skip là `integration`/`admin` cần Mongo thật → vẫn thuộc blocker #2.
 5. Buffer RAM chưa bảo đảm tiến trình chưa ACK khi crash/offline/logout/conflict. Legacy clients không owner-binding, admin save writes và sâu corrupt snapshot còn cần audit. (`gameMode/modeBest/guild/garden/plinko` đã có writer/schema persistence — xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`.)
 6. JWT revocation sau logout/reset-password chưa được giải quyết; quyền admin immutable provisioning cần review riêng.
 7. **Đợt 4 đã đo được nhưng chưa sửa:** simulator khớp source (6 chương) và hồ sơ A–G đo bằng `getComputedStats()`. Kết quả: ATK tăng **39×** chỉ giảm TTK **1,96×**; HP tăng **25×** nhưng số đòn chịu vẫn **16,1**; hồ sơ yếu ở chương 5 vẫn chịu đúng 16 đòn. Đề xuất tách campaign sang độ khó tuyệt đối nằm ở `13-GAME-BALANCE-MEASURED.md` §4 — **chưa triển khai**, cần phê duyệt và playtest người thật.

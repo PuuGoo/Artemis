@@ -112,8 +112,15 @@ check('tab Su Kien goi renderSeasonPanel', /renderSeasonPanel\(\)/.test(html));
 check('doi nghe thi ve lai lobby (cap nhat chi so hien thi)',
   /renderSeasonPanel\(\);[\s\S]{0,120}?renderLobbyUI\(\)/.test(html.replace(/\r/g, '')));
 // Loi UI that: 2 nut cung nhan "Doi" (doi nghe + doi qua) gay nham.
-check('nut cua hang ten "Cua Hang" (khong trung "Doi" cua nghe)',
-  /<b class="block text-\[10px\] font-black text-white">Cửa Hàng<\/b>/.test(html));
+// Panel mùa giải đã được thiết kế lại nên khối <b>Cửa Hàng</b> không còn. Giữ đúng
+// BẤT BIẾN mà test này bảo vệ: không nút nào nhãn đúng "Đổi" (trùng "Đổi nghề"),
+// và hai chức năng dùng hai thuộc tính riêng để không lẫn.
+// Phạm vi phải là NÚT MUA của mùa giải: nút "Đổi" của VƯỜN (data-exchange) là hợp lệ
+// và không liên quan tới "Đổi nghề". Văn bản thường ("Đổi 20% Máu Tối Đa") cũng bỏ qua.
+check('nut mua cua hang mua giai khong chi ghi "Doi" (tranh trung "Doi nghe")',
+  !/data-season-buy="[^"]*"[\s\S]{0,500}?>\s*Đổi\s*</.test(html));
+check('mua hang dung data-season-buy, doi nghe dung data-pick-career (khong lan)',
+  /data-season-buy=/.test(html) && /data-pick-career/.test(html));
 
 // ============================================================ 7. EXPORT
 console.log('\n=== 7. EXPORT ===');
