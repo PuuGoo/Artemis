@@ -1,0 +1,273 @@
+{
+  "time": "2026-11-07T01:46:27.033Z",
+  "scope": "LOCAL REAL SERVER (dev-server + DB_BACKEND=memory): đăng ký thật, cookie/JWT thật, save thật. Không Mongo, không production.",
+  "origin": "http://127.0.0.1:3111",
+  "username": "qa_e2e_w15goe",
+  "browser": "156.0.8078.80",
+  "results": [
+    {
+      "name": "A1 cổng đăng nhập thật do máy chủ trả về (chưa có session)",
+      "status": "PASS",
+      "details": {
+        "heading": true,
+        "hasSwitch": true,
+        "locked": true
+      }
+    },
+    {
+      "name": "A2 đăng ký qua UI: 201, session, vào lobby",
+      "status": "PASS",
+      "details": {
+        "waitedMs": 480,
+        "cookiePresent": true
+      }
+    },
+    {
+      "name": "A3 trạng thái khởi tạo đúng chuẩn (500/50/20, Alex 0★, túi rỗng, N01 mở)",
+      "status": "PASS",
+      "details": {
+        "version": 1,
+        "startedAt": 1794015922106,
+        "completedAt": 0,
+        "skipped": false,
+        "currentStep": "N01",
+        "completedSteps": [],
+        "claimedRewards": [],
+        "isCompleted": false,
+        "_lootCount": 0
+      }
+    },
+    {
+      "name": "A4 máy chủ đã có save revision 1 (không phải client tự tạo)",
+      "status": "PASS",
+      "details": {
+        "revision": 1,
+        "gold": 500
+      }
+    },
+    {
+      "name": "B1 N01: bấm \"Đã Hiểu\" trong panel → xong, nhận 100 vàng",
+      "status": "PASS",
+      "details": {
+        "gold": 600,
+        "steps": [
+          "N01"
+        ]
+      }
+    },
+    {
+      "name": "B2 reload: N01 vẫn xong, vàng giữ nguyên",
+      "status": "PASS",
+      "details": {
+        "gold": 600,
+        "revision": 2
+      }
+    },
+    {
+      "name": "B3 N02: vào trận thật, dọn sạch ít nhất 1 phòng → nhận đúng 1 Cung Gỉ Sét",
+      "status": "PASS",
+      "details": {
+        "sessions": 1,
+        "last": {
+          "roomCleared": true,
+          "room": 1,
+          "roomsCleared": [],
+          "enemies": 0,
+          "hp": 775,
+          "running": true,
+          "pickedSkills": 0
+        },
+        "weapons": [
+          "starter_w_mw5qrt5w"
+        ]
+      }
+    },
+    {
+      "name": "B4 N03: nhặt đủ 10 vật phẩm bằng chiến đấu thật",
+      "status": "PASS",
+      "details": {
+        "loot": 10,
+        "sessions": 1,
+        "stats": {
+          "sessions": 2,
+          "roomsCleared": [
+            2,
+            3,
+            4
+          ],
+          "maxRoom": 4,
+          "skillsPicked": 5,
+          "deaths": 0,
+          "totalMs": 45603
+        }
+      }
+    },
+    {
+      "name": "B5 N04: mặc Cung Gỉ Sét qua modal Trang Bị thật",
+      "status": "PASS",
+      "details": {
+        "modalOpened": true,
+        "equipped": "starter_w_mw5qrt5w",
+        "steps": [
+          "N01",
+          "N02",
+          "N06",
+          "N03",
+          "N04"
+        ]
+      }
+    },
+    {
+      "name": "B6 N05: nâng cấp trang bị qua nút Nâng Cấp thật",
+      "status": "PASS",
+      "details": {
+        "goldBefore": 984,
+        "goldAfter": 859,
+        "scrollBefore": 2,
+        "scrollAfter": 1,
+        "lvBefore": 1,
+        "lvAfter": 2,
+        "toppedGold": 0,
+        "toppedScroll": 0,
+        "cost": 125,
+        "needScroll": 1,
+        "j": {
+          "version": 1,
+          "startedAt": 1794015922106,
+          "completedAt": 0,
+          "skipped": false,
+          "currentStep": "N07",
+          "completedSteps": [
+            "N01",
+            "N02",
+            "N06",
+            "N03",
+            "N04",
+            "N05"
+          ],
+          "claimedRewards": [
+            "N01"
+          ],
+          "isCompleted": false,
+          "_lootCount": 10
+        }
+      }
+    },
+    {
+      "name": "B7 N06: chọn kỹ năng (delta thật nếu autopilot đã bấm, nếu không dùng hook)",
+      "status": "PASS",
+      "details": {
+        "via": "ui-skill-picker",
+        "skillsPicked": 5
+      }
+    },
+    {
+      "name": "B8 N07 (hook chapter_cleared) + N08 (bấm nút Hoàn Tất thật)",
+      "status": "PASS",
+      "details": {
+        "version": 1,
+        "startedAt": 1794015922106,
+        "completedAt": 1794015977274,
+        "skipped": false,
+        "currentStep": "N08",
+        "completedSteps": [
+          "N01",
+          "N02",
+          "N06",
+          "N03",
+          "N04",
+          "N05",
+          "N07",
+          "N08"
+        ],
+        "claimedRewards": [
+          "N01",
+          "N08"
+        ],
+        "isCompleted": true,
+        "_lootCount": 10
+      }
+    },
+    {
+      "name": "B9 nhận thưởng đúng một lần cho mỗi bước (claim lại trả false)",
+      "status": "PASS",
+      "details": {
+        "first": [
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        "second": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "claimed": [
+          "N01",
+          "N08",
+          "N02",
+          "N03",
+          "N04",
+          "N05",
+          "N06",
+          "N07"
+        ]
+      }
+    },
+    {
+      "name": "C1 reload giữ toàn bộ tiến trình N01–N08",
+      "status": "PASS",
+      "details": {
+        "gold": 3809,
+        "steps": 8
+      }
+    },
+    {
+      "name": "C2 logout → login lại giữ nguyên dữ liệu",
+      "status": "PASS",
+      "details": {
+        "gold": 3809,
+        "steps": 8
+      }
+    },
+    {
+      "name": "C3 tài khoản thứ hai trên cùng trình duyệt nhận trạng thái tân thủ",
+      "status": "PASS",
+      "details": {
+        "gold": 500,
+        "steps": []
+      }
+    },
+    {
+      "name": "C4 client tự khai tài nguyên bị máy chủ từ chối",
+      "status": "PASS",
+      "details": {
+        "status": 409,
+        "serverGold": 3809
+      }
+    }
+  ],
+  "errors": [],
+  "netFailures": [
+    {
+      "kind": "failed",
+      "url": "http://127.0.0.1:3111/api/auth/logout",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "kind": "failed",
+      "url": "http://127.0.0.1:3111/api/auth/logout",
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

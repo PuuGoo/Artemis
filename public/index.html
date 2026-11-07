@@ -25732,8 +25732,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         onDialogueDone() { completeBeginnerStep('N01'); },
         onRoomCleared() {
           completeBeginnerStep('N02');
-          // Thưởng vũ khí đầu tiên ngay sau phòng đầu — người chơi có thứ
-          // để mặc ở bước N04 thay vì bị bỏ rơi với 6 ô trống.
+          // Chỉ tặng vũ khí đầu tiên cho TÀI KHOẢN ĐANG ĐI HÀNH TRÌNH TÂN THỦ.
+          // Tài khoản cũ (startedAt = 0) không bao giờ bị thêm vật phẩm ngoài ý
+          // muốn chỉ vì họ dọn một phòng — quyền sở hữu của người chơi cũ được
+          // giữ nguyên. Cờ starterWeaponGranted vẫn chống tặng trùng.
+          if (!isBeginnerJourneyActive()) return;
           const granted = grantStarterWeaponIfNeeded();
           if (granted && typeof showToast === 'function') {
             showToast('🏹 Nhận được Cung Gỉ Sét! Mở tab Trang Bị để mặc.');
@@ -25781,7 +25784,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const bg = isDone ? 'bg-emerald-950/40' : (isCurrent ? 'bg-amber-950/30' : 'bg-slate-950/60');
           const badge = isDone
             ? '<span class="text-emerald-400 font-black text-xs">✔ XONG</span>'
-            : (isCurrent ? '<span class="text-amber-300 font-black text-xs">▶ ĐANG LÀM</span>' : '<span class="text-slate-500 font-bold text-xs">🔒 CHƯA MỞ</span>');
+            : (isCurrent
+              ? '<span class="text-amber-300 font-black text-xs">▶ ĐANG LÀM</span>'
+              : '<span class="text-slate-500 font-bold text-xs">⏳ CHƯA XONG</span>');
 
           const claimBtn = (isDone && !isClaimed)
             ? `<button data-bj-claim="${s.id}" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-black transition">Nhận thưởng</button>`
@@ -25827,6 +25832,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               </div>
               <div class="mt-3 h-2 rounded-full bg-slate-800 overflow-hidden">
                 <div class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all" style="width:${pct}%"></div>
+              </div>
+              <div class="mt-1.5 text-[10px] text-slate-400 leading-snug">
+                Không bắt buộc làm đúng thứ tự: hành động bạn làm sớm (chọn kỹ năng, nâng đồ…) vẫn được tính và bước đó sẽ tự đánh dấu xong.
               </div>
               ${active ? `<div class="mt-2 flex gap-2">
                 <button data-bj-skip="1" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-[11px] font-bold transition">Bỏ qua hướng dẫn</button>
@@ -32861,6 +32869,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         getBeginnerCompletedCount,
         buildBeginnerJourneyPanelHtml,
         renderBeginnerJourneyUI,
+        // Mở modal chi tiết trang bị (đường UI thật cho equip/upgrade).
+        openGearDetailModal,
         // ===== API session / reset phó bản =====
         DungeonSession,
         clearRunState,

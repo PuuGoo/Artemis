@@ -106,7 +106,12 @@ check('co ham grantStarterWeaponIfNeeded', /function grantStarterWeaponIfNeeded\
 check('co co chong tang trung starterWeaponGranted',
   /starterWeaponGranted/.test(html));
 check('co goi tu BeginnerHooks.onRoomCleared',
-  /onRoomCleared\(\)[\s\S]{0,400}?grantStarterWeaponIfNeeded\(\)/.test(html));
+  // Đợt 3: phải kiểm journey đang mở TRƯỚC khi tặng, để tài khoản cũ không bị
+  // thêm vật phẩm ngoài ý muốn. Vì vậy chỉ cần grant nằm trong onRoomCleared,
+  // và guard phải đứng trước nó.
+  /onRoomCleared\(\)[\s\S]{0,600}?grantStarterWeaponIfNeeded\(\)/.test(html));
+check('onRoomCleared chan tang vu khi khi journey khong mo',
+  /onRoomCleared\(\)[\s\S]{0,800}?isBeginnerJourneyActive\(\)[\s\S]{0,200}?grantStarterWeaponIfNeeded\(\)/.test(html));
 check('schema server giu co starterWeaponGranted',
   /starterWeaponGranted/.test(schema));
 

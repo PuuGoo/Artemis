@@ -2,9 +2,11 @@
 
 Ngày chạy: 07/11/2026 (UTC+07:00). Nhánh `codex/artemis-new-player-hardening`. Node `v24.19.0`, npm `11.17.0`. Không chạy DB thật, không gọi API ghi production.
 
-> **Cập nhật sau Đợt 1 + Đợt 2** (xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`): tổng suite nay là
-> **175 test — 167 pass / 6 fail / 2 skip**. Ba suite mới thêm 28 case đều pass:
-> `canonical-new-account` (15), `subsystem-save-persistence` (12), `subsystem-save-roundtrip` (1).
+> **Cập nhật sau Đợt 1 + 2 + 3** (xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`,
+> `12-E2E-NEW-PLAYER.md`): tổng suite nay là **179 test — 171 pass / 6 fail / 2 skip**.
+> Suite mới đều pass: `canonical-new-account` (15), `subsystem-save-persistence` (12),
+> `subsystem-save-roundtrip` (1), `beginner-journey-decisions` (4). Thêm
+> `tools/e2e-new-player.mjs`: **17/17 PASS** trên server thật + DB bộ nhớ.
 > Sáu failure vẫn là đúng sáu suite baseline ở mục 2, không phát sinh regression mới.
 
 Số liệu dưới đây là **output thật** của lần chạy cuối, sau khi tất cả thay đổi local đã áp. Log giữ ngoài repo: `artemis-regression-test-final.log`, `artemis-regression-sim-final.log`, `artemis-new-suites.log`, `artemis-local-browser.log`, `artemis-head-six.log` trong `C:/Users/PuuGoo/AppData/Local/hermes/cache/scratch/`.
