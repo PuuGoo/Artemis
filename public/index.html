@@ -264,6 +264,26 @@
     #tabEvents { background:radial-gradient(circle at 50% -100px,#442b87 0,transparent 430px),linear-gradient(#171936,#0c1229 52%,#0a1123); }
     #tabEvents [data-event-area]:not(.is-active) { display:none; }
     .events-home { width:100%; max-width:960px; margin:0 auto; }
+    .vip-pass-wrap { width:100%; max-width:960px; margin:0 auto; }
+    .vip-pass-title { display:flex; justify-content:space-between; gap:8px; align-items:center; margin:16px 2px 9px; color:#fff; font-size:17px; font-weight:1000; }
+    .vip-pass-title span { color:#f0abfc; font-size:11px; }
+    .vip-pass-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .vip-pass-card { position:relative; overflow:hidden; min-width:0; padding:15px; border:2px solid #8bd9ff; border-radius:20px; background:linear-gradient(140deg,#1266b4,#173477 70%,#14255c);
+      box-shadow:0 6px 0 #123365,0 14px 24px #03071277,inset 0 1px 0 #fff8; animation:eventsCardIn .35s both; }
+    .vip-pass-card:nth-child(2) { border-color:#ffc36c; background:linear-gradient(140deg,#a95318,#713319 70%,#47251f); box-shadow:0 6px 0 #653116,0 14px 24px #03071277,inset 0 1px 0 #fff8; }
+    .vip-pass-card:nth-child(3) { border-color:#f0a6ed; background:linear-gradient(140deg,#8b316d,#57215e 70%,#311740); box-shadow:0 6px 0 #582456,0 14px 24px #03071277,inset 0 1px 0 #fff8; }
+    .vip-pass-card::before { content:'✦'; position:absolute; right:12px; top:5px; color:#ffffff55; font-size:60px; animation:eventsTwinkle 4s infinite; }
+    .vip-pass-icon { display:block; margin-bottom:5px; font-size:44px; filter:drop-shadow(0 5px 4px #0008); animation:eventsFloat 4s infinite; }
+    .vip-pass-card h4 { position:relative; margin:0 0 4px; font-size:18px; font-weight:1000; text-shadow:0 2px 0 #0008; }
+    .vip-pass-card p { position:relative; margin:0 0 10px; color:#f5edff; font-size:11px; }
+    .vip-pass-benefits { min-height:80px; padding:9px; border-radius:12px; background:#0d183c77; list-style:none; }
+    .vip-pass-benefits li { margin:4px 0; color:#fff; font-size:11px; font-weight:800; }
+    .vip-pass-benefits li::before { content:'✦ '; color:#ffe281; }
+    .vip-pass-status { display:block; min-height:28px; margin:10px 0 5px; color:#fff6b8; font-size:11px; font-weight:900; }
+    .vip-pass-buy { width:100%; min-height:42px; padding:9px; border:2px solid #fff1a7; border-radius:11px; background:linear-gradient(#fff49f,#ffbd2d 58%,#e4870e); color:#4c2708; font-size:12px; font-weight:1000; cursor:pointer; box-shadow:0 3px 0 #8b4c0b; }
+    .vip-pass-buy:hover,.vip-pass-buy:focus-visible { filter:brightness(1.1); transform:translateY(-2px); }
+    .vip-pass-buy:disabled { opacity:.6; cursor:wait; }
+    @media(max-width:700px) { .vip-pass-grid { grid-template-columns:1fr; } .vip-pass-benefits { min-height:0; } .vip-pass-card { padding:12px; } }
     .events-hero { position:relative; overflow:hidden; padding:18px; border:2px solid #f7c969; border-radius:24px;
       background:radial-gradient(circle at 80% 20%,#ffb6db88,transparent 35%),linear-gradient(135deg,#75324d,#4a285d 50%,#25215d);
       box-shadow:0 8px 0 #281532,0 18px 32px #03071288,inset 0 2px 0 #fff7; }
@@ -2170,6 +2190,7 @@
             <button type="button" class="events-choice" data-event-area-target="plinko" aria-pressed="false"><span class="events-choice-icon">🎰</span><span class="events-choice-name">Plinko</span><span class="events-choice-desc">Thả bóng, nhận xu và quà</span></button>
           </nav>
         </div>
+        <div id="vipPrivilegeCardsContainer" class="vip-pass-wrap"></div>
         <h3 id="eventsCurrentHeading" class="events-section-heading">🎪 Khám phá sự kiện</h3>
         <!-- ==================== SU KIEN THAT: MUA GIAI (season) ====================
              Ban that co 5 man season*; ban web lam 4 man co co che that:
@@ -10562,6 +10583,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         gold: 500,
         gems: 50,
         vipCoins: 0,
+        vipPasses: { hunting: 0, cave: 0, sealing: 0 },
         stamina: 20,
         playerLevel: 1,
         playerName: 'JohnBowman',
@@ -11002,6 +11024,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               gold: this.gold,
               gems: this.gems,
               vipCoins: this.vipCoins,
+              vipPasses: this.vipPasses,
               stamina: this.stamina,
               playerLevel: this.playerLevel,
               playerName: this.playerName,
@@ -19592,6 +19615,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
         if (itemId === 'gold_cave_ticket') {
+          if (!requireVipCard('cave', 'Cave Explorer')) return;
           if ((items.gold_cave_ticket || 0) < 1) {
             showToast('⚠️ Không đủ Gold Cave Ticket!');
             return;
@@ -19610,6 +19634,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
         if (itemId === 'seal_battle_ticket') {
+          if (!requireVipCard('sealing', 'Sealing Master')) return;
           if ((items.seal_battle_ticket || 0) < 1) {
             showToast('⚠️ Không đủ Seal Battle Ticket!');
             return;
@@ -19618,8 +19643,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const dmgDealt = 450000 + Math.floor(Math.random() * 180000);
           ev.sealBossTotalDmg = (ev.sealBossTotalDmg || 0) + dmgDealt;
           items.guild_gold = (items.guild_gold || 0) + 1500;
-          SaveState.chestKeys.chromatic_chest_key = (SaveState.chestKeys.chromatic_chest_key || 0) + 2;
-          ev.lastEventLog = `🐉 Khiêu chiến Seal Battle: Gây ${(dmgDealt).toLocaleString('vi-VN')} DMG lên Ác Long • Nhận +1,500 🛡️ Guild Gold & +2 🗝️🌈 Chromatic Chest Key!`;
+          SaveState.chestKeys.chromatic_chest_key = (SaveState.chestKeys.chromatic_chest_key || 0) + 3;
+          ev.lastEventLog = `🐉 Khiêu chiến Seal Battle: Gây ${(dmgDealt).toLocaleString('vi-VN')} DMG lên Ác Long • Nhận +1,500 🛡️ Guild Gold & +3 🗝️🌈 Chromatic Chest Key!`;
           SaveState.save();
           SoundFX.levelUp();
           renderLobbyUI();
@@ -22108,7 +22133,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const ev = SaveState.wikiEventsState;
         const curCat = ev.activeCategory || 'all';
         const curEvId = ev.selectedEventId || 'campaign';
-        const maxEnergy = ev.huntingWarriorCard ? 50 : 30;
+        const maxEnergy = hasActiveVipCard('hunting') ? 50 : 30;
 
         const filteredEvents = WIKI_11_EVENTS_CATALOG.filter(e => curCat === 'all' || e.category === curCat);
         const activeEventMeta = WIKI_11_EVENTS_CATALOG.find(e => e.id === curEvId) || WIKI_11_EVENTS_CATALOG[0];
@@ -22146,11 +22171,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   <p class="text-xs text-slate-300">Mỗi lần vượt chương tiêu hao <strong class="text-emerald-300">5 Energy</strong> (Giới hạn <strong class="text-amber-300">30 Energy</strong>, hoặc <strong class="text-amber-300">50 Energy</strong> khi bật Thẻ Hunting Warrior Card). Nhận Exp, Gold, Gear Scrolls, Runes, Gear và Rương Mốc Tiến Độ liên tiếp!</p>
                 </div>
                 <div class="flex items-center gap-2 flex-wrap shrink-0">
-                  <button type="button" id="btnToggleHuntingWarriorCard" class="px-3 py-2 rounded-xl border text-xs font-black transition ${ev.huntingWarriorCard ? 'bg-amber-400 text-slate-950 border-white shadow' : 'bg-slate-800 text-slate-300 border-slate-600'}">
-                    🪪 Hunting Warrior Card: ${ev.huntingWarriorCard ? 'ĐANG BẬT (Max 50 ⚡)' : 'TẮT (Max 30 ⚡)'}
+                  <button type="button" id="btnToggleHuntingWarriorCard" class="px-3 py-2 rounded-xl border text-xs font-black transition ${hasActiveVipCard('hunting') ? 'bg-amber-400 text-slate-950 border-white shadow' : 'bg-slate-800 text-slate-300 border-slate-600'}">
+                    🪪 Hunting Warrior: ${hasActiveVipCard('hunting') ? 'ĐANG DÙNG (Max 50 ⚡)' : '🔒 Cần thẻ VIP'}
                   </button>
                   <button type="button" id="btnRefillCampaignEnergy" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 border border-emerald-300 text-white font-black text-xs shadow">
-                    ⚡ Hồi Đầy ${SaveState.stamina || 30}/${maxEnergy} Energy
+                    ⚡ Hồi đầy ${SaveState.stamina || 0}/${maxEnergy} (-50 💎)
                   </button>
                 </div>
               </div>
@@ -22189,9 +22214,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                       <div class="text-xs font-black text-sky-300">🎁 Campaign Progress Rewards (${chMeta.stageType} Chapter • Nhận Liên Tiếp Theo Thứ Tự):</div>
                       <div class="text-[10px] text-slate-400">Đã nhận mốc: <strong class="text-amber-300">${claimedStep} / ${chMeta.progressMilestones.length}</strong> trên Chương ${chMeta.id}</div>
                     </div>
-                    <button type="button" id="btnCampaignClaimAllSteps" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-[11px] shadow">
-                      🎁 Nhận Đủ Mốc Ch.${chMeta.id}
-                    </button>
                   </div>
                   <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     ${chMeta.progressMilestones.map(ms => {
@@ -22472,7 +22494,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 <div class="flex items-center gap-2 flex-wrap shrink-0">
                   <span class="px-3 py-2 rounded-xl bg-slate-950 border border-amber-400/50 text-xs font-black text-amber-300">🎟️ Vé Gold Cave: ${tickets}</span>
                   <button type="button" id="btnGoldCaveWatchAd" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow">
-                    📺 Xem AD Nhận +1 Vé Ngày
+                    🎟️ Mua +1 Vé Hang Vàng (100 💎)
                   </button>
                 </div>
               </div>
@@ -23302,23 +23324,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const btnHuntCard = document.getElementById('btnToggleHuntingWarriorCard');
         if (btnHuntCard) {
           btnHuntCard.onclick = () => {
-            ev.huntingWarriorCard = !ev.huntingWarriorCard;
-            SaveState.stamina = ev.huntingWarriorCard ? 50 : 30;
-            SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast(ev.huntingWarriorCard ? '🪪 Đã kích hoạt Hunting Warrior Card: Giới hạn Năng lượng tăng lên 50 ⚡!' : '🪪 Đã chuyển về giới hạn 30 ⚡ Năng lượng tiêu chuẩn.');
+            if (!requireVipCard('hunting', 'Hunting Warrior')) return;
+            showToast('🪪 Thẻ Hunting Warrior đang hoạt động: giới hạn năng lượng 50 ⚡ và mở càn quét chiến dịch.');
           };
         }
 
         const btnRefillEn = document.getElementById('btnRefillCampaignEnergy');
         if (btnRefillEn) {
           btnRefillEn.onclick = () => {
-            SaveState.stamina = ev.huntingWarriorCard ? 50 : 30;
+            const cap = hasActiveVipCard('hunting') ? 50 : 30;
+            if ((SaveState.stamina || 0) >= cap) { showToast('⚡ Năng lượng đã đầy.'); return; }
+            if ((SaveState.gems || 0) < 50) { showToast('Cần 50 💎 để hồi năng lượng.', 'err'); return; }
+            SaveState.gems -= 50;
+            SaveState.stamina = cap;
             SaveState.save();
             SoundFX.levelUp();
             renderLobbyUI();
-            showToast(`⚡ Đã hồi đầy ${SaveState.stamina}/${SaveState.stamina} Energy!`);
+            showToast(`⚡ Đã hồi đầy ${cap} năng lượng bằng 50 💎!`);
           };
         }
 
@@ -23363,12 +23385,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const btnCampSweep = document.getElementById('btnCampaignSweepClear');
         if (btnCampSweep) {
           btnCampSweep.onclick = () => {
+            if (!requireVipCard('hunting', 'Hunting Warrior')) return;
             const chMeta = WIKI_95_CAMPAIGN_CHAPTERS[(ev.selectedCampaignChapter || 1) - 1] || WIKI_95_CAMPAIGN_CHAPTERS[0];
             if ((SaveState.stamina || 0) < 5) {
-              SaveState.stamina = ev.huntingWarriorCard ? 50 : 30;
+              showToast('Cần 5 ⚡ năng lượng để càn quét.', 'err'); return;
             }
             SaveState.stamina -= 5;
-            const goldGain = 6000 + chMeta.id * 1200;
+            const goldGain = Math.min(25000, Math.round((4000 + chMeta.id * 500) * 1.2));
             SaveState.gold = (SaveState.gold || 0) + goldGain;
             grantAll6GearScrolls(5);
             rollSingleCanonicalChestPull('obsidian');
@@ -23409,33 +23432,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             showToast(`🎁 Đã nhận Mốc ${ms.label} (Ch.${chId}): ${ms.rewardText}!`);
           };
         });
-
-        const btnCampAllSteps = document.getElementById('btnCampaignClaimAllSteps');
-        if (btnCampAllSteps) {
-          btnCampAllSteps.onclick = () => {
-            const chId = ev.selectedCampaignChapter || 1;
-            const chMeta = WIKI_95_CAMPAIGN_CHAPTERS[chId - 1] || WIKI_95_CAMPAIGN_CHAPTERS[0];
-            let curClaimed = ev.campaignClaimedSteps[chId] || 0;
-            if (curClaimed >= chMeta.progressMilestones.length) {
-              showToast('✓ Đã nhận toàn bộ mốc tiến độ của chương này!');
-              return;
-            }
-            for (let s = curClaimed + 1; s <= chMeta.progressMilestones.length; s++) {
-              const ms = chMeta.progressMilestones[s - 1];
-              SaveState.gold = (SaveState.gold || 0) + ms.gold;
-              SaveState.gems = (SaveState.gems || 0) + ms.gems;
-              SaveState.stamina = (SaveState.stamina || 0) + ms.energy;
-              SaveState.chestKeys.silver_chest_key = (SaveState.chestKeys.silver_chest_key || 0) + ms.silverKey;
-              SaveState.chestKeys.obsidian_chest_key = (SaveState.chestKeys.obsidian_chest_key || 0) + ms.obsidianKey;
-              if (ms.scrolls > 0) grantAll6GearScrolls(ms.scrolls);
-            }
-            ev.campaignClaimedSteps[chId] = chMeta.progressMilestones.length;
-            SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast(`🎁 Đã nhận trọn bộ phần thưởng tiến độ Chương ${chId} (${chMeta.wikiName}): +320 💎, +18,000 🪙, +1 Silver Key, +1 Obsidian Key, +24 Scrolls & +10 ⚡!`);
-          };
-        }
 
         const btnSkyAd = document.getElementById('btnSkyTowerWatchAd');
         if (btnSkyAd) {
@@ -23625,11 +23621,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const btnGcAd = document.getElementById('btnGoldCaveWatchAd');
         if (btnGcAd) {
           btnGcAd.onclick = () => {
+            if ((SaveState.gems || 0) < 100) { showToast('Cần 100 💎 để mua vé Hang Vàng.', 'err'); return; }
+            SaveState.gems -= 100;
             SaveState.wikiOtherItems.gold_cave_ticket = (SaveState.wikiOtherItems.gold_cave_ticket || 0) + 1;
             SaveState.save();
             SoundFX.coinPickup();
             renderLobbyUI();
-            showToast('📺 Đã nhận +1 Gold Cave Ticket từ AD!');
+            showToast('🎟️ Đã mua +1 vé Hang Vàng bằng 100 💎!');
           };
         }
 
@@ -23674,17 +23672,18 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const btnGcSweep = document.getElementById('btnGoldCaveSweep10');
         if (btnGcSweep) {
           btnGcSweep.onclick = () => {
+            if (!requireVipCard('cave', 'Cave Explorer')) return;
             if ((SaveState.wikiOtherItems.gold_cave_ticket || 0) < 1) {
-              SaveState.wikiOtherItems.gold_cave_ticket = 5;
+              showToast('Cần 1 🎟️ vé Hang Vàng để càn quét.', 'err'); return;
             }
             SaveState.wikiOtherItems.gold_cave_ticket -= 1;
             ev.goldCaveCurrentWave = 10;
             const mult = 1 + (ev.goldCaveDifficulty || 15) * 0.15;
-            const totalGold = Math.round(32000 * mult);
+            const totalGold = Math.min(25000, Math.round(5500 * mult));
             SaveState.gold = (SaveState.gold || 0) + totalGold;
-            SaveState.gems = (SaveState.gems || 0) + 200;
+            SaveState.gems = (SaveState.gems || 0) + 100;
             grantAll6GearScrolls(35);
-            ev.goldCaveLastRoulette = `🪙 Càn quét trọn 10 Đợt Hang Vàng Lv.${ev.goldCaveDifficulty} + Final 2× Roulette: Nhận +${totalGold.toLocaleString('vi-VN')} 🪙 Vàng, +200 💎 Gems & +35 mỗi loại Gear Scroll!`;
+            ev.goldCaveLastRoulette = `🪙 Càn quét trọn 10 Đợt Hang Vàng Lv.${ev.goldCaveDifficulty}: Nhận +${totalGold.toLocaleString('vi-VN')} 🪙 Vàng, +100 💎 Gems & +35 mỗi loại Gear Scroll!`;
             SaveState.save();
             SoundFX.levelUp();
             renderLobbyUI();
@@ -23750,9 +23749,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const mult = ev.runeRuinsBoard.multiplier || 1;
             if ((SaveState.wikiOtherItems.shovel || 0) >= mult) {
               SaveState.wikiOtherItems.shovel -= mult;
-            } else {
-              SaveState.gems = Math.max(0, (SaveState.gems || 0) - mult * 200);
-            }
+            } else if ((SaveState.gems || 0) >= mult * 200) SaveState.gems -= mult * 200;
+            else { showToast('Cần xẻng hoặc đá quý để tạo bàn mới.', 'err'); return; }
             const nextB = createFreshRuneRuins3x3Board();
             nextB.multiplier = mult;
             ev.runeRuinsBoard = nextB;
@@ -23766,8 +23764,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const btnRrAuto = document.getElementById('btnRuneRuinsAutoComplete');
         if (btnRrAuto) {
           btnRrAuto.onclick = () => {
+            if (!requireVipCard('cave', 'Cave Explorer')) return;
             if (ev.runeRuinsBoard.finished) {
               const mult = ev.runeRuinsBoard.multiplier || 1;
+              if ((SaveState.wikiOtherItems.shovel || 0) >= mult) SaveState.wikiOtherItems.shovel -= mult;
+              else if ((SaveState.gems || 0) >= mult * 200) SaveState.gems -= mult * 200;
+              else { showToast('Cần xẻng hoặc đá quý để tạo bàn mới.', 'err'); return; }
               const nextB = createFreshRuneRuins3x3Board();
               nextB.multiplier = mult;
               ev.runeRuinsBoard = nextB;
@@ -24321,6 +24323,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const btnDkClear7 = document.getElementById('btnDemonClearAll7Stages');
         if (btnDkClear7) {
           btnDkClear7.onclick = () => {
+            if (!requireVipCard('sealing', 'Sealing Master')) return;
             ev.demonStageCleared = 7;
             ev.clashBadges = (ev.clashBadges || 0) + 1400;
             SaveState.save();
@@ -26997,6 +27000,48 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       // 5. RENDER TAB 5: SỰ KIỆN (THI ĐẤU | KHIÊU CHIẾN | PB — PAGES 62-64)
+      function hasActiveVipCard(id) {
+        return Number(SaveState.vipPasses?.[id] || 0) > Date.now();
+      }
+      function requireVipCard(id, label) {
+        if (hasActiveVipCard(id)) return true;
+        showToast(`🔒 Cần thẻ ${label} còn hạn. Mở mục Thẻ đặc quyền trong tab Sự Kiện!`, 'err');
+        document.getElementById('vipPrivilegeCardsContainer')?.scrollIntoView({ behavior:'smooth', block:'start' });
+        return false;
+      }
+      function renderVipPrivilegeCardsUI() {
+        const box = document.getElementById('vipPrivilegeCardsContainer');
+        if (!box) return;
+        const cards = [
+          { id:'hunting', icon:'🏹', title:'Hunting Warrior Card', subtitle:'Thẻ Chiến Binh Săn Bắn', benefits:['Càn quét chiến dịch không giới hạn','Giới hạn năng lượng +20','Vàng càn quét +20%'] },
+          { id:'cave', icon:'🛤️', title:'Cave Explorer Card', subtitle:'Thẻ Nhà Thám Hiểm Hang Động', benefits:['Càn quét Hang Vàng 10 đợt','Đào tự động Tàn Tích Cổ Ngữ','Vẫn tiêu vé và xẻng theo luật chơi'] },
+          { id:'sealing', icon:'🐉', title:'Sealing Master Card', subtitle:'Thẻ Bậc Thầy Phong Ấn', benefits:['Đánh nhanh Seal Battle bằng vé','Thưởng thêm 1 chìa khóa sắc màu','Vẫn tiêu vé Seal Battle'] },
+        ];
+        box.innerHTML = `<div class="vip-pass-title">🟣 Thẻ đặc quyền 30 ngày <span>Số dư: ${(SaveState.vipCoins || 0).toLocaleString('vi-VN')} xu VIP</span></div>
+          <div class="vip-pass-grid">${cards.map(card => {
+            const expiry = Number(SaveState.vipPasses?.[card.id] || 0);
+            const active = expiry > Date.now();
+            return `<article class="vip-pass-card"><span class="vip-pass-icon" aria-hidden="true">${card.icon}</span>
+              <h4>${card.title}</h4><p>${card.subtitle}</p>
+              <ul class="vip-pass-benefits">${card.benefits.map(benefit => `<li>${benefit}</li>`).join('')}</ul>
+              <span class="vip-pass-status">${active ? `✓ Đang dùng · đến ${new Date(expiry).toLocaleDateString('vi-VN')}` : '🔒 Chưa mở khóa'}</span>
+              <button type="button" class="vip-pass-buy" data-buy-vip-card="${card.id}">${active ? 'Gia hạn +30 ngày' : 'Mở khóa 30 ngày'} · 500 🟣</button>
+            </article>`;
+          }).join('')}</div>`;
+        box.querySelectorAll('[data-buy-vip-card]').forEach(button => {
+          button.onclick = async () => {
+            if ((SaveState.vipCoins || 0) < 500) { showToast('Cần 500 xu VIP. Quản trị viên có thể cấp trong trang Admin.', 'err'); return; }
+            button.disabled = true;
+            try {
+              const response = await fetch('/api/privileges', { method:'POST', credentials:'same-origin', headers:{'content-type':'application/json'}, body:JSON.stringify({ cardId:button.dataset.buyVipCard }) });
+              const result = await response.json();
+              if (!response.ok || !result.ok) { showToast(result.error || 'Không thể mua thẻ lúc này.', 'err'); button.disabled = false; return; }
+              showToast('🎉 Đã mở thẻ đặc quyền! Đang cập nhật tài khoản…');
+              window.location.reload();
+            } catch (error) { showToast('Không kết nối được máy chủ. Hãy thử lại.', 'err'); button.disabled = false; }
+          };
+        });
+      }
       let activeEventsArea = 'discover';
       function setActiveEventsArea(area, scroll = false) {
         const labels = { discover:'🎪 Khám phá sự kiện', season:'⚔️ Mùa giải', garden:'🌿 Vườn thủ hộ', plinko:'🎰 Plinko' };
@@ -27152,6 +27197,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         safeRender('continueButton', () => {
           if (typeof syncContinueButton === 'function') syncContinueButton();
         });
+        safeRender('vipCards', () => renderVipPrivilegeCardsUI());
         safeRender('events', () => renderVnEventsBannerCardsUI());
         safeRender('wikiEvents', () => renderWikiEventsHubUI());
         // PHẢI chạy SAU mọi render: một số nút cheat nằm trong HTML sinh động

@@ -4,6 +4,7 @@ import { sanitizeSave, MAX_SAVE_BYTES } from "../lib/saveSchema.js";
 import { validateEconomyDelta, validateSeasonDelta } from "../lib/economy.js";
 import { NEW_ACCOUNT_INIT_VERSION, buildCanonicalNewAccountSave } from "../lib/initialState.js";
 import { validateEconomyBudget } from "../lib/economyLedger.js";
+import { normalizeVipPasses, hasVipPass } from '../lib/privilegeCards.js';
 
 export const config = { runtime: "nodejs" };
 
@@ -104,7 +105,7 @@ export async function PUT(request) {
 
   const existing = await saves.findOne({ playerId }, { projection: {
     revision: 1, ledger: 1,
-    "data.gold": 1, "data.gems": 1, "data.vipCoins": 1, "data.lifetimeStats": 1, "data.season": 1,
+    "data.gold": 1, "data.gems": 1, "data.vipCoins": 1, "data.vipPasses": 1, "data.lifetimeStats": 1, "data.season": 1,
     "data.gameMode": 1, "data.modeBest": 1, "data.guild": 1, "data.garden": 1, "data.plinko": 1,
   } });
   const currentRevision = existing ? (existing.revision || 1) : 0;
@@ -127,6 +128,10 @@ export async function PUT(request) {
   // VIP is issued by admins. Client snapshots may carry the value for display,
   // but they never get to create, increase, or erase the server balance.
   check.data.vipCoins = Math.max(0, Math.min(1e9, Number(existing?.data?.vipCoins) || 0));
+  check.data.vipPasses = normalizeVipPasses(existing?.data?.vipPasses);
+  if (!hasVipPass(check.data.vipPasses, 'hunting') && check.data.wikiEventsState?.huntingWarriorCard) {
+    check.data.wikiEventsState.huntingWarriorCard = false;
+  }
   for (const key of CARRY_FORWARD_FIELDS) {
     if (key in incomingData) continue;
     if (existing && existing.data && key in existing.data) {

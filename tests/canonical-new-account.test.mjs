@@ -16,6 +16,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { sanitizeSave } from '../lib/saveSchema.js';
 import { validateEconomyBudget } from '../lib/economyLedger.js';
+import { normalizeVipPasses, hasVipPass } from '../lib/privilegeCards.js';
 import { validateEconomyDelta, validateSeasonDelta } from '../lib/economy.js';
 import { validateCredentials, normalizeUsername, usernameKey } from '../lib/auth.js';
 import {
@@ -176,6 +177,8 @@ function saveRoute(mock, who) {
     validateSeasonDelta,
     // Ngân sách kinh tế (Đợt 6) — save.js gọi tới, phải có trong sandbox vm.
     validateEconomyBudget,
+    normalizeVipPasses,
+    hasVipPass,
     NEW_ACCOUNT_INIT_VERSION,
     buildCanonicalNewAccountSave,
   });

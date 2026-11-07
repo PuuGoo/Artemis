@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import { sanitizeSave, MAX_SAVE_BYTES } from '../lib/saveSchema.js';
 import { validateEconomyDelta, validateSeasonDelta } from '../lib/economy.js';
 import { validateEconomyBudget } from '../lib/economyLedger.js';
+import { normalizeVipPasses, hasVipPass } from '../lib/privilegeCards.js';
 
 // Execute the actual route body with isolated Mongo/auth seams; never import
 // Mongo or read .env. The sanitizer and economy validators are real dependencies.
@@ -61,7 +62,7 @@ function harness(initial = null, ownerId) {
     bumpRateLimit: async () => ({ allowed: true }), clientIp: () => 'offline',
     sanitizeSave, MAX_SAVE_BYTES, validateEconomyDelta, validateSeasonDelta,
     // Ngân sách kinh tế theo đồng hồ server (Đợt 6).
-    validateEconomyBudget,
+    validateEconomyBudget, normalizeVipPasses, hasVipPass,
   });
   vm.runInContext(source.replace(/^import .*;\r?\n/gm, '').replace(/export /g, '') + '\nthis.route = { GET, PUT };', context);
   return {

@@ -1767,6 +1767,9 @@ const ArenaV2 = (() => {
   }
 
   function drawZodiacBoss(ctx, r, t, hr, charge) {
+    // Boss cung hoàng đạo mới: Canvas nhận SVG chibi; lỗi tải ảnh tự quay về hình cũ.
+    const chibi = typeof window !== 'undefined' ? window.ArtemisZodiacBosses : null;
+    if (chibi && chibi.draw(ctx, curBiome?.boss, r, t, hr, charge)) return;
     const B = curBiome, glow = B?.accent || '#a5b4fc';
     ctx.save(); ctx.rotate(Math.sin(t * .0014) * .08);
     ctx.fillStyle = '#0f172a'; ctx.strokeStyle = glow; ctx.lineWidth = 3;
