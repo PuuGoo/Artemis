@@ -67,8 +67,9 @@
   function selectChapter(id, updateHash) {
     if (!chapterById(id)) return Promise.resolve();
     var seq = ++requestSeq;
+    stopAnimation();
     current = chapterById(id);
-    roomNo = 1; activeEntities = []; previewBroken = false;
+    roomNo = 1; activeEntities = []; fakeGame = null; previewBroken = false;
     el("ccDetail").innerHTML='<div class="cc-panel cc-loading">Đang nạp Chương ' + id + '…</div>';
     renderList();
     if(updateHash) location.hash="campaign-"+id;
@@ -174,7 +175,7 @@
     var rows=el("ccRoomTable");if(rows)rows.querySelectorAll("tr[data-room]").forEach(function(row){
       row.setAttribute("aria-selected",Number(row.getAttribute("data-room"))===n);
     });
-    if(fakeGame) buildFakeGame();
+    if(window.AdminCampaignArenaV2) buildFakeGame();
     drawScene(performance.now());
   }
   function renderRoster() {
@@ -223,7 +224,7 @@
     window.AdminCampaignArenaV2.init(fakeGame);
   }
   function drawScene(now) {
-    if(!visible||!current ||!window.AdminCampaignArenaV2 || previewBroken)return;
+    if(!visible||!current ||!current.roomsDetail ||!fakeGame ||!window.AdminCampaignArenaV2 || previewBroken)return;
     var api=window.AdminCampaignArenaV2, canvas=el("ccArena");
     if(!canvas)return;
     try {
@@ -263,10 +264,15 @@
       api._debug.setBiome(b);
       var ctx=canvas.getContext("2d");if(!ctx)return;
       ctx.clearRect(0,0,200,136);
-      var enemy={type:e.type,isBoss:!!(room.isBoss&&!roster),x:100,y:73,
-        r:room.isBoss&&!roster?33:25,
-        hp:e.hp||100,maxHp:e.hp||100,attackTimer:1.5,
-        hitFlashTimer:0,slowTimer:0,burnTimer:0,vx:0,vy:0};
+      // Giữ cùng entity qua các frame: boss cần thời gian đáp xuống thay vì xuất hiện ngoài canvas mãi.
+      var enemy=canvas._ccPreviewEntity;
+      if(!enemy || enemy.type!==e.type) {
+        enemy={type:e.type,isBoss:!!(room.isBoss&&!roster),x:100,y:73,
+          r:room.isBoss&&!roster?33:25,
+          hp:e.hp||100,maxHp:e.hp||100,attackTimer:1.5,
+          hitFlashTimer:0,slowTimer:0,burnTimer:0,vx:0,vy:0};
+        canvas._ccPreviewEntity=enemy;
+      }
       api.drawMonster(ctx,enemy,now);
     });
   }
