@@ -15,6 +15,7 @@
   <script src="/skill-art-data.js"></script>
   <script src="/skill-art.js"></script>
   <script src="/skill-combat-vfx.js"></script>
+  <script src="/monster-art.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap&subset=vietnamese" rel="stylesheet">
@@ -4715,10 +4716,15 @@ const ArenaV2 = (() => {
     // thân (squash & stretch)
     const bounce = Math.sin(nowMs * (e.type === 'bat' ? 0.02 : 0.009) + e.x * 0.1);
     const hover = e.type === 'bat' ? Math.sin(nowMs * 0.012 + e.y) * 4 - 6 : 0;
-    ctx.save(); ctx.translate(0, hover + drop); ctx.globalAlpha = big ? 1 : clamp(k * 1.6, 0, 1); ctx.scale((1 + bounce * (big ? 0.025 : 0.05)) * sc * S, (1 - bounce * (big ? 0.025 : 0.05)) * sc * S);
+    ctx.save(); ctx.translate(0, hover + drop); ctx.globalAlpha = big ? 1 : clamp(k * 1.6, 0, 1);
+    // PNG giữ tỉ lệ; chỉ thân vector cũ dùng squash/stretch.
+    ctx.scale(sc * S, sc * S);
     const flash = e.hitFlashTimer > 0;
     if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
-    drawBody(ctx, e, nowMs, B, v);
+    if (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e)) {
+      ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
+      drawBody(ctx, e, nowMs, B, v); ctx.restore();
+    }
     if (flash) { ctx.filter = 'none'; orb(ctx, 0, 0, r * 1.25, '#ffffff', Math.min(1, e.hitFlashTimer / 0.14) * 0.8); }
     ctx.restore();
 
@@ -28311,6 +28317,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         DungeonSession.begin(SaveState.selectedChapterIdx);
 
         Game.chapter = ch;
+        // Ngoại hình chỉ sống trong lượt chơi, không ghi vào tài khoản/checkpoint.
+        MonsterArt.beginRun(Game);
         Game.mode = mode.id;
         Game.room = 1;
         // Số phòng: Vô Tận/Tháp/Luyện Tập là vô hạn (dùng số lớn thay cho
@@ -28739,6 +28747,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }
         }
 
+        // Gán sau khi constructor gốc đã giữ nguyên AI, chỉ số và vị trí an toàn.
+        MonsterArt.assignRoom(Game);
         updateInGameHUD();
       }
 

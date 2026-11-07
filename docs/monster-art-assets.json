@@ -1,0 +1,402 @@
+[
+  {
+    "file": "Icon_Bat_Gray_4f8a9c.png",
+    "theme": "stone",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "cd3e52f8493f0eeea1e73c6e025a30eba682854c2f40d4259e98995ce9ee23a1"
+  },
+  {
+    "file": "Icon_BatMage_Gray_bc6707.png",
+    "theme": "stone",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "d2634be01e1f7abba0ada5710ae588252618b29645c2a088070abd9769e373e8"
+  },
+  {
+    "file": "Icon_BatMage_Purple_f6213f.png",
+    "theme": "void",
+    "boss": false,
+    "width": 198,
+    "height": 198,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "bb92ef7b20463b84d5e01338017e278716f979949ec3f9dcd3e63302099d9d85"
+  },
+  {
+    "file": "Icon_Bee_Yellow_ad322d.png",
+    "theme": "forest",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "ab56f65f8277a988be75827b079011bf74a40b5fc4ac8871707b1b509809512a"
+  },
+  {
+    "file": "Icon_Boss_BeeQueen_Purple_5581a1.png",
+    "theme": "forest",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "998e52d5e4a5c164e140a8329a2389e936b9ef1c6cf669eba2f9b9ca6e41553c"
+  },
+  {
+    "file": "Icon_Boss_Boar_Blue_d0c00b.png",
+    "theme": "ice",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "1f6f43828b575dfc2d6b81674fbbbedbc4bdf450cb5e451121a4cd36d2d8a5d1"
+  },
+  {
+    "file": "Icon_Boss_Boar_Brown_b3eaae.png",
+    "theme": "stone",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "1e39b6fd8bcb9c580f13a26bd72b26dbf1f5f45f2ddb44e164dc1402706440d0"
+  },
+  {
+    "file": "Icon_Boss_SnowMan_Purple_390f75.png",
+    "theme": "ice",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "211ced4071e48cd9e923f8e52b0b908c843827a624e7c3d737817487fb05b301"
+  },
+  {
+    "file": "Icon_Boss_With_Red_cd3f56.png",
+    "theme": "fire",
+    "boss": true,
+    "width": 198,
+    "height": 198,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "b399bcc6a3ad6e8946988378ceff3a4fee946bbe9ceff56ce335a0cce1ff4d23"
+  },
+  {
+    "file": "Icon_BossBingMo_Purple_dc21fe.png",
+    "theme": "ice",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "8cf8848656005386b783a2ebf100a73251c504144445efde6d690244f7e8a3b2"
+  },
+  {
+    "file": "Icon_BossDemon_Purple_37ff22.png",
+    "theme": "void",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "e9a3e36c481fd6b7144caf19d75ee91146e63a65078c37e6109a3d318999d661"
+  },
+  {
+    "file": "Icon_BossDemon_Red_ccb16c.png",
+    "theme": "fire",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "5922d5ea8d414fca755a68451ed9c97603f3314e19825756a6414a97f9b01aa1"
+  },
+  {
+    "file": "Icon_BossFlameDemon_Red_f96019.png",
+    "theme": "fire",
+    "boss": true,
+    "width": 198,
+    "height": 198,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "5d1f8514279ce18fcc26518c3b4bbf9413e8e295e242e88195c5ccca749c3ebf"
+  },
+  {
+    "file": "Icon_BossSunflower_Yellow_fbbdb2.png",
+    "theme": "forest",
+    "boss": true,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "6922f4b2bc045e28ca104e757289a8d2d0b3123bf204097d3f54b660161fdc2b"
+  },
+  {
+    "file": "Icon_GhostFireCenter_623481.png",
+    "theme": "void",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "96d62f76b3c935c1a7eabfac6e960df1fb0b4a37424552d1f00dde34025fe819"
+  },
+  {
+    "file": "Icon_Grim_Purple_cd4116.png",
+    "theme": "void",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "74f1ddc6ea1dc2752caa9051fd2ad855563a7890dc8330f760adbd7901f312fc"
+  },
+  {
+    "file": "Icon_Grim_Red_0aeec8.png",
+    "theme": "fire",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "facb5cfa5e942ba2d26b010dc4a4567e7aec2be13b14693b53d500793c60e9f8"
+  },
+  {
+    "file": "Icon_HaiGuZhanShi_Blue_ac9d54.png",
+    "theme": "ice",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "e989ffce75eefe97ea216b56327c85aafcb175c6133ebbd81747331cdc6a8f82"
+  },
+  {
+    "file": "Icon_HaiGuZhanShi_Brown_da5ea2.png",
+    "theme": "stone",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "df616f92b0d5e6beb2c5cd91cb7fc160f2f3826bab627d3dade7dc16b2e88aeb"
+  },
+  {
+    "file": "Icon_HuoYanLingZhu_375559.png",
+    "theme": "fire",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "9fdb018d6954e9c78d4d5b78c5b9219b18ae2b6f3968c58505754c50bdfe7d13"
+  },
+  {
+    "file": "Icon_KuLouYuanCheng_Skin_c1f9cd.png",
+    "theme": "stone",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "8285f5b8742fa713489528350240ec18106ba214cb2853224edafeba6cdce57d"
+  },
+  {
+    "file": "Icon_KuLouYuanCheng_Skin_Blue_36532c.png",
+    "theme": "ice",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "be4add2685800faf1a892ad2ce4abb6ed1eb1a8d93bac2e177990fbb5c77ca13"
+  },
+  {
+    "file": "Icon_LeiDianMao_b05c67.png",
+    "theme": "sky",
+    "boss": false,
+    "width": 198,
+    "height": 198,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "7110460d701783c47e5315e5edebeadd2d3f3598def04da8c6b6b35d9e6216b3"
+  },
+  {
+    "file": "Icon_MeiDuSha_Green_c185fa.png",
+    "theme": "forest",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "fcad5be4342b0a345b8553d7e5aede660140456c7d9819ff08eeb193ae8b66a8"
+  },
+  {
+    "file": "Icon_MeiDuSha_Purple_ed3092.png",
+    "theme": "void",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "45f7ebec301eb3a02a96d20f2848e084f6889706995a9a699d1d0cae17237d49"
+  },
+  {
+    "file": "Icon_MoFaShu_f817c6.png",
+    "theme": "forest",
+    "boss": false,
+    "width": 198,
+    "height": 198,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "49737035faa49a462f79d675b26eab384c677b07861b8a657553156b807b95fc"
+  },
+  {
+    "file": "Icon_MoveFlower_Blue_3118df.png",
+    "theme": "ice",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "31c98693cfe8bc7e2dc0ddfa279d66b2882eff257941e6fa2cfac47a9cfa1bfc"
+  },
+  {
+    "file": "Icon_MoveFlower_Purple_91997c.png",
+    "theme": "void",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "d24052404b3eaf24ec76ad66847ac16eb4e7acce6fcd3cbf3f2cc52f2cffd89f"
+  },
+  {
+    "file": "Icon_MoveFlower_Red_fec301.png",
+    "theme": "fire",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "63cb339d08853b662b5c1645edec30644cce8b367f53190cfa7b76e10be8773b"
+  },
+  {
+    "file": "Icon_PenHuoLong_Purple_af9f48.png",
+    "theme": "sky",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "9917cb9a69e8b577ca57217dfaf4a8d16b7329dbbf339ab4960eb96208913978"
+  },
+  {
+    "file": "Icon_ScorpoinBig_Red_2eb985.png",
+    "theme": "fire",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "206f70cd46c9abd275a5ec50eaa46ab707cb824e7a84c0f12e08b5cab1b4ba39"
+  },
+  {
+    "file": "Icon_ScorpoinSmall_Orange_b0ebac.png",
+    "theme": "stone",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "e0b2c285b620b8cad32673b5f966ff8df2be7d6193bbbb051231371b52c79c9c"
+  },
+  {
+    "file": "Icon_ShuYao_64da08.png",
+    "theme": "forest",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "824b43357728fa034a33cac5578d01b0aebf796f596a924cc1ef1d8bbcaa9e7c"
+  },
+  {
+    "file": "ICon_ShuYao_Red_5296e5.png",
+    "theme": "fire",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "a6619d8fec00395ea1672486592131bab7bdab82cc786d9a443e4418afded67f"
+  },
+  {
+    "file": "Icon_SmilmeSmall_ccca1d.png",
+    "theme": "stone",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "4706b04594a26b0eed850a696c4f7f0dceb1dd7e366f58af0e7287d6813bfef2"
+  },
+  {
+    "file": "Icon_UndergroundWormNew_Red_336601.png",
+    "theme": "fire",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "bbb08875bb2444038044b56165de410cee50fcd0b67b6b66f06aca5e9493c44f"
+  },
+  {
+    "file": "Icon_Whirlwind_Green_542e6c.png",
+    "theme": "sky",
+    "boss": false,
+    "width": 198,
+    "height": 198,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "b1b58c68fbf1e8dec8a265cdfbd3135b152bcdf04e713b6633a096260dfc87e5"
+  },
+  {
+    "file": "Icon_Witch_Blue_dc7027.png",
+    "theme": "ice",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "6cfdd75a3dd62ae5ccc8da68b28a9b02af8e8ff10f12b0ccf61deac0bc98c86b"
+  },
+  {
+    "file": "Icon_Wolf_f26b27.png",
+    "theme": "forest",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "6229643c858a6f1ee86074334a23dfc4cf0781a4f96c014c72fe1ad9068b5a66"
+  },
+  {
+    "file": "Icon_Wolf_Red_691e7a.png",
+    "theme": "fire",
+    "boss": false,
+    "width": 200,
+    "height": 200,
+    "alphaMin": 0,
+    "alphaMax": 255,
+    "sha256": "210686b36ce39a4ff253cef733dcd16a76eccc8bde7de5c7780f763f32f2c7e1"
+  }
+]
