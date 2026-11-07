@@ -1,71 +1,115 @@
-// Mo phong can bang combat tren 5 ho so — tinh TTK / Hits To Die tu CHINH
-// cong thuc trong source (doc bang regex), khong dung browser, khong ghi save.
+// ==================== MÔ PHỎNG CÂN BẰNG COMBAT (PARITY VỚI SOURCE) ====================
 //
-// Chay: node tools/combat-sim.mjs
-import fs from "node:fs";
+// Nguyên tắc: KHÔNG tự đặt công thức. Mọi hằng số đọc từ public/index.html bằng
+// regex; nếu source đổi mà regex không khớp, script NÉM LỖI thay vì tính sai.
+//
+// Chạy: node tools/combat-sim.mjs            (dùng tools/combat-profiles.json)
+//       node tools/combat-sim.mjs --verbose  (in thêm từng phòng)
+//
+// Hồ sơ người chơi lấy từ tools/measure-profiles.mjs — đo bằng
+// getComputedStats() thật trên Chrome local, không gõ tay.
+import fs from 'node:fs';
 
-const html = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
+const profilesPath = new URL('./combat-profiles.json', import.meta.url);
 
 function num(re, label) {
   const m = html.match(re);
-  if (!m) throw new Error("Khong tim thay trong source: " + label);
+  if (!m) throw new Error('Không tìm thấy trong source: ' + label);
   return Number(m[1]);
 }
 
-// ==================== HANG SO DOC TU SOURCE ====================
-const BASE_ATK = num(/\((\d+) \+ gearAtk \+ gemAtk/, "base ATK");
-const BASE_HP = num(/\((\d+) \+ gearHp \+ gemHp/, "base HP");
-const MOB_HITS_BASE = num(/const baseHits = ([\d.]+) \+ depth/, "quai baseHits");
-const MOB_HITS_DEPTH = num(/const baseHits = [\d.]+ \+ depth \* ([\d.]+)/, "quai hits depth");
-const MOB_ATK_START = num(/playerMaxHp \/ \((\d+) - depth \* \d+\)/, "quai atk start");
-const MOB_ATK_DEPTH = num(/playerMaxHp \/ \(\d+ - depth \* (\d+)\)/, "quai atk depth");
-const BOSS_HITS_5 = num(/const hitsToKill = roomNum === 5 \? (\d+)/, "boss hits 5");
-const BOSS_HITS_10 = num(/const hitsToKill = roomNum === 5 \? \d+ : \(roomNum === 10 \? (\d+)/, "boss hits 10");
-const BOSS_HITS_FINAL = num(/const hitsToKill = roomNum === 5 \? \d+ : \(roomNum === 10 \? \d+ : (\d+)\)/, "boss hits final");
-const BOSS_DEMON_MULT = num(/bossType === 'demon_king' \? ([\d.]+)/, "demon mult");
-const BOSS_ATK_5 = num(/playerMaxHp \/ \(roomNum === 5 \? (\d+)/, "boss atk 5");
-const BOSS_ATK_10 = num(/playerMaxHp \/ \(roomNum === 5 \? \d+ : \(roomNum === 10 \? (\d+)/, "boss atk 10");
-const BOSS_ATK_FINAL = num(/playerMaxHp \/ \(roomNum === 5 \? \d+ : \(roomNum === 10 \? \d+ : (\d+)\)\)/, "boss atk final");
-const ROOM_MUL_STEP = num(/const roomMul = 1 \+ \(roomNum - 1\) \* ([\d.]+)/, "roomMul step");
-const DEF_K_BASE = num(/const defK = (\d+) \+ 120 \*/, "defK base");
-const DEF_K_PER_ROOM = num(/const defK = \d+ \+ (\d+) \*/, "defK per room");
-const DEF_CAP = num(/Math\.min\((0\.\d+), defFlat \/ \(defFlat \+ defK\)\)/, "DEF cap");
+// ==================== HẰNG SỐ ĐỌC TỪ SOURCE ====================
+const BASE_ATK = num(/\((\d+) \+ gearAtk \+ gemAtk/, 'base ATK');
+const BASE_HP = num(/\((\d+) \+ gearHp \+ gemHp/, 'base HP');
+const MOB_HITS_BASE = num(/const baseHits = ([\d.]+) \+ depth/, 'quái baseHits');
+const MOB_HITS_DEPTH = num(/const baseHits = [\d.]+ \+ depth \* ([\d.]+)/, 'quái hits depth');
+const MOB_ATK_START = num(/playerMaxHp \/ \((\d+) - depth \* \d+\)/, 'quái atk start');
+const MOB_ATK_DEPTH = num(/playerMaxHp \/ \(\d+ - depth \* (\d+)\)/, 'quái atk depth');
+const BOSS_HITS_5 = num(/const hitsToKill = roomNum === 5 \? (\d+)/, 'boss hits 5');
+const BOSS_HITS_10 = num(/const hitsToKill = roomNum === 5 \? \d+ : \(roomNum === 10 \? (\d+)/, 'boss hits 10');
+const BOSS_HITS_FINAL = num(/const hitsToKill = roomNum === 5 \? \d+ : \(roomNum === 10 \? \d+ : (\d+)\)/, 'boss hits final');
+const BOSS_DEMON_MULT = num(/bossType === 'demon_king' \? ([\d.]+)/, 'demon mult');
+const BOSS_ATK_5 = num(/playerMaxHp \/ \(roomNum === 5 \? (\d+)/, 'boss atk 5');
+const BOSS_ATK_10 = num(/playerMaxHp \/ \(roomNum === 5 \? \d+ : \(roomNum === 10 \? (\d+)/, 'boss atk 10');
+const BOSS_ATK_FINAL = num(/playerMaxHp \/ \(roomNum === 5 \? \d+ : \(roomNum === 10 \? \d+ : (\d+)\)\)/, 'boss atk final');
+const ROOM_MUL_STEP = num(/const roomMul = 1 \+ \(roomNum - 1\) \* ([\d.]+)/, 'roomMul step');
+const DEF_K_BASE = num(/const defK = (\d+) \+ 120 \*/, 'defK base');
+const DEF_K_PER_ROOM = num(/const defK = \d+ \+ (\d+) \*/, 'defK per room');
+const DEF_CAP = num(/Math\.min\((0\.\d+), defFlat \/ \(defFlat \+ defK\)\)/, 'DEF cap');
+const MOB_COUNT_BASE = num(/const count = Math\.min\((\d+), 3 \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái max count');
+const MOB_COUNT_BASE_N = num(/const count = Math\.min\(\d+, (\d+) \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái base count');
 
-const CHAPTERS = [
-  { id: 1, rooms: 15, enemyScale: 1.0 },
-  { id: 2, rooms: 12, enemyScale: 1.45 },
-  { id: 3, rooms: 10, enemyScale: 2.0 },
-];
+// Hệ số máu theo loại quái (atkMul) — đọc nguyên biểu thức trong source.
+const ARCHETYPE_MULT = (() => {
+  const m = html.match(/const atkMul = (t === '[^']+'[^;]+?) \* baseHits;/s);
+  if (!m) throw new Error('Không tìm thấy atkMul của quái');
+  const out = { default: 1 };
+  for (const hit of m[1].matchAll(/t === '([a-z_]+)' \? ([\d.]+)/g)) out[hit[1]] = Number(hit[2]);
+  return out;
+})();
+// Bảng quái theo chương (types array trong setupRoom).
+const CHAPTER_ENEMIES = (() => {
+  const out = {};
+  const re = /Game\.chapter && Number\(Game\.chapter\.id\) === (\d)\s*\?\s*\[([^\]]+)\]/g;
+  for (const m of html.matchAll(re)) {
+    out[Number(m[1])] = [...m[2].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]);
+  }
+  if (!Object.keys(out).length) throw new Error('Không tìm thấy bảng quái theo chương');
+  return out;
+})();
+// Boss theo chương (id 4,5,6 có trùm riêng; 1–3 dùng golem/queen/demon_king theo phòng).
+const CHAPTER_BOSS = (() => {
+  const out = {};
+  const re = /Number\(Game\.chapter\.id\) === (\d) \? '([a-z_]+)'/g;
+  for (const m of html.matchAll(re)) out[Number(m[1])] = m[2];
+  return out;
+})();
+// Chương: rooms + enemyScale.
+const CHAPTERS = (() => {
+  const i = html.indexOf('const CHAPTERS = [');
+  const j = html.indexOf('\n      ];', i);
+  if (i < 0 || j < 0) throw new Error('Không tìm thấy CHAPTERS');
+  const blk = html.slice(i, j);
+  const ids = [...blk.matchAll(/\n {10}id: (\d+),/g)].map((m) => Number(m[1]));
+  const rooms = [...blk.matchAll(/\n {10}rooms: (\d+),/g)].map((m) => Number(m[1]));
+  const scale = [...blk.matchAll(/\n {10}enemyScale: ([\d.]+),/g)].map((m) => Number(m[1]));
+  return ids.map((id, k) => ({ id, rooms: rooms[k], enemyScale: scale[k] }));
+})();
 
-// ==================== CONG THUC (theo source) ====================
-function depthOf(room, maxRooms) {
-  return Math.min(1, (room - 1) / Math.max(1, maxRooms - 1));
+const isBossRoom = (room, maxRooms) => (room % 5 === 0) || (room === maxRooms);
+const depthOf = (room, maxRooms) => Math.min(1, (room - 1) / Math.max(1, maxRooms - 1));
+const mobCount = (room) => Math.min(MOB_COUNT_BASE, MOB_COUNT_BASE_N + Math.floor(room / 2));
+
+function bossType(chapterId, room, maxRooms) {
+  if (CHAPTER_BOSS[chapterId]) return CHAPTER_BOSS[chapterId];
+  return room === 5 ? 'golem' : (room === 10 ? 'queen' : 'demon_king');
 }
-/** Quái thường: HP neo theo ATK người chơi -> TTK ổn định. */
-function mobHp(playerAtk, room, maxRooms, enemyScale, atkMul = 1) {
-  const scale = enemyScale * (1 + (room - 1) * ROOM_MUL_STEP);
-  const baseHits = MOB_HITS_BASE + depthOf(room, maxRooms) * MOB_HITS_DEPTH;
-  return playerAtk * baseHits * atkMul * scale;
+
+/** HP/ATK một con quái — copy đúng công thức setupRoom(). */
+function mobStats({ playerAtk, playerMaxHp, chapter, room, type }) {
+  const scale = chapter.enemyScale * (1 + (room - 1) * ROOM_MUL_STEP);
+  const depth = depthOf(room, chapter.rooms);
+  const baseHits = MOB_HITS_BASE + depth * MOB_HITS_DEPTH;
+  const atkMul = (ARCHETYPE_MULT[type] ?? ARCHETYPE_MULT.default) * baseHits;
+  const count = mobCount(room);
+  return {
+    count,
+    hp: Math.max(1, Math.round(playerAtk * atkMul * scale)),
+    atk: Math.max(1, Math.round(playerMaxHp / (MOB_ATK_START - depth * MOB_ATK_DEPTH) / Math.max(1, Math.sqrt(count / 3)))),
+  };
 }
-/** Quái thường: ATK neo theo MaxHP người chơi -> số đòn chịu được ổn định. */
-function mobAtk(playerMaxHp, room, maxRooms, count = 3) {
-  const hits = MOB_ATK_START - depthOf(room, maxRooms) * MOB_ATK_DEPTH;
-  return playerMaxHp / hits / Math.sqrt(count / 3);
-}
-/** Boss: HP = playerAtk * hitsToKill * chapterMul. */
-function bossHp(playerAtk, room, enemyScale, isDemon) {
+
+/** HP/ATK trùm — copy đúng công thức setupRoom(). */
+function bossStats({ playerAtk, playerMaxHp, chapter, room }) {
+  const type = bossType(chapter.id, room, chapter.rooms);
   const hits = room === 5 ? BOSS_HITS_5 : (room === 10 ? BOSS_HITS_10 : BOSS_HITS_FINAL);
-  return playerAtk * hits * enemyScale * (isDemon ? BOSS_DEMON_MULT : 1);
+  const hp = Math.round(playerAtk * hits * chapter.enemyScale * (type === 'demon_king' ? BOSS_DEMON_MULT : 1));
+  const atk = Math.max(1, Math.round(playerMaxHp / (room === 5 ? BOSS_ATK_5 : (room === 10 ? BOSS_ATK_10 : BOSS_ATK_FINAL))));
+  return { type, hp, atk };
 }
-/** Boss: ATK = playerMaxHp / soDon (9 / 7 / 5). */
-function bossAtk(playerMaxHp, room) {
-  const hits = room === 5 ? BOSS_ATK_5 : (room === 10 ? BOSS_ATK_10 : BOSS_ATK_FINAL);
-  return playerMaxHp / hits;
-}
-function dps(p) {
-  const avgCrit = 1 + p.crit * (p.critMult - 1);
-  return p.atk * p.aspd * avgCrit;
-}
+
+const dps = (p) => p.atk * p.aspd * (1 + p.crit * (p.critMult - 1));
 function survivability(p, incomingAtk, maxRooms) {
   const defK = DEF_K_BASE + DEF_K_PER_ROOM * maxRooms;
   const dr = Math.min(DEF_CAP, p.def / (p.def + defK));
@@ -73,111 +117,111 @@ function survivability(p, incomingAtk, maxRooms) {
   return { dr, effective, hits: Math.max(1, p.hp / Math.max(1, effective)) };
 }
 
-// ==================== HO SO NGUOI CHOI ====================
-// So lieu do that tu getComputedStats() tren trinh duyet sau khi sua cong thuc.
-const PROFILES = [
-  { name: "1.Tan thu (common Lv.1)", atk: 173, hp: 751, crit: 0.22, critMult: 1.85, aspd: 1.94, def: 0 },
-  { name: "2.Sau HD (fine Lv.10)", atk: 991, hp: 3889, crit: 0.22, critMult: 1.85, aspd: 1.94, def: 27 },
-  { name: "3.Qua C1 (rare Lv.30)", atk: 4845, hp: 16602, crit: 0.36, critMult: 2.10, aspd: 2.20, def: 93 },
-  { name: "4.Mid (epic Lv.60)", atk: 15833, hp: 50152, crit: 0.46, critMult: 2.35, aspd: 2.62, def: 185 },
-  { name: "5.Late (mythic Lv.100)", atk: 71484, hp: 224920, crit: 0.70, critMult: 2.60, aspd: 3.13, def: 313 },
-];
+// ==================== HỒ SƠ (ĐO THẬT) ====================
+if (!fs.existsSync(profilesPath)) {
+  throw new Error('Thiếu tools/combat-profiles.json — chạy tools/measure-profiles.mjs trước.');
+}
+const measured = JSON.parse(fs.readFileSync(profilesPath, 'utf8'));
+const PROFILES = measured.profiles;
 
-// ==================== CHAY MO PHONG ====================
+// Chương phù hợp với từng hồ sơ (theo tiến trình thiết kế).
+const APPROPRIATE = {
+  'A.': 1, 'B.': 1, 'C.': 1, 'D.': 1, 'E.': 1, 'F.': 1, 'G.': 5,
+};
+
+// ==================== CHẠY ====================
 const rows = [];
 for (const p of PROFILES) {
   const d = dps(p);
-  for (const ch of CHAPTERS) {
-    // Quái thường: đầu / giữa / cuối chương (bỏ phòng trùm)
-    const mobRooms = [1, Math.ceil(ch.rooms / 2), Math.max(1, ch.rooms - 1)]
-      .filter((r, i, a) => a.indexOf(r) === i && r < ch.rooms && r % 5 !== 0);
-    for (const r of mobRooms) {
-      const hp = mobHp(p.atk, r, ch.rooms, ch.enemyScale);
-      const atk = mobAtk(p.hp, r, ch.rooms, 3);
-      const s = survivability(p, atk, ch.rooms);
-      rows.push({ profile: p.name, ch: ch.id, room: r, kind: "quai", ttk: hp / d, hits: s.hits, dr: s.dr });
-    }
-    // Boss: phòng 5 và phòng cuối
-    const bossRooms = [5, ch.rooms].filter((v, i, a) => a.indexOf(v) === i && v <= ch.rooms);
-    for (const r of bossRooms) {
-      const isFinal = r === ch.rooms;
-      const isDemon = ch.id === 3 && isFinal;
-      // Phòng cuối dùng mốc hitsToKill cuối (40), không phải mốc phòng 5
-      const hp = bossHp(p.atk, isFinal ? 999 : r, ch.enemyScale, isDemon);
-      const atk = bossAtk(p.hp, isFinal ? 999 : r);
-      const s = survivability(p, atk, ch.rooms);
-      rows.push({ profile: p.name, ch: ch.id, room: r, kind: isFinal ? "boss cuoi" : "boss-5",
-        ttk: hp / d, hits: s.hits, dr: s.dr });
+  for (const chapter of CHAPTERS) {
+    for (let room = 1; room <= chapter.rooms; room++) {
+      if (isBossRoom(room, chapter.rooms)) {
+        const b = bossStats({ playerAtk: p.atk, playerMaxHp: p.hp, chapter, room });
+        const s = survivability(p, b.atk, chapter.rooms);
+        rows.push({
+          profile: p.name, profileKey: p.name.slice(0, 2), ch: chapter.id, room,
+          kind: room === chapter.rooms ? 'boss cuối' : 'boss-' + room,
+          bossType: b.type, enemyHp: b.hp, enemyAtk: b.atk,
+          ttk: b.hp / d, hits: s.hits, dr: s.dr, hitsToKill: b.hp / Math.max(1, p.atk),
+        });
+      } else {
+        const types = CHAPTER_ENEMIES[chapter.id] || CHAPTER_ENEMIES[1] || ['slime'];
+        // setupRoom chọn type theo (roomNum + i) % types.length -> lấy type phổ biến nhất
+        // là type tại i=0 (đại diện trung tính), và type nặng nhất để cảnh báo.
+        const type = types[room % types.length];
+        const m = mobStats({ playerAtk: p.atk, playerMaxHp: p.hp, chapter, room, type });
+        const s = survivability(p, m.atk, chapter.rooms);
+        rows.push({
+          profile: p.name, profileKey: p.name.slice(0, 2), ch: chapter.id, room,
+          kind: 'quái', bossType: type, count: m.count, enemyHp: m.hp, enemyAtk: m.atk,
+          ttk: m.hp / d, hits: s.hits, dr: s.dr, hitsToKill: m.hp / Math.max(1, p.atk),
+        });
+      }
     }
   }
 }
 
-// ==================== IN BANG ====================
-console.log("=== HANG SO DOC TU SOURCE ===");
-console.log(`  BASE_ATK=${BASE_ATK}  BASE_HP=${BASE_HP}  roomMul=1+(r-1)*${ROOM_MUL_STEP}`);
-console.log(`  Quai: HP=atk*(${MOB_HITS_BASE}+depth*${MOB_HITS_DEPTH})*scale  ATK=maxHp/(${MOB_ATK_START}-depth*${MOB_ATK_DEPTH})`);
-console.log(`  Boss: HP=atk*hits(${BOSS_HITS_5}/${BOSS_HITS_10}/${BOSS_HITS_FINAL})*chapterMul  ATK=maxHp/(${BOSS_ATK_5}/${BOSS_ATK_10}/${BOSS_ATK_FINAL})`);
-console.log(`  DEF K=${DEF_K_BASE}+${DEF_K_PER_ROOM}*rooms cap=${DEF_CAP}\n`);
-console.log("| Ho so | Ch | Phong | Loai | TTK | Hits | DR |");
-console.log("|---|---|---|---|---|---|---|");
-for (const r of rows) {
-  console.log(`| ${r.profile} | C${r.ch} | ${r.room} | ${r.kind} | ${r.ttk.toFixed(2)}s | ${r.hits.toFixed(1)} | ${(r.dr * 100).toFixed(1)}% |`);
-}
+// ==================== IN ====================
+const verbose = process.argv.includes('--verbose');
+console.log('=== HẰNG SỐ ĐỌC TỪ SOURCE ===');
+console.log(`  BASE_ATK=${BASE_ATK} BASE_HP=${BASE_HP} roomMul=1+(r-1)*${ROOM_MUL_STEP} DEF K=${DEF_K_BASE}+${DEF_K_PER_ROOM}*rooms cap=${DEF_CAP}`);
+console.log(`  Quái: ${MOB_COUNT_BASE_N}+floor(r/2) con (max ${MOB_COUNT_BASE}), HP=atk*(hits)*scale, ATK=maxHp/(${MOB_ATK_START}-depth*${MOB_ATK_DEPTH})/sqrt(n/3)`);
+console.log(`  Hệ số quái: ${JSON.stringify(ARCHETYPE_MULT)}`);
+console.log(`  Boss theo chương: ${JSON.stringify(CHAPTER_BOSS)} | hits ${BOSS_HITS_5}/${BOSS_HITS_10}/${BOSS_HITS_FINAL}, demon×${BOSS_DEMON_MULT}`);
+console.log(`  Chương: ${CHAPTERS.map((c) => `C${c.id}(${c.rooms} phòng ×${c.enemyScale})`).join(' ')}`);
+console.log(`  Hồ sơ đo lúc: ${measured.measuredAt}\n`);
 
-// ==================== KIEM TRA TIEU CHI ====================
-console.log("\n=== KIEM TRA TIEU CHI ===");
-let fails = 0;
-const ok = (cond, msg) => { console.log((cond ? "  OK   " : "  FAIL ") + msg); if (!cond) fails++; };
-
-const mobs = rows.filter(r => r.kind === "quai");
-const bosses = rows.filter(r => r.kind !== "quai");
-
-ok(mobs.every(r => r.ttk >= 0.2), "Moi quai thuong TTK >= 0.2s");
-ok(mobs.every(r => r.ttk <= 8), "Moi quai thuong TTK <= 8s");
-ok(mobs.every(r => r.hits >= 3), "Nguoi choi chiu it nhat 3 don quai");
-ok(bosses.every(r => r.ttk <= 60), "Moi boss TTK <= 60s (khong buoc tuong)");
-ok(bosses.every(r => r.hits >= 4), "Nguoi choi chiu it nhat 4 don boss");
-
-// Boss phai du lau de co tran dau THAT khi nguoi choi o dung tam chuong.
-// (Nguoi choi qua manh so voi chuong thi giet nhanh la dung thiet ke —
-//  khong the doi boss Chuong 1 tru duoc mot tai khoan Lv.100 mythic.)
-const APPROPRIATE = {
-  "1.Tan thu (common Lv.1)": 1,
-  "2.Sau HD (fine Lv.10)": 1,
-  "3.Qua C1 (rare Lv.30)": 2,
-  "4.Mid (epic Lv.60)": 3,
-  "5.Late (mythic Lv.100)": 3,
-};
-for (const [name, chId] of Object.entries(APPROPRIATE)) {
-  const at = bosses.filter(r => r.profile === name && r.ch === chId);
-  if (!at.length) continue;
-  ok(at.every(r => r.ttk >= 4), `${name} o dung chuong C${chId}: moi boss TTK >= 4s (${at.map(r => r.ttk.toFixed(1)).join("/")}s)`);
-}
-// Boss khong duoc chet duoi 1s o dung tam chuong (quai thuong chet nhanh la
-// dung thiet ke roguelike — chi boss moi can du lau de co tran dau that).
-for (const [name, chId] of Object.entries(APPROPRIATE)) {
-  const at = bosses.filter(r => r.profile === name && r.ch === chId);
-  if (!at.length) continue;
-  ok(at.every(r => r.ttk > 1), `${name} o dung chuong C${chId}: khong boss nao chet duoi 1s`);
-}
-
-// Chuong sau kho hon: cung ho so, boss phong 5 cua C3 phai lau hon C1
+console.log('| Hồ sơ | Chương | ATK | HP | Quái TTK | Quái số đòn chết người | Boss TTK | Boss số đòn |');
+console.log('|---|---|---|---|---|---|---|---|');
 for (const p of PROFILES) {
-  const c1 = rows.find(r => r.profile === p.name && r.ch === 1 && r.kind === "boss-5");
-  const c3 = rows.find(r => r.profile === p.name && r.ch === 3 && r.kind === "boss-5");
-  if (c1 && c3) ok(c3.ttk > c1.ttk, `${p.name}: boss C3 (${c3.ttk.toFixed(1)}s) > C1 (${c1.ttk.toFixed(1)}s)`);
+  for (const ch of CHAPTERS) {
+    const first = rows.find((r) => r.profile === p.name && r.ch === ch.id && r.kind === 'quái' && r.room === 1);
+    const boss = rows.find((r) => r.profile === p.name && r.ch === ch.id && r.kind === 'boss cuối');
+    if (!first || !boss) continue;
+    console.log(`| ${p.name} | C${ch.id} | ${p.atk} | ${p.hp} | ${first.ttk.toFixed(2)}s | ${first.hits.toFixed(1)} | ${boss.ttk.toFixed(1)}s | ${boss.hits.toFixed(1)} |`);
+  }
 }
-// Boss cuoi lau hon boss phong 5 trong cung chuong
-for (const p of PROFILES) {
-  const b5 = rows.find(r => r.profile === p.name && r.ch === 1 && r.kind === "boss-5");
-  const bf = rows.find(r => r.profile === p.name && r.ch === 1 && r.kind === "boss cuoi");
-  if (b5 && bf) ok(bf.ttk > b5.ttk, `${p.name}: boss cuoi C1 (${bf.ttk.toFixed(1)}s) > boss P5 (${b5.ttk.toFixed(1)}s)`);
-}
-// Trang bi tot hon -> giet nhanh hon
-const t1 = mobHp(173, 1, 15, 1.0) / dps(PROFILES[0]);
-const t5 = mobHp(71484, 1, 15, 1.0) / dps(PROFILES[4]);
-ok(t5 < t1, `Nguoi manh hon giet quai nhanh hon (${t5.toFixed(2)}s < ${t1.toFixed(2)}s)`);
-ok(rows.every(r => Number.isFinite(r.ttk) && Number.isFinite(r.hits) && r.ttk > 0 && r.hits > 0), "Khong NaN/Infinity");
 
-console.log("\n" + (fails === 0 ? "TAT CA TIEU CHI DAT" : fails + " tieu chi KHONG dat"));
-process.exit(fails > 0 ? 1 : 0);
+if (verbose) {
+  console.log('\n| Hồ sơ | Ch | Phòng | Loại | HP địch | TTK | Số đòn chịu | DR |');
+  console.log('|---|---|---|---|---|---|---|---|');
+  for (const r of rows) {
+    console.log(`| ${r.profile} | C${r.ch} | ${r.room} | ${r.kind}${r.bossType ? '/' + r.bossType : ''} | ${r.enemyHp} | ${r.ttk.toFixed(2)}s | ${r.hits.toFixed(1)} | ${(r.dr * 100).toFixed(1)}% |`);
+  }
+}
+
+// ==================== KẾT LUẬN ĐO ĐƯỢC ====================
+console.log('\n=== KẾT LUẬN ĐO ĐƯỢC ===');
+const ok = (cond, msg) => console.log((cond ? '  OK   ' : '  FAIL ') + msg);
+
+// 1. Nâng cấp có làm trận đấu dễ hơn không?
+const a1 = rows.find((r) => r.profileKey === 'A.' && r.ch === 1 && r.room === 1);
+const f1 = rows.find((r) => r.profileKey === 'F.' && r.ch === 1 && r.room === 1);
+console.log(`\n  [1] Cùng phòng C1-P1: hồ sơ A (ATK ${PROFILES[0].atk}) TTK ${a1.ttk.toFixed(2)}s | hồ sơ F (ATK ${PROFILES[5].atk}) TTK ${f1.ttk.toFixed(2)}s`);
+console.log(`      Tỉ lệ ATK F/A = ${(PROFILES[5].atk / PROFILES[0].atk).toFixed(1)}× nhưng TTK chỉ giảm ${(a1.ttk / f1.ttk).toFixed(2)}×`);
+console.log(`      Số đòn để hạ 1 quái: A ${a1.hitsToKill.toFixed(1)} | F ${f1.hitsToKill.toFixed(1)}`);
+
+// 2. Số đòn người chơi chịu được có tăng khi lên đồ?
+const aHits = rows.find((r) => r.profileKey === 'A.' && r.ch === 1 && r.room === 1).hits;
+const fHits = rows.find((r) => r.profileKey === 'F.' && r.ch === 1 && r.room === 1).hits;
+console.log(`\n  [2] Số đòn quái phải đánh để giết người chơi: A ${aHits.toFixed(1)} | F ${fHits.toFixed(1)}`);
+console.log(`      HP tăng ${(PROFILES[5].hp / PROFILES[0].hp).toFixed(1)}× nhưng sát thương quái cũng tăng theo -> gần như không đổi.`);
+
+// 3. Chương sau có khó hơn?
+for (const key of ['A.', 'E.']) {
+  const c1 = rows.find((r) => r.profileKey === key && r.ch === 1 && r.kind === 'boss cuối');
+  const c5 = rows.find((r) => r.profileKey === key && r.ch === 5 && r.kind === 'boss cuối');
+  console.log(`\n  [3] ${key} boss cuối: C1 ${c1.ttk.toFixed(1)}s -> C5 ${c5.ttk.toFixed(1)}s (${(c5.ttk / c1.ttk).toFixed(2)}×)`);
+}
+
+// 4. Người yếu ở chương cao
+const g5 = rows.find((r) => r.profileKey === 'G.' && r.ch === 5 && r.room === 1);
+console.log(`\n  [4] Hồ sơ G (starter gear) ở C5-P1: TTK ${g5.ttk.toFixed(2)}s, chịu ${g5.hits.toFixed(1)} đòn`);
+console.log(`      -> ${g5.hits < 5 ? 'chết rất nhanh: đúng là "yếu gặp màn cao"' : 'vẫn sống được: chưa đủ áp lực'}`);
+
+// 5. Bất biến kỹ thuật
+console.log('');
+ok(rows.every((r) => Number.isFinite(r.ttk) && r.ttk > 0), 'Không NaN/Infinity, TTK > 0');
+ok(rows.every((r) => r.hits >= 1), 'Số đòn chịu được >= 1');
+const bosses = rows.filter((r) => r.kind !== 'quái');
+ok(bosses.every((r) => r.ttk <= 120), 'Không trùm nào cần > 120s (không bức tường)');

@@ -3,7 +3,8 @@
 Ngày chạy: 07/11/2026 (UTC+07:00). Nhánh `codex/artemis-new-player-hardening`. Node `v24.19.0`, npm `11.17.0`. Không chạy DB thật, không gọi API ghi production.
 
 > **Cập nhật sau Đợt 1 + 2 + 3** (xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`,
-> `12-E2E-NEW-PLAYER.md`): tổng suite nay là **179 test — 171 pass / 6 fail / 2 skip**.
+> `12-E2E-NEW-PLAYER.md`, `13-GAME-BALANCE-MEASURED.md`): tổng suite nay là
+> **181 test — 173 pass / 6 fail / 2 skip**.
 > Suite mới đều pass: `canonical-new-account` (15), `subsystem-save-persistence` (12),
 > `subsystem-save-roundtrip` (1), `beginner-journey-decisions` (4). Thêm
 > `tools/e2e-new-player.mjs`: **17/17 PASS** trên server thật + DB bộ nhớ.

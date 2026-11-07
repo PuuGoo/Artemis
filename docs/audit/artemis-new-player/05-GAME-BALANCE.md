@@ -1,5 +1,10 @@
 # 05 — Đo baseline combat và progression
 
+> **Cập nhật Đợt 4 (xem `13-GAME-BALANCE-MEASURED.md`):** simulator đã được sửa cho khớp
+> source thật (6 chương, số quái, hệ số archetype, boss theo chương) và hồ sơ người chơi
+> nay **đo bằng `getComputedStats()`** thay vì gõ tay. Số liệu dưới đây là baseline cũ
+> (3 chương, hồ sơ hardcode) — giữ lại để đối chiếu, **không dùng làm kết luận hiện tại**.
+
 ## Kết quả thực thi
 
 Baseline đọc tại HEAD `3838b40`, Node thực `v24.19.0`. Không chỉnh application/simulator, không browser automation, không HTTP/DB, không ghi save. Chạy `node tools/combat-sim.mjs` **exit 0**, đọc output bằng chương trình: **70 dòng mô phỏng, 27 tiêu chí OK, không tiêu chí FAIL**. Chạy lại riêng simulator cũng exit 0 cùng số dòng/tiêu chí. Đây là mô hình giải tích TTK/hits-to-die, **không phải mô phỏng đầy đủ trận đấu**.

@@ -1,0 +1,100 @@
+{
+  "measuredAt": "2026-11-07T02:01:27.245Z",
+  "source": "getComputedStats() trong public/index.html, đo trên Chrome local",
+  "note": "Hồ sơ dựng bằng cách mặc đồ thật qua SaveState; KHÔNG ghi save, KHÔNG dùng dữ liệu người chơi.",
+  "browser": "156.0.8078.80",
+  "errors": [],
+  "profiles": [
+    {
+      "name": "A. Tân thủ (tay không, Alex 0★)",
+      "atk": 152,
+      "hp": 775,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3215,
+      "hero": "alex",
+      "heroStar": 0
+    },
+    {
+      "name": "B. Starter (Cung Gỉ Sét Lv.1)",
+      "atk": 164,
+      "hp": 775,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3289,
+      "hero": "alex",
+      "heroStar": 0
+    },
+    {
+      "name": "C. Nâng cấp đầu (Lv.5 + uncommon)",
+      "atk": 183,
+      "hp": 868,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3514,
+      "hero": "alex",
+      "heroStar": 0
+    },
+    {
+      "name": "D. Giữa chương 1 (rare Lv.15)",
+      "atk": 491,
+      "hp": 1929,
+      "aspd": 2.13,
+      "crit": 0.27,
+      "critMult": 1.85,
+      "def": 4,
+      "dmgReduction": 0.0018,
+      "powerScore": 10028,
+      "hero": "alex",
+      "heroStar": 2
+    },
+    {
+      "name": "E. Cuối chương 1 (epic Lv.30, 4★)",
+      "atk": 1073,
+      "hp": 4020,
+      "aspd": 2.62,
+      "crit": 0.34,
+      "critMult": 1.85,
+      "def": 8,
+      "dmgReduction": 0.0036,
+      "powerScore": 19500,
+      "hero": "alex",
+      "heroStar": 4
+    },
+    {
+      "name": "F. Người cũ quay lại (mythic Lv.100, 8★)",
+      "atk": 5934,
+      "hp": 19489,
+      "aspd": 3.13,
+      "crit": 0.52,
+      "critMult": 1.85,
+      "def": 16,
+      "dmgReduction": 0.0072,
+      "powerScore": 74290,
+      "hero": "alex",
+      "heroStar": 8
+    },
+    {
+      "name": "G. Yếu ở chương cao (starter gear)",
+      "atk": 164,
+      "hp": 775,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3289,
+      "hero": "alex",
+      "heroStar": 0
+    }
+  ]
+}

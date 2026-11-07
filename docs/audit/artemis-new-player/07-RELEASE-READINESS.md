@@ -25,7 +25,7 @@ Chi tiết: `03-BUG-REPORT.md`, `04-CHANGES.md`, `06-REGRESSION.md`, `11-NEW-PLA
 4. Full suite vẫn có failures baseline chưa xử lý. Không xem PASS-focused hoặc skip2 suite DB là regression toàn repo xanh.
 5. Buffer RAM chưa bảo đảm tiến trình chưa ACK khi crash/offline/logout/conflict. Legacy clients không owner-binding, admin save writes và sâu corrupt snapshot còn cần audit. (`gameMode/modeBest/guild/garden/plinko` đã có writer/schema persistence — xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`.)
 6. JWT revocation sau logout/reset-password chưa được giải quyết; quyền admin immutable provisioning cần review riêng.
-7. Chưa đủ profile A–G/simulator parity/win rate để tuyên bố nâng cấp tạo lợi ích campaign đúng yêu cầu. Không đổi balance hàng loạt.
+7. **Đợt 4 đã đo được nhưng chưa sửa:** simulator khớp source (6 chương) và hồ sơ A–G đo bằng `getComputedStats()`. Kết quả: ATK tăng **39×** chỉ giảm TTK **1,96×**; HP tăng **25×** nhưng số đòn chịu vẫn **16,1**; hồ sơ yếu ở chương 5 vẫn chịu đúng 16 đòn. Đề xuất tách campaign sang độ khó tuyệt đối nằm ở `13-GAME-BALANCE-MEASURED.md` §4 — **chưa triển khai**, cần phê duyệt và playtest người thật.
 8. Sự cố baseline: hai test cũ có thể đã xóa rate-limit records ở DB đọc từ `.env`; đích/tác động chưa biết. Chủ repository cần kiểm audit/log bằng quyền phù hợp. Không khẳng định phiên này “production untouched”.
 
 ## Rollback considerations — chưa chạy
