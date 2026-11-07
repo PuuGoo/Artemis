@@ -3,6 +3,7 @@ import { getCurrentPlayer, json, fail, readJsonBody, bumpRateLimit, clientIp } f
 import { sanitizeSave, MAX_SAVE_BYTES } from "../lib/saveSchema.js";
 import { validateEconomyDelta, validateSeasonDelta } from "../lib/economy.js";
 import { NEW_ACCOUNT_INIT_VERSION, buildCanonicalNewAccountSave } from "../lib/initialState.js";
+import { validateEconomyBudget } from "../lib/economyLedger.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -102,7 +103,8 @@ export async function PUT(request) {
   const now = new Date();
 
   const existing = await saves.findOne({ playerId }, { projection: {
-    revision: 1, "data.gold": 1, "data.gems": 1, "data.lifetimeStats": 1, "data.season": 1,
+    revision: 1, ledger: 1,
+    "data.gold": 1, "data.gems": 1, "data.lifetimeStats": 1, "data.season": 1,
     "data.gameMode": 1, "data.modeBest": 1, "data.guild": 1, "data.garden": 1, "data.plinko": 1,
   } });
   const currentRevision = existing ? (existing.revision || 1) : 0;
@@ -132,6 +134,7 @@ export async function PUT(request) {
   // ===== Kiểm tra kinh tế phía server =====
   // Không tin client: chặn việc tự cấp vàng/đá quý qua một request duy nhất.
   // So sánh với bản ghi đang có trong DB, dùng số revision tăng làm mốc.
+  // (1) Hạn mức delta cũ — chặn payload khổng lồ trước khi tính ngân sách.
   const economy = validateEconomyDelta(existing?.data || null, check.data, 1);
   if (!economy.ok) {
     const save = await saves.findOne({ playerId }, { projection: { revision: 1, data: 1 } });
@@ -141,6 +144,24 @@ export async function PUT(request) {
       code: economy.code,
       detail: economy.detail,
       // Trả lại bản ghi server để client không ghi đè dữ liệu hỏng lên máy.
+      conflict: true,
+      serverRevision: save?.revision || 0,
+      serverData: save?.data || null,
+    }, 422);
+  }
+
+  // ===== (2) Ngân sách theo ĐỒNG HỒ SERVER =====
+  // Delta cũ chỉ chặn 500.000 vàng/lần lưu; kẻ gian vẫn mint được 500k mỗi revision.
+  // Ngân sách nạp theo thời gian thật nên trần thu nhập phụ thuộc thời gian đã chơi,
+  // không phụ thuộc số lần lưu. Xem lib/economyLedger.js.
+  const budget = validateEconomyBudget(existing?.data || null, check.data, existing?.ledger || null);
+  if (!budget.ok) {
+    const save = await saves.findOne({ playerId }, { projection: { revision: 1, data: 1 } });
+    return json({
+      ok: false,
+      error: "Kinh tế không hợp lệ so với thời gian chơi.",
+      code: budget.code,
+      message: budget.message,
       conflict: true,
       serverRevision: save?.revision || 0,
       serverData: save?.data || null,
@@ -169,6 +190,8 @@ export async function PUT(request) {
     playerId,
     username: player.username,
     data: check.data,
+    // Ngân sách còn lại sau lần lưu này — mốc để lần sau refill theo thời gian.
+    ledger: budget.ledger,
     revision: nextRevision,
     updatedAt: now,
     updatedIp: clientIp(request).slice(0, 45),
