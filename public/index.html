@@ -6315,6 +6315,55 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (heroArtFile) hero.avatar = `assets/heroes/${heroArtFile}.png`;
       }
 
+      // Tab Anh Hùng dùng dữ liệu PDF với vài id khác HEROES -> cần bí danh.
+      const HERO_ART_ALIASES = { mumy: 'mymu' };
+
+      function getHeroArtFile(heroId) {
+        if (!heroId) return null;
+        return HERO_ART_FILES[heroId] || HERO_ART_FILES[HERO_ART_ALIASES[heroId]] || null;
+      }
+
+      // Cache HTMLImageElement để vẽ ảnh chân dung vào canvas (chiến đấu + bệ đá lobby).
+      const HERO_ART_IMG_CACHE = new Map();
+      function getHeroArtImage(heroId) {
+        if (!heroId) return null;
+        if (HERO_ART_IMG_CACHE.has(heroId)) return HERO_ART_IMG_CACHE.get(heroId);
+        const file = getHeroArtFile(heroId);
+        let img = null;
+        if (file) {
+          img = new Image();
+          img.decoding = 'async';
+          img.src = `assets/heroes/${file}.png`;
+        }
+        HERO_ART_IMG_CACHE.set(heroId, img);
+        return img;
+      }
+      function isHeroArtReady(img) {
+        return Boolean(img && img.complete && img.naturalWidth > 0);
+      }
+      // Vẽ ảnh chân dung: canh giữa theo trục x, chân đặt đúng feetY, cao `height` px.
+      // Ảnh chưa tải xong -> trả false để nơi gọi vẽ nhân vật vector như cũ.
+      function drawHeroArtOnCanvas(ctx, img, opts = {}) {
+        if (!isHeroArtReady(img)) return false;
+        const centerX = opts.centerX || 0;
+        const feetY = opts.feetY || 0;
+        const height = opts.height || 46;
+        const ratio = (img.naturalWidth / img.naturalHeight) || 0.66;
+        const drawW = height * ratio;
+        ctx.save();
+        if (opts.flip) ctx.scale(-1, 1);
+        ctx.drawImage(img, centerX - drawW / 2, feetY - height, drawW, height);
+        ctx.restore();
+        return true;
+      }
+
+      // Thẻ <img> chân dung cho UI HTML (thay emoji), rơi về emoji nếu chưa có ảnh.
+      function heroArtImgTag(heroId, fallbackEmoji, extraClass = 'w-full h-full object-contain') {
+        const file = getHeroArtFile(heroId);
+        if (!file) return fallbackEmoji || '';
+        return `<img src="assets/heroes/${file}.png" alt="" draggable="false" loading="lazy" decoding="async" class="${extraClass}" />`;
+      }
+
       // ==================== ARCHERO 2 WIKI 0★ -> 8★ STAR MILESTONES ====================
       const HERO_STAR_MILESTONES = [
         {
@@ -13659,6 +13708,13 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           sctx.restore();
         }
 
+        // Ảnh chân dung thật (PNG) thay cho toàn bộ thân vector trên bệ đá.
+        // Ảnh chưa tải xong -> vẽ vector như cũ, frame sau tự đổi sang ảnh.
+        const stageArtImg = getHeroArtImage(heroId);
+        const useStageArt = isHeroArtReady(stageArtImg);
+        if (useStageArt) {
+          drawHeroArtOnCanvas(sctx, stageArtImg, { feetY: 6, height: 116 });
+        } else {
         // Flowing Cape behind torso (Reacts to Hero + Equipped Armor + Skin)
         sctx.save();
         if (heroId === 'artemis') {
@@ -14593,6 +14649,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           sctx.ellipse(0, -4, 24, 5.5, 0, 0, Math.PI * 2);
           sctx.stroke();
           sctx.restore();
+        }
         }
         // Render Star Arc (0★ to 8★) above hero head on Stage Canvas
         const totalStars = Math.max(1, Math.min(8, heroStar || 8));
@@ -25671,7 +25728,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   <span>🪐</span>
                   <span>Xem trước 5 sao</span>
                 </button>
-                <div class="text-7xl drop-shadow-[0_10px_12px_rgba(0,0,0,0.4)] mb-1">🦆✨</div>
+                <div class="h-32 w-full flex items-end justify-center drop-shadow-[0_10px_12px_rgba(0,0,0,0.4)] mb-1">
+                  ${heroArtImgTag(heroMeta.id, '<span class="text-7xl">🦆✨</span>', 'max-h-32 object-contain object-bottom')}
+                </div>
                 <div class="w-44 h-6 rounded-t-xl bg-lime-500 border-t-2 border-lime-300"></div>
                 <div class="w-48 h-5 rounded-b-xl bg-amber-600 border-b-2 border-amber-800"></div>
               </div>
@@ -25781,8 +25840,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   </button>
                 </div>
 
-                <div class="w-28 h-28 rounded-full flex items-center justify-center text-6xl drop-shadow-[0_10px_14px_rgba(0,0,0,0.45)]" style="background:${heroMeta.avatarBg}">
-                  ${heroMeta.spriteEmoji}
+                <div class="w-28 h-28 rounded-full flex items-center justify-center text-6xl overflow-hidden drop-shadow-[0_10px_14px_rgba(0,0,0,0.45)]" style="background:${heroMeta.avatarBg}">
+                  ${heroArtImgTag(heroMeta.id, heroMeta.spriteEmoji, 'w-full h-full object-contain object-top scale-110')}
                 </div>
 
                 <!-- White Silver-Riveted Name Plate -->
@@ -25872,8 +25931,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   <div data-vn-select-hero="${h.id}" class="cursor-pointer relative rounded-2xl border-2 p-2 flex flex-col items-center justify-between transition ${isSel ? 'border-cyan-300 bg-sky-500/30 shadow-lg' : 'border-slate-700 bg-[#1b2a4a] hover:border-sky-400/60'}">
                     ${isEquipped ? '<span class="absolute top-1 inset-x-6 rounded-full bg-slate-950/85 text-emerald-300 font-black text-[9px] text-center py-0.5">Đang Dùng</span>' : ''}
                     ${!h.unlocked ? '<span class="absolute top-1.5 left-1.5 text-xs">🔒</span>' : ''}
-                    <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl my-2 shadow-inner" style="background:${h.avatarBg}">
-                      ${h.spriteEmoji}
+                    <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl my-2 shadow-inner overflow-hidden" style="background:${h.avatarBg}">
+                      ${heroArtImgTag(h.id, h.spriteEmoji, 'w-full h-full object-contain object-top scale-110')}
                     </div>
                     <div class="font-black text-xs text-white">${h.name}</div>
 
@@ -31614,6 +31673,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           ctx.restore();
         }
 
+        // Ảnh chân dung thật (PNG) thay cho toàn bộ thân vector khi ảnh đã tải xong.
+        // Ảnh chưa tải (lần đầu vào trận) thì vẽ vector như cũ rồi tự đổi ở frame sau.
+        const battleArtImg = getHeroArtImage(p.hero.id);
+        const useArtSprite = isHeroArtReady(battleArtImg);
+        if (useArtSprite) {
+          drawHeroArtOnCanvas(ctx, battleArtImg, { feetY: 16, height: 48, flip: facingLeft });
+        } else {
         // Flip horizontally for character body when aiming left
         ctx.save();
         if (facingLeft) ctx.scale(-1, 1);
@@ -31936,8 +32002,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         ctx.restore(); // end horizontal flip
 
-        // 6. Held S-Tier Weapon Rotating Toward Target
+        // 6. Held S-Tier Weapon Rotating Toward Target (chỉ vẽ khi dùng sprite vector,
+        // vì ảnh PNG đã có vũ khí trong tay)
         drawHeroWeaponSprite(ctx, p, nowMs);
+        }
 
         ctx.restore(); // end bobbing
 

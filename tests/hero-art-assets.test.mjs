@@ -73,3 +73,40 @@ test('mỗi file ảnh chân dung tồn tại, là PNG RGBA, đủ nét và khô
 test('ảnh toàn thân được neo mép trên khi bị cắt vào khung vuông', () => {
   assert.match(html, /img\[src\^="assets\/heroes\/"\]\s*\{\s*object-position: top center;/);
 });
+
+test('tab Anh Hùng (dữ liệu PDF) hiển thị ảnh thật thay cho emoji', () => {
+  // Bí danh: hero "Mumy" trong dữ liệu PDF dùng chung ảnh với "Mymu".
+  assert.match(html, /const HERO_ART_ALIASES = \{ mumy: 'mymu' \};/);
+  assert.match(html, /function getHeroArtFile\(heroId\)/);
+  assert.match(html, /function heroArtImgTag\(heroId/);
+
+  // Bệ đá lớn + lưới 21 hero đều phải dùng heroArtImgTag, không còn render emoji trần.
+  const showcase = html.slice(html.indexOf('function renderVnHeroesAndWardrobeUI'), html.indexOf('function renderVnCollectiblesTabUI'));
+  assert.ok(showcase.length > 1000, 'không tìm thấy renderVnHeroesAndWardrobeUI');
+  assert.match(showcase, /heroArtImgTag\(heroMeta\.id, heroMeta\.spriteEmoji/);
+  assert.match(showcase, /heroArtImgTag\(h\.id, h\.spriteEmoji/);
+  assert.equal(/\n\s*\$\{heroMeta\.spriteEmoji\}\s*\n/.test(showcase), false, 'vẫn còn chỗ render emoji trần cho hero đang chọn');
+  assert.equal(/\n\s*\$\{h\.spriteEmoji\}\s*\n/.test(showcase), false, 'vẫn còn chỗ render emoji trần trong lưới hero');
+});
+
+test('chiến đấu và bệ đá lobby vẽ ảnh chân dung lên canvas, có fallback vector', () => {
+  // Loader ảnh + helper vẽ dùng chung cho cả hai nơi.
+  assert.match(html, /function getHeroArtImage\(heroId\)/);
+  assert.match(html, /function isHeroArtReady\(img\)/);
+  assert.match(html, /function drawHeroArtOnCanvas\(ctx, img, opts = \{\}\)/);
+
+  const battle = html.slice(html.indexOf('function drawChibiHeroSprite(ctx, p, nowMs)'), html.indexOf('function drawHeroWeaponSprite(ctx, p, nowMs)'));
+  assert.match(battle, /const battleArtImg = getHeroArtImage\(p\.hero\.id\);/);
+  assert.match(battle, /if \(useArtSprite\) \{\s*\n\s*drawHeroArtOnCanvas\(ctx, battleArtImg, \{ feetY: 16, height: 48, flip: facingLeft \}\);/);
+  assert.match(battle, /\} else \{/, 'phải còn nhánh vẽ vector khi ảnh chưa tải xong');
+  // Vũ khí vector chỉ vẽ trong nhánh fallback (ảnh PNG đã có vũ khí).
+  const weaponCall = battle.lastIndexOf('drawHeroWeaponSprite(ctx, p, nowMs);');
+  assert.ok(weaponCall > battle.indexOf('} else {'), 'vũ khí vector phải nằm trong nhánh fallback');
+
+  const stage = html.slice(html.indexOf('function renderHeroStageCanvas(nowMs)'), html.indexOf('function renderHeroRoster()'));
+  assert.match(stage, /const stageArtImg = getHeroArtImage\(heroId\);/);
+  assert.match(stage, /drawHeroArtOnCanvas\(sctx, stageArtImg, \{ feetY: 6, height: 116 \}\);/);
+  // Thanh sao 0★-8★ vẫn phải render sau khối thân nhân vật.
+  assert.ok(stage.indexOf('// Render Star Arc') > stage.indexOf('drawHeroArtOnCanvas(sctx, stageArtImg'));
+});
+
