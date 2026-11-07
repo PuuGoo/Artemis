@@ -1,6 +1,11 @@
 # 06 — Regression cuối
 
-Ngày chạy: 07/11/2026 (UTC+07:00). Nhánh `codex/artemis-new-player-hardening`, HEAD vẫn `3838b40` (chưa commit). Node `v24.19.0`, npm `11.17.0`. Không push/merge/deploy, không chạy DB thật, không gọi API ghi production.
+Ngày chạy: 07/11/2026 (UTC+07:00). Nhánh `codex/artemis-new-player-hardening`. Node `v24.19.0`, npm `11.17.0`. Không chạy DB thật, không gọi API ghi production.
+
+> **Cập nhật sau Đợt 1 + Đợt 2** (xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`): tổng suite nay là
+> **175 test — 167 pass / 6 fail / 2 skip**. Ba suite mới thêm 28 case đều pass:
+> `canonical-new-account` (15), `subsystem-save-persistence` (12), `subsystem-save-roundtrip` (1).
+> Sáu failure vẫn là đúng sáu suite baseline ở mục 2, không phát sinh regression mới.
 
 Số liệu dưới đây là **output thật** của lần chạy cuối, sau khi tất cả thay đổi local đã áp. Log giữ ngoài repo: `artemis-regression-test-final.log`, `artemis-regression-sim-final.log`, `artemis-new-suites.log`, `artemis-local-browser.log`, `artemis-head-six.log` trong `C:/Users/PuuGoo/AppData/Local/hermes/cache/scratch/`.
 
@@ -9,7 +14,8 @@ Số liệu dưới đây là **output thật** của lần chạy cuối, sau k
 | Lệnh | Exit | Kết quả |
 |---|---:|---|
 | `npm run check` | 0 | 7 module server/cloud parse OK |
-| `npm test` | 1 | 147 test entry: **139 pass / 6 fail / 2 skip** |
+| `npm test` | 1 | 147 test entry: **139 pass / 6 fail / 2 skip** (trước Đợt 1/2) |
+| `node --test tests/*.test.mjs` | 1 | **175 test — 167 pass / 6 fail / 2 skip** (sau Đợt 1/2) |
 | `npm run sim` | 0 | Simulator chạy, tiêu chí nội bộ OK (sai lệch parity ở `05-GAME-BALANCE.md`) |
 | `node --test <11 suite mới + 2 suite isolation>` | 0 | **105 pass / 0 fail / 2 skip** (107 entry) |
 | `node tools/audit-new-player-browser.mjs` | 0 | Chrome thật, fixture local: **15/15 PASS**, `errors=[]` |
@@ -47,6 +53,9 @@ Baseline ban đầu fail `admin.test.mjs` và `integration.test.mjs` vì `ECONNR
 | Season round-trip writer | `save-writer-roundtrip.test.mjs` | 2 |
 | An toàn test harness | `audit-test-isolation.test.mjs` | 4 |
 | Schema hostile input | `schema-hostile-input.test.mjs` | 5 |
+| Khởi tạo tài khoản mới (server seed, restore, revision 0, carry-forward) | `canonical-new-account.test.mjs` | 15 |
+| Persistence 5 hệ (writer, sanitizer, dữ liệu bẩn, legacy absence) | `subsystem-save-persistence.test.mjs` | 12 |
+| Round-trip writer→sanitizer→load thật của 5 hệ | `subsystem-save-roundtrip.test.mjs` | 1 |
 | Admin/integration | 2 suite | 2 skip có lý do |
 
 RED→GREEN đã quan sát cho từng nhóm: cloud load fail (6/6 sau khi đỏ), login single-flight, owner binding, hash collision, revision contract, owner mismatch, season projection, `_lootCount`, starter flag, free weapon, hero ownership (6 pass/19 fail trên HEAD → 25/25), dev gate public-host (4 fail → 33/33), cookie (1 fail → 3/3), index error (3 fail → 4/4), writer season (1 fail → 2/2).
@@ -65,7 +74,8 @@ RED→GREEN đã quan sát cho từng nhóm: cloud load fail (6/6 sau khi đỏ)
 - Đăng ký + hành trình tân thủ trên production bằng account thật (vault không có credential Artemis; không yêu cầu mật khẩu qua chat).
 - Logout → login lại, session hết hạn, multi-tab cookie switch.
 - Offline/crash trước ACK, conflict recovery.
-- `gameMode/modeBest/guild/garden/plinko` persistence.
+- ~~`gameMode/modeBest/guild/garden/plinko` persistence~~ → đã có writer + schema + round-trip
+  trong VM; **chưa** kiểm trên browser thật hoặc Mongo thật.
 - Profile A–G, win rate, thời gian vượt chương.
 - Index `uniq_player` options thực tế trên deployment.
 

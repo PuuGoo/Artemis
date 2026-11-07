@@ -11,16 +11,18 @@ Không được deploy bản audit này theo yêu cầu người dùng. “Có p
 - Debug query/storage chỉ local/offline, không mở trên public hostname.
 - Cookie malformed fail-closed; index errors không bị nuốt toàn bộ.
 - Test harness không còn tự đọc `.env`/xóa rate-limit khi chạy npm test, DB integration opt-in bị chặn khi chưa xác minh cô lập.
+- **Đợt 1:** tài khoản mới được máy chủ cấp seed chuẩn + `initVersion`; `PUT revision 0` trên tài khoản đã đánh dấu bị từ chối; `GET` khôi phục seed khi bản ghi mất; tutorial nằm trong seed nên sống qua reload.
+- **Đợt 2:** `gameMode`/`modeBest`/`guild`/`garden`/`plinko` được writer ghi và sanitizer whitelist; client cũ không ghi đè mất dữ liệu (carry-forward).
 
-Chi tiết: `03-BUG-REPORT.md`, `04-CHANGES.md`, `06-REGRESSION.md` và báo cáo từng workstream. Các sửa source chưa ảnh hưởng production.
+Chi tiết: `03-BUG-REPORT.md`, `04-CHANGES.md`, `06-REGRESSION.md`, `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md` và báo cáo từng workstream.
 
 ## Release blockers
 
-1. **P0 initial-save và economy provenance còn mở.** Local helper vẫn chấp nhận số dư đầu tự khai1e12 và mint nhiều revision trong delta cap. Snapshot shape/schema không chứng minh nguồn reward/ownership/cost. Cần thiết kế tương thích riêng.
+1. **Economy provenance sau lần lưu đầu vẫn mở (P0).** Tài khoản mới không còn tự khai được số dư khởi tạo, nhưng snapshot các lần sau vẫn tự khai vàng/đá quý trong giới hạn delta (`500.000`/revision, `20.000` gem/revision) mà không có chứng cứ đã chơi/nhận thưởng. Cần server-authoritative action ledger. Tài khoản legacy (không `initVersion`) vẫn đi đường cũ ở lần lưu đầu.
 2. Chưa có Mongo test cô lập, chưa xác minh atomic behavior/index options thực, chưa chạy auth/register/logout/login persistence integration thật. Concurrency fake DB không là Mongo proof.
 3. **Chưa tạo tài khoản production.** Chỉ có anonymous GET-only auth smoke và validation rỗng. Authenticated new-player journey/reload/login lại production BLOCKED; deployment SHA chưa biết.
 4. Full suite vẫn có failures baseline chưa xử lý. Không xem PASS-focused hoặc skip2 suite DB là regression toàn repo xanh.
-5. Buffer RAM chưa bảo đảm tiến trình chưa ACK khi crash/offline/logout/conflict. **gameMode/modeBest/guild/garden/plinko còn thiếu writer/schema persistence**, dù season đã được vá writer riêng. Legacy clients không owner-binding, admin save writes và sâu corrupt snapshot còn cần audit.
+5. Buffer RAM chưa bảo đảm tiến trình chưa ACK khi crash/offline/logout/conflict. Legacy clients không owner-binding, admin save writes và sâu corrupt snapshot còn cần audit. (`gameMode/modeBest/guild/garden/plinko` đã có writer/schema persistence — xem `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`.)
 6. JWT revocation sau logout/reset-password chưa được giải quyết; quyền admin immutable provisioning cần review riêng.
 7. Chưa đủ profile A–G/simulator parity/win rate để tuyên bố nâng cấp tạo lợi ích campaign đúng yêu cầu. Không đổi balance hàng loạt.
 8. Sự cố baseline: hai test cũ có thể đã xóa rate-limit records ở DB đọc từ `.env`; đích/tác động chưa biết. Chủ repository cần kiểm audit/log bằng quyền phù hợp. Không khẳng định phiên này “production untouched”.

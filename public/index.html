@@ -10300,6 +10300,14 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               runeRuinsState: this.runeRuinsState,
               wikiEventsState: this.wikiEventsState,
               season: this.season,
+              // Chế độ chơi + kỷ lục + các hệ mở rộng. Luôn gửi key (null khi
+              // chưa mở) để API phân biệt "chưa từng có" với "đã xoá" — client
+              // cũ không gửi thì server giữ nguyên giá trị đang có trong DB.
+              gameMode: this.gameMode,
+              modeBest: this.modeBest,
+              guild: this.guild,
+              garden: this.garden,
+              plinko: this.plinko,
               runes: this.runes,
               talents: this.talents,
               bestRooms: this.bestRooms,

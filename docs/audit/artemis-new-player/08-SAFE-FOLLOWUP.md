@@ -4,7 +4,13 @@
 
 ## 1. Canonical initial state và nhận dạng tài khoản mới
 
-1. Chốt spec initial state từ fixture thực: level1, gold500, gems50, stamina20, Alex0★, không gear/talent mạnh; pet hiện là archetype miễn phí, chưa có entitlement riêng. Chốt toàn bộ field thực, không chỉ ba currencies.
+> **Trạng thái: đã triển khai một phần (Đợt 1).** `lib/initialState.js` sinh seed chuẩn;
+> `api/auth/register.js` tạo save revision 1 + `initVersion`; `api/save.js` khôi phục seed khi
+> bản ghi mất và từ chối `PUT revision 0` trên tài khoản đã đánh dấu. Bằng chứng trước/sau
+> trong `11-NEW-PLAYER-INIT-AND-PERSISTENCE.md`. **Còn mở:** tài khoản legacy không marker
+> vẫn đi đường lưu-đầu cũ; chưa chạy trên Mongo thật.
+
+1. Chốt spec initial state từ fixture thực: level1, gold500, gems50, stamina20, Alex0★, không gear/talent mạnh; pet hiện là archetype miễn phí, chưa có entitlement riêng. Chốt toàn bộ field thực, không chỉ ba currencies. → **Done**: `buildCanonicalNewAccountData()` khớp `SaveState` defaults, có test khóa từng field.
 2. Thêm marker/version server cho **player mới tạo sau rollout**. Không suy “tân thủ” từ thiếu save, thiếu field hoặc level thấp. Player cũ không marker giữ chính sách recovery riêng, không bị apply defaults.
 3. Tạo canonical save server với identity/revision/idempotency rõ, trước khi trả registration success. Đánh giá transaction hoặc protocol recoverable giữa player insert và save insert, retry chỉ insert-once, không upsert đè save hiện có.
 4. Không chấp nhận client first snapshot tự quyết currency/gear/ownership trên nhánh marker mới. Existing-account-no-save không tự nhận seed mới khi chưa biết lịch sử hay nguyên nhân mất snapshot.

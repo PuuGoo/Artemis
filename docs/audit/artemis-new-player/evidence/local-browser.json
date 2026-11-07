@@ -1,5 +1,5 @@
 {
-  "time": "2026-11-06T19:10:24.454Z",
+  "time": "2026-11-07T00:17:27.303Z",
   "browser": "156.0.8078.80",
   "scope": "LOCAL MOCK AUTH/SAVE ONLY. Không đăng ký account thật, không kiểm chứng Mongo persistence hoặc auth server.",
   "results": [
@@ -117,7 +117,7 @@
       "status": "PASS",
       "details": {
         "version": 1,
-        "startedAt": 1793992187915,
+        "startedAt": 1794010606773,
         "completedAt": 0,
         "skipped": false,
         "currentStep": "N01",
@@ -132,7 +132,7 @@
       "details": {
         "before": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N01",
@@ -143,7 +143,7 @@
         },
         "after": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N01",
@@ -201,7 +201,7 @@
           "afterDuplicateCount": 0,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
+            "startedAt": 1794010606773,
             "completedAt": 0,
             "skipped": false,
             "currentStep": "N02",
@@ -217,7 +217,7 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N02",
@@ -256,7 +256,7 @@
           "afterDuplicateCount": 1,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
+            "startedAt": 1794010606773,
             "completedAt": 0,
             "skipped": false,
             "currentStep": "N03",
@@ -274,7 +274,7 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N03",
@@ -315,7 +315,7 @@
           "afterDuplicateCount": 1,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
+            "startedAt": 1794010606773,
             "completedAt": 0,
             "skipped": false,
             "currentStep": "N04",
@@ -335,7 +335,7 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N04",
@@ -378,7 +378,7 @@
           "afterDuplicateCount": 1,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
+            "startedAt": 1794010606773,
             "completedAt": 0,
             "skipped": false,
             "currentStep": "N05",
@@ -400,7 +400,7 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N05",
@@ -445,7 +445,7 @@
           "afterDuplicateCount": 1,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
+            "startedAt": 1794010606773,
             "completedAt": 0,
             "skipped": false,
             "currentStep": "N06",
@@ -469,7 +469,7 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N06",
@@ -516,7 +516,7 @@
           "afterDuplicateCount": 1,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
+            "startedAt": 1794010606773,
             "completedAt": 0,
             "skipped": false,
             "currentStep": "N07",
@@ -542,7 +542,7 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N07",
@@ -592,7 +592,7 @@
           "afterDuplicateCount": 1,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
+            "startedAt": 1794010606773,
             "completedAt": 0,
             "skipped": false,
             "currentStep": "N08",
@@ -620,7 +620,7 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
+          "startedAt": 1794010606773,
           "completedAt": 0,
           "skipped": false,
           "currentStep": "N08",
@@ -671,8 +671,8 @@
           "afterDuplicateCount": 1,
           "journey": {
             "version": 1,
-            "startedAt": 1793992187915,
-            "completedAt": 1793992215735,
+            "startedAt": 1794010606773,
+            "completedAt": 1794010636816,
             "skipped": false,
             "currentStep": "N08",
             "completedSteps": [
@@ -701,8 +701,8 @@
         },
         "restored": {
           "version": 1,
-          "startedAt": 1793992187915,
-          "completedAt": 1793992215735,
+          "startedAt": 1794010606773,
+          "completedAt": 1794010636816,
           "skipped": false,
           "currentStep": "N08",
           "completedSteps": [
@@ -745,7 +745,7 @@
           "maxHp": 775,
           "atk": 152
         },
-        "lastTime": 2653.2,
+        "lastTime": 3093.8,
         "coloredSamples": 8504
       }
     },
@@ -922,6 +922,11 @@
     },
     {
       "method": "GET",
+      "path": "/api/save",
+      "player": "local_fixture_a"
+    },
+    {
+      "method": "PUT",
       "path": "/api/save",
       "player": "local_fixture_a"
     },

@@ -4,6 +4,7 @@ import {
   normalizeUsername, usernameKey,
 } from "../../lib/auth.js";
 import { json, fail, readJsonBody, bumpRateLimit, clientIp } from "../../lib/http.js";
+import { NEW_ACCOUNT_INIT_VERSION, buildCanonicalNewAccountSave } from "../../lib/initialState.js";
 
 export const config = { runtime: "nodejs" };
 
@@ -22,6 +23,7 @@ export async function POST(request) {
   const db = await getMongoDb();
   const cleanName = normalizeUsername(username);
   const keyLower = usernameKey(username);
+  const now = new Date();
 
   let result;
   try {
@@ -30,8 +32,13 @@ export async function POST(request) {
       usernameLower: keyLower,
       displayName: cleanName,
       passwordHash: await hashPassword(password),
-      createdAt: new Date(),
-      lastLoginAt: new Date(),
+      createdAt: now,
+      lastLoginAt: now,
+      // Danh dau tai khoan duoc khoi tao bang seed chuan cua may chu.
+      // GET /api/save dua vao co nay de khoi phuc snapshot neu ban ghi bi mat,
+      // va PUT revision 0 se bi tu choi thay vi nhan payload client tu khai.
+      initVersion: NEW_ACCOUNT_INIT_VERSION,
+      initVersionAt: now,
     });
   } catch (e) {
     if (e && e.code === 11000) {
@@ -41,6 +48,20 @@ export async function POST(request) {
   }
 
   const playerId = String(result.insertedId);
+
+  // Cap san snapshot tan thu chuan — client khong con quyet dinh trang thai khoi tao.
+  // Loi o buoc nay khong duoc bien mot tai khoan hop le thanh 500: GET /api/save
+  // se tao lai seed vi player da co initVersion. Chi ghi log de co vet.
+  try {
+    await db.collection(COLLECTIONS.saves).insertOne(
+      buildCanonicalNewAccountSave({ playerId, username: cleanName, now }),
+    );
+  } catch (e) {
+    if (!e || e.code !== 11000) {
+      console.error("[register] khong tao duoc save khoi tao, GET se khoi phuc:", e && e.message);
+    }
+  }
+
   const token = await signSession({ sub: playerId, username: cleanName });
 
   return new Response(

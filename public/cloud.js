@@ -379,6 +379,13 @@
             return;
           }
           toast((r.data && r.data.error) || "Tiến trình không hợp lệ, chưa được lưu.", "err");
+        } else if (r.data && r.data.code === "SAVE_MISSING") {
+          // Tài khoản có seed chuẩn nhưng client không thấy save: tải lại để
+          // GET khôi phục đúng snapshot máy chủ. Không ghi đè bằng state hiện tại.
+          state.lastError = "save-missing";
+          toast("Không tìm thấy tiến trình trên máy chủ. Đang tải lại để khôi phục…", "err");
+          setTimeout(function () { location.reload(); }, 1400);
+          return;
         } else if (r.data && r.data.conflict) {
           toast("Tiến trình đã đổi từ thiết bị khác. Tải lại trang để đồng bộ.", "warn");
           state.lastError = "conflict";

@@ -2,19 +2,59 @@ import { getMongoDb, COLLECTIONS } from "../lib/mongo.js";
 import { getCurrentPlayer, json, fail, readJsonBody, bumpRateLimit, clientIp } from "../lib/http.js";
 import { sanitizeSave, MAX_SAVE_BYTES } from "../lib/saveSchema.js";
 import { validateEconomyDelta, validateSeasonDelta } from "../lib/economy.js";
+import { NEW_ACCOUNT_INIT_VERSION, buildCanonicalNewAccountSave } from "../lib/initialState.js";
 
 export const config = { runtime: "nodejs" };
+
+/**
+ * Tài khoản được khởi tạo bằng seed chuẩn của máy chủ (tạo sau bản vá).
+ * Chỉ những tài khoản này mới bị áp luật "không có save = mất dữ liệu".
+ */
+function isCanonicalAccount(player) {
+  return Number.isInteger(player?.initVersion) && player.initVersion >= NEW_ACCOUNT_INIT_VERSION;
+}
+
+/**
+ * Các hệ mới thêm sau này. Client cũ (JS trong cache) không gửi key, nên khi
+ * ghi đè snapshot phải giữ lại giá trị đang có trong DB — nếu không, chỉ cần mở
+ * game bằng bundle cũ là tiến trình Vườn/Bang/Plinko biến mất.
+ * Client mới LUÔN gửi key (null khi trống) nên xoá có chủ đích vẫn hoạt động.
+ */
+const CARRY_FORWARD_FIELDS = ["gameMode", "modeBest", "guild", "garden", "plinko"];
+
+/** Dựng lại seed chuẩn khi bản ghi save của tài khoản đã đánh dấu bị thất lạc. */
+async function restoreCanonicalSave(saves, player, playerId) {
+  const doc = buildCanonicalNewAccountSave({ playerId, username: player.username });
+  try {
+    await saves.insertOne(doc);
+    return doc;
+  } catch (error) {
+    // Một request khác vừa tạo xong -> đọc lại thay vì ghi đè.
+    if (error?.code === 11000) return saves.findOne({ playerId });
+    throw error;
+  }
+}
 
 export async function GET(request) {
   const player = await getCurrentPlayer(request);
   if (!player) return fail("Ban can dang nhap de luu tien trinh.", 401);
 
   const db = await getMongoDb();
-  const doc = await db.collection(COLLECTIONS.saves).findOne({ playerId: String(player._id) });
-  if (!doc) return json({ ok: true, playerId: String(player._id), hasSave: false, data: null, revision: 0 });
+  const saves = db.collection(COLLECTIONS.saves);
+  const playerId = String(player._id);
+  let doc = await saves.findOne({ playerId });
+
+  // Tài khoản đã đánh dấu khởi tạo chuẩn thì bản ghi save phải tồn tại. Nếu mất,
+  // "không có save" nghĩa là dữ liệu đã mất — không phải người chơi mới — nên
+  // khôi phục seed chuẩn thay vì trả hasSave=false cho client tự dựng state.
+  if (!doc && isCanonicalAccount(player)) {
+    doc = await restoreCanonicalSave(saves, player, playerId);
+  }
+
+  if (!doc) return json({ ok: true, playerId, hasSave: false, data: null, revision: 0 });
   return json({
     ok: true,
-    playerId: String(player._id),
+    playerId,
     hasSave: true,
     data: doc.data,
     revision: doc.revision || 1,
@@ -48,9 +88,23 @@ export async function PUT(request) {
   if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0) {
     return fail("Revision khong hop le. Hay tai lai truoc khi luu.", 400);
   }
+  // Tài khoản đánh dấu khởi tạo chuẩn LUÔN có save do máy chủ cấp. Revision 0
+  // nghĩa là client không thấy save đó -> dữ liệu đã mất hoặc client cũ. Không
+  // nhận snapshot tự khai trong trường hợp này; tải lại để GET khôi phục seed.
+  if (expectedRevision === 0 && isCanonicalAccount(player)) {
+    return json({
+      ok: false,
+      conflict: true,
+      code: "SAVE_MISSING",
+      error: "Khong tim thay tien trinh tren may chu. Hay tai lai trang de khoi phuc.",
+    }, 409);
+  }
   const now = new Date();
 
-  const existing = await saves.findOne({ playerId }, { projection: { revision: 1, "data.gold": 1, "data.gems": 1, "data.lifetimeStats": 1, "data.season": 1 } });
+  const existing = await saves.findOne({ playerId }, { projection: {
+    revision: 1, "data.gold": 1, "data.gems": 1, "data.lifetimeStats": 1, "data.season": 1,
+    "data.gameMode": 1, "data.modeBest": 1, "data.guild": 1, "data.garden": 1, "data.plinko": 1,
+  } });
   const currentRevision = existing ? (existing.revision || 1) : 0;
 
   if (expectedRevision !== currentRevision) {
@@ -60,6 +114,19 @@ export async function PUT(request) {
       conflict: true,
       serverRevision: currentRevision,
     }, 409);
+  }
+
+  // Client cũ (bundle trong cache) không gửi các hệ mới. Nếu ghi đè snapshot mà
+  // thiếu key thì tiến trình Vườn/Bang/Plinko của người chơi biến mất chỉ vì họ
+  // mở game bằng JS cũ. Giữ lại giá trị đang có trong DB cho field KHÔNG xuất
+  // hiện trong payload; client mới luôn gửi key (null khi trống) nên thao tác
+  // xoá có chủ đích vẫn hoạt động.
+  const incomingData = body.data.data;
+  for (const key of CARRY_FORWARD_FIELDS) {
+    if (key in incomingData) continue;
+    if (existing && existing.data && key in existing.data) {
+      check.data[key] = existing.data[key];
+    }
   }
 
   // ===== Kiểm tra kinh tế phía server =====
