@@ -48,12 +48,21 @@ node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ## Test
 
 ```bash
-node tests/save-schema.test.mjs    # 33 test: không mất field, đúng kiểu dữ liệu
-node tests/integration.test.mjs    # 29 test: auth, save, bảo mật (cần dev server đang chạy)
+npm test                         # bộ test chính (các test cần MongoDB thật sẽ tự bỏ qua)
+node tools/validate-biomes.mjs   # kiểm tra map, vật trang trí và boss
 ```
 
 > `tests/save-schema.test.mjs` đối chiếu trực tiếp với `public/index.html`: nếu game thêm field mới
 > vào `SaveState.save()` mà `lib/saveSchema.js` chưa giữ lại, test sẽ FAIL ngay.
+
+### Chơi thử ngay, không cần MongoDB Atlas
+
+```bash
+npm ci
+DB_BACKEND=memory JWT_SECRET="$(node -e 'process.stdout.write(require("node:crypto").randomBytes(48).toString("hex"))')" npm run dev
+```
+
+Mở `http://localhost:3000`, tạo tài khoản thử và chơi. Dữ liệu trong bộ nhớ sẽ mất khi tắt server. Chương 7 mở sau khi hoàn thành Chương 6. Các test kết nối MongoDB thật chỉ chạy khi có `TEST_MONGODB_URI` riêng cho test; không dùng database production.
 
 ## Deploy Vercel
 

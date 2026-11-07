@@ -29,11 +29,11 @@ function fnBody(marker) {
   throw new Error('không tìm thấy điểm kết của ' + marker);
 }
 
-test('có bảng độ khó tuyệt đối cho cả 6 chương', () => {
+test('có bảng độ khó tuyệt đối cho cả 7 chương', () => {
   assert.match(html, /const CAMPAIGN_TUNING = \{/);
   const blk = html.slice(html.indexOf('const CAMPAIGN_TUNING = {'), html.indexOf('};', html.indexOf('const CAMPAIGN_TUNING = {')));
   const rows = [...blk.matchAll(/(\d): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)];
-  assert.equal(rows.length, 6, 'phải có đủ 6 chương');
+  assert.equal(rows.length, 7, 'phải có đủ 7 chương');
   for (const m of rows) {
     for (let k = 2; k <= 5; k++) assert.ok(Number(m[k]) > 0, `giá trị không dương ở chương ${m[1]}`);
   }

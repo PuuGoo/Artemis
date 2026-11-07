@@ -2616,6 +2616,24 @@ const ArenaV2 = (() => {
     floor: 'void', wall: 'obsidian', props: ['rift', 'constellation', 'stars', 'rune', 'glyph'], wallProps: ['spikes', 'columns', 'crystals', 'chains'], ambient: 'stars', torchStyle: 'void',
     obstacles: ['obelisk', 'crystal', 'statue', 'pillar'], skin: 'void', bullet: ['#ffffff', '#c7d2fe', '#4338ca'] });
 
+  // Chương 7: rừng nấm phát quang, đầm bào tử và tổ kén của Nữ Hoàng.
+  def('luminous_grove', { label: 'Rừng Nấm Phát Quang', f1: '#102c2c', f2: '#071b20', wall0: '#041013', wall1: '#20565b', trim: '#5eead4', accent: '#2dd4bf',
+    glow: 'rgba(45,212,191,', torch: ['#99f6e4', '#0f766e'], fog: 'rgba(20,184,166,', ob0: '#17454a', ob1: '#071b20', obTop: '#5eead4', vein: 'rgba(94,234,212,',
+    floor: 'moss', wall: 'stone', props: ['moss', 'mushroom', 'sparkleSpot', 'log'], wallProps: ['vines', 'columns'], ambient: 'fireflies', torchStyle: 'crystal',
+    obstacles: ['pillar', 'crystal', 'stump'], skin: 'forest', bullet: ['#f0fdfa', '#5eead4', '#0f766e'] });
+  def('spore_marsh', { label: 'Đầm Bào Tử', f1: '#262039', f2: '#120f27', wall0: '#0a0818', wall1: '#4c3b68', trim: '#d8b4fe', accent: '#c084fc',
+    glow: 'rgba(192,132,252,', torch: ['#e9d5ff', '#7e22ce'], fog: 'rgba(168,85,247,', ob0: '#3d3154', ob1: '#110e22', obTop: '#d8b4fe', vein: 'rgba(216,180,254,',
+    floor: 'swamp', wall: 'stone', props: ['moss', 'mushroom', 'rune', 'sparkleSpot'], wallProps: ['vines', 'chains'], ambient: 'motes', torchStyle: 'void',
+    obstacles: ['pillar', 'crystal', 'stump'], skin: 'swamp', bullet: ['#f5d0fe', '#c084fc', '#6b21a8'] });
+  def('hollow_hive', { label: 'Tổ Kén Rỗng', f1: '#2b1a29', f2: '#160c1b', wall0: '#0b0610', wall1: '#63334b', trim: '#f9a8d4', accent: '#fb7185',
+    glow: 'rgba(251,113,133,', torch: ['#fbcfe8', '#be185d'], fog: 'rgba(244,114,182,', ob0: '#4e2a42', ob1: '#160b1a', obTop: '#f9a8d4', vein: 'rgba(249,168,212,',
+    floor: 'tiles', wall: 'bone', props: ['log', 'mushroom', 'glyph', 'crack'], wallProps: ['vines', 'spikes', 'chains'], ambient: 'motes', torchStyle: 'lantern',
+    obstacles: ['pillar', 'coffin', 'statue'], skin: 'crypt', bullet: ['#ffe4e6', '#fb7185', '#9f1239'] });
+  def('mycelium_heart', { label: 'Trái Tim Sợi Nấm', boss: 'mycelium_queen', f1: '#1b112b', f2: '#090919', wall0: '#080511', wall1: '#51306d', trim: '#f0abfc', accent: '#a3e635',
+    glow: 'rgba(163,230,53,', torch: ['#ecfccb', '#65a30d'], fog: 'rgba(192,132,252,', ob0: '#34254d', ob1: '#0c0917', obTop: '#d9f99d', vein: 'rgba(217,249,157,',
+    floor: 'rune', wall: 'bone', props: ['mushroom', 'log', 'rune', 'glyph'], wallProps: ['vines', 'columns', 'spikes'], ambient: 'motes', torchStyle: 'crystal',
+    obstacles: ['pillar', 'crystal', 'statue'], skin: 'forest', bullet: ['#f7fee7', '#a3e635', '#7e22ce'] });
+
   // Chương nào dùng biome nào (xoay vòng theo phòng thường). Chương sự kiện (999) trộn tất cả.
   const POOLS = {
     1: ['stone', 'forest', 'mine', 'swamp', 'crypt'],
@@ -2623,13 +2641,15 @@ const ArenaV2 = (() => {
     3: ['void', 'crystal', 'ice', 'astral', 'temple'],
     4: ['dragon_realm', 'ice', 'crystal', 'astral'],
     5: ['eclipse_reach', 'obsidian_garden', 'starfall_rift', 'eclipse_reach'],
-    6: ['nebula_gate', 'frozen_choir', 'throne_of_stars', 'nebula_gate']
+    6: ['nebula_gate', 'frozen_choir', 'throne_of_stars', 'nebula_gate'],
+    7: ['luminous_grove', 'spore_marsh', 'hollow_hive', 'luminous_grove']
   };
-  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift', 'nebula_gate', 'frozen_choir', 'throne_of_stars'];
-  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne', astral_devourer: 'abyss_crown' };
+  const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift', 'nebula_gate', 'frozen_choir', 'throne_of_stars', 'luminous_grove', 'spore_marsh', 'hollow_hive'];
+  const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne', astral_devourer: 'abyss_crown', mycelium_queen: 'mycelium_heart' };
 
   // Mỗi chương có một bản sắc trùm riêng; các chương đầu giữ nguyên bộ boss cũ.
   function bossTypeOfRoom(room) {
+    if (Game.chapter && Number(Game.chapter.id) === 7) return 'mycelium_queen';
     if (Game.chapter && Number(Game.chapter.id) === 6) return 'astral_devourer';
     if (Game.chapter && Number(Game.chapter.id) === 5) return 'eclipse_sovereign';
     if (Game.chapter && Number(Game.chapter.id) === 4) return 'elder_dragon';
@@ -3376,7 +3396,7 @@ const ArenaV2 = (() => {
   };
   const TYPEKEY = { slime: 'slime', goblin: 'goblin', skeleton_mage: 'mage', plant_turret: 'plant', bat: 'bat' };
   const skinOf = (B, type) => (SK[B.skin] || SK.stone)[TYPEKEY[type]];
-  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', rift_stalker: '#c084fc', eclipse_oracle: '#f0abfc', obsidian_brute: '#34d399', nebula_herald: '#22d3ee', frost_sentinel: '#7dd3fc', star_wraith: '#818cf8', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9', eclipse_sovereign: '#c084fc', astral_devourer: '#818cf8' };
+  const AURA_T = { slime: 0, goblin: 0, skeleton_mage: 0, plant_turret: 0, bat: 0, dragon_whelp: '#22d3ee', cloud_wisp: '#67e8f9', sky_sentinel: '#a5f3fc', rift_stalker: '#c084fc', eclipse_oracle: '#f0abfc', obsidian_brute: '#34d399', nebula_herald: '#22d3ee', frost_sentinel: '#7dd3fc', star_wraith: '#818cf8', golem: '#f97316', queen: '#a855f7', demon_king: '#e11d48', elder_dragon: '#67e8f9', eclipse_sovereign: '#c084fc', astral_devourer: '#818cf8', spore_runner: '#5eead4', mire_shaman: '#c084fc', hive_guardian: '#fb7185', mycelium_queen: '#a3e635' };
 
   const eyes = (ctx, x, y, s, col = '#fff', pupil = '#0f172a') => {
     for (const d of [-1, 1]) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x + d * s * 1.1, y, s * 0.72, s * 0.9, 0, 0, TAU); ctx.fill(); ctx.fillStyle = pupil; ctx.beginPath(); ctx.arc(x + d * s * 1.1 + 0.6, y + 0.5, s * 0.38, 0, TAU); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); ctx.arc(x + d * s * 1.1 - 0.4, y - 0.8, s * 0.16, 0, TAU); ctx.fill(); }
@@ -4127,10 +4147,27 @@ const ArenaV2 = (() => {
     ctx.restore();
   }
 
+  function drawMyceliumQueen(ctx, r, t, hr, charge) {
+    ctx.save();
+    const pulse = 1 + Math.sin(t * .006) * .05;
+    ctx.scale(pulse, pulse);
+    ctx.fillStyle = '#5b21b6'; ctx.strokeStyle = '#f0abfc'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.ellipse(0, 4, r * 1.05, r * .85, 0, 0, TAU); ctx.fill(); ctx.stroke();
+    for (let i = 0; i < 7; i++) {
+      const a = i * TAU / 7 + t * .0005;
+      orb(ctx, Math.cos(a) * r * 1.3, Math.sin(a) * r * .75, r * .18, '#a3e635', .8);
+    }
+    ctx.fillStyle = '#d9f99d'; ctx.beginPath(); ctx.moveTo(-r * .9, -r * .35);
+    ctx.quadraticCurveTo(0, -r * 1.8, r * .9, -r * .35); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#1a1026'; ctx.beginPath(); ctx.arc(-r * .28, 0, 4, 0, TAU); ctx.arc(r * .28, 0, 4, 0, TAU); ctx.fill();
+    if (charge || hr < .45) orb(ctx, 0, -r * .7, r * .3, '#f0abfc', .75);
+    ctx.restore();
+  }
+
   const BOSSFN = {
     golem: drawGolem, queen: drawQueen, demon_king: drawDemon,
     elder_dragon: drawElderDragon, eclipse_sovereign: drawEclipseSovereign,
-    astral_devourer: drawAstralDevourer
+    astral_devourer: drawAstralDevourer, mycelium_queen: drawMyceliumQueen
   };
 
   // ---------- trạng thái hiển thị riêng từng quái (không ghi vào dữ liệu game) ----------
@@ -4147,6 +4184,14 @@ const ArenaV2 = (() => {
     if (ty === 'obsidian_brute') { drawObsidianBrute(ctx, r, t); return; }
     if (ty === 'nebula_herald') { drawNebulaHerald(ctx, r, t); return; }
     if (ty === 'frost_sentinel') { drawFrostSentinel(ctx, r, t); return; }
+    if (ty === 'spore_runner' || ty === 'mire_shaman' || ty === 'hive_guardian') {
+      const colors = { spore_runner: '#5eead4', mire_shaman: '#c084fc', hive_guardian: '#fb7185' };
+      blob(ctx, r, colors[ty], '#23132f');
+      ctx.fillStyle = ty === 'spore_runner' ? '#99f6e4' : (ty === 'mire_shaman' ? '#e9d5ff' : '#fda4af');
+      ctx.beginPath(); ctx.ellipse(0, -r * .38, r * .8, r * .48, 0, Math.PI, TAU); ctx.fill();
+      eyes(ctx, 0, 1, 3);
+      return;
+    }
     if (ty === 'star_wraith') { drawStarWraith(ctx, r, t); return; }
     if (BOSSFN[ty]) { const hr = clamp(e.hp / Math.max(1, e.maxHp), 0, 1); BOSSFN[ty](ctx, r, t, hr, e.attackTimer > 0 && e.attackTimer < 0.48); return; }
     const sk = skinOf(B, ty);
@@ -4569,6 +4614,20 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           mapAsset: '/assets/map-ch6-abyssal-galaxy.svg',
           mapRegion: 'Vực Thẳm Thiên Hà',
           mapTagline: 'Nơi ánh sáng không thoát ra được, và mọi vì sao đều là mồi của bóng tối.',
+        },
+        {
+          id: 7,
+          name: 'Chương 7: Mê Lâm Bào Tử', modeLabel: 'Hành Trình Rừng Kén (15 Phòng)',
+          desc: 'Băng qua rừng nấm phát quang, đầm bào tử và tổ kén. Né đạn xoáy, quạt độc và đường đạn đan xen của Nữ Hoàng Sợi Nấm.',
+          rooms: 15,
+          floorColor1: '#102c2c', floorColor2: '#120f27', wallColor: '#3d3154',
+          enemyScale: 3.2,
+          icon: '🍄', accent: '#5eead4', accent2: '#a3e635', gradFrom: '#134e4a', gradTo: '#1b112b',
+          difficulty: 5, difficultyLabel: 'Thần Thoại — Bào Tử', themeName: 'Mê Lâm',
+          bossIcon: '👑', bossName: 'Nữ Hoàng Sợi Nấm',
+          unlock: { type: 'chapterWin', chapterId: 6, label: 'Thắng Chương 6' },
+          mapAsset: '/assets/map-ch7-mycelium-forest.svg', mapRegion: 'Mê Lâm Bào Tử',
+          mapTagline: 'Ánh nấm dẫn đường qua đầm sương, đến trái tim của mạng sợi dưới lòng đất.',
         }
       ];
 
@@ -4776,7 +4835,24 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           behavior: 'Phóng vành sao xoáy nhiều lớp, triệu hồi tinh vân phủ kín sân, và bắn tia hư không xuyên mọi vật cản. Dưới 40% máu, đĩa bồi tụ mở rộng và nhịp tấn công tăng mạnh.',
           threat: 8,
           stats: { speed: 64, contact: true, ranged: true }
-        }
+        },
+        {
+          id: 'spore_runner', name: 'Bọ Chạy Bào Tử', icon: '🪲', tier: 'Thường', color: '#5eead4', aura: '#2dd4bf',
+          lore: 'Sinh vật nhỏ kéo bào tử qua các gốc cây phát sáng.', behavior: 'Áp sát rồi bắn hai tia chéo luân phiên.', threat: 5,
+          stats: { speed: 112, contact: true, ranged: true } },
+        {
+          id: 'mire_shaman', name: 'Pháp Sư Đầm Nấm', icon: '🍄', tier: 'Tinh Anh', color: '#c084fc', aura: '#d8b4fe',
+          lore: 'Kẻ canh đầm điều khiển bào tử độc bằng trượng nấm.', behavior: 'Giữ khoảng cách và bắn quạt năm bào tử.', threat: 6,
+          stats: { speed: 52, contact: false, ranged: true } },
+        {
+          id: 'hive_guardian', name: 'Vệ Binh Tổ Kén', icon: '🛡️', tier: 'Tinh Anh', color: '#fb7185', aura: '#f9a8d4',
+          lore: 'Giáp kén cứng che chở lõi tổ.', behavior: 'Tiến chậm, phóng hai vòng đạn lệch pha.', threat: 6,
+          stats: { speed: 42, contact: true, ranged: true } },
+        {
+          id: 'mycelium_queen', name: 'Nữ Hoàng Sợi Nấm', icon: '👑', tier: 'TRÙM CUỐI', color: '#a3e635', aura: '#f0abfc',
+          lore: 'Trái tim của mạng sợi cổ xưa, điều khiển cả khu rừng như một cơ thể.',
+          behavior: 'Ba chiêu xoay vòng: vòng bào tử có khe né, quạt độc và hai luồng đan xen. Dưới 45% máu, các đòn nhanh hơn và dày hơn.', threat: 9,
+          stats: { speed: 72, contact: true, ranged: true } }
       ];
 
       const BESTIARY_BY_ID = Object.fromEntries(BESTIARY.map(b => [b.id, b]));
@@ -27602,6 +27678,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         4: { mobHp: 1250, mobAtk: 220, bossHp: 33000, bossAtk: 460 },
         5: { mobHp: 1750, mobAtk: 380, bossHp: 34000, bossAtk: 600 },
         6: { mobHp: 2400, mobAtk: 520, bossHp: 48000, bossAtk: 760 },
+        7: { mobHp: 3100, mobAtk: 660, bossHp: 62000, bossAtk: 930 },
       };
 
       /** Chỉ số địch tuyệt đối cho một phòng chiến dịch (không phụ thuộc người chơi). */
@@ -27778,17 +27855,19 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         if (isBossRoomNow) {
           SoundFX.bossSpawn();
-          const bossType = Game.chapter && Number(Game.chapter.id) === 6 ? 'astral_devourer'
+          const bossType = Game.chapter && Number(Game.chapter.id) === 7 ? 'mycelium_queen'
+            : (Game.chapter && Number(Game.chapter.id) === 6 ? 'astral_devourer'
             : (Game.chapter && Number(Game.chapter.id) === 5 ? 'eclipse_sovereign'
               : (Game.chapter && Number(Game.chapter.id) === 4 ? 'elder_dragon'
-                : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king'))));
+                : ((roomNum === 5) ? 'golem' : (roomNum === 10 ? 'queen' : 'demon_king')))));
           const bossNames = {
             golem: '🔥 TRÙM: GOLEM DUNG NHAM',
             queen: '🕷️ TRÙM: NỮ HOÀNG NHỆN ĐỘC',
             demon_king: '👑 ĐẠI MA VƯƠNG ATREUS',
             elder_dragon: '🐉 TRÙM: CỔ LONG THIÊN KHÔNG',
             eclipse_sovereign: '🌑 TRÙM CUỐI: BẠO CHÚA NHẬT THỰC',
-            astral_devourer: '🌌 TRÙM CUỐI: THỰC THẦN TINH HÀ'
+            astral_devourer: '🌌 TRÙM CUỐI: THỰC THẦN TINH HÀ',
+            mycelium_queen: '🍄 TRÙM CUỐI: NỮ HOÀNG SỢI NẤM'
           };
           // HP boss neo theo ATK người chơi (≈ số đòn đánh thường để hạ).
           // Scale phòng KHÔNG nhân vào HP nữa — đã tính bằng hitsToKill, nếu nhân
@@ -27813,7 +27892,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             atk: campaign
               ? Math.max(1, campaign.bossAtk)
               : Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
-            speed: bossType === 'eclipse_sovereign' ? 76 : 68,
+            speed: bossType === 'mycelium_queen' ? 72 : (bossType === 'eclipse_sovereign' ? 76 : 68),
             vx: 45,
             vy: 30,
             attackTimer: 1.6,
@@ -27822,7 +27901,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             burnTimer: 0,
             burnDmg: 0,
             slowTimer: 0,
-            color: bossType === 'eclipse_sovereign' ? '#c084fc' : (bossType === 'elder_dragon' ? '#67e8f9' : (bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48')))
+            color: bossType === 'mycelium_queen' ? '#a3e635' : (bossType === 'eclipse_sovereign' ? '#c084fc' : (bossType === 'elder_dragon' ? '#67e8f9' : (bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48'))))
           });
           document.getElementById('bossHudContainer').classList.remove('hidden');
           showBossIntro(bossType, bossNames[bossType]);
@@ -27832,13 +27911,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           hideBossIntro();
           document.getElementById('hudHintBanner').textContent = '💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!';
           const count = Math.min(8, 3 + Math.floor(roomNum / 2));
-          const types = Game.chapter && Number(Game.chapter.id) === 6
+          const types = Game.chapter && Number(Game.chapter.id) === 7
+            ? ['spore_runner', 'mire_shaman', 'hive_guardian']
+            : (Game.chapter && Number(Game.chapter.id) === 6
             ? ['nebula_herald', 'frost_sentinel', 'star_wraith']
             : (Game.chapter && Number(Game.chapter.id) === 5
               ? ['rift_stalker', 'eclipse_oracle', 'obsidian_brute']
               : (Game.chapter && Number(Game.chapter.id) === 4
                 ? ['dragon_whelp', 'cloud_wisp', 'sky_sentinel']
-                : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat']));
+                : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat'])));
 
           for (let i = 0; i < count; i++) {
             const t = types[(roomNum + i) % types.length];
@@ -27851,7 +27932,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const depth = Math.min(1, (roomNum - 1) / Math.max(1, Game.maxRooms - 1));
             const baseHits = 1.4 + depth * 1.0;   // 1,4 -> 2,4 đòn
             // Hệ số riêng của từng loại quái (không gồm baseHits).
-            const typeMul = t === 'obsidian_brute' ? 1.28 : (t === 'eclipse_oracle' ? 1.16 : (t === 'rift_stalker' ? 1.04 : (t === 'sky_sentinel' ? 1.25 : (t === 'cloud_wisp' ? 0.96 : (t === 'dragon_whelp' ? 1.08 : (t === 'plant_turret' ? 1.23 : (t === 'skeleton_mage' ? 1.12 : 1.0)))))));
+            const typeMul = ({ hive_guardian: 1.3, mire_shaman: 1.14, spore_runner: 0.92, obsidian_brute: 1.28, eclipse_oracle: 1.16, rift_stalker: 1.04, sky_sentinel: 1.25, cloud_wisp: 0.96, dragon_whelp: 1.08, plant_turret: 1.23, skeleton_mage: 1.12 })[t] || 1.0;
             // Chiến dịch: HP tuyệt đối (type chỉ chỉnh nhẹ). Vô hạn: giữ công thức cũ.
             const enemyHp = campaign
               ? Math.max(1, Math.round(campaign.mobHp * typeMul))
@@ -27861,7 +27942,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               type: t,
               x: ex,
               y: ey,
-              r: t === 'bat' ? 13 : (t === 'cloud_wisp' ? 14 : (t === 'sky_sentinel' || t === 'obsidian_brute' ? 19 : (t === 'rift_stalker' ? 14 : 16))),
+              r: ({ hive_guardian: 20, mire_shaman: 17, spore_runner: 14, bat: 13, cloud_wisp: 14, sky_sentinel: 19, obsidian_brute: 19, rift_stalker: 14 })[t] || 16,
               hp: enemyHp,
               maxHp: enemyHp,
               // Sát thương quái — thiết kế theo SỐ ĐÒN PHẢI CHỊU, không theo %:
@@ -27876,7 +27957,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 : Math.max(1, Math.round(
                     playerMaxHp / (16 - depth * 10) / Math.max(1, Math.sqrt(count / 3))
                   )),
-              speed: t === 'plant_turret' ? 0 : (t === 'bat' ? 115 : (t === 'rift_stalker' ? 102 : (t === 'eclipse_oracle' ? 55 : (t === 'obsidian_brute' ? 38 : (t === 'dragon_whelp' ? 88 : (t === 'cloud_wisp' ? 92 : (t === 'sky_sentinel' ? 48 : 64))))))),
+              speed: ({ spore_runner: 112, mire_shaman: 52, hive_guardian: 42, plant_turret: 0, bat: 115, rift_stalker: 102, eclipse_oracle: 55, obsidian_brute: 38, dragon_whelp: 88, cloud_wisp: 92, sky_sentinel: 48 })[t] ?? 64,
               vx: (Math.random() - 0.5) * 60,
               vy: (Math.random() - 0.5) * 60,
               attackTimer: 1.1 + Math.random() * 1.4,
@@ -29617,7 +29698,25 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (e.attackTimer <= 0) {
             const ang = Math.atan2(p.y - e.y, p.x - e.x);
             if (e.isBoss) {
-              if (e.type === 'eclipse_sovereign') {
+              if (e.type === 'mycelium_queen') {
+                const enraged = e.hp / Math.max(1, e.maxHp) < 0.45;
+                e.phaseTimer = (e.phaseTimer + 1) % 3;
+                if (e.phaseTimer === 0) { // Vòng bào tử có khe trống hướng về người chơi.
+                  const count = enraged ? 18 : 14;
+                  for (let k = 0; k < count; k++) {
+                    const a = ang + k * Math.PI * 2 / count;
+                    if (k !== 0 && k !== 1 && k !== count - 1) spawnEnemyBullet(e.x, e.y, a, enraged ? 250 : 205, e.atk, 7);
+                  }
+                } else if (e.phaseTimer === 1) { // Quạt độc có khoảng hở giữa các tia.
+                  for (const k of [-3, -2, -1, 1, 2, 3]) spawnEnemyBullet(e.x, e.y, ang + k * 0.19, enraged ? 290 : 245, e.atk, 6);
+                } else { // Hai hàng bào tử đan chéo.
+                  for (const offset of [-0.35, -0.18, 0.18, 0.35]) {
+                    spawnEnemyBullet(e.x - 24, e.y, ang + offset, 265, e.atk, 6);
+                    spawnEnemyBullet(e.x + 24, e.y, ang - offset, 265, e.atk, 6);
+                  }
+                }
+                e.attackTimer = enraged ? 1.0 : 1.45;
+              } else if (e.type === 'eclipse_sovereign') {
                 const enraged = e.hp / Math.max(1, e.maxHp) < 0.5;
                 e.phaseTimer = (e.phaseTimer + 1) % 3;
                 if (e.phaseTimer === 0) {
@@ -29666,6 +29765,17 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 }
                 e.attackTimer = 1.45;
               }
+            } else if (e.type === 'spore_runner') {
+              e.phaseTimer = (e.phaseTimer || 0) + 1;
+              for (const k of [-1, 1]) spawnEnemyBullet(e.x, e.y, ang + k * (e.phaseTimer % 2 ? 0.22 : 0.42), 240, e.atk, 5);
+              e.attackTimer = 2.1;
+            } else if (e.type === 'mire_shaman') {
+              for (let k = -2; k <= 2; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.2, 205, e.atk, 6);
+              e.attackTimer = 2.8;
+            } else if (e.type === 'hive_guardian') {
+              e.phaseTimer = (e.phaseTimer || 0) + 1;
+              for (let k = 0; k < 8; k++) spawnEnemyBullet(e.x, e.y, k * Math.PI / 4 + (e.phaseTimer % 2 ? 0 : Math.PI / 8), 185, e.atk, 6);
+              e.attackTimer = 3.0;
             } else if (e.type === 'rift_stalker') {
               for (let k = -1; k <= 1; k++) spawnEnemyBullet(e.x, e.y, ang + k * 0.22, 245, e.atk, 5);
               e.attackTimer = 2.25;

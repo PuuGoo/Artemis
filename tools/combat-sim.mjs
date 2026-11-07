@@ -50,7 +50,7 @@ const CAMPAIGN_TUNING = (() => {
       bossHp: Number(m[4]), bossAtk: Number(m[5]),
     };
   }
-  if (Object.keys(out).length !== 6) throw new Error('CAMPAIGN_TUNING phải có 6 chương, đọc được ' + Object.keys(out).length);
+  if (Object.keys(out).length !== 7) throw new Error('CAMPAIGN_TUNING phải có 7 chương, đọc được ' + Object.keys(out).length);
   return out;
 })();
 
@@ -88,10 +88,10 @@ const ADAPTIVE = {
 
 // Hệ số máu theo loại quái (typeMul) — đọc nguyên biểu thức trong source.
 const ARCHETYPE_MULT = (() => {
-  const m = html.match(/const typeMul = (t === '[^']+'[^;]+?);/s);
+  const m = html.match(/const typeMul = \({([^}]+)}\)\[t\] \|\| 1\.0;/s);
   if (!m) throw new Error('Không tìm thấy typeMul của quái');
   const out = { default: 1 };
-  for (const hit of m[1].matchAll(/t === '([a-z_]+)' \? ([\d.]+)/g)) out[hit[1]] = Number(hit[2]);
+  for (const hit of m[1].matchAll(/([a-z_]+): ([\d.]+)/g)) out[hit[1]] = Number(hit[2]);
   return out;
 })();
 
@@ -313,7 +313,7 @@ ok(rows.every((r) => Number.isFinite(r.ttk) && r.ttk > 0), 'không NaN/Infinity,
 ok(rows.every((r) => r.hits >= 1), 'số đòn chịu được ≥ 1');
 // Trùm phải vừa sức với hồ sơ ĐÚNG TẦM của chương đó (10–60s), và người yếu ở
 // chương cao phải bị chặn thật (không thể gặm trùm cuối bằng đồ tân thủ).
-const APPROPRIATE = { 1: 'A.', 2: 'B.', 3: 'D.', 4: 'E.', 5: 'E.', 6: 'E.' };
+const APPROPRIATE = { 1: 'A.', 2: 'B.', 3: 'D.', 4: 'E.', 5: 'E.', 6: 'E.', 7: 'E.' };
 for (const ch of CHAPTERS) {
   const key = APPROPRIATE[ch.id];
   const boss = rows.find((r) => r.profileKey === key && r.ch === ch.id && r.kind === 'boss' && r.room === ch.rooms);
