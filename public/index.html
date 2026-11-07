@@ -857,6 +857,11 @@
         animation: a2ItemFloatBob 2.6s ease-in-out infinite;
         filter: drop-shadow(0 4px 6px rgba(0,0,0,0.45));
       }
+      /* Ảnh chân dung anh hùng là ảnh toàn thân (tỉ lệ ~2:3). Khi bị cắt vào khung
+         vuông/tròn, neo lên đỉnh để luôn thấy mặt thay vì cắt vào thân. */
+      img[src^="assets/heroes/"] {
+        object-position: top center;
+      }
       .a2-q-mythic .a2-item-art-float {
         filter: drop-shadow(0 0 8px rgba(254, 240, 138, 0.75)) drop-shadow(0 4px 6px rgba(0,0,0,0.5));
       }
@@ -6284,6 +6289,31 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           capeColor: '#16a34a'
         }
       ];
+
+      // ==================== ẢNH CHÂN DUNG ANH HÙNG (PNG, nền trong suốt) ====================
+      // 14 ảnh chân dung thật (public/assets/heroes/*.png, cao 512px) thay cho avatar
+      // SVG/base64 cũ. Anh hùng chưa có ảnh (Wukong, Nezha, Hou Yi, Artemis) giữ nguyên.
+      // Gán SAU khi khai báo HEROES để không phải sửa từng khối avatar base64 khổng lồ.
+      const HERO_ART_FILES = {
+        thor: 'thor',
+        cleo: 'cleo',
+        atreus: 'atreus',
+        rolla: 'rolla',
+        otta: 'otta',
+        phynx: 'phynx',
+        loki: 'loki',
+        dracoola: 'dracoola',
+        seraph: 'seraph',
+        mymu: 'mymu',
+        hela: 'hela',
+        helix: 'helix',
+        nyanja: 'nyanja',
+        alex: 'alex'
+      };
+      for (const hero of HEROES) {
+        const heroArtFile = HERO_ART_FILES[hero.id];
+        if (heroArtFile) hero.avatar = `assets/heroes/${heroArtFile}.png`;
+      }
 
       // ==================== ARCHERO 2 WIKI 0★ -> 8★ STAR MILESTONES ====================
       const HERO_STAR_MILESTONES = [
