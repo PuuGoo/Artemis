@@ -17,7 +17,7 @@ export async function POST(request) {
   const body=await request.json().catch(()=>({}));
   const action=body?.action;
   if (!['explore','enchant','merge'].includes(action)) return fail('Thao tác Ngọc không hợp lệ.',400);
-  if (action === 'merge' && (!Number.isSafeInteger(body.revision) || body.revision < 1)) {
+  if (['merge','enchant'].includes(action) && (!Number.isSafeInteger(body.revision) || body.revision < 1)) {
     return fail('Phiên bản tiến trình không hợp lệ. Hãy tải lại.',400);
   }
   const count=Number(body?.count||1);
@@ -45,13 +45,19 @@ export async function POST(request) {
       return fail('Tiến trình vừa thay đổi. Hãy đồng bộ lại trước khi ghép.',409);
     }
     if (action==='enchant') {
-      if (data.runeMythicEnchant===true) return fail('Phù phép đã được mở.',422);
-      if (!RUNE_IDS.some(id=>Number(runes[id])>=6)) return fail('Cần ít nhất một Ngọc Epic +2.',422);
+      if (body.revision !== save.revision) return fail('Tiến trình vừa thay đổi. Hãy đồng bộ lại.',409);
+      const id=body.runeId;
+      if (!RUNE_IDS.includes(id) || RUNE_IDS.indexOf(id)<13) return fail('Ngọc này không có phù phép.',422);
+      if (!(Number(runes[id])>=6)) return fail('Ngọc được chọn phải đạt Epic +2.',422);
+      const runeEnchantments={...(data.runeEnchantments||{})};
+      const level=Number(runeEnchantments[id])||0;
+      if (level>=6) return fail('Phù phép viên ngọc đã đạt Thần Thoại.',422);
       if ((Number(items.enchantium)||0)<10) return fail('Cần 10 Enchantium để phù phép.',422);
       items.enchantium=Number(items.enchantium)-10;
-      const result=await saves.updateOne({playerId,revision:save.revision===undefined?{$exists:false}:save.revision},{$set:{data:{...data,wikiOtherItems:items,runeMythicEnchant:true},revision,updatedAt:now}});
-      if(result.matchedCount===1)return json({ok:true,action,revision});
-      continue;
+      runeEnchantments[id]=level+1;
+      const result=await saves.updateOne({playerId,revision:save.revision},{$set:{data:{...data,wikiOtherItems:items,runeEnchantments},revision,updatedAt:now}});
+      if(result.matchedCount===1)return json({ok:true,action,runeId:id,level:level+1,cost:10,revision});
+      return fail('Tiến trình vừa thay đổi. Hãy đồng bộ lại.',409);
     }
     const promised=body.promised===true, key=promised?'promised_relic_shovel':'shovel';
     const freeIntro=!promised && count===1 && data.runeIntroClaimed!==true;

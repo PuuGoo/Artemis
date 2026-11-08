@@ -1,0 +1,4989 @@
+{
+  "source": "https://archero-2.game-vault.net/wiki/Runes",
+  "sourceParity": "46 loại từ snapshot hiện có; lượt này không đối chiếu lại Wiki live. Dữ liệu tham khảo không đồng nghĩa triển khai.",
+  "policy": "Không gán xác suất/công thức cho các mô tả định tính. Giá tiến cấp phù phép là quy tắc Artemis, không phải giá Wiki.",
+  "runes": [
+    {
+      "id": "arrow_of_echoes",
+      "name": "Arrow Of Echoes",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Main Weapon damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Main weapon skills have the chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "When firing 4 or more projectiles at once, they have the chance to form a web",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Starting skill: Diagonal Arrow",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Main Weapon Skill obtained, Main Weapon DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "2x Projectile Web DMG",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Main weapon skills have a greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "When firing 4+ projectiles, Projectile Web chance is increased (Max 10 stakcs)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "elemental_domain",
+      "name": "Elemental Domain",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Elemental damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Elemental skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "When enemies fall from Elemental DMG, 30% chance to form an elemental area for 5s. Enemies in it take 1x ATK PWR of elemental damage every 0.5s (doesn't apply any elemental effects)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Elemental Domain lasts 10s with increased DMG",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For ech Element skill obtained, Elemental DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "Elemental DMG +15% to enemies below 50% HP",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Elemental skills have greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Elemental DMG +30% to enemies below 50% HP",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "pulsing_orb",
+      "name": "Pulsing Orb",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Circle damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Circle skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Circle pulses shrink and expand",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Circle trails deal DMG to monsters",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Circle skill obtained, Circle DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "All Circle attacks have a very small chance to fire lasers",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Circle skills have greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "All Circle attacks have a small chance to fire lasers",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "meteor_split",
+      "name": "Meteor Split",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Meteor damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Meteor skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Meteors have a chance to split into 3 smaller non-elemental meteors dealing 0.33x ATK PWR each",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Split meteors will bounce forever",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Meteor Skill obtained, Meteor DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "Meteor impact zones Burn for 2s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Meteor skills have greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Meteor impact zones Burn for 4s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "sprites_awe",
+      "name": "Sprite's Awe",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Sprite damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sprite skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "When hero is hurt, Sprites have a chance to trigger clones that last 5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "For every additional Sprite or Sprite clone, monsters in battle take 5% more DMG",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Sprite skill obtained, Sprite DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "When Sprites attack, there is a small chance to unleash 1 Spinning Slash",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Sprite skills have a greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "In battle, Sprite summon skills can be picked +1 more time",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "sword_strike_split",
+      "name": "Sword Strike Split",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Strike damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sword Strike skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "When Strike fade, they have a chance to split into 3 mini-strikes dealing 33% of the original Strike's damage each.",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sword Strikes have chance to split into 5 homing strikes when they fade",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Sword Strike skill obtained, Strike DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "When Sword Strikes defeat enemies, there is a small chance to restore 2% HP",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Sword Strike skills have a greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Strike DMG +20% to enemies below 50% HP",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "sprite_assist",
+      "name": "Sprite Assist",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Sprite damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sprite skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Each time the character attacks, sprites have a 40% chance to launch 1 attack as well",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Each time the character attacks, sprites have a 80% chance to launch 1 attack as well",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Sprite skill obtained, Sprite DMG is increased (Max 10 tacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "Sprites inherit 40% of owner´s Crit Rate",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Sprite skills have a greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sprites inherit 40% of owner´s Crit DMG",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "sword_strike_aerie",
+      "name": "Sword Strike Aerie",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Strike damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sword Strike skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Sword strike hits have a 25% chance to spawn 1 minor strike that deals half damage",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sword strike hits have a 50% chance to spawn 1 minor strike that deals half damage",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Sword Strike skill obtained, Strike DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "Sword Strikes have a very small chance to fire 1 more strike",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Sword Strike skills have a greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sword Strikes have a small chance to fire 1 more strike",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "potion_spring",
+      "name": "Potion Spring",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Meteor damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Increased chance for Potion skills to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "25% chance to summon Potion Spring. Standing within the spring´s range activates it, spraying forth large amounts of the same potion",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Doubles potions spawned by Potion Spring",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Potion skill obtained, Meteor DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "When looting potions, there is a small chance to trigger a minor meteor bombardment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Greatly increased chance for Potion skills to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "When looting potions, there is a chance to trigger a major meteor bombardment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "elemental_crit",
+      "name": "Elemental Crit",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Elemental damage +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Increased chance for Elemental skills to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Elemental DMG inherits 10% of the character´s CRIT Rate and 10% of the character's CRIT DMG",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Elemental DMG inherits 30% of the character´s CRIT Rate and 30% of the character's CRIT DMG",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Elemental skill obtained, Elemental DMG is increased (Max 10 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "Elemental critical hits trigger a small area elemental splash attack",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Greatly increased chance for Elemental skills to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Elemental critical hits trigger a large area elemental splash attack",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "life_surge",
+      "name": "Life Surge",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Plant DMG +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Increased chance for Plant-related skills to appear",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Cast 1 Life Surge for every 5 plant deaths",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Cast 1 Life Surge for every 2 plant deaths",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "Plant DMG increases for each Plant-related skill obtained, up to 10 stacks",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "Cast 1 Life Surge for every 2 Plant deaths, with a 10% chance to summon a Plant Guardian when it hits a boss player",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Greatly increased chance for Plant-related skills to appear",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Cast 1 Life Surge for every 2 Plant deaths, with a 30% chance to summon a Plant Guardian when it hits a boss or player",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "orbital_orb",
+      "name": "Orbital Orb",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Circle DMG +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Circle skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "When a Circle defeats an enemy, 50% chance to gain an Orbital Orb orbiting that circle, up to 3",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "When a Circle defeats an enemy, gain 1 Orbital Orb orbiting that circle, up to 7",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Circle skill obtained, Circle DMG is increased (Max 10 stacks",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "When a Circle hits an enemy, small chance to gain an Orbital Orb",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Circle skills have greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "For each Orbital Orb owned, main Circle DMG +20%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "echo_scythe",
+      "name": "Echo Scythe",
+      "type": "Etched",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Main Weapon DMG +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR +100",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Main Weapon skills have increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Main Weapon attacks have a chance to fire [Echo Scythes] in a fixed vertical direction (CD:5s). [Echo Scythes] deals 60% character's ATK DMG, pierces enemies, bounces off walls 9 times, and lasts 15s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Each [Echo Scythe] bounce deals 115% of previous bounce's DMG. Projectile size increases to 115% of previous bounce's size",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +1",
+          "text": "For each Main Weapon skill obtained, Main Weapon DMG is increased (Max 10 stacks",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +2",
+          "text": "[Echo Scythe] base DMG is increased to 100% of character's ATK",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary +3",
+          "text": "Main Weapon skills have greatly increased chance to spawn",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "When launching [Echo Scythe], 2 additional scythes are launched in a fixed horizontal direction",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [],
+      "sharedEnchantments": []
+    },
+    {
+      "id": "rune_valkyrie",
+      "name": "Revive",
+      "type": "Blessing",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +240",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "50% Chance to revive upon death, with half of HP restored",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Increases ATK PWR by 20% after revival",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "100% Chance to revive upon death, with half of HP restored",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Upon revival, ATK SPD +15% for 10s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Upon revival, ATK SPD +30%, and main weapon hits restore 1.5% HP. Lasts 10s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10\nMax HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nMax HP+80\nReduced Circle DMG taken+0.5%\nReduced Sword Strike DMG taken+0.5%\nReduced Sprite DMG taken+0.5%\nReduced Main Weapon DMG taken+0.5%\nReduced Meteor DMG taken+0.5%\nReduced Elemental DMG taken+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nMax HP+160\nReduced Circle DMG taken+1%\nReduced Sword Strike DMG taken+1%\nReduced Sprite DMG taken+1%\nReduced Main Weapon DMG taken+1%\nReduced Meteor DMG taken+1%\nReduced Elemental DMG taken+1%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nMax HP+480\nReduced Circle DMG taken+3%\nReduced Sword Strike DMG taken+3%\nReduced Sprite DMG taken+3%\nReduced Main Weapon DMG taken+3%\nReduced Meteor DMG taken+3%\nReduced Elemental DMG taken+3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Reduced Circle DMG taken+7.5%\nReduced Sword Strike DMG taken+7.5%\nReduced Sprite DMG taken+7.5%\nReduced Main Weapon DMG taken+7.5%\nReduced Meteor DMG taken+7.5%\nReduced Elemental DMG taken+7.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduced Circle DMG taken+15%\nReduced Sword Strike DMG taken+15%\nReduced Sprite DMG taken+15%\nReduced Main Weapon DMG taken+15%\nReduced Meteor DMG taken+15%\nReduced Elemental DMG taken+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "lucky_shadow",
+      "name": "Lucky Shadow",
+      "type": "Blessing",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +240",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Increases luck by 5% and dodge by 2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Increases luck by 10% and dodge by 5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Increases luck by 15% and dodge by 10%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "DMG taken from monster collisions -15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "DMG taken from monster collisions -30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10\nMax HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nMax HP+80\nReduced Circle DMG taken+0.5%\nReduced Sword Strike DMG taken+0.5%\nReduced Sprite DMG taken+0.5%\nReduced Main Weapon DMG taken+0.5%\nReduced Meteor DMG taken+0.5%\nReduced Elemental DMG taken+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nMax HP+160\nReduced Circle DMG taken+1%\nReduced Sword Strike DMG taken+1%\nReduced Sprite DMG taken+1%\nReduced Main Weapon DMG taken+1%\nReduced Meteor DMG taken+1%\nReduced Elemental DMG taken+1%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nMax HP+480\nReduced Circle DMG taken+3%\nReduced Sword Strike DMG taken+3%\nReduced Sprite DMG taken+3%\nReduced Main Weapon DMG taken+3%\nReduced Meteor DMG taken+3%\nReduced Elemental DMG taken+3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Reduced Circle DMG taken+7.5%\nReduced Sword Strike DMG taken+7.5%\nReduced Sprite DMG taken+7.5%\nReduced Main Weapon DMG taken+7.5%\nReduced Meteor DMG taken+7.5%\nReduced Elemental DMG taken+7.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduced Circle DMG taken+15%\nReduced Sword Strike DMG taken+15%\nReduced Sprite DMG taken+15%\nReduced Main Weapon DMG taken+15%\nReduced Meteor DMG taken+15%\nReduced Elemental DMG taken+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "intelligence",
+      "name": "Intelligence",
+      "type": "Blessing",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +240",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Increases EXP gain rate by 10%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Increases EXP gain rate to 20%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Max level cap +1 during battle",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "In-battle skill refreshes +1",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "In-battle skill refreshes +2, Max level +1",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10\nMax HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nMax HP+80\nReduced Circle DMG taken+0.5%\nReduced Sword Strike DMG taken+0.5%\nReduced Sprite DMG taken+0.5%\nReduced Main Weapon DMG taken+0.5%\nReduced Meteor DMG taken+0.5%\nReduced Elemental DMG taken+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nMax HP+160\nReduced Circle DMG taken+1%\nReduced Sword Strike DMG taken+1%\nReduced Sprite DMG taken+1%\nReduced Main Weapon DMG taken+1%\nReduced Meteor DMG taken+1%\nReduced Elemental DMG taken+1%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nMax HP+480\nReduced Circle DMG taken+3%\nReduced Sword Strike DMG taken+3%\nReduced Sprite DMG taken+3%\nReduced Main Weapon DMG taken+3%\nReduced Meteor DMG taken+3%\nReduced Elemental DMG taken+3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Reduced Circle DMG taken+7.5%\nReduced Sword Strike DMG taken+7.5%\nReduced Sprite DMG taken+7.5%\nReduced Main Weapon DMG taken+7.5%\nReduced Meteor DMG taken+7.5%\nReduced Elemental DMG taken+7.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduced Circle DMG taken+15%\nReduced Sword Strike DMG taken+15%\nReduced Sprite DMG taken+15%\nReduced Main Weapon DMG taken+15%\nReduced Meteor DMG taken+15%\nReduced Elemental DMG taken+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "rabbits_foot",
+      "name": "Rabbit's Foot",
+      "type": "Blessing",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +60",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Chance of obtaining rare skill upon level-up increases to 20%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Increases the chance of landing on Valkyrie in the Roulette by 15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Chance of obtaining high-quality rewards upon meeting Valkyrie increases by 20%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "For each Epic or higher skill gained, ATK and HP +2% (Max 5 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "For each Epic or higher skill gained, ATK and HP +5% (Max 5 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10\nMax HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nMax HP+80\nReduced Circle DMG taken+0.5%\nReduced Sword Strike DMG taken+0.5%\nReduced Sprite DMG taken+0.5%\nReduced Main Weapon DMG taken+0.5%\nReduced Meteor DMG taken+0.5%\nReduced Elemental DMG taken+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nMax HP+160\nReduced Circle DMG taken+1%\nReduced Sword Strike DMG taken+1%\nReduced Sprite DMG taken+1%\nReduced Main Weapon DMG taken+1%\nReduced Meteor DMG taken+1%\nReduced Elemental DMG taken+1%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nMax HP+480\nReduced Circle DMG taken+3%\nReduced Sword Strike DMG taken+3%\nReduced Sprite DMG taken+3%\nReduced Main Weapon DMG taken+3%\nReduced Meteor DMG taken+3%\nReduced Elemental DMG taken+3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Reduced Circle DMG taken+7.5%\nReduced Sword Strike DMG taken+7.5%\nReduced Sprite DMG taken+7.5%\nReduced Main Weapon DMG taken+7.5%\nReduced Meteor DMG taken+7.5%\nReduced Elemental DMG taken+7.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduced Circle DMG taken+15%\nReduced Sword Strike DMG taken+15%\nReduced Sprite DMG taken+15%\nReduced Main Weapon DMG taken+15%\nReduced Meteor DMG taken+15%\nReduced Elemental DMG taken+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "guardian",
+      "name": "Guardian",
+      "type": "Blessing",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +60",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Reduces DMG taken by 5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "DMG taken -10%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "DMG taken -15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "When HP drop below 50% for the first time, gain a shield that blocks 1 attack",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "When HP drop below 50% for the first 2 times, gain a shield that blocks 1 attack",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10\nMax HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nMax HP+80\nReduced Circle DMG taken+0.5%\nReduced Sword Strike DMG taken+0.5%\nReduced Sprite DMG taken+0.5%\nReduced Main Weapon DMG taken+0.5%\nReduced Meteor DMG taken+0.5%\nReduced Elemental DMG taken+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nMax HP+160\nReduced Circle DMG taken+1%\nReduced Sword Strike DMG taken+1%\nReduced Sprite DMG taken+1%\nReduced Main Weapon DMG taken+1%\nReduced Meteor DMG taken+1%\nReduced Elemental DMG taken+1%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nMax HP+480\nReduced Circle DMG taken+3%\nReduced Sword Strike DMG taken+3%\nReduced Sprite DMG taken+3%\nReduced Main Weapon DMG taken+3%\nReduced Meteor DMG taken+3%\nReduced Elemental DMG taken+3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Reduced Circle DMG taken+7.5%\nReduced Sword Strike DMG taken+7.5%\nReduced Sprite DMG taken+7.5%\nReduced Main Weapon DMG taken+7.5%\nReduced Meteor DMG taken+7.5%\nReduced Elemental DMG taken+7.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduced Circle DMG taken+15%\nReduced Sword Strike DMG taken+15%\nReduced Sprite DMG taken+15%\nReduced Main Weapon DMG taken+15%\nReduced Meteor DMG taken+15%\nReduced Elemental DMG taken+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "devil_pact",
+      "name": "Devil Pact",
+      "type": "Blessing",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +60",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Devil encounter chance increases by 10% and reduces HP loss when exchanging abilities by 25%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Devil encounter chance increases to 20%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduces HP Loss to 50% when exchanging abilities with a devil",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Max HP lost when selecting Devil skills becomes direct HP lost",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Max HP lost when selecting Devil skills becomes direct HP lost. Also +5% for every Devil skill selected (Max 3 stacks)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10\nMax HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nMax HP+80\nReduced Circle DMG taken+0.5%\nReduced Sword Strike DMG taken+0.5%\nReduced Sprite DMG taken+0.5%\nReduced Main Weapon DMG taken+0.5%\nReduced Meteor DMG taken+0.5%\nReduced Elemental DMG taken+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nMax HP+160\nReduced Circle DMG taken+1%\nReduced Sword Strike DMG taken+1%\nReduced Sprite DMG taken+1%\nReduced Main Weapon DMG taken+1%\nReduced Meteor DMG taken+1%\nReduced Elemental DMG taken+1%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nMax HP+480\nReduced Circle DMG taken+3%\nReduced Sword Strike DMG taken+3%\nReduced Sprite DMG taken+3%\nReduced Main Weapon DMG taken+3%\nReduced Meteor DMG taken+3%\nReduced Elemental DMG taken+3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Reduced Circle DMG taken+7.5%\nReduced Sword Strike DMG taken+7.5%\nReduced Sprite DMG taken+7.5%\nReduced Main Weapon DMG taken+7.5%\nReduced Meteor DMG taken+7.5%\nReduced Elemental DMG taken+7.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduced Circle DMG taken+15%\nReduced Sword Strike DMG taken+15%\nReduced Sprite DMG taken+15%\nReduced Main Weapon DMG taken+15%\nReduced Meteor DMG taken+15%\nReduced Elemental DMG taken+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "resilience",
+      "name": "Resilience",
+      "type": "Blessing",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +240",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Converts 15% ATK to 20% Max HP (at the start of the game applies -15% ATK PWR debuff, +20% Max HP buff)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Converts 15% ATK to 25% Max HP (at the start of the game applies -15% ATK PWR debuff, +25% Max HP buff)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Converts 15% ATK to 30% Max HP (at the start of the game applies -15% ATK PWR debuff, +30% Max HP buff)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "-",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "10% CRIT DMG is converted to 25% CRIT DMG Reduction",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "10% CRIT DMG is converted to 50% CRIT DMG Reduction",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10\nMax HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nMax HP+80\nReduced Circle DMG taken+0.5%\nReduced Sword Strike DMG taken+0.5%\nReduced Sprite DMG taken+0.5%\nReduced Main Weapon DMG taken+0.5%\nReduced Meteor DMG taken+0.5%\nReduced Elemental DMG taken+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nMax HP+160\nReduced Circle DMG taken+1%\nReduced Sword Strike DMG taken+1%\nReduced Sprite DMG taken+1%\nReduced Main Weapon DMG taken+1%\nReduced Meteor DMG taken+1%\nReduced Elemental DMG taken+1%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nMax HP+480\nReduced Circle DMG taken+3%\nReduced Sword Strike DMG taken+3%\nReduced Sprite DMG taken+3%\nReduced Main Weapon DMG taken+3%\nReduced Meteor DMG taken+3%\nReduced Elemental DMG taken+3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Reduced Circle DMG taken+7.5%\nReduced Sword Strike DMG taken+7.5%\nReduced Sprite DMG taken+7.5%\nReduced Main Weapon DMG taken+7.5%\nReduced Meteor DMG taken+7.5%\nReduced Elemental DMG taken+7.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Reduced Circle DMG taken+15%\nReduced Sword Strike DMG taken+15%\nReduced Sprite DMG taken+15%\nReduced Main Weapon DMG taken+15%\nReduced Meteor DMG taken+15%\nReduced Elemental DMG taken+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "sharp_arrow",
+      "name": "Sharp Arrow",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Main Weapon damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Main Weapon damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Main weapon DMG increases by 10%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Main weapon DMG increases by 20%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Main weapon DMG increases by 30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Main Weapon DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Main Weapon DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Main Weapon DMG+160\nMain Weapon CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Main Weapon DMG+480\nMain Weapon CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Main Weapon DMG+15%\nMain Weapon CRIT Rate+15%\nMain Weapon bounces +2",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế.",
+          "partialEvidence": [
+            "tests/rune-damage-handler.test.mjs: typed damage thật; chưa phủ đủ dòng đặc biệt"
+          ]
+        },
+        {
+          "tier": "Mythic",
+          "text": "Main Weapon DMG+30%\nMain Weapon CRIT Rate+30%\nMain Weapon bounces +4",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "rune_flame",
+      "name": "Flame-Poison Seal",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Fire damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Poison damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Fire DMG +50%",
+          "status": "PASS",
+          "reason": "combat-status: fire ×1.5 trước flat +5",
+          "scope": "VM production damageEnemy/updateGame; không khẳng định parity đầy đủ",
+          "evidence": [
+            "tests/combat-status.test.mjs"
+          ]
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Poison DMG +50%",
+          "status": "PASS",
+          "reason": "combat-status: poison ×1.5 trước flat +10",
+          "scope": "VM production damageEnemy/updateGame; không khẳng định parity đầy đủ",
+          "evidence": [
+            "tests/combat-status.test.mjs"
+          ]
+        },
+        {
+          "tier": "Mythic",
+          "text": "When Fire and Poison are present, an explosion occurs every second",
+          "status": "FAIL",
+          "reason": "Nổ fire+poison mỗi giây chưa triển khai.",
+          "evidence": [
+            "public/js/game/runes/rune-workspace.js: combatNote",
+            "tests/combat-status.test.mjs"
+          ]
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Elemental DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Elemental DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Elemental DMG+160\nElemental CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Elemental DMG+480\nElemental CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Elemental DMG+15%\nElemental CRIT Rate+15%\nWhen attacking Burning, Poisoned targets [sic], CRIT Rate +7.5%, CRIT DMG +15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế.",
+          "partialEvidence": [
+            "tests/rune-damage-handler.test.mjs: typed damage thật; chưa phủ đủ dòng đặc biệt"
+          ]
+        },
+        {
+          "tier": "Mythic",
+          "text": "Elemental DMG+30%\nElemental CRIT Rate+30%\nWhen attacking Burning, Poisoned targets [sic], CRIT Rate +15%, CRIT DMG +30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "rune_frost",
+      "name": "Frost-Thunder Seal",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Ice damage + 10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Lightning damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Lightning strikes have a chance to cause paralysis",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Freezing deepens enemy injuries by 30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Lightning strike DMG to frozen monsters increases by 30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Elemental DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Elemental DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Elemental DMG+160\nElemental CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Elemental DMG+480\nElemental CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Elemental DMG+15%\nElemental CRIT Rate+15%\nWhen attacking Paralyzed, Frozen targets [sic], CRIT Rate +17.5%, CRIT DMG +35%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Elemental DMG+30%\nElemental CRIT Rate+30%\nWhen attacking Paralyzed, Frozen targets [sic], CRIT Rate +35%, CRIT DMG +70%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "rotating_spd_up",
+      "name": "Rotating SPD Up",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Circle damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Circle speed increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Circle speed increases by 100%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Circles increase from 2 orbs per group to 3",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Circle DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Circle DMG+160\nCircle CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Circle DMG+480\nCircle CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Circle DMG+15%\nCircle CRIT Rate+15%\nEach time Circle attacks are active, there is a chance to copy the same Circle attack on another trajectory",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Circle DMG+30%\nCircle CRIT Rate+30%\nEach time Circle attacks are active, there is a high chance to copy the same Circle attack on another trajectory",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "sawblade_circle",
+      "name": "Sawblade Circle",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Circle damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Circles become Sawblade Circle",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sawblade Circle DMG increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sawblade Circle inherit main weapon's CRIT rate",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Circle DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Circle DMG+160\nCircle CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Circle DMG+480\nCircle CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Circle DMG+15%\nCircle CRIT Rate+15%\nAdditional Sawblade center DMG +25%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Circle DMG+30%\nCircle CRIT Rate+30%\nAdditional Sawblade center additional[sic] DMG +50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "giant_meteor",
+      "name": "Giant Meteor",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Meteor damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Meteors have a 20% chance to become Giant Meteors, DMG increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "After absorbing a Meteor Potion, 50% chance to summon 1 extra Meteor",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "After summoning 5 Meteors, the next summon will be 1 Giant Meteor",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Meteor DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Meteor DMG+160\nMeteor CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Meteor DMG+480\nMeteor CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Meteor DMG+15%\nMeteor CRIT Rate+15%\nMeteor and Meteor Potion CD -25%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Meteor DMG+30%\nMeteor CRIT Rate+30%\nMeteor and Meteor Potion CD -50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "potion_magnet",
+      "name": "Potion Magnet",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Meteor damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Auto absorbs Meteor Potions when dropped",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Meteor DMG increases by 25%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Meteor DMG increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Meteor DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Meteor DMG+160\nMeteor CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Meteor DMG+480\nMeteor CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Meteor DMG+15%\nMeteor CRIT Rate+15%\nWhen auto-looting Meteor Potions, there is a chance to spawn 1 more potion",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Meteor DMG+30%\nMeteor CRIT Rate+30%\nMeteor CRIT Rate+30%\nWhen auto-looting Meteor Potions, there is a high chance to spawn 1 more potion",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "sprite_multishot",
+      "name": "Sprite Multishot",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Sprite damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Sprites have a 30% chance to fire multiple shots",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sprite ATK SPD increases by 25%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sprite ATK SPD increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Sprite DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sprite DMG+160\nSprite CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Sprite DMG+480\nSprite CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sprite DMG+15%\nSprite CRIT Rate+15%\nWhen Sprites trigger multi shots, there is a chance to fire a projectile barrage in an area",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sprite DMG+30%\nSprite CRIT Rate+30%\nSprite CRIT Rate+30%\nWhen Sprites trigger multi shots, fire a projectile barrage in an area",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "sprite_link",
+      "name": "Sprite Link",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Sprite damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Every extra sprite increases all Sprite DMG by 5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Every extra sprite increases all Sprite DMG by 10%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Every extra sprite increases all Sprite DMG by 15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Sprite DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sprite DMG+160\nSprite CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Sprite DMG+480\nSprite CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sprite DMG+15%\nSprite CRIT Rate+15%\nFor every additional Sprite, all Sprites gain 10% ATK SPD",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sprite DMG+30%\nSprite CRIT Rate+30%\nFor every additional Sprite, all Sprites gain 20% ATK SPD",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "dragonflight_sword",
+      "name": "Dragonflight Sword",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Strike damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Strikes have a 35% chance to become Dragon Strike dealing 1x ATK PWR as damage (Dragon Beam Strikes do 4 hits, 0.55x ATK PWR each, and have tracking)",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Dragon Strike chance increases to 70%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Dragon Strike chance increases to 100%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Strike DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Strike DMG+160\nStrike CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Strike DMG+480\nStrike CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Strike DMG+15%\nStrike CRIT Rate+15%\nChance for Dragon Strikes to turn into Warfire Dragons: Slower in speed, but fires smaller Strikes when tracking enemies. Lasts 5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Strike DMG+30%\nStrike CRIT Rate+30%\nHigh chance for Dragon Strikes to turn into Warfire Dragons: Slower in speed, but fires smaller Strikes when tracking enemies. Lasts 5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "ricocheting_strike",
+      "name": "Ricocheting Strike",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Strike damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Strike has a 35% chance to ricochet",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Strike ricochet chance increases to 70%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Strike always ricochets",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Strike DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Strike DMG+160\nStrike CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Strike DMG+480\nStrike CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Strike DMG+15%\nStrike CRIT Rate+15%\nStrike Bounce +2",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Strike DMG+30%\nStrike CRIT Rate+30%\nStrike Bounce +4",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "rootguard",
+      "name": "Rootguard",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Plant damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Gain a shield while standing still. The more Plant Guardians there are, the faster the shield is gained",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "When shield breaks, summons 2 Plant Guardians",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Max Plant Guardian Count +4",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Plant DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Plant DMG+160\nPlant CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Plant DMG+480\nPlant CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Plant DMG+15%\nPlant CRIT Rate+15%\nWhen taking fatal damage, destroy 5 Plant Guardians to negate damage. Triggers once per match",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Plant DMG+30%\nPlant CRIT Rate+30%\nWhen taking fatal damage, destroy 5 Plant Guardians to negate damage. Triggers up to 3 times per match",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "vine_bind",
+      "name": "Vine Bind",
+      "type": "Enhancement",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Plant damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR +50",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Plant Guardians link to 1 other Plant Guardian, dealing Poison DMG along the link path and Slowing enemies hit",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Plant Guardians preferentially spawn near the highest-HP enemy",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Plant Guardians link to 2 other Plant Guardians, dealing Poison DMG along the link path and Slowing enemies hit",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Plant DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Plant DMG+160\nPlant CRIT Rate+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Plant DMG+480\nPlant CRIT Rate+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Plant DMG+15%\nPlant CRIT Rate+15%\nPlant Guardians deal damage over time to nearby enemies and reduce MOV SPD by 15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Plant DMG+30%\nPlant CRIT Rate+30%\nPlant Guardians deal damage over time to nearby enemies, reduce MOV SPD by 15%, and have a small chance to Root for 0.5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "ATK PWR+10",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "ATK PWR+20\nBoss DMG+0.3%\nMore damage VS minions+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "ATK PWR+40\nBoss DMG+0.5%\nMore damage VS minions+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "ATK PWR+120\nBoss DMG+2%\nMore damage VS minions+2%\nCRIT DMG+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG+7.5%\nMore damage VS minions+7.5%\nCRIT DMG+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG+15%\nMore damage VS minions+15%\nCRIT DMG+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "arrow_rain",
+      "name": "Arrow Rain",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Main Weapon damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Main Weapon damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Initial Ability: Every 7 shots trigger an AoE Arrow Rain",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Main weapon ATK SPD increases by 15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Main weapon ATK SPD increases by 30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Main Weapon DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Main Weapon DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Main Weapon DMG+160\nMain Weapon CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Main Weapon DMG+480\nMain Weapon CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Main Weapon DMG+15%\nMain Weapon CRIT DMG+15%\nEnemies hit by Arrow Rain have a chance to be Weakened for 2s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Main Weapon DMG+30%\nMain Weapon CRIT DMG+30%\nEnemies hit by Arrow Rain are Weakened for 2s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "flame_poison_touch",
+      "name": "Flame-Poison Touch",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Poison damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Fire damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Initial Ability: Ignite a random monster every 2s",
+          "status": "PASS",
+          "reason": "combat-status: cháy 2s, không độc trước Legendary",
+          "scope": "VM production damageEnemy/updateGame; không khẳng định parity đầy đủ",
+          "evidence": [
+            "tests/combat-status.test.mjs"
+          ]
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Initial Ability: Poison a random monster every 2s",
+          "status": "PASS",
+          "reason": "combat-status: độc mở ở rank 7",
+          "scope": "VM production damageEnemy/updateGame; không khẳng định parity đầy đủ",
+          "evidence": [
+            "tests/combat-status.test.mjs"
+          ]
+        },
+        {
+          "tier": "Mythic",
+          "text": "Flame-Poison touch cooldown shortened to 1.5s",
+          "status": "PASS",
+          "reason": "combat-status: chu kỳ 1.5s",
+          "scope": "VM production damageEnemy/updateGame; không khẳng định parity đầy đủ",
+          "evidence": [
+            "tests/combat-status.test.mjs"
+          ]
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Elemental DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Elemental DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Elemental DMG+160\nElemental CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Elemental DMG+480\nElemental CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Elemental DMG+15%\nElemental CRIT DMG+15%\nWhen Flamenox Touch is triggered, there is a chance to summon Meteor",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Elemental DMG+30%\nElemental CRIT DMG+30%\nFlamenox Touch summons Meteor when triggered",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "rune_thunder",
+      "name": "Frost-Thunder Touch",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Ice damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Lightning damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Initial Ability: Strike a random enemy with lightning every 2s",
+          "status": "PASS",
+          "reason": "combat-status: sét 2s",
+          "scope": "VM production damageEnemy/updateGame; không khẳng định parity đầy đủ",
+          "evidence": [
+            "tests/combat-status.test.mjs"
+          ]
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Initial Ability: Freeze a random enemy every 2s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Lightning Touch can hit 2 enemies instead",
+          "status": "PASS",
+          "reason": "combat-status: hai mục tiêu",
+          "scope": "VM production damageEnemy/updateGame; không khẳng định parity đầy đủ",
+          "evidence": [
+            "tests/combat-status.test.mjs"
+          ]
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Elemental DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Elemental DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Elemental DMG+160\nElemental CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Elemental DMG+480\nElemental CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Elemental DMG+15%\nElemental CRIT DMG+15%\nWhen Frostshock Touch is triggered, there is a chance to summon 1-3 Strikes",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Elemental DMG+30%\nElemental CRIT DMG+30%\nFrostshock Touch summons 1-3 Strikes when triggered",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "ring_of_agony",
+      "name": "Ring of Agony",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Circle damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Start with Ring of Agony. Monsters within the ring take 20% more DMG",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Ring of Agony deals 1x ATK PWR as damage every second to enemies inside the ring",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Ring of Agony deals 1x ATK PWR as damage every 0.5s and applies Bolt effect",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Circle DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Circle DMG+160\nCircle CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Circle DMG+480\nCircle CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Circle DMG+15%\nCircle CRIT DMG+15%\nEnemies suffer -10% ATK inside Ring of Agony",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Circle DMG+30%\nCircle CRIT DMG+30%\nEnemies suffer -20% ATK inside Ring of Agony",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "ability_circle",
+      "name": "Circle",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Circle damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Start with 2 weak circling orbs dealing 0.75x ATK PWR as damage per hit",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Start with 2 strong circling orbs dealing 1.25x ATK PWR as damage per hit",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Start with 4 strong circling orbs dealing 1.25x ATK PWR as damage per hit",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Circle DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Circle DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Circle DMG+160\nCircle CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Circle DMG+480\nCircle CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Circle DMG+15%\nCircle CRIT DMG+15%\nChance for Circles to turn into shields that block projectiles",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Circle DMG+30%\nCircle CRIT DMG+30%\nIncreased chance for Circles to turn into shields that block projectiles",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "star_of_fury",
+      "name": "Star of Fury",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Meteor damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Initial Ability: Upon taking DMG, summon 3 Meteors to randomly bombard the field",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Recover 0.5% Max HP when a Meteor hits",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Upon taking DMG, summon 7 Meteors to randomly bombard the field",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Meteor DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Meteor DMG+160\nMeteor CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Meteor DMG+480\nMeteor CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Meteor DMG+15%\nMeteor CRIT DMG+15%\nStar of Fury's Meteors have a chance to become huge Meteors",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Meteor DMG+30%\nMeteor CRIT DMG+30%\nStar of Fury's Meteors become huge Meteors",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "star_of_time",
+      "name": "Star of Time",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Meteor damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Initial Ability: Summon 1 Meteor every 10s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Star of Time's Meteor summoning time reduced to 5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Star of Time has a 50% chance to summon double Meteors",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Meteor DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Meteor DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Meteor DMG+160\nMeteor CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Meteor DMG+480\nMeteor CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Meteor DMG+15%\nMeteor CRIT DMG+15%\nWhen Star of Time summons Meteors, increases CRIT Rate. When dealing damage, there is a chance to summon 1-3 Strikes",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Meteor DMG+30%\nMeteor CRIT DMG+30%\nWhen Star of Time summons Meteors, greatly increases CRIT Rate. When dealing damage, summons 1-3 Strikes",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "healing_sprite",
+      "name": "Healing Sprite",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Sprite damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Start with a Healing Sprite that deals 0.5x ATK PWR as damage, and heals for 1% Max HP per hit.",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Healing Sprite ATK increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Healing Sprite ATK SPD increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Sprite DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sprite DMG+160\nSprite CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Sprite DMG+480\nSprite CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sprite DMG+15%\nSprite CRIT DMG+15%\nAt full HP, CRIT Rate of Healing Sprite attacks increased",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sprite DMG+30%\nSprite CRIT DMG+30%\nAt full HP, CRIT Rate of Healing Sprite attacks greatly increased",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "melee_sprite",
+      "name": "Melee Sprite",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Sprite damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Start with a Melee Sprite that deals 1.25x ATK PWR as damage in a small area",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Melee Sprite DMG increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Melee Sprite ATK SPD increases by 50%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Sprite DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Sprite DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Sprite DMG+160\nSprite CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Sprite DMG+480\nSprite CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sprite DMG+15%\nSprite CRIT DMG+15%\nWhen not at full HP, melee[sic] Sprite attacks have a chance to heal character[sic]",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sprite DMG+30%\nSprite CRIT DMG+30%\nWhen not at full HP, melee[sic] Sprite attacks heal character[sic]",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "sword_of_time",
+      "name": "Sword of Time",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Strike damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Initial Ability: Summon 1 Strike every 3s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Sword of Time's Strike summoning is reduced to 1.5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Sword of Time has a 50% chance to summon double Strike swords",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Strike DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Strike DMG+160\nStrike CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Strike DMG+480\nStrike CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Strike DMG+15%\nStrike CRIT DMG+15%\nSword of Time summons Strikes with random elements, with a chance to cast Meteor when they deal damage",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Strike DMG+30%\nStrike CRIT DMG+30%\nSword of Time summons Strikes with random elements, and cast Meteor when they deal damage",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "strike_potion",
+      "name": "Strike Potion",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Strike damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Start with a Strike Potion",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Summon 3 Strikes upon absorbing any potion",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Strike Potion has a 50% chance to summon double Strike Swords",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Strike DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Strike DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Strike DMG+160\nStrike CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Strike DMG+480\nStrike CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Strike DMG+15%\nStrike CRIT DMG+15%\nWhen looting Strike Potions, there is a small chance to gain Invincibility Potion effect[sic]",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Strike DMG+30%\nStrike CRIT DMG+30%\nWhen looting Strike Potions, there is an increased chance to gain Invincibility Potion effect[sic]",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "plant_summon",
+      "name": "Plant Summon",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Plant damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Summons 1 Plant Guardian around the player every 8s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Summons 1 Plant Guardian around the player every 4s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "50% chance to summon 2 Plant Guardians",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Plant DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Plant DMG+160\nPlant CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Plant DMG+480\nPlant CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Plant DMG+15%\nPlant CRIT DMG+15%\nSummons 1 Plant Guardian after taking damage",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Plant DMG+30%\nPlant CRIT DMG+30%\nSummons 2 Plant Guardians after taking damage",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    },
+    {
+      "id": "equinox_bloom",
+      "name": "Equinox Bloom",
+      "type": "Ability",
+      "effects": [
+        {
+          "tier": "Normal",
+          "text": "Plant damage +5",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant damage +10",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP +200",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "When a Plant Guardian dies, chance to cast [Berserk] on 1 random Plant Guardian, increasing its CRIT DMG, CRIT Rate, and ATK SPD for 5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic +2",
+          "text": "Unlocks Rune Enchantment",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "When a Plant Guardian dies, chance to create an Acid Swamp",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "When a Plant Guardian dies, chance to cast [Berserk] on 2 random Plant Guardian, increasing their CRIT DMG, CRIT Rate, and ATK SPD for 5s",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "enchantments": [
+        {
+          "tier": "Normal",
+          "text": "Plant DMG+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Fine",
+          "text": "Plant DMG+80",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Rare",
+          "text": "Plant DMG+160\nPlant CRIT DMG+2%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Epic",
+          "text": "Plant DMG+480\nPlant CRIT DMG+6%",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Plant DMG+15%\nPlant CRIT DMG+15%\nWhen Plant Guardian hits an enemy, has a small chance to restore 0.3% HP",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Plant DMG+30%\nPlant CRIT DMG+30%\nWhen Plant Guardian hits an enemy, has a small chance to restore 0.6% HP, and the next attack is guaranteed to crit",
+          "status": "NOT TESTED",
+          "reason": "Chưa đối chiếu đường chạy thực tế."
+        }
+      ],
+      "sharedEnchantments": [
+        {
+          "tier": "Normal",
+          "text": "Max HP+40",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Fine",
+          "text": "Max HP+80\nBoss DMG REDUC+0.3%\nMinion DMG REDUC+0.3%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Rare",
+          "text": "Max HP+160\nBoss DMG REDUC+0.5%\nMinion DMG REDUC+0.5%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Epic",
+          "text": "Max HP+480\nBoss DMG REDUC+2%\nMinion DMG REDUC+2%\nCRIT DMG REDUC+4%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Legendary",
+          "text": "Boss DMG REDUC+7.5%\nMinion DMG REDUC+7.5%\nCRIT DMG REDUC+15%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        },
+        {
+          "tier": "Mythic",
+          "text": "Boss DMG REDUC+15%\nMinion DMG REDUC+15%\nCRIT DMG REDUC+30%",
+          "status": "NOT TESTED",
+          "reason": "Chưa phủ toàn bộ dòng bonus trên từng ngọc."
+        }
+      ]
+    }
+  ]
+}

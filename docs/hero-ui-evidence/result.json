@@ -1,0 +1,711 @@
+{
+  "scope": "Real Chrome + isolated real HTTP/auth/save + memory DB; seeded onboarding completion only; no production",
+  "status": "PASS",
+  "viewports": [
+    {
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "heroNavLabel": "Anh hùng",
+      "primaryWeaponSelectorAbsent": true,
+      "initiallyClosed": true,
+      "triggerBox": {
+        "x": 161.71875,
+        "y": 347,
+        "width": 157.28125,
+        "height": 44
+      },
+      "closedGeometry": {
+        "viewportWidth": 360,
+        "documentWidth": 360,
+        "boxes": [
+          {
+            "id": "subpanelCharacters",
+            "left": 1,
+            "right": 359,
+            "width": 358
+          },
+          {
+            "id": "characterStageControls",
+            "left": 1,
+            "right": 359,
+            "width": 358
+          },
+          {
+            "id": "vnCharactersAuthenticShowcase",
+            "left": 1,
+            "right": 359,
+            "width": 358
+          },
+          {
+            "id": "charSubtabHeroGrid",
+            "left": 28,
+            "right": 332,
+            "width": 304
+          },
+          {
+            "id": "thor",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "wukong",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "cleo",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "atreus",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "rolla",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "nezha",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "otta",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "hou_yi",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "phynx",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "loki",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "dracoola",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "seraph",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "mymu",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "hela",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "helix",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "nyanja",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "alex",
+            "left": 26.529998779296875,
+            "right": 176.47000122070312,
+            "width": 149.94000244140625
+          },
+          {
+            "id": "artemis",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "btnToggleCharStarResonance",
+            "left": 161.71875,
+            "right": 319,
+            "width": 157.28125
+          }
+        ],
+        "clipped": []
+      },
+      "openedByLabelledButton": true,
+      "openGeometry": {
+        "viewportWidth": 360,
+        "documentWidth": 360,
+        "boxes": [
+          {
+            "id": "subpanelCharacters",
+            "left": 1,
+            "right": 359,
+            "width": 358
+          },
+          {
+            "id": "characterStageControls",
+            "left": 1,
+            "right": 359,
+            "width": 358
+          },
+          {
+            "id": "vnCharactersAuthenticShowcase",
+            "left": 1,
+            "right": 359,
+            "width": 358
+          },
+          {
+            "id": "charSubtabHeroGrid",
+            "left": 28,
+            "right": 332,
+            "width": 304
+          },
+          {
+            "id": "thor",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "wukong",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "cleo",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "atreus",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "rolla",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "nezha",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "otta",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "hou_yi",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "phynx",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "loki",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "dracoola",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "seraph",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "mymu",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "hela",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "helix",
+            "left": 28,
+            "right": 175,
+            "width": 147
+          },
+          {
+            "id": "nyanja",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "alex",
+            "left": 26.529998779296875,
+            "right": 176.47000122070312,
+            "width": 149.94000244140625
+          },
+          {
+            "id": "artemis",
+            "left": 185,
+            "right": 332,
+            "width": 147
+          },
+          {
+            "id": "btnToggleCharStarResonance",
+            "left": 161.71875,
+            "right": 319,
+            "width": 157.28125
+          },
+          {
+            "id": "charHeroStatsStarSkinPanel",
+            "left": 28,
+            "right": 332,
+            "width": 304
+          },
+          {
+            "id": "BUTTON",
+            "left": 44,
+            "right": 232.765625,
+            "width": 188.765625
+          },
+          {
+            "id": "BUTTON",
+            "left": 44,
+            "right": 182.078125,
+            "width": 138.078125
+          },
+          {
+            "id": "BUTTON",
+            "left": 56.779998779296875,
+            "right": 303.219970703125,
+            "width": 246.43997192382812
+          },
+          {
+            "id": "BUTTON",
+            "left": 58,
+            "right": 302,
+            "width": 244
+          },
+          {
+            "id": "BUTTON",
+            "left": 58,
+            "right": 302,
+            "width": 244
+          }
+        ],
+        "clipped": []
+      },
+      "escapeClosesAndRestoresFocus": true,
+      "reentryClosed": true,
+      "stageTriggerBox": {
+        "x": 33.890625,
+        "y": 346.5,
+        "width": 155.28125,
+        "height": 44
+      },
+      "stageDisclosureVerified": true,
+      "mainNavigationReentryClosed": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "heroNavLabel": "Anh hùng",
+      "primaryWeaponSelectorAbsent": true,
+      "initiallyClosed": true,
+      "triggerBox": {
+        "x": 614.71875,
+        "y": 423,
+        "width": 157.28125,
+        "height": 44
+      },
+      "closedGeometry": {
+        "viewportWidth": 1024,
+        "documentWidth": 1024,
+        "boxes": [
+          {
+            "id": "subpanelCharacters",
+            "left": 212,
+            "right": 812,
+            "width": 600
+          },
+          {
+            "id": "characterStageControls",
+            "left": 212,
+            "right": 812,
+            "width": 600
+          },
+          {
+            "id": "vnCharactersAuthenticShowcase",
+            "left": 212,
+            "right": 812,
+            "width": 600
+          },
+          {
+            "id": "charSubtabHeroGrid",
+            "left": 239,
+            "right": 785,
+            "width": 546
+          },
+          {
+            "id": "thor",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "wukong",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "cleo",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "atreus",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "rolla",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "nezha",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "otta",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "hou_yi",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "phynx",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "loki",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "dracoola",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "seraph",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "mymu",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "hela",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "helix",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "nyanja",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "alex",
+            "left": 237.70999145507812,
+            "right": 369.2900085449219,
+            "width": 131.58001708984375
+          },
+          {
+            "id": "artemis",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "btnToggleCharStarResonance",
+            "left": 614.71875,
+            "right": 772,
+            "width": 157.28125
+          }
+        ],
+        "clipped": []
+      },
+      "openedByLabelledButton": true,
+      "openGeometry": {
+        "viewportWidth": 1024,
+        "documentWidth": 1024,
+        "boxes": [
+          {
+            "id": "subpanelCharacters",
+            "left": 212,
+            "right": 812,
+            "width": 600
+          },
+          {
+            "id": "characterStageControls",
+            "left": 212,
+            "right": 812,
+            "width": 600
+          },
+          {
+            "id": "vnCharactersAuthenticShowcase",
+            "left": 212,
+            "right": 812,
+            "width": 600
+          },
+          {
+            "id": "charSubtabHeroGrid",
+            "left": 239,
+            "right": 785,
+            "width": 546
+          },
+          {
+            "id": "thor",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "wukong",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "cleo",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "atreus",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "rolla",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "nezha",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "otta",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "hou_yi",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "phynx",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "loki",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "dracoola",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "seraph",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "mymu",
+            "left": 239,
+            "right": 368,
+            "width": 129
+          },
+          {
+            "id": "hela",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "helix",
+            "left": 517,
+            "right": 646,
+            "width": 129
+          },
+          {
+            "id": "nyanja",
+            "left": 656,
+            "right": 785,
+            "width": 129
+          },
+          {
+            "id": "alex",
+            "left": 237.70999145507812,
+            "right": 369.2900085449219,
+            "width": 131.58001708984375
+          },
+          {
+            "id": "artemis",
+            "left": 378,
+            "right": 507,
+            "width": 129
+          },
+          {
+            "id": "btnToggleCharStarResonance",
+            "left": 614.71875,
+            "right": 772,
+            "width": 157.28125
+          },
+          {
+            "id": "charHeroStatsStarSkinPanel",
+            "left": 239,
+            "right": 785,
+            "width": 546
+          },
+          {
+            "id": "BUTTON",
+            "left": 255,
+            "right": 443.765625,
+            "width": 188.765625
+          },
+          {
+            "id": "BUTTON",
+            "left": 449.765625,
+            "right": 587.84375,
+            "width": 138.078125
+          },
+          {
+            "id": "BUTTON",
+            "left": 268.31671142578125,
+            "right": 406.33953857421875,
+            "width": 138.0228271484375
+          },
+          {
+            "id": "BUTTON",
+            "left": 443.65625,
+            "right": 580.328125,
+            "width": 136.671875
+          },
+          {
+            "id": "BUTTON",
+            "left": 618.328125,
+            "right": 755,
+            "width": 136.671875
+          }
+        ],
+        "clipped": []
+      },
+      "escapeClosesAndRestoresFocus": true,
+      "reentryClosed": true,
+      "stageTriggerBox": {
+        "x": 591.703125,
+        "y": 423,
+        "width": 168.59375,
+        "height": 44
+      },
+      "stageDisclosureVerified": true,
+      "mainNavigationReentryClosed": true
+    }
+  ],
+  "errors": []
+}

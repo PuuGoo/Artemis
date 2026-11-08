@@ -1,0 +1,11 @@
+{
+  "scope": "Chrome + isolated real HTTP/auth/save + memory DB; seeded test inventory, no production",
+  "enchantClicked": true,
+  "persistedAfterReload": true,
+  "level": 1,
+  "enchantium": 90,
+  "unrelatedRuneUnchanged": true,
+  "stonesPreserved": true,
+  "socketsPreserved": true,
+  "errors": []
+}

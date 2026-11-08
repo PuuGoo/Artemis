@@ -28,10 +28,10 @@ console.log('\n=== 1. KY KHE UOC PHAI TRU HP HIEN TAI ===');
 
 const accIdx = src.indexOf("document.getElementById('btnAcceptDevil').addEventListener");
 check('tim thay handler btnAcceptDevil', accIdx > 0);
-const accBlock = src.slice(accIdx, accIdx + 3000);
+const accBlock = src.slice(accIdx, src.indexOf("document.getElementById('btnDeclineDevil')", accIdx));
 
-check('co tru HP hien tai (beforeHp - lostMaxHp)',
-  /beforeHp\s*-\s*lostMaxHp/.test(accBlock));
+check('trừ HP theo paidHp, hỗ trợ direct HP và mất Max HP',
+  /beforeHp\s*-\s*paidHp/.test(accBlock) && /paidHp = directHpCost[^;]+: lostMaxHp/.test(accBlock));
 check('KHONG con chi dung Math.min(hp, maxHp) don thuan',
   !/p\.hp = Math\.min\(p\.hp, p\.maxHp\)\s*;/.test(accBlock));
 check('co tinh lostMaxHp = beforeMaxHp - newMaxHp',
@@ -71,7 +71,7 @@ check('Seraph mien phi', /hasHeroSkillActive\(p, 'seraph'\)[\s\S]{0,120}?pct = 0
 check('Rune Devil Pact duoc kiem tra', /runeHasEffect\('devil_pact'\)/.test(src));
 check('Mythic Enchant mien tru hoan toan',
   /runeMythicEnchant === true[\s\S]{0,150}?copies\(SaveState\.runes\?\.devil_pact\) >= 6[\s\S]{0,120}?pct = 0/.test(src));
-check('Blessing thuong giam 50%', /pct = basePct \/ 2/.test(src));
+check('Blessing Epic giảm 25%, Mythic giảm 50% đúng nguồn', /pct = basePct \* \(runeHasEffect\('devil_pact',11\) \? 0\.5 : 0\.75\)/.test(src));
 
 // ============================================================ 5. KHONG GHI DE HAI LAN
 console.log('\n=== 5. KHONG CO HANDLER TRUNG ===');

@@ -1,0 +1,10 @@
+{
+  "scope": "Local verification only; no commit/push or production mutation",
+  "focused": {"tests":88,"pass":88,"fail":0,"log":"C:/Users/PuuGoo/AppData/Local/hermes/cache/scratch/rune-focused-final.log"},
+  "devilLegacyFixtureFollowup": {"tests":1,"pass":1,"fail":0},
+  "fullSuite": {"tests":531,"pass":524,"fail":0,"skipped":7,"durationMs":36018.0614,"log":"C:/Users/PuuGoo/AppData/Local/hermes/cache/scratch/rune-full-final.log"},
+  "syntax": {"files":202,"inlineScripts":6,"errors":0},
+  "browser": {"scope":"Chrome + isolated HTTP/auth/save + memory DB; seeded inventory", "level":1,"enchantiumAfter":90,"cost":10,"persistedAfterReload":true,"unrelatedRuneUnchanged":true,"stonesPreserved":true,"socketsPreserved":true,"errors":[]},
+  "coverageLedger": {"runes":46,"PASS":7,"FAIL":1,"NOT TESTED":736,"note":"Statuses count individual source rows, not runes. PASS is restricted to documented VM scope."},
+  "remaining": ["Flame-Poison Seal Mythic explosion not implemented", "Full 46-rune passive/enchant parity is not implemented or verified", "Legendary Frost-Thunder currently slows; absolute freeze parity unresolved", "Devil Pact Mythic enchant 5% per selected Devil skill stacks not implemented in this chunk", "Conditional crit, special procs and other unverified source rows remain NOT TESTED", "Live Wiki was not re-fetched in this chunk", "Seven opt-in integration tests skipped; production/Mongo durability not verified"]
+}

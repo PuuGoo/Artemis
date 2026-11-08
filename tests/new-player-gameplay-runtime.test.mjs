@@ -60,13 +60,6 @@ test('Vũ khí đang mặc được ghi nhận như vũ khí trong túi, tháo/b
   assert.equal(f.run('grantStarterWeaponIfNeeded()'), null);
 });
 
-test('Selector vũ khí không tự tạo trang bị miễn phí khi túi/ô vũ khí trống', () => {
-  const f = fixture({ selectedWeaponId: 'bow' });
-  const before = JSON.stringify(f.S);
-  clickHandler(f, '.select-weapon-btn', "const petGrid =", 'data-weapon-id', 'staff');
-  assert.equal(JSON.stringify(f.S), before);
-});
-
 test('Selector hero cũ không vượt khoá sở hữu của roster mới', () => {
   const f = fixture();
   f.run(between('function getHeroStarLevel(', 'function getHeroShardRequirement('));
@@ -84,17 +77,6 @@ test('Alex 0 sao vẫn sở hữu sau khi đổi sang hero đã mở, có thể 
   assert.equal(f.S.selectedHeroId, 'thor');
   clickHandler(f, '.hero-card-btn', "document.getElementById('activeHeroRole')", 'data-hero-id', 'alex');
   assert.equal(f.S.selectedHeroId, 'alex');
-});
-
-test('Danh mục không ghi Đang Trang Bị khi người mới chưa sở hữu vũ khí', () => {
-  const f = fixture({ selectedWeaponId: 'bow', gearLevel: 1 });
-  const grid = { innerHTML: '' };
-  f.ctx.document = { getElementById: () => grid };
-  f.ctx.WEAPONS = [{ id: 'bow', name: 'Cung', tier: 'S', desc: '' }];
-  f.ctx.getWeaponSvgArt = () => '';
-  f.run(between("const weaponGrid = document.getElementById('weaponCardsGrid');", "document.querySelectorAll('.select-weapon-btn')"));
-  assert.ok(!grid.innerHTML.includes('✓ Đang Trang Bị'));
-  assert.ok(grid.innerHTML.includes('Chưa sở hữu'));
 });
 
 test('N08 hiển thị Hoàn Tất khi đã xong bảy bước trước', () => {
@@ -166,34 +148,12 @@ test('Save cũ không tự bật tutorial; skip không xoá tiến trình hay th
   assert.equal(f.run('activateBeginnerJourney()'), false);
 });
 
-test('Đổi vũ khí sở hữu giữ nguyên UID, template, level, quality, sockets, affixes của cả hai món', () => {
-  const old = { uid: 'old-bow', templateId: 'rusty_bow', level: 31, quality: 'legendary', locked: true, sockets: ['ruby'], affixes: [{ id: 'atk' }] };
-  const owned = { uid: 'owned-staff', templateId: 'oracle_staff', level: 2, quality: 'rare', favorite: true, sockets: [], affixes: [] };
-  const f = fixture({ equippedGear: { weapon: old }, gearBag: [owned], selectedWeaponId: 'bow' });
-  const originals = JSON.stringify([old, owned]);
-  clickHandler(f, '.select-weapon-btn', 'const petGrid =', 'data-weapon-id', 'staff');
-  assert.equal(f.S.equippedGear.weapon, owned);
-  assert.equal(f.S.gearBag[0], old);
-  assert.equal(JSON.stringify([old, owned]), originals);
-  assert.ok(f.S.beginnerJourney.completedSteps.includes('N04'));
-  const after = JSON.stringify(f.S);
-  clickHandler(f, '.select-weapon-btn', 'const petGrid =', 'data-weapon-id', 'staff');
-  assert.equal(JSON.stringify(f.S), after);
-});
-
-test('Không biến rusty_bow đang mặc thành vũ khí S hoặc loại chưa sở hữu', () => {
-  const f = fixture({ equippedGear: { weapon: { uid: 'starter', templateId: 'rusty_bow', level: 10 } }, selectedWeaponId: 'bow' });
-  const before = JSON.stringify(f.S);
-  for (const id of ['bow','staff','claw','invalid']) clickHandler(f, '.select-weapon-btn', 'const petGrid =', 'data-weapon-id', id);
-  assert.equal(JSON.stringify(f.S), before);
-});
-
 function modalClick(f, id, end, ref) {
   let callback;
   f.ctx._activeModalGearRef = ref;
   f.ctx.StageHeroAnim = { triggerPose() {} };
   f.ctx.refreshGearDetailModalContent = () => {};
-  f.ctx.closeGearDetailModal = () => {}; // UI được kiểm riêng trong Chrome; đây là test thao tác kho.
+  f.ctx.closeGearDetailModal = () => {};
   f.ctx.formatQualityWithStars = () => '';
   f.ctx.WIKI_GEAR_SCROLLS_META = { weapon: { wikiName: 'Weapon Scroll' } };
   f.ctx.document = { getElementById: () => ({ addEventListener: (_, fn) => { callback = fn; }, classList: { add() {} } }) };
@@ -202,6 +162,7 @@ function modalClick(f, id, end, ref) {
   assert.equal(typeof callback, 'function');
   callback();
 }
+
 test('N04 handler thật lấy món khỏi túi, trả đồ cũ về túi, không nhân đôi', () => {
   const old = { uid: 'old', templateId: 'rusty_bow', level: 1 };
   const owned = { uid: 'new', templateId: 'oracle_staff', level: 1 };

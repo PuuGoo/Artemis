@@ -39,7 +39,7 @@ test('runes only come from server-validated exploration, with one free intro dig
   assert.equal(saved.data.runeIntroClaimed,true);
   assert.ok(saved.data.runes[reward.drops[0].runeId]>=1);
   assert.equal((await explore(request('POST','/api/runes',cookie,{action:'explore',count:1}))).status,422);
-  assert.equal((await explore(request('POST','/api/runes',cookie,{action:'enchant'}))).status,422);
+  assert.equal((await explore(request('POST','/api/runes',cookie,{action:'enchant'}))).status,400);
 
   const forged=await putSave(request('PUT','/api/save',cookie,{
     playerId:before.playerId,revision:saved.revision,

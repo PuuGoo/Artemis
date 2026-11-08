@@ -81,7 +81,8 @@
         </section>
         ${combatNote(id)}
         <details class="rune-reference"><summary>Thuộc tính theo phẩm chất · Tham khảo</summary><p class="rune-reference-note">Dữ liệu Archero 2 Wiki, bản lưu 16/03/2026; không khẳng định mọi hiệu ứng đã được mô phỏng trong chiến đấu.</p><div class="rune-reference-tier"><b>Chỉ số gốc theo Wiki</b><p>${escape(wiki.base)}</p></div>${Object.entries(wiki.effects || {}).map(([label, text]) => `<div class="rune-reference-tier ${currentRank >= tierRanks[label] ? 'is-active' : ''}"><b>${currentRank >= tierRanks[label] ? '✓ ' : ''}${escape(label)}</b><p>${escape(text && text !== '-' ? text : 'Không có thuộc tính riêng ở bậc này')}</p></div>`).join('')}</details>
-        <details class="rune-reference"><summary>Phù phép · Tham khảo</summary>${table(wiki.enchantments)}${table(wiki.sharedEnchantments)}</details>
+        <section class="rune-reference"><h4>Phù phép riêng của viên ngọc</h4>${rune.type === 'etched' ? '<p>Khắc Ấn không có phù phép trong Wiki.</p>' : `<p>Bậc hiện tại: ${['Chưa phù phép','Thường','Tốt','Hiếm','Sử Thi','Huyền Thoại','Thần Thoại'][Number(options.getState().runeEnchantments?.[id]) || 0]}. Mỗi bậc thay thế chỉ số phù phép trước, không cộng dồn các bậc. Chi phí Artemis: 10 Enchantium/bậc; cần ngọc Epic +2.</p><button type="button" data-rune-enchant="${escape(id)}"${currentRank < 6 || Number(options.getState().runeEnchantments?.[id]) >= 6 || Number(options.getState().wikiOtherItems?.enchantium || 0) < 10 ? ' disabled' : ''}>Phù phép +1 · 10 Enchantium</button><p data-rune-enchant-error role="status"></p>`}</section>
+        <details class="rune-reference"><summary>Thuộc tính phù phép · Tham khảo</summary>${table(wiki.enchantments)}${table(wiki.sharedEnchantments)}</details>
         <footer class="rune-sheet-actions"><button type="button" data-rune-popup-dismiss>Để sau</button>${at ? '<button type="button" data-rune-popup-unequip class="rune-primary">Tháo ngọc</button>' : currentRank ? `<button type="button" data-rune-popup-equip class="rune-primary"${target && target.cat !== rune.type ? ' disabled' : ''}>Gắn ngọc</button>` : '<button type="button" data-rune-popup-ruins class="rune-primary">Khám phá →</button>'}</footer>
         ${currentRank && !at && target && target.cat !== rune.type ? '<p class="rune-target-warning">Ô đang chọn khác nhóm ngọc. Hãy chọn ô cùng nhóm trước khi gắn.</p>' : ''}
       </div>`;
@@ -96,6 +97,14 @@
       modal.setAttribute('aria-labelledby', 'rune-workspace-detail-title');
       modal.innerHTML = markup + mergeMarkup(id);
       bindMerge(modal);
+      modal.querySelector('[data-rune-enchant]')?.addEventListener('click', async event => {
+        const button = event.currentTarget;
+        if (modal.dataset.merging === 'true') return;
+        modal.dataset.merging = 'true'; button.disabled = true;
+        try { await options.onEnchant(id); close(); openDetail(id, socket); }
+        catch (error) { modal.querySelector('[data-rune-enchant-error]').textContent = error.message; button.disabled = false; }
+        finally { modal.dataset.merging = 'false'; }
+      });
       const close = () => modal.close();
       modal.addEventListener('close', () => { modal.remove(); if (dialog === modal) { dialog = null; focusCard(id); } }, { once: true });
       modal.addEventListener('click', event => {

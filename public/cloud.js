@@ -680,6 +680,20 @@
     getState: function () { return Object.assign({}, state); },
     pushNow: function () { pushCloudSave(); return state.revision; },
     purchaseShopOffer: purchaseShopOffer,
+    enchantRune: async function (runeId) {
+      if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");
+      shopBusy = true;
+      try {
+        await pushCloudSave();
+        if (state.lastError || state.dirty || !state.authenticated || window.__ARTEMIS_SAVE_READY !== true) throw new Error("Chưa đồng bộ tiến trình.");
+        if (state.saveTimer) clearTimeout(state.saveTimer);
+        state.saving = true; window.__ARTEMIS_SAVE_READY = false;
+        var response = await api("/api/runes", { method:"POST", body:{action:"enchant",runeId:runeId,revision:state.revision} });
+        await refreshAfterShopPurchase();
+        if (!response.ok || response.data.ok !== true) throw new Error(response.data.error || "Không phù phép được ngọc.");
+        return response.data;
+      } finally { state.saving = false; shopBusy = false; }
+    },
     mergeRune: async function (runeId, tier) {
       if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");
       shopBusy = true;

@@ -135,20 +135,8 @@ check('base HP nam trong dai hop ly (<= 800)',
 // ============================================================ 8. UI KHONG CRASH
 console.log('\n=== 8. UI CHIU DUOC SLOT NULL ===');
 
-// Doc truc tiep equippedGear.weapon.templateId ma khong guard se crash
-const badAccess = [...html.matchAll(/SaveState\.equippedGear\.(weapon|necklace|ring|armor|helmet|boots)\.(?!templateId =)/g)];
-check('khong co cho nao doc thang .slot.property ma thieu guard',
-  badAccess.length === 0, `tim thay ${badAccess.length}`);
-
-// Selector chỉ mặc món đã sở hữu; starter được cấp từ room-clear, không từ preview.
-// Runtime handler và bảo toàn UID/template: new-player-gameplay-runtime.test.mjs.
-const selectorStart = html.indexOf("document.querySelectorAll('.select-weapon-btn').forEach");
-const selectorEnd = html.indexOf("const petGrid =", selectorStart);
-const weaponSelector = html.slice(selectorStart, selectorEnd);
-check('selector vu khi khong tao item mien phi hoac sua template',
-  selectorStart >= 0 && selectorEnd > selectorStart
-  && /bagIdx < 0/.test(weaponSelector)
-  && !/makeStarterItem|\.templateId\s*=/.test(weaponSelector));
+// Weapon archetype selection is intentionally retired from the UI.
+check('khong con selector vu khi chinh tren production surface', !html.includes('select-weapon-btn') && !html.includes('weaponCardsGrid') && !html.includes('data-weapon-id'));
 
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);
 process.exit(fail > 0 ? 1 : 0);

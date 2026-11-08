@@ -19,6 +19,7 @@
   <script src="/rune-art.js"></script>
   <script src="/rune-wiki-images.js"></script>
   <script src="/rune-wiki-data.js"></script>
+  <script src="/js/game/runes/rune-modifiers.js"></script>
   <script src="/artifact-reference.js"></script>
   <script src="/skill-art-data.js"></script>
   <script src="/skill-art.js"></script>
@@ -221,7 +222,8 @@
     .rune-workshop-row .rune-gold-btn:hover,.rune-workshop-row .rune-gold-btn:focus-visible{transform:translateY(-3px);filter:brightness(1.12)}
     .gear-context-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;max-width:760px;width:100%;margin:0 auto;padding:8px;border:1px solid #a78bfa77;border-radius:14px;background:#111936dc}
     .gear-context-controls:empty{display:none}
-    .gear-context-controls>div{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+    #btnToggleStageStarSkin{min-height:44px;min-width:44px}
+    .gear-context-controls>div:not(.hidden){display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
     .gear-context-controls #stageLoreDrawer,.gear-context-controls #stageStarSkinDrawer{width:100%}
     .character-visual-settings{width:100%;padding:8px 10px;border:1px solid #a78bfa77;border-radius:10px;color:#e9d5ff;font-size:12px;font-weight:800}
     .character-visual-settings summary{cursor:pointer}
@@ -1742,7 +1744,7 @@
               <div class="flex items-center gap-1.5 flex-wrap">
                 <span id="activeHeroRole" class="text-[11px] text-emerald-400 font-semibold">Cân bằng & Linh hoạt</span>
                 <button id="btnBattleOpenStarSkin" type="button" class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-400 via-rose-500 to-fuchsia-500 text-slate-950 font-black text-[10px] shadow hover:brightness-110 transition">
-                  🌟 Nâng Sao &amp; Trang Phục
+                  ⭐ Nâng sao &amp; cộng hưởng
                 </button>
               </div>
             </div>
@@ -1869,8 +1871,8 @@
               <button id="btnToggleStageLore" type="button" class="px-2 py-0.5 rounded-full bg-purple-950/75 hover:bg-purple-900/85 border border-purple-300/50 text-[10px] font-black text-purple-100 shadow transition" title="Xem Backstory & Kỹ năng Nhân vật">
                 📜 Tiểu Sử
               </button>
-              <button id="btnToggleStageStarSkin" type="button" class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-400 text-slate-950 font-black text-[10px] sm:text-[11px] border border-white/70 shadow-[0_0_12px_rgba(244,114,182,0.6)] hover:brightness-110 active:scale-95 transition" title="Mở Nâng Cấp Sao Tướng & Tủ Đồ Trang Phục Siêu Đẹp">
-                🌟 Nâng Sao &amp; Trang Phục
+              <button id="btnToggleStageStarSkin" type="button" aria-expanded="false" aria-controls="stageStarSkinDrawer" class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-400 text-slate-950 font-black text-[10px] sm:text-[11px] border border-white/70 shadow-[0_0_12px_rgba(244,114,182,0.6)] hover:brightness-110 active:scale-95 transition" title="Mở Nâng Cấp Sao Tướng & Tủ Đồ Trang Phục Siêu Đẹp">
+                ⭐ Nâng sao &amp; cộng hưởng
               </button>
               <button id="btnStageShowcaseUlt" type="button" class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-cyan-400 via-sky-500 to-indigo-500 text-slate-950 font-black text-[10px] sm:text-[11px] border border-white/80 shadow-[0_0_12px_rgba(56,189,248,0.75)] hover:brightness-110 active:scale-95 transition" title="Kích hoạt Mưa Tên Bão Tố & Tuyệt Kỹ Vũ Khí ngay trên Sân Khấu!">
                 ⚡ Biểu Diễn Tuyệt Kỹ
@@ -1897,7 +1899,7 @@
           <div id="stageLoreDrawer" class="hidden relative z-20 max-w-xl mx-auto mb-2 rounded-2xl bg-slate-950/90 backdrop-blur-md border-2 border-amber-300/70 p-3 shadow-2xl text-xs"></div>
 
           <!-- Collapsible Hero Star Upgrade & Luxury Skin Wardrobe Drawer right on the Gear Stage -->
-          <div id="stageStarSkinDrawer" class="hidden relative z-20 max-w-2xl mx-auto mb-2.5 rounded-2xl bg-slate-950/95 backdrop-blur-md border-2 border-fuchsia-400/80 p-3 sm:p-4 shadow-[0_12px_32px_rgba(0,0,0,0.85)] text-xs"></div>
+          <div id="stageStarSkinDrawer" class="hidden relative z-20 max-w-2xl mx-auto mb-2.5 rounded-2xl bg-slate-950/95 backdrop-blur-md border-2 border-fuchsia-400/80 p-3 sm:p-4 shadow-[0_12px_32px_rgba(0,0,0,0.85)] text-xs" role="region" aria-label="Nâng sao và cộng hưởng" data-hero-upgrade-disclosure="stage"></div>
 
           <!-- Main 3-Column Stage: [3 Left Equipped Slots] - [Center 3D Chibi Hero & ATK/HP Pedestal] - [3 Right Equipped Slots] -->
           <div class="gear-stage-layout relative z-10 max-w-2xl mx-auto grid grid-cols-[76px_1fr_76px] sm:grid-cols-[92px_1fr_92px] items-center gap-2 sm:gap-4">
@@ -2032,7 +2034,7 @@
                 <span class="text-[11px] text-sky-300 font-bold">Đổi nhân vật sẽ cập nhật ngay trên đài Gear</span>
               </div>
               <div id="charSubtabHeroGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
-              <div id="charHeroStatsStarSkinPanel" class="mt-1"></div>
+              <div class="flex items-center justify-between gap-2 mt-1 rounded-xl border border-fuchsia-400/30 bg-fuchsia-950/20 px-3 py-2"><div><b class="text-xs text-fuchsia-200">⭐ Phát triển anh hùng</b><p class="text-[10px] text-slate-400">Nâng sao và chọn kỹ năng cộng hưởng khi bạn chủ động mở bảng.</p></div><button type="button" id="btnToggleCharStarResonance" aria-expanded="false" aria-controls="charHeroStatsStarSkinPanel" class="shrink-0 min-h-[44px] px-3 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 text-slate-950 text-[10px] font-black shadow">⭐ Nâng sao &amp; cộng hưởng</button></div><div id="charHeroStatsStarSkinPanel" class="hidden mt-1" role="region" aria-label="Bảng nâng sao và cộng hưởng" data-hero-upgrade-disclosure="characters"></div>
               <div id="charHeroLoreCard" class="mt-1"></div>
             </div>
 
@@ -2044,14 +2046,6 @@
               <button id="btnUpgradeAllGear" type="button" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shrink-0 transition">
                 ⬆️ Cường Hóa Vũ Khí (+25 ATK, +80 HP) - <span id="gearUpgradeCostText">250</span> 🪙
               </button>
-            </div>
-
-            <!-- Weapons List -->
-            <div>
-              <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-400 mb-2">1. Chọn Vũ Khí Chủ Đạo (S-Grade Weapons)</h3>
-              <div id="weaponCardsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <!-- Populated by JS -->
-              </div>
             </div>
 
             <!-- Spirit Pets List -->
@@ -7170,8 +7164,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           mythic:      { atk: 0, hp: 6000 }
         },
         blessing: {
-          normal:      { atk: 36,  hp: 144 },
-          fine:        { atk: 36,  hp: 144 },
+          normal:      { atk: 0,   hp: 0 },
+          fine:        { atk: 0,   hp: 0 },
           rare:        { atk: 36,  hp: 144 },
           epic:        { atk: 48,  hp: 192 },
           epic_1:      { atk: 72,  hp: 288 },
@@ -7183,8 +7177,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           mythic:      { atk: 900, hp: 3600 }
         },
         etched: {
-          normal:      { atk: 180,  hp: 720 },
-          fine:        { atk: 180,  hp: 720 },
+          normal:      { atk: 0,    hp: 0 },
+          fine:        { atk: 0,    hp: 0 },
           rare:        { atk: 180,  hp: 720 },
           epic:        { atk: 240,  hp: 960 },
           epic_1:      { atk: 360,  hp: 1440 },
@@ -7769,6 +7763,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             await window.ArtemisCloud.mergeRune(id, tier);
             renderLobbyUI(); SoundFX.levelUp(); showToast('Đã ghép 3 viên thành 1 viên bậc cao hơn.');
           },
+          onEnchant: async id => {
+            SaveState.save();
+            await window.ArtemisCloud.enchantRune(id);
+            renderLobbyUI(); SoundFX.levelUp(); showToast('Đã tăng một bậc phù phép cho viên ngọc.');
+          },
           onSelectSlot: socket => { selectedRuneSocket = socket; SaveState.runeTypeFilter = socket.cat; renderLobbyUI(); },
           onClearSelection: () => { selectedRuneSocket = null; renderLobbyUI(); },
           onFilter: category => { SaveState.runeTypeFilter = category; renderLobbyUI(); },
@@ -7829,7 +7828,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
 
       function computeTotalEquippedRunesStats() {
         const eq = getEquippedRuneSlots();
-        const enchantOn = SaveState.runeMythicEnchant === true;
+        const enchantOn = SaveState.runeMythicEnchant === true; // Giữ quyền lợi phù phép đã mua của save cũ; giao dịch mới dùng từng ngọc.
         let atk = 0;
         let hp = 0;
         let critBonus = 0;
@@ -7844,6 +7843,16 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             const tierStat = statTbl[tierId] || statTbl.normal;
             atk += tierStat.atk;
             hp += tierStat.hp;
+            // Chỉ số riêng là phần cộng thêm, khác với chỉ số nền của nhóm ngọc.
+            // Chỉ nhận dòng phẳng đúng định dạng; không suy diễn sát thương hay % thành Công/Máu.
+            const rank = RuneEconomy.copies(SaveState.runes[id]);
+            for (const [label, minimum] of [['Normal',1], ['Fine',2], ['Rare',3]]) {
+              if (rank < minimum) continue;
+              const text = RuneWikiData[id]?.effects?.[label] || '';
+              const flat = /^(ATK PWR|Max HP) \+(\d+)$/.exec(text);
+              if (flat?.[1] === 'ATK PWR') atk += Number(flat[2]);
+              if (flat?.[1] === 'Max HP') hp += Number(flat[2]);
+            }
             if (enchantOn && RuneEconomy.copies(SaveState.runes[id]) >= 6) {
             if (cat === 'blessing') {
               atk += 120;
@@ -7863,6 +7872,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         if (runeHasEffect('lucky_shadow',11)) dodgeBonus += 0.10;
         else if (runeHasEffect('lucky_shadow',7)) dodgeBonus += 0.05;
         else if (runeHasEffect('lucky_shadow',4)) dodgeBonus += 0.02;
+        const enchanted = window.ArtemisRuneModifiers?.stats(SaveState, RuneWikiData) || {atk:0,hp:0};
+        atk += enchanted.atk; hp += enchanted.hp;
         return { atk, hp, critBonus, aspdBonus, dodgeBonus };
       }
 
@@ -9059,6 +9070,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         equippedRuneSlots: { etched: [], blessing: [], enhancement: [], ability: [] },
         runeQualityTier: 'normal',
         runeMythicEnchant: false,
+        runeEnchantments: {},
         runeStones: {},
         runeIntroClaimed: false,
         runes: {
@@ -9452,6 +9464,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               equippedRuneSlots: this.equippedRuneSlots,
               runeQualityTier: this.runeQualityTier,
               runeMythicEnchant: this.runeMythicEnchant,
+              runeEnchantments: this.runeEnchantments,
               talents: this.talents,
               bestRooms: this.bestRooms,
               // Thành tựu & chỉ số vĩnh viễn
@@ -17819,13 +17832,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
         if (itemId === 'enchantium') {
-          try {
-            const response = await fetch('/api/runes',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({action:'enchant'})});
-            const result = await response.json();
-            if (!response.ok || !result.ok) { showToast(result.error || 'Chưa thể phù phép Ngọc.','err'); return; }
-            showToast('🔮 Đã mở phù phép! Đang cập nhật tài khoản…');
-            window.location.reload();
-          } catch { showToast('Không kết nối được máy chủ. Hãy thử lại.','err'); }
+          document.getElementById('bottomNavBar')?.querySelector('[data-tab="tabRunes"]')?.click();
+          showToast('🔮 Chọn một ngọc Epic +2 trong kho, mở chi tiết rồi bấm Phù phép.');
           return;
         }
         if (itemId === 'gold_cave_ticket') {
@@ -25272,57 +25280,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const gearUpgradeCost = 200 + (SaveState.gearLevel - 1) * 120;
         document.getElementById('gearUpgradeCostText').textContent = gearUpgradeCost;
 
-        const weaponGrid = document.getElementById('weaponCardsGrid');
-        weaponGrid.innerHTML = WEAPONS.map(w => {
-          const matchesWeapon = it => it && GEAR_TEMPLATES[it.templateId]?.slot === 'weapon'
-            && GEAR_TEMPLATES[it.templateId].weaponArchetype === w.id;
-          const isSelected = matchesWeapon(SaveState.equippedGear?.weapon);
-          const owned = isSelected || (SaveState.gearBag || []).some(matchesWeapon);
-          return `
-            <div class="p-3.5 rounded-2xl border flex flex-col justify-between gap-3 transition ${isSelected ? 'bg-amber-500/15 border-amber-400 shadow-lg' : 'bg-slate-900/90 border-slate-800'}">
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-12 h-12 rounded-xl bg-slate-950/90 border border-amber-500/40 shadow-inner flex items-center justify-center">${getWeaponSvgArt(w.id)}</div>
-                  <div>
-                    <span class="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">${w.tier} • Lv.${SaveState.gearLevel}</span>
-                    <h4 class="font-extrabold text-sm text-white mt-0.5">${w.name}</h4>
-                  </div>
-                </div>
-              </div>
-              <p class="text-xs text-slate-300 leading-relaxed">${w.desc}</p>
-              <button type="button" data-weapon-id="${w.id}" class="select-weapon-btn w-full py-2 rounded-xl font-extrabold text-xs transition ${isSelected ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600'}">
-                ${isSelected ? '✓ Đang Trang Bị' : (owned ? 'Trang Bị Vũ Khí Đang Có' : '🔒 Chưa sở hữu · Xem thông tin')}
-              </button>
-            </div>
-          `;
-        }).join('');
-
-        document.querySelectorAll('.select-weapon-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const wId = btn.getAttribute('data-weapon-id');
-            // Danh mục chỉ chọn món ĐÃ sở hữu, không tạo hay đổi template của đồ cũ.
-            const matchesWeapon = it => it && GEAR_TEMPLATES[it.templateId]?.slot === 'weapon'
-              && GEAR_TEMPLATES[it.templateId].weaponArchetype === wId;
-            const current = SaveState.equippedGear && SaveState.equippedGear.weapon;
-            if (matchesWeapon(current)) return;
-            const bagIdx = (SaveState.gearBag || []).findIndex(matchesWeapon);
-            if (bagIdx < 0) {
-              showToast('🔒 Chưa sở hữu vũ khí loại này. Hãy kiếm trang bị từ rương hoặc phần thưởng.');
-              return;
-            }
-            if (!SaveState.equippedGear) SaveState.equippedGear = createDefaultEquipped();
-            const ownedItem = SaveState.gearBag.splice(bagIdx, 1)[0];
-            if (current) SaveState.gearBag.push(current);
-            SaveState.equippedGear.weapon = ownedItem;
-            SaveState.selectedWeaponId = wId;
-            SaveState.save();
-            if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onGearEquipped();
-            SoundFX.coinPickup();
-            showToast('Đã trang bị vũ khí đang sở hữu!');
-            renderLobbyUI();
-          });
-        });
-
         const petGrid = document.getElementById('petCardsGrid');
         petGrid.innerHTML = PETS.map(p => {
           const isSelected = p.id === SaveState.selectedPetId;
@@ -26779,19 +26736,22 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const p = Game.player;
         const basePct = skillRarity === 'legend' ? 30 : (skillRarity === 'epic' ? 23 : 15);
         let freeReason = null;
+        let directHp = false;
         let pct = basePct;
 
         if (p && hasHeroSkillActive(p, 'seraph')) {
           pct = 0;
           freeReason = 'Seraph [Divine Favor LV.3]';
         } else if (runeHasEffect('devil_pact')) {
-          // Mythic Enchant: miễn trừ hoàn toàn việc mất Max HP vĩnh viễn.
+          const perRune = Number(SaveState.runeEnchantments?.devil_pact) || 0;
+          pct = basePct * (runeHasEffect('devil_pact',11) ? 0.5 : 0.75);
           if (SaveState.runeMythicEnchant === true && RuneEconomy.copies(SaveState.runes?.devil_pact) >= 6) {
+            // Quyền lợi đã thanh toán trước đây không bị giảm khi nâng phù phép mới.
             pct = 0;
             freeReason = 'Rune Devil Pact [Mythic Enchant]';
-          } else {
-            // Blessing thường: giảm một nửa lượng máu phải trả.
-            pct = basePct / 2;
+          } else if (perRune >= 5 && RuneEconomy.copies(SaveState.runes?.devil_pact) >= 6) {
+            directHp = true;
+            freeReason = 'Rune Devil Pact [Legendary Enchant]';
           }
         }
 
@@ -26799,6 +26759,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         return {
           pct,
           costHp: Math.round(maxHp * pct / 100),
+          directHp,
           freeReason
         };
       }
@@ -26813,9 +26774,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           modal.setAttribute('data-devil-skill', pick.id);
           // Chi phí tính 1 lần ở đây và chốt vào DOM — lúc bấm "Ký" chỉ việc
           // đọc lại con số này, không tính lại (tránh lệch nếu state đổi).
-          const { pct: hpCostPct, costHp, freeReason } = computeDevilCost(pick.rarity);
+          const { pct: hpCostPct, costHp, directHp, freeReason } = computeDevilCost(pick.rarity);
           modal.setAttribute('data-devil-cost-pct', String(hpCostPct));
           modal.setAttribute('data-devil-cost-hp', String(costHp));
+          modal.setAttribute('data-devil-direct-hp', String(directHp));
 
           // KHÔNG dùng span con #devilSkillName nữa: khối dưới ghi đè innerHTML
           // của #devilOfferDesc nên span đó bị xoá sau lần gặp trùm đầu tiên.
@@ -26827,7 +26789,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (descEl) {
             descEl.innerHTML = (hpCostPct === 0)
               ? `Nhờ <span class="text-amber-300 font-black">${freeReason || 'đặc quyền'}</span>, bạn được nhận kỹ năng <span class="text-rose-400 font-black">${skillLabel}</span> mà <span class="text-emerald-300 font-black">KHÔNG TỐN MÁU TỐI ĐA (0% Max HP)</span>!`
-              : `Đổi <span class="text-rose-400 font-black">${hpCostPct}% Máu Tối Đa</span> (<b class="text-rose-300">-${costHp.toLocaleString('vi-VN')} HP</b>, Chuẩn Wiki: 15%/23%/30%) để nhận ngay kỹ năng <span class="text-amber-300 font-black">${skillLabel}</span> (${pick.desc})?`;
+              : `Đổi <span class="text-rose-400 font-black">${hpCostPct}% ${directHp ? 'HP hiện tại tính theo trần máu (giữ nguyên Max HP)' : 'Máu Tối Đa'}</span> (<b class="text-rose-300">-${costHp.toLocaleString('vi-VN')} HP</b>, Chuẩn Wiki: 15%/23%/30%) để nhận ngay kỹ năng <span class="text-amber-300 font-black">${skillLabel}</span> (${pick.desc})?`;
           }
 
           modal.classList.remove('hidden');
@@ -26940,7 +26902,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // Echo Scythe [Mythic Etched Rune]: Launches 3 piercing Echo Scythes (1 vertical + 2 horizontal) bouncing 9 times!
-        if (runeHasEffect('echo_scythe',4) && Math.random() < 0.35) {
+        if (runeHasEffect('echo_scythe',4) && !(p.echoScytheCooldown > 0) && Math.random() < 0.35) {
+          p.echoScytheCooldown = 5;
           const echoRank=RuneEconomy.copies(SaveState.runes?.echo_scythe);
           for (const scAng of echoRank>=11?[-Math.PI / 2, 0, Math.PI]:[-Math.PI / 2]) {
             Game.playerBullets.push({
@@ -26964,7 +26927,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // Sprite Assist [Mythic Etched Rune]: 80% chance for Sprites to launch an extra attack when character attacks!
-        if (runeHasEffect('sprite_assist') && Math.random() < 0.80) {
+        if (runeHasEffect('sprite_assist') && Math.random() < (runeHasEffect('sprite_assist',7) ? 0.80 : 0.40)) {
           const sTarget = findNearestEnemy(p.x, p.y);
           if (sTarget) {
             const sAng = Math.atan2(sTarget.y - p.y, sTarget.x - p.x);
@@ -27051,7 +27014,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           r: hasCharged ? 12 : (p.weapon.id === 'claw' ? 9 : 6.5),
           dmg: p.atk * totalMult,
           exHurtAttack: 4,
-          bouncesLeft: (p.skills.bouncy_wall || 0) * 2,
+          bouncesLeft: (p.skills.bouncy_wall || 0) * 2 + (window.ArtemisRuneModifiers?.bounces(SaveState,'sharp_arrow') || 0),
           ricochetsLeft: (p.skills.ricochet || 0) * 2,
           pierce: p.weapon.pierceDefault || (p.skills.pierce || 0) > 0 || hasCharged,
           wallPierce: (p.skills.wall_piercing_arrow || 0) > 0 || hasCharged,
@@ -27109,6 +27072,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function applyEnemyCombatHit(e, attack, options = {}) {
         if (!(e.hp > 0) || !Number.isFinite(attack) || attack <= 0) return null;
         const source = getCombatSourceData(Game.player, true);
+        const sourceType = options.element || ({1:'circle',2:'strike',3:'meteor',4:'weapon',5:'sprite',6:'plant',7:'circle'})[options.context?.exHurtAttack];
+        const runeBonus = window.ArtemisRuneModifiers?.damage(SaveState, RuneWikiData, sourceType, e, Game.player) || {flat:0,pct:0,critRate:0,critDmg:0,bossPct:0};
+        attack = (attack + runeBonus.flat) * (1 + runeBonus.pct) * (1 + runeBonus.bossPct);
+        source.CritRate += runeBonus.critRate;
+        source.CritValue += runeBonus.critDmg;
         source.CritRate += options.critRateBonus || 0;
         const hit = CombatDamage.resolve({
           attack, source, target:e, canCrit:!!options.canCrit,
@@ -27169,6 +27137,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         rawDmg *= heroDmgMult;
         const markMult = (e.artemisMarked ? 1.25 : 1.0)
           * (e.corrosiveVulnerable ? 1.35 : 1.0)
+          * (runeHasEffect('ring_of_agony') && Math.hypot(e.x - p.x, e.y - p.y) <= 140 ? 1.2 : 1)
           * (e.isBoss && (p.skills.boss_slayer || 0) > 0 ? 1.25 : 1.0)
           * ((p.woundedWarriorTimer || 0) > 0 ? 1.50 : 1.0)
           * ((p.skills.perilous_fervor || 0) > 0 && p.hp < p.maxHp * 0.5 ? 1.30 : 1.0);
@@ -27698,6 +27667,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         if (Game.shakeTime > 0) Game.shakeTime -= dt;
         if (p.invulnTimer > 0) p.invulnTimer -= dt;
+        if (p.echoScytheCooldown > 0) p.echoScytheCooldown = Math.max(0, p.echoScytheCooldown - dt);
 
         // Hồi năng lượng Tuyệt Kỹ (18 NL/giây) + cập nhật nút HUD
         updateUltimateCharge(dt);
@@ -28079,11 +28049,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // Ring of Agony [Ability Rune]: 7m radius deals 1.0x ATK + Bolt every 0.5s and increases DMG taken by +20%!
         if (runeHasEffect('ring_of_agony') && Game.enemies.length > 0) {
           Game.ringOfAgonyTimer = (Game.ringOfAgonyTimer || 0) + dt;
-          if (Game.ringOfAgonyTimer >= 0.50) {
+          if (runeHasEffect('ring_of_agony',7) && Game.ringOfAgonyTimer >= (runeHasEffect('ring_of_agony',11) ? 0.5 : 1)) {
             Game.ringOfAgonyTimer = 0;
             for (const re of Game.enemies) {
               if (re.hp > 0 && Math.hypot(re.x - p.x, re.y - p.y) <= 140) {
-                re.corrosiveVulnerable = true;
                 damageEnemy(re, p.atk * 1.0, true);
               }
             }
@@ -28092,18 +28061,20 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // Sword of Time [Ability Rune]: Summons 1-2 Elemental Strikes every 1.5s!
         if (runeHasEffect('sword_of_time') && Game.enemies.length > 0) {
           Game.swordOfTimeTimer = (Game.swordOfTimeTimer || 0) + dt;
-          if (Game.swordOfTimeTimer >= 1.50) {
+          if (Game.swordOfTimeTimer >= (runeHasEffect('sword_of_time',7) ? 1.5 : 3)) {
             Game.swordOfTimeTimer = 0;
             spawnFloatingSword();
-            if (Math.random() < 0.50) spawnFloatingSword();
+            if (runeHasEffect('sword_of_time',11) && Math.random() < 0.50) spawnFloatingSword();
           }
         }
         // Star of Time [Ability Rune]: Summons 1-2 Meteors every 5s (reduced to 2.5s with Giant Meteor -50% CD)!
         if (runeHasEffect('star_of_time') && Game.enemies.length > 0) {
           Game.starOfTimeTimer = (Game.starOfTimeTimer || 0) + dt;
-          const cd = runeHasEffect('giant_meteor') ? 2.5 : 4.5;
+          const cd = runeHasEffect('star_of_time',7) ? 5 : 10;
           if (Game.starOfTimeTimer >= cd) {
             Game.starOfTimeTimer = 0;
+            const meteorCount = runeHasEffect('star_of_time',11) && Math.random() < 0.5 ? 2 : 1;
+            for (let meteorIndex = 0; meteorIndex < meteorCount; meteorIndex++) {
             const mTarget = Game.enemies[Math.floor(Math.random() * Game.enemies.length)];
             if (mTarget) {
               Game.meteors.push({
@@ -28112,35 +28083,36 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 progress: 0, targetRef: mTarget
               });
             }
+            }
           }
         }
         // Hỏa Độc: một mục tiêu/1,65s; 0,45 ATK tức thì + cháy 0,45 ATK/s + độc 0,20 ATK/s trong 3s.
         if (runeHasEffect('flame_poison_touch') && Game.enemies.length > 0) {
           Game.flamePoisonTouchTimer = (Game.flamePoisonTouchTimer || 0) + dt;
-          if (Game.flamePoisonTouchTimer >= 1.65) {
-            Game.flamePoisonTouchTimer %= 1.65;
+          const touchCooldown = runeHasEffect('flame_poison_touch',11) ? 1.5 : 2;
+          if (Game.flamePoisonTouchTimer >= touchCooldown) {
+            Game.flamePoisonTouchTimer %= touchCooldown;
             const live = Game.enemies.filter(e => e.hp > 0);
             const target = live[Math.floor(Math.random() * live.length)];
             if (target) {
               CombatStatus.applyBurn(target, Math.round(p.atk * 0.15), 3);
-              CombatStatus.applyPoison(target, p.atk * 0.20, 3);
-              damageEnemy(target, p.atk * 0.45, true);
+              if (runeHasEffect('flame_poison_touch',7)) CombatStatus.applyPoison(target, p.atk * 0.20, 3);
             }
           }
         } else Game.flamePoisonTouchTimer = 0;
         // Băng Lôi: làm chậm + sét 0,90 ATK, lan một địch gần 0,45 ATK; không gây cháy.
         if (runeHasEffect('rune_thunder') && Game.enemies.length > 0) {
           Game.frostThunderTouchTimer = (Game.frostThunderTouchTimer || 0) + dt;
-          if (Game.frostThunderTouchTimer >= 1.65) {
-            Game.frostThunderTouchTimer %= 1.65;
+          if (Game.frostThunderTouchTimer >= 2) {
+            Game.frostThunderTouchTimer %= 2;
             const live = Game.enemies.filter(e => e.hp > 0);
             const target = live[Math.floor(Math.random() * live.length)];
             if (target) {
-              target.slowTimer = Math.max(target.slowTimer || 0, 2);
+              if (runeHasEffect('rune_thunder',7)) target.slowTimer = Math.max(target.slowTimer || 0, 2);
               Game.lightningBolts.push({ x1:p.x, y1:p.y, x2:target.x, y2:target.y, life:0.22, maxLife:0.22, color:'#7dd3fc' });
               const neighbor = findNearestEnemy(target.x, target.y, target);
               damageEnemy(target, p.atk * 0.90, true, 'lightning');
-              if (neighbor && neighbor.hp > 0 && Math.hypot(neighbor.x - target.x, neighbor.y - target.y) < 170) {
+              if (runeHasEffect('rune_thunder',11) && neighbor && neighbor.hp > 0 && Math.hypot(neighbor.x - target.x, neighbor.y - target.y) < 170) {
                 Game.lightningBolts.push({ x1:target.x, y1:target.y, x2:neighbor.x, y2:neighbor.y, life:0.22, maxLife:0.22, color:'#38bdf8' });
                 damageEnemy(neighbor, p.atk * 0.45, true, 'lightning');
               }
@@ -28220,11 +28192,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // 5) Orbiting Orbs (Elemental/Vampiric Circles + Super Circle + Beam Circle + Circle Web!)
-        const totalOrbs = (p.skills.orbit_orbs || 0) * 2 + (p.skills.super_circle || 0) * 4 + (p.skills.beam_circle || 0) * 2;
+        const runeOrbs = runeHasEffect('ability_circle') ? (runeHasEffect('ability_circle',11) ? 4 : 2) : 0;
+        const totalOrbs = runeOrbs + (p.skills.orbit_orbs || 0) * 2 + (p.skills.super_circle || 0) * 4 + (p.skills.beam_circle || 0) * 2;
         if (totalOrbs > 0) {
           const orbCount = Math.min(10, totalOrbs);
           const orbRadius = 62;
-          const timeAng = performance.now() * 0.0048;
+          const rotationBonus = runeHasEffect('rotating_spd_up',7) ? 2 : runeHasEffect('rotating_spd_up') ? 1.5 : 1;
+          const timeAng = performance.now() * 0.0048 * rotationBonus;
           const webBonus = (p.skills.circle_web || 0) > 0 ? 1.35 : 1.0;
           for (let i = 0; i < orbCount; i++) {
             const ang = timeAng + (i * Math.PI * 2) / orbCount;
@@ -28234,7 +28208,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               if (Math.hypot(e.x - ox, e.y - oy) < e.r + 14) {
                 if (!e._orbHitTime || performance.now() - e._orbHitTime > 320) {
                   e._orbHitTime = performance.now();
-                  damageEnemy(e, p.atk * 1.25 * webBonus, true, null, {exHurtAttack:1});
+                  const orbDmg = i < runeOrbs && !runeHasEffect('ability_circle',7) ? .75 : 1.25;
+                  damageEnemy(e, p.atk * orbDmg * webBonus, true, null, {exHurtAttack:1});
                   if ((p.skills.orbit_orbs || 0) > 0 && p.hp < p.maxHp) {
                     p.hp = Math.min(p.maxHp, p.hp + Math.max(4, Math.round(p.maxHp * 0.02)));
                   }
@@ -28702,7 +28677,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         // Star of Fury [Mythic Ability Rune]: Upon taking DMG, summon 7 Huge Meteors to bombard the field!
         if (runeHasEffect('star_of_fury') && Game.enemies.length > 0) {
-          for (let m = 0; m < Math.min(7, Game.enemies.length * 2); m++) {
+          const furyCount = runeHasEffect('star_of_fury',11) ? 7 : 3;
+          for (let m = 0; m < furyCount; m++) {
             const mt = Game.enemies[m % Game.enemies.length];
             if (mt) {
               Game.meteors.push({
@@ -28715,7 +28691,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               });
             }
           }
-          spawnFloatText(p.x, p.y - 42, '☄️ STAR OF FURY: 7 ĐẠI THIÊN THẠCH!', '#f59e0b', 12);
+          spawnFloatText(p.x, p.y - 42, `☄️ STAR OF FURY: ${furyCount} THIÊN THẠCH!`, '#f59e0b', 12);
         }
         // Wukong [Monkey Brethren] Damage Reduction
         if (hasHeroSkillActive(p, 'wukong')) {
@@ -28734,6 +28710,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
         const source = getCombatSourceData(hitContext.source);
+        const runeDefense = window.ArtemisRuneModifiers?.defense(SaveState,RuneWikiData,hitContext.source,hitContext.context || {}) || {reduction:0,critReduction:0};
+        coefficientModifiers.push(1-runeDefense.reduction);
+        source.CritValue = Math.max(1,source.CritValue-runeDefense.critReduction);
         const canCrit = source.CritRate > 0 || source.SuperCirtRate > 0;
         const hit = CombatDamage.resolve({
           attack:dmg, source, target:p, canCrit,
@@ -31067,13 +31046,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       document.getElementById('btnAcceptDevil').addEventListener('click', () => {
         const modal = document.getElementById('devilModal');
         const skId = modal.getAttribute('data-devil-skill');
-        const costPct = parseInt(modal.getAttribute('data-devil-cost-pct'), 10) || 0;
+        const costPct = Number(modal.getAttribute('data-devil-cost-pct')) || 0;
         if (Game.player) {
           const p = Game.player;
           if (costPct > 0) {
             const beforeMaxHp = p.maxHp;
             const beforeHp = p.hp;
-            const newMaxHp = Math.max(120, Math.round(p.maxHp * (1 - costPct / 100)));
+            const directHpCost = modal.getAttribute('data-devil-direct-hp') === 'true';
+            const newMaxHp = directHpCost ? beforeMaxHp : Math.max(120, Math.round(p.maxHp * (1 - costPct / 100)));
             const lostMaxHp = beforeMaxHp - newMaxHp;
 
             p.maxHp = newMaxHp;
@@ -31097,7 +31077,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             // MẤT máu, không bao giờ HỒI máu (đã từng để HP 50 -> 106 vì
             // sàn 15% của Max HP mới cao hơn HP đang có).
             const safeFloor = Math.min(beforeHp, Math.max(1, Math.round(newMaxHp * 0.15)));
-            p.hp = Math.min(newMaxHp, Math.max(safeFloor, Math.round(beforeHp - lostMaxHp)));
+            const paidHp = directHpCost ? Math.round(beforeMaxHp * costPct / 100) : lostMaxHp;
+            p.hp = Math.min(newMaxHp, Math.max(safeFloor, Math.round(beforeHp - paidHp)));
 
             const lostHp = beforeHp - p.hp;
             if (lostHp > 0) {
@@ -31344,17 +31325,36 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         selectOrUnlockHeroSkin(hId, nextIdx);
       });
 
-      // Toggle Stage Hero Star & Skin Studio Drawer
+      // Disclosure rõ ràng: mặc định đóng, chỉ mở khi người chơi bấm nút.
+      function setHeroUpgradeDisclosure(panelId, buttonId, open) {
+        const panel = document.getElementById(panelId);
+        const button = document.getElementById(buttonId);
+        if (!panel || !button) return;
+        panel.classList.toggle('hidden', !open);
+        button.setAttribute('aria-expanded', String(open));
+      }
+      function closeHeroUpgradeDisclosures() {
+        setHeroUpgradeDisclosure('stageStarSkinDrawer', 'btnToggleStageStarSkin', false);
+        setHeroUpgradeDisclosure('charHeroStatsStarSkinPanel', 'btnToggleCharStarResonance', false);
+      }
       document.getElementById('btnToggleStageStarSkin')?.addEventListener('click', () => {
-        const drawer = document.getElementById('stageStarSkinDrawer');
-        if (!drawer) return;
-        const willOpen = drawer.classList.contains('hidden');
-        drawer.classList.toggle('hidden');
-        SoundFX.levelUp();
-        StageHeroAnim.triggerPose();
-        if (willOpen) {
-          drawer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+        const b = document.getElementById('btnToggleStageStarSkin');
+        const open = b?.getAttribute('aria-expanded') !== 'true';
+        setHeroUpgradeDisclosure('stageStarSkinDrawer', 'btnToggleStageStarSkin', open);
+        if (open) document.getElementById('stageStarSkinDrawer')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+      document.getElementById('btnToggleCharStarResonance')?.addEventListener('click', () => {
+        const b = document.getElementById('btnToggleCharStarResonance');
+        const open = b?.getAttribute('aria-expanded') !== 'true';
+        setHeroUpgradeDisclosure('charHeroStatsStarSkinPanel', 'btnToggleCharStarResonance', open);
+        if (open) document.getElementById('charHeroStatsStarSkinPanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        const activePanel = [...document.querySelectorAll('[data-hero-upgrade-disclosure]')].find(panel => !panel.classList.contains('hidden') && panel.contains(document.activeElement));
+        const returnButton = activePanel && document.querySelector(`[aria-controls="${activePanel.id}"]`);
+        closeHeroUpgradeDisclosures();
+        returnButton?.focus({ preventScroll: true });
       });
 
       // Battle Tab Quick Jump to Hero Star & Skin Studio
@@ -31380,6 +31380,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       document.querySelectorAll('.gear-subtab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const sub = btn.getAttribute('data-gear-subtab');
+          closeHeroUpgradeDisclosures();
           SaveState.activeGearSubtab = sub;
           document.getElementById('gearHeroStage')?.classList.toggle('hidden', sub !== 'gear');
           document.getElementById('subpanelGear').classList.toggle('hidden', sub !== 'gear');
