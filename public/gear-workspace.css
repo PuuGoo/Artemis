@@ -1,0 +1,79 @@
+/* Không đổi token toàn ứng dụng; chỉ áp dụng cho kho và chi tiết trang bị. */
+#tabEquip { background: #101322; color: #edf0ff; }
+#tabEquip #gearHeroStage { background: radial-gradient(ellipse at 50% 60%, #302c4e, #161b30 72%); border-bottom: 1px solid #73648d55; }
+#tabEquip #stageBgCanvas { opacity: .28; }
+#tabEquip .a2-sky-godray, #tabEquip .a2-energy-beam, #tabEquip .a2-item-art-float, #tabEquip .a2-sparkle-dot { animation: none; }
+#tabEquip #stageResonanceSvg { opacity: .2; }
+#tabEquip .gear-stage-layout { grid-template-columns: 76px minmax(0,1fr) 76px; }
+#tabEquip .gear-stage-layout > div { min-width: 0; }
+#tabEquip #heroStageClickArea { max-width: 100%; }
+#tabEquip #heroStageCanvas { max-width: 100%; object-fit: contain; }
+#tabEquip .a2-pedestal { min-width: 0; background: #1c2036; border: 1px solid #9781b15c; box-shadow: none; }
+#tabEquip .a2-stat-pill { min-width: 0; background: #11162a; border-color: #9380ab4d; box-shadow: none; }
+#tabEquip .gear-subtab-btn { min-height: 54px; flex-direction: column; gap: 3px; font-size: 11px; padding: 6px 2px; border-radius: 12px 12px 0 0; }
+#tabEquip .gear-subtab-btn > span:nth-child(3):not(#gearSubtabUpBadge) { display: none; }
+#tabEquip #gearSubtabUpBadge { position: absolute; right: 3px; top: 3px; }
+#tabEquip .gear-subtab-btn .truncate { max-width: 100%; }
+#tabEquip .a2-sparkle-dot { display: none; }
+#tabEquip .gear-stage-heading { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 672px; margin: 0 auto 10px; padding: 6px 0; }
+#tabEquip .gear-eyebrow { display: block; color: #b7a4cf; font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+#tabEquip h2 { margin: 3px 0; font-size: 21px; font-weight: 900; color: #fff0d3; }
+#tabEquip #btnGearChangeHero { min-height: 44px; padding: 8px 12px; border: 1px solid #796b975e; border-radius: 12px; background: #161b2dd9; color: #ddd0ef; font-size: 12px; font-weight: 700; }
+#tabEquip #stageVisualGearSummary { display: none; }
+#tabEquip #subpanelGear { background: #101322; padding-bottom: 30px; }
+#tabEquip .gear-vault-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; }
+#tabEquip #gearLoadoutControls { width: auto; max-width: none; margin: 0; padding: 4px; border: 1px solid #66567766; background: #1d2034; }
+#tabEquip #gearLoadoutControls > div { background: none; border: 0; padding: 0; }
+#tabEquip .loadout-preset-btn { min-width: 40px; min-height: 40px; border-radius: 9px; transform: none; }
+#tabEquip .gear-vault-toolbar { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 8px; }
+#tabEquip .gear-vault-toolbar button { min-height: 44px; border: 1px solid #655a7d80; border-radius: 12px; background: #22253a; color: #dfd9ec; font-size: 12px; box-shadow: none; padding: 8px 10px; letter-spacing: 0; }
+#tabEquip #btnQuickEquipBest { background: #f1cc83; color: #36240c; border-color: #ffe3ac; }
+#tabEquip .gear-materials { border-bottom: 1px solid #655a7d44; padding-bottom: 4px; }
+#tabEquip summary, #gearDetailModal summary { cursor: pointer; min-height: 44px; align-content: center; font-size: 12px; color: #c7bed9; font-weight: 700; }
+#tabEquip .gear-slot-filters { scrollbar-width: thin; gap: 6px; padding: 4px 0 8px; }
+#tabEquip .slot-filter-btn { min-height: 44px; padding: 8px 12px; border-radius: 12px; font-size: 12px; }
+#tabEquip #gearBagGrid { grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
+#tabEquip .gear-item-card-btn { cursor: pointer; border-radius: 15px; box-shadow: inset 0 1px 0 #ffffff20, 0 3px 8px #0003; }
+#tabEquip .gear-empty-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; width: 68px; height: 68px; border: 1px dashed #9986ae77; border-radius: 15px; background: #13172bbf; color: #cec1e0; font-size: 10px; }
+#tabEquip .gear-empty-slot svg { width: 20px; height: 20px; opacity: .65; }
+#tabEquip .gear-empty-slot small { color: #a69bb8; font-size: 9px; }
+#tabEquip .gear-empty-bag { grid-column: 1/-1; text-align: center; padding: 32px 16px; border: 1px dashed #75648488; border-radius: 16px; background: #191c2d; color: #ded4ec; font-size: 14px; }
+#tabEquip .gear-empty-bag p { margin-top: 8px; color: #b7acc9; font-size: 12px; line-height: 1.6; }
+#tabEquip .gear-workshop { border: 1px solid #73628b66; background: #1b1e30; padding: 0 14px 14px; }
+#tabEquip .gear-workshop:not([open]) { padding-bottom: 0; }
+#tabEquip .gear-workshop > summary { padding: 10px 0; color: #f1d7a3; }
+#tabEquip .gear-workshop > summary span + span { display: block; margin: 3px 0 0 17px; color: #b6aac9; font-size: 11px; font-weight: 400; }
+#tabEquip .gear-workshop-tools button { min-height: 44px; border: 1px solid #75638d66; border-radius: 12px; background: #25283d; color: #e0d6ef; box-shadow: none; padding: 10px; font-size: 12px; }
+#tabEquip button:focus-visible, #tabEquip [role=button]:focus-visible, #tabEquip summary:focus-visible, #gearDetailModal button:focus-visible, #gearDetailModal summary:focus-visible { outline: 2px solid #e3bcff; outline-offset: 3px; }
+#gearDetailModal { color-scheme: dark; width: min(470px, calc(100vw - 28px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 1px solid #85719f; border-radius: 24px; background: #181b2c; color: #ede5f7; overflow: auto; overscroll-behavior: contain; box-shadow: 0 24px 80px #0009; }
+#gearDetailModal::backdrop { background: #080916d9; }
+#gearDetailModal .gear-detail-sheet { max-width: none; border: 0; border-radius: 0; background: linear-gradient(145deg,#2a263d,#171b2c 70%); padding: 20px; gap: 12px; }
+#gearDetailModal #btnCloseGearModal { min-width: 44px; min-height: 44px; flex-shrink: 0; }
+#gearDetailModal .gear-comparison { padding: 14px; border: 1px solid #a786c455; border-radius: 14px; background: #b58bdd0b; }
+#gearDetailModal .gear-comparison h4 { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: #f5d9a3; }
+#gearDetailModal .gear-comparison > div { display: grid; grid-template-columns: 35px 1fr auto; align-items: center; gap: 8px; padding: 5px 0; font-size: 12px; }
+#gearDetailModal .gear-comparison > div strong { text-align: right; }
+#gearDetailModal .gear-comparison p { font-size: 11px; line-height: 1.6; margin: 6px 0; color: #c2b7d2; overflow-wrap: anywhere; }
+#gearDetailModal .gear-comparison .gear-gain { color: #9ee5ba; }
+#gearDetailModal .gear-comparison .gear-loss { color: #ffb5bc; }
+#gearDetailModal .gear-advanced { border-top: 1px solid #7e6d9255; }
+#gearDetailModal button { min-height: 44px; }
+#gearDetailModal .gear-detail-actions { position: sticky; bottom: 0; padding: 12px 0 16px; margin-bottom: 0; background: #171b2c; box-shadow: 0 -8px 16px #171b2c; }
+#gearDetailModal #btnModalEquipGear { background: linear-gradient(#ffe0a0,#edbc68); color: #38270d; border: 1px solid #ffe5b4; box-shadow: none; font-size: 13px; }
+#gearDetailModal #btnModalUpgradeGear { background: #273849; border: 1px solid #7896a7; color: #e8eff5; box-shadow: none; font-size: 13px; }
+#gearDetailModal button:disabled { opacity: .45; cursor: not-allowed; }
+@media (min-width:640px) { #tabEquip .gear-empty-slot { width:82px; height:82px; font-size:11px; } #tabEquip .gear-stage-layout { grid-template-columns:92px minmax(0,1fr) 92px; } }
+@media (max-width:639px) {
+  #tabEquip .gear-stage-layout { grid-template-columns:68px minmax(0,1fr) 68px; }
+  #tabEquip .a2-pedestal { display: grid; grid-template-columns:minmax(0,1fr); padding:6px; gap:4px; }
+  #tabEquip .a2-stat-pill { padding:4px 7px; }
+}
+@media (max-width:480px) {
+  #tabEquip #gearBagGrid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; }
+  #tabEquip .gear-vault-toolbar button { font-size: 11px; padding: 8px; }
+  #tabEquip .gear-vault-heading h2 { font-size: 19px; }
+  #gearDetailModal { width: 100%; margin: auto 0 0; max-height: 92dvh; border-radius: 24px 24px 0 0; border-bottom: 0; }
+  #gearDetailModal .gear-detail-sheet { padding: 18px 16px calc(18px + env(safe-area-inset-bottom)); }
+  #gearDetailModal .gear-detail-actions { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion:reduce) { #tabEquip *, #gearDetailModal * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

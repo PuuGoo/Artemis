@@ -1,0 +1,52 @@
+{
+  "scope": "Chrome + real HTTP + isolated memory DB; seeded gear/scroll fixture, not production or earned loot",
+  "geometry": [
+    {
+      "viewportWidth": 1024,
+      "scroll": 1022,
+      "width": 1022,
+      "stage": 363.5,
+      "grid": "126.391px 126.406px 126.391px 126.406px 126.406px",
+      "allSlotsVisible": true
+    },
+    {
+      "viewportWidth": 390,
+      "scroll": 388,
+      "width": 388,
+      "stage": 333.5,
+      "grid": "86px 86px 86px 86px",
+      "allSlotsVisible": true
+    },
+    {
+      "viewportWidth": 360,
+      "scroll": 358,
+      "width": 358,
+      "stage": 333.5,
+      "grid": "78.5px 78.5px 78.5px 78.5px",
+      "allSlotsVisible": true
+    }
+  ],
+  "comparison": "Nếu trang bị món này\n\nĐang mặc: Echo Ring (Nhẫn Tiếng Vang) · Cấp 5\n\nCông\n214 → 204\n-10\nMáu\n945 → 945\n0\n\nKế thừa cấp 5 từ vị trí đang mặc.\n\n⚠ Mất Echo (Tiếng Vang • Combo) · 2 món: +5% ATK & +5% Tốc bắn",
+  "equipped": {
+    "uid": "compare_ring",
+    "level": 5,
+    "totals": [
+      204,
+      945
+    ],
+    "gold": 500,
+    "scrolls": 30
+  },
+  "upgraded": {
+    "level": 6,
+    "gold": 195,
+    "scrolls": 28
+  },
+  "salvage": {
+    "gold": 35,
+    "shards": 1
+  },
+  "scrollPreserved": 863,
+  "reloadPersisted": true,
+  "errors": []
+}

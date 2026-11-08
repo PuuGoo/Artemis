@@ -193,6 +193,7 @@ function modalClick(f, id, end, ref) {
   f.ctx._activeModalGearRef = ref;
   f.ctx.StageHeroAnim = { triggerPose() {} };
   f.ctx.refreshGearDetailModalContent = () => {};
+  f.ctx.closeGearDetailModal = () => {}; // UI được kiểm riêng trong Chrome; đây là test thao tác kho.
   f.ctx.formatQualityWithStars = () => '';
   f.ctx.WIKI_GEAR_SCROLLS_META = { weapon: { wikiName: 'Weapon Scroll' } };
   f.ctx.document = { getElementById: () => ({ addEventListener: (_, fn) => { callback = fn; }, classList: { add() {} } }) };

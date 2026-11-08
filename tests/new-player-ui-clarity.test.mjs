@@ -83,10 +83,12 @@ test('modal trang bị hiển thị tác động lên TỔNG chỉ số, tính b
   // Phải tìm trong THÂN hàm: chuỗi 'gearModalTotalImpact' còn xuất hiện ở markup
   // (dòng <div id=...>) nằm TRƯỚC hàm, nếu indexOf toàn file sẽ cắt cửa sổ rỗng.
   const impactIdx = html.indexOf('gearModalTotalImpact', fnStart);
-  const fn = html.slice(fnStart, impactIdx + 4200);
-  assert.match(fn, /getComputedStats\(\)/, 'phải dùng hàm tính chỉ số thật');
-  assert.match(fn, /originalLevel/, 'phải khôi phục cấp sau khi đo (không ghi vào save)');
-  assert.match(fn, /target\.level = originalLevel/, 'bắt buộc khôi phục level');
+  const fn = html.slice(fnStart, html.indexOf('// ==================== BLACKSMITH', impactIdx));
+  const preview = html.slice(html.indexOf('function previewGearDecision('), html.indexOf('function renderGearDecision('));
+  assert.match(fn, /previewGearDecision\(item, slotKey, true\)/);
+  assert.match(preview, /getComputedStats\(\)/, 'phải dùng hàm tính chỉ số thật');
+  assert.match(preview, /finally \{ SaveState\.equippedGear = equipped; \}/, 'bắt buộc khôi phục bộ đang mặc');
+  assert.match(preview, /\[slotKey\]: \{ \.\.\.item, level \}/, 'xem trước bằng bản sao, không đổi cấp đồ thật');
   assert.match(fn, /ATK/);
 });
 
