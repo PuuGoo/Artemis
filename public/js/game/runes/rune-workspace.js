@@ -135,5 +135,8 @@
     }
     return Object.freeze({ render, openDetail, detailMarkup });
   }
-  root.ArtemisRuneWorkspace = Object.freeze({ create, combatNote });
+  function navigationMarkup(active) {
+    return `<nav class="rune-reference-tabs" aria-label="Chuyển mục trang bị">${[['characters','Anh hùng'],['gear','Trang bị'],['runes','Ngọc']].map(([id, label]) => `<button type="button" data-equipment-nav="${id}"${id === active ? ' aria-current="page"' : ''}><svg viewBox="0 0 24 24" aria-hidden="true">${navIcons[id]}</svg>${label}</button>`).join('')}</nav><details class="equipment-extra-nav"><summary>Mục khác</summary><button type="button" data-equipment-nav="artifacts">Thánh vật</button><button type="button" data-equipment-nav="items">Vật phẩm</button></details>`;
+  }
+  root.ArtemisRuneWorkspace = Object.freeze({ create, combatNote, navigationMarkup });
 })(globalThis);

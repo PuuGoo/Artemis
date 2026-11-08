@@ -59,7 +59,7 @@ try {
     await page.waitForFunction(() => window.Archero2FusionAPI && window.ArtemisCloud?.getState().ready);
     await page.evaluate(() => window.Archero2FusionAPI.stopGameLoop());
     await page.locator('#bottomNavBar [data-tab="tabEquip"]').first().click();
-    if (!await page.locator('#subpanelRunes').isVisible()) await page.locator('#tabEquip [data-gear-subtab="runes"]').click();
+    if (!await page.locator('#subpanelRunes').isVisible()) await page.locator('#tabEquip [data-equipment-nav="runes"]:visible').first().click();
   };
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await enter();
@@ -178,8 +178,23 @@ try {
   await page.screenshot({ path: resolve(evidence, 'equipped-mobile.png') });
   await page.locator('[data-rune-nav="gear"]').click();
   assert.equal(await page.locator('#subpanelGear').isVisible(), true);
-  assert.equal(await page.locator('#tabEquip > .gear-subnav').isVisible(), true);
-  await page.locator('#tabEquip [data-gear-subtab="runes"]').click();
+  assert.equal(await page.locator('#tabEquip > .gear-subnav').isVisible(), false);
+  for (const width of [1024, 390, 360]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const sub of ['gear', 'characters']) {
+      const nav = sub === 'gear' ? '#gearReferenceNavigation' : '#subpanelCharacters';
+      await page.locator('[data-equipment-nav="' + sub + '"]:visible').first().click();
+      const panel = page.locator(sub === 'gear' ? '#subpanelGear' : '#subpanelCharacters');
+      assert.equal(await panel.isVisible(), true);
+      assert.equal(await panel.evaluate(el => el.scrollWidth <= el.clientWidth), true, `${sub} không tràn ngang ${width}`);
+      assert.equal(await page.locator(nav + ' .rune-reference-tabs [aria-current="page"]').getAttribute('data-equipment-nav'), sub);
+      assert.equal(await page.locator(nav + ' .rune-reference-tabs').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), 3);
+      if (sub === 'gear') assert.equal(await page.locator('#gearBagGrid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length), 5);
+      await page.locator('#tabEquip').evaluate(el => el.scrollTop = 0);
+      await page.screenshot({ path: resolve(evidence, `${sub}-unified-${width}.png`) });
+    }
+  }
+  await page.locator('#subpanelCharacters [data-equipment-nav="runes"]').click();
   await page.locator('#btnRuneWorkshop').click();
   await page.locator('[data-rune-explore]').click();
   assert.equal(await page.locator('#tabEvents').isVisible(), true);

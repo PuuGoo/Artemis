@@ -1,0 +1,48 @@
+/* Trang bị và Anh hùng dùng cùng ngôn ngữ hình ảnh với bảng Ngọc. */
+#appRoot:has(#tabEquip:not(.hidden)) > header { background:linear-gradient(110deg,#971f39,#b6323f 55%,#781d35); border-bottom:2px solid #eac34f; }
+#appRoot:has(#tabEquip:not(.hidden)) #bottomNavBar { background:linear-gradient(110deg,#9f2637,#a42c3c 55%,#722136); border-top:2px solid #eac34f; }
+#tabEquip { background:#171934; }
+#tabEquip:has(#subpanelGear:not(.hidden)) > .gear-subnav,
+#tabEquip:has(#subpanelCharacters:not(.hidden)) > .gear-subnav { display:none; }
+#gearReferenceNavigation { display:none; }
+#tabEquip:has(#subpanelGear:not(.hidden)) #gearReferenceNavigation { display:block; width:100%; max-width:600px; margin:0 auto; }
+#tabEquip .rune-reference-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin:0; min-height:44px; border-bottom:2px solid #ffdc4c; background:#192450; }
+#tabEquip .rune-reference-tabs button { display:flex; align-items:center; justify-content:center; gap:5px; min-width:0; min-height:44px; padding:5px 2px; border:1px solid #6683bf; border-bottom:0; border-radius:12px 12px 0 0; background:linear-gradient(#344b86,#17234d); color:#fff; font-size:clamp(12px,2.7vw,17px); font-weight:1000; text-shadow:0 2px 1px #172448; box-shadow:inset 0 2px 0 #ffffff18; }
+#tabEquip .rune-reference-tabs button svg { width:24px; height:24px; fill:currentColor; flex-shrink:0; }
+#tabEquip .rune-reference-tabs button[aria-current] { background:linear-gradient(#ffdc55,#fff132); border-color:#ffdd50; color:#86420d; text-shadow:0 1px 0 #fff3; }
+#tabEquip .equipment-extra-nav { padding:0 10px; background:#222644; color:#cbd0ea; font-size:11px; }
+#tabEquip .equipment-extra-nav button { min-height:44px; margin:0 8px 8px 0; padding:8px 12px; border:1px solid #6683bf; border-radius:9px; background:#233469; color:#fff; }
+#tabEquip #gearHeroStage { width:100%; max-width:600px; margin:0 auto; padding:12px 14px; border:0; background:#332540 url('/assets/ui/rune-altar.svg') center/100% 100% no-repeat; }
+#tabEquip #stageBgCanvas, #tabEquip #stageResonanceSvg, #tabEquip .a2-cloud-dome, #tabEquip .a2-sky-godray, #tabEquip .a2-grass-hill { display:none; }
+#tabEquip .gear-stage-heading { margin-bottom:4px; }
+#tabEquip .gear-eyebrow { color:#cfc2e9; }
+#tabEquip .gear-stage-layout { min-height:250px; }
+#tabEquip .gear-empty-slot { border:2px solid #8e7fae; background:linear-gradient(145deg,#61517c,#332d4e); border-radius:11px; color:#f1e6ff; box-shadow:inset 0 0 0 2px #70628e,0 3px 0 #211b36; }
+#tabEquip .a2-pedestal { background:#292440de; border-color:#84749c; }
+#tabEquip #subpanelGear, #tabEquip #subpanelCharacters { width:100%; max-width:600px; margin:0 auto; padding:0 0 calc(16px + env(safe-area-inset-bottom)); gap:0; background:#171934; }
+#tabEquip #subpanelGear > div { max-width:none; gap:0; }
+#tabEquip .gear-vault-heading { padding:10px 12px; background:#26294d; }
+#tabEquip .gear-vault-heading h2 { font-size:16px; }
+#tabEquip .gear-core-hint { color:#e1d9f1; }
+#tabEquip .gear-vault-toolbar { display:flex; justify-content:space-between; gap:12px; min-height:58px; padding:8px 7px 10px; border-top:1px solid #496eb7; border-bottom:3px solid #0e102c; background:linear-gradient(#344b86,#233469); }
+#tabEquip .gear-vault-toolbar button, #tabEquip #btnOpenBlacksmith, #tabEquip #btnGearChangeHero { min-height:44px; padding:6px 13px; border:2px solid #fce473; border-radius:11px; background:linear-gradient(#ffe776 0 45%,#ffca22 47%,#ffb400); box-shadow:0 3px 0 #94620c,inset 0 2px 1px #fff4ad; color:#58340c; font-size:13px; font-weight:900; }
+#tabEquip .gear-materials, #tabEquip .gear-slot-filters { padding-inline:10px; background:#222644; }
+#tabEquip .slot-filter-btn { border:1px solid #6683bf; border-radius:9px; }
+#tabEquip #gearBagGrid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:clamp(6px,1.8vw,12px); padding:12px clamp(10px,3.4vw,20px) 16px; }
+#tabEquip .gear-item-card-btn { border-radius:11px; box-shadow:inset 0 0 0 2px #ffffff25,0 3px 0 #24203e; }
+#tabEquip #characterStageControls { max-width:600px; border:0; border-radius:0; background:#26294d; }
+#tabEquip #vnCharactersAuthenticShowcase { order:0; }
+#tabEquip #characterStageControls { order:1; }
+#tabEquip #subpanelCharacters > div:last-child { order:2; }
+#tabEquip #subpanelCharacters > div { max-width:600px; }
+#tabEquip .hero-reference-content { padding:0; border:0; border-radius:0; background:#171934; box-shadow:none; }
+#tabEquip .hero-reference-content > * { margin-top:0; }
+#tabEquip .hero-reference-stage { padding:16px 12px; border:0; border-radius:0; background:#332540 url('/assets/ui/rune-altar.svg') center/cover no-repeat; }
+#tabEquip .hero-reference-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; max-height:none; overflow:visible; padding:12px; }
+#tabEquip [data-vn-select-hero] { min-width:0; border:2px solid #9279b7; border-radius:11px; background:linear-gradient(145deg,#4c366e,#272541); box-shadow:inset 0 0 0 2px #ffffff15,0 3px 0 #24203e; }
+#tabEquip [data-vn-select-hero]:has([data-vn-hero-use]) { border-color:#ffdf59; background:linear-gradient(145deg,#714585,#35274f); }
+#tabEquip .hero-reference-grid button { min-height:44px; }
+#tabEquip #subpanelCharacters > div:last-child { padding:12px; }
+#tabEquip button:focus-visible, #tabEquip summary:focus-visible { outline:2px solid #fff695; outline-offset:3px; }
+@media(max-width:480px) { #tabEquip .gear-stage-layout { grid-template-columns:64px minmax(0,1fr) 64px; gap:6px; } #tabEquip .gear-empty-slot { width:60px; height:64px; } #tabEquip .hero-reference-grid { gap:7px; padding:10px; } }
+@media(prefers-reduced-motion:reduce) { #tabEquip *, #tabEquip *::before, #tabEquip *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }

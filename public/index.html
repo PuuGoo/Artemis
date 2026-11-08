@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/gear-workspace.css" />
   <link rel="stylesheet" href="/rune-workspace.css" />
   <link rel="stylesheet" href="/rune-reference.css" />
+  <link rel="stylesheet" href="/equipment-reference.css" />
   <script src="/zodiac-chibi-bosses.js"></script>
   <script src="/obstacle-clearance.js"></script>
   <script src="/rune-economy.js"></script>
@@ -1940,6 +1941,7 @@
           </div>
         </div>
 
+        <div id="gearReferenceNavigation"></div>
         <!-- 2. SUB-NAVIGATION TABS BAR (Characters | Gear | Runes | Artifacts | Items & Shop) -->
         <div class="gear-subnav z-10 bg-[#091024] px-1.5 sm:px-6 pt-1.5 border-b-2 border-amber-400/80 shadow-md shrink-0">
           <div class="max-w-4xl mx-auto grid grid-cols-5 gap-1 sm:gap-2">
@@ -23698,9 +23700,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const starsHtml = '⭐'.repeat(Math.max(1, heroMeta.stars)) + '☆'.repeat(Math.max(0, 6 - heroMeta.stars));
 
         container.innerHTML = `
-          <div class="rounded-3xl bg-[#132347] border-2 border-[#3b82f6] overflow-hidden shadow-2xl space-y-3 p-3">
+          <div class="hero-reference-content rounded-3xl bg-[#132347] border-2 border-[#3b82f6] overflow-hidden shadow-2xl space-y-3 p-3">
             <!-- UPPER STAGE: HERO MODEL ON LEFT + SKILL LEVELS ON RIGHT (MATCHES PAGES 22, 38-58) -->
-            <div class="rounded-2xl bg-gradient-to-b from-[#0284c7] via-[#2563eb] to-[#1e3a8a] border-2 border-sky-300/70 p-3 grid grid-cols-1 md:grid-cols-2 gap-3 items-center relative">
+            <div class="hero-reference-stage rounded-2xl bg-gradient-to-b from-[#0284c7] via-[#2563eb] to-[#1e3a8a] border-2 border-sky-300/70 p-3 grid grid-cols-1 md:grid-cols-2 gap-3 items-center relative">
               <!-- Left: Hero Pedestal + Trang Phục / Điện + Name Banner -->
               <div class="relative flex flex-col items-center justify-center py-2">
                 <div class="absolute left-1 top-2 flex flex-col gap-2">
@@ -23758,6 +23760,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               </div>
             </div>
 
+            ${window.ArtemisRuneWorkspace.navigationMarkup('characters')}
             ${st.showResonancePanel ? `
               <!-- CỘNG HƯỞNG KỸ NĂNG VIEW (PAGE 37) -->
               <div class="rounded-2xl bg-[#1c2a52] border-2 border-sky-400/60 p-3.5 space-y-3">
@@ -23798,7 +23801,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             ` : ''}
 
             <!-- 4-COLUMN 21-HERO GRID (MATCHES PAGES 22, 38-58) -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
+            <div class="hero-reference-grid grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
               ${VN_21_HEROES_PDF.map(h => {
                 const isSel = h.id === heroMeta.id;
                 const isEquipped = (SaveState.selectedHeroId || 'nyanja') === h.id;
@@ -31361,6 +31364,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       });
 
       // Gear Subtabs (Characters | Gear | Runes)
+      document.getElementById('gearReferenceNavigation').innerHTML = window.ArtemisRuneWorkspace.navigationMarkup('gear');
+      document.addEventListener('click', event => {
+        const target = event.target.closest('[data-equipment-nav]');
+        if (!target) return;
+        document.querySelector(`#tabEquip > .gear-subnav [data-gear-subtab="${target.dataset.equipmentNav}"]`)?.click();
+      });
       document.querySelectorAll('.gear-subtab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const sub = btn.getAttribute('data-gear-subtab');
@@ -31371,6 +31380,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           document.getElementById('subpanelRunes').classList.toggle('hidden', sub !== 'runes');
           document.getElementById('subpanelArtifacts')?.classList.toggle('hidden', sub !== 'artifacts');
           document.getElementById('subpanelItems')?.classList.toggle('hidden', sub !== 'items');
+          document.getElementById('tabEquip').scrollTop = 0;
 
           document.querySelectorAll('.gear-subtab-btn').forEach(b => {
             const active = b === btn;
