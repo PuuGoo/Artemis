@@ -4,7 +4,7 @@ import {
   normalizeUsername, usernameKey,
 } from "../../lib/auth.js";
 import { json, fail, readJsonBody, bumpRateLimit, clientIp } from "../../lib/http.js";
-import { NEW_ACCOUNT_INIT_VERSION, buildCanonicalNewAccountSave } from "../../lib/initialState.js";
+import { NEW_ACCOUNT_INIT_VERSION, buildCanonicalNewAccountSave } from "../../lib/save/initialState.js";
 
 export const config = { runtime: "nodejs" };
 

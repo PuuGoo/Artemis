@@ -1,6 +1,6 @@
 import { requireAdmin, db, COLLECTIONS } from "../../lib/adminAuth.js";
 import { json, fail } from "../../lib/http.js";
-import { sanitizeSave } from "../../lib/saveSchema.js";
+import { sanitizeSave } from "../../lib/save/schema.js";
 
 export const config = { runtime: "nodejs" };
 

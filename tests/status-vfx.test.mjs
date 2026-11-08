@@ -9,7 +9,8 @@ import { fileURLToPath } from 'node:url';
 const root = new URL('..', import.meta.url);
 const modPath = new URL('public/status-vfx.js', root);
 const manifest = JSON.parse(fs.readFileSync(new URL('public/assets/vfx/manifest.json', root), 'utf8'));
-const html = fs.readFileSync(new URL('public/index.html', root), 'utf8').replace(/\r\n/g, '\n');
+const html = fs.readFileSync(new URL('public/index.html', root), 'utf8').replaceAll(String.fromCharCode(13), '');
+const renderer = fs.readFileSync(new URL('public/js/game/rendering/arena-renderer.js', root), 'utf8').replaceAll(String.fromCharCode(13), '');
 
 function load() {
   assert.ok(fs.existsSync(modPath), 'thiếu public/status-vfx.js');
@@ -100,7 +101,9 @@ test('không vẽ khi tắt hiệu năng thấp/giảm chuyển động, và kh�
 
 test('renderer production dùng StatusVFX cho cháy và độc', () => {
   assert.match(html, /<script src="\/status-vfx\.js"><\/script>/);
-  const arena = html.slice(html.indexOf('const ArenaV2 = (() => {'), html.indexOf('// ---------- Đạn quái:'));
+  const start = renderer.indexOf('  function drawMonster(');
+  assert.ok(start >= 0);
+  const arena = renderer.slice(start, renderer.indexOf('// ---------- Đạn quái:', start));
   assert.match(arena, /StatusVFX\.drawEnemy\(ctx, e, nowMs, Game\)/);
 });
 

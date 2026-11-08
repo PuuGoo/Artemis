@@ -15,9 +15,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const SRC = path.resolve(HERE, "..", "public", "index.html");
+const SRC = path.resolve(HERE, "..", "public", "js", "game", "rendering", "arena-renderer.js");
 
 const src = fs.readFileSync(SRC, "utf8");
+const gameplaySource = fs.readFileSync(path.resolve(HERE, "..", "public", "index.html"), "utf8");
 const lines = src.split("\n");
 
 /** Lấy tập key của một object literal bắt đầu ở dòng (1-based). */
@@ -168,7 +169,7 @@ const bossKeys = bossFnMatch
   : new Set();
 
 // Mọi loại quái được spawn trong setupRoom
-const spawnBlocks = [...src.matchAll(/\[\s*'([a-z0-9_]+)',\s*'([a-z0-9_]+)',\s*'([a-z0-9_]+)'\s*\]/g)];
+const spawnBlocks = [...gameplaySource.matchAll(/\[\s*'([a-z0-9_]+)',\s*'([a-z0-9_]+)',\s*'([a-z0-9_]+)'\s*\]/g)];
 const spawned = new Set();
 for (const b of spawnBlocks) { spawned.add(b[1]); spawned.add(b[2]); spawned.add(b[3]); }
 

@@ -6,12 +6,13 @@ import vm from 'node:vm';
 const read = p => fs.readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const html = read('public/index.html').replace(/\r\n/g, '\n');
 function fn(name) {
-  const start = html.indexOf('function ' + name + '(');
+  const source = name === 'drawMonster' ? read('public/js/game/rendering/arena-renderer.js').replace(/\r\n/g, '\n') : html;
+  const start = source.indexOf('function ' + name + '(');
   assert.ok(start >= 0, name);
   const boundary = name === 'drawMonster' ? '\n  }' : '\n      }';
-  const end = html.indexOf(boundary, start);
+  const end = source.indexOf(boundary, start);
   assert.ok(end > start, name + ' boundary');
-  return html.slice(start, end + boundary.length);
+  return source.slice(start, end + boundary.length);
 }
 function fixture({ skills = {}, hero = 'alex' } = {}) {
   const p = { x:300,y:500,r:12,hp:1000,maxHp:1000,atk:100,critRate:0,skills,hero:{id:hero},weapon:{color:'#fff'},attackCooldown:10000,facingAngle:0 };

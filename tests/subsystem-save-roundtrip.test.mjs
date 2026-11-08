@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { sanitizeSave, MAX_SAVE_BYTES } from '../lib/saveSchema.js';
+import { sanitizeSave, MAX_SAVE_BYTES } from '../lib/save/schema.js';
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 function between(a, b) { const i=html.indexOf(a), j=html.indexOf(b,i+a.length); assert.ok(i>=0&&j>i); return html.slice(i,j); }
 const fields=['gameMode','modeBest','guild','garden','plinko'];

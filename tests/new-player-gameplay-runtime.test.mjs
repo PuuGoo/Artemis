@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sanitizeSave } from '../lib/saveSchema.js';
+import { sanitizeSave } from '../lib/save/schema.js';
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 function between(start, end) {
   const a = html.indexOf(start), b = html.indexOf(end, a + start.length);

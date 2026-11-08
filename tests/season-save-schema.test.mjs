@@ -1,5 +1,5 @@
 // Regression test: season must survive cloud-save sanitization without trusting client IDs.
-import { sanitizeSave } from "../lib/saveSchema.js";
+import { sanitizeSave } from "../lib/save/schema.js";
 
 let pass = 0, fail = 0;
 function check(name, ok, extra = "") {

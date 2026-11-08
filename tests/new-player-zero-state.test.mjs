@@ -16,7 +16,7 @@
 import { readFileSync } from 'node:fs';
 
 const html = readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
-const schema = readFileSync(new URL('../lib/saveSchema.js', import.meta.url), 'utf8');
+const schema = readFileSync(new URL('../lib/save/schema.js', import.meta.url), 'utf8');
 let pass = 0, fail = 0;
 function check(name, ok) {
   if (ok) { pass++; console.log(`  PASS  ${name}`); }

@@ -100,7 +100,7 @@ check("migration chuan hoa completedSteps ve array", migBody.includes("if (!Arra
 
 // ---------------------------------------------------------------- 8. Server schema
 console.log("\n=== 8. SERVER-SIDE VALIDATION ===");
-const schemaSrc = fs.readFileSync(new URL("../lib/saveSchema.js", import.meta.url), "utf8");
+const schemaSrc = fs.readFileSync(new URL("../lib/save/schema.js", import.meta.url), "utf8");
 check("schema co BEGINNER_STEP_IDS whitelist", schemaSrc.includes("export const BEGINNER_STEP_IDS"));
 check("schema co sanitizeBeginnerJourney", schemaSrc.includes("function sanitizeBeginnerJourney"));
 check("schema dedupe step ids", schemaSrc.includes("if (!id || !BEGINNER_STEP_SET.has(id) || seen.has(id)) continue;"));
@@ -109,7 +109,7 @@ check("schema clamp startedAt", schemaSrc.includes("startedAt: clampNum(raw.star
 check("sanitizeSave gan beginnerJourney", schemaSrc.includes("beginnerJourney: sanitizeBeginnerJourney(raw.beginnerJourney)"));
 
 // Kiểm tra thật bằng cách import
-const { sanitizeSave } = await import(new URL("../lib/saveSchema.js", import.meta.url));
+const { sanitizeSave } = await import(new URL("../lib/save/schema.js", import.meta.url));
 const r1 = sanitizeSave({
   beginnerJourney: {
     startedAt: 1700000000000, currentStep: "N05",

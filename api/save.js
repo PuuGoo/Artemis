@@ -1,10 +1,9 @@
 import { getMongoDb, COLLECTIONS } from "../lib/mongo.js";
 import { getCurrentPlayer, json, fail, readJsonBody, bumpRateLimit, clientIp } from "../lib/http.js";
-import { sanitizeSave, MAX_SAVE_BYTES } from "../lib/saveSchema.js";
-import { validateEconomyDelta, validateSeasonDelta } from "../lib/economy.js";
-import { NEW_ACCOUNT_INIT_VERSION, buildCanonicalNewAccountSave } from "../lib/initialState.js";
-import { validateEconomyBudget } from "../lib/economyLedger.js";
-import { normalizeVipPasses, hasVipPass } from '../lib/privilegeCards.js';
+import { sanitizeSave, MAX_SAVE_BYTES } from "../lib/save/schema.js";
+import { NEW_ACCOUNT_INIT_VERSION } from "../lib/save/initialState.js";
+import { prepareSaveData, validateSaveTransition } from '../lib/save/policy.js';
+import { createSaveRepository } from '../lib/save/repository.js';
 
 export const config = { runtime: "nodejs" };
 
@@ -16,41 +15,20 @@ function isCanonicalAccount(player) {
   return Number.isInteger(player?.initVersion) && player.initVersion >= NEW_ACCOUNT_INIT_VERSION;
 }
 
-/**
- * Các hệ mới thêm sau này. Client cũ (JS trong cache) không gửi key, nên khi
- * ghi đè snapshot phải giữ lại giá trị đang có trong DB — nếu không, chỉ cần mở
- * game bằng bundle cũ là tiến trình Vườn/Bang/Plinko biến mất.
- * Client mới LUÔN gửi key (null khi trống) nên xoá có chủ đích vẫn hoạt động.
- */
-const CARRY_FORWARD_FIELDS = ["gameMode", "modeBest", "guild", "garden", "plinko"];
-
-/** Dựng lại seed chuẩn khi bản ghi save của tài khoản đã đánh dấu bị thất lạc. */
-async function restoreCanonicalSave(saves, player, playerId) {
-  const doc = buildCanonicalNewAccountSave({ playerId, username: player.username });
-  try {
-    await saves.insertOne(doc);
-    return doc;
-  } catch (error) {
-    // Một request khác vừa tạo xong -> đọc lại thay vì ghi đè.
-    if (error?.code === 11000) return saves.findOne({ playerId });
-    throw error;
-  }
-}
-
 export async function GET(request) {
   const player = await getCurrentPlayer(request);
   if (!player) return fail("Ban can dang nhap de luu tien trinh.", 401);
 
   const db = await getMongoDb();
-  const saves = db.collection(COLLECTIONS.saves);
+  const saves = createSaveRepository(db.collection(COLLECTIONS.saves));
   const playerId = String(player._id);
-  let doc = await saves.findOne({ playerId });
+  let doc = await saves.find(playerId);
 
   // Tài khoản đã đánh dấu khởi tạo chuẩn thì bản ghi save phải tồn tại. Nếu mất,
   // "không có save" nghĩa là dữ liệu đã mất — không phải người chơi mới — nên
   // khôi phục seed chuẩn thay vì trả hasSave=false cho client tự dựng state.
   if (!doc && isCanonicalAccount(player)) {
-    doc = await restoreCanonicalSave(saves, player, playerId);
+    doc = await saves.restoreCanonical(player, playerId);
   }
 
   if (!doc) return json({ ok: true, playerId, hasSave: false, data: null, revision: 0 });
@@ -70,7 +48,7 @@ export async function PUT(request) {
 
   const playerId = String(player._id);
   const db = await getMongoDb();
-  const saves = db.collection(COLLECTIONS.saves);
+  const saves = createSaveRepository(db.collection(COLLECTIONS.saves));
 
   const rl = await bumpRateLimit(`save:${playerId}`, { windowMs: 60_000, max: 60 });
   if (!rl.allowed) return fail("Luu qua nhanh. Thu lai sau it giay.", 429);
@@ -103,11 +81,7 @@ export async function PUT(request) {
   }
   const now = new Date();
 
-  const existing = await saves.findOne({ playerId }, { projection: {
-    revision: 1, ledger: 1,
-    "data.gold": 1, "data.gems": 1, "data.vipCoins": 1, "data.vipPasses": 1, "data.runes": 1, "data.runeStones": 1, "data.runeIntroClaimed": 1, "data.runeMythicEnchant": 1, "data.lifetimeStats": 1, "data.season": 1,
-    "data.gameMode": 1, "data.modeBest": 1, "data.guild": 1, "data.garden": 1, "data.plinko": 1,
-  } });
+  const existing = await saves.readForValidation(playerId);
   const currentRevision = existing ? (existing.revision || 1) : 0;
 
   if (expectedRevision !== currentRevision) {
@@ -119,86 +93,18 @@ export async function PUT(request) {
     }, 409);
   }
 
-  // Client cũ (bundle trong cache) không gửi các hệ mới. Nếu ghi đè snapshot mà
-  // thiếu key thì tiến trình Vườn/Bang/Plinko của người chơi biến mất chỉ vì họ
-  // mở game bằng JS cũ. Giữ lại giá trị đang có trong DB cho field KHÔNG xuất
-  // hiện trong payload; client mới luôn gửi key (null khi trống) nên thao tác
-  // xoá có chủ đích vẫn hoạt động.
-  const incomingData = body.data.data;
-  // VIP is issued by admins. Client snapshots may carry the value for display,
-  // but they never get to create, increase, or erase the server balance.
-  check.data.vipCoins = Math.max(0, Math.min(1e9, Number(existing?.data?.vipCoins) || 0));
-  check.data.vipPasses = normalizeVipPasses(existing?.data?.vipPasses);
-  // Rune copies can only be created by /api/runes. Equipping remains a free
-  // choice, but the chosen stone must already belong to this account.
-  check.data.runes = existing?.data?.runes && typeof existing.data.runes === 'object' ? existing.data.runes : {};
-  check.data.runeStones = existing?.data?.runeStones && typeof existing.data.runeStones === 'object' ? existing.data.runeStones : {};
-  check.data.runeIntroClaimed = existing?.data?.runeIntroClaimed === true;
-  check.data.runeMythicEnchant = existing?.data?.runeMythicEnchant === true;
-  for (const slots of Object.values(check.data.equippedRuneSlots || {})) {
-    if (!Array.isArray(slots)) continue;
-    for (let index=0;index<slots.length;index++) {
-      if (slots[index] && !(Number(check.data.runes[slots[index]])>0)) slots[index] = null;
-    }
-  }
-  if (!hasVipPass(check.data.vipPasses, 'hunting') && check.data.wikiEventsState?.huntingWarriorCard) {
-    check.data.wikiEventsState.huntingWarriorCard = false;
-  }
-  for (const key of CARRY_FORWARD_FIELDS) {
-    if (key in incomingData) continue;
-    if (existing && existing.data && key in existing.data) {
-      check.data[key] = existing.data[key];
-    }
-  }
-
-  // ===== Kiểm tra kinh tế phía server =====
-  // Không tin client: chặn việc tự cấp vàng/đá quý qua một request duy nhất.
-  // So sánh với bản ghi đang có trong DB, dùng số revision tăng làm mốc.
-  // (1) Hạn mức delta cũ — chặn payload khổng lồ trước khi tính ngân sách.
-  const economy = validateEconomyDelta(existing?.data || null, check.data, 1);
-  if (!economy.ok) {
-    const save = await saves.findOne({ playerId }, { projection: { revision: 1, data: 1 } });
+  const data = prepareSaveData({
+    sanitizedData: check.data,
+    incomingData: body.data.data,
+    previousData: existing?.data,
+    nowMs: now.getTime(),
+  });
+  const transition = validateSaveTransition({ previous: existing, data, nowMs: now.getTime() });
+  if (!transition.ok) {
+    const save = await saves.readConflict(playerId);
     return json({
       ok: false,
-      error: economy.reason,
-      code: economy.code,
-      detail: economy.detail,
-      // Trả lại bản ghi server để client không ghi đè dữ liệu hỏng lên máy.
-      conflict: true,
-      serverRevision: save?.revision || 0,
-      serverData: save?.data || null,
-    }, 422);
-  }
-
-  // ===== (2) Ngân sách theo ĐỒNG HỒ SERVER =====
-  // Delta cũ chỉ chặn 500.000 vàng/lần lưu; kẻ gian vẫn mint được 500k mỗi revision.
-  // Ngân sách nạp theo thời gian thật nên trần thu nhập phụ thuộc thời gian đã chơi,
-  // không phụ thuộc số lần lưu. Xem lib/economyLedger.js.
-  const budget = validateEconomyBudget(existing?.data || null, check.data, existing?.ledger || null);
-  if (!budget.ok) {
-    const save = await saves.findOne({ playerId }, { projection: { revision: 1, data: 1 } });
-    return json({
-      ok: false,
-      error: "Kinh tế không hợp lệ so với thời gian chơi.",
-      code: budget.code,
-      message: budget.message,
-      conflict: true,
-      serverRevision: save?.revision || 0,
-      serverData: save?.data || null,
-    }, 422);
-  }
-
-  // ===== Kiểm tra tiến trình Mùa Giải phía server =====
-  // Tiền Mùa chỉ được tăng khi save phản ánh một lần hi sinh hợp lệ (+60 mỗi 2%)
-  // hoặc một chuyển trạng thái hạ trùm hợp lệ (+120). Không nhận số dư do client tự khai.
-  const seasonEconomy = validateSeasonDelta(existing?.data || null, check.data);
-  if (!seasonEconomy.ok) {
-    const save = await saves.findOne({ playerId }, { projection: { revision: 1, data: 1 } });
-    return json({
-      ok: false,
-      error: seasonEconomy.reason,
-      code: seasonEconomy.code,
-      detail: seasonEconomy.detail,
+      ...transition.error,
       conflict: true,
       serverRevision: save?.revision || 0,
       serverData: save?.data || null,
@@ -209,35 +115,18 @@ export async function PUT(request) {
   const snapshot = {
     playerId,
     username: player.username,
-    data: check.data,
+    data,
     // Ngân sách còn lại sau lần lưu này — mốc để lần sau refill theo thời gian.
-    ledger: budget.ledger,
+    ledger: transition.ledger,
     revision: nextRevision,
     updatedAt: now,
     updatedIp: clientIp(request).slice(0, 45),
   };
-  async function revisionConflict() {
-    const latest = await saves.findOne({ playerId }, { projection: { revision: 1 } });
+  if (!await saves.commit(existing, snapshot)) {
+    const latest = await saves.readForValidation(playerId);
     return json({ ok: false, conflict: true,
       error: "Du lieu da thay doi tu thiet bi khac. Hay tai lai truoc khi luu.",
       serverRevision: latest ? (latest.revision || 1) : 0 }, 409);
-  }
-  if (existing) {
-    // Compare-and-set: validation and replacement must refer to the same snapshot.
-    const result = await saves.updateOne(
-      { playerId, revision: existing.revision === undefined ? { $exists: false } : existing.revision },
-      { $set: snapshot },
-      { upsert: false },
-    );
-    if (result.matchedCount !== 1) return revisionConflict();
-  } else {
-    // The unique playerId index arbitrates concurrent first saves without replacing one.
-    try {
-      await saves.insertOne({ ...snapshot, createdAt: now });
-    } catch (error) {
-      if (error?.code === 11000) return revisionConflict();
-      throw error;
-    }
   }
 
   return json({ ok: true, revision: nextRevision, updatedAt: now, bytes: check.bytes });

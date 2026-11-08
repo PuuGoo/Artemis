@@ -1,5 +1,5 @@
 import { getCurrentPlayer } from "../../lib/http.js";
-import { publicPlayer } from "../../lib/saveSchema.js";
+import { publicPlayer } from "../../lib/save/schema.js";
 import { getMongoDb, COLLECTIONS } from "../../lib/mongo.js";
 
 export const config = { runtime: "nodejs" };

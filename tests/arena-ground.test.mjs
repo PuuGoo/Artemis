@@ -8,6 +8,7 @@ const root = new URL('..', import.meta.url);
 const modPath = new URL('public/arena-ground.js', root);
 const manifest = JSON.parse(fs.readFileSync(new URL('public/assets/maps/manifest.json', root), 'utf8'));
 const html = fs.readFileSync(new URL('public/index.html', root), 'utf8').replace(/\r\n/g, '\n');
+const renderer = fs.readFileSync(new URL('public/js/game/rendering/arena-renderer.js', root), 'utf8').replace(/\r\n/g, '\n');
 
 function load() {
   assert.ok(fs.existsSync(modPath), 'thiếu public/arena-ground.js');
@@ -92,10 +93,11 @@ test('thiếu ảnh thì bỏ qua an toàn, không ném lỗi', () => {
 
 test('game thật gọi lớp nền này trong drawArena và có script', () => {
   assert.match(html, /<script src="\/arena-ground\.js"><\/script>/);
-  const start = html.indexOf('  function drawArena(ctx, w, h, pad, nowMs, chId) {');
+  assert.match(html, /<script src="\/js\/game\/rendering\/arena-renderer\.js"><\/script>/);
+  const start = renderer.indexOf('  function drawArena(ctx, w, h, pad, nowMs, chId) {');
   assert.ok(start > 0);
-  const end = html.indexOf('\n  }', start);
-  const body = html.slice(start, end);
+  const end = renderer.indexOf('\n  }', start);
+  const body = renderer.slice(start, end);
   assert.match(body, /ArenaGround\.draw\(/, 'drawArena chưa dùng nền thật');
   // Nền phải vẽ TRƯỚC decal/hạt để không che nhân vật.
   assert.ok(body.indexOf('ArenaGround.draw(') < body.indexOf('Game.floorDecals'), 'nền vẽ sau decal');

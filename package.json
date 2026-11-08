@@ -9,8 +9,8 @@
   },
   "scripts": {
     "dev": "node dev-server.mjs",
-    "test": "node --test tests/*.test.mjs",
-    "check": "node --check lib/mongo.js && node --check lib/auth.js && node --check lib/saveSchema.js && node --check lib/economy.js && node --check lib/http.js && node --check lib/initialState.js && node --check api/save.js && node --check public/cloud.js",
+    "test": "node --max-old-space-size=192 tools/run-tests.mjs",
+    "check": "node --max-old-space-size=192 tools/check-source.mjs",
  "sim": "node tools/combat-sim.mjs"
   },
   "dependencies": {

@@ -3,10 +3,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { sanitizeSave } from "../lib/saveSchema.js";
+import { sanitizeSave } from "../../lib/save/schema.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const html = fs.readFileSync(path.join(__dirname, "../public/index.html"), "utf8");
+const html = fs.readFileSync(path.join(__dirname, "../../public/index.html"), "utf8");
 
 let pass = 0, fail = 0;
 function check(name, cond, extra = "") {

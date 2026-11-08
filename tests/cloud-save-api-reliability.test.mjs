@@ -2,10 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { sanitizeSave, MAX_SAVE_BYTES } from '../lib/saveSchema.js';
-import { validateEconomyDelta, validateSeasonDelta } from '../lib/economy.js';
-import { validateEconomyBudget } from '../lib/economyLedger.js';
-import { normalizeVipPasses, hasVipPass } from '../lib/privilegeCards.js';
+import { sanitizeSave, MAX_SAVE_BYTES } from '../lib/save/schema.js';
+import { prepareSaveData, validateSaveTransition } from '../lib/save/policy.js';
+import { createSaveRepository } from '../lib/save/repository.js';
 
 // Execute the actual route body with isolated Mongo/auth seams; never import
 // Mongo or read .env. The sanitizer and economy validators are real dependencies.
@@ -60,9 +59,7 @@ function harness(initial = null, ownerId) {
     json, fail: (error, status) => json({ ok: false, error }, status),
     readJsonBody: async request => ({ ok: true, data: await request.json() }),
     bumpRateLimit: async () => ({ allowed: true }), clientIp: () => 'offline',
-    sanitizeSave, MAX_SAVE_BYTES, validateEconomyDelta, validateSeasonDelta,
-    // Ngân sách kinh tế theo đồng hồ server (Đợt 6).
-    validateEconomyBudget, normalizeVipPasses, hasVipPass,
+    sanitizeSave, MAX_SAVE_BYTES, prepareSaveData, validateSaveTransition, createSaveRepository,
   });
   vm.runInContext(source.replace(/^import .*;\r?\n/gm, '').replace(/export /g, '') + '\nthis.route = { GET, PUT };', context);
   return {

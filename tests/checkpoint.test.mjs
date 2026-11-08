@@ -5,7 +5,7 @@ import fs from "node:fs";
 
 const HTML = new URL("../public/index.html", import.meta.url);
 const src = fs.readFileSync(HTML, "utf8");
-const schemaSrc = fs.readFileSync(new URL("../lib/saveSchema.js", import.meta.url), "utf8");
+const schemaSrc = fs.readFileSync(new URL("../lib/save/schema.js", import.meta.url), "utf8");
 
 let pass = 0, fail = 0;
 function check(name, cond, extra = "") {
@@ -92,7 +92,7 @@ check("schema co sanitizeDungeonCheckpoint", schemaSrc.includes("function saniti
 check("sanitizeSave gan dungeonCheckpoint", schemaSrc.includes("dungeonCheckpoint: sanitizeDungeonCheckpoint(raw.dungeonCheckpoint)"));
 
 // Kiểm tra thật
-const { sanitizeSave } = await import(new URL("../lib/saveSchema.js", import.meta.url));
+const { sanitizeSave } = await import(new URL("../lib/save/schema.js", import.meta.url));
 
 const good = sanitizeSave({
   dungeonCheckpoint: {

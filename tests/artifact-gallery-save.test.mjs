@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sanitizeSave } from '../lib/saveSchema.js';
+import { sanitizeSave } from '../lib/save/schema.js';
 
 test('artifact stars and wish progress survive cloud save round trips', () => {
   const input = { artifactStars: { gladiators_helm: 1, iron_throne: 6, four_leaf_clover: 15 }, wishPityCount: 32 };

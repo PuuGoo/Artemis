@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { Script } from "node:vm";
+import { Script, runInNewContext } from "node:vm";
 import { getCampaignSummaries, getCampaignDetail } from "../lib/campaignCatalog.js";
 
 const source = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
 const catalogCode = fs.readFileSync(new URL("../lib/campaignCatalog.js", import.meta.url), "utf8");
-const rendererCode = fs.readFileSync(new URL("../public/admin-campaign-renderer.js", import.meta.url), "utf8");
+const rendererCode = fs.readFileSync(new URL("../public/js/game/rendering/arena-renderer.js", import.meta.url), "utf8");
 const adminHtml = fs.readFileSync(new URL("../public/admin.html", import.meta.url), "utf8");
 const adminJs = fs.readFileSync(new URL("../public/admin-campaign.js", import.meta.url), "utf8");
 const apiJs = fs.readFileSync(new URL("../api/admin/campaign.js", import.meta.url), "utf8");
@@ -16,7 +16,7 @@ function section(src, first, last) {
   assert.ok(a >= 0, "Missing " + first);
   const b = src.indexOf(last, a);
   assert.ok(b >= 0, "Missing closing marker for " + first);
-  return src.slice(a, b + last.length).trim();
+  return src.slice(a, b + last.length).replace(/\r\n/g, '\n').trim();
 }
 
 test("admin campaign catalog matches actual game definitions", () => {
@@ -27,14 +27,16 @@ test("admin campaign catalog matches actual game definitions", () => {
     ["const POOLS = {", "\n  };"],
     ["const BOSS_ARENA = {", ";"],
   ]) {
-    assert.equal(section(catalogCode, first, last), section(source, first, last), first + " drifted");
+    const actual = first === 'const POOLS = {' || first === 'const BOSS_ARENA = {' ? rendererCode : source;
+    assert.equal(section(catalogCode, first, last), section(actual, first, last), first + " drifted");
   }
 });
 
 test("admin monster renderer stays synchronized with game and handles Ch8+", () => {
-  const gameArena = section(source, "const ArenaV2 = (() => {", "\n})();");
-  assert.ok(rendererCode.includes(gameArena), "Admin sprite render is out of sync with public/index.html");
-  assert.match(adminJs, /admin-campaign-renderer\.js/);
+  assert.match(source, /const ArenaV2 = ArtemisArenaRenderer.create\(\)/);
+  assert.match(adminJs, /window.AdminCampaignArenaV2 = window.ArtemisArenaRenderer.create\(\)/);
+  assert.match(adminJs, /script.src="\/js\/game\/rendering\/arena-renderer\.js"/);
+  assert.doesNotMatch(source, /const BIOMES =/);
 });
 
 test("admin UI remains read-only and guarded by existing admin identity", () => {
@@ -92,8 +94,9 @@ test("real Canvas renderer can draw every campaign room and creature without thr
     set(o,k,v){o[k]=v;return true;}
   });
   const doc={createElement(){return {width:780,height:420,getContext(){return ctx}}},getElementById(){return null}};
-  const fakeWindow={};
-  const Arena = new Function("window","document",rendererCode+"\nreturn window.AdminCampaignArenaV2;")(fakeWindow,doc);
+  const context = { document: doc };
+  runInNewContext(rendererCode, context);
+  const Arena = context.ArtemisArenaRenderer.create();
   assert.ok(Arena && Arena.drawArena && Arena.drawMonster);
   for(const ch of getCampaignSummaries()) {
     for(const room of getCampaignDetail(ch.id).roomsDetail) {

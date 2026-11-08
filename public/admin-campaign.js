@@ -210,8 +210,12 @@
         var groundScript=document.createElement("script");groundScript.src="/arena-ground.js";groundScript.dataset.adminGround="1";document.head.appendChild(groundScript);
       }
       var script=document.createElement("script");
-      script.src="/admin-campaign-renderer.js";
-      script.onload=function(){window.AdminCampaignArenaV2?resolve(window.AdminCampaignArenaV2):reject(Error("Không có ArenaV2"));};
+      script.src="/js/game/rendering/arena-renderer.js";
+      script.onload=function(){
+        if(!window.ArtemisArenaRenderer) return reject(Error("Không có factory ArenaV2"));
+        window.AdminCampaignArenaV2 = window.ArtemisArenaRenderer.create();
+        resolve(window.AdminCampaignArenaV2);
+      };
       script.onerror=function(){reject(Error("Không tải được mã Canvas của game"));};
       document.head.appendChild(script);
     });

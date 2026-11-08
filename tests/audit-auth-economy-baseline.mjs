@@ -2,7 +2,7 @@
 // Deliberately outside npm's *.test.mjs glob; do not call any API or database.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sanitizeSave } from '../lib/saveSchema.js';
+import { sanitizeSave } from '../lib/save/schema.js';
 import { validateEconomyDelta, validateSeasonDelta } from '../lib/economy.js';
 import { signSession, verifySessionToken } from '../lib/auth.js';
 import { POST as logout } from '../api/auth/logout.js';

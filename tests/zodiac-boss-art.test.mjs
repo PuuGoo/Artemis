@@ -5,6 +5,7 @@ import vm from 'node:vm';
 
 const root = new URL('../', import.meta.url);
 const html = fs.readFileSync(new URL('public/index.html', root), 'utf8');
+const renderer = fs.readFileSync(new URL('public/js/game/rendering/arena-renderer.js', root), 'utf8');
 const code = fs.readFileSync(new URL('public/zodiac-chibi-bosses.js', root), 'utf8');
 const signs = 'aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces'.split(' ');
 
@@ -47,10 +48,10 @@ test('all 12 chibi bosses render with paths, charge and rage without an image lo
 
 test('campaign remains wired to the same pure visual drawing hook', () => {
   assert.match(html,/<script src="\/zodiac-chibi-bosses\.js"><\/script>/);
-  const boss=html.slice(html.indexOf('function drawZodiacBoss('),html.indexOf('const BOSSFN'));
+  const boss=renderer.slice(renderer.indexOf('function drawZodiacBoss('),renderer.indexOf('const BOSSFN'));
   assert.match(boss,/ArtemisZodiacBosses/);
   assert.match(boss,/\.draw\(ctx, curBiome\?\.boss, r, t, hr, charge\)/);
-  assert.match(html,/zodiac_pisces:\s*drawZodiacBoss/);
+  assert.match(renderer,/zodiac_pisces:\s*drawZodiacBoss/);
 });
 
 test('unsupported contexts allow old Canvas fallback',()=>{

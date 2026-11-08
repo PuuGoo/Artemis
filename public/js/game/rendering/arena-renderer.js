@@ -1,6 +1,6 @@
-// Snapshot of ArenaV2 from public/index.html, for read-only admin previews.
-// Keep identical to game renderer. tests/admin-campaign.test.mjs catches changes.
-const ArenaV2 = (() => {
+// Renderer Canvas dùng chung game/admin; mỗi create() giữ Game/cache/VIS riêng.
+(function(root) {
+  function createArenaRenderer() {
   let Game = { enemies: [], obstacles: [], floorDecals: [], wallTorches: [], portalRect: { x: 0, y: 0, w: 0, h: 0 } };
   const TAU = Math.PI * 2;
   const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
@@ -1934,5 +1934,6 @@ const ArenaV2 = (() => {
     tint() { const B = curBiome; return { accent: B.accent, glow: B.glow, mote: B.torch[1], ray: hex2(B.accent).join(', ') }; },
     _debug: { BIOMES, SK, POOLS, pickBiome, buildStatic, drawBody, setBiome(id) { curBiome = BIOMES[id]; return curBiome; } }
   };
-})();
-window.AdminCampaignArenaV2 = ArenaV2;
+  }
+  root.ArtemisArenaRenderer = Object.freeze({ create: createArenaRenderer });
+})(globalThis);

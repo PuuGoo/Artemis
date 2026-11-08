@@ -4,7 +4,7 @@ import { resolve, dirname, extname, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import assert from 'node:assert/strict';
-import { sanitizeSave } from '../lib/saveSchema.js';
+import { sanitizeSave } from '../lib/save/schema.js';
 
 // Chrome thật + auth/save bộ nhớ: không DB, không tài khoản thật, không đọc .env.
 // PLAYWRIGHT_MODULE=<đường dẫn playwright-core/index.mjs> node tools/verify-battle-hub.mjs [--baseline]

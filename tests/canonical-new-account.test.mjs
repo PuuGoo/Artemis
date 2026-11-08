@@ -14,16 +14,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { sanitizeSave } from '../lib/saveSchema.js';
-import { validateEconomyBudget } from '../lib/economyLedger.js';
-import { normalizeVipPasses, hasVipPass } from '../lib/privilegeCards.js';
-import { validateEconomyDelta, validateSeasonDelta } from '../lib/economy.js';
+import { sanitizeSave } from '../lib/save/schema.js';
+import { prepareSaveData, validateSaveTransition } from '../lib/save/policy.js';
+import { createSaveRepository } from '../lib/save/repository.js';
 import { validateCredentials, normalizeUsername, usernameKey } from '../lib/auth.js';
 import {
   NEW_ACCOUNT_INIT_VERSION,
   buildCanonicalNewAccountData,
   buildCanonicalNewAccountSave,
-} from '../lib/initialState.js';
+} from '../lib/save/initialState.js';
 
 const ROOT = new URL('..', import.meta.url);
 const fileURL = (rel) => new URL(rel, import.meta.url);
@@ -173,12 +172,9 @@ function saveRoute(mock, who) {
     clientIp: () => '127.0.0.1',
     sanitizeSave,
     MAX_SAVE_BYTES: 400 * 1024,
-    validateEconomyDelta,
-    validateSeasonDelta,
-    // Ngân sách kinh tế (Đợt 6) — save.js gọi tới, phải có trong sandbox vm.
-    validateEconomyBudget,
-    normalizeVipPasses,
-    hasVipPass,
+    prepareSaveData,
+    validateSaveTransition,
+    createSaveRepository,
     NEW_ACCOUNT_INIT_VERSION,
     buildCanonicalNewAccountSave,
   });

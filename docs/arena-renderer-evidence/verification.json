@@ -1,0 +1,41 @@
+{
+  "scope": "Chrome thật; HTTP fixture local mock auth/save/admin; không DB/production; không chứng minh vượt chương",
+  "results": [
+    {
+      "name": "game-ui-bootstrap-live-loop-and-independent-factory",
+      "details": {
+        "time": 5879.5,
+        "enemies": 3,
+        "hp": 775,
+        "painted": 51896,
+        "colors": 37273,
+        "currentBiome": "Hầm Ngục Đá Cổ",
+        "previewBiome": "Hỏa Sơn Sừng Đỏ",
+        "independent": true,
+        "saveUnchanged": true
+      }
+    },
+    {
+      "name": "admin-real-ui-dynamic-shared-renderer-load-and-canvas",
+      "details": {
+        "painted": 20475,
+        "colors": 16095,
+        "biome": "Hầm Ngục Đá Cổ",
+        "sharedScriptCount": 1,
+        "legacyScriptCount": 0
+      }
+    }
+  ],
+  "rendererRequests": [
+    {
+      "page": "game",
+      "status": 200
+    },
+    {
+      "page": "admin",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

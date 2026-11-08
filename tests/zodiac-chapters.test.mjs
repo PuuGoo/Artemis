@@ -6,6 +6,7 @@ import { resolve, dirname } from 'node:path';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(resolve(root, 'public/index.html'), 'utf8');
+const renderer = readFileSync(resolve(root, 'public/js/game/rendering/arena-renderer.js'), 'utf8');
 const signs = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
 const chapters = html.slice(html.indexOf('const CHAPTERS = ['), html.indexOf('\n      ];', html.indexOf('const CHAPTERS = [')));
 
@@ -24,9 +25,9 @@ for (const [index, sign] of signs.entries()) {
     assert.match(svg, /@keyframes orbit/);
     assert.match(svg, /prefers-reduced-motion/);
     assert.ok((svg.match(/<circle/g) || []).length >= 20, 'thiếu sao và chòm sao');
-    assert.match(html, new RegExp(`def\\('zodiac_${sign}'`));
-    assert.match(html, new RegExp(`${number}: \\['zodiac_${sign}'\\]`));
-    assert.match(html, new RegExp(`zodiac_${sign}: drawZodiacBoss`));
+    assert.match(renderer, new RegExp(`def\\('zodiac_${sign}'`));
+    assert.match(renderer, new RegExp(`${number}: \\['zodiac_${sign}'\\]`));
+    assert.match(renderer, new RegExp(`zodiac_${sign}: drawZodiacBoss`));
     assert.match(html, new RegExp(`${number}: \\{ mobHp: [0-9]+, mobAtk: [0-9]+, bossHp: [0-9]+, bossAtk: [0-9]+ \\}`));
   });
 }

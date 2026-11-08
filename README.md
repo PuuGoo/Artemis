@@ -4,6 +4,12 @@ Game roguelike bắn cung một người chơi, có **tài khoản** và **lưu 
 
 ## Kiến trúc
 
+Ranh giới module, luồng save và lộ trình tách frontend: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Save backend tách `api/save.js` (HTTP), `lib/save/policy.js` (luật nghiệp vụ) và
+`lib/save/repository.js` (projection/CAS); không cần mở DB để unit-test policy.
+Game và admin dùng chung factory Canvas tại `public/js/game/rendering/arena-renderer.js`, mỗi bên
+có instance/cache riêng thay vì giữ hai bản renderer phải sửa đồng thời.
+
 ```
 public/          # game tĩnh (HTML/JS) + cloud.js (auth gate + cloud save)
 api/             # Vercel serverless functions (Node.js runtime)
@@ -16,8 +22,11 @@ api/             # Vercel serverless functions (Node.js runtime)
 lib/             # logic dùng chung
   mongo.js       # MongoClient cache, tự tạo index
   auth.js        # bcrypt hash + JWT (jose)
-  saveSchema.js  # whitelist + validate toàn bộ save snapshot
+  save/          # schema, seed tân thủ, policy, repository (xem README trong thư mục)
   http.js        # JSON body guard, rate limit, session
+public/js/game/rendering/  # renderer Canvas dùng chung game/admin
+tests/save/                # kiểm thử subsystem save
+tests/rendering/           # kiểm thử renderer đã tách
 ```
 
 ## Bảo mật
@@ -48,12 +57,13 @@ node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ## Test
 
 ```bash
-npm test                         # bộ test chính (các test cần MongoDB thật sẽ tự bỏ qua)
+npm run check                   # kiểm cú pháp JS/MJS và script nhúng trong HTML, không execute app
+npm test                         # tìm *.test.mjs đệ quy, chạy tuần tự; MongoDB thật chỉ chạy khi opt-in
 node tools/validate-biomes.mjs   # kiểm tra map, vật trang trí và boss
 ```
 
-> `tests/save-schema.test.mjs` đối chiếu trực tiếp với `public/index.html`: nếu game thêm field mới
-> vào `SaveState.save()` mà `lib/saveSchema.js` chưa giữ lại, test sẽ FAIL ngay.
+> `tests/save/schema.test.mjs` đối chiếu trực tiếp với `public/index.html`: nếu game thêm field mới
+> vào `SaveState.save()` mà `lib/save/schema.js` chưa giữ lại, test sẽ FAIL ngay.
 
 ### Chơi thử ngay, không cần MongoDB Atlas
 

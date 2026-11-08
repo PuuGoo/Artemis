@@ -4,6 +4,8 @@ import fs from "node:fs";
 
 const economySrc = fs.readFileSync(new URL("../lib/economy.js", import.meta.url), "utf8");
 const saveSrc = fs.readFileSync(new URL("../api/save.js", import.meta.url), "utf8");
+const policySrc = fs.readFileSync(new URL('../lib/save/policy.js', import.meta.url), 'utf8');
+const repositorySrc = fs.readFileSync(new URL('../lib/save/repository.js', import.meta.url), 'utf8');
 const {
   validateEconomyDelta,
   MAX_GOLD_GAIN_PER_REVISION,
@@ -19,15 +21,18 @@ function check(name, cond, extra = "") {
 
 // ---------------------------------------------------------------- 1. Nối vào API
 console.log("\n=== 1. DA NOI VAO /api/save ===");
-// Import có thể kèm nhiều tên (validateSeasonDelta...) — kiểm tra THÀNH PHẦN,
-// không so khớp nguyên chuỗi.
-check("api/save.js import validateEconomyDelta",
-  /import \{[^}]*\bvalidateEconomyDelta\b[^}]*\} from "\.\.\/lib\/economy\.js"/.test(saveSrc));
-check("goi validateEconomyDelta truoc khi ghi", /validateEconomyDelta\(existing\?\.data \|\| null, check\.data, 1\)/.test(saveSrc));
-check("tra 422 kem code khi bi chan", saveSrc.includes("code: economy.code"));
+// Luật chuyển sang domain policy; route vẫn phải gọi trước persistence.
+check("route import policy, policy import delta validator",
+  /import \{[^}]*\bvalidateSaveTransition\b[^}]*\} from ['"]\.\.\/lib\/save\/policy\.js['"]/.test(saveSrc)
+  && /import \{[^}]*\bvalidateEconomyDelta\b[^}]*\} from ['"]\.\.\/economy\.js['"]/.test(policySrc));
+check("policy kiem delta cho mot revision", /validateEconomyDelta\(previousData, data, 1\)/.test(policySrc));
+check("tra 422 kem loi domain khi bi chan", saveSrc.includes('...transition.error') && /if \(!transition.ok\)[\s\S]*?}, 422\)/.test(saveSrc) && policySrc.includes('code: economy.code'));
 check("tra serverData de client khong ghi de", saveSrc.includes("serverData: save?.data || null"));
-check("projection lay data de so sanh", saveSrc.includes('"data.gold": 1'));
-check("chan xay ra TRUOC updateOne", saveSrc.indexOf("validateEconomyDelta") < saveSrc.indexOf("await saves.updateOne"));
+check("repository projection lay data de so sanh", repositorySrc.includes("'data.gold': 1"));
+check("chan xay ra TRUOC commit va route khong updateOne truc tiep",
+  saveSrc.indexOf('const transition = validateSaveTransition') >= 0
+  && saveSrc.indexOf('const transition = validateSaveTransition') < saveSrc.indexOf('await saves.commit')
+  && !saveSrc.includes('saves.updateOne'));
 
 // ---------------------------------------------------------------- 2. Người chơi hợp lệ
 console.log("\n=== 2. NGUOI CHOI HOP LE VAN QUA ===");

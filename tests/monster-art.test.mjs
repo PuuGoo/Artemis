@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import zlib from 'node:zlib';
 const read=p=>fs.readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const html=read('public/index.html');
-function extract(name, end){const i=html.indexOf('function '+name+'(');assert.ok(i>=0);if(end)return html.slice(i,html.indexOf(end,i));let j=html.indexOf('{',i)+1,n=1;for(;n;j++){if(html[j]==='{')n++;if(html[j]==='}')n--;}return html.slice(i,j);}
+function extract(name, end){const source=name==='drawMonster'?read('public/js/game/rendering/arena-renderer.js'):html;const i=source.indexOf('function '+name+'(');assert.ok(i>=0);if(end)return source.slice(i,source.indexOf(end,i));let j=source.indexOf('{',i)+1,n=1;for(;n;j++){if(source[j]==='{')n++;if(source[j]==='}')n--;}return source.slice(i,j);}
 function setup(mode='ready'){
   const images=[];
   class Image{constructor(){this.complete=mode==='ready';this.naturalWidth=200;this.naturalHeight=100;images.push(this);}set src(v){this.url=v;if(mode==='error')this.onerror();}}

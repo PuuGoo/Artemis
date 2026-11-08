@@ -3,7 +3,7 @@ import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { resolve, dirname, extname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
-import { sanitizeSave } from '../lib/saveSchema.js';
+import { sanitizeSave } from '../lib/save/schema.js';
 
 // Harness local rõ ràng: không MongoDB, không credentials, không ghi production.
 // Chạy: PLAYWRIGHT_MODULE=<absolute .../playwright-core/index.mjs> node tools/audit-new-player-browser.mjs

@@ -2,10 +2,10 @@
 //
 // Chạy: node tests/bestiary.test.mjs
 import fs from "node:fs";
-import { sanitizeSave } from "../lib/saveSchema.js";
+import { sanitizeSave } from "../lib/save/schema.js";
 
 const html = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
-const schema = fs.readFileSync(new URL("../lib/saveSchema.js", import.meta.url), "utf8");
+const schema = fs.readFileSync(new URL("../lib/save/schema.js", import.meta.url), "utf8");
 
 let pass = 0, fail = 0;
 function check(name, cond, extra = "") {
