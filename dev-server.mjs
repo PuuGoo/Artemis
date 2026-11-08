@@ -2,6 +2,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { resolveApiRequestUrl } from "./lib/httpRouting.js";
 
 // ==================== LOCAL DEV SERVER ====================
 // Chay dung cac file trong /api nhu Vercel serverless function.
@@ -10,6 +11,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3000);
+const API_REWRITES = JSON.parse(fs.readFileSync(path.join(__dirname, 'vercel.json'), 'utf8')).rewrites || [];
 
 // ---- Doc .env thu cong (khong phu thuoc dotenv) ----
 function loadEnv() {
@@ -45,9 +47,9 @@ const MIME = {
   ".ico": "image/x-icon",
 };
 
-function toWebRequest(req) {
+function toWebRequest(req, rewrittenUrl) {
   const host = req.headers.host || `localhost:${PORT}`;
-  const url = new URL(req.url, `http://${host}`);
+  const url = rewrittenUrl || new URL(req.url, `http://${host}`);
   const headers = new Headers();
   for (const [k, v] of Object.entries(req.headers)) {
     if (v === undefined) continue;
@@ -85,7 +87,7 @@ function resolveApiFile(pathname) {
 
 const server = http.createServer(async (req, res) => {
   try {
-    const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+    const url = resolveApiRequestUrl(new URL(req.url, `http://${req.headers.host || "localhost"}`), API_REWRITES);
 
     if (url.pathname.startsWith("/api/")) {
       const file = resolveApiFile(url.pathname);
@@ -108,7 +110,7 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ ok: false, error: `Phuong thuc ${method} khong duoc ho tro.` }));
         return;
       }
-      const webRes = await handler(toWebRequest(req));
+      const webRes = await handler(toWebRequest(req, url));
       await sendWebResponse(res, webRes);
       return;
     }

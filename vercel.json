@@ -4,6 +4,9 @@
   "framework": null,
   "buildCommand": null,
   "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/api/shop", "destination": "/api/privileges?__resource=shop" }
+  ],
   "functions": {
     "api/**/*.js": {
       "memory": 1024,

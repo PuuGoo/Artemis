@@ -13,7 +13,7 @@ const { POST: register } = await import('../../api/auth/register.js');
 const { PATCH: grant } = await import('../../api/admin/players.js');
 const { GET: getSave, PUT: putSave } = await import('../../api/save.js');
 const { getMongoDb, COLLECTIONS } = await import('../../lib/mongo.js');
-const routeUrl = new URL('../../api/shop.js', import.meta.url);
+const routeUrl = new URL('../../api/privileges.js', import.meta.url);
 const catalogUrl = new URL('../../lib/shop/catalog.js', import.meta.url);
 function request(method, cookie, body) {
   return new Request('https://artemis.test/api/shop', {

@@ -1,10 +1,22 @@
 import { getMongoDb, COLLECTIONS } from '../lib/mongo.js';
 import { getCurrentPlayer, json, fail } from '../lib/http.js';
 import { VIP_CARD_IDS, VIP_CARD_PRICE, VIP_CARD_DURATION_MS, normalizeVipPasses } from '../lib/privilegeCards.js';
+import { GET as getShop, POST as purchaseShop } from '../lib/shop/handler.js';
 
 export const config = { runtime: 'nodejs' };
 
+// Vercel rewrite giữ /api/shop nhưng dùng chung một function với thẻ VIP.
+function isShopRequest(request) {
+  const url = new URL(request.url);
+  return url.pathname.replace(/\/+$/, '') === '/api/shop' || url.searchParams.get('__resource') === 'shop';
+}
+
+export async function GET(request) {
+  return isShopRequest(request) ? getShop(request) : fail('Phương thức không được hỗ trợ.', 405);
+}
+
 export async function POST(request) {
+  if (isShopRequest(request)) return purchaseShop(request);
   const player = await getCurrentPlayer(request);
   if (!player) return fail('Bạn cần đăng nhập để mua thẻ.', 401);
   let body;

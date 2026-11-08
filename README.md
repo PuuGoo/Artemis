@@ -18,7 +18,7 @@ api/             # Vercel serverless functions (Node.js runtime)
   auth/logout    # đăng xuất
   auth/me        # kiểm tra phiên hiện tại
   save           # GET tải save / PUT ghi save
-  shop           # GET catalog VIP / POST mua gói, trừ xu và cấp thưởng bằng CAS
+  privileges     # thẻ VIP + shop; /api/shop rewrite vào function này để giữ quota Hobby
   health         # healthcheck + ping MongoDB
 lib/             # logic dùng chung
   mongo.js       # MongoClient cache, tự tạo index

@@ -4,9 +4,21 @@
 
 - `catalog.js`: nguồn duy nhất của giá, phần thưởng và giới hạn 28 gói trước đây niêm yết tiền đ.
 - `rewards.js`: tạo snapshot phần thưởng mới, kiểm trần tài nguyên/túi đồ; không truy cập HTTP hoặc DB.
-- `../../api/shop.js`: xác thực, đọc catalog và commit nguyên tử `trừ xu + cấp thưởng + giới hạn + receipt` bằng revision CAS.
+- `handler.js`: HTTP handler xác thực, đọc catalog và commit nguyên tử `trừ xu + cấp thưởng + giới hạn + receipt` bằng revision CAS.
+- `../../api/privileges.js`: function dùng chung, phân luồng shop và thẻ đặc quyền; giữ nguyên hành vi thẻ cũ.
 - `../../public/js/game/shop/vip-shop.js`: view adapter đọc catalog server; không quyết định giá hoặc tự cộng thưởng.
 - `../../public/cloud.js`: flush save trước mua, khóa ghi khi thanh toán/đồng bộ và giữ mã giao dịch khi mất phản hồi.
+
+## Triển khai trong giới hạn Hobby
+
+`vercel.json` rewrite `/api/shop` sang `/api/privileges?__resource=shop`.
+Không tạo lại `api/shop.js`: mỗi file API riêng sẽ tăng số Serverless Functions.
+Handler shop nằm ngoài `api/`, nên cửa hàng và thẻ VIP dùng chung một function;
+URL frontend, cookie, body, giá, phần thưởng và CAS không đổi. Tổng hiện tại là 12 function.
+Dev server dùng cùng cấu hình rewrite qua `lib/httpRouting.js`; bộ phân giải local
+chỉ hỗ trợ các rewrite literal nội bộ `/api`, không giả lập toàn bộ router Vercel.
+`tests/deployment-routing.test.mjs` chặn vượt quota và kiểm HTTP thật trong fixture
+DB bộ nhớ riêng, không nạp `.env` thật hoặc truy cập production.
 
 ## Giá và phần thưởng
 

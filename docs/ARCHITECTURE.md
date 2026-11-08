@@ -111,6 +111,12 @@ Không chạy migration, không truy cập production, không cấp lại tài n
 28 gói tiền đ được chuyển theo tỷ lệ đã duyệt: 1 xu VIP = 1.000đ giá cũ.
 Xem bảng trách nhiệm và hợp đồng tại `lib/shop/README.md`.
 
+`/api/shop` là URL công khai, không phải function riêng: Vercel rewrite vào
+`api/privileges.js?__resource=shop`, rồi gọi `lib/shop/handler.js`.
+Cửa hàng và thẻ VIP dùng chung một function để tổng API không vượt giới hạn 12
+của Hobby. Handler shop giữ nguyên, chỉ đổi vị trí và import; domain catalog/rewards
+vẫn độc lập HTTP/DB. Dev server đọc cùng rewrite literal qua `lib/httpRouting.js`.
+
 ```text
 UI mở cửa hàng -> GET /api/shop -> giá/thưởng/lượt còn lại từ catalog server
 UI mua -> cloud flush save -> POST /api/shop (owner/revision/requestId)
