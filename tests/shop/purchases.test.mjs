@@ -33,6 +33,7 @@ test('VIP shop uses authoritative prices, atomic rewards, limits and replay-safe
   assert.ok(fs.existsSync(catalogUrl), 'Cần catalog giá duy nhất trên server');
   const { GET, POST } = await import(routeUrl);
   const { SHOP_OFFERS, shopPeriodKey } = await import(catalogUrl);
+  const vipOffers = SHOP_OFFERS.filter(offer => offer.currency === 'vipCoins');
   const admin = await account(adminName);
   const cookie = await account(`shopuser_${randomBytes(3).toString('hex')}`);
   const save = await snapshot(cookie);
@@ -45,10 +46,9 @@ test('VIP shop uses authoritative prices, atomic rewards, limits and replay-safe
     return { offerId, playerId: current.playerId, revision: current.revision, requestId: randomUUID() };
   };
 
-  await t.test('all 28 former money offers convert exactly at 1000 VND per VIP coin', async () => {
-    assert.equal(SHOP_OFFERS.length, 28);
+  await t.test('retained former money offers convert exactly at 1000 VND per VIP coin', async () => {
     assert.equal(new Set(SHOP_OFFERS.map(o => o.id)).size, SHOP_OFFERS.length);
-    for (const offer of SHOP_OFFERS) {
+    for (const offer of vipOffers) {
       assert.equal(offer.priceVip, offer.legacyVnd / 1000, offer.id);
       assert.ok(Number.isSafeInteger(offer.priceVip) && offer.priceVip > 0);
     }
@@ -72,7 +72,7 @@ test('VIP shop uses authoritative prices, atomic rewards, limits and replay-safe
   });
   await fund(1000000);
   await t.test('every catalog offer charges its price and awards the documented inventory', async () => {
-    for (const offer of SHOP_OFFERS) {
+    for (const offer of vipOffers) {
       const before = await snapshot(cookie);
       const body = await bodyFor(offer.id);
       const response = await POST(request('POST', cookie, { ...body, priceVip: 0, rewards: { gems: 9999999 } }));
@@ -182,7 +182,7 @@ test('VIP shop uses authoritative prices, atomic rewards, limits and replay-safe
   });
   await t.test('server keeps an auditable bounded receipt log outside client snapshots', async () => {
     const stored = await (await getMongoDb()).collection(COLLECTIONS.saves).findOne({ playerId: save.playerId });
-    assert.ok(stored.shopReceipts.length >= SHOP_OFFERS.length);
+    assert.ok(stored.shopReceipts.length >= vipOffers.length);
     assert.ok(stored.shopReceipts.every(r => r.requestId && r.offerId && r.priceVip > 0 && r.at));
     assert.ok(stored.shopLimits.chapter_91);
     assert.equal('shopLimits' in (await snapshot(cookie)).data, false);

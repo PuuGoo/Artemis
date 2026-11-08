@@ -36,9 +36,9 @@ function harness({ rejectPurchase = false } = {}) {
       return { ok: true, offerId, priceVip: SHOP_OFFERS.find(o => o.id === offerId).priceVip };
     } };
   const context = vm.createContext({ console, SaveState: state,
-    window: { ArtemisCloud: cloud },
+    window: { ArtemisCloud: cloud }, confirm: () => true,
     document: { getElementById: id => id === 'vnShopMainContainer' ? container : id === 'tabShopVn' ? panel : null },
-    fetchCatalog: async () => { requestCount++; return { ok: true, json: async () => ({ ok: true, playerId: 'A', offers: SHOP_OFFERS.map(o => ({ ...o, remaining: o.limit })) }) }; },
+    fetchCatalog: async () => { requestCount++; return { ok: true, json: async () => ({ ok: true, playerId: 'A', balances: { vipCoins: 100000, gems: 100000, gold: 100000 }, offers: SHOP_OFFERS.map(o => ({ ...o, remaining: o.limit })) }) }; },
     ensureVnAuthenticUIState() {}, formatCompactNumberVn: value => String(value),
     SoundFX: { levelUp() {}, coinPickup() {} }, showToast: message => notices.push(message),
     renderLobbyUI() { context.renderVnShopTabUI(); },
@@ -66,7 +66,7 @@ test('hidden shop performs no network or rendering work until the tab opens', as
   assert.ok(h.markup().includes('xu VIP'));
 });
 
-test('actual shop renderer exposes all 28 VIP offers across deal and resource tabs', async () => {
+test('actual shop renderer exposes every server offer across daily, deal and resource tabs', async () => {
   const h = harness();
   h.render();
   assert.ok(h.buttons('data-vip-offer').every(button => button.disabled));
@@ -99,7 +99,7 @@ test('actual paid click handler delegates its offer ID and never grants local re
     await h.buttons('data-vip-offer').find(b => b.getAttribute('data-vip-offer') === 'gems_80').onclick();
     assert.deepEqual(h.purchases, ['gems_80']);
     assert.deepEqual({ gems: h.state.gems, vipCoins: h.state.vipCoins }, before, 'only the cloud response rebuild may change paid resources');
-    assert.ok(h.notices.some(message => message.includes(rejected ? 'Không đủ xu VIP' : '24 xu VIP')));
+    assert.ok(h.notices.some(message => message.includes(rejected ? 'Không đủ xu VIP' : 'Mua thành công')));
   }
 });
 

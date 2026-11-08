@@ -478,7 +478,7 @@
   /** Flush trước giao dịch; khóa ghi đến khi tải lại snapshot server.
    * Mất phản hồi giữ nguyên requestId + revision để thử lại không bị trừ hai lần.
    */
-  async function purchaseShopOffer(offerId) {
+  async function purchaseShopOffer(offerId, expectedBalance) {
     if (shopBusy) throw new Error("Đang xử lý giao dịch. Vui lòng chờ.");
     if (!state.authenticated) throw new Error("Bạn cần đăng nhập để mua bằng xu VIP.");
     if (pendingShopRequest && pendingShopRequest.offerId !== offerId) {
@@ -498,6 +498,7 @@
         }
         pendingShopRequest = { offerId: offerId, playerId: state.player.id,
           revision: state.revision, requestId: window.crypto.randomUUID() };
+        if (expectedBalance !== undefined) pendingShopRequest.expectedBalance = expectedBalance;
       }
       if (state.saveTimer) clearTimeout(state.saveTimer);
       state.saving = true;

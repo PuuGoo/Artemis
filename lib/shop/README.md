@@ -2,7 +2,7 @@
 
 ## Ranh giới
 
-- `catalog.js`: nguồn duy nhất của giá, phần thưởng và giới hạn 28 gói trước đây niêm yết tiền đ.
+- `catalog.js`: nguồn duy nhất của giá, phần thưởng và giới hạn các gói VIP, cửa hàng ngày và đổi vàng.
 - `rewards.js`: tạo snapshot phần thưởng mới, kiểm trần tài nguyên/túi đồ; không truy cập HTTP hoặc DB.
 - `handler.js`: HTTP handler xác thực, đọc catalog và commit nguyên tử `trừ xu + cấp thưởng + giới hạn + receipt` bằng revision CAS.
 - `../../api/privileges.js`: function dùng chung, phân luồng shop và thẻ đặc quyền; giữ nguyên hành vi thẻ cũ.
@@ -26,13 +26,41 @@ Tỷ lệ được duyệt: **1 xu VIP tương ứng 1.000đ giá niêm yết c�
 Giá hiện tại được GET từ `/api/shop`; không thêm bảng giá riêng trong HTML.
 
 - Một gói chương: một lần/tài khoản, 14.000 Kim Cương và một trang bị Epic S-Tier.
-- 15 gói ưu đãi: giữ phần thưởng **thực tế** của handler cũ: Kim Cương theo gói, 10 chìa Ngũ Sắc và 20 cuộn **mỗi loại** trong sáu slot.
+- Gói ưu đãi cơ bản: Kim Cương theo gói, 10 chìa Ngũ Sắc và 20 cuộn **mỗi loại** trong sáu slot.
 - Sáu gói Kim Cương: giữ phần tặng kèm bằng lượng gốc, tổng thưởng bằng hai lần lượng gốc.
 - Sáu gói Aurocite: tối đa 30 lần/gói/tháng; Aurocite được lưu thật trên server, mặc định 0, không còn số 51 giả lập trong UI.
 
 Trước đây hình gói ưu đãi không khớp handler (mảnh hero, vàng, lựa chọn...), còn gói chương quảng cáo S-Tier nhưng gọi rương ngẫu nhiên thường. UI ưu đãi nay hiển thị đúng thưởng thực tế; gói chương cấp S-Tier thật. Đây là sửa sai có chủ đích, không tự chế thêm vật phẩm từ hình minh họa.
 
-Cửa hàng vàng/kim cương và API thẻ đặc quyền VIP có sẵn giữ nguyên. Thay đổi này không biến toàn bộ gameplay thành server-authoritative.
+Cửa hàng ngày và đổi Kim Cương sang Vàng dùng chung checkout máy chủ với shop VIP.
+Giá/phần thưởng/giới hạn lấy từ catalog; không còn handler tự cộng vàng hoặc tự cấp
+thưởng cửa hàng ngày trong trình duyệt. API thẻ đặc quyền VIP có sẵn giữ nguyên.
+Thay đổi này không biến toàn bộ gameplay thành server-authoritative: vàng/kim cương
+kiếm và tiêu trong gameplay vẫn theo snapshot cùng bộ kiểm tra delta/ngân sách hiện có.
+
+## Xác nhận và lịch sử người chơi
+
+Catalog hiện có 34 gói: 25 gói VIP, 7 gói dùng Kim Cương và 2 gói dùng Vàng.
+`chapter_91` đổi tên thành Gói Tiếp Sức Hành Trình, giữ ID và hạn mức cũ.
+Bỏ `wk_3`, `wk_5`, `mo_3` trùng hoàn toàn trong cùng chu kỳ. `mo_4` tập trung
+cuộn (120 mỗi loại), `mo_5` tập trung chìa Ngũ Sắc (60 chìa); giữ giá và hạn mức.
+Gói cơ bản cùng giá/thưởng giữa ngày/tuần/tháng là lựa chọn có chu kỳ mua độc lập,
+không còn bản sao cùng giá/thưởng trong một chu kỳ.
+Cửa hàng ngày cấp đúng vật phẩm/schema hiện có: mảnh Hậu Nghệ, Ủng Echo thường,
+xu cầu nguyện, Hạt Mầm Xanh và cuộn trang bị. Giữ các phần thưởng đã sửa trên main;
+không thay vật phẩm của người chơi khi chuyển checkout lên máy chủ.
+
+- Trước giao dịch mới, tải lại catalog và số dư máy chủ; popup xác nhận ghi giá,
+  phần thưởng và số dư dự kiến sau mua. Hủy không gửi POST mua hàng.
+- Client gửi số dư đã xác nhận qua `expectedBalance`. Server từ chối nếu số dư
+  thay đổi khi flush save, tránh thanh toán trên số dư khác popup.
+- Giao dịch chưa rõ kết quả được kiểm tra bằng request cũ, không hỏi mua lại hay
+  tạo requestId mới. Số dư vẫn được máy chủ quyết định; không tin DOM/browser.
+- Lịch sử nằm trong cửa hàng, đọc receipt của đúng tài khoản từ API; tối đa 100
+  giao dịch mới nhất, ghi thời gian Việt Nam, giá, thưởng, số dư và mã giao dịch.
+  Receipt cũ chưa ghi số dư hiển thị thiếu dữ liệu, không bịa số dư quá khứ.
+- `tools/verify-shop-browser.mjs` kiểm hủy/xác nhận/đổi vàng/lịch sử sau reload bằng
+  Chrome + HTTP handler thật + DB bộ nhớ riêng. Không đọc `.env`, không gọi production.
 
 ## Hợp đồng giao dịch
 

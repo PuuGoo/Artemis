@@ -23299,14 +23299,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           dragoon: 'Dòng Kỵ Sĩ Rồng Cấp S'
         };
 
-        const dailyCards = [
-          { id: 'ds_1', title: 'Mảnh Hậu Nghệ', disc: 'Giảm 10%', icon: '🏹', qty: '3', cost: 240, cur: 'gem' },
-          { id: 'ds_2', title: 'Ủng Echo (Thường)', disc: 'Giảm 10%', icon: '🥾', qty: '1', cost: 45, cur: 'gem' },
-          { id: 'ds_3', title: 'Xu Cầu Nguyện', disc: 'Giảm 30%', icon: '🪙✨', qty: '1', cost: 280, cur: 'gem', goldTag: true },
-          { id: 'ds_4', title: 'Hạt Mầm Xanh', disc: 'Giảm 30%', icon: '🌱', qty: '5', cost: 70, cur: 'gem', goldTag: true },
-          { id: 'ds_5', title: 'Cuộn Ủng', disc: 'Giảm 30%', icon: '📜🥾', qty: '2', cost: 700, cur: 'gold', goldTag: true },
-          { id: 'ds_6', title: 'Cuộn Vũ Khí', disc: 'Giảm 10%', icon: '📜🏹', qty: '2', cost: 900, cur: 'gold' }
-        ];
+        const dailyCards = VipShop.offers().filter(offer => offer.id.startsWith('ds_'));
 
         const dealsData = Object.fromEntries([
           ['daily', 'Mỗi Ngày', 'dl_', 'Làm mới lúc 00:00 mỗi ngày (giờ Việt Nam)'],
@@ -23359,7 +23352,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   </div>
                   <div class="flex flex-col items-center sm:items-end justify-between gap-2">
                     <div class="text-center sm:text-right">
-                      <div class="text-lg sm:text-xl font-black text-white drop-shadow">Gói Chương 91</div>
+                      <div class="text-lg sm:text-xl font-black text-white drop-shadow">${VipShop.name('chapter_91')}</div>
                       <div class="sv2-pill inline-block px-3 py-0.5 rounded-full text-[11px] font-bold text-amber-200 mt-0.5">${VipShop.remainingLabel('chapter_91') || 'Chỉ một lần duy nhất'}</div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -23387,23 +23380,16 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 <span class="sv2-title-text font-black">Cửa Hàng Mỗi Ngày</span>
                 <span class="sv2-dot"></span>
               </div>
-              <div class="sv2-timer text-center text-[11px] font-bold">Thời gian làm mới còn 13:45:01</div>
+              <div class="sv2-timer text-center text-[11px] font-bold">Làm mới lúc 00:00 mỗi ngày (giờ Việt Nam)</div>
 
               <div class="grid grid-cols-3 gap-2.5">
                 ${dailyCards.map(c => `
                   <div class="sv2-item sv2-tone-sky relative p-2.5 flex flex-col items-center justify-between gap-2">
-                    <span class="sv2-disc ${c.goldTag ? 'sv2-disc-gold' : ''} absolute -top-1.5 -left-1.5 px-1.5 py-0.5 font-black text-[9px]">
-                      ${c.disc}
-                    </span>
-                    <div class="text-xs sm:text-sm font-black text-white text-center leading-tight pt-2 min-h-[34px] flex items-center justify-center">${c.title}</div>
-                    <div class="sv2-plate w-14 h-14 flex flex-col items-center justify-center relative">
-                      <span class="text-2xl">${c.icon}</span>
-                      <span class="sv2-qty absolute bottom-0.5 right-1 text-[10px] font-black">${c.qty}</span>
-                    </div>
-                    <div class="text-[10px] font-bold text-sky-100 text-center">Còn có thể mua 1 lần</div>
-                    <button type="button" data-vn-daily-buy="${c.id}" class="sv2-buy2 w-full py-1.5 text-xs flex items-center justify-center gap-1">
-                      <span>${c.cur === 'gem' ? '💚' : '🪙'}</span>
-                      <span>${c.cost}</span>
+                    <div class="text-xs sm:text-sm font-black text-white text-center leading-tight pt-2">${c.name}</div>
+                    <div class="text-xs text-center">${VipShop.rewardItems(c.id).map(item => item.join(' × ')).join('<br>')}</div>
+                    <div class="text-[10px] font-bold text-sky-100 text-center">${VipShop.remainingLabel(c.id)}</div>
+                    <button type="button" ${VipShop.buttonAttributes(c.id)} class="sv2-buy2 w-full py-1.5 text-xs disabled:opacity-50">
+                      ${VipShop.priceLabel(c.id)}
                     </button>
                   </div>
                 `).join('')}
@@ -23673,8 +23659,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                       <div class="text-base font-black text-white">${x.amt}</div>
                       <div class="text-4xl my-2">${x.icon}</div>
                       <div class="text-[11px] font-bold text-sky-100">${x.name}</div>
-                      <button type="button" data-vn-topup-gold="${x.amt}" data-vn-gem-cost="${x.cost}" class="sv2-buy2 w-full py-1.5 text-xs">
-                        💚 ${x.cost}
+                      <button type="button" ${VipShop.buttonAttributes(`gold_${x.amt}`)} class="sv2-buy2 w-full py-1.5 text-xs disabled:opacity-50">
+                        ${VipShop.priceLabel(`gold_${x.amt}`)}
                       </button>
                     </div>
                   `).join('')}
@@ -23718,6 +23704,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
           </div>
 
+          <details class="sv2-card p-3 text-xs">
+            <summary class="cursor-pointer font-bold">Lịch sử giao dịch cửa hàng (100 giao dịch gần nhất)</summary>
+            <div class="max-h-64 overflow-y-auto mt-2">${VipShop.historyMarkup()}</div>
+          </details>
           <!-- STICKY 5-TAB SHOP SUB-NAVIGATION BAR ABOVE MAIN DOCK (MATCHES PAGES 1-19) -->
           <div class="sv2-dock px-2 py-1.5 grid grid-cols-5 gap-1.5 shrink-0">
             ${[
@@ -23757,9 +23747,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             SaveState.save();
             try {
               const result = await VipShop.purchase(offerId);
+              if (result.cancelled) return;
               SoundFX.levelUp();
               renderLobbyUI();
-              showToast(result.replayed ? '✅ Đã đồng bộ giao dịch trước, không trừ thêm xu VIP.' : `🎁 Mua thành công! Đã trừ ${result.priceVip.toLocaleString('vi-VN')} xu VIP và chuyển phần thưởng vào kho.`);
+              showToast(result.replayed ? '✅ Đã đồng bộ giao dịch trước, không trừ thêm tài nguyên.' : '🎁 Mua thành công! Máy chủ đã trừ giá mua và chuyển phần thưởng vào kho.');
             } catch (error) {
               renderLobbyUI();
               showToast(error.message || 'Chưa xác nhận được giao dịch. Hãy thử lại đúng gói.', 'err');
@@ -23767,41 +23758,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           };
         });
 
-        el.querySelectorAll('[data-vn-daily-buy]').forEach(btn => {
-          btn.onclick = () => {
-            const id = btn.getAttribute('data-vn-daily-buy');
-            const card = dailyCards.find(x => x.id === id);
-            if (!card) return;
-            const currency = card.cur === 'gem' ? 'gems' : 'gold';
-            if ((SaveState[currency] || 0) < card.cost) {
-              showToast('Không đủ ' + (currency === 'gems' ? 'Kim Cương' : 'Vàng') + '.', 'err');
-              return;
-            }
-            if (id === 'ds_2' && SaveState.gearBag.length >= 400) {
-              showToast('Túi trang bị đã đầy. Hãy dọn túi trước khi mua.', 'err');
-              return;
-            }
-            if (id === 'ds_1') {
-              SaveState.heroShards.hou_yi = (SaveState.heroShards.hou_yi || 0) + 3;
-            } else if (id === 'ds_2') {
-              SaveState.gearBag.unshift({ uid: `daily_${crypto.randomUUID()}`, templateId: 'echo_boots', quality: 'common', level: 1, awakening: 0, locked: false, favorite: false, sockets: [], affixes: [] });
-            } else if (id === 'ds_3') {
-              SaveState.wishTokens = (SaveState.wishTokens || 0) + 1;
-              syncWishTokenMirrors();
-            } else if (id === 'ds_4') {
-              const garden = ensureGarden();
-              garden.seeds.sprout = (garden.seeds.sprout || 0) + 5;
-            } else {
-              const slot = id === 'ds_5' ? 'boots' : 'weapon';
-              SaveState.gearScrolls[slot] = (SaveState.gearScrolls[slot] || 0) + 2;
-            }
-            SaveState[currency] -= card.cost;
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderLobbyUI();
-            showToast(`🏪 Đã mua [${card.title}] từ Cửa Hàng Mỗi Ngày!`);
-          };
-        });
+
 
         el.querySelectorAll('[data-vn-mythstone-series]').forEach(btn => {
           btn.onclick = () => {
@@ -23861,21 +23818,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
 
 
-        el.querySelectorAll('[data-vn-topup-gold]').forEach(btn => {
-          btn.onclick = () => {
-            const amt = parseInt(btn.getAttribute('data-vn-topup-gold') || '6420', 10);
-            const cost = ({ 6420: 20, 64200: 200, 642000: 2000 })[amt];
-            if (!cost) return;
-            if ((SaveState.gems || 0) < cost) { showToast('Không đủ Kim Cương để đổi Vàng.', 'err'); return; }
-            if ((SaveState.gold || 0) + amt > 1e12) { showToast('Vàng đã đạt giới hạn lưu trữ.', 'err'); return; }
-            SaveState.gems -= cost;
-            SaveState.gold = (SaveState.gold || 0) + amt;
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderLobbyUI();
-            showToast(`🪙 Đã đổi thành công +${amt.toLocaleString('vi-VN')} Xu!`);
-          };
-        });
+
 
 
       }

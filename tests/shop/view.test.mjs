@@ -5,16 +5,17 @@ import vm from 'node:vm';
 import { SHOP_OFFERS } from '../../lib/shop/catalog.js';
 
 const moduleUrl = new URL('../../public/js/game/shop/vip-shop.js', import.meta.url);
-function harness({ fetcher, purchase } = {}) {
+function harness({ fetcher, purchase, confirmPurchase = () => true } = {}) {
   assert.ok(fs.existsSync(moduleUrl), 'Cần module giao diện shop VIP riêng');
   const context = vm.createContext({ console });
   vm.runInContext(fs.readFileSync(moduleUrl, 'utf8'), context);
   const posts = [];
   let updates = 0;
   const shop = context.ArtemisVipShop.create({
+    confirmPurchase,
     cloud: { getState: () => ({ player: { id: 'A' } }), getPendingShopOffer: () => null,
       async purchaseShopOffer(id) { posts.push(id); return purchase ? purchase(id) : { ok: true, offerId: id }; } },
-    fetcher: fetcher || (async () => ({ ok: true, json: async () => ({ ok: true, playerId: 'A', offers: SHOP_OFFERS.map(o => ({ ...o, remaining: o.limit })) }) })),
+    fetcher: fetcher || (async () => ({ ok: true, json: async () => ({ ok: true, playerId: 'A', balances: { vipCoins: 100000, gems: 100000, gold: 100000 }, offers: SHOP_OFFERS.map(o => ({ ...o, remaining: o.limit })) }) })),
     onChange: () => { updates++; },
   });
   return { shop, posts, updates: () => updates };
@@ -25,7 +26,7 @@ test('VIP shop view takes every price and actual reward from the server catalog'
   assert.match(shop.priceLabel('gems_80'), /Đang tải/);
   assert.match(shop.buttonAttributes('gems_80'), /disabled/);
   await shop.load();
-  assert.equal(shop.offers().length, 28);
+  assert.equal(shop.offers().length, SHOP_OFFERS.length);
   assert.match(shop.priceLabel('gems_80'), /24 xu VIP/);
   assert.match(shop.priceLabel('chapter_91'), /2\.500 xu VIP/);
   assert.doesNotMatch(shop.buttonAttributes('gems_80'), /disabled/);
@@ -59,6 +60,7 @@ test('purchase buttons are single-flight, delegate payment and refresh remaining
   const first = shop.purchase('gems_80');
   assert.match(shop.buttonAttributes('gems_500'), /disabled/);
   await assert.rejects(shop.purchase('gems_500'));
+  await new Promise(resolve => setImmediate(resolve));
   assert.deepEqual(posts, ['gems_80']);
   resolve({ ok: true, offerId: 'gems_80' });
   await first;

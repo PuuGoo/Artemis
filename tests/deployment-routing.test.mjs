@@ -9,6 +9,7 @@ import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+import { SHOP_OFFERS } from '../lib/shop/catalog.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 function apiFiles(directory) {
@@ -87,7 +88,7 @@ test('local HTTP preserves shop rewrites and VIP cards with isolated memory DB a
     for (const route of ['/api/shop', '/api/privileges?__resource=shop']) {
       const response = await request('GET', route, cookie);
       assert.equal(response.status, 200);
-      assert.equal((await response.json()).offers.length, 28);
+      assert.equal((await response.json()).offers.length, SHOP_OFFERS.length);
     }
     const current = await save();
     const order = { playerId: current.playerId, revision: current.revision, offerId: 'gems_80', requestId: randomUUID() };
