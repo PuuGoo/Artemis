@@ -205,6 +205,10 @@
     if(window.AdminCampaignArenaV2) return Promise.resolve(window.AdminCampaignArenaV2);
     if(rendererPromise) return rendererPromise;
     rendererPromise=new Promise(function(resolve,reject) {
+      // Nền sàn ảnh thật dùng cùng module với game; thiếu thì renderer tự bỏ qua.
+      if(!window.ArenaGround && !document.querySelector('script[data-admin-ground]')){
+        var groundScript=document.createElement("script");groundScript.src="/arena-ground.js";groundScript.dataset.adminGround="1";document.head.appendChild(groundScript);
+      }
       var script=document.createElement("script");
       script.src="/admin-campaign-renderer.js";
       script.onload=function(){window.AdminCampaignArenaV2?resolve(window.AdminCampaignArenaV2):reject(Error("Không có ArenaV2"));};

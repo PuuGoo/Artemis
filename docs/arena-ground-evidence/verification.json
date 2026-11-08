@@ -1,0 +1,102 @@
+{
+  "scope": "Chrome thật + fixture localhost, mock auth/save. Xác nhận ảnh nền tải/giải mã và được vẽ; không đánh giá thẩm mỹ.",
+  "results": [
+    {
+      "name": "background-image-loads",
+      "details": {
+        "key": "meilizhi_battle_05",
+        "w": 720,
+        "h": 1440,
+        "pick": [
+          "duizhan_13x25_16",
+          "meilizhi_battle_02",
+          "meilizhi_battle_05",
+          "meilizhi_dianfeng_04",
+          "dianfeng_13x21_01"
+        ]
+      }
+    },
+    {
+      "name": "arena-draws-background-image",
+      "details": {
+        "imageDraws": 2,
+        "last": "duizhan_13x25_09_new.webp"
+      }
+    },
+    {
+      "name": "chapter-room-variety",
+      "details": {
+        "used": 28,
+        "sample": [
+          "duizhan_13x25_09_new",
+          "duizhan_13x25_12",
+          "duizhan_13x25_15",
+          "duizhan_13x25_18",
+          "meilizhi_battle_04",
+          "meilizhi_dianfeng_03"
+        ]
+      }
+    },
+    {
+      "name": "floor-pixels-are-textured-and-differ-by-chapter",
+      "details": {
+        "a": {
+          "key": "meilizhi_battle_05",
+          "mean": 48.51,
+          "sd": 28.71,
+          "colors": 1830
+        },
+        "b": {
+          "key": "duizhan_13x25_17",
+          "mean": 72.2,
+          "sd": 24.87,
+          "colors": 1647
+        },
+        "meanAbsDiff": 36.18
+      }
+    },
+    {
+      "name": "geometry-unchanged",
+      "details": {
+        "enemies": 3,
+        "walls": 0,
+        "bounds": null,
+        "px": 449,
+        "py": 737
+      }
+    },
+    {
+      "name": "no-save-write-from-graphics",
+      "details": {
+        "put": 0
+      }
+    },
+    {
+      "name": "map-http",
+      "details": {
+        "served": 3,
+        "files": [
+          "duizhan_13x25_09_new.webp",
+          "meilizhi_battle_05.webp",
+          "duizhan_13x25_17.webp"
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": [],
+  "mapRequests": [
+    {
+      "url": "duizhan_13x25_09_new.webp",
+      "status": 200
+    },
+    {
+      "url": "meilizhi_battle_05.webp",
+      "status": 200
+    },
+    {
+      "url": "duizhan_13x25_17.webp",
+      "status": 200
+    }
+  ]
+}
