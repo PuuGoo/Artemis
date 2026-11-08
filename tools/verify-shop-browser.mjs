@@ -57,6 +57,9 @@ try {
   await page.locator('[data-vip-offer="ds_1"]').waitFor();
   await page.locator('[data-vn-topup-tab="gold"]').click();
   const before = await (await page.request.get(origin + '/api/save')).json();
+  await page.locator('[data-vip-offer="gold_6420"]').scrollIntoViewIfNeeded();
+  const scrollBefore = await page.locator('#vnShopMainContainer .sv2-body').evaluate(el => el.scrollTop);
+  assert.ok(scrollBefore > 0, 'test phải bắt đầu ở khu vực mua phía dưới');
   let dialogText = '';
   page.once('dialog', async dialog => { dialogText = dialog.message(); await dialog.dismiss(); });
   await page.locator('[data-vip-offer="gold_6420"]').click();
@@ -64,6 +67,8 @@ try {
   assert.match(dialogText, /Giá: 20 Kim Cương/);
   assert.match(dialogText, /Phần thưởng/);
   assert.match(dialogText, /Số dư sau mua: 30 Kim Cương/);
+  const scrollAfterCancel = await page.locator('#vnShopMainContainer .sv2-body').evaluate(el => el.scrollTop);
+  assert.ok(Math.abs(scrollAfterCancel - scrollBefore) <= 1, `hủy popup làm nhảy vị trí: ${scrollBefore} -> ${scrollAfterCancel}`);
   const cancelled = await (await page.request.get(origin + '/api/save')).json();
   assert.equal(cancelled.data.gems, before.data.gems);
   assert.equal(cancelled.data.gold, before.data.gold);
@@ -73,6 +78,8 @@ try {
   const after = await (await page.request.get(origin + '/api/save')).json();
   assert.equal(after.data.gems, before.data.gems - 20);
   assert.equal(after.data.gold, before.data.gold + 6420);
+  const scrollAfterBuy = await page.locator('#vnShopMainContainer .sv2-body').evaluate(el => el.scrollTop);
+  assert.ok(Math.abs(scrollAfterBuy - scrollBefore) <= 1, `mua làm nhảy vị trí: ${scrollBefore} -> ${scrollAfterBuy}`);
   const history = await (await page.request.get(origin + '/api/shop')).json();
   assert.equal(history.history.length, 1);
   await page.locator('#vnShopMainContainer details summary').click();
@@ -84,7 +91,7 @@ try {
   await page.locator('#vnShopMainContainer details article').waitFor({ state: 'attached' });
   assert.equal(await page.locator('#vnShopMainContainer details article').count(), 1);
   assert.deepEqual(errors, []);
-  const result = { scope: 'Chrome + real HTTP handlers + isolated memory DB; not production/Mongo durability', before: { gold: before.data.gold, gems: before.data.gems }, after: { gold: after.data.gold, gems: after.data.gems }, cancelledWithoutDebit: true, historyAfterReload: 1, dialogText, errors };
+  const result = { scope: 'Chrome + real HTTP handlers + isolated memory DB; not production/Mongo durability', before: { gold: before.data.gold, gems: before.data.gems }, after: { gold: after.data.gold, gems: after.data.gems }, scrollBefore, scrollAfterCancel, scrollAfterBuy, cancelledWithoutDebit: true, historyAfterReload: 1, dialogText, errors };
   await writeFile(resolve(evidence, 'result.json'), JSON.stringify(result, null, 2));
   console.log(JSON.stringify(result, null, 2));
 } finally {

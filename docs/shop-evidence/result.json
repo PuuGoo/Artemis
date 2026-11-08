@@ -8,6 +8,9 @@
     "gold": 6920,
     "gems": 30
   },
+  "scrollBefore": 2255,
+  "scrollAfterCancel": 2255,
+  "scrollAfterBuy": 2255,
   "cancelledWithoutDebit": true,
   "historyAfterReload": 1,
   "dialogText": "6420 Vàng\nGiá: 20 Kim Cương\nPhần thưởng:\n🪙 Vàng × 6.420\nSố dư sau mua: 30 Kim Cương\nVàng: 6.920 • xu VIP: 0\nMáy chủ sẽ kiểm tra lại số dư khi thanh toán.",

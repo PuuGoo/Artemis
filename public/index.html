@@ -23286,6 +23286,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         ensureVnAuthenticUIState();
         const el = document.getElementById('vnShopMainContainer');
         if (!el) return;
+        // Dựng lại DOM khi tải giá/mua hàng không được làm mất chỗ đang xem.
+        const previousShopBody = el.querySelector('.sv2-body');
+        const shopScrollTop = previousShopBody?.scrollTop || 0;
+        const shopScrollLeft = previousShopBody?.scrollLeft || 0;
         VipShop.ensureLoaded();
         const st = SaveState.vnUiState;
         const curSub = st.shopSubtab || 'daily';
@@ -23724,6 +23728,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             `).join('')}
           </div>
         `;
+
+        const nextShopBody = el.querySelector('.sv2-body');
+        if (nextShopBody) {
+          nextShopBody.scrollTop = shopScrollTop;
+          nextShopBody.scrollLeft = shopScrollLeft;
+        }
 
         // Bind Shop Interactions
         el.querySelectorAll('[data-vn-shop-subnav]').forEach(btn => {

@@ -15,17 +15,20 @@ const viewSource = fs.readFileSync(new URL('../../public/js/game/shop/vip-shop.j
 function harness({ rejectPurchase = false } = {}) {
   let buttons = [], markup = '', requestCount = 0;
   let hidden = false;
+  let scrollBody = { scrollTop: 0, scrollLeft: 0 };
   const panel = { classList: { contains: name => name === 'hidden' && hidden } };
   const purchases = [], notices = [];
   const container = {
     set innerHTML(value) {
       markup = value;
+      scrollBody = { scrollTop: 0, scrollLeft: 0 };
       buttons = [...value.matchAll(/<button\b([^>]*)>/g)].map(([, raw]) => {
         const attributes = Object.fromEntries([...raw.matchAll(/([\w-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
         return { disabled: /(?:^|\s)disabled(?:\s|$)/.test(raw), getAttribute: key => attributes[key], attributes };
       });
     },
     querySelectorAll(selector) { const key = selector.slice(1, -1); return buttons.filter(b => Object.hasOwn(b.attributes, key)); },
+    querySelector(selector) { return selector === '.sv2-body' ? scrollBody : null; },
   };
   const state = { gold: 500, gems: 50, vipCoins: 1000, aurocite: 0, chestKeys: {}, gearScrolls: {},
     vnUiState: { dealsPeriod: 'daily', topupTab: 'gems' }, save() {} };
@@ -50,6 +53,7 @@ function harness({ rejectPurchase = false } = {}) {
     buttons: key => container.querySelectorAll(`[${key}]`),
     render: () => context.renderVnShopTabUI(),
     load: () => vm.runInContext('VipShop.load()', context),
+    scroll: () => scrollBody,
   };
 }
 
@@ -101,6 +105,18 @@ test('actual paid click handler delegates its offer ID and never grants local re
     assert.deepEqual({ gems: h.state.gems, vipCoins: h.state.vipCoins }, before, 'only the cloud response rebuild may change paid resources');
     assert.ok(h.notices.some(message => message.includes(rejected ? 'Không đủ xu VIP' : 'Mua thành công')));
   }
+});
+
+test('shop keeps purchase position during catalog refresh, confirmation and payment result', async () => {
+  const h = harness();
+  await h.load();
+  h.scroll().scrollTop = 1800;
+  h.render();
+  assert.equal(h.scroll().scrollTop, 1800, 'lobby render must retain the shop scroll offset');
+  await h.load();
+  assert.equal(h.scroll().scrollTop, 1800, 'catalog refresh must retain the selected purchase position');
+  await h.buttons('data-vip-offer').find(b => b.getAttribute('data-vip-offer') === 'gems_80').onclick();
+  assert.equal(h.scroll().scrollTop, 1800, 'confirmation/payment rerenders must not jump to the top');
 });
 
 test('chapter reward templates exist in the current game S-Tier sets', () => {
