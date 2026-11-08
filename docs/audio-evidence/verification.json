@@ -1,0 +1,209 @@
+{
+  "scope": "Chrome thật + fixture localhost, mock auth/save; mp3 giải mã bằng WebAudio thật, không phải đánh giá thẩm mỹ hay E2E production.",
+  "results": [
+    {
+      "name": "preload-real-clips",
+      "details": {
+        "loaded": 23,
+        "expected": 23,
+        "state": "running"
+      }
+    },
+    {
+      "name": "all-events-play-real-samples",
+      "details": {
+        "attempts": [
+          {
+            "call": "shootBow",
+            "sample": true
+          },
+          {
+            "call": "shootStaff",
+            "sample": true
+          },
+          {
+            "call": "shootClaw",
+            "sample": true
+          },
+          {
+            "call": "playerHurt",
+            "sample": true
+          },
+          {
+            "call": "coinPickup",
+            "sample": true
+          },
+          {
+            "call": "levelUp",
+            "sample": true
+          },
+          {
+            "call": "portalOpen",
+            "sample": true
+          },
+          {
+            "call": "bossSpawn",
+            "sample": true
+          },
+          {
+            "call": "enemyDeath",
+            "sample": true
+          },
+          {
+            "call": "bossDeath",
+            "sample": true
+          },
+          {
+            "call": "victory",
+            "sample": true
+          },
+          {
+            "call": "uiClick",
+            "sample": true
+          },
+          {
+            "call": "uiOpen",
+            "sample": true
+          },
+          {
+            "call": "skillCast:fire",
+            "sample": true
+          },
+          {
+            "call": "skillCast:ice",
+            "sample": true
+          },
+          {
+            "call": "skillCast:poison",
+            "sample": true
+          },
+          {
+            "call": "skillCast:heal",
+            "sample": true
+          },
+          {
+            "call": "skillCast:sword",
+            "sample": true
+          },
+          {
+            "call": "skillCast:arrow",
+            "sample": true
+          }
+        ],
+        "hitNormal": true,
+        "hitCrit": true,
+        "samples": 21,
+        "synthFallbacks": 0
+      }
+    },
+    {
+      "name": "mute-prevents-playback",
+      "details": {
+        "started": 0
+      }
+    },
+    {
+      "name": "http-audio-requests",
+      "details": {
+        "served": 23,
+        "requests": 23
+      }
+    }
+  ],
+  "audioRequests": [
+    {
+      "url": "shoot_bow.mp3",
+      "status": 200
+    },
+    {
+      "url": "shoot_staff.mp3",
+      "status": 200
+    },
+    {
+      "url": "hit_crit.mp3",
+      "status": 200
+    },
+    {
+      "url": "hit_normal.mp3",
+      "status": 200
+    },
+    {
+      "url": "shoot_claw.mp3",
+      "status": 200
+    },
+    {
+      "url": "hit_skeleton.mp3",
+      "status": 200
+    },
+    {
+      "url": "enemy_death.mp3",
+      "status": 200
+    },
+    {
+      "url": "hit_ghost.mp3",
+      "status": 200
+    },
+    {
+      "url": "boss_death.mp3",
+      "status": 200
+    },
+    {
+      "url": "player_hurt.mp3",
+      "status": 200
+    },
+    {
+      "url": "level_up.mp3",
+      "status": 200
+    },
+    {
+      "url": "coin.mp3",
+      "status": 200
+    },
+    {
+      "url": "portal.mp3",
+      "status": 200
+    },
+    {
+      "url": "boss_spawn.mp3",
+      "status": 200
+    },
+    {
+      "url": "victory.mp3",
+      "status": 200
+    },
+    {
+      "url": "ui_click.mp3",
+      "status": 200
+    },
+    {
+      "url": "ui_open.mp3",
+      "status": 200
+    },
+    {
+      "url": "skill_fire.mp3",
+      "status": 200
+    },
+    {
+      "url": "skill_ice.mp3",
+      "status": 200
+    },
+    {
+      "url": "skill_poison.mp3",
+      "status": 200
+    },
+    {
+      "url": "skill_heal.mp3",
+      "status": 200
+    },
+    {
+      "url": "skill_sword.mp3",
+      "status": 200
+    },
+    {
+      "url": "skill_arrow.mp3",
+      "status": 200
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

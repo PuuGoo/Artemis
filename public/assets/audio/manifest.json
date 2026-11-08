@@ -1,0 +1,141 @@
+{
+  "shoot_bow": {
+    "source": "poly_shoot_arrow",
+    "file": "shoot_bow.mp3",
+    "seconds": 0.262,
+    "bytes": 2968
+  },
+  "shoot_staff": {
+    "source": "poly_shoot_magic",
+    "file": "shoot_staff.mp3",
+    "seconds": 0.7,
+    "bytes": 6312
+  },
+  "shoot_claw": {
+    "source": "poly_shoot_bone",
+    "file": "shoot_claw.mp3",
+    "seconds": 0.471,
+    "bytes": 4640
+  },
+  "hit_normal": {
+    "source": "Hitted_Body02",
+    "file": "hit_normal.mp3",
+    "seconds": 0.32,
+    "bytes": 3386
+  },
+  "hit_crit": {
+    "source": "Hitted_Stone",
+    "file": "hit_crit.mp3",
+    "seconds": 0.758,
+    "bytes": 6730
+  },
+  "hit_skeleton": {
+    "source": "hitted_skeleton",
+    "file": "hit_skeleton.mp3",
+    "seconds": 0.705,
+    "bytes": 6312
+  },
+  "hit_ghost": {
+    "source": "Hitted_Ghost",
+    "file": "hit_ghost.mp3",
+    "seconds": 0.81,
+    "bytes": 7148
+  },
+  "enemy_death": {
+    "source": "Death_Monster01",
+    "file": "enemy_death.mp3",
+    "seconds": 0.84,
+    "bytes": 7566
+  },
+  "boss_death": {
+    "source": "Death_Stone",
+    "file": "boss_death.mp3",
+    "seconds": 2.118,
+    "bytes": 17806
+  },
+  "player_hurt": {
+    "source": "Hitted_Body01",
+    "file": "player_hurt.mp3",
+    "seconds": 0.679,
+    "bytes": 6103
+  },
+  "coin": {
+    "source": "Button_Click_Coins",
+    "file": "coin.mp3",
+    "seconds": 0.524,
+    "bytes": 5058
+  },
+  "level_up": {
+    "source": "level_up",
+    "file": "level_up.mp3",
+    "seconds": 2.199,
+    "bytes": 18433
+  },
+  "portal": {
+    "source": "DoorOpen2",
+    "file": "portal.mp3",
+    "seconds": 1.176,
+    "bytes": 10074
+  },
+  "boss_spawn": {
+    "source": "SkillStart_StoneBoss",
+    "file": "boss_spawn.mp3",
+    "seconds": 1.435,
+    "bytes": 12163
+  },
+  "victory": {
+    "source": "PveVictory",
+    "file": "victory.mp3",
+    "seconds": 2.168,
+    "bytes": 18015
+  },
+  "ui_click": {
+    "source": "Button_Click_Small",
+    "file": "ui_click.mp3",
+    "seconds": 0.064,
+    "bytes": 1296
+  },
+  "ui_open": {
+    "source": "Button_ShowPop",
+    "file": "ui_open.mp3",
+    "seconds": 0.131,
+    "bytes": 1714
+  },
+  "skill_fire": {
+    "source": "SkillStart_Fire",
+    "file": "skill_fire.mp3",
+    "seconds": 0.653,
+    "bytes": 5894
+  },
+  "skill_ice": {
+    "source": "SkillStart_Ice",
+    "file": "skill_ice.mp3",
+    "seconds": 0.674,
+    "bytes": 6103
+  },
+  "skill_poison": {
+    "source": "SkillStart_Poison",
+    "file": "skill_poison.mp3",
+    "seconds": 1.2,
+    "bytes": 10283,
+    "trimmed": "1.2s + 0.3s fade-out (source 3.5s)"
+  },
+  "skill_heal": {
+    "source": "SkillStart_RecoverHP",
+    "file": "skill_heal.mp3",
+    "seconds": 1.228,
+    "bytes": 10700
+  },
+  "skill_sword": {
+    "source": "SkillStart_Sword1",
+    "file": "skill_sword.mp3",
+    "seconds": 0.444,
+    "bytes": 4222
+  },
+  "skill_arrow": {
+    "source": "SkillStart_Arrow1",
+    "file": "skill_arrow.mp3",
+    "seconds": 0.355,
+    "bytes": 3595
+  }
+}

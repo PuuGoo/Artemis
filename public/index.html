@@ -4814,6 +4814,27 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
       const SoundFX = {
         ctx: null,
         muted: false,
+        // Mẫu thật nạp từ assets/audio; synth bên dưới chỉ là dự phòng khi chưa tải xong.
+        clipBase: 'assets/audio/',
+        clipFiles: {
+          shootBow: 'shoot_bow.mp3', shootStaff: 'shoot_staff.mp3', shootClaw: 'shoot_claw.mp3',
+          hitNormal: 'hit_normal.mp3', hitCrit: 'hit_crit.mp3',
+          hitSkeleton: 'hit_skeleton.mp3', hitGhost: 'hit_ghost.mp3',
+          enemyDeath: 'enemy_death.mp3', bossDeath: 'boss_death.mp3',
+          playerHurt: 'player_hurt.mp3', coin: 'coin.mp3',
+          levelUp: 'level_up.mp3', portal: 'portal.mp3', bossSpawn: 'boss_spawn.mp3', victory: 'victory.mp3',
+          uiClick: 'ui_click.mp3', uiOpen: 'ui_open.mp3',
+          skillFire: 'skill_fire.mp3', skillIce: 'skill_ice.mp3', skillPoison: 'skill_poison.mp3',
+          skillHeal: 'skill_heal.mp3', skillSword: 'skill_sword.mp3', skillArrow: 'skill_arrow.mp3'
+        },
+        clips: {},
+        // Hai ngân sách riêng: tiếng ngắn (bắn/trúng/chết) không bị tiếng dài (thắng, lên cấp) chiếm chỗ.
+        maxVoices: 12,
+        // Cụm hiếm có thể trùng: trùm chết + thắng + lên cấp + kỹ năng dài trong cùng giây.
+        maxStingers: 5,
+        activeVoices: 0,
+        activeStingers: 0,
+        lastPlayed: {},
         init() {
           if (!this.ctx) {
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -4822,6 +4843,51 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           if (this.ctx && this.ctx.state === 'suspended') {
             this.ctx.resume();
           }
+        },
+        /** Nạp trước toàn bộ mẫu; thiếu file thì im lặng và vẫn dùng synth. */
+        async preload() {
+          if (this._preloading) return this._preloading;
+          this._preloading = (async () => {
+            this.init();
+            if (!this.ctx) return;
+            await Promise.all(Object.entries(this.clipFiles).map(async ([key, file]) => {
+              try {
+                const response = await fetch(this.clipBase + file);
+                if (!response.ok) return;
+                this.clips[key] = await this.ctx.decodeAudioData(await response.arrayBuffer());
+              } catch (e) { /* giữ synth */ }
+            }));
+          })();
+          return this._preloading;
+        },
+        playClip(key, vol = 0.55, minGap = 0.03, stinger = false) {
+          if (this.muted) return false;
+          const buffer = this.clips[key];
+          if (!buffer) return false;
+          this.init();
+          if (!this.ctx) return false;
+          const now = this.ctx.currentTime;
+          // Cùng một mẫu không chồng lên nhau trong khoảng rất ngắn (tránh "máy khâu").
+          if (now - (this.lastPlayed[key] || -1) < minGap) return false;
+          // Tiếng dài có hạn mức riêng nên không làm tắt tiếng chiến đấu ngắn.
+          if (stinger) { if (this.activeStingers >= this.maxStingers) return false; }
+          else if (this.activeVoices >= this.maxVoices) return false;
+          try {
+            const source = this.ctx.createBufferSource();
+            const gain = this.ctx.createGain();
+            source.buffer = buffer;
+            gain.gain.value = vol;
+            source.connect(gain);
+            gain.connect(this.ctx.destination);
+            if (stinger) this.activeStingers++; else this.activeVoices++;
+            this.lastPlayed[key] = now;
+            source.onended = () => {
+              if (stinger) this.activeStingers = Math.max(0, this.activeStingers - 1);
+              else this.activeVoices = Math.max(0, this.activeVoices - 1);
+            };
+            source.start(now);
+            return true;
+          } catch (e) { return false; }
         },
         playTone(freq, type, duration, vol = 0.12, slideFreq = null) {
           if (this.muted) return;
@@ -4844,27 +4910,40 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             osc.stop(now + duration);
           } catch (e) {}
         },
-        shootBow() { this.playTone(520, 'triangle', 0.08, 0.1, 180); },
-        shootStaff() { this.playTone(360, 'sine', 0.12, 0.1, 740); },
-        shootClaw() { this.playTone(220, 'sawtooth', 0.09, 0.1, 95); },
+        shootBow() { if (!this.playClip('shootBow', 0.45, 0.02)) this.playTone(520, 'triangle', 0.08, 0.1, 180); },
+        shootStaff() { if (!this.playClip('shootStaff', 0.45, 0.02)) this.playTone(360, 'sine', 0.12, 0.1, 740); },
+        shootClaw() { if (!this.playClip('shootClaw', 0.45, 0.02)) this.playTone(220, 'sawtooth', 0.09, 0.1, 95); },
         hitEnemy(isCrit) {
+          if (this.playClip(isCrit ? 'hitCrit' : 'hitNormal', isCrit ? 0.6 : 0.4)) return;
           if (isCrit) {
             this.playTone(880, 'square', 0.11, 0.12, 420);
           } else {
             this.playTone(310, 'triangle', 0.06, 0.08, 140);
           }
         },
-        playerHurt() { this.playTone(150, 'sawtooth', 0.22, 0.18, 65); },
-        coinPickup() { this.playTone(980, 'sine', 0.09, 0.07, 1320); },
+        enemyDeath() { if (!this.playClip('enemyDeath', 0.5, 0.05)) this.playTone(240, 'sawtooth', 0.16, 0.1, 90); },
+        bossDeath() { if (!this.playClip('bossDeath', 0.65, 0.2, true)) this.playTone(90, 'sawtooth', 0.6, 0.2, 40); },
+        victory() { if (!this.playClip('victory', 0.6, 0.5, true)) this.levelUp(); },
+        skillCast(kind) {
+          const map = { fire: 'skillFire', ice: 'skillIce', poison: 'skillPoison', heal: 'skillHeal', sword: 'skillSword', arrow: 'skillArrow' };
+          // Mọi mẫu chọn kỹ năng đều đã cắt ngắn nên dùng chung ngân sách tiếng ngắn.
+          if (!this.playClip(map[kind] || 'skillArrow', 0.5, 0.06)) this.playTone(520, 'triangle', 0.18, 0.1, 780);
+        },
+        uiClick() { if (!this.playClip('uiClick', 0.35, 0.02)) this.playTone(640, 'square', 0.04, 0.05); },
+        uiOpen() { if (!this.playClip('uiOpen', 0.4, 0.05)) this.playTone(500, 'sine', 0.1, 0.06, 700); },
+        playerHurt() { if (!this.playClip('playerHurt', 0.7, 0.08)) this.playTone(150, 'sawtooth', 0.22, 0.18, 65); },
+        coinPickup() { if (!this.playClip('coin', 0.45, 0.03)) this.playTone(980, 'sine', 0.09, 0.07, 1320); },
         levelUp() {
-          this.playTone(440, 'triangle', 0.12, 0.14, 587);
-          setTimeout(() => this.playTone(587, 'triangle', 0.14, 0.14, 880), 90);
+          if (!this.playClip('levelUp', 0.55, 0.1, true)) {
+            this.playTone(440, 'triangle', 0.12, 0.14, 587);
+            setTimeout(() => this.playTone(587, 'triangle', 0.14, 0.14, 880), 90);
+          }
         },
         portalOpen() {
-          this.playTone(330, 'sine', 0.25, 0.12, 660);
+          if (!this.playClip('portal', 0.5, 0.2, true)) this.playTone(330, 'sine', 0.25, 0.12, 660);
         },
         bossSpawn() {
-          this.playTone(110, 'sawtooth', 0.45, 0.2, 55);
+          if (!this.playClip('bossSpawn', 0.6, 0.3, true)) this.playTone(110, 'sawtooth', 0.45, 0.2, 55);
         }
       };
 
@@ -28226,6 +28305,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       // Initialize a new Run
       function startNewRun(reason = 'fresh') {
         SoundFX.init();
+        // Nạp mẫu âm thanh thật sau thao tác của người chơi (được phép mở AudioContext).
+        SoundFX.preload?.();
         // Dừng vòng lặp cũ TRƯỚC khi dựng trận mới để không có hai session.
         stopGameLoop();
         clearRunState();
@@ -28843,6 +28924,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const p = Game.player;
 
         p.skills[skId] = (p.skills[skId] || 0) + 1;
+        // Tiếng chọn kỹ năng: dùng mẫu nguyên tố khi kỹ năng có hệ, còn lại tiếng mũi tên.
+        if (!silent && typeof SoundFX !== 'undefined') {
+          const kind = /fire/.test(skId) ? 'fire' : /ice|freeze|frost/.test(skId) ? 'ice'
+            : /venom|poison/.test(skId) ? 'poison' : /heal|recover|bloodthirst/.test(skId) ? 'heal'
+            : /sword|blade|strike/.test(skId) ? 'sword' : 'arrow';
+          SoundFX.skillCast?.(kind);
+        }
         // ---- Thành tựu: chỉ tính kỹ năng nhặt trong trận, không tính pre-pin ----
         if (!silent) bumpLifetimeStat('skillsPicked', 1);
         // Beginner Journey: N06 — chọn kỹ năng trong trận (không tính pre-pin).
@@ -29443,6 +29531,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         spawnShockwave(e.x, e.y, e.isBoss ? 125 : 54, e.isBoss ? '#f43f5e' : '#fde047', e.isBoss ? 0.55 : 0.32);
         spawnFloorDecal(e.x, e.y + 4, e.isBoss ? 42 : 22, e.isBoss ? 'rgba(244, 63, 94, 0.38)' : 'rgba(15, 23, 42, 0.55)', e.isBoss ? 'crater' : 'scorch');
+        // Phản hồi âm thanh hạ địch: trùm dùng tiếng riêng, quái thường dùng tiếng gọn.
+        SoundFX[e.isBoss ? 'bossDeath' : 'enemyDeath']();
 
         if (e.isBoss) {
           Game.shakeTime = 0.35;
@@ -32782,7 +32872,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         SaveState.save();
 
-        if (isVictory) SoundFX.levelUp();
+        if (isVictory) SoundFX.victory();
 
         // Phá đảo: hiện màn hình chinh phục riêng, có thông báo mở khoá chương
         // tiếp theo. Summary thường chỉ hiện khi thua hoặc tạm dừng.
