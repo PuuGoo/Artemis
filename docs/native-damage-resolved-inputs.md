@@ -1,5 +1,7 @@
 # Giải nghĩa caller, crit, clamp và khiên
 
+> Cập nhật tiếp: xem `native-damage-branch-validation.md` và `native-damage-branches-evidence.json` cho oracle GetDecrease, RNG, crit và mutation khiên. Các giới hạn về oracle trong báo cáo này mô tả mốc phân tích trước, không thay thế kết quả mới.
+
 ## Phạm vi / bằng chứng
 
 Phân tích tĩnh bản libil2cpp.so SHA-256 `bed445a394a7b7e7f58a5f61399ccf1875a03087c574e76e726d4aa23ca7f7d3` và metadata giải mã SHA-256 `fd6a35437472ed8ae4247d3dd6a1c2063ac8fbd37cdba6da3e8952db00e28c43`. Không chạy APK, không tải hot-update hoặc gọi server. Các kết luận chỉ thuộc nhánh native mặc định của build này.
