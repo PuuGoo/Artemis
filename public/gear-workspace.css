@@ -22,12 +22,10 @@
 #tabEquip #stageVisualGearSummary { display: none; }
 #tabEquip #subpanelGear { background: #101322; padding-bottom: 30px; }
 #tabEquip .gear-vault-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; }
-#tabEquip #gearLoadoutControls { width: auto; max-width: none; margin: 0; padding: 4px; border: 1px solid #66567766; background: #1d2034; }
-#tabEquip #gearLoadoutControls > div { background: none; border: 0; padding: 0; }
-#tabEquip .loadout-preset-btn { min-width: 40px; min-height: 40px; border-radius: 9px; transform: none; }
-#tabEquip .gear-vault-toolbar { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 8px; }
+#tabEquip .gear-core-hint { max-width: 150px; text-align: right; font-size: 11px; line-height: 1.6; color: #b7a4cf; }
+#tabEquip .gear-vault-toolbar { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; }
 #tabEquip .gear-vault-toolbar button { min-height: 44px; border: 1px solid #655a7d80; border-radius: 12px; background: #22253a; color: #dfd9ec; font-size: 12px; box-shadow: none; padding: 8px 10px; letter-spacing: 0; }
-#tabEquip #btnQuickEquipBest { background: #f1cc83; color: #36240c; border-color: #ffe3ac; }
+#tabEquip #btnOpenBlacksmith { background: #f1cc83; color: #36240c; border-color: #ffe3ac; padding-inline: 22px; }
 #tabEquip .gear-materials { border-bottom: 1px solid #655a7d44; padding-bottom: 4px; }
 #tabEquip summary, #gearDetailModal summary { cursor: pointer; min-height: 44px; align-content: center; font-size: 12px; color: #c7bed9; font-weight: 700; }
 #tabEquip .gear-slot-filters { scrollbar-width: thin; gap: 6px; padding: 4px 0 8px; }
@@ -39,11 +37,7 @@
 #tabEquip .gear-empty-slot small { color: #a69bb8; font-size: 9px; }
 #tabEquip .gear-empty-bag { grid-column: 1/-1; text-align: center; padding: 32px 16px; border: 1px dashed #75648488; border-radius: 16px; background: #191c2d; color: #ded4ec; font-size: 14px; }
 #tabEquip .gear-empty-bag p { margin-top: 8px; color: #b7acc9; font-size: 12px; line-height: 1.6; }
-#tabEquip .gear-workshop { border: 1px solid #73628b66; background: #1b1e30; padding: 0 14px 14px; }
-#tabEquip .gear-workshop:not([open]) { padding-bottom: 0; }
-#tabEquip .gear-workshop > summary { padding: 10px 0; color: #f1d7a3; }
-#tabEquip .gear-workshop > summary span + span { display: block; margin: 3px 0 0 17px; color: #b6aac9; font-size: 11px; font-weight: 400; }
-#tabEquip .gear-workshop-tools button { min-height: 44px; border: 1px solid #75638d66; border-radius: 12px; background: #25283d; color: #e0d6ef; box-shadow: none; padding: 10px; font-size: 12px; }
+
 #tabEquip button:focus-visible, #tabEquip [role=button]:focus-visible, #tabEquip summary:focus-visible, #gearDetailModal button:focus-visible, #gearDetailModal summary:focus-visible { outline: 2px solid #e3bcff; outline-offset: 3px; }
 #gearDetailModal { color-scheme: dark; width: min(470px, calc(100vw - 28px)); max-width: none; max-height: calc(100dvh - 32px); margin: auto; padding: 0; border: 1px solid #85719f; border-radius: 24px; background: #181b2c; color: #ede5f7; overflow: auto; overscroll-behavior: contain; box-shadow: 0 24px 80px #0009; }
 #gearDetailModal::backdrop { background: #080916d9; }
@@ -57,11 +51,23 @@
 #gearDetailModal .gear-comparison .gear-gain { color: #9ee5ba; }
 #gearDetailModal .gear-comparison .gear-loss { color: #ffb5bc; }
 #gearDetailModal .gear-advanced { border-top: 1px solid #7e6d9255; }
+#gearDetailModal .gear-merge-protection { display:flex; align-items:center; gap:10px; min-height:44px; padding:8px 12px; border:1px solid #7e6d9255; border-radius:12px; font-size:12px; color:#d2c7e1; cursor:pointer; }
+#gearDetailModal .gear-merge-protection input { width:20px; height:20px; accent-color:#f1cc83; }
 #gearDetailModal button { min-height: 44px; }
 #gearDetailModal .gear-detail-actions { position: sticky; bottom: 0; padding: 12px 0 16px; margin-bottom: 0; background: #171b2c; box-shadow: 0 -8px 16px #171b2c; }
 #gearDetailModal #btnModalEquipGear { background: linear-gradient(#ffe0a0,#edbc68); color: #38270d; border: 1px solid #ffe5b4; box-shadow: none; font-size: 13px; }
 #gearDetailModal #btnModalUpgradeGear { background: #273849; border: 1px solid #7896a7; color: #e8eff5; box-shadow: none; font-size: 13px; }
 #gearDetailModal button:disabled { opacity: .45; cursor: not-allowed; }
+#blacksmithModal > div { min-height:0; max-height:92dvh; }
+#blacksmithModal > div > :not(#blacksmithMergeList) { flex-shrink:0; }
+#blacksmithModal #blacksmithMergeList { min-height:0; overscroll-behavior:contain; }
+#blacksmithModal #btnCloseBlacksmith, #blacksmithModal #btnCloseBlacksmithBottom, #blacksmithModal #btnQuickMergeAll, #blacksmithModal .single-merge-btn { min-height:44px; }
+#blacksmithModal .gear-merge-content { min-width:0; }
+#blacksmithModal .gear-merge-content .truncate { white-space:normal; overflow-wrap:anywhere; }
+@media (max-width:639px) {
+  #blacksmithModal .gear-merge-content { flex-direction:column; align-items:flex-start; }
+  #blacksmithModal .gear-merge-content > .min-w-0 { width:100%; }
+}
 @media (min-width:640px) { #tabEquip .gear-empty-slot { width:82px; height:82px; font-size:11px; } #tabEquip .gear-stage-layout { grid-template-columns:92px minmax(0,1fr) 92px; } }
 @media (max-width:639px) {
   #tabEquip .gear-stage-layout { grid-template-columns:68px minmax(0,1fr) 68px; }

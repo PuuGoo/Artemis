@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { sanitizeSave } from '../lib/save/schema.js';
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../public/gear-workspace.css', import.meta.url), 'utf8');
 function section(start, end) {
@@ -10,6 +11,16 @@ function section(start, end) {
   return html.slice(a, b);
 }
 const previewSource = section('function previewGearDecision(', 'function renderGearDecision(');
+test('bỏ giao diện nâng cao không làm rơi dữ liệu ngọc/dòng phụ từ save máy chủ', () => {
+  const raw = { uid: 'legacy_item', templateId: 'crimson_bow', quality: 'common', level: 5, awakening: 0, locked: true, favorite: true, sockets: [{ gem: 'ruby', level: 1 }], affixes: [{ stat: 'atk_flat', tier: 'C', value: 14 }] };
+  const before = sanitizeSave({ gearBag: [raw] }).data;
+  const item = structuredClone(before.gearBag[0]);
+  const ctx = vm.createContext({ console, GEAR_TEMPLATES: { crimson_bow: {} }, GEAR_QUALITIES: { common: { maxAwakening: 0 } } });
+  vm.runInContext(section('function normalizeGearItem(', 'function buildMaxSocketsForTemplate('), ctx);
+  ctx.normalizeGearItem(item);
+  const after = sanitizeSave({ gearBag: [item] }).data;
+  assert.deepEqual(after.gearBag, before.gearBag);
+});
 test('xem trước kế thừa cấp vị trí, không đổi object, cấp đồ hay ghi save', () => {
   const current = { templateId: 'old', level: 12 }, candidate = { templateId: 'new', level: 2 };
   const equipped = { weapon: current };
@@ -55,13 +66,19 @@ test('bảng quyết định cảnh báo mất mốc bộ và escape tên trang 
   assert.match(el.innerHTML, /&lt;img/);
   assert.doesNotMatch(el.innerHTML, /<img/);
 });
-test('kho thu gọn công cụ, modal top-layer và giao diện responsive', () => {
-  assert.match(html, /<details id="gearWorkshop"/);
-  assert.equal((html.match(/id="btnOpenGearChest"/g) || []).length, 1);
+test('kho chỉ giữ trang bị, cường hóa và ghép; không còn lối vào tính năng nâng cao', () => {
+  const removed = ['gearWorkshop', 'gearWorkshopContent', 'gearLoadoutControls', 'btnQuickEquipBest', 'btnOpenGearChest', 'btnGearCompare', 'btnGemWorkshop', 'btnBulkSalvage', 'btnAutoBuildAdvanced', 'btnGearReforge', 'btnGearLoadouts', 'btnGearEvolution', 'btnWorkshopMaxAll', 'btnModalMaxUpgradeGear', 'btnModalOpenReforge', 'btnModalResetLevel', 'btnModalToggleFavorite', 'btnModalToggleLock', 'btnModalAscendChaotic'];
+  for (const id of removed) assert.ok(!html.includes(`id="${id}"`), `lối vào đã bỏ: ${id}`);
+  assert.doesNotMatch(html, /data-loadout-preset=/);
+  const api = section('window.Archero2FusionAPI = {', '// ===== API gỡ lỗi');
+  for (const name of ['renderReforgeTool', 'runAdvancedAutoBuild', 'renderGearLoadoutManager', 'saveCurrentGearLoadout', 'applyGearLoadout', 'deleteGearLoadout']) assert.ok(!api.includes(name), name);
+  assert.match(html, /id="btnModalUpgradeGear"/);
+  assert.match(html, /id="btnModalEquipGear"/);
+  assert.match(html, /id="btnOpenBlacksmith"/);
   assert.match(html, /<dialog id="gearDetailModal"/);
   assert.match(html, /modal\.showModal\(\)/);
   assert.match(html, /modal\.close\(\)/);
-  assert.match(html, /id="gearSalvagePreview"|salvagePreview\.id = 'gearSalvagePreview'/);
+  assert.match(html, /id="gearModalMergeProtected"/);
   assert.match(css, /repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /safe-area-inset-bottom/);

@@ -74,7 +74,7 @@ const INLINE = [
   ["btnMaxAllWikiItems", "const btnMaxItems = document.getElementById('btnMaxAllWikiItems');"],
   ["btnMaxAllWikiEventsCurrencies", "const btnMaxEv = document.getElementById('btnMaxAllWikiEventsCurrencies');"],
   ["btnResetWikiItemsStarter", "const btnResetItems = document.getElementById('btnResetWikiItemsStarter');"],
-  ["btnModalMaxUpgradeGear", "document.getElementById('btnModalMaxUpgradeGear')?.addEventListener('click', () => {"],
+
   ["btn max hero star", "containerEl.querySelectorAll('.btn-max-hero-star').forEach(btn => {"],
 ];
 for (const [label, anchor] of INLINE) {
@@ -84,6 +84,7 @@ for (const [label, anchor] of INLINE) {
 
 // ---------------------------------------------------------------- 5. Không còn đường vòng
 console.log("\n=== 5. KHONG CON DUONG VONG ===");
+check("da bo nut va handler max trang bi rieng", !src.includes('id="btnModalMaxUpgradeGear"') && !src.includes("getElementById('btnModalMaxUpgradeGear')"));
 // Không được có lời gọi trực tiếp applyMaxAllSystems ngoài 2 chỗ đã biết
 const maxAllCalls = [...src.matchAll(/applyMaxAllSystems\(/g)].length;
 check("applyMaxAllSystems chi goi o dinh nghia + migration + handler da chan",

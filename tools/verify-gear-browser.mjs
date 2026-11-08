@@ -54,7 +54,8 @@ try {
   const gear = (uid, templateId, level = 1, extra = {}) => ({ uid, templateId, quality: 'common', level, awakening: 0, locked: false, favorite: false, sockets: [], affixes: [], ...extra });
   const fixture = sanitizeSave({ ...fresh, beginnerJourney: { isCompleted: true, skipped: true },
     equippedGear: { ...fresh.equippedGear, ring: gear('eq_ring', 'echo_ring', 5), helmet: gear('eq_helmet', 'echo_helmet') },
-    gearBag: [gear('compare_ring', 'destruction_ring'), gear('protected', 'crimson_bow', 1, { locked: true }), gear('favorite', 'crimson_bow', 1, { favorite: true }), ...Array.from({ length: 30 }, (_, i) => gear('bag_' + i, 'crimson_bow'))],
+    gearBag: [gear('compare_ring', 'destruction_ring'), gear('protected', 'crimson_bow', 1, { locked: true, sockets: [{ gem: 'ruby', level: 1 }], affixes: [{ stat: 'atk_flat', tier: 'C', value: 14 }] }), gear('favorite', 'crimson_bow', 1, { favorite: true }), ...Array.from({ length: 30 }, (_, i) => gear('bag_' + i, 'crimson_bow'))],
+    gearLoadouts: { legacy: { id: 'legacy', name: 'Bộ đã lưu trước đây', slots: { weapon: 'protected' }, createdAt: 1000 } },
     gearScrolls: { ...fresh.gearScrolls, ring: 30 },
   }).data;
   const db = await getMongoDb();
@@ -65,7 +66,9 @@ try {
   await page.evaluate(() => window.Archero2FusionAPI.stopGameLoop());
   await page.locator('#bottomNavBar [data-tab="tabEquip"]').first().click();
   await page.locator('#tabEquip [data-gear-subtab="gear"]').click();
-  assert.equal(await page.locator('#gearWorkshop').getAttribute('open'), null);
+  const removedSelectors = '#gearWorkshop, #gearWorkshopContent, #gearLoadoutControls, [data-loadout-preset], #btnQuickEquipBest, #btnOpenGearChest, #btnGemWorkshop, #btnBulkSalvage, #btnGearReforge, #btnGearLoadouts, #btnGearEvolution';
+  assert.equal(await page.locator(removedSelectors).count(), 0);
+  assert.equal(await page.evaluate(() => ['renderReforgeTool', 'runAdvancedAutoBuild', 'renderGearLoadoutManager', 'saveCurrentGearLoadout', 'applyGearLoadout', 'deleteGearLoadout'].some(key => key in window.Archero2FusionAPI)), false);
   assert.equal(await page.locator('.gear-empty-slot').count(), 4);
   const geometry = [];
   for (const width of [1024, 390, 360]) {
@@ -73,7 +76,7 @@ try {
     await page.locator('#tabEquip').evaluate(el => el.scrollTop = 0);
     const dimensions = await page.locator('#tabEquip').evaluate(el => ({ scroll: el.scrollWidth, width: el.clientWidth, stage: document.querySelector('#gearHeroStage').getBoundingClientRect().height, grid: getComputedStyle(document.querySelector('#gearBagGrid')).gridTemplateColumns }));
     assert.ok(dimensions.scroll <= dimensions.width, JSON.stringify(dimensions));
-    assert.ok((await page.locator('#btnQuickEquipBest').boundingBox()).height >= 44);
+    assert.ok((await page.locator('#btnOpenBlacksmith').boundingBox()).height >= 44);
     const slots = await page.locator('#gearHeroStage').evaluate(el => {
       const stage = el.getBoundingClientRect();
       return [...el.querySelectorAll('#equippedLeftCol > *, #equippedRightCol > *')].map(item => {
@@ -95,6 +98,7 @@ try {
   const before = await page.evaluate(() => JSON.stringify(window.Archero2FusionAPI.SaveState.equippedGear));
   await page.locator('[data-gear-uid="compare_ring"]').click();
   const modal = page.locator('#gearDetailModal');
+  assert.deepEqual(await modal.locator('button').evaluateAll(buttons => buttons.map(el => el.id).sort()), ['btnCloseGearModal', 'btnModalEquipGear', 'btnModalUpgradeGear'].sort());
   assert.equal(await modal.evaluate(el => el.open), true);
   const comparison = await page.locator('#gearModalComparison').innerText();
   assert.match(comparison, /Kế thừa cấp 5/);
@@ -130,23 +134,40 @@ try {
   assert.ok(upgraded.scrolls < equipped.scrolls);
   await page.locator('#btnCloseGearModal').click();
   await page.locator('[data-slot-filter="all"]').click();
-  await page.locator('#gearWorkshop > summary').click();
-  await page.locator('#btnBulkSalvage').click();
-  assert.equal(await page.locator('.salvage-check[value="protected"]').count(), 0);
-  assert.equal(await page.locator('.salvage-check[value="favorite"]').count(), 0);
-  assert.equal(await page.locator('.salvage-check[value="compare_ring"]').count(), 0);
-  await page.locator('.salvage-check[value="bag_0"]').check();
-  assert.match(await page.locator('#gearSalvagePreview').innerText(), /Sẽ mất 1 món.*35 vàng, 1 mảnh/);
-  await page.locator('#confirmBulkSalvage').click();
-  assert.equal(await page.locator('.salvage-check[value="bag_0"]').count(), 0);
-  const salvaged = await page.evaluate(() => ({ gold: window.Archero2FusionAPI.SaveState.gold, shards: window.Archero2FusionAPI.SaveState.salvageMaterials }));
-  assert.equal(salvaged.gold, upgraded.gold + 35);
-  assert.equal(salvaged.shards, 1);
-  await page.locator('#gearWorkshop > summary').click();
+  const mergeBefore = await page.evaluate(() => {
+    const api = window.Archero2FusionAPI, group = api.getBlacksmithMergeGroups().find(g => g.key === 'crimson_bow__common__0');
+    return { count: api.SaveState.gearBag.length, protected: JSON.stringify(api.SaveState.gearBag.filter(item => item.locked || item.favorite)), consumed: group.items.map(item => item.uid), toQuality: group.recipe.toQuality, required: group.recipe.reqCount };
+  });
+  assert.ok(!mergeBefore.consumed.includes('protected') && !mergeBefore.consumed.includes('favorite'));
+  await page.locator('#btnOpenBlacksmith').click();
+  const mergeFits = await page.locator('#blacksmithModal > div').evaluate(el => {
+    const box = el.getBoundingClientRect();
+    return box.top >= 0 && box.bottom <= innerHeight && box.left >= 0 && box.right <= innerWidth;
+  });
+  assert.equal(mergeFits, true);
+  assert.equal(await page.locator('.gear-merge-group').evaluateAll(groups => groups.every(el => el.scrollWidth <= el.clientWidth)), true);
+  await page.screenshot({ path: resolve(evidence, 'merge-mobile.png') });
+  await page.locator('.single-merge-btn[data-merge-key="crimson_bow__common__0"]').click();
+  const merged = await page.evaluate(() => {
+    const bag = window.Archero2FusionAPI.SaveState.gearBag;
+    return { count: bag.length, item: bag[0], ids: bag.map(item => item.uid), protected: JSON.stringify(bag.filter(item => item.locked || item.favorite)) };
+  });
+  assert.equal(merged.count, mergeBefore.count - mergeBefore.required + 1);
+  assert.equal(merged.item.quality, mergeBefore.toQuality);
+  assert.equal(new Set(merged.ids).size, merged.ids.length);
+  assert.ok(mergeBefore.consumed.every(uid => !merged.ids.includes(uid)));
+  assert.equal(merged.protected, mergeBefore.protected);
+  const beforeQuickMerge = await page.evaluate(() => JSON.stringify(window.Archero2FusionAPI.SaveState.gearBag));
+  await page.locator('#btnQuickMergeAll').click();
+  assert.equal(await page.locator('#quickMergePreviewModal').isVisible(), true);
+  await page.locator('#btnCancelQuickMerge').click();
+  assert.equal(await page.evaluate(() => JSON.stringify(window.Archero2FusionAPI.SaveState.gearBag)), beforeQuickMerge);
+  await page.locator('#btnCloseBlacksmith').click();
   await page.locator('[data-gear-uid="bag_29"]').scrollIntoViewIfNeeded();
   const scroll = await page.locator('#tabEquip').evaluate(el => el.scrollTop);
   assert.ok(scroll > 0);
-  await page.locator('[data-gear-uid="bag_29"]').click();
+  await page.locator('[data-gear-uid="bag_29"]').focus();
+  await page.keyboard.press('Enter');
   assert.equal(await page.locator('#btnModalUpgradeGear').isDisabled(), true);
   await page.mouse.click(2, 2);
   assert.equal(await modal.evaluate(el => el.open), false);
@@ -158,12 +179,14 @@ try {
   const persisted = (await (await page.request.get(origin + '/api/save')).json()).data;
   assert.equal(persisted.equippedGear.ring.uid, 'compare_ring');
   assert.equal(persisted.equippedGear.ring.level, 6);
-  assert.equal(persisted.gearBag.some(item => item.uid === 'bag_0'), false);
+  assert.equal(persisted.gearBag.some(item => item.uid === merged.item.uid && item.quality === mergeBefore.toQuality), true);
+  assert.deepEqual(persisted.gearBag.find(item => item.uid === 'protected'), fixture.gearBag.find(item => item.uid === 'protected'));
+  assert.deepEqual(persisted.gearLoadouts, fixture.gearLoadouts);
   await page.reload({ waitUntil: 'load' });
   await page.waitForFunction(() => window.ArtemisCloud?.getState().ready);
   assert.equal(await page.evaluate(() => window.Archero2FusionAPI.SaveState.equippedGear.ring.level), 6);
   assert.deepEqual(errors, []);
-  const result = { scope: 'Chrome + real HTTP + isolated memory DB; seeded gear/scroll fixture, not production or earned loot', geometry, comparison, equipped, upgraded, salvage: { gold: salvaged.gold - upgraded.gold, shards: salvaged.shards }, scrollPreserved: scroll, reloadPersisted: true, errors };
+  const result = { scope: 'Chrome + real HTTP + isolated memory DB; seeded gear/scroll fixture, not production or earned loot', geometry, comparison, equipped, upgraded, merge: { consumed: mergeBefore.required, quality: merged.item.quality, beforeCount: mergeBefore.count, afterCount: merged.count }, advancedActionsRemoved: true, legacyDataPreserved: true, scrollPreserved: scroll, reloadPersisted: true, errors };
   await writeFile(resolve(evidence, 'result.json'), JSON.stringify(result, null, 2));
   console.log(JSON.stringify(result, null, 2));
 } finally {

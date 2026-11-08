@@ -1878,9 +1878,7 @@
               </button>
             </div>
             <div class="flex items-center gap-1.5 bg-slate-950/45 backdrop-blur-sm p-1 rounded-full border border-white/20">
-              <button type="button" data-loadout-preset="1" class="loadout-preset-btn w-7 sm:w-8 h-6 rounded-full text-xs font-black transition bg-sky-200 text-slate-950 shadow">1</button>
-              <button type="button" data-loadout-preset="2" class="loadout-preset-btn w-7 sm:w-8 h-6 rounded-full text-xs font-black transition bg-slate-900/75 text-slate-300 hover:text-white">2</button>
-              <button type="button" data-loadout-preset="3" class="loadout-preset-btn w-7 sm:w-8 h-6 rounded-full text-xs font-black transition bg-slate-900/75 text-slate-300 hover:text-white">3</button>
+
               <button id="btnCycleHeroSkin" type="button" class="w-8 h-6 rounded-full bg-sky-500/40 hover:bg-sky-400/60 border border-white/40 flex items-center justify-center text-xs text-white shadow transition" title="Đổi Trang Phục & Hào Quang Nhân Vật">
                 🧥
               </button>
@@ -1972,7 +1970,7 @@
         <!-- 3A. SUB-PANEL: GEAR INVENTORY GRID & BLACKSMITH CONTROLS (DEFAULT ACTIVE) -->
         <div id="subpanelGear" class="flex-1 a2-gear-vault-bg px-2.5 sm:px-6 py-3 flex flex-col gap-3">
           <div class="max-w-2xl w-full mx-auto flex flex-col gap-2.5">
-            <div class="gear-vault-heading"><div><span class="gear-eyebrow">HÀNH TRANG</span><h2>Kho trang bị</h2></div><div id="gearLoadoutControls" class="gear-context-controls" aria-label="Bộ trang bị"></div></div>
+            <div class="gear-vault-heading"><div><span class="gear-eyebrow">HÀNH TRANG</span><h2>Kho trang bị</h2></div><span class="gear-core-hint">Trang bị · Cường hóa · Ghép đồ</span></div>
 
             <!-- Controls Row: [By Quality] - [Quick Equip & Open Chest] - [Blacksmith] -->
             <div class="gear-vault-toolbar flex flex-wrap items-center justify-between gap-2">
@@ -1981,13 +1979,6 @@
                 <span class="text-[10px]">▾</span>
               </button>
 
-              <!-- Center Quick Helpers -->
-              <div class="flex items-center gap-1.5">
-                <button id="btnQuickEquipBest" type="button" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 border-2 border-emerald-300 text-white font-black text-[11px] sm:text-xs shadow transition">
-                  ⚡ Mặc Nhanh
-                </button>
-
-              </div>
 
               <button id="btnOpenBlacksmith" type="button" class="a2-yellow-btn relative px-3.5 sm:px-4 py-1.5 rounded-xl font-black text-xs sm:text-sm tracking-tight flex items-center gap-1">
                 <span>Ghép đồ</span>
@@ -2018,62 +2009,7 @@
               <!-- Populated dynamically by renderGearSystemUI() -->
             </div>
 
-            <!-- EXPANDED GEAR WORKSHOP V4 -->
-            <details id="gearWorkshop" class="gear-workshop rounded-2xl border border-amber-400/40 bg-slate-950/75 p-3 space-y-3">
-              <summary><span>⚒️ Xưởng trang bị</span><span>Khảm đá · Tinh luyện · Phân rã</span></summary>
-              <div class="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                  <h3 class="font-black text-amber-300 text-sm">Nâng cao &amp; quản lý bộ đồ</h3>
-                  <p class="text-[10px] text-slate-400">Chọn công cụ khi cần. Xem trước thông tin trước khi tiêu tài nguyên.</p>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="text-[10px] font-black rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-200 px-2.5 py-1">🔩 Mảnh Rèn: <strong id="workshopShardCountText">0</strong></span>
-                  <span class="text-[10px] rounded-full bg-emerald-500/15 text-emerald-300 px-2 py-1">Đã kích hoạt</span>
-                </div>
-              </div>
-              <!-- Quick 1-Click Wiki S-Tier & Standard Set Switcher Bar -->
-              <div class="rounded-xl bg-slate-900/90 border border-cyan-400/40 p-2.5 space-y-2">
-                <div class="flex flex-wrap items-center justify-between gap-1.5">
-                  <span class="text-[11px] font-black text-cyan-300">📖 6 Bộ Trang Bị Chuẩn Archero 2 Wiki (Chuyển Nhanh &amp; Thức Tỉnh Chaotic Lv.100):</span>
-                  <span class="text-[10px] text-amber-200 font-bold">3 Bộ S-Tier (Chaotic) + 3 Bộ Thường (Leg +3)</span>
-                </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-                  <button type="button" data-equip-wiki-set="celestial" class="wiki-set-switch-btn rounded-lg bg-gradient-to-r from-sky-600/40 to-indigo-600/40 hover:brightness-125 border border-sky-400/70 px-2 py-1.5 text-[10px] font-black text-sky-100 text-left transition">
-                    ⚡ 1. Bộ Oracle (S-Tier Combo)
-                  </button>
-                  <button type="button" data-equip-wiki-set="phoenix" class="wiki-set-switch-btn rounded-lg bg-gradient-to-r from-rose-600/40 to-amber-600/40 hover:brightness-125 border border-amber-400/70 px-2 py-1.5 text-[10px] font-black text-amber-100 text-left transition">
-                    🐉 2. Bộ Dragon Knight (S-Tier Nổ)
-                  </button>
-                  <button type="button" data-equip-wiki-set="shadow" class="wiki-set-switch-btn rounded-lg bg-gradient-to-r from-fuchsia-600/40 to-emerald-600/40 hover:brightness-125 border border-fuchsia-400/70 px-2 py-1.5 text-[10px] font-black text-fuchsia-100 text-left transition">
-                    🦅 3. Bộ Griffin (S-Tier Cận Chiến)
-                  </button>
-                  <button type="button" data-equip-wiki-set="echo" class="wiki-set-switch-btn rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 px-2 py-1.5 text-[10px] font-bold text-slate-200 text-left transition">
-                    🌀 4. Bộ Echo (Leg+3 Combo)
-                  </button>
-                  <button type="button" data-equip-wiki-set="destruction" class="wiki-set-switch-btn rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 px-2 py-1.5 text-[10px] font-bold text-slate-200 text-left transition">
-                    💣 5. Bộ Destruction (Leg+3 Nổ)
-                  </button>
-                  <button type="button" data-equip-wiki-set="decisiveness" class="wiki-set-switch-btn rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 px-2 py-1.5 text-[10px] font-bold text-slate-200 text-left transition">
-                    🥊 6. Bộ Decisiveness (Leg+3 Gần)
-                  </button>
-                </div>
-              </div>
-              <div id="gearSetBonusPanel" class="grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
-              <div class="gear-workshop-tools grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <button id="btnOpenGearChest" type="button">🎁 Mở rương · 180 vàng</button>
-                <button id="btnGearCompare" type="button" class="rounded-xl border border-sky-400/50 bg-sky-600/20 hover:bg-sky-600/30 px-2 py-2 text-[11px] font-black text-sky-200 transition">⚖️ So sánh đồ</button>
-                <button id="btnGemWorkshop" type="button" class="rounded-xl border border-violet-400/50 bg-violet-600/20 hover:bg-violet-600/30 px-2 py-2 text-[11px] font-black text-violet-200 transition">💎 Khảm đá</button>
-                <button id="btnBulkSalvage" type="button" class="rounded-xl border border-rose-400/50 bg-rose-600/20 hover:bg-rose-600/30 px-2 py-2 text-[11px] font-black text-rose-200 transition">♻️ Phân rã hàng loạt</button>
-                <button id="btnAutoBuildAdvanced" type="button" class="rounded-xl border border-emerald-400/50 bg-emerald-600/20 hover:bg-emerald-600/30 px-2 py-2 text-[11px] font-black text-emerald-200 transition">⚡ Tối ưu bộ đồ</button>
-                <button id="btnGearReforge" type="button" class="rounded-xl border border-cyan-400/60 bg-cyan-600/20 hover:bg-cyan-600/30 px-2 py-2 text-[11px] font-black text-cyan-200 col-span-2 transition">🔮 Tinh luyện dòng phụ (Affix)</button>
-                <button id="btnGearLoadouts" type="button" class="rounded-xl border border-fuchsia-400/50 bg-fuchsia-600/20 hover:bg-fuchsia-600/30 px-2 py-2 text-[11px] font-black text-fuchsia-200 col-span-2 transition">🧰 Quản lý bộ trang bị đã lưu</button>
-                <button id="btnGearEvolution" type="button" class="rounded-xl border border-amber-300/60 bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-fuchsia-500/20 hover:brightness-110 px-2 py-2 text-[11px] font-black text-amber-100 col-span-2 transition">✨ Tiến hóa &amp; Lập kế hoạch cường hóa</button>
-                <button id="btnWorkshopMaxAll" type="button" class="rounded-xl border-2 border-amber-300 gold-gradient hover:brightness-110 px-2 py-2 text-[11px] font-black text-slate-950 col-span-2 shadow-[0_0_18px_rgba(251,191,36,.4)] transition">👑 Max Full Đồ Thần Thoại Lv.100 &amp; Hệ Thống</button>
-              </div>
-              <div id="gearWorkshopContent" class="rounded-xl bg-slate-900/80 border border-slate-700 p-3 text-xs text-slate-200 space-y-2">
-                <p class="text-slate-400">Chọn một công cụ ở trên để quản lý và tối ưu kho trang bị.</p>
-              </div>
-            </details>
+
 
           </div>
         </div>
@@ -2679,7 +2615,7 @@
           </div>
           <!-- Tác động lên tổng chỉ số nhân vật, tính bằng getComputedStats() thật -->
           <div id="gearModalTotalImpact" class="text-[11px] font-bold text-emerald-300"></div>
-          <details class="gear-advanced"><summary>Nội tại, bộ đồ &amp; dòng phụ</summary>
+          <div class="gear-passive-info">
           <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800/60">
             <span class="text-slate-400 font-semibold">Trạng thái bảo vệ Fusion:</span>
             <span id="gearModalProtectStatus" class="font-bold text-emerald-300">Có thể ghép</span>
@@ -2688,33 +2624,10 @@
             <span class="font-extrabold text-sky-300">✨ Nội tại Phẩm Chất: </span>
             <span id="gearModalPassiveDesc">Tăng +10% Tốc độ bắn và bắn tên xuyên gió.</span>
           </div>
-          <!-- Set Piece, Sockets & Substat Affixes Summary inside Modal -->
-          <div id="gearModalV4Summary" class="pt-2 border-t border-slate-800/80 space-y-1.5 text-[11px]"></div>
-          </details>
+          </div>
         </div>
 
-        <!-- Protection Controls: Lock & Favorite Toggles -->
-        <div class="grid grid-cols-2 gap-2">
-          <button id="btnModalToggleLock" type="button" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
-            <span id="gearModalLockBtnText">🔓 Khóa Trang Bị</span>
-          </button>
-          <button id="btnModalToggleFavorite" type="button" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
-            <span id="gearModalFavBtnText">🤍 Yêu Thích</span>
-          </button>
-        </div>
-
-        <!-- V4 Quick Utility Row: Max Level Up, Reforge Substats & Reset Level (100% Gold Refund) -->
-        <details class="gear-advanced"><summary>Công cụ nâng cao</summary><div class="grid grid-cols-3 gap-1.5">
-          <button id="btnModalMaxUpgradeGear" type="button" class="py-1.5 px-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 font-extrabold text-[11px] flex items-center justify-center gap-1 transition">
-            <span>⏫ Lên Tối Đa</span>
-          </button>
-          <button id="btnModalOpenReforge" type="button" class="py-1.5 px-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/50 text-cyan-200 font-extrabold text-[11px] flex items-center justify-center gap-1 transition">
-            <span>🔮 Tinh Luyện</span>
-          </button>
-          <button id="btnModalResetLevel" type="button" class="py-1.5 px-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/50 text-rose-200 font-extrabold text-[11px] flex items-center justify-center gap-1 transition">
-            <span id="gearModalResetBtnText">🔄 Hoàn Cấp</span>
-          </button>
-        </div></details>
+        <label class="gear-merge-protection"><input id="gearModalMergeProtected" type="checkbox" /> Bảo vệ món này khỏi ghép nhầm</label>
 
         <!-- Wiki Slot Scroll Requirement Info Pill -->
         <div id="gearModalScrollCostRow" class="rounded-xl bg-slate-900/90 border border-sky-400/35 px-3 py-1.5 flex items-center justify-between text-[11px]">
@@ -2743,11 +2656,9 @@
           <div class="flex items-center gap-2.5">
             <span class="w-10 h-10 rounded-2xl gold-gradient flex items-center justify-center text-xl shadow shrink-0">⚒️</span>
             <div>
-              <h3 class="text-base sm:text-lg font-black text-white">Lò Rèn Thợ Rèn (Blacksmith Merge)</h3>
+              <h3 class="text-base sm:text-lg font-black text-white">Ghép trang bị</h3>
               <p class="text-[11px] text-slate-300">
-                <strong class="text-amber-300">GĐ A:</strong> 3 Common/Great/Rare ➔ Bậc kế •
-                <strong class="text-purple-300">GĐ B:</strong> 2 Epic ★0~★2 ➔ Legendary •
-                <strong class="text-rose-300">GĐ C:</strong> 2 Legendary ★0~★3 ➔ Mythic
+                Chọn nhóm đủ nguyên liệu để ghép lên phẩm chất tiếp theo.
               </p>
             </div>
           </div>
@@ -2765,7 +2676,7 @@
             <span id="bsEligibleBagCount" class="font-black text-sky-300 text-xs sm:text-sm">0 món</span>
           </div>
           <div class="bg-slate-900/90 rounded-lg py-1 px-2 border border-amber-500/30">
-            <span class="text-slate-400 block text-[10px]">Đang bảo vệ (Mặc/🔒/❤️)</span>
+            <span class="text-slate-400 block text-[10px]">Được bảo vệ</span>
             <span id="bsProtectedCount" class="font-black text-amber-300 text-xs sm:text-sm">6 món</span>
           </div>
         </div>
@@ -2807,7 +2718,7 @@
             Đóng
           </button>
           <button id="btnQuickMergeAll" type="button" class="a2-yellow-btn flex-1 py-2.5 px-4 rounded-xl font-black text-xs sm:text-sm flex items-center justify-center gap-1.5">
-            <span>✨ Ghép Nhanh Tất Cả (Quick Merge)</span>
+            <span>Ghép nhanh · Xem trước</span>
           </button>
         </div>
       </div>
@@ -8940,9 +8851,14 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           item.sockets = Array.isArray(item.sockets) ? item.sockets.slice(0, 4) : [];
           if (Array.isArray(item.affixes)) {
             item.affixes = item.affixes
-              .filter(a => a && typeof a === 'object' && typeof a.type === 'string')
+              .filter(a => a && typeof a === 'object' && (typeof a.type === 'string' || typeof a.stat === 'string'))
               .slice(0, 3)
-              .map(a => ({
+              // Giữ dạng stat/value đã lưu trên máy chủ dù giao diện tinh luyện đã bỏ.
+              .map(a => typeof a.type !== 'string' ? {
+                stat: a.stat,
+                tier: a.tier,
+                value: Number.isFinite(Number(a.value)) ? Number(a.value) : 0
+              } : ({
                 type: a.type,
                 tier: ['C', 'B', 'A', 'S', 'SS'].includes(a.tier) ? a.tier : 'B',
                 val: Number.isFinite(Number(a.val)) ? Number(a.val) : 10,
@@ -10386,7 +10302,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         for(const slot of Object.keys(GEAR_SLOTS_META)){const target=selected[slot],old=current[slot];if(target&&old?.uid!==target.uid){const idx=bag.findIndex(i=>i.uid===target.uid);if(idx>=0){const picked=bag.splice(idx,1)[0];picked.level=Math.max(picked.level||1,old?.level||1);if(old){old.level=Math.min(old.level||1,picked.level);bag.push(old);}current[slot]=picked;swaps++;}}}
         if(swaps){SaveState.equippedGear=current;SaveState.save();renderLobbyUI();renderGearSetPanel();showToast(`⚡ Auto Build+ đã tối ưu ${swaps} vị trí (xét Chỉ số, Bộ trang bị, Đá quý & Dòng phụ)!`);}else showToast('✓ Bộ trang bị hiện tại đã là cấu hình tốt nhất theo điểm tối ưu.');
       }
-      function openGearWorkshopTool(tool) { const f={compare:renderCompareTool,gems:renderGemTool,salvage:renderSalvageTool,reforge:renderReforgeTool};(f[tool]||renderCompareTool)(); }
+
 
       // ==================== HERO STAR (0★->8★), RESONANCE & LUXURY SKIN HELPER FUNCTIONS ====================
       function getHeroStarLevel(heroId = SaveState.selectedHeroId) {
@@ -16619,7 +16535,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function renderGearSystemUI(stats) {
         const gearStageName = document.getElementById('gearStageHeroName');
         if (gearStageName) gearStageName.textContent = stats.hero.name;
-        renderGearSetPanel();
         // 1. Update Pedestal ATK & HP numbers
         const stageAtkEl = document.getElementById('stageAtkVal');
         const stageHpEl = document.getElementById('stageHpVal');
@@ -17005,14 +16920,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           bindStarAndSkinEvents(charStarSkinEl);
         }
 
-        // 2. Render Preset Buttons (1 | 2 | 3)
-        document.querySelectorAll('.loadout-preset-btn').forEach(btn => {
-          const pNum = parseInt(btn.getAttribute('data-loadout-preset'), 10);
-          const active = pNum === (SaveState.activePreset || 1);
-          btn.className = `loadout-preset-btn w-7 sm:w-8 h-6 rounded-full text-xs font-black transition ${
-            active ? 'bg-sky-200 text-slate-950 shadow scale-105' : 'bg-slate-900/75 text-slate-300 hover:text-white'
-          }`;
-        });
 
         // 3. Render Left 3 Equipped Slots (weapon, necklace, ring) & Right 3 Equipped Slots (armor, helmet, boots)
         const leftCol = document.getElementById('equippedLeftCol');
@@ -19125,110 +19032,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }
         }
 
-        const lockBtn = document.getElementById('btnModalToggleLock');
-        const lockBtnText = document.getElementById('gearModalLockBtnText');
-        if (lockBtn && lockBtnText) {
-          if (item.locked) {
-            lockBtn.className = 'py-2 px-3 rounded-xl bg-amber-500/25 hover:bg-amber-500/35 border-2 border-amber-400 text-amber-200 font-black text-xs flex items-center justify-center gap-1.5 transition';
-            lockBtnText.textContent = '🔒 Đã Khóa (Mở Khóa)';
-          } else {
-            lockBtn.className = 'py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition';
-            lockBtnText.textContent = '🔓 Khóa Trang Bị';
-          }
-        }
-
-        const favBtn = document.getElementById('btnModalToggleFavorite');
-        const favBtnText = document.getElementById('gearModalFavBtnText');
-        if (favBtn && favBtnText) {
-          if (item.favorite) {
-            favBtn.className = 'py-2 px-3 rounded-xl bg-rose-500/25 hover:bg-rose-500/35 border-2 border-rose-400 text-rose-200 font-black text-xs flex items-center justify-center gap-1.5 transition';
-            favBtnText.textContent = '❤️ Yêu Thích (Bỏ Thích)';
-          } else {
-            favBtn.className = 'py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition';
-            favBtnText.textContent = '🤍 Yêu Thích';
-          }
-        }
+        document.getElementById('gearModalMergeProtected').checked = Boolean(item.locked || item.favorite);
 
         document.getElementById('gearModalLevelSub').textContent = `Cấp cường hóa: Lv.${item.level} / 100`;
-
-        const v4Box = document.getElementById('gearModalV4Summary');
-        if (v4Box) {
-          const setId = getGearSetId(item);
-          const setMeta = setId ? GEAR_SET_META[setId] : null;
-          const setCounts = getEquippedSetCounts();
-          const setLine = setMeta
-            ? `<div class="flex items-center justify-between"><span class="text-slate-400">Bộ Chuẩn Wiki:</span><span class="font-bold text-amber-300">${setMeta.icon} ${setMeta.name} (${setCounts[setId] || 0}/6)</span></div>`
-            : '';
-          const maxGem = gemCapacity(item);
-          const gemPills = (item.sockets || []).map(gId => `${GEM_META[gId]?.icon || '💎'} ${GEM_META[gId]?.name || gId}`).join(' • ') || 'Chưa khảm đá';
-          const gemLine = `<div class="flex items-center justify-between"><span class="text-slate-400">Ô Đá Quý (${(item.sockets || []).length}/${maxGem}):</span><span class="font-bold text-violet-300">${gemPills}</span></div>`;
-          const maxAff = affixCapacity(item);
-          const affPills = (item.affixes || []).map(a => `<span class="px-1.5 py-0.5 rounded border text-[9px] font-black ${(AFFIX_TIERS[a.tier] || AFFIX_TIERS.B).badge}">${a.tier}: ${formatAffixText(a)}${a.locked ? ' 🔒' : ''}</span>`).join(' ') || '<span class="text-slate-500">Chưa khắc dòng phụ</span>';
-          const affLine = `<div class="flex items-start justify-between gap-2"><span class="text-slate-400 shrink-0">Dòng phụ (${(item.affixes || []).length}/${maxAff}):</span><div class="flex flex-wrap justify-end gap-1">${affPills}</div></div>`;
-
-          // Build Official Archero 2 Wiki 9-Tier Attribute Progression Table
-          const wt = tpl.wikiTiers || {};
-          const qOrder = q.order || 1;
-          const tierRows = [
-            { label: '🟢 Fine',       unlocked: qOrder >= 2, text: wt.fine || 'ATK PWR / Max HP +5%', color: 'text-emerald-300' },
-            { label: '🔵 Rare',       unlocked: qOrder >= 3, text: wt.rare || '+CRIT / Dodge / Heart', color: 'text-sky-300' },
-            { label: '🟣 Epic',       unlocked: qOrder >= 4, text: wt.epic || 'Mở khóa Kỹ năng Sử Thi', color: 'text-purple-300' },
-            { label: '🟡 Legendary',  unlocked: qOrder >= 5, text: wt.legendary || 'ATK PWR / Max HP +10%', color: 'text-amber-300' },
-            { label: '🟡 Leg +3',     unlocked: (qOrder === 5 && awk >= 3) || qOrder >= 6, text: wt.legendary3 || 'Base Stats +20%', color: 'text-amber-200' },
-            ...(tpl.isSTier ? [
-              { label: '🔴 Mythic',    unlocked: qOrder >= 6, text: wt.mythic || 'Cường hóa Kỹ năng Thần Thoại', color: 'text-rose-300' },
-              { label: '🔴 Mythic +2', unlocked: (qOrder === 6 && awk >= 2) || qOrder >= 7, text: wt.mythic2 || 'Base Stats +30%', color: 'text-rose-200' },
-              { label: '🔴 Mythic +4', unlocked: (qOrder === 6 && awk >= 4) || qOrder >= 7, text: wt.mythic4 || 'Base Stats +40%', color: 'text-rose-200' },
-              { label: '🌈 Chaotic',   unlocked: qOrder >= 7, text: wt.chaotic || 'Thức tỉnh Nội Tại Hỗn Nguyên', color: 'text-fuchsia-200 font-black' }
-            ] : [])
-          ].map(r => `
-            <div class="flex items-start justify-between gap-2 py-0.5 border-b border-slate-800/70 ${r.unlocked ? '' : 'opacity-45'}">
-              <span class="shrink-0 font-black text-[10px] ${r.color}">${r.unlocked ? '✓ ' : '🔒 '}${r.label}</span>
-              <span class="text-right text-[10px] text-slate-200">${r.text}</span>
-            </div>
-          `).join('');
-
-          const wikiBox = `
-            <div class="mt-2 pt-2 border-t border-slate-700/80 space-y-1">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] font-black uppercase tracking-wider text-cyan-300">📖 Thuộc Tính Chuẩn Archero 2 Wiki (${tpl.archetypeLabel || 'Build'})</span>
-                ${tpl.isSTier && item.quality !== 'chaotic' ? `<button id="btnModalAscendChaotic" type="button" class="px-2 py-0.5 rounded bg-gradient-to-r from-rose-500 via-fuchsia-500 to-amber-400 text-slate-950 font-black text-[9px] shadow hover:brightness-110">🌈 Thức Tỉnh Chaotic</button>` : ''}
-              </div>
-              <div class="max-h-36 overflow-y-auto pr-1 space-y-0.5">${tierRows}</div>
-            </div>
-          `;
-          v4Box.innerHTML = `${setLine}${gemLine}${affLine}${wikiBox}`;
-
-          const ascBtn = document.getElementById('btnModalAscendChaotic');
-          if (ascBtn) {
-            ascBtn.onclick = () => {
-              item.quality = 'chaotic';
-              item.awakening = 0;
-              item.level = Math.max(item.level || 1, 100);
-              item.sockets = buildMaxSocketsForTemplate(item.templateId);
-              item.affixes = buildMaxSSAffixesForTemplate(item.templateId);
-              SaveState.save();
-              SoundFX.levelUp();
-              StageHeroAnim.triggerPose();
-              refreshGearDetailModalContent();
-              renderLobbyUI();
-              showToast(`🌈 Đã Thức Tỉnh [${tpl.name}] lên phẩm chất CHAOTIC (Hỗn Nguyên) tối thượng!`);
-            };
-          }
-        }
-
-        const resetBtn = document.getElementById('btnModalResetLevel');
-        const resetTxt = document.getElementById('gearModalResetBtnText');
-        if (resetBtn && resetTxt) {
-          const refund = computeTotalUpgradeGoldSpent(item.level || 1);
-          if ((item.level || 1) > 1) {
-            resetTxt.textContent = `🔄 Hoàn Cấp (+${refund.toLocaleString('vi-VN')}🪙)`;
-            resetBtn.classList.remove('opacity-45');
-          } else {
-            resetTxt.textContent = '🔄 Hoàn Cấp (Lv.1)';
-            resetBtn.classList.add('opacity-45');
-          }
-        }
 
         const eqBtnText = document.getElementById('gearModalEquipBtnText');
         if (isEquipped) {
@@ -19275,7 +19081,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const protEl = document.getElementById('bsProtectedCount');
         if (readyEl) readyEl.textContent = `${readyGroups.length} nhóm`;
         if (eligEl) eligEl.textContent = `${eligibleInBagCount} món`;
-        if (protEl) protEl.textContent = `${equippedCount + protectedInBagCount} món (${equippedCount} Mặc, ${protectedInBagCount} 🔒/❤️)`;
+        if (protEl) {
+          protEl.textContent = `${equippedCount + protectedInBagCount} món`;
+          protEl.title = `${equippedCount} đang mặc, ${protectedInBagCount} được bảo vệ trong kho`;
+        }
 
         // Sync active filter buttons styling
         document.querySelectorAll('.bs-slot-filter-btn').forEach(btn => {
@@ -19355,8 +19164,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           }
 
           return `
-            <div class="p-3 rounded-2xl ${g.canMerge ? 'bg-slate-950/95 border-2 border-amber-400/70 shadow-lg' : 'bg-slate-950/70 border border-slate-800/90'} flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition">
-              <div class="flex items-center gap-2.5">
+            <div class="gear-merge-group p-3 rounded-2xl ${g.canMerge ? 'bg-slate-950/95 border-2 border-amber-400/70 shadow-lg' : 'bg-slate-950/70 border border-slate-800/90'} flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition">
+              <div class="gear-merge-content flex items-center gap-2.5">
                 <!-- Input Materials -> Output Item Visual -->
                 <div class="flex items-center gap-1 shrink-0">
                   <div class="flex items-center -space-x-1.5">
@@ -31580,14 +31389,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       // Keep each control with the feature it changes. The shared hero stage stays uncluttered.
       const stageControls = document.getElementById('stageTopControls');
       const characterControls = document.getElementById('characterStageControls');
-      const gearControls = document.getElementById('gearLoadoutControls');
-      if (stageControls && characterControls && gearControls) {
+      if (stageControls && characterControls) {
         const heroActions = stageControls.firstElementChild;
-        const presetActions = stageControls.lastElementChild;
+
         const skinButton = document.getElementById('btnCycleHeroSkin');
         const themeButton = document.getElementById('btnCycleStageTheme');
         if (heroActions) characterControls.appendChild(heroActions);
-        if (presetActions) gearControls.appendChild(presetActions);
+        // Các bộ trang bị nhanh đã được bỏ; chỉ chuyển nút trang phục sang Anh hùng.
         if (skinButton) characterControls.appendChild(skinButton);
         if (themeButton) {
           const visualSettings=document.createElement('details');
@@ -31644,68 +31452,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         startNewRun();
       });
 
-      // Loadout Presets (1 | 2 | 3) — UID-safe swap between Equipped and Bag (never clones or loses items)
-      document.querySelectorAll('.loadout-preset-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetPreset = parseInt(btn.getAttribute('data-loadout-preset'), 10);
-          const currPreset = SaveState.activePreset || 1;
-          if (targetPreset === currPreset) return;
-
-          // Save current preset as slot -> uid map
-          const currMap = {};
-          for (const slot of Object.keys(GEAR_SLOTS_META)) {
-            currMap[slot] = SaveState.equippedGear?.[slot]?.uid || null;
-          }
-          SaveState.presets = SaveState.presets || {};
-          SaveState.presets[currPreset] = currMap;
-
-          const targetSaved = SaveState.presets[targetPreset];
-          if (targetSaved && typeof targetSaved === 'object') {
-            const owned = getAllOwnedGearByUid();
-            const wantedUids = new Set();
-            const resolvedTargetUids = {};
-            for (const slot of Object.keys(GEAR_SLOTS_META)) {
-              const rawEntry = targetSaved[slot];
-              const uid = typeof rawEntry === 'string' ? rawEntry : (rawEntry && rawEntry.uid ? rawEntry.uid : null);
-              if (uid && owned.has(uid) && GEAR_TEMPLATES[owned.get(uid).templateId]?.slot === slot && !wantedUids.has(uid)) {
-                resolvedTargetUids[slot] = uid;
-                wantedUids.add(uid);
-              } else {
-                // Keep currently equipped item in this slot if saved item was merged/salvaged
-                const fallbackUid = SaveState.equippedGear?.[slot]?.uid || null;
-                resolvedTargetUids[slot] = fallbackUid;
-                if (fallbackUid) wantedUids.add(fallbackUid);
-              }
-            }
-            const nextBag = [...(SaveState.gearBag || [])];
-            for (const [, eqIt] of Object.entries(SaveState.equippedGear || {})) {
-              if (eqIt && !wantedUids.has(eqIt.uid)) nextBag.push(eqIt);
-            }
-            const nextEq = {};
-            for (const slot of Object.keys(GEAR_SLOTS_META)) {
-              const wantUid = resolvedTargetUids[slot];
-              const prevSlotIt = SaveState.equippedGear?.[slot];
-              const picked = owned.get(wantUid) || prevSlotIt;
-              if (picked && prevSlotIt && picked.uid !== prevSlotIt.uid) {
-                const hi = Math.max(picked.level || 1, prevSlotIt.level || 1);
-                const lo = Math.min(picked.level || 1, prevSlotIt.level || 1);
-                picked.level = hi;
-                prevSlotIt.level = lo;
-              }
-              nextEq[slot] = picked || null;
-            }
-            SaveState.gearBag = nextBag.filter(it => !wantedUids.has(it.uid));
-            SaveState.equippedGear = nextEq;
-          }
-
-          SaveState.activePreset = targetPreset;
-          SaveState.save();
-          SoundFX.coinPickup();
-          StageHeroAnim.triggerPose();
-          showToast(`🛡️ Đã chuyển sang Bộ Trang Bị số ${targetPreset}!`);
-          renderLobbyUI();
-        });
-      });
 
       // Wardrobe / Costume Aura Toggle (Cycles the active hero's 3 Ultra-Gorgeous Skins!)
       document.getElementById('btnCycleHeroSkin').addEventListener('click', () => {
@@ -31792,40 +31538,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         });
       });
 
-      // Quick Equip Best Gear now uses the expanded optimizer (stats + set synergy).
-      document.getElementById('btnQuickEquipBest').addEventListener('click', () => {
-        runAdvancedAutoBuild();
-      });
-
-      // Open Gear Chest (Unbox New Equipment)
-      document.getElementById('btnOpenGearChest').addEventListener('click', () => {
-        if (SaveState.gold < 180) {
-          showToast('⚠️ Cần 180 🪙 Vàng để mở Rương Trang Bị!');
-          return;
-        }
-        SaveState.gold -= 180;
-        const tplKeys = Object.keys(GEAR_TEMPLATES);
-        const pickTpl = GEAR_TEMPLATES[tplKeys[Math.floor(Math.random() * tplKeys.length)]];
-        const roll = Math.random();
-        const pickQ = roll < 0.08 ? 'legendary' : (roll < 0.26 ? 'epic' : (roll < 0.58 ? 'rare' : 'uncommon'));
-        const newItem = {
-          uid: 'chest_' + Date.now() + '_' + Math.floor(Math.random() * 9999),
-          templateId: pickTpl.id,
-          quality: pickQ,
-          awakening: 0,
-          level: 1,
-          locked: false,
-          favorite: false
-        };
-        SaveState.gearBag.unshift(newItem);
-        SaveState.save();
-        bumpLifetimeStat('chestPulls', 1);
-        checkAchievements();
-        SoundFX.levelUp();
-        StageHeroAnim.triggerPose();
-        showToast(`🎁 Mở Rương nhận được: [${pickTpl.name}] phẩm chất ${formatQualityWithStars(pickQ, 0, false)}!`);
-        renderLobbyUI();
-      });
 
       // Open & Close Gear Detail Modal
       document.getElementById('btnCloseGearModal').addEventListener('click', () => {
@@ -31836,7 +31548,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       });
       document.getElementById('gearDetailModal').addEventListener('keydown', event => {
         if (event.key !== 'Tab') return;
-        const controls = [...event.currentTarget.querySelectorAll('button, summary')].filter(el => !el.disabled && el.getClientRects().length);
+        const controls = [...event.currentTarget.querySelectorAll('button, summary, input')].filter(el => !el.disabled && el.getClientRects().length);
         const index = controls.indexOf(document.activeElement);
         event.preventDefault();
         controls[(index + (event.shiftKey ? controls.length - 1 : 1)) % controls.length]?.focus();
@@ -31851,13 +31563,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         document.querySelector('.gear-subtab-btn[data-gear-subtab="characters"]')?.click();
       });
 
-      // Toggle Lock on Gear Item inside Gear Detail Modal
-      document.getElementById('btnModalToggleLock').addEventListener('click', () => {
+      // Bảo vệ nguyên liệu là một phần của luồng ghép, giữ cả cờ bảo vệ từ save cũ.
+      document.getElementById('gearModalMergeProtected').addEventListener('change', event => {
         if (!_activeModalGearRef) return;
         const { uid, isEquipped, slotKey } = _activeModalGearRef;
         const item = isEquipped ? SaveState.equippedGear[slotKey] : SaveState.gearBag.find(i => i.uid === uid);
         if (!item) return;
-        item.locked = !item.locked;
+        item.locked = event.currentTarget.checked;
+        if (!item.locked) item.favorite = false;
         SaveState.save();
         SoundFX.coinPickup();
         refreshGearDetailModalContent();
@@ -31865,24 +31578,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (!document.getElementById('blacksmithModal').classList.contains('hidden')) {
           renderBlacksmithList();
         }
-        showToast(item.locked ? '🔒 Đã Khóa trang bị (Bảo vệ khỏi ghép đồ)!' : '🔓 Đã Mở khóa trang bị!');
-      });
-
-      // Toggle Favorite on Gear Item inside Gear Detail Modal
-      document.getElementById('btnModalToggleFavorite').addEventListener('click', () => {
-        if (!_activeModalGearRef) return;
-        const { uid, isEquipped, slotKey } = _activeModalGearRef;
-        const item = isEquipped ? SaveState.equippedGear[slotKey] : SaveState.gearBag.find(i => i.uid === uid);
-        if (!item) return;
-        item.favorite = !item.favorite;
-        SaveState.save();
-        SoundFX.coinPickup();
-        refreshGearDetailModalContent();
-        renderLobbyUI();
-        if (!document.getElementById('blacksmithModal').classList.contains('hidden')) {
-          renderBlacksmithList();
-        }
-        showToast(item.favorite ? '❤️ Đã đánh dấu Yêu thích (Bảo vệ khỏi ghép đồ)!' : '🤍 Đã bỏ đánh dấu Yêu thích!');
+        showToast(item.locked ? 'Đã bảo vệ món này khỏi ghép nhầm.' : 'Đã cho phép dùng món này làm nguyên liệu ghép.');
       });
 
       // Upgrade Item Level inside Gear Detail Modal
@@ -31955,110 +31651,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onGearEquipped();
       });
 
-      // V4 Modal Buttons: Max Upgrade (Mythic Lv.100 + Full 4 Gems + 3 SS Affixes), Quick Open Reforge, and 100% Gold Level Reset
-      document.getElementById('btnModalMaxUpgradeGear')?.addEventListener('click', () => {
-        if (!devCheatsEnabled()) { blockedCheatNotice(); return; }
-        if (!_activeModalGearRef) return;
-        const { uid, isEquipped, slotKey } = _activeModalGearRef;
-        const item = isEquipped ? SaveState.equippedGear[slotKey] : SaveState.gearBag.find(i => i.uid === uid);
-        if (!item) return;
-        item.quality = 'mythic';
-        item.awakening = 0;
-        item.level = 100;
-        item.sockets = buildMaxSocketsForTemplate(item.templateId);
-        item.affixes = buildMaxSSAffixesForTemplate(item.templateId);
-        SaveState.save();
-        SoundFX.levelUp();
-        StageHeroAnim.triggerPose();
-        refreshGearDetailModalContent();
-        renderLobbyUI();
-        showToast('👑 Đã nâng trang bị lên Thần Thoại (Mythic) Lv.100 + 4 Đá Quý + 3 Dòng Phụ SS!');
-      });
+      // V4 Modal Buttons: đã loại bỏ thao tác nâng cao; chỉ còn trang bị, cường hóa và ghép.
 
-      document.getElementById('btnModalOpenReforge')?.addEventListener('click', () => {
-        if (!_activeModalGearRef) return;
-        const { uid } = _activeModalGearRef;
-        closeGearDetailModal();
-        document.getElementById('gearWorkshop').open = true;
-        renderReforgeTool(uid);
-        const ws = document.getElementById('gearWorkshopContent');
-        if (ws) ws.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      });
-
-      document.getElementById('btnModalResetLevel')?.addEventListener('click', () => {
-        if (!_activeModalGearRef) return;
-        const { uid, isEquipped, slotKey } = _activeModalGearRef;
-        const item = isEquipped ? SaveState.equippedGear[slotKey] : SaveState.gearBag.find(i => i.uid === uid);
-        if (!item) return;
-        if ((item.level || 1) <= 1) {
-          showToast('Trang bị đang ở Lv.1, không cần hoàn cấp.');
-          return;
-        }
-        ensureWikiCurrencyAndItemsState();
-        const tpl = GEAR_TEMPLATES[item.templateId] || GEAR_TEMPLATES.crimson_bow;
-        const scMeta = WIKI_GEAR_SCROLLS_META[tpl.slot] || WIKI_GEAR_SCROLLS_META.weapon;
-        const refund = computeTotalUpgradeGoldSpent(item.level);
-        const scrollRefund = computeTotalUpgradeScrollsSpent(item.level);
-        const oldLv = item.level;
-        item.level = 1;
-        SaveState.gold += refund;
-        SaveState.gearScrolls[tpl.slot] = (SaveState.gearScrolls[tpl.slot] || 0) + scrollRefund;
-        SaveState.save();
-        SoundFX.coinPickup();
-        refreshGearDetailModalContent();
-        renderLobbyUI();
-        showToast(`🔄 Đã hoàn cấp từ Lv.${oldLv} ➔ Lv.1: Hoàn trả 100% (${refund.toLocaleString('vi-VN')} 🪙 & +${scrollRefund} ${scMeta.wikiName})!`);
-      });
-
-      // Expanded equipment workshop actions
-      document.getElementById('btnGearCompare').addEventListener('click',()=>openGearWorkshopTool('compare'));
-      document.getElementById('btnGemWorkshop').addEventListener('click',()=>openGearWorkshopTool('gems'));
-      document.getElementById('btnBulkSalvage').addEventListener('click',()=>openGearWorkshopTool('salvage'));
-      document.getElementById('btnAutoBuildAdvanced').addEventListener('click',runAdvancedAutoBuild);
-      document.getElementById('btnGearReforge')?.addEventListener('click',()=>openGearWorkshopTool('reforge'));
-      document.getElementById('btnGearLoadouts').addEventListener('click',renderGearLoadoutManager);
-
-      // V3 Gear Evolution & Upgrade Planner — uses the existing live save state.
-      function renderGearEvolutionPlanner() {
-        const el = document.getElementById('gearWorkshopContent');
-        if (!el) return;
-        const equipped = Object.entries(SaveState.equippedGear || {}).filter(([, item]) => item);
-        const bag = (SaveState.gearBag || []).map(item => [item.uid, item]);
-        const all = [...equipped.map(([slot,item]) => ({item, label:`Đang mặc • ${GEAR_TEMPLATES[item.templateId]?.name || item.templateId}`})), ...bag.map(([,item]) => ({item,label:`Kho đồ • ${GEAR_TEMPLATES[item.templateId]?.name || item.templateId}`}))];
-        const opts = all.map(({item,label}) => `<option value="${item.uid}">${label} • ${formatQualityWithStars(item.quality,item.awakening||0,true)} • Lv.${item.level||1}</option>`).join('');
-        el.innerHTML = `<div class="gear-v3-panel rounded-2xl p-3 sm:p-4 space-y-3">
-          <div class="flex items-center justify-between gap-2"><div><div class="text-[10px] tracking-[.22em] font-black text-fuchsia-300">FORGE ASCENSION • V3</div><h3 class="text-lg font-black text-amber-100">✨ Tiến hóa trang bị</h3><p class="text-[10px] text-slate-400">Lập kế hoạch cường hóa dựa trên vàng hiện có, không tiêu tài nguyên khi xem trước.</p></div><div class="text-3xl animate-pulse">⚒️</div></div>
-          <div class="grid grid-cols-2 gap-2"><div class="rounded-xl bg-slate-950/70 border border-amber-400/20 p-3"><div class="text-[10px] text-slate-400">VÀNG HIỆN CÓ</div><div class="text-xl font-black text-amber-300">${(SaveState.gold||0).toLocaleString('vi-VN')} 🪙</div></div><div class="rounded-xl bg-slate-950/70 border border-fuchsia-400/20 p-3"><div class="text-[10px] text-slate-400">TRANG BỊ SỞ HỮU</div><div class="text-xl font-black text-fuchsia-200">${all.length} <span class="text-xs text-slate-400">món</span></div></div></div>
-          <label class="block text-[11px] font-bold text-slate-300">Chọn trang bị<select id="gearEvoItem" class="mt-1 w-full rounded-xl border border-slate-600 bg-slate-950 p-3 text-sm text-white">${opts || '<option value="">Chưa có trang bị</option>'}</select></label>
-          <div class="grid grid-cols-2 gap-2"><label class="text-[11px] font-bold text-slate-300">Cấp hiện tại<input id="gearEvoCurrent" readonly class="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 p-2 text-amber-200" value="—"></label><label class="text-[11px] font-bold text-slate-300">Cấp mục tiêu<input id="gearEvoTarget" type="number" min="1" max="100" value="20" class="mt-1 w-full rounded-xl border border-amber-400/40 bg-slate-950 p-2 text-white"></label></div>
-          <div id="gearEvoPreview" class="rounded-xl border border-slate-700 bg-slate-950/80 p-3 text-xs text-slate-300">Chọn trang bị để xem kế hoạch.</div>
-          <button id="btnGearEvoExecute" class="w-full rounded-xl border border-amber-200/50 bg-gradient-to-r from-amber-500 via-orange-500 to-fuchsia-600 py-3 text-sm font-black text-slate-950 shadow-[0_0_24px_rgba(245,158,11,.22)]">⚡ Thực hiện cường hóa</button>
-          <p class="text-[10px] text-slate-500">Công thức chi phí dùng cùng logic cường hóa hiện tại: 80 + cấp hiện tại × 45 vàng mỗi cấp. Không thay đổi phẩm chất hay ghép trang bị.</p>
-        </div>`;
-        const select = document.getElementById('gearEvoItem'), target = document.getElementById('gearEvoTarget');
-        const find = () => all.find(x => x.item.uid === select.value)?.item;
-        const calc = () => {
-          const item = find(); if (!item) return;
-          const current = Math.max(1, Number(item.level)||1), goal = Math.max(current, Math.min(100, Number(target.value)||current));
-          document.getElementById('gearEvoCurrent').value = `Lv.${current}`;
-          target.value = goal;
-          let cost = 0; for (let lv=current; lv<goal; lv++) cost += 80 + lv*45;
-          const pct = Math.min(100, Math.round(current/goal*100));
-          document.getElementById('gearEvoPreview').innerHTML = `<div class="flex justify-between mb-2"><b class="text-amber-200">${GEAR_TEMPLATES[item.templateId]?.name || item.templateId}</b><span class="text-fuchsia-200">${formatQualityWithStars(item.quality,item.awakening||0,true)}</span></div><div class="flex justify-between text-[11px]"><span>Lv.${current} → Lv.${goal}</span><b class="text-amber-300">${cost.toLocaleString('vi-VN')} 🪙</b></div><div class="gear-v3-progress mt-2"><i style="width:${pct}%"></i></div><div class="flex justify-between mt-2 text-[10px]"><span>Vàng còn lại sau nâng cấp</span><b class="${SaveState.gold>=cost?'text-emerald-300':'text-rose-300'}">${(SaveState.gold-cost).toLocaleString('vi-VN')} 🪙</b></div>${SaveState.gold<cost?'<p class="mt-2 text-rose-300 font-bold">⚠️ Không đủ vàng cho mục tiêu này.</p>':'<p class="mt-2 text-emerald-300">✓ Đủ vàng để thực hiện kế hoạch.</p>'}`;
-          document.getElementById('btnGearEvoExecute').disabled = SaveState.gold < cost || goal===current;
-          document.getElementById('btnGearEvoExecute').style.opacity = (SaveState.gold < cost || goal===current) ? '.45' : '1';
-        };
-        select.addEventListener('change',calc); target.addEventListener('input',calc); calc();
-        document.getElementById('btnGearEvoExecute').addEventListener('click',()=>{
-          const item=find(); if(!item)return;
-          const current=Math.max(1,Number(item.level)||1), goal=Math.max(current,Math.min(100,Number(target.value)||current));
-          let cost=0;for(let lv=current;lv<goal;lv++)cost+=80+lv*45;
-          if(goal===current||SaveState.gold<cost){showToast('⚠️ Không đủ vàng hoặc cấp mục tiêu không hợp lệ!');return;}
-          SaveState.gold-=cost;item.level=goal;SaveState.save();SoundFX.levelUp();StageHeroAnim.triggerPose();
-          renderLobbyUI();renderGearEvolutionPlanner();showToast(`✨ Tiến hóa hoàn tất! Trang bị đạt Lv.${goal}.`);
-        });
-      }
-      document.getElementById('btnGearEvolution')?.addEventListener('click',renderGearEvolutionPlanner);
 
       // Open & Close Blacksmith Modal
       document.getElementById('btnOpenBlacksmith').addEventListener('click', () => {
@@ -32141,12 +31735,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         affixCapacity,
         rollSingleAffix,
         computeTotalUpgradeGoldSpent,
-        renderReforgeTool,
-        runAdvancedAutoBuild,
-        renderGearLoadoutManager,
-        saveCurrentGearLoadout,
-        applyGearLoadout,
-        deleteGearLoadout,
+
         HERO_STAR_MILESTONES,
         HERO_SKINS,
         getHeroStarLevel,

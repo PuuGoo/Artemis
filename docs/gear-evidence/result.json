@@ -42,11 +42,15 @@
     "gold": 195,
     "scrolls": 28
   },
-  "salvage": {
-    "gold": 35,
-    "shards": 1
+  "merge": {
+    "consumed": 3,
+    "quality": "uncommon",
+    "beforeCount": 33,
+    "afterCount": 31
   },
-  "scrollPreserved": 863,
+  "advancedActionsRemoved": true,
+  "legacyDataPreserved": true,
+  "scrollPreserved": 793,
   "reloadPersisted": true,
   "errors": []
 }
