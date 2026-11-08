@@ -17944,7 +17944,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       // Execute Interactive Activity for any of the 11 Canonical Wiki "Other Items"
-      async function executeWikiOtherItemAction(itemId) {
+      async function executeWikiOtherItemAction(itemId, batchWish = false) {
         ensureWikiCurrencyAndItemsState();
         const items = SaveState.wikiOtherItems;
         const ev = SaveState.wikiEventsState;
@@ -17981,11 +17981,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const starMap = getArtifactStarMap();
             starMap[picked.id] = Math.min(15, (starMap[picked.id] || 0) + 1);
             ev.lastEventLog = `🌠 Cầu Nguyện Đền Wish Token: Trúng ${isFullArtifact ? 'Cổ Vật Nguyên Bản' : 'Mảnh Cổ Vật'} [${picked.icon} ${picked.wikiName}] (${targetRarity.toUpperCase()}) ➔ Lên ${starMap[picked.id]}★!`;
-            showToast(ev.lastEventLog);
+            if (!batchWish) showToast(ev.lastEventLog);
           }
-          SaveState.save();
-          SoundFX.levelUp();
-          renderLobbyUI();
+          if (!batchWish) {
+            SaveState.save();
+            SoundFX.levelUp();
+            renderLobbyUI();
+          }
           return;
         }
         if (itemId === 'enchantium') {
@@ -23299,9 +23301,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         const dailyCards = [
           { id: 'ds_1', title: 'Mảnh Hậu Nghệ', disc: 'Giảm 10%', icon: '🏹', qty: '3', cost: 240, cur: 'gem' },
-          { id: 'ds_2', title: 'Ủng Đấu Sĩ', disc: 'Giảm 10%', icon: '🥾', qty: '1', cost: 45, cur: 'gem' },
+          { id: 'ds_2', title: 'Ủng Echo (Thường)', disc: 'Giảm 10%', icon: '🥾', qty: '1', cost: 45, cur: 'gem' },
           { id: 'ds_3', title: 'Xu Cầu Nguyện', disc: 'Giảm 30%', icon: '🪙✨', qty: '1', cost: 280, cur: 'gem', goldTag: true },
-          { id: 'ds_4', title: 'Hạt Giống Linh Khê', disc: 'Giảm 30%', icon: '🫐', qty: '5', cost: 70, cur: 'gem', goldTag: true },
+          { id: 'ds_4', title: 'Hạt Mầm Xanh', disc: 'Giảm 30%', icon: '🌱', qty: '5', cost: 70, cur: 'gem', goldTag: true },
           { id: 'ds_5', title: 'Cuộn Ủng', disc: 'Giảm 30%', icon: '📜🥾', qty: '2', cost: 700, cur: 'gold', goldTag: true },
           { id: 'ds_6', title: 'Cuộn Vũ Khí', disc: 'Giảm 10%', icon: '📜🏹', qty: '2', cost: 900, cur: 'gold' }
         ];
@@ -23770,13 +23772,30 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const id = btn.getAttribute('data-vn-daily-buy');
             const card = dailyCards.find(x => x.id === id);
             if (!card) return;
-            if (card.cur === 'gem') {
-              SaveState.gems = Math.max(0, (SaveState.gems || 0) - card.cost);
-            } else {
-              SaveState.gold = Math.max(0, (SaveState.gold || 0) - card.cost);
+            const currency = card.cur === 'gem' ? 'gems' : 'gold';
+            if ((SaveState[currency] || 0) < card.cost) {
+              showToast('Không đủ ' + (currency === 'gems' ? 'Kim Cương' : 'Vàng') + '.', 'err');
+              return;
             }
-            SaveState.wishTokens = (SaveState.wishTokens || 0) + 2;
-            grantAll6GearScrolls(5);
+            if (id === 'ds_2' && SaveState.gearBag.length >= 400) {
+              showToast('Túi trang bị đã đầy. Hãy dọn túi trước khi mua.', 'err');
+              return;
+            }
+            if (id === 'ds_1') {
+              SaveState.heroShards.hou_yi = (SaveState.heroShards.hou_yi || 0) + 3;
+            } else if (id === 'ds_2') {
+              SaveState.gearBag.unshift({ uid: `daily_${crypto.randomUUID()}`, templateId: 'echo_boots', quality: 'common', level: 1, awakening: 0, locked: false, favorite: false, sockets: [], affixes: [] });
+            } else if (id === 'ds_3') {
+              SaveState.wishTokens = (SaveState.wishTokens || 0) + 1;
+              syncWishTokenMirrors();
+            } else if (id === 'ds_4') {
+              const garden = ensureGarden();
+              garden.seeds.sprout = (garden.seeds.sprout || 0) + 5;
+            } else {
+              const slot = id === 'ds_5' ? 'boots' : 'weapon';
+              SaveState.gearScrolls[slot] = (SaveState.gearScrolls[slot] || 0) + 2;
+            }
+            SaveState[currency] -= card.cost;
             SaveState.save();
             SoundFX.coinPickup();
             renderLobbyUI();
@@ -23809,8 +23828,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         el.querySelectorAll('[data-vn-wish-pull]').forEach(btn => {
           btn.onclick = () => {
             const cnt = parseInt(btn.getAttribute('data-vn-wish-pull') || '1', 10);
+            if (![1, 10, 100].includes(cnt)) return;
+            const cost = cnt * 400;
+            if ((SaveState.gems || 0) < cost) { showToast('Không đủ Kim Cương để cầu nguyện.', 'err'); return; }
+            SaveState.gems -= cost;
             SaveState.wishTokens = (SaveState.wishTokens || 0) + cnt;
-            executeWikiOtherItemAction('wish_token');
+            for (let pull = 0; pull < cnt; pull++) executeWikiOtherItemAction('wish_token', true);
+            SaveState.save();
+            SoundFX.levelUp();
+            renderLobbyUI();
             showToast(`🪽 Đã Cầu Nguyện ×${cnt} lần tại Đền Nữ Thần!`);
           };
         });
@@ -23838,6 +23864,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         el.querySelectorAll('[data-vn-topup-gold]').forEach(btn => {
           btn.onclick = () => {
             const amt = parseInt(btn.getAttribute('data-vn-topup-gold') || '6420', 10);
+            const cost = ({ 6420: 20, 64200: 200, 642000: 2000 })[amt];
+            if (!cost) return;
+            if ((SaveState.gems || 0) < cost) { showToast('Không đủ Kim Cương để đổi Vàng.', 'err'); return; }
+            if ((SaveState.gold || 0) + amt > 1e12) { showToast('Vàng đã đạt giới hạn lưu trữ.', 'err'); return; }
+            SaveState.gems -= cost;
             SaveState.gold = (SaveState.gold || 0) + amt;
             SaveState.save();
             SoundFX.coinPickup();
