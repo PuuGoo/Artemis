@@ -22,7 +22,8 @@ function fixture({ skills = {}, hero = 'alex' } = {}) {
   c.Math.random=()=>.99;
   c.collidesObstacle=()=>false;
   if (fs.existsSync(new URL('../public/combat-status.js',import.meta.url))) vm.runInContext(read('public/combat-status.js'),c);
-  vm.runInContext(['hasHeroSkillActive','runeOwned','getEquippedRuneSlots','isRuneEquipped','runeHasEffect','getCombatElementalMultiplier','findNearestEnemy','damageEnemy','spawnEnemyBullet','updateGame','clearRunState'].map(fn).join('\n'),c);
+  vm.runInContext(read('public/combat-damage.js'),c);
+  vm.runInContext(['hasHeroSkillActive','runeOwned','getEquippedRuneSlots','isRuneEquipped','runeHasEffect','getCombatSourceData','applyEnemyCombatHit','dealEnemySecondaryDamage','getCombatElementalMultiplier','findNearestEnemy','damageEnemy','spawnEnemyBullet','updateGame','clearRunState'].map(fn).join('\n'),c);
   c.onEnemyKilled=e=>{assert.ok(!e.testKilled,'death once');e.testKilled=true;Game.kills++;Game.enemies=Game.enemies.filter(x=>x.hp>0);};
   const enemy=(extra={})=>{const e={x:100,y:100,r:14,hp:100000,maxHp:100000,atk:10,type:'goblin',speed:0,vx:0,vy:0,attackTimer:10000,...extra};Game.enemies.push(e);return e;};
   return {c,Game,p,S,enemy,tick:dt=>c.updateGame(dt),hit:(e,d=100,el=false)=>c.damageEnemy(e,d,el)};

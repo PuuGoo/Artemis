@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--artifact-dir', required=True)
 parser.add_argument('--analysis-tools', required=True)
 parser.add_argument('--output', required=True)
+parser.add_argument('--vectors-output')
 args = parser.parse_args()
 sys.path.insert(0, args.analysis_tools)
 spec = importlib.util.spec_from_file_location('native_arm64_oracle', Path(__file__).with_name('native-arm64-oracle.py'))
@@ -33,6 +34,7 @@ GET_ATTR = 0xf0000010
 COMP, DATA, ENTITY, ATTR, CLASS, HERO, HIER, OUTPUT, OTHER = [0x1000000 + i * 0x10000 for i in range(9)]
 coverage = set()
 counts = {'get_decrease': 0, 'rng': 0, 'shield': 0, 'crit': 0, 'shield_state': 0, 'replacement_dispatch_fixture': 0}
+vectors = {'decrease': [], 'rng': [], 'crit': [], 'shield': []}
 
 def base():
     m = Machine(image)
@@ -103,6 +105,7 @@ def check_decrease(attrs, race=0, attacker=0, element=0, extra_type=0, hero=True
     assert actual == expected, (actual, expected, race, attacker, element, extra_type, hero, moving, sword, attrs)
     coverage.update(m.visited)
     counts['get_decrease'] += 1
+    vectors['decrease'].append({'attrs': [attrs[i] for i in attr_ids], 'context': [race, attacker, element, extra_type, hero, moving, sword, invincible, inv_hurt], 'expected': list(actual)})
 
 rng = random.Random(813287)
 def attrs_fixture():
@@ -127,6 +130,7 @@ for seed, low, high in itertools.product([0, 1, 0x123456789abc, (1 << 48) - 1, *
     expected = min(low, high) + ((next_seed // (1 << 32)) * abs(high - low) // Q)
     assert actual == expected and m.read(DATA + 0x10) == next_seed
     counts['rng'] += 1
+    vectors['rng'].append([seed, low, high, actual, m.read(DATA + 0x10)])
 
 # CheckShield branch/event order. Effects themselves are explicit recording stubs.
 shield_events = []
@@ -189,6 +193,7 @@ for hero, normal, extra, damage in itertools.product([False, True], [0, 1, 10], 
     assert bool(m.read(DATA + 0x120) & (1 << 30)) == bool(total)
     assert events == (['break_effect', 'on_break'] if total and total <= damage else [])
     counts['shield_state'] += 1
+    vectors['shield'].append([hero, normal, extra, damage, actual, m.read(OUTPUT + 0x28), m.read(ENTITY + 0x458)])
 
 crit_coverage = set()
 for hero, owner, sec_kill, rate, super_rate in itertools.product([False, True], [0, 0x10, 0x58090, 2], [False, True], [0, Q // 2, Q], [0, 8192]):
@@ -227,6 +232,7 @@ for hero, owner, sec_kill, rate, super_rate in itertools.product([False, True], 
         assert len(roll_calls) == (0 if sec_kill else 1)
         crit_coverage.update(m.visited)
         counts['crit'] += 1
+        vectors['crit'].append({'source': [rate, base_value, super_rate, super_value, player_rate, player_value, owner], 'attrs': [attrs[i] for i in [0xa9, 0xb3, 0x6c, 0xaa]], 'hero': hero, 'secKill': sec_kill, 'roll': roll, 'expected': [m.read(COMP + 0x60, 1), signed(m.read(COMP + 0x58))]})
 
 # Demonstrate the replacement gate with explicit artificial callbacks.
 # This proves forwarding semantics, NOT that any online callback is installed.
@@ -260,4 +266,10 @@ report = {
 }
 image.close()
 Path(args.output).write_text(json.dumps(report, indent=2), encoding='utf8')
+if args.vectors_output:
+    names = ['HurtDecrease','HurtDecreasePercent','StandHurtDecrease','StandHurtDecreasePercent','BodyHurtDecrease','BodyHurtDecreasePercent','BulletHurtDecreasePercent','HurtReduceForMonsterPercent','HurtReduceForBossPercent','HurtReduceForElitePercent','HurtReduceForPlayerPercent','HurtReduceForFlyPercent','HurtReduceForGroundPercent','FireHurtDecreasePercent','PoisonHurtDecreasePercent','IceHurtDecreasePercent','ThunderHurtDecreasePercent','ElementHurtDecreasePercent','RotateBallHurtDecreasePercent','SwardHurtDecreasePercent','StarHurtDecreasePercent','MainWeaponHurtDecreasePercent','SpriteHurtDecreasePercent','PlantHurtDecreasePercent','BallVulnerabilityPercent','FlySwardVulnerabilityPercent','StarFallVulnerabilityPercent','SpriteVulnerabilityPercent']
+    vectors.update(binary_sha256=image.digest, scope='Synthetic fixtures interpreted from static native instructions; not online observations.', attribute_names=names)
+    destination = Path(args.vectors_output)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(vectors, separators=(',', ':')), encoding='utf8')
 print(json.dumps({'counts': counts, 'get_decrease_native_pcs_visited': len(coverage)}))

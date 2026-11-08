@@ -21,7 +21,10 @@ check("getComputedStats co tinh defFlat", src.includes("const defFlat = Math.rou
 check("getComputedStats co tinh dmgReduction", src.includes("const dmgReduction ="));
 check("defK phu thuoc so phong cua chuong", /const defK = 400 \+ 120 \* /.test(src));
 check("dmgReduction chan tren 0.75", /Math\.min\(0\.75, defFlat \/ \(defFlat \+ defK\)\)/.test(src));
-check("hurtPlayer ap dmgReduction", src.includes("dmg = Math.max(1, Math.round(dmg * (1 - p.dmgReduction)))"));
+check("hurtPlayer nối dmgReduction vào hệ số pipeline, không giữ phép giảm cũ song song",
+  src.includes("const coefficientModifiers = [1 - Math.max(0, Math.min(0.75, p.dmgReduction || 0))]") &&
+  src.includes("attack:dmg, source, target:p, canCrit") &&
+  !src.includes("dmg = Math.max(1, Math.round(dmg * (1 - p.dmgReduction)))"));
 check("Game.player duoc gan dmgReduction", src.includes("dmgReduction: stats.dmgReduction || 0"));
 
 // Tính lại công thức để đối chiếu số học
@@ -46,8 +49,8 @@ check("critDmgBonus gom artifact", src.includes("(artifactTotals.critDmgPct || 0
 check("critDmgBonus gom hero star global", src.includes("(globalAll.critDmgPct || 0)"));
 check("critDmgBonus gom set bonus", src.includes("setBonuses.reduce((n, b) => n + (b.critDmgPct || 0), 0)"));
 check("critDmgMult = 1.85 + bonus", src.includes("const critDmgMult = +(1.85 + critDmgBonus).toFixed(3)"));
-check("damageEnemy dung p.critDmgMult (khong hardcode 1.85)",
-  src.includes("(isCrit ? (p.critDmgMult || 1.85) : 1.0)"));
+check("damageEnemy dùng critDmgMult qua SourceData của pipeline (không hardcode finalDmg)",
+  src.includes("CritValue: number(entity?.critDmgMult, 1.85)") && src.includes("const hit = applyEnemyCombatHit(e, rawDmg * markMult"));
 check("khong con hardcode 'isCrit ? 1.85' o cho tinh finalDmg",
   !/finalDmg = Math\.round\(rawDmg \* \(isCrit \? 1\.85/.test(src));
 

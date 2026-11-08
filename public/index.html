@@ -16,6 +16,7 @@
   <script src="/skill-art.js"></script>
   <script src="/skill-combat-vfx.js"></script>
   <script src="/combat-status.js"></script>
+  <script src="/combat-damage.js"></script>
   <script src="/combat-loot.js"></script>
   <script src="/boss-attack-patterns.js"></script>
   <script src="/arena-ground.js"></script>
@@ -28297,6 +28298,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         Game.screenFlashTimer = 0;
         Game.cleoFireHitCount = 0;
         Game.pausedNoModalFrames = 0;
+        Game.lastCombatHit = null;
         Game.flamePoisonTouchTimer = 0;
         Game.frostThunderTouchTimer = 0;
 
@@ -28362,6 +28364,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // Mở session mới — chỉ chứa trạng thái lượt chơi, không đụng SaveState.
         DungeonSession.begin(SaveState.selectedChapterIdx);
+        CombatDamage.beginRun(Game);
 
         Game.chapter = ch;
         // Ngoại hình chỉ sống trong lượt chơi, không ghi vào tài khoản/checkpoint.
@@ -29283,6 +29286,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           vy: Math.sin(angle) * spd,
           r: hasCharged ? 12 : (p.weapon.id === 'claw' ? 9 : 6.5),
           dmg: p.atk * totalMult,
+          exHurtAttack: 4,
           bouncesLeft: (p.skills.bouncy_wall || 0) * 2,
           ricochetsLeft: (p.skills.ricochet || 0) * 2,
           pierce: p.weapon.pierceDefault || (p.skills.pierce || 0) > 0 || hasCharged,
@@ -29328,6 +29332,43 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
       }
 
+      function getCombatSourceData(entity, player = false) {
+        const number = (value, fallback = 0) => Number.isFinite(value) ? value : fallback;
+        return {
+          CritRate: number(entity?.critRate), CritValue: number(entity?.critDmgMult, 1.85),
+          SuperCirtRate: number(entity?.superCritRate), SuperCritValue: number(entity?.superCritDmgMult),
+          OwnerRaceFlag: player ? 16 : (entity?.isBoss ? 8 : entity?.isElite ? 4 : 2) | (entity?.type === 'bat' ? 32 : 0),
+          ...entity?.combatSourceData
+        };
+      }
+
+      function applyEnemyCombatHit(e, attack, options = {}) {
+        if (!(e.hp > 0) || !Number.isFinite(attack) || attack <= 0) return null;
+        const source = getCombatSourceData(Game.player, true);
+        source.CritRate += options.critRateBonus || 0;
+        const hit = CombatDamage.resolve({
+          attack, source, target:e, canCrit:!!options.canCrit,
+          critRoll:options.canCrit ? CombatDamage.roll(Game) : 0,
+          context:{ ownerRaceFlag:source.OwnerRaceFlag, attackerType:1,
+            hurtType:({fire:2,poison:3,ice:4,lightning:5})[options.element] || 0,
+            ...options.context }
+        });
+        if (typeof e.displayHp !== 'number') e.displayHp = e.hp;
+        e.hp = Math.max(0, e.hp - hit.hpDamage);
+        e.hitFlashTimer = 0.14;
+        Game.lastCombatHit = { direction:'enemy', ...hit };
+        if (hit.absorbed > 0) spawnFloatText(e.x, e.y - e.r - 22, `🛡️ ${hit.absorbed}`, '#a5b4fc', 11);
+        if (hit.shieldBroken) spawnShockwave(e.x, e.y, e.r + 18, '#a5b4fc', 0.2);
+        return hit;
+      }
+
+      function dealEnemySecondaryDamage(e, attack, options = {}) {
+        const hit = applyEnemyCombatHit(e, attack * getCombatElementalMultiplier(options.element), options);
+        if (!hit) return;
+        if (e.hp <= 0 && !options.deferDeath) onEnemyKilled(e);
+        updateInGameHUD();
+      }
+
       function getCombatElementalMultiplier(element) {
         // Chỉ cộng cho nguyên tố được nguồn sát thương xác định, không đoán theo màu VFX.
         const sealEquipped = Array.isArray(SaveState.equippedRuneSlots?.enhancement)
@@ -29338,18 +29379,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         return 1;
       }
 
-      function damageEnemy(e, rawDmg, isElemental = false, element = null) {
-        if (e.hp <= 0) return;
+      function damageEnemy(e, rawDmg, isElemental = false, element = null, attackContext = {}) {
+        if (!(e.hp > 0) || !Number.isFinite(rawDmg) || rawDmg <= 0) return;
         const p = Game.player;
         if (isElemental) rawDmg *= getCombatElementalMultiplier(element);
         const ottaActive = hasHeroSkillActive(p, 'otta');
         const enemyHpRatio = e.maxHp ? (e.hp / e.maxHp) : 1;
         const bonusCritFromHero = (ottaActive && enemyHpRatio > 0.6 ? 0.18 : 0) + (p.alexNextGuaranteedCrit ? 1.0 : 0);
         if (p.alexNextGuaranteedCrit && !isElemental) p.alexNextGuaranteedCrit = false;
-        const isCrit = !isElemental && (Math.random() < (p.critRate + bonusCritFromHero));
-        if (isCrit && hasHeroSkillActive(p, 'alex')) {
-          p.alexCritAspdTimer = 6.0;
-        }
+
         // Helix [Absolute Counter] & Dracoola Full-HP +40% ATK & Hou Yi [Sunpiercer] multiplier
         let heroDmgMult = 1.0;
         if (hasHeroSkillActive(p, 'helix')) {
@@ -29373,10 +29411,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (p && p.hero && p.hero.id === 'artemis') {
           e.artemisMarked = true;
         }
-        const finalDmg = Math.round(rawDmg * (isCrit ? (p.critDmgMult || 1.85) : 1.0) * markMult);
-        if (typeof e.displayHp !== 'number') e.displayHp = e.hp;
-        e.hp -= finalDmg;
-        e.hitFlashTimer = 0.14;
+        const hit = applyEnemyCombatHit(e, rawDmg * markMult, {
+          canCrit:!isElemental, critRateBonus:bonusCritFromHero, element,
+          context:{ exHurtAttack:0, ...attackContext }
+        });
+        if (!hit) return;
+        const isCrit = hit.isCrit;
+        const finalDmg = hit.hpDamage;
+        if (isCrit && hasHeroSkillActive(p, 'alex')) p.alexCritAspdTimer = 6.0;
 
         // Archero 2 Wiki Set Passives on Hit (Oracle Combo / Dragon Knight Explosion / Griffin Close-Range)
         const eqCounts = getEquippedSetCounts();
@@ -29391,7 +29433,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // Oracle Amulet & Armor: Every 5 Combo, double DMG & fire bonus Diagonal Arrows!
         if (isOracleBuild && !isElemental && (Game.comboCount % 5 === 0)) {
-          e.hp -= Math.round(finalDmg * 0.85);
+          dealEnemySecondaryDamage(e, finalDmg * 0.85, {deferDeath:true});
           spawnFloatText(e.x, e.y - e.r - 18, '⚡ ORACLE 2x DMG!', '#38bdf8', 12);
         }
 
@@ -29404,7 +29446,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             Game.cleoFireHitCount = 0;
             const bossOrHigh = [...Game.enemies].sort((a, b) => b.hp - a.hp)[0] || e;
             if (bossOrHigh && bossOrHigh.hp > 0) {
-              bossOrHigh.hp -= Math.round(p.atk * 3.0);
+              dealEnemySecondaryDamage(bossOrHigh, p.atk * 3.0, {element:'fire',deferDeath:bossOrHigh === e});
               spawnShockwave(bossOrHigh.x, bossOrHigh.y, 95, '#ef4444', 0.36);
               spawnParticles(bossOrHigh.x, bossOrHigh.y, '#fde047', 16);
               spawnFloatText(bossOrHigh.x, bossOrHigh.y - 26, '🔥 CLEO NỔ CHỮ THẬP 300%!', '#fb923c', 13);
@@ -29416,7 +29458,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const wasFrozen = (e.slowTimer || 0) > 0.2;
           e.slowTimer = Math.max(e.slowTimer || 0, 3.2);
           if (wasFrozen && Math.random() < 0.35) {
-            e.hp -= Math.round(p.atk * 1.45);
+            dealEnemySecondaryDamage(e, p.atk * 1.45, {element:'ice',deferDeath:true});
             spawnSkyLaser(e.x, e.y, 28, '#67e8f9');
             spawnFloatText(e.x, e.y - 24, '❄️ THIÊN THẠCH BĂNG ROLLA!', '#67e8f9', 12);
           }
@@ -29437,7 +29479,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (e.phynxBleedStacks >= 4) {
             e.phynxBleedStacks = 0;
             const bleedDet = Math.round(p.atk * 1.35);
-            e.hp -= bleedDet;
+            dealEnemySecondaryDamage(e, bleedDet, {deferDeath:true});
             spawnParticles(e.x, e.y, '#e879f9', 10);
             spawnFloatText(e.x, e.y - 22, `⚖️ PHYNX KÍCH NỔ BLEED +${bleedDet}!`, '#e879f9', 11);
           }
@@ -29452,9 +29494,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (isDragonBuild && !isElemental && Math.random() < 0.65) {
           spawnShockwave(e.x, e.y, 68, '#f97316', 0.28);
           spawnParticles(e.x, e.y, '#f97316', 10);
-          for (const nearE of Game.enemies) {
+          for (const nearE of [...Game.enemies]) {
             if (nearE !== e && nearE.hp > 0 && Math.hypot(nearE.x - e.x, nearE.y - e.y) < 68) {
-              nearE.hp -= Math.round(p.atk * 0.55);
+              dealEnemySecondaryDamage(nearE, p.atk * 0.55, {element:'fire'});
               CombatStatus.applyBurn(nearE, Math.round(p.atk * 0.3), 2.5);
             }
           }
@@ -29475,7 +29517,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         spawnFloatText(
           e.x + (Math.random() - 0.5) * 16,
           e.y - e.r - 6,
-          isCrit ? `💥 ${finalDmg}!` : (elementLabel ? `${elementLabel} ${finalDmg}` : `${finalDmg}`),
+          isCrit ? `💥 ${hit.superCrit ? 'SIÊU CRIT ' : ''}${finalDmg}!` : (elementLabel ? `${elementLabel} ${finalDmg}` : `${finalDmg}`),
           isCrit ? '#fde047' : (elementLabel ? (element === 'fire' ? '#fb923c' : '#a3e635') : (e.isBoss ? '#fda4af' : '#f8fafc')),
           isCrit ? 17 : (e.isBoss ? 14 : 12),
           { kind: isCrit ? 'crit' : (e.isBoss ? 'boss' : 'normal') }
@@ -29496,7 +29538,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 x1: e.x, y1: e.y, x2: neighbor.x, y2: neighbor.y,
                 life: 0.22, maxLife: 0.22, color: '#38bdf8'
               });
-              damageEnemy(neighbor, p.atk * 0.45, true);
+              damageEnemy(neighbor, p.atk * 0.45, true, 'lightning');
               spawnParticles(neighbor.x, neighbor.y, '#38bdf8', 7);
             }
           }
@@ -29537,6 +29579,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       function onEnemyKilled(e) {
+        if (e.deathProcessed) return;
+        e.deathProcessed = true;
         Game.kills++;
         bumpLifetimeStat('kills', 1);
         if (e.isBoss) bumpLifetimeStat('bossKills', 1);
@@ -30248,7 +30292,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 spawnShockwave(te.x, te.y, 64, '#ef4444', 0.32);
                 spawnParticles(te.x, te.y, '#fde047', 14);
                 spawnFloatText(te.x, te.y - 24, '🐉 LONG HỎA BẠO!', '#fb923c', 12);
-                damageEnemy(te, p.atk * 0.95, true);
+                damageEnemy(te, p.atk * 0.95, true, 'fire');
               }
             }
           }
@@ -30331,10 +30375,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               target.slowTimer = Math.max(target.slowTimer || 0, 2);
               Game.lightningBolts.push({ x1:p.x, y1:p.y, x2:target.x, y2:target.y, life:0.22, maxLife:0.22, color:'#7dd3fc' });
               const neighbor = findNearestEnemy(target.x, target.y, target);
-              damageEnemy(target, p.atk * 0.90, true);
+              damageEnemy(target, p.atk * 0.90, true, 'lightning');
               if (neighbor && neighbor.hp > 0 && Math.hypot(neighbor.x - target.x, neighbor.y - target.y) < 170) {
                 Game.lightningBolts.push({ x1:target.x, y1:target.y, x2:neighbor.x, y2:neighbor.y, life:0.22, maxLife:0.22, color:'#38bdf8' });
-                damageEnemy(neighbor, p.atk * 0.45, true);
+                damageEnemy(neighbor, p.atk * 0.45, true, 'lightning');
               }
             }
           }
@@ -30426,7 +30470,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               if (Math.hypot(e.x - ox, e.y - oy) < e.r + 14) {
                 if (!e._orbHitTime || performance.now() - e._orbHitTime > 320) {
                   e._orbHitTime = performance.now();
-                  damageEnemy(e, p.atk * 1.25 * webBonus, true);
+                  damageEnemy(e, p.atk * 1.25 * webBonus, true, null, {exHurtAttack:1});
                   if ((p.skills.orbit_orbs || 0) > 0 && p.hp < p.maxHp) {
                     p.hp = Math.min(p.maxHp, p.hp + Math.max(4, Math.round(p.maxHp * 0.02)));
                   }
@@ -30500,7 +30544,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             if (b.hitSet.has(e)) continue;
             if (Math.hypot(e.x - b.x, e.y - b.y) < e.r + b.r) {
               b.hitSet.add(e);
-              damageEnemy(e, b.dmg, false);
+              damageEnemy(e, b.dmg, false, null, {exHurtAttack:b.isSword ? 2 : b.spriteKind ? 5 : b.exHurtAttack || 0});
               spawnParticles(b.x, b.y, b.color, 4);
 
               // Ricochet to another enemy
@@ -30562,12 +30606,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
           // Contact damage with Player
           if (Math.hypot(p.x - e.x, p.y - e.y) < p.r + e.r - 2) {
-            hurtPlayer(e.atk);
+            hurtPlayer(e.atk, {source:e,attackerType:3});
           }
 
           // Ranged Attacks
           e.attackTimer -= dt * slowMult;
           if (e.attackTimer <= 0) {
+            const firstEnemyBullet = Game.enemyBullets.length;
             const ang = Math.atan2(p.y - e.y, p.x - e.x);
             if (e.isBoss) {
               window.BossAttackPatterns.fire(e, p, spawnEnemyBullet);
@@ -30616,6 +30661,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             } else {
               e.attackTimer = 2.0;
             }
+            // Giữ đúng nguồn lúc bắn, kể cả khi quái đã chết trước khi đạn chạm.
+            for (let n = firstEnemyBullet; n < Game.enemyBullets.length; n++) Game.enemyBullets[n].source = e;
           }
         }
 
@@ -30641,7 +30688,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
           if (Math.hypot(p.x - eb.x, p.y - eb.y) < p.r + eb.r - 2) {
             Game.enemyBullets.splice(i, 1);
-            hurtPlayer(eb.dmg);
+            hurtPlayer(eb.dmg, {source:eb.source,attackerType:1});
           }
         }
 
@@ -30724,11 +30771,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             spawnShockwave(mt.targetX, mt.targetY, 78, '#fb7185', 0.42);
             spawnFloorDecal(mt.targetX, mt.targetY, 34, 'rgba(249, 115, 22, 0.42)', 'crater');
             if (mt.targetRef && mt.targetRef.hp > 0) {
-              damageEnemy(mt.targetRef, p.atk * 1.45, true);
+              damageEnemy(mt.targetRef, p.atk * 1.45, true, null, {exHurtAttack:3});
             }
             for (const other of Game.enemies) {
               if (other !== mt.targetRef && Math.hypot(other.x - mt.targetX, other.y - mt.targetY) < 70) {
-                damageEnemy(other, p.atk * 0.85, true);
+                damageEnemy(other, p.atk * 0.85, true, null, {exHurtAttack:3});
               }
             }
             spawnFloatText(mt.targetX, mt.targetY - 28, '☄️ THIÊN THẠCH!', '#fb7185', 14);
@@ -30870,9 +30917,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         });
       }
 
-      function hurtPlayer(dmg) {
+      function hurtPlayer(dmg, hitContext = {}) {
         const p = Game.player;
-        if (!p || p.invulnTimer > 0) return;
+        if (!p || p.invulnTimer > 0 || !Number.isFinite(dmg) || dmg <= 0) return;
         // Dodge chance from Hermes Boots
         const dodgeChance = Math.min(0.55, (p.skills.hermes_boots || 0) * 0.15 + (p.gearDodge || 0));
         if (Math.random() < dodgeChance) {
@@ -30881,16 +30928,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
 
-        // ===== DEF: giảm sát thương nhận vào =====
-        // Áp TRƯỚC các hiệu ứng rune/hero để mọi nguồn giảm trừ cộng dồn tuyến tính
-        // và không bao giờ đẩy sát thương về 0 (giữ tối thiểu 1).
-        if (p.dmgReduction > 0) {
-          dmg = Math.max(1, Math.round(dmg * (1 - p.dmgReduction)));
-        }
+        // DEF Artemis vẫn dùng phép quy đổi hiện tại; chỉ nối thành hệ số đầu vào.
+        // Không trừ defFlat lần nữa và không gọi đây là công thức DEF của APK.
+        const coefficientModifiers = [1 - Math.max(0, Math.min(0.75, p.dmgReduction || 0))];
         // Guardian [Mythic Blessing Rune]: Reduces all DMG taken by -15%!
         if (runeHasEffect('guardian')) {
           const guardianRank=RuneEconomy.copies(SaveState.runes?.guardian);
-          dmg = Math.max(1, Math.round(dmg * (guardianRank>=11?.85:guardianRank>=7?.90:.95)));
+          coefficientModifiers.push(guardianRank>=11?.85:guardianRank>=7?.90:.95);
         }
         // Star of Fury [Mythic Ability Rune]: Upon taking DMG, summon 7 Huge Meteors to bombard the field!
         if (runeHasEffect('star_of_fury') && Game.enemies.length > 0) {
@@ -30911,7 +30955,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         // Wukong [Monkey Brethren] Damage Reduction
         if (hasHeroSkillActive(p, 'wukong')) {
-          dmg = Math.max(1, Math.round(dmg * 0.82));
+          coefficientModifiers.push(0.82);
         }
         // Alex [Braveheart LV.4]: Next attack after taking DMG is a Guaranteed CRIT!
         if (hasHeroSkillActive(p, 'alex')) {
@@ -30925,6 +30969,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           spawnFloatText(p.x, p.y - 34, `🛡️ KHIÊN THÁNH CHẶN ĐÒN! (${p.sacredShieldStacks} còn lại)`, '#fde047', 13);
           return;
         }
+        const source = getCombatSourceData(hitContext.source);
+        const canCrit = source.CritRate > 0 || source.SuperCirtRate > 0;
+        const hit = CombatDamage.resolve({
+          attack:dmg, source, target:p, canCrit,
+          critRoll:canCrit ? CombatDamage.roll(Game) : 0,
+          context:{ targetIsHero:true, moving:!!p.moving, ownerRaceFlag:source.OwnerRaceFlag,
+            attackerType:hitContext.attackerType || 1, ...hitContext.context, coefficientModifiers }
+        });
+        Game.lastCombatHit = { direction:'player', ...hit };
+        dmg = hit.hpDamage;
+        if (hit.absorbed > 0) spawnFloatText(p.x, p.y - 32, `🛡️ KHIÊN HẤP THỤ ${hit.absorbed}`, '#c084fc', 12);
+        if (hit.shieldBroken) spawnShockwave(p.x, p.y, 65, '#a5b4fc', 0.25);
+        if (dmg <= 0) {
+          p.invulnTimer = 0.45;
+          updateInGameHUD();
+          return;
+        }
         // Wounded Warrior [Fine Skill]: +50% ATK PWR for 5s when losing HP!
         if ((p.skills.wounded_warrior || 0) > 0) {
           p.woundedWarriorTimer = 5.0;
@@ -30934,18 +30995,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if ((p.skills.assault_strike || 0) > 0) {
           for (let k = 0; k < 5; k++) spawnFloatingSword();
         }
-        // Atreus [Demon King Energy]: 50% Max HP Dark Shield absorbs incoming damage first!
-        if (p.darkShieldHp && p.darkShieldHp > 0) {
-          const absorbed = Math.min(p.darkShieldHp, dmg);
-          p.darkShieldHp -= absorbed;
-          dmg -= absorbed;
-          spawnFloatText(p.x, p.y - 32, `🛡️ KHIÊN MA VƯƠNG -${absorbed}`, '#c084fc', 12);
-          if (dmg <= 0) {
-            p.invulnTimer = 0.45;
-            return;
-          }
-        }
-
         p.hp -= dmg;
         // HP không bao giờ âm (trước đây có thể xuống số âm lớn trước khi kiểm tra chết).
         if (p.hp < 0) p.hp = 0;
