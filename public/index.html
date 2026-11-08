@@ -16,6 +16,7 @@
   <script src="/skill-art.js"></script>
   <script src="/skill-combat-vfx.js"></script>
   <script src="/combat-status.js"></script>
+  <script src="/combat-loot.js"></script>
   <script src="/boss-attack-patterns.js"></script>
   <script src="/arena-ground.js"></script>
   <script src="/status-vfx.js"></script>
@@ -29596,7 +29597,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const scrollDropChance = (e.isBoss ? 1.0 : 0.28) * (1 + (Game.player.scrollDropBonus || 0));
         if (Math.random() < scrollDropChance) {
           const slotKeys = Object.keys(WIKI_GEAR_SCROLLS_META);
-          const pickSlot = slotKeys[Math.floor(Math.random() * slotKeys.length)];
+          const pickSlot = typeof CombatLoot !== 'undefined'
+            ? CombatLoot.pickScrollSlot(slotKeys)
+            : slotKeys[Math.floor(Math.random() * slotKeys.length)];
           Game.drops.push({
             type: 'scroll',
             slot: pickSlot,
