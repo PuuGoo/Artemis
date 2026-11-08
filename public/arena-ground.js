@@ -35,6 +35,8 @@
   }
 
   function draw(c, w, h, pad, chapter, room, game) {
+    // Phòng mở đầu giữ nền biome của chương; chỉ bỏ lớp ảnh phủ, không bỏ phòng.
+    if (Math.max(1, Number(room) || 1) === 1) return false;
     if (!shouldDraw(game)) return false;
     const key = pick(chapter, room);
     const img = image(key);

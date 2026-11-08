@@ -68,10 +68,17 @@ try {
   assert.ok(load.w >= 700 && load.h >= 700, 'ảnh quá nhỏ: ' + JSON.stringify(load));
   results.push({ name: 'background-image-loads', details: load });
 
-  // 2. drawArena vẽ nền ảnh thật, không lỗi.
+  // 2. Phòng đầu dùng nền biome, không vẽ lớp ảnh phủ.
   const drawCheck = await page.evaluate(() => {
     const orig = CanvasRenderingContext2D.prototype.drawImage;
-    let n = 0, last = null;
+    const originalGroundDraw = window.ArenaGround.draw;
+    let n = 0, last = null, groundCalls = 0;
+    const rooms = new Set();
+    window.ArenaGround.draw = function (...args) {
+      groundCalls++;
+      rooms.add(args[5]);
+      return originalGroundDraw.apply(this, args);
+    };
     CanvasRenderingContext2D.prototype.drawImage = function (img, ...rest) {
       // Chỉ đếm ảnh nền map; chân dung/skill cũng là IMG nên phải lọc theo đường dẫn.
       if (img && img.tagName === 'IMG' && /assets\/maps\//.test(img.src)) { n++; last = img.src.split('/').pop(); }
@@ -80,14 +87,16 @@ try {
     return new Promise(resolve => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
         CanvasRenderingContext2D.prototype.drawImage = orig;
-        resolve({ imageDraws: n, last });
+        window.ArenaGround.draw = originalGroundDraw;
+        resolve({ imageDraws: n, last, groundCalls, rooms: [...rooms] });
       }));
     });
   });
-  assert.ok(drawCheck.imageDraws >= 1, 'drawArena không vẽ ảnh nền: ' + JSON.stringify(drawCheck));
-  assert.ok(drawCheck.imageDraws <= 2, 'vẽ nền lặp quá nhiều trong 2 frame: ' + drawCheck.imageDraws);
-  assert.match(drawCheck.last, /\.webp$/, 'nền phải là webp: ' + drawCheck.last);
-  results.push({ name: 'arena-draws-background-image', details: drawCheck });
+  assert.equal(drawCheck.imageDraws, 0, 'phòng đầu không được vẽ ảnh phủ: ' + JSON.stringify(drawCheck));
+  assert.equal(drawCheck.last, null);
+  assert.ok(drawCheck.groundCalls >= 1, 'renderer phải thực sự chạy, không chỉ trả 0 do game đang dừng');
+  assert.deepEqual(drawCheck.rooms, [1]);
+  results.push({ name: 'opening-room-keeps-biome-without-image-overlay', details: drawCheck });
   await page.screenshot({ path: resolve(evidence, 'arena-ground-ch2.png') });
 
   // 3. Nền khác nhau giữa chương/phòng, ổn định trong cùng phòng.

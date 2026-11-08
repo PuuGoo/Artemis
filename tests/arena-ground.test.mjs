@@ -77,17 +77,34 @@ test('vẽ một lần mỗi frame, không tạo entity và không sửa Game', 
   assert.equal(calls.filter(x => x[0] === 'restore').length, 0);
 });
 
+test('phòng đầu mọi chương giữ nền biome, không tải hoặc vẽ lớp ảnh phủ', () => {
+  const art = load();
+  const c = { globalAlpha: 0.65, fillStyle: '#123456',
+    drawImage() { assert.fail('Phòng 1 không được vẽ ảnh phủ'); },
+    fillRect() { assert.fail('Phòng 1 không được phủ tối nền biome'); },
+  };
+  for (let chapter = 1; chapter <= 19; chapter++) {
+    const game = { chapter: { id: chapter }, room: 1, lowGfx: false, enemies: [{ hp: 20 }], obstacles: [{ x: 30, y: 40 }] };
+    const before = JSON.stringify(game);
+    assert.equal(art.draw(c, 600, 800, 24, chapter, 1, game), false);
+    assert.equal(JSON.stringify(game), before);
+  }
+  assert.equal(art._cache.size, 0, 'không tải ảnh nền phòng đầu vào cache');
+  assert.equal(c.globalAlpha, 0.65);
+  assert.equal(c.fillStyle, '#123456');
+});
+
 test('thiếu ảnh thì bỏ qua an toàn, không ném lỗi', () => {
   // Không có Image trong sandbox => không tải được ảnh => phải trả false, không vẽ.
   const bare = vm.createContext({ console, matchMedia: () => ({ matches: false }) });
   vm.runInContext(fs.readFileSync(modPath, 'utf8'), bare);
   let drew = 0;
   const c = { drawImage() { drew++; } };
-  assert.equal(bare.ArenaGround.draw(c, 600, 800, 24, 1, 1, { lowGfx: false }), false);
+  assert.equal(bare.ArenaGround.draw(c, 600, 800, 24, 1, 2, { lowGfx: false }), false);
   assert.equal(drew, 0, 'không được vẽ khi thiếu ảnh');
   // Và khi tắt hiệu năng thấp cũng không vẽ.
   const art = load();
-  assert.equal(art.draw(c, 600, 800, 24, 1, 1, { lowGfx: true }), false);
+  assert.equal(art.draw(c, 600, 800, 24, 1, 2, { lowGfx: true }), false);
   assert.equal(drew, 0);
 });
 

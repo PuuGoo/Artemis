@@ -61,6 +61,47 @@ test('factory không đụng DOM khi nạp và mỗi instance có Game, biome, c
   assert.equal(output.depth(), 0);
 });
 
+test('renderer thật dùng nền biome ở phòng 1 mọi chương, phòng sau vẫn vẽ ảnh phủ', () => {
+  const requested = [];
+  class FakeImage {
+    constructor() { this.complete = true; this.naturalWidth = 720; }
+    set src(value) { this._src = value; requested.push(value); }
+    get src() { return this._src; }
+  }
+  const c = load({ Image: FakeImage, document: {
+    createElement() { return { getContext: () => canvas().ctx }; },
+    getElementById() { return null; },
+  } });
+  vm.runInContext(read('public/arena-ground.js'), c);
+  for (let chapter = 1; chapter <= 19; chapter++) {
+    const g = game(chapter), arena = c.ArtemisArenaRenderer.create();
+    arena.init(g);
+    const before = JSON.stringify(g), requestsBefore = requested.length, cacheBefore = c.ArenaGround._cache.size;
+    const opening = canvas();
+    arena.drawArena(opening.ctx, 600, 800, 24, 1000, chapter);
+    assert.equal(opening.images.length, 1, `chương ${chapter}: chỉ vẽ nền biome đã cache`);
+    assert.equal(requested.length, requestsBefore, 'không tải ảnh phủ phòng đầu');
+    assert.equal(c.ArenaGround._cache.size, cacheBefore);
+    assert.equal(JSON.stringify(g), before, 'không thay phòng hoặc dữ liệu gameplay');
+    assert.equal(opening.depth(), 0);
+    if (chapter === 2) assert.equal(arena.biomeLabel(), 'Thung Lũng Dung Nham');
+
+    g.room = 2;
+    const laterBefore = JSON.stringify(g), later = canvas();
+    arena.drawArena(later.ctx, 600, 800, 24, 1100, chapter);
+    assert.equal(later.images.length, 2, `chương ${chapter}: phòng 2 vẫn có ảnh phủ`);
+    assert.equal(later.images[1].src, `assets/maps/${c.ArenaGround.pick(chapter, 2)}.webp`);
+    assert.equal(JSON.stringify(g), laterBefore);
+    assert.equal(later.depth(), 0);
+
+    g.room = 1;
+    const back = canvas();
+    arena.drawArena(back.ctx, 600, 800, 24, 1200, chapter);
+    assert.equal(back.images.length, 1, 'quay lại phòng đầu không dùng ảnh từ cache');
+    assert.equal(back.depth(), 0);
+  }
+});
+
 test('game nạp factory trước bootstrap, không còn bản sao renderer game/admin', () => {
   load();
   const html = read('public/index.html'), admin = read('public/admin-campaign.js');
