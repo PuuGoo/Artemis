@@ -59,23 +59,33 @@ try {
     await page.waitForFunction(() => window.Archero2FusionAPI && window.ArtemisCloud?.getState().ready);
     await page.evaluate(() => window.Archero2FusionAPI.stopGameLoop());
     await page.locator('#bottomNavBar [data-tab="tabEquip"]').first().click();
-    await page.locator('#tabEquip [data-gear-subtab="runes"]').click();
+    if (!await page.locator('#subpanelRunes').isVisible()) await page.locator('#tabEquip [data-gear-subtab="runes"]').click();
   };
-  await page.goto(origin, { waitUntil: 'load' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await enter();
   assert.equal(await page.locator('[data-equip-wiki-rune]').count(), 5);
+  assert.equal(await page.locator('#btnRuneSortQuality').getAttribute('aria-pressed'), 'true');
+  await page.locator('#btnRuneSortQuality').click();
+  assert.equal(await page.locator('#btnRuneSortQuality').getAttribute('aria-pressed'), 'false');
+  await page.locator('#btnRuneSortQuality').click();
+  assert.equal(await page.locator('#btnRuneSortQuality').getAttribute('aria-pressed'), 'true');
   for (const width of [1024, 390, 360]) {
     await page.setViewportSize({ width, height: 900 });
     await page.locator('#tabEquip').evaluate(el => el.scrollTop = 0);
     const bounds = await page.locator('#subpanelRunes').evaluate(el => {
       const altar = el.querySelector('.rune-altar').getBoundingClientRect();
       const slots = [...el.querySelectorAll('[data-rune-slot]')].map(node => { const b = node.getBoundingClientRect(); return { left: b.left, right: b.right, top: b.top, bottom: b.bottom, width: b.width, height: b.height }; });
-      return { width: el.clientWidth, scroll: el.scrollWidth, slots, allInside: slots.every(b => b.left >= altar.left && b.right <= altar.right && b.top >= altar.top && b.bottom <= altar.bottom), gridColumns: getComputedStyle(el.querySelector('.rune-inventory-grid')).gridTemplateColumns };
+      const nav = el.querySelector('.rune-reference-tabs').getBoundingClientRect();
+      const toolbar = el.querySelector('.rune-catalog-toolbar').getBoundingClientRect();
+      const grid = el.querySelector('.rune-inventory-grid');
+      return { width: el.clientWidth, scroll: el.scrollWidth, slots, allInside: slots.every(b => b.left >= altar.left - 1 && b.right <= altar.right + 1 && b.top >= altar.top - 1 && b.bottom <= altar.bottom + 1), gridColumns: getComputedStyle(grid).gridTemplateColumns, referenceOrder: altar.bottom <= nav.top + 1 && nav.bottom <= toolbar.top + 1 && toolbar.bottom <= grid.getBoundingClientRect().top + 1 };
     });
     assert.equal(bounds.slots.length, 13);
     assert.ok(bounds.allInside, 'cả 13 ô ngọc phải ở trong bảng, không bị cắt');
     assert.ok(bounds.slots.every(b => b.width >= 44 && b.height >= 44));
     assert.ok(bounds.scroll <= bounds.width, JSON.stringify(bounds));
+    assert.equal(bounds.gridColumns.split(' ').length, 5);
+    assert.equal(bounds.referenceOrder, true, 'đài → ba tab → thanh nút → kho');
     geometry.push({ viewportWidth: width, ...bounds });
     await page.screenshot({ path: resolve(evidence, `board-${width}.png`) });
     if (width === 1024) {
@@ -125,6 +135,7 @@ try {
   await modal.locator('[data-rune-popup-equip]').click();
   await modal.waitFor({ state: 'detached' });
   assert.equal(await page.evaluate(() => window.Archero2FusionAPI.SaveState.equippedRuneSlots.enhancement[2]), 'rune_frost');
+  await page.locator('#btnRuneWorkshop').click();
   await page.locator('[data-rune-cat-filter="ability"]').click();
   await page.locator('[data-equip-wiki-rune="rune_thunder"]').click();
   assert.equal(await modal.locator('[data-rune-popup-equip]').isDisabled(), true);
@@ -148,7 +159,7 @@ try {
   await page.locator('[data-rune-scope="owned"]').click();
   await page.locator('.rune-inventory-grid').scrollIntoViewIfNeeded();
   await page.screenshot({ path: resolve(evidence, 'inventory-mobile.png') });
-  await page.locator('.rune-presets > summary').click();
+  if (!await page.locator('.rune-presets').evaluate(el => el.open)) await page.locator('#btnRuneWorkshop').click();
   await page.locator('[data-rune-preset="oracle_weapon"]').click();
   const preset = await page.evaluate(() => JSON.parse(JSON.stringify(window.Archero2FusionAPI.SaveState.equippedRuneSlots)));
   assert.equal(Object.values(preset).flat().filter(Boolean).length, 5);
@@ -157,7 +168,7 @@ try {
   const persisted = (await (await page.request.get(origin + '/api/save')).json()).data;
   assert.equal(persisted.equippedRuneSlots.enhancement[2], 'rune_frost');
   assert.deepEqual(persisted.runes, fixture.runes);
-  await page.reload({ waitUntil: 'load' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await enter();
   assert.equal(await page.evaluate(() => window.Archero2FusionAPI.SaveState.equippedRuneSlots.enhancement[2]), 'rune_frost');
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -165,8 +176,41 @@ try {
   assert.equal(await page.locator('.rune-hero img').evaluate(el => getComputedStyle(el).animationName), 'none');
   await page.locator('#tabEquip').evaluate(el => el.scrollTop = 0);
   await page.screenshot({ path: resolve(evidence, 'equipped-mobile.png') });
+  await page.locator('[data-rune-nav="gear"]').click();
+  assert.equal(await page.locator('#subpanelGear').isVisible(), true);
+  assert.equal(await page.locator('#tabEquip > .gear-subnav').isVisible(), true);
+  await page.locator('#tabEquip [data-gear-subtab="runes"]').click();
+  await page.locator('#btnRuneWorkshop').click();
+  await page.locator('[data-rune-explore]').click();
+  assert.equal(await page.locator('#tabEvents').isVisible(), true);
   assert.deepEqual(errors, []);
-  const result = { scope: 'Chrome + real HTTP/auth/save + isolated memory DB; 5 seeded rune types, not production or earned loot', geometry, narrowModal: box, actionBox, equipUnequipReplace: true, wrongCategoryBlocked: true, lockedCannotEquip: true, cancelUnchanged: true, keyboardFocus: true, scrollPreserved: scroll, ownershipUnchanged: true, presetOwnedOnly: true, reducedMotion: true, reloadPersisted: true, errors };
+  // Fixture thị giác riêng để đối chiếu ảnh: không dùng các cấp này làm bằng chứng kiếm thưởng.
+  await page.waitForFunction(() => !window.ArtemisCloud.getState().dirty);
+  const { RUNE_IDS } = await import('../lib/runeCatalog.js');
+  const visual = sanitizeSave({ ...fixture, selectedHeroId: 'seraph', heroStars: { ...fixture.heroStars, seraph: 1 },
+    runes: Object.fromEntries(RUNE_IDS.map((id, index) => [id, ['echo_scythe', 'sharp_arrow', 'rune_valkyrie', 'arrow_rain'].includes(id) ? 7 : ['rune_flame', 'rune_frost', 'dragonflight_sword', 'rabbits_foot', 'ring_of_agony', 'rune_thunder', 'flame_poison_touch'].includes(id) || index < 25 ? 4 : 3])), runeSortByQuality: true, runeTypeFilter: 'all',
+    equippedRuneSlots: { etched: [null, null, null], blessing: ['rune_valkyrie', 'rabbits_foot'], enhancement: ['sharp_arrow', 'rune_flame', 'rune_frost', 'dragonflight_sword'], ability: ['arrow_rain', 'ring_of_agony', 'rune_thunder', 'flame_poison_touch'] },
+  }).data;
+  await db.collection(COLLECTIONS.saves).updateOne({ playerId }, { $set: { data: visual } });
+  await page.setViewportSize({ width: 540, height: 1100 });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await enter();
+  await page.locator('.rune-hero img').evaluate(img => img.decode());
+  const heroGeometry = await page.locator('.rune-hero').evaluate(el => {
+    const hero = el.getBoundingClientRect(), img = el.querySelector('img').getBoundingClientRect();
+    const slots = [...document.querySelectorAll('[data-rune-cat="etched"]')].map(node => node.getBoundingClientRect().top);
+    return { heroBottom: hero.bottom, imageBottom: img.bottom, etchedTop: Math.min(...slots) };
+  });
+  assert.ok(heroGeometry.imageBottom <= heroGeometry.heroBottom + 1, 'ảnh không được ép grid cao hơn khung nhân vật');
+  assert.ok(heroGeometry.imageBottom <= heroGeometry.etchedTop + 1, 'nhân vật toàn thân không bị hàng ngọc dưới che chân');
+  await page.locator('#tabEquip').evaluate(el => el.scrollTop = 0);
+  await page.screenshot({ path: resolve(evidence, 'reference-540.png') });
+  await page.setViewportSize({ width: 360, height: 740 });
+  await page.locator('#tabEquip').evaluate(el => el.scrollTop = 0);
+  await page.screenshot({ path: resolve(evidence, 'reference-360.png') });
+  assert.equal(await page.locator('[data-equip-wiki-rune]').count(), 46);
+  assert.deepEqual(errors, []);
+  const result = { scope: 'Chrome + real HTTP/auth/save + isolated memory DB; 5 seeded rune types, not production or earned loot; separate visual fixture with Seraph and 46 rune types', geometry, heroGeometry, narrowModal: box, actionBox, equipUnequipReplace: true, wrongCategoryBlocked: true, lockedCannotEquip: true, cancelUnchanged: true, keyboardFocus: true, scrollPreserved: scroll, ownershipUnchanged: true, presetOwnedOnly: true, reducedMotion: true, reloadPersisted: true, navigationAndExplore: true, errors };
   await writeFile(resolve(evidence, 'result.json'), JSON.stringify(result, null, 2));
   console.log(JSON.stringify(result, null, 2));
 } finally {

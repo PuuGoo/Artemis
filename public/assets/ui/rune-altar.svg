@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 350" fill="none">
+  <defs>
+    <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#21192f"/><stop offset="1" stop-color="#42233f"/></linearGradient>
+    <radialGradient id="stone"><stop stop-color="#51436d"/><stop offset=".68" stop-color="#3c365e"/><stop offset="1" stop-color="#292946"/></radialGradient>
+    <linearGradient id="plinth" x2=".3" y2="1"><stop stop-color="#5c4b78"/><stop offset="1" stop-color="#3c2e56"/></linearGradient>
+    <path id="mark" d="M253 25 Q270 21 287 25 L290 62 Q282 72 270 72 Q258 72 250 62Z"/>
+  </defs>
+  <path fill="url(#wall)" d="M0 0h540v350H0z"/>
+  <g stroke="#241a31" stroke-width="2" opacity=".55"><path d="M0 48h540M0 108h540M0 168h540M0 228h540M0 288h540M0 348h540"/><path d="M55 0v48m120 0v60m140-108v48m140 0v60M55 108v60m120 0v60m140-120v60m140 0v60M55 228v60m120 0v60m140-120v60m140 0v60"/></g>
+  <circle cx="270" cy="178" r="247" fill="#1b1b33" stroke="#241b35" stroke-width="8"/>
+  <circle cx="270" cy="174" r="239" fill="url(#stone)" stroke="#525174" stroke-width="4"/>
+  <circle cx="270" cy="174" r="221" stroke="#777391" stroke-opacity=".18" stroke-width="3"/>
+  <g fill="#776052" stroke="#39304c" stroke-width="3" opacity=".75">
+    <use href="#mark"/><use href="#mark" transform="rotate(30 270 174)"/><use href="#mark" transform="rotate(60 270 174)"/><use href="#mark" transform="rotate(90 270 174)"/><use href="#mark" transform="rotate(120 270 174)"/><use href="#mark" transform="rotate(150 270 174)"/><use href="#mark" transform="rotate(180 270 174)"/><use href="#mark" transform="rotate(210 270 174)"/><use href="#mark" transform="rotate(240 270 174)"/><use href="#mark" transform="rotate(270 270 174)"/><use href="#mark" transform="rotate(300 270 174)"/><use href="#mark" transform="rotate(330 270 174)"/>
+  </g>
+  <circle cx="270" cy="174" r="104" fill="#302943" stroke="#84715f" stroke-opacity=".55" stroke-width="10"/>
+  <circle cx="270" cy="174" r="88" fill="#3c344e" stroke="#30283f" stroke-width="3"/>
+  <ellipse cx="270" cy="242" rx="68" ry="15" fill="#21182f" opacity=".65"/>
+  <path d="M142 254Q145 236 165 235L198 227H342L375 235Q395 236 398 254L408 350H132Z" fill="#241d39" stroke="#30263f" stroke-width="7"/>
+  <path d="M148 255Q150 241 167 241L200 233H340L373 241Q390 241 392 255L401 350H139Z" fill="url(#plinth)" stroke="#73628e" stroke-opacity=".55" stroke-width="3"/>
+</svg>

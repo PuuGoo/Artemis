@@ -43,7 +43,7 @@ test('ô khác nhóm không thể gắn; dữ liệu tham khảo và tên đư�
   assert.doesNotMatch(markup, /<script>|onerror=alert\(1\)>/);
 });
 test('bảng 13 ô, kho mặc định chỉ ngọc sở hữu, giữ vị trí cuộn và bộ nhanh thu gọn', () => {
-  const h = harness(), nodes = { '.rune-filter-row': { scrollLeft: 61 }, '.rune-presets': { open: true }, '#btnRuneSortQuality': {} };
+  const h = harness(), nodes = { '.rune-filter-row': { scrollLeft: 61 }, '.rune-presets': { open: true }, '#btnRuneSortQuality': {}, '#btnRuneWorkshop': {} };
   const container = { innerHTML: '', querySelector: key => nodes[key], querySelectorAll: () => [] };
   h.view.render(container);
   assert.equal((container.innerHTML.match(/data-rune-slot=/g) || []).length, 13);
@@ -61,12 +61,22 @@ test('kho mới có empty state thật, không tự cấp ngọc', () => {
   assert.doesNotMatch(container.innerHTML, /data-equip-wiki-rune=/);
   assert.equal(h.state.runes.rune_flame, 0);
 });
+test('mẫu ảnh dùng đài 13 ô, kho 5 cột và ba tab dưới đài; không giả khóa ô hay cấp ngọc', () => {
+  const h = harness();
+  const container = { innerHTML: '', querySelector: () => ({ addEventListener() {} }), querySelectorAll: () => [] };
+  h.view.render(container);
+  assert.match(container.innerHTML, /rune-altar\.svg/);
+  assert.equal((container.innerHTML.match(/data-rune-nav=/g) || []).length, 3);
+  assert.match(container.innerHTML, /id="btnRuneWorkshop"/);
+  assert.equal((container.innerHTML.match(/class="rune-crystal"/g) || []).length, 14);
+  assert.doesNotMatch(container.innerHTML, /data-rune-slot=[^>]*disabled/);
+});
 test('module được nối vào luồng thật và CSS giới hạn ở workspace/modal', () => {
-  const html = read('public/index.html'), css = read('public/rune-workspace.css');
+  const html = read('public/index.html'), css = read('public/rune-reference.css');
   assert.match(html, /src="\/js\/game\/runes\/rune-workspace.js"/);
   assert.match(html, /getRuneWorkspace\(\)\.render\(runeGrid\)/);
   assert.match(html, /onEquip: equipRuneIntoCategorySlot/);
-  assert.match(css, /grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
+  assert.match(css, /grid-template-columns:repeat\(5,minmax\(0,1fr\)\)/);
   assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /safe-area-inset-bottom/);
 });
