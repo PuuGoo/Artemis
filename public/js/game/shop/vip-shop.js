@@ -5,7 +5,7 @@
     const cloud = options.cloud;
     const fetcher = options.fetcher || ((url, init) => root.fetch(url, init));
     const onChange = options.onChange || (() => {});
-    const confirmPurchase = options.confirmPurchase || (message => root.confirm(message));
+    const confirmPurchase = options.confirmPurchase || ((_message, detail) => showConfirmation(detail));
     let offers = [], history = [], balances = {}, loading = null, attempted = false, error = '', busy = false;
     const currencyLabel = key => ({ vipCoins: 'xu VIP', gems: 'Kim Cương', gold: 'Vàng' })[key] || key;
     const price = offer => offer.price ?? offer.priceVip;
@@ -14,6 +14,47 @@
     const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
     const get = id => offers.find(offer => offer.id === id);
     const pending = () => cloud.getPendingShopOffer ? cloud.getPendingShopOffer() : null;
+    function showConfirmation(detail) {
+      return new Promise((resolve, reject) => {
+        const dialog = root.document.createElement('dialog');
+        dialog.className = 'shop-confirm';
+        dialog.setAttribute('aria-labelledby', 'shop-confirm-title');
+        dialog.setAttribute('aria-describedby', 'shop-confirm-note');
+        dialog.innerHTML = `
+          <form method="dialog" class="shop-confirm-panel">
+            <header class="shop-confirm-heading"><span class="shop-confirm-eyebrow">CỬA HÀNG · XÁC NHẬN</span><button type="submit" value="cancel" class="shop-confirm-close" aria-label="Đóng xác nhận mua hàng">×</button></header>
+            <div class="shop-confirm-emblem" aria-hidden="true">🎁</div>
+            <h2 id="shop-confirm-title">Xác nhận mua hàng</h2>
+            <p class="shop-confirm-name">${escape(detail.name)}</p>
+            <section class="shop-confirm-rewards" aria-label="Phần thưởng nhận được"><h3>Bạn sẽ nhận được</h3>
+              ${detail.items.map(([label, amount]) => `<div class="shop-confirm-reward"><span>${escape(label)}</span><strong>${escape(amount)}</strong></div>`).join('')}
+            </section>
+            <section class="shop-confirm-balance" aria-label="Chi tiết thanh toán">
+              <div><span>Giá mua</span><strong class="shop-confirm-price">${escape(detail.priceLabel)}</strong></div>
+              <div><span>Số dư hiện tại</span><span>${escape(detail.balanceLabel)}</span></div>
+              <div class="shop-confirm-after"><span>Số dư sau mua</span><strong>${escape(detail.afterLabel)}</strong></div>
+            </section>
+            <p id="shop-confirm-note">Chỉ trừ tài nguyên khi bạn xác nhận. Máy chủ sẽ kiểm tra lại số dư khi thanh toán.</p>
+            <footer class="shop-confirm-actions"><button type="submit" value="cancel" class="shop-confirm-cancel" autofocus>Để sau</button><button type="submit" value="buy" class="shop-confirm-buy">Xác nhận mua <span aria-hidden="true">→</span></button></footer>
+          </form>`;
+        const finish = accepted => { dialog.remove(); resolve(accepted); };
+        dialog.addEventListener('close', () => finish(dialog.returnValue === 'buy'), { once: true });
+        dialog.addEventListener('keydown', event => {
+          if (event.key !== 'Tab') return;
+          const buttons = [...dialog.querySelectorAll('button')];
+          const index = buttons.indexOf(root.document.activeElement);
+          event.preventDefault();
+          buttons[(index + (event.shiftKey ? buttons.length - 1 : 1)) % buttons.length].focus();
+        });
+        dialog.addEventListener('click', event => {
+          if (event.target !== dialog) return;
+          const box = dialog.getBoundingClientRect();
+          if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close('cancel');
+        });
+        root.document.body.append(dialog);
+        try { dialog.showModal(); } catch (error) { dialog.remove(); reject(error); }
+      });
+    }
     function canBuy(id) {
       const offer = get(id), pendingId = pending();
       return !busy && !!offer && (!pendingId || pendingId === id) && (offer.remaining !== 0 || pendingId === id);
@@ -108,7 +149,12 @@
             const rewards = this.rewardItems(id).map(item => item.join(' × ')).join('\n');
             const otherBalances = ['gold', 'gems', 'vipCoins'].filter(field => field !== key && Number.isSafeInteger(balances[field]))
               .map(field => `${currencyLabel(field)}: ${number(balances[field] + (offer.rewards[field] || 0))}`).join(' • ');
-            const accepted = await confirmPurchase(`${offer.name}\nGiá: ${number(price(offer))} ${currencyLabel(key)}\nPhần thưởng:\n${rewards}\nSố dư sau mua: ${number(after)} ${currencyLabel(key)}\n${otherBalances}\nMáy chủ sẽ kiểm tra lại số dư khi thanh toán.`);
+            const accepted = await confirmPurchase(`${offer.name}\nGiá: ${number(price(offer))} ${currencyLabel(key)}\nPhần thưởng:\n${rewards}\nSố dư sau mua: ${number(after)} ${currencyLabel(key)}\n${otherBalances}\nMáy chủ sẽ kiểm tra lại số dư khi thanh toán.`, {
+              name: offer.name, items: this.rewardItems(id),
+              priceLabel: `${number(price(offer))} ${currencyLabel(key)}`,
+              balanceLabel: `${number(balance)} ${currencyLabel(key)}`,
+              afterLabel: `${number(after)} ${currencyLabel(key)}`,
+            });
             if (!accepted) return { cancelled: true };
             confirmedBalance = balance;
           }
@@ -118,6 +164,7 @@
         } finally {
           busy = false;
           onChange();
+          root.document?.querySelector(`[data-vip-offer="${id}"]`)?.focus({ preventScroll: true });
         }
       },
     });

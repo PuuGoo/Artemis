@@ -1,0 +1,49 @@
+/* Popup thanh toán riêng, không đổi kiểu các modal khác trong game. */
+dialog.shop-confirm {
+  color-scheme: dark;
+  box-sizing: border-box;
+  width: min(440px, calc(100vw - 28px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  color: #f5f0ff;
+  border: 1px solid #9471bc;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at 50% 0, #48315f 0, #211b32 52%, #191625 100%);
+  box-shadow: 0 24px 80px #0009, inset 0 1px 0 #ffffff21;
+  font-family: inherit;
+}
+.shop-confirm::backdrop { background: #090713cc; }
+.shop-confirm[open] { animation: shop-confirm-enter .2s ease-out; }
+.shop-confirm-panel { padding: 20px 24px 24px; }
+.shop-confirm-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.shop-confirm-eyebrow { color: #d1b6ef; font-size: 10px; font-weight: 800; letter-spacing: .15em; }
+.shop-confirm button { font: inherit; cursor: pointer; touch-action: manipulation; }
+.shop-confirm-close { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; margin: -8px -12px -4px 0; border: 0; border-radius: 12px; background: transparent; color: #d9c9ee; font-size: 28px !important; }
+.shop-confirm-emblem { display: grid; place-items: center; width: 72px; height: 72px; margin: 8px auto 14px; border: 1px solid #cba5ee80; border-radius: 22px; background: linear-gradient(145deg, #654281, #332342); box-shadow: 0 8px 26px #b483ec25, inset 0 1px 0 #ffffff30; font-size: 38px; }
+.shop-confirm h2 { margin: 0; text-align: center; font-size: 24px; font-weight: 900; line-height: 1.25; color: #fff5de; }
+.shop-confirm-name { margin: 8px 0 20px; text-align: center; color: #d4c2e8; font-size: 14px; overflow-wrap: anywhere; }
+.shop-confirm-rewards { padding: 15px; border: 1px solid #9072b24d; border-radius: 16px; background: #ac7de70d; }
+.shop-confirm h3 { margin: 0 0 12px; color: #d6c3ee; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.shop-confirm-reward { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 0; font-size: 14px; overflow-wrap: anywhere; }
+.shop-confirm-reward + .shop-confirm-reward { border-top: 1px solid #b19cc51f; }
+.shop-confirm-reward strong { color: #ffe0a0; text-align: right; }
+.shop-confirm-balance { margin-top: 18px; font-size: 13px; }
+.shop-confirm-balance > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; color: #c9bdd8; }
+.shop-confirm-balance > div > :last-child { text-align: right; overflow-wrap: anywhere; }
+.shop-confirm-price { color: #ffe0a0; font-size: 17px; }
+.shop-confirm-balance > .shop-confirm-after { margin-top: 6px; padding-top: 13px; border-top: 1px dashed #9a83b35c; }
+.shop-confirm-after strong { color: #9de4ba; }
+#shop-confirm-note { margin: 16px 0 20px; color: #bdb0cf; font-size: 11px; line-height: 1.65; }
+.shop-confirm-actions { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; }
+.shop-confirm-actions button { min-height: 48px; padding: 12px; border-radius: 13px; font-size: 13px; font-weight: 800; transition: background-color .15s, filter .15s; }
+.shop-confirm-cancel { border: 1px solid #8d779c80; background: #ffffff06; color: #ddd0eb; }
+.shop-confirm-buy { display: flex; justify-content: center; align-items: center; gap: 10px; border: 1px solid #ffe2a2; background: linear-gradient(#ffe1a0, #edb858); color: #38230a; box-shadow: 0 4px 0 #8e602e, 0 6px 16px #edb8581f; }
+.shop-confirm-buy:hover { filter: brightness(1.07); }
+.shop-confirm-cancel:hover, .shop-confirm-close:hover { background: #ffffff12; }
+.shop-confirm button:focus-visible { outline: 2px solid #e6c4ff; outline-offset: 3px; }
+@keyframes shop-confirm-enter { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+@media (max-width: 380px) { .shop-confirm-panel { padding: 16px 18px 20px; } .shop-confirm h2 { font-size: 22px; } }
+@media (prefers-reduced-motion: reduce) { .shop-confirm[open] { animation: none; } .shop-confirm-actions button { transition: none; } }

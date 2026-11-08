@@ -60,20 +60,46 @@ try {
   await page.locator('[data-vip-offer="gold_6420"]').scrollIntoViewIfNeeded();
   const scrollBefore = await page.locator('#vnShopMainContainer .sv2-body').evaluate(el => el.scrollTop);
   assert.ok(scrollBefore > 0, 'test phải bắt đầu ở khu vực mua phía dưới');
-  let dialogText = '';
-  page.once('dialog', async dialog => { dialogText = dialog.message(); await dialog.dismiss(); });
   await page.locator('[data-vip-offer="gold_6420"]').click();
+  const popup = page.locator('dialog.shop-confirm[open]');
+  await popup.waitFor();
+  const dialogText = await popup.innerText();
+  assert.match(dialogText, /Giá mua\s+20 Kim Cương/);
+  assert.match(dialogText, /Bạn sẽ nhận được/i);
+  assert.match(dialogText, /Số dư sau mua\s+30 Kim Cương/);
+  assert.equal(await page.locator('.shop-confirm-cancel').evaluate(el => el === document.activeElement), true);
+  await page.keyboard.press('Tab');
+  assert.equal(await page.locator('.shop-confirm-buy').evaluate(el => el === document.activeElement), true);
+  await page.keyboard.press('Tab');
+  assert.equal(await page.locator('.shop-confirm-close').evaluate(el => el === document.activeElement), true);
+  await popup.screenshot({ path: resolve(evidence, 'confirmation-desktop.png') });
+  for (const width of [390, 360]) {
+    await page.setViewportSize({ width, height: 740 });
+    const box = await popup.boundingBox();
+    assert.ok(box.x >= 0 && box.x + box.width <= width && box.y >= 0 && box.y + box.height <= 740);
+    assert.equal(await popup.evaluate(el => el.scrollWidth <= el.clientWidth), true);
+    assert.ok((await page.locator('.shop-confirm-buy').boundingBox()).height >= 44);
+  }
+  await popup.screenshot({ path: resolve(evidence, 'confirmation-mobile.png') });
+  await page.setViewportSize({ width: 1024, height: 900 });
+  await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.querySelector('[data-vip-offer="gold_6420"]').disabled);
-  assert.match(dialogText, /Giá: 20 Kim Cương/);
-  assert.match(dialogText, /Phần thưởng/);
-  assert.match(dialogText, /Số dư sau mua: 30 Kim Cương/);
   const scrollAfterCancel = await page.locator('#vnShopMainContainer .sv2-body').evaluate(el => el.scrollTop);
   assert.ok(Math.abs(scrollAfterCancel - scrollBefore) <= 1, `hủy popup làm nhảy vị trí: ${scrollBefore} -> ${scrollAfterCancel}`);
   const cancelled = await (await page.request.get(origin + '/api/save')).json();
   assert.equal(cancelled.data.gems, before.data.gems);
   assert.equal(cancelled.data.gold, before.data.gold);
-  page.once('dialog', dialog => dialog.accept());
+  for (const close of ['.shop-confirm-cancel', '.shop-confirm-close', 'backdrop']) {
+    await page.locator('[data-vip-offer="gold_6420"]').click();
+    await popup.waitFor();
+    if (close === 'backdrop') await page.mouse.click(4, 4);
+    else await page.locator(close).click();
+    await popup.waitFor({ state: 'detached' });
+    await page.waitForFunction(() => !document.querySelector('[data-vip-offer="gold_6420"]').disabled);
+  }
+  assert.equal((await (await page.request.get(origin + '/api/shop')).json()).history.length, 0);
   await page.locator('[data-vip-offer="gold_6420"]').click();
+  await page.locator('.shop-confirm-buy').click();
   await page.waitForFunction(() => window.ArtemisCloud.getPendingShopOffer() === null && document.querySelector('details article'));
   const after = await (await page.request.get(origin + '/api/save')).json();
   assert.equal(after.data.gems, before.data.gems - 20);

@@ -39,14 +39,14 @@ function harness({ rejectPurchase = false } = {}) {
       return { ok: true, offerId, priceVip: SHOP_OFFERS.find(o => o.id === offerId).priceVip };
     } };
   const context = vm.createContext({ console, SaveState: state,
-    window: { ArtemisCloud: cloud }, confirm: () => true,
-    document: { getElementById: id => id === 'vnShopMainContainer' ? container : id === 'tabShopVn' ? panel : null },
+    window: { ArtemisCloud: cloud },
+    document: { querySelector: () => null, getElementById: id => id === 'vnShopMainContainer' ? container : id === 'tabShopVn' ? panel : null },
     fetchCatalog: async () => { requestCount++; return { ok: true, json: async () => ({ ok: true, playerId: 'A', balances: { vipCoins: 100000, gems: 100000, gold: 100000 }, offers: SHOP_OFFERS.map(o => ({ ...o, remaining: o.limit })) }) }; },
     ensureVnAuthenticUIState() {}, formatCompactNumberVn: value => String(value),
     SoundFX: { levelUp() {}, coinPickup() {} }, showToast: message => notices.push(message),
     renderLobbyUI() { context.renderVnShopTabUI(); },
   });
-  vm.runInContext(viewSource + '\nconst VipShop = ArtemisVipShop.create({cloud: window.ArtemisCloud, fetcher: fetchCatalog, onChange: () => renderVnShopTabUI()});\n' + renderer, context);
+  vm.runInContext(viewSource + '\nconst VipShop = ArtemisVipShop.create({cloud: window.ArtemisCloud, fetcher: fetchCatalog, confirmPurchase: () => true, onChange: () => renderVnShopTabUI()});\n' + renderer, context);
   return { context, state, purchases, notices,
     setHidden: value => { hidden = value; },
     markup: () => markup, requests: () => requestCount,
