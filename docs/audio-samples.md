@@ -41,6 +41,7 @@ Không chạy mã nhúng, không gọi endpoint từ asset, không đọc creden
 - `SoundFX` có `preload()` nạp song song toàn bộ mẫu, giải mã bằng WebAudio; **thiếu file hoặc lỗi mạng thì tự rơi về synth cũ**, không im lặng và không ném lỗi.
 - `playClip()` giữ hai ngân sách voice tách biệt: **12 tiếng ngắn** (bắn/trúng/chết) và **5 tiếng dài** (thắng, lên cấp, cổng, trùm xuất hiện). Nhờ vậy một tiếng thắng dài không làm tắt tiếng chiến đấu, mà spam vẫn bị chặn.
 - Mỗi slot có `minGap` riêng nên cùng một mẫu không chồng lên nhau thành tiếng "máy khâu".
+- Khi bị chặn bởi minGap hoặc hết voice, không phát synth thay thế. Chỉ thiếu mẫu/lỗi khởi tạo mới dùng synth; thời điểm 0 là giá trị hợp lệ. Voice được giải phóng một lần khi kết thúc, start lỗi không giữ mất suất.
 - `SoundFX.muted` chặn ở tầng `playClip`, không tạo nguồn phát nào.
 - Gọi `preload()` trong `startNewRun()` — sau thao tác người chơi, đúng chính sách autoplay của trình duyệt.
 
@@ -48,12 +49,13 @@ Sự kiện mới được nối: hạ địch thường/trùm (`onEnemyKilled`)
 
 ## Kiểm chứng
 
-- **4 test** `tests/audio-samples.test.mjs`: từng file tồn tại, đúng magic MP3, thời lượng hợp lệ; `SoundFX` trong VM phát mẫu khi đã tải và giữ synth dự phòng; tắt tiếng không phát; mọi file game tham chiếu đều có thật.
+- **6 test** `tests/audio-samples.test.mjs`: từng file tồn tại, đúng magic MP3, thời lượng hợp lệ; VM kiểm mẫu thật/synth dự phòng, minGap tại thời điểm 0, voice ngắn/dài độc lập, giải phóng idempotent, start lỗi và tắt tiếng.
 - **Chrome thật** (`tools/verify-audio-browser.mjs`, mock auth/save localhost): nạp **23/23** mẫu, AudioContext ở trạng thái `running`, **23 yêu cầu MP3 đều 200**, không file 404.
 - Mỗi sự kiện được gọi và xác nhận **phát mẫu thật, không rơi về synth** — kể cả hit thường, hit chí mạng và 6 loại kỹ năng.
 - Tắt tiếng: **0 nguồn phát** được tạo.
+- Chrome: gọi hitEnemy 100 lần liên tiếp chỉ tạo **1 nguồn phát, 0 synth**. Phép đo đếm AudioBufferSource.start thật, không suy diễn từ giá trị trả về playClip.
 - 0 lỗi JS, 0 tài nguyên local lỗi.
-- Toàn suite: **346 đạt, 0 lỗi, 7 integration bỏ qua**; `npm run check` và `git diff --check` đạt.
+- Toàn suite tuần tự (integration opt-in tắt), `npm run check` và `git diff --check`: exit 0. Không xác minh DB/production.
 
 ## Giới hạn
 

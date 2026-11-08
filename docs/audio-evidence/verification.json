@@ -103,6 +103,14 @@
       }
     },
     {
+      "name": "burst-does-not-bypass-limit-with-synth",
+      "details": {
+        "starts": 1,
+        "synth": 0,
+        "active": 1
+      }
+    },
+    {
       "name": "http-audio-requests",
       "details": {
         "served": 23,
@@ -112,19 +120,7 @@
   ],
   "audioRequests": [
     {
-      "url": "shoot_bow.mp3",
-      "status": 200
-    },
-    {
       "url": "shoot_staff.mp3",
-      "status": 200
-    },
-    {
-      "url": "hit_crit.mp3",
-      "status": 200
-    },
-    {
-      "url": "hit_normal.mp3",
       "status": 200
     },
     {
@@ -132,15 +128,27 @@
       "status": 200
     },
     {
+      "url": "hit_normal.mp3",
+      "status": 200
+    },
+    {
+      "url": "hit_crit.mp3",
+      "status": 200
+    },
+    {
       "url": "hit_skeleton.mp3",
       "status": 200
     },
     {
-      "url": "enemy_death.mp3",
+      "url": "shoot_bow.mp3",
       "status": 200
     },
     {
       "url": "hit_ghost.mp3",
+      "status": 200
+    },
+    {
+      "url": "enemy_death.mp3",
       "status": 200
     },
     {
@@ -149,10 +157,6 @@
     },
     {
       "url": "player_hurt.mp3",
-      "status": 200
-    },
-    {
-      "url": "level_up.mp3",
       "status": 200
     },
     {
@@ -165,6 +169,10 @@
     },
     {
       "url": "boss_spawn.mp3",
+      "status": 200
+    },
+    {
+      "url": "level_up.mp3",
       "status": 200
     },
     {

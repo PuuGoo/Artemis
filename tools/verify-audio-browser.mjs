@@ -83,9 +83,17 @@ try {
     const attempts = [];
     const orig = { tone: S.playTone };
     let tones = 0, clips = 0;
+    // Đếm start thật, không đếm giá trị true (true cũng có thể là chủ động chặn).
+    const createSource = S.ctx.createBufferSource.bind(S.ctx);
+    S.ctx.createBufferSource = () => {
+      const source = createSource();
+      const start = source.start.bind(source);
+      source.start = (...args) => { start(...args); clips++; };
+      return source;
+    };
     S.playTone = (...args) => { tones++; return orig.tone.apply(S, args); };
     const originalClip = S.playClip.bind(S);
-    S.playClip = (...args) => { const ok = originalClip(...args); if (ok) clips++; return ok; };
+    await new Promise(r => setTimeout(r, 2300));
     S.lastPlayed = {};
     const beforeHit = clips; S.hitEnemy(false); const hitNormal = clips > beforeHit;
     S.lastPlayed = {};
@@ -106,6 +114,7 @@ try {
       await new Promise(r => setTimeout(r, 40));
     }
     S.playTone = orig.tone; S.playClip = originalClip;
+    S.ctx.createBufferSource = createSource;
     return { attempts, hitNormal, hitCrit, samples: clips, synthFallbacks: tones };
   });
   const missing = playback.attempts.filter(a => !a.sample).map(a => a.call);
@@ -127,6 +136,25 @@ try {
   });
   assert.equal(muted.started, 0, 'vẫn phát khi tắt tiếng');
   results.push({ name: 'mute-prevents-playback', details: muted });
+
+  const burst = await page.evaluate(async () => {
+    const S = window.__soundForTest;
+    await new Promise(r => setTimeout(r, 2300));
+    const create = S.ctx.createBufferSource.bind(S.ctx);
+    const tone = S.playTone;
+    let starts = 0, synth = 0;
+    S.ctx.createBufferSource = () => { starts++; return create(); };
+    S.playTone = () => { synth++; };
+    S.lastPlayed = {};
+    for (let i = 0; i < 100; i++) S.hitEnemy(false);
+    const result = { starts, synth, active: S.activeVoices };
+    S.ctx.createBufferSource = create;
+    S.playTone = tone;
+    return result;
+  });
+  assert.equal(burst.starts, 1);
+  assert.equal(burst.synth, 0);
+  results.push({ name: 'burst-does-not-bypass-limit-with-synth', details: burst });
 
   // Đếm yêu cầu mạng thật cho mẫu.
   const served = audioRequests.filter(r => r.status === 200).length;

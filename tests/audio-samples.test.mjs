@@ -29,6 +29,7 @@ test('mọi file trong manifest tồn tại và là MP3 hợp lệ', () => {
 function fixture() {
   const calls = [];
   const buffers = new Map();
+  const sources = [];
   class FakeBuffer { constructor(name) { this.name = name; this.duration = 1; } }
   const ctx = {
     state: 'running', currentTime: 0, destination: {},
@@ -36,6 +37,7 @@ function fixture() {
     createGain() { return { gain: { setValueAtTime() {}, exponentialRampToValueAtTime() {}, value: 1 }, connect() {} }; },
     createBufferSource() {
       const node = { buffer: null, connect() {}, start(t) { calls.push(['sample', this.buffer && this.buffer.name, t]); } };
+      sources.push(node);
       return node;
     },
     decodeAudioData(arrayBuffer) {
@@ -64,7 +66,7 @@ function fixture() {
   const end = html.indexOf('\n      };', start) + '\n      };'.length;
   assert.ok(start > 0 && end > start, 'không tìm thấy SoundFX');
   vm.runInContext(html.slice(start, end) + '\nthis.__sfx = SoundFX;', context);
-  return { sfx: context.__sfx, calls, fetched, ctx };
+  return { sfx: context.__sfx, calls, fetched, ctx, sources };
 }
 
 test('SoundFX dùng mẫu thật khi đã tải, giữ synth làm dự phòng', async () => {
@@ -88,7 +90,39 @@ test('tắt tiếng thì không phát gì; giới hạn số tiếng đồng th�
   f.sfx.muted = false;
   for (let i = 0; i < 40; i++) f.sfx.hitEnemy(false);
   const playing = f.calls.filter(c => c[0] === 'sample').length;
-  assert.ok(playing <= f.sfx.maxVoices + 30, 'không giới hạn voice: ' + playing);
+  assert.equal(playing, 1, 'cùng thời điểm chỉ được một mẫu trúng đòn');
+  assert.equal(f.calls.filter(c => c[0] === 'osc').length, 0, 'không lách giới hạn bằng synth');
+});
+
+test('giới hạn voice ngắn/dài độc lập, giải phóng đúng khi kết thúc', async () => {
+  const f = fixture();
+  await f.sfx.preload();
+  for (let i = 0; i < f.sfx.maxVoices + 5; i++) {
+    f.ctx.currentTime = i;
+    f.sfx.shootBow();
+  }
+  assert.equal(f.sfx.activeVoices, f.sfx.maxVoices);
+  assert.equal(f.calls.filter(c => c[0] === 'osc').length, 0);
+  f.sfx.victory();
+  assert.equal(f.sfx.activeStingers, 1);
+  const source = f.sources[0];
+  source.onended();
+  source.onended();
+  assert.equal(f.sfx.activeVoices, f.sfx.maxVoices - 1, 'onended lặp không giảm hai lần');
+  f.ctx.currentTime++;
+  f.sfx.shootBow();
+  assert.equal(f.sfx.activeVoices, f.sfx.maxVoices);
+});
+
+test('thiếu mẫu vẫn dùng synth, start lỗi không rò ngân sách voice', async () => {
+  const f = fixture();
+  f.sfx.shootBow();
+  assert.equal(f.calls.filter(c => c[0] === 'osc').length, 1);
+  await f.sfx.preload();
+  f.ctx.createBufferSource = () => ({ connect() {}, start() { throw new Error('start failed'); } });
+  f.sfx.shootBow();
+  assert.equal(f.sfx.activeVoices, 0);
+  assert.equal(f.sfx.lastPlayed.shootBow, undefined, 'start lỗi không ghi cooldown');
 });
 
 test('âm thanh mới có mặt trong game và gọi đúng sự kiện', () => {
