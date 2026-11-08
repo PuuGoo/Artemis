@@ -1,0 +1,36 @@
+{
+  "scope": "Chrome + isolated real HTTP/auth/save + memory DB; seeded stones, not production",
+  "mergeClicked": true,
+  "persistedAfterReload": true,
+  "insufficientDisabled": true,
+  "mythicDisabled": true,
+  "resourcesUnchanged": true,
+  "equippedPreserved": true,
+  "art": [
+    {
+      "src": "assets/runes/crystals/Rune_bless_60.png",
+      "width": 39.625,
+      "parent": 39.625,
+      "naturalWidth": 203
+    },
+    {
+      "src": "assets/runes/crystals/Rune_skill_50.png",
+      "width": 39.625,
+      "parent": 39.625,
+      "naturalWidth": 205
+    },
+    {
+      "src": "assets/runes/crystals/Rune_grow_41.png",
+      "width": 39.625,
+      "parent": 39.625,
+      "naturalWidth": 204
+    },
+    {
+      "src": "assets/runes/crystals/Rune_grow_30.png",
+      "width": 39.625,
+      "parent": 39.625,
+      "naturalWidth": 204
+    }
+  ],
+  "errors": []
+}

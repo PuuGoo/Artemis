@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import vm from 'node:vm';
-import { RUNE_IDS, RUNE_TIERS, addRuneDrop } from '../lib/runeCatalog.js';
+import * as catalog from '../lib/runeCatalog.js';
+const { RUNE_IDS, RUNE_TIERS, addRuneDrop } = catalog;
 
 const context = vm.createContext({});
 vm.runInContext(readFileSync(new URL('../public/rune-economy.js', import.meta.url), 'utf8'), context);
@@ -27,17 +28,16 @@ test('all 46 runes have individual wiki attributes and Revive milestones', () =>
   assert.match(data.rune_valkyrie.effects.Mythic,/100% Chance to revive/);
 });
 
-test('three same-quality stones merge into one next-quality stone', () => {
+test('drops remain separate until the player merges three identical stones', () => {
   let stones={}, ranks={};
   for(let i=0;i<3;i++) ({stones,ranks}=addRuneDrop(stones,ranks,'rune_valkyrie',0));
-  assert.equal(ranks.rune_valkyrie,2);
-  assert.equal(stones.rune_valkyrie.normal,0);
-  assert.equal(stones.rune_valkyrie.fine,1);
-  for(let i=0;i<2;i++) ({stones,ranks}=addRuneDrop(stones,ranks,'rune_valkyrie',1));
-  assert.equal(ranks.rune_valkyrie,3);
-  assert.equal(stones.rune_valkyrie.rare,1);
-  ({stones,ranks}=addRuneDrop(stones,ranks,'rune_valkyrie',3));
-  assert.equal(ranks.rune_valkyrie,4);
+  assert.equal(ranks.rune_valkyrie,1);
+  assert.equal(stones.rune_valkyrie.normal,3);
+  const merged = catalog.mergeRuneStones(stones, ranks, 'rune_valkyrie', 'normal');
+  assert.equal(merged.rank,2);
+  assert.equal(merged.stones.rune_valkyrie.normal,0);
+  assert.equal(merged.stones.rune_valkyrie.fine,1);
+  assert.equal(stones.rune_valkyrie.normal,3);
   assert.equal(RUNE_TIERS.length,11);
 });
 

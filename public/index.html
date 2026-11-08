@@ -7764,6 +7764,11 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           getHero: () => HEROES.find(hero => hero.id === SaveState.selectedHeroId) || HEROES[0],
           getBaseStats: (type, tier) => RUNE_BASE_STATS_BY_TYPE[type]?.[tier] || RUNE_BASE_STATS_BY_TYPE[type]?.normal || { atk: 0, hp: 0 },
           image: runeImage, fallback: runeFallback, tier: runeTierStyle,
+          onMerge: async (id, tier) => {
+            SaveState.save();
+            await window.ArtemisCloud.mergeRune(id, tier);
+            renderLobbyUI(); SoundFX.levelUp(); showToast('Đã ghép 3 viên thành 1 viên bậc cao hơn.');
+          },
           onSelectSlot: socket => { selectedRuneSocket = socket; SaveState.runeTypeFilter = socket.cat; renderLobbyUI(); },
           onClearSelection: () => { selectedRuneSocket = null; renderLobbyUI(); },
           onFilter: category => { SaveState.runeTypeFilter = category; renderLobbyUI(); },
@@ -18345,7 +18350,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               <div>
                 <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-indigo-500/25 text-indigo-200 border border-indigo-400/40">Khám phá Ngọc · Tỷ lệ trong game</span>
                 <h3 class="text-sm sm:text-lg font-black text-white mt-0.5">⛏️ Tàn Tích Cổ Ngữ (Rune Ruins) &amp; Tàn Tích Hứa Hẹn (Promised Ruins)</h3>
-                <p class="text-[11px] text-slate-300">Dùng <strong class="text-amber-300">Shovel</strong> hoặc <strong class="text-fuchsia-300">Promised Relic Shovel</strong> để nhận Ngọc trực tiếp vào kho. Mỗi lượt luôn nhận một viên; phẩm chất cao hiếm hơn. Ba viên cùng loại và cùng phẩm chất tự ghép lên bậc tiếp theo.</p>
+                <p class="text-[11px] text-slate-300">Dùng <strong class="text-amber-300">Shovel</strong> hoặc <strong class="text-fuchsia-300">Promised Relic Shovel</strong> để nhận Ngọc trực tiếp vào kho. Mỗi lượt luôn nhận một viên; phẩm chất cao hiếm hơn. Vào Xưởng Ngọc để ghép 3 viên cùng loại và cùng bậc thành 1 viên bậc tiếp theo.</p>
               </div>
               <div class="flex items-center gap-2 flex-wrap">
                 <button type="button" id="btnDigStandardRuins10" class="px-3 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs shadow transition">
@@ -20678,7 +20683,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           detailHtml=`<section class="rune-ruins-expedition">
             <div class="rune-ruins-banner"><span class="rune-ruins-banner-icon" aria-hidden="true">💎</span><div><span class="text-[10px] font-black uppercase tracking-widest text-fuchsia-200">Sự kiện khám phá · Nguồn Ngọc duy nhất</span><h3> Tàn Tích Ngọc</h3><p>Đào từng ô để nhận Ngọc thật vào kho. Mỗi ô dùng xẻng; thiếu xẻng có thể dùng đá quý. Không có cách khắc Ngọc bằng vàng.</p></div></div>
             <div class="rune-ruins-stats"><span>⛏️ ${shovels} xẻng</span><span>💎 ${SaveState.gems||0} đá quý</span><span>🔮 ${SaveState.wikiOtherItems.enchantium||0} Enchantium</span>${!SaveState.runeIntroClaimed?'<span>🎁 Lượt đào đầu miễn phí</span>':''}</div>
-            <div class="rune-ruins-explain"><b>Phẩm chất khi khai quật</b><p>Normal 76% · Fine 19% · Rare 4% · Epic 1%. Một viên nhận được ở mỗi lượt. Ba viên cùng loại và cùng bậc tự ghép thành một viên bậc cao hơn; ô khảm luôn dùng bậc cao nhất.</p></div>
+            <div class="rune-ruins-explain"><b>Phẩm chất khi khai quật</b><p>Normal 76% · Fine 19% · Rare 4% · Epic 1%. Một viên nhận được ở mỗi lượt. Vào Xưởng Ngọc để ghép 3 viên cùng loại và cùng bậc thành 1 viên bậc cao hơn; ô khảm luôn dùng bậc cao nhất.</p></div>
             <div class="rune-ruins-layout"><div class="rune-ruins-map"><div class="rune-ruins-map-head"><b>✦ Bản đồ cổ 3 × 3</b><span>${board.revealed.filter(Boolean).length}/9 ô đã mở</span></div>
               <div class="rune-ruins-tiles">${Array.from({length:9},(_,idx)=>`<button type="button" data-wiki-ruins-cell="${idx}" class="rune-ruins-tile ${board.revealed[idx]?'is-open':''}" ${board.revealed[idx]?'disabled':''} aria-label="${board.revealed[idx]?'Ô đã đào':'Đào ô '+(idx+1)}"><span>${board.revealed[idx]?'💠':'✧'}</span><small>Ô ${idx+1}</small></button>`).join('')}</div>
               <p class="text-xs text-slate-300 mt-3">Chạm một ô để đào ${mult} lượt. Bản đồ mới chỉ đổi vị trí ô, không tốn tài nguyên.</p>

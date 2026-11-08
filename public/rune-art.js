@@ -44,5 +44,23 @@
     const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><radialGradient id="g" cx=".35" cy=".25"><stop stop-color="${shine}"/><stop offset=".55" stop-color="${mid}"/><stop offset="1" stop-color="${dark}"/></radialGradient></defs><path d="M48 3L79 20 90 48 77 78 48 93 17 78 6 48 17 20Z" fill="url(#g)" stroke="${shine}" stroke-width="4"/><path d="M48 10L74 25 82 48 70 72 48 85 25 72 14 48 25 25Z" fill="#100b42" fill-opacity=".47" stroke="#fff" stroke-opacity=".55" stroke-width="2"/>${stars}<g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 5px ${shine})">${motifs[motif(id)]}</g><circle cx="48" cy="48" r="37" fill="none" stroke="${shine}" stroke-opacity=".45" stroke-dasharray="2 8"/></svg>`;
     return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
   }
-  root.RuneArt=Object.freeze({src,motif});
+  const crystalFamilies = { ability:'skill', enhancement:'grow', blessing:'bless', etched:'imprint' };
+  const crystalTiers = { normal:'10', fine:'20', rare:'30', epic:'40', epic_1:'41', epic_2:'42', legendary:'50', legendary_1:'51', legendary_2:'52', legendary_3:'53', mythic:'60' };
+  function crystalSrc(type, tier) {
+    const family = crystalFamilies[type];
+    let code = crystalTiers[tier];
+    if (!family || !code) return null;
+    // Bộ Khắc Ấn nguồn chỉ có bốn màu: giữ ảnh gốc, hiển thị dấu + bằng nhãn.
+    if (type === 'etched') {
+      if (tier === 'normal' || tier === 'fine') return null;
+      if (tier.startsWith('epic')) code = '40';
+      if (tier.startsWith('legendary')) code = '50';
+    }
+    return `assets/runes/crystals/Rune_${family}_${code}.png`;
+  }
+  function crystalPalette(tier) {
+    const base = String(tier).split('_')[0];
+    return ({ normal:['#5e6b8e','#9ea8c7','#323854'], fine:['#198533','#7ef28a','#014a16'], rare:['#2a5cb8','#8bd3ff','#0f2d8c'], epic:['#a025a5','#f6a0ff','#6b026f'], legendary:['#b7700a','#ffe482','#cb7101'], mythic:['#af232f','#ff9b9b','#8c1110'] })[base] || ['#5e6b8e','#9ea8c7','#323854'];
+  }
+  root.RuneArt=Object.freeze({src,motif,crystalSrc,crystalPalette});
 })(typeof window === 'undefined'?globalThis:window);

@@ -80,3 +80,13 @@ test('module được nối vào luồng thật và CSS giới hạn ở workspa
   assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /safe-area-inset-bottom/);
 });
+test('xưởng hiển thị nguyên liệu đúng bậc, chỉ mở ghép khi đủ 3 và chặn Mythic', () => {
+  const h = harness();
+  h.state.runeStones = { rune_flame: { normal: 2, epic: 3, mythic: 8 } };
+  const markup = h.view.mergeMarkup('rune_flame');
+  assert.match(markup, /data-merge-tier="normal" disabled/);
+  assert.match(markup, /data-merge-tier="epic">Ghép 3 → 1/);
+  assert.match(markup, /data-merge-tier="mythic" disabled/);
+  assert.match(markup, /Sử Thi ×3 → Sử Thi \+1/);
+  assert.match(markup, /Không tốn vàng hoặc đá quý/);
+});

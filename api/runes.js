@@ -1,7 +1,7 @@
 import { randomInt } from 'node:crypto';
 import { getMongoDb, COLLECTIONS } from '../lib/mongo.js';
 import { getCurrentPlayer, json, fail } from '../lib/http.js';
-import { RUNE_IDS, runePool, addRuneDrop } from '../lib/runeCatalog.js';
+import { RUNE_IDS, runePool, addRuneDrop, mergeRuneStones } from '../lib/runeCatalog.js';
 
 export const config = { runtime:'nodejs' };
 
@@ -13,10 +13,13 @@ function draw(pool) {
 
 export async function POST(request) {
   const player = await getCurrentPlayer(request);
-  if (!player) return fail('Bạn cần đăng nhập để khám phá Ngọc.',401);
+  if (!player) return fail('Bạn cần đăng nhập để sử dụng Ngọc.',401);
   const body=await request.json().catch(()=>({}));
   const action=body?.action;
-  if (!['explore','enchant'].includes(action)) return fail('Ngọc chỉ nhận được qua khám phá Tàn Tích.',400);
+  if (!['explore','enchant','merge'].includes(action)) return fail('Thao tác Ngọc không hợp lệ.',400);
+  if (action === 'merge' && (!Number.isSafeInteger(body.revision) || body.revision < 1)) {
+    return fail('Phiên bản tiến trình không hợp lệ. Hãy tải lại.',400);
+  }
   const count=Number(body?.count||1);
   if (action==='explore' && ![1,5,10].includes(count)) return fail('Số lượt đào không hợp lệ.',400);
   const playerId=String(player._id);
@@ -27,6 +30,20 @@ export async function POST(request) {
     const data=save.data||{}, runes={...(data.runes||{})}, stones={...(data.runeStones||{})};
     const items={...(data.wikiOtherItems||{})};
     const now=new Date(), revision=(save.revision||1)+1;
+    if (action === 'merge') {
+      if (body.revision !== save.revision) return fail('Tiến trình vừa thay đổi. Hãy đồng bộ lại trước khi ghép.',409);
+      let merged;
+      try { merged = mergeRuneStones(stones, runes, body.runeId, body.tier); }
+      catch (error) { return fail(error.message,422); }
+      const next = { ...data, runes: merged.ranks, runeStones: merged.stones };
+      const log = [...(Array.isArray(save.runeMergeLog) ? save.runeMergeLog : []),
+        { at: now, runeId: body.runeId, tier: body.tier, nextTier: merged.nextTier, consumed: 3 }].slice(-30);
+      const result = await saves.updateOne({ playerId, revision: save.revision },
+        { $set: { data: next, revision, updatedAt: now, runeMergeLog: log } });
+      if (result.matchedCount === 1) return json({ ok: true, action, runeId: body.runeId,
+        tier: body.tier, nextTier: merged.nextTier, rank: merged.rank, revision });
+      return fail('Tiến trình vừa thay đổi. Hãy đồng bộ lại trước khi ghép.',409);
+    }
     if (action==='enchant') {
       if (data.runeMythicEnchant===true) return fail('Phù phép đã được mở.',422);
       if (!RUNE_IDS.some(id=>Number(runes[id])>=6)) return fail('Cần ít nhất một Ngọc Epic +2.',422);
