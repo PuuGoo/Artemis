@@ -221,15 +221,12 @@ test('Ấn giữ potency mạnh nhất, đổi khảm không nhân dồn và nh�
 });
 
 test('hồ sơ Ấn tách tác dụng đã làm khỏi wiki và không quảng cáo nổ Mythic đang hoạt động',()=>{
-  const f=fixture();let modal;
-  const node={focus(){}};
-  f.c.document={querySelector:()=>null,createElement:()=>modal={setAttribute(){},addEventListener(){},querySelector:s=>s.includes('img')||s.includes('equip')||s.includes('ruins')?null:node},body:{appendChild(){}}};
-  f.c.RUNES_DATA=[{id:'rune_flame',name:'Ấn',type:'enhancement'}];f.c.RuneWikiData={rune_flame:{name:'Seal',effects:{},base:'ATK'}};
-  f.c.RuneEconomy.tier=()=>'epic';f.c.runeImage=()=>'';vm.runInContext(fn('openRuneDetailPopup'),f.c);
-  f.c.openRuneDetailPopup('rune_flame');
-  assert.match(modal.innerHTML,/data-rune-combat-note/);
-  assert.match(modal.innerHTML,/Epic.*50%.*Legendary.*50%/);
-  assert.match(modal.innerHTML,/chưa.*nổ Mythic/i);
+  const context=vm.createContext({});
+  vm.runInContext(read('public/js/game/runes/rune-workspace.js'),context);
+  const note=context.ArtemisRuneWorkspace.combatNote('rune_flame');
+  assert.match(note,/data-rune-combat-note/);
+  assert.match(note,/Epic.*50%.*Legendary.*50%/);
+  assert.match(note,/chưa.*nổ Mythic/i);
 });
 
 test('Hỏa Độc Chạm + Ấn tăng đúng DoT theo thời gian, không biến Băng Lôi thành lửa',()=>{

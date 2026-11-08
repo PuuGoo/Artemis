@@ -1,0 +1,367 @@
+{
+  "scope": "Chrome + real HTTP/auth/save + isolated memory DB; 5 seeded rune types, not production or earned loot",
+  "geometry": [
+    {
+      "viewportWidth": 1024,
+      "width": 1022,
+      "scroll": 1022,
+      "slots": [
+        {
+          "left": 379.265625,
+          "right": 439.265625,
+          "top": 583.1875,
+          "bottom": 643.1875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 482,
+          "right": 542,
+          "top": 583.1875,
+          "bottom": 643.1875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 584.71875,
+          "right": 644.71875,
+          "top": 583.1875,
+          "bottom": 643.1875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 347.171875,
+          "right": 407.171875,
+          "top": 443.796875,
+          "bottom": 503.796875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 616.8125,
+          "right": 676.8125,
+          "top": 443.796875,
+          "bottom": 503.796875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 713.109375,
+          "right": 773.109375,
+          "top": 335,
+          "bottom": 395,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 738.796875,
+          "right": 798.796875,
+          "top": 406.390625,
+          "bottom": 466.390625,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 738.796875,
+          "right": 798.796875,
+          "top": 481.1875,
+          "bottom": 541.1875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 706.6875,
+          "right": 766.6875,
+          "top": 549.1875,
+          "bottom": 609.1875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 250.875,
+          "right": 310.875,
+          "top": 335,
+          "bottom": 395,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 225.1875,
+          "right": 285.1875,
+          "top": 406.390625,
+          "bottom": 466.390625,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 225.1875,
+          "right": 285.1875,
+          "top": 481.1875,
+          "bottom": 541.1875,
+          "width": 60,
+          "height": 60
+        },
+        {
+          "left": 257.296875,
+          "right": 317.296875,
+          "top": 549.1875,
+          "bottom": 609.1875,
+          "width": 60,
+          "height": 60
+        }
+      ],
+      "allInside": true,
+      "gridColumns": "126.391px 126.406px 126.391px 126.406px 126.406px"
+    },
+    {
+      "viewportWidth": 390,
+      "width": 388,
+      "scroll": 388,
+      "slots": [
+        {
+          "left": 117,
+          "right": 161,
+          "top": 546.5,
+          "bottom": 590.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 173,
+          "right": 217,
+          "top": 546.5,
+          "bottom": 590.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 229,
+          "right": 273,
+          "top": 546.5,
+          "bottom": 590.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 99.5,
+          "right": 143.5,
+          "top": 423.5,
+          "bottom": 467.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 246.5,
+          "right": 290.5,
+          "top": 423.5,
+          "bottom": 467.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 299,
+          "right": 343,
+          "top": 327.5,
+          "bottom": 371.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 313,
+          "right": 357,
+          "top": 390.5,
+          "bottom": 434.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 313,
+          "right": 357,
+          "top": 456.5,
+          "bottom": 500.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 295.5,
+          "right": 339.5,
+          "top": 516.5,
+          "bottom": 560.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 47,
+          "right": 91,
+          "top": 327.5,
+          "bottom": 371.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 33,
+          "right": 77,
+          "top": 390.5,
+          "bottom": 434.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 33,
+          "right": 77,
+          "top": 456.5,
+          "bottom": 500.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 50.5,
+          "right": 94.5,
+          "top": 516.5,
+          "bottom": 560.5,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "allInside": true,
+      "gridColumns": "87px 87px 87px 87px"
+    },
+    {
+      "viewportWidth": 360,
+      "width": 358,
+      "scroll": 358,
+      "slots": [
+        {
+          "left": 106.796875,
+          "right": 150.796875,
+          "top": 546.5,
+          "bottom": 590.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 158,
+          "right": 202,
+          "top": 546.5,
+          "bottom": 590.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 209.1875,
+          "right": 253.1875,
+          "top": 546.5,
+          "bottom": 590.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 90.796875,
+          "right": 134.796875,
+          "top": 423.5,
+          "bottom": 467.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 225.1875,
+          "right": 269.1875,
+          "top": 423.5,
+          "bottom": 467.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 273.1875,
+          "right": 317.1875,
+          "top": 327.5,
+          "bottom": 371.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 286,
+          "right": 330,
+          "top": 390.5,
+          "bottom": 434.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 286,
+          "right": 330,
+          "top": 456.5,
+          "bottom": 500.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 270,
+          "right": 314,
+          "top": 516.5,
+          "bottom": 560.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 42.796875,
+          "right": 86.796875,
+          "top": 327.5,
+          "bottom": 371.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 30,
+          "right": 74,
+          "top": 390.5,
+          "bottom": 434.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 30,
+          "right": 74,
+          "top": 456.5,
+          "bottom": 500.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "left": 46,
+          "right": 90,
+          "top": 516.5,
+          "bottom": 560.5,
+          "width": 44,
+          "height": 44
+        }
+      ],
+      "allInside": true,
+      "gridColumns": "79.5px 79.5px 79.5px 79.5px"
+    }
+  ],
+  "narrowModal": {
+    "x": 0,
+    "y": 59.203125,
+    "width": 360,
+    "height": 680.796875
+  },
+  "actionBox": {
+    "x": 158.65625,
+    "y": 670.203125,
+    "width": 184.328125,
+    "height": 48
+  },
+  "equipUnequipReplace": true,
+  "wrongCategoryBlocked": true,
+  "lockedCannotEquip": true,
+  "cancelUnchanged": true,
+  "keyboardFocus": true,
+  "scrollPreserved": 1375,
+  "ownershipUnchanged": true,
+  "presetOwnedOnly": true,
+  "reducedMotion": true,
+  "reloadPersisted": true,
+  "errors": []
+}
