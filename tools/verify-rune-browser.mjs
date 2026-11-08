@@ -64,6 +64,17 @@ try {
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await enter();
   assert.equal(await page.locator('[data-equip-wiki-rune]').count(), 5);
+  const heroMotion = await page.locator('.rune-hero img').evaluate(el => ({ name: getComputedStyle(el).animationName, state: getComputedStyle(el).animationPlayState }));
+  assert.equal(heroMotion.name, 'rune-hero-breathe');
+  assert.equal(heroMotion.state, 'running');
+  await page.locator('[data-rune-nav="gear"]').click();
+  assert.equal(await page.locator('.rune-hero img').evaluate(el => getComputedStyle(el).animationPlayState), 'paused');
+  await page.locator('#gearReferenceNavigation [data-equipment-nav="runes"]').click();
+  assert.equal(await page.locator('.rune-altar').evaluate(el => getComputedStyle(el, '::before').animationName), 'rune-orbit');
+  await page.locator('[data-equip-wiki-rune="rune_flame"]').click();
+  assert.equal(await page.locator('.rune-hero img').evaluate(el => getComputedStyle(el).animationPlayState), 'paused');
+  await page.keyboard.press('Escape');
+  await page.locator('dialog.rune-workspace-detail').waitFor({ state: 'detached' });
   assert.equal(await page.locator('#btnRuneSortQuality').getAttribute('aria-pressed'), 'true');
   await page.locator('#btnRuneSortQuality').click();
   assert.equal(await page.locator('#btnRuneSortQuality').getAttribute('aria-pressed'), 'false');

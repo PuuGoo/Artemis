@@ -1,0 +1,29 @@
+/* Pháp trận Ngọc: chỉ transform/opacity, không thêm vòng render hay sửa save. */
+#subpanelRunes.rune-reference .rune-altar::before { content:""; display:block; position:absolute; inset:14% 23% 11%; border:1px solid #e5b7ff99; border-radius:50%; background:repeating-conic-gradient(from 0deg,#ffe6a9aa 0deg 1deg,transparent 1deg 30deg); box-shadow:inset 0 0 24px #c079ff33,0 0 18px #a569ff33; mask-image:radial-gradient(ellipse,transparent 62%,#000 64% 68%,transparent 70%); z-index:1; pointer-events:none; animation:rune-orbit 26s linear infinite; }
+#subpanelRunes.rune-reference .rune-altar::after { content:""; display:block; position:absolute; inset:20% 27% 8%; border:0; border-radius:50%; background:radial-gradient(ellipse,#ffe9b05c, #c168ff28 45%,transparent 72%); box-shadow:none; z-index:1; pointer-events:none; animation:rune-aura 4s ease-in-out infinite; }
+#subpanelRunes.rune-reference .rune-hero { overflow:visible; }
+#subpanelRunes.rune-reference .rune-hero::before { content:""; position:absolute; inset:12% -8% -1%; border:1px solid #e2b2ff66; border-radius:50%; background:radial-gradient(ellipse at 50% 90%,#edbaff55,transparent 65%); box-shadow:inset 0 0 22px #b36aff44; pointer-events:none; animation:rune-halo 5s ease-in-out infinite; }
+#subpanelRunes.rune-reference .rune-hero::after { content:"✦"; position:absolute; left:48%; top:32%; color:#fff2b0; font-size:13px; text-shadow:0 0 8px #f8d3ff; box-shadow:38px 42px 0 -4px #fff0b8,-35px 72px 0 -5px #e0a8ff; pointer-events:none; animation:rune-spark 5.5s ease-in-out infinite; }
+#subpanelRunes.rune-reference .rune-hero img { position:relative; transform-origin:50% 85%; animation:rune-hero-breathe 4.6s ease-in-out infinite; }
+#subpanelRunes.rune-reference .rune-socket { --rune-delay:0s; }
+#subpanelRunes.rune-reference .rune-socket:nth-of-type(3n+1) { --rune-delay:-1.2s; }
+#subpanelRunes.rune-reference .rune-socket:nth-of-type(3n+2) { --rune-delay:-2.4s; }
+#subpanelRunes.rune-reference .rune-socket.is-filled .rune-crystal { animation:rune-crystal-breathe 3.6s ease-in-out var(--rune-delay) infinite; }
+#subpanelRunes.rune-reference .rune-socket.is-picked::after { content:""; position:absolute; inset:3%; border:2px solid #fff0a6; border-radius:35%; box-shadow:0 0 10px #ffd977; pointer-events:none; animation:rune-pick 1.8s ease-out infinite; }
+#subpanelRunes.rune-reference .rune-inventory-card:not(.is-locked):hover .rune-inventory-glyph, #subpanelRunes.rune-reference .rune-inventory-card:focus-visible .rune-inventory-glyph { transform:translateY(-3px) scale(1.04); transition:transform .18s ease; }
+#subpanelRunes.rune-reference .rune-reference-tabs [aria-current] svg { animation:rune-tab-glint 4s ease-in-out infinite; }
+@keyframes rune-orbit { to { transform:rotate(360deg); } }
+@keyframes rune-aura { 0%,100% { opacity:.45; transform:scale(.94); } 50% { opacity:1; transform:scale(1.05); } }
+@keyframes rune-halo { 0%,100% { opacity:.35; transform:scale(.96); } 50% { opacity:.85; transform:scale(1.03); } }
+@keyframes rune-hero-breathe { 0%,100% { transform:translateY(0) rotate(-.5deg) scale(.97); } 50% { transform:translateY(-5px) rotate(.5deg) scale(.985); } }
+@keyframes rune-spark { 0% { opacity:0; transform:translate(-28px,45px) scale(.3); } 35% { opacity:1; } 80% { opacity:.8; } 100% { opacity:0; transform:translate(30px,-45px) scale(.9); } }
+@keyframes rune-crystal-breathe { 0%,100% { opacity:.8; transform:scale(.97); } 50% { opacity:1; transform:scale(1.025); } }
+@keyframes rune-pick { 0% { opacity:.9; transform:scale(.94); } 100% { opacity:0; transform:scale(1.16); } }
+@keyframes rune-tab-glint { 0%,80%,100% { opacity:1; transform:scale(1); } 90% { opacity:.65; transform:scale(1.12); } }
+/* Dừng cả pseudo-element khi rời tab Ngọc hoặc mở chi tiết. */
+#appRoot:not(:has(#tabEquip:not(.hidden))) #subpanelRunes *, #appRoot:not(:has(#tabEquip:not(.hidden))) #subpanelRunes *::before, #appRoot:not(:has(#tabEquip:not(.hidden))) #subpanelRunes *::after,
+#subpanelRunes.hidden *, #subpanelRunes.hidden *::before, #subpanelRunes.hidden *::after,
+#subpanelRunes.rune-motion-low *, #subpanelRunes.rune-motion-low *::before, #subpanelRunes.rune-motion-low *::after,
+body:has(dialog[open]) #subpanelRunes *, body:has(dialog[open]) #subpanelRunes *::before, body:has(dialog[open]) #subpanelRunes *::after { animation-play-state:paused !important; }
+#subpanelRunes.rune-reference.hidden .rune-hero img, #subpanelRunes.rune-reference.hidden .rune-altar::before, #subpanelRunes.rune-reference.hidden .rune-altar::after { animation-play-state:paused !important; }
+@media(prefers-reduced-motion:reduce) { #subpanelRunes.rune-reference *, #subpanelRunes.rune-reference *::before, #subpanelRunes.rune-reference *::after { animation:none !important; transition:none !important; } }

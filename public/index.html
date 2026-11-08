@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/rune-workspace.css" />
   <link rel="stylesheet" href="/rune-reference.css" />
   <link rel="stylesheet" href="/equipment-reference.css" />
+  <link rel="stylesheet" href="/rune-animation.css" />
   <script src="/zodiac-chibi-bosses.js"></script>
   <script src="/obstacle-clearance.js"></script>
   <script src="/rune-economy.js"></script>
@@ -30518,6 +30519,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       let _perfCooldown = 0;
 
       function setLowGfx(on) {
+        document.getElementById('subpanelRunes')?.classList.toggle('rune-motion-low', on);
         document.getElementById('tabBattle')?.classList.toggle('battle-motion-low', on);
         document.getElementById('runBriefingModal')?.classList.toggle('battle-motion-low', on);
         if (Game.lowGfx === on) return;
