@@ -18,15 +18,19 @@ api/             # Vercel serverless functions (Node.js runtime)
   auth/logout    # đăng xuất
   auth/me        # kiểm tra phiên hiện tại
   save           # GET tải save / PUT ghi save
+  shop           # GET catalog VIP / POST mua gói, trừ xu và cấp thưởng bằng CAS
   health         # healthcheck + ping MongoDB
 lib/             # logic dùng chung
   mongo.js       # MongoClient cache, tự tạo index
   auth.js        # bcrypt hash + JWT (jose)
   save/          # schema, seed tân thủ, policy, repository (xem README trong thư mục)
+  shop/          # catalog giá xu VIP và phần thưởng (xem README trong thư mục)
   http.js        # JSON body guard, rate limit, session
 public/js/game/rendering/  # renderer Canvas dùng chung game/admin
+public/js/game/shop/       # view cửa hàng VIP; giá/thưởng lấy từ server
 tests/save/                # kiểm thử subsystem save
 tests/rendering/           # kiểm thử renderer đã tách
+tests/shop/                # API mua hàng, view và renderer cửa hàng trong VM
 ```
 
 ## Bảo mật

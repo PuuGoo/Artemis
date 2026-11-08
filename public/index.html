@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Archero 2: Kỷ Nguyên Cung Thủ Roguelike</title>
   <script src="/cloud.js"></script>
+  <script src="/js/game/shop/vip-shop.js"></script>
   <script src="/zodiac-chibi-bosses.js"></script>
   <script src="/obstacle-clearance.js"></script>
   <script src="/rune-economy.js"></script>
@@ -9043,6 +9044,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         gold: 500,
         gems: 50,
         vipCoins: 0,
+        aurocite: 0,
         vipPasses: { hunting: 0, cave: 0, sealing: 0 },
         stamina: 20,
         playerLevel: 1,
@@ -9486,6 +9488,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               gold: this.gold,
               gems: this.gems,
               vipCoins: this.vipCoins,
+              aurocite: this.aurocite,
               vipPasses: this.vipPasses,
               stamina: this.stamina,
               playerLevel: this.playerLevel,
@@ -23241,7 +23244,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         normalizeStateArrays();
         if (!SaveState.vnUiState || typeof SaveState.vnUiState !== 'object') {
           SaveState.vnUiState = {
-            aurocite: 51,
+
             shopSubtab: 'daily', // daily | chests | wish | deals | topup
             dealsPeriod: 'daily', // daily | weekly | monthly
             topupTab: 'gems', // gems | gold | aurocite
@@ -23272,11 +23275,16 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         return String(n);
       }
 
+      const VipShop = ArtemisVipShop.create({ cloud: window.ArtemisCloud, onChange: () => renderVnShopTabUI() });
+
       // 1. RENDER TAB 1: CỬA HÀNG (PAGES 1-19)
       function renderVnShopTabUI() {
+        const panel = document.getElementById('tabShopVn');
+        if (panel?.classList.contains('hidden')) return;
         ensureVnAuthenticUIState();
         const el = document.getElementById('vnShopMainContainer');
         if (!el) return;
+        VipShop.ensureLoaded();
         const st = SaveState.vnUiState;
         const curSub = st.shopSubtab || 'daily';
         const curDeal = st.dealsPeriod || 'daily';
@@ -23298,59 +23306,38 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           { id: 'ds_6', title: 'Cuộn Vũ Khí', disc: 'Giảm 10%', icon: '📜🏹', qty: '2', cost: 900, cur: 'gold' }
         ];
 
-        const dealsData = {
-          daily: {
-            title: 'Gói Ưu Đãi Mỗi Ngày', timer: 'Thời gian làm mới còn 13:44:39', badge: '450% Giá Trị',
-            packs: [
-              { id: 'dl_0', free: true, items: [['💚', '10'], ['🪙', '100'], ['📜', '1']], price: 'Đã bán hết' },
-              { id: 'dl_1', items: [['💚', '500'], ['🗝️🌈', '3'], ['🗝️🔮', '5'], ['📜', '10']], limit: 'Còn có thể mua 1 lần', price: '₫129,000', gemGrant: 500 },
-              { id: 'dl_2', items: [['💚', '1800'], ['🪙✨', '10'], ['🪙', '6000'], ['📜', '15']], limit: 'Còn có thể mua 1 lần', price: '₫386,000', gemGrant: 1800 },
-              { id: 'dl_3', items: [['💚', '2500'], ['🧙‍♂️', '10'], ['🪙', '8000'], ['📜', '20']], limit: 'Còn có thể mua 1 lần', price: '₫505,000', gemGrant: 2500 },
-              { id: 'dl_4', items: [['💚', '3900'], ['🧥', '15'], ['🪙✨', '5'], ['🪙', '12K']], limit: 'Còn có thể mua 1 lần', price: '₫766,000', gemGrant: 3900 },
-              { id: 'dl_5', items: [['💚', '6500'], ['👸❄️', '20'], ['🪙', '20K'], ['📜', '50']], limit: 'Còn có thể mua 1 lần', price: '₫1,300,000', gemGrant: 6500 }
-            ]
-          },
-          weekly: {
-            title: 'Gói Ưu Đãi Mỗi Tuần', timer: 'Thời gian làm mới còn 04 ngày 13 giờ', badge: '500% Giá Trị',
-            packs: [
-              { id: 'wk_0', free: true, items: [['💚', '20'], ['🪙', '200'], ['📜', '2']], price: 'Đã bán hết' },
-              { id: 'wk_1', items: [['💚', '1800'], ['🗝️🌈', '10'], ['🪙', '6000'], ['📜', '15']], limit: 'Còn có thể mua 1 lần', price: '₫386,000', gemGrant: 1800 },
-              { id: 'wk_2', items: [['💚', '6500'], ['🗝️🌈', '35'], ['🪙', '20K'], ['📜', '50']], limit: 'Còn có thể mua 1 lần', price: '₫1,300,000', gemGrant: 6500 },
-              { id: 'wk_3', items: [['💚', '6500'], ['🪙', '20K'], ['📜', '50'], ['➕', 'Chọn']], limit: 'Còn có thể mua 1 lần', price: '₫1,300,000', gemGrant: 6500 },
-              { id: 'wk_4', items: [['💚', '14K'], ['🪙', '40K'], ['📜', '100'], ['➕', 'Chọn']], limit: 'Còn có thể mua 1 lần', price: '₫2,500,000', gemGrant: 14000 },
-              { id: 'wk_5', items: [['💚', '14K'], ['🔮', '10'], ['🗝️🌈', '10'], ['🪙', '40K']], limit: 'Còn có thể mua 1 lần', price: '₫2,500,000', gemGrant: 14000 }
-            ]
-          },
-          monthly: {
-            title: 'Gói Ưu Đãi Mỗi Tháng', timer: 'Thời gian làm mới còn 26 ngày 13 giờ', badge: '550% Giá Trị',
-            packs: [
-              { id: 'mo_0', free: true, items: [['💚', '30'], ['🪙', '300'], ['📜', '3']], price: 'Đã bán hết' },
-              { id: 'mo_1', items: [['💚', '3900'], ['🗝️🌈', '24'], ['🪙', '12K'], ['📜', '30']], limit: 'Còn có thể mua 1 lần', price: '₫766,000', gemGrant: 3900 },
-              { id: 'mo_2', items: [['💚', '14K'], ['➕', 'Chọn'], ['➕', 'Chọn']], limit: 'Còn có thể mua 1 lần', price: '₫2,500,000', gemGrant: 14000 },
-              { id: 'mo_3', items: [['💚', '14K'], ['➕', 'Chọn'], ['➕', 'Chọn']], limit: 'Còn có thể mua 1 lần', price: '₫2,500,000', gemGrant: 14000 },
-              { id: 'mo_4', items: [['💚', '14K'], ['🪙', '40K'], ['📜', '100'], ['➕', 'Chọn']], limit: 'Còn có thể mua 2 lần', price: '₫2,500,000', gemGrant: 14000 },
-              { id: 'mo_5', items: [['💚', '14K'], ['💠', '3'], ['🪙', '40K'], ['📜', '100']], limit: 'Còn có thể mua 5 lần', price: '₫2,500,000', gemGrant: 14000 }
-            ]
-          }
-        };
+        const dealsData = Object.fromEntries([
+          ['daily', 'Mỗi Ngày', 'dl_', 'Làm mới lúc 00:00 mỗi ngày (giờ Việt Nam)'],
+          ['weekly', 'Mỗi Tuần', 'wk_', 'Làm mới lúc 00:00 thứ Hai (giờ Việt Nam)'],
+          ['monthly', 'Mỗi Tháng', 'mo_', 'Làm mới lúc 00:00 ngày đầu tháng (giờ Việt Nam)']
+        ].map(([period, label, prefix, timer]) => [period, {
+          title: `Gói Ưu Đãi ${label}`, timer, badge: 'Mua bằng xu VIP',
+          packs: VipShop.offers().filter(offer => offer.id.startsWith(prefix)).map(offer => ({
+            id: offer.id, items: VipShop.rewardItems(offer.id), limit: VipShop.remainingLabel(offer.id)
+          }))
+        }]));
 
         const activeDealMeta = dealsData[curDeal] || dealsData.daily;
 
         el.innerHTML = `
           <!-- TOP BLUE SCALLOPED AWNING + AUROCITE COUNTER (MATCHES PAGES 1-19) -->
-          <div class="sv2-header relative px-3 py-2 flex items-center justify-between">
+          <div class="sv2-header relative px-3 py-2 flex flex-wrap gap-2 items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="sv2-htitle font-black uppercase">🏪 Cửa Hàng Archero 2</span>
             </div>
-            <div class="sv2-cur">
+            <div class="sv2-cur flex-wrap">
               <div class="sv2-chip sv2-chip-gold flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">🪙</span><b>${formatCompactNumberVn(SaveState.gold, '0')}</b></div>
               <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">💚</span><b>${formatCompactNumberVn(SaveState.gems, '0')}</b></div>
-              <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">💎🌸</span><b>${st.aurocite || 51}</b></div>
+              <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5"><span class="text-sm">💎🌸</span><b>${SaveState.aurocite || 0}</b></div>
+              <div class="sv2-chip flex items-center gap-1 rounded-full px-2.5 py-0.5" title="Xu VIP do máy chủ quản lý"><span class="text-sm">💠</span><b>${(SaveState.vipCoins || 0).toLocaleString('vi-VN')} xu VIP</b></div>
             </div>
           </div>
 
           <!-- MAIN SCROLLABLE SHOP BODY -->
           <div class="sv2-body flex-1 overflow-y-auto px-2.5 sm:px-5 py-3 space-y-5">
+            <div class="text-xs text-center text-amber-100" role="status">${VipShop.error() || 'Các gói ưu đãi, Kim Cương và Aurocite được mua bằng xu VIP.'}
+              <button type="button" data-vip-shop-reload class="underline ml-1">${VipShop.error() ? 'Thử lại' : 'Làm mới giá và lượt mua'}</button>
+            </div>
 
             <!-- 1. GÓI CHƯƠNG 91 (PAGE 1) -->
             <div id="shopSecChapterPack" class="sv2-card p-3 space-y-2.5">
@@ -23371,7 +23358,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   <div class="flex flex-col items-center sm:items-end justify-between gap-2">
                     <div class="text-center sm:text-right">
                       <div class="text-lg sm:text-xl font-black text-white drop-shadow">Gói Chương 91</div>
-                      <div class="sv2-pill inline-block px-3 py-0.5 rounded-full text-[11px] font-bold text-amber-200 mt-0.5">Chỉ một lần duy nhất</div>
+                      <div class="sv2-pill inline-block px-3 py-0.5 rounded-full text-[11px] font-bold text-amber-200 mt-0.5">${VipShop.remainingLabel('chapter_91') || 'Chỉ một lần duy nhất'}</div>
                     </div>
                     <div class="flex items-center gap-2">
                       <div class="sv2-slot w-12 h-12 flex flex-col items-center justify-center">
@@ -23380,11 +23367,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                       </div>
                       <div class="sv2-slot w-12 h-12 flex flex-col items-center justify-center">
                         <span class="text-lg">🏆</span>
-                        <span class="text-[9px] font-black text-white">Rương S</span>
+                        <span class="text-[9px] font-black text-white">Epic S-Tier ×1</span>
                       </div>
                     </div>
-                    <button type="button" data-vn-shop-buy-pack="chapter_91" class="sv2-buy-gold w-full sm:w-64 py-2.5 text-sm">
-                      ₫2,500,000
+                    <button type="button" ${VipShop.buttonAttributes('chapter_91')} class="sv2-buy-gold w-full sm:w-64 py-2.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                      ${VipShop.priceLabel('chapter_91')}
                     </button>
                   </div>
                 </div>
@@ -23623,8 +23610,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                       `).join('')}
                     </div>
                     <div class="text-[10px] font-bold text-white text-center">${pk.limit || 'Đã bán hết'}</div>
-                    <button type="button" data-vn-deal-buy="${pk.id}" data-vn-gems="${pk.gemGrant || 100}" class="${pk.free ? 'sv2-buy-free' : 'sv2-buy2'} w-full py-1.5 text-xs">
-                      ${pk.free ? '✔️' : pk.price}
+                    <button type="button" ${VipShop.buttonAttributes(pk.id)} class="sv2-buy2 w-full py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed">
+                      ${VipShop.priceLabel(pk.id)}
                     </button>
                   </div>
                 `).join('')}
@@ -23655,20 +23642,20 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               ${curTopup === 'gems' ? `
                 <div class="grid grid-cols-3 gap-2.5">
                   ${[
-                    { amt: 80, name: '1 Ít Kim Cương', price: '₫24,000', icon: '💚' },
-                    { amt: 500, name: '1 Đống Nhỏ Kim Cương', price: '₫129,000', icon: '💚💚' },
-                    { amt: 1200, name: '1 Đống Lớn Kim Cương', price: '₫257,000', icon: '💎💚' },
-                    { amt: 2500, name: '1 Túi Kim Cương', price: '₫505,000', icon: '💰💚' },
-                    { amt: 6500, name: '1 Thùng Kim Cương', price: '₫1,300,000', icon: '🛢️💚' },
-                    { amt: 14000, name: '1 Rương Lớn Kim Cương', price: '₫2,500,000', icon: '🧰💚' }
+                    { amt: 80, name: '1 Ít Kim Cương', icon: '💚' },
+                    { amt: 500, name: '1 Đống Nhỏ Kim Cương', icon: '💚💚' },
+                    { amt: 1200, name: '1 Đống Lớn Kim Cương', icon: '💎💚' },
+                    { amt: 2500, name: '1 Túi Kim Cương', icon: '💰💚' },
+                    { amt: 6500, name: '1 Thùng Kim Cương', icon: '🛢️💚' },
+                    { amt: 14000, name: '1 Rương Lớn Kim Cương', icon: '🧰💚' }
                   ].map(g => `
                     <div class="relative sv2-item sv2-tone-violet p-2.5 flex flex-col items-center justify-between gap-2 text-center">
                       <span class="px-2 py-0.5 rounded-lg bg-emerald-500 border border-white text-slate-950 font-black text-[9px]">Tặng kèm ${g.amt}</span>
                       <div class="text-base sm:text-lg font-black text-white">${g.amt}</div>
                       <div class="text-3xl my-1">${g.icon}</div>
                       <div class="text-[10px] font-bold text-purple-100">${g.name}</div>
-                      <button type="button" data-vn-topup-gems="${g.amt}" class="sv2-buy2 w-full py-1.5 text-xs">
-                        ${g.price}
+                      <button type="button" ${VipShop.buttonAttributes(`gems_${g.amt}`)} class="sv2-buy2 w-full py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed">
+                        ${VipShop.priceLabel(`gems_${g.amt}`)}
                       </button>
                     </div>
                   `).join('')}
@@ -23691,22 +23678,22 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                   `).join('')}
                 </div>
               ` : `
-                <div class="sv2-timer text-center text-[11px] font-bold">Thời gian làm mới còn 26 ngày 13 giờ • Aurocite dùng để mua tất cả các vật phẩm trả phí trong game</div>
+                <div class="sv2-timer text-center text-[11px] font-bold">Mua Aurocite bằng xu VIP • Giới hạn làm mới mỗi tháng theo giờ Việt Nam</div>
                 <div class="grid grid-cols-3 gap-2.5">
                   ${[
-                    { amt: 99, price: '₫24,000' },
-                    { amt: 499, price: '₫129,000' },
-                    { amt: 999, price: '₫257,000' },
-                    { amt: 1999, price: '₫505,000' },
-                    { amt: 4999, price: '₫1,300,000' },
-                    { amt: 9999, price: '₫2,500,000' }
+                    { amt: 99 },
+                    { amt: 499 },
+                    { amt: 999 },
+                    { amt: 1999 },
+                    { amt: 4999 },
+                    { amt: 9999 }
                   ].map(a => `
                     <div class="sv2-item sv2-tone-violet p-2.5 flex flex-col items-center justify-between gap-2 text-center">
                       <div class="text-base font-black text-white">${a.amt}</div>
                       <div class="text-4xl my-2">💎🌸</div>
-                      <div class="text-[10px] font-bold text-pink-200">Còn có thể mua 30 lần</div>
-                      <button type="button" data-vn-topup-aurocite="${a.amt}" class="sv2-buy2 w-full py-1.5 text-xs">
-                        ${a.price}
+                      <div class="text-[10px] font-bold text-pink-200">${VipShop.remainingLabel(`aurocite_${a.amt}`)}</div>
+                      <button type="button" ${VipShop.buttonAttributes(`aurocite_${a.amt}`)} class="sv2-buy2 w-full py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed">
+                        ${VipShop.priceLabel(`aurocite_${a.amt}`)}
                       </button>
                     </div>
                   `).join('')}
@@ -23736,7 +23723,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               { id: 'chests', label: 'Rương Trang Bị', target: 'shopSecChests', alert: true },
               { id: 'wish', label: 'Cầu Nguyện', target: 'shopSecWish' },
               { id: 'deals', label: 'Hạn Mua Ưu Đãi', target: 'shopSecDeals' },
-              { id: 'topup', label: 'Nạp', target: 'shopSecTopup' }
+              { id: 'topup', label: 'Đổi Tài Nguyên', target: 'shopSecTopup' }
             ].map(sb => `
               <button type="button" data-vn-shop-subnav="${sb.id}" data-vn-scroll-to="${sb.target}" class="sv2-tab ${curSub === sb.id ? 'on' : ''} relative py-2 px-1 flex flex-col items-center justify-center gap-0.5 font-black text-[10px] sm:text-xs leading-tight text-center">
                 <span class="sv2-ico">${({ daily: '🏪', chests: '🎁', wish: '🙏', deals: '🏷️', topup: '💎' })[sb.id] || '✨'}</span><span>${sb.label}</span>
@@ -23758,14 +23745,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           };
         });
 
-        el.querySelectorAll('[data-vn-shop-buy-pack]').forEach(btn => {
-          btn.onclick = () => {
-            SaveState.gems = (SaveState.gems || 0) + 14000;
-            rollSingleCanonicalChestPull('mythstone');
+        el.querySelectorAll('[data-vip-shop-reload]').forEach(btn => {
+          btn.onclick = () => { void VipShop.load(); };
+        });
+        el.querySelectorAll('[data-vip-offer]').forEach(btn => {
+          btn.onclick = async () => {
+            const offerId = btn.getAttribute('data-vip-offer');
+            if (btn.disabled || !offerId) return;
             SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast('🎁 Đã mở Gói Chương 91 (600% Giá Trị): Nhận +14,000 💚 Kim Cương & 1 Trang Bị S-Tier!');
+            try {
+              const result = await VipShop.purchase(offerId);
+              SoundFX.levelUp();
+              renderLobbyUI();
+              showToast(result.replayed ? '✅ Đã đồng bộ giao dịch trước, không trừ thêm xu VIP.' : `🎁 Mua thành công! Đã trừ ${result.priceVip.toLocaleString('vi-VN')} xu VIP và chuyển phần thưởng vào kho.`);
+            } catch (error) {
+              renderLobbyUI();
+              showToast(error.message || 'Chưa xác nhận được giao dịch. Hãy thử lại đúng gói.', 'err');
+            }
           };
         });
 
@@ -23827,18 +23823,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           };
         });
 
-        el.querySelectorAll('[data-vn-deal-buy]').forEach(btn => {
-          btn.onclick = () => {
-            const gGrant = parseInt(btn.getAttribute('data-vn-gems') || '500', 10);
-            SaveState.gems = (SaveState.gems || 0) + gGrant;
-            SaveState.chestKeys.chromatic_chest_key = (SaveState.chestKeys.chromatic_chest_key || 0) + 10;
-            grantAll6GearScrolls(20);
-            SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast(`🎁 Đã nhận Gói Ưu Đãi: +${gGrant.toLocaleString('vi-VN')} 💚 Kim Cương, +10 🗝️🌈 Chìa Khóa S & +20 Cuộn Trang Bị!`);
-          };
-        });
+
 
         el.querySelectorAll('[data-vn-topup-tab]').forEach(btn => {
           btn.onclick = () => {
@@ -23848,16 +23833,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           };
         });
 
-        el.querySelectorAll('[data-vn-topup-gems]').forEach(btn => {
-          btn.onclick = () => {
-            const amt = parseInt(btn.getAttribute('data-vn-topup-gems') || '500', 10);
-            SaveState.gems = (SaveState.gems || 0) + amt * 2;
-            SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast(`💚 Đã nạp +${amt} Kim Cương (Tặng kèm +${amt} = Tổng +${amt * 2} 💚)!`);
-          };
-        });
+
 
         el.querySelectorAll('[data-vn-topup-gold]').forEach(btn => {
           btn.onclick = () => {
@@ -23870,16 +23846,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           };
         });
 
-        el.querySelectorAll('[data-vn-topup-aurocite]').forEach(btn => {
-          btn.onclick = () => {
-            const amt = parseInt(btn.getAttribute('data-vn-topup-aurocite') || '99', 10);
-            st.aurocite = (st.aurocite || 51) + amt;
-            SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast(`💎🌸 Đã nhận +${amt} Aurocite (Tổng: ${st.aurocite} Aurocite)!`);
-          };
-        });
+
       }
 
       // 2. RENDER TAB 2 SUB-SCREEN: ANH HÙNG (21 HEROES + CỘNG HƯỞNG + 8-TAB WARDROBE, PAGES 22-58)

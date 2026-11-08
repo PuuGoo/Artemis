@@ -18,11 +18,13 @@ là bằng chứng theo thời điểm, không phải mô tả tự động cậ
 | `lib/save/policy.js` | Quyền sở hữu server, tương thích client cũ, kiểm tra chuyển trạng thái | HTTP, MongoDB, đọc env, đồng hồ ngầm |
 | `lib/save/repository.js` | Projection, đọc snapshot, restore seed, ghi compare-and-set | Quyết định quyền VIP/rune hoặc status HTTP |
 | `lib/economy.js`, `lib/economyLedger.js` | Luật kinh tế, ngân sách theo giờ server | Điều phối HTTP |
+| `lib/shop/catalog.js`, `lib/shop/rewards.js` | Giá xu VIP, phần thưởng và giới hạn gói; tạo snapshot thưởng | Giá/phần thưởng tự khai từ client hoặc kết nối DB |
 | `lib/save/initialState.js` | Sinh dữ liệu chuẩn cho tài khoản mới | Thay thế save hiện có |
 | `lib/mongo.js`, `lib/mongoMemory.js` | Kết nối và adapter DB | Luật gameplay |
 | `public/cloud.js` | Auth gate, tải và đẩy save, vòng đời kết nối client | Nguồn sự thật của tài nguyên do server cấp |
 | `public/combat-*.js`, `boss-attack-patterns.js` | Những module combat đã tách | Mở rộng trực tiếp API hoặc DB |
 | `public/js/game/rendering/arena-renderer.js` | Factory renderer Canvas dùng chung game/admin, cache và trạng thái visual theo instance | Combat update, thay schema save, renderer copy-paste |
+| `public/js/game/shop/vip-shop.js` | Đọc catalog server, trạng thái nút mua và điều phối view | Tự trừ xu/cộng phần thưởng trên client |
 | `public/index.html` | Hiện vẫn chứa UI, phần lớn gameplay, state và rendering | Không coi đây là kiến trúc đích |
 | `tests/` | Unit, runtime VM, API với DB bộ nhớ, test opt-in | Credentials hoặc dữ liệu production |
 | `tools/` | Kiểm tra source và công cụ vận hành độc lập | Logic nghiệp vụ được copy để thay implementation thật |
@@ -73,7 +75,7 @@ Request
 
 - `prepareSaveData({ sanitizedData, incomingData, previousData, nowMs })` nhận dữ
   liệu **đã sanitize**, trả object mới; không sửa hoặc giữ tham chiếu mutable tới input.
-- VIP coins/passes và rune inventory/entitlements lấy từ snapshot server. Client
+- VIP coins/passes, Aurocite và rune inventory/entitlements lấy từ snapshot server. Client
   được chọn rune đang sở hữu, không được tự cấp rune.
 - Các field `gameMode`, `modeBest`, `guild`, `garden`, `plinko` được giữ lại khi client
   cũ không gửi key. Gửi `null` rõ ràng vẫn giữ nghĩa xoá theo sanitizer hiện hành.
@@ -103,6 +105,25 @@ Request
 Endpoint, body, status lỗi, seed tân thủ, schema save, thứ tự auth/body validation,
 revision, cơ chế CAS, luật tài nguyên và quyền sở hữu server được giữ nguyên.
 Không chạy migration, không truy cập production, không cấp lại tài nguyên.
+
+## Lát cắt cửa hàng xu VIP
+
+28 gói tiền đ được chuyển theo tỷ lệ đã duyệt: 1 xu VIP = 1.000đ giá cũ.
+Xem bảng trách nhiệm và hợp đồng tại `lib/shop/README.md`.
+
+```text
+UI mở cửa hàng -> GET /api/shop -> giá/thưởng/lượt còn lại từ catalog server
+UI mua -> cloud flush save -> POST /api/shop (owner/revision/requestId)
+       -> auth / body / rate limit / kiểm tiền và giới hạn
+       -> rewards tạo snapshot -> CAS trừ xu + cấp thưởng + receipt + giới hạn
+       -> cloud tải snapshot server và dựng lại nhân vật -> render số dư thật
+```
+
+Ngày/tuần/tháng dùng giờ Việt Nam; receipt và giới hạn ở ngoài snapshot client.
+Mất phản hồi giữ nguyên mã giao dịch để retry, không tự cộng thưởng hoặc gửi mã
+mới. Aurocite được lưu canonical và bảo vệ qua save policy/projection như xu VIP.
+UI chỉ tải catalog khi mở tab cửa hàng, không thêm request vào game/battle bootstrap.
+Các cửa hàng dùng vàng/kim cương và giá thẻ đặc quyền có sẵn không đổi.
 
 ## Kiểm tra và cách thêm code
 

@@ -49,7 +49,7 @@ test('repository khôi phục seed có idempotency và đọc đủ field cho po
   assert.equal(docs[0].data.gold, 500);
   assert.equal(docs[1].revision, 1);
   const existing = await repo.readForValidation('A');
-  for (const key of ['gold', 'gems', 'vipCoins', 'vipPasses', 'runes', 'runeStones', 'runeIntroClaimed', 'runeMythicEnchant', 'lifetimeStats', 'season', 'gameMode', 'modeBest', 'guild', 'garden', 'plinko']) {
+  for (const key of ['gold', 'gems', 'vipCoins', 'aurocite', 'vipPasses', 'runes', 'runeStones', 'runeIntroClaimed', 'runeMythicEnchant', 'lifetimeStats', 'season', 'gameMode', 'modeBest', 'guild', 'garden', 'plinko']) {
     assert.ok(key in existing.data, `projection thiếu ${key}`);
   }
   assert.ok(existing.ledger);

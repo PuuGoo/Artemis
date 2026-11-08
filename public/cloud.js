@@ -37,6 +37,9 @@
     saving: false,
   };
   var lastPushedPayload = null;
+  var savePromise = null;
+  var shopBusy = false;
+  var pendingShopRequest = null;
 
   // ---------- Tien ich ----------
   function el(tag, cls, text) {
@@ -414,7 +417,8 @@
 
   /** Day buffer hien tai len MongoDB. */
   function pushCloudSave() {
-    if (!state.authenticated || window.__ARTEMIS_SAVE_READY !== true || state.saving) return;
+    if (state.saving) return savePromise;
+    if (!state.authenticated || window.__ARTEMIS_SAVE_READY !== true) return;
     var payload = window.__ARTEMIS_SAVE_BUFFER;
     if (!payload) return;
 
@@ -426,7 +430,7 @@
 
     state.saving = true;
     var nextRevision = state.revision + 1;
-    api(API.save, { method: "PUT", body: { data: data, revision: state.revision, playerId: state.player.id } })
+    savePromise = api(API.save, { method: "PUT", body: { data: data, revision: state.revision, playerId: state.player.id } })
       .then(function (r) {
         if (r.ok && r.data && r.data.ok === true && r.data.revision === nextRevision) {
           state.revision = r.data.revision;
@@ -468,6 +472,75 @@
         state.saving = false;
         if (state.dirty && !state.lastError) scheduleSave();
       });
+    return savePromise;
+  }
+
+  /** Flush trước giao dịch; khóa ghi đến khi tải lại snapshot server.
+   * Mất phản hồi giữ nguyên requestId + revision để thử lại không bị trừ hai lần.
+   */
+  async function purchaseShopOffer(offerId) {
+    if (shopBusy) throw new Error("Đang xử lý giao dịch. Vui lòng chờ.");
+    if (!state.authenticated) throw new Error("Bạn cần đăng nhập để mua bằng xu VIP.");
+    if (pendingShopRequest && pendingShopRequest.offerId !== offerId) {
+      throw new Error("Giao dịch trước chưa được xác nhận. Hãy bấm lại đúng gói đó để kiểm tra.");
+    }
+    shopBusy = true;
+    try {
+      if (!pendingShopRequest) {
+        if (window.__ARTEMIS_SAVE_READY !== true) throw new Error("Tiến trình chưa đồng bộ. Hãy tải lại trang.");
+        for (var attempt = 0; attempt < 3; attempt++) {
+          await pushCloudSave();
+          if (state.lastError) throw new Error("Chưa lưu được tiến trình: " + state.lastError);
+          if (window.__ARTEMIS_SAVE_BUFFER === lastPushedPayload) break;
+        }
+        if (state.dirty || window.__ARTEMIS_SAVE_BUFFER !== lastPushedPayload || state.revision < 1) {
+          throw new Error("Tiến trình đang thay đổi. Hãy thử mua lại sau khi lưu xong.");
+        }
+        pendingShopRequest = { offerId: offerId, playerId: state.player.id,
+          revision: state.revision, requestId: window.crypto.randomUUID() };
+      }
+      if (state.saveTimer) clearTimeout(state.saveTimer);
+      state.saving = true;
+      window.__ARTEMIS_SAVE_READY = false;
+      var response = await api("/api/shop", { method: "POST", body: pendingShopRequest });
+      if (!response.ok || response.data.ok !== true) {
+        if (response.status < 500) {
+          pendingShopRequest = null;
+          if (response.status === 409) await refreshAfterShopPurchase();
+          else window.__ARTEMIS_SAVE_READY = true;
+        }
+        throw new Error(response.data.error || "Chưa xác nhận được giao dịch. Hãy bấm lại đúng gói để kiểm tra.");
+      }
+      if (response.data.offerId !== offerId || !Number.isSafeInteger(response.data.revision)
+          || response.data.revision <= pendingShopRequest.revision) {
+        throw new Error("Phản hồi giao dịch không hợp lệ. Hãy bấm lại đúng gói để kiểm tra.");
+      }
+      await refreshAfterShopPurchase();
+      pendingShopRequest = null;
+      return response.data;
+    } catch (error) {
+      if (pendingShopRequest) window.__ARTEMIS_SAVE_READY = false;
+      throw error;
+    } finally {
+      state.saving = false;
+      shopBusy = false;
+      if (!pendingShopRequest && window.__ARTEMIS_SAVE_READY === true && state.dirty) scheduleSave();
+    }
+  }
+
+  async function refreshAfterShopPurchase() {
+    try {
+      await loadCloudSave();
+      if (!window.Archero2FusionAPI || window.Archero2FusionAPI.reloadSaveFromStorage() === false) {
+        throw new Error("Chưa dựng lại được tiến trình. Hãy tải lại trang để đồng bộ giao dịch.");
+      }
+      state.ready = true;
+      state.lastError = "";
+      state.dirty = window.__ARTEMIS_SAVE_BUFFER !== lastPushedPayload;
+    } catch (error) {
+      window.__ARTEMIS_SAVE_READY = false;
+      throw error;
+    }
   }
 
   function scheduleSave() {
@@ -605,6 +678,8 @@
   window.ArtemisCloud = {
     getState: function () { return Object.assign({}, state); },
     pushNow: function () { pushCloudSave(); return state.revision; },
+    purchaseShopOffer: purchaseShopOffer,
+    getPendingShopOffer: function () { return pendingShopRequest ? pendingShopRequest.offerId : null; },
     loadCloudSave: loadCloudSave,
     toast: toast,
     purgeLegacyLocalSave: purgeLegacyLocalSave,

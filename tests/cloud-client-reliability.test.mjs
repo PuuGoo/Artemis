@@ -19,7 +19,9 @@ function harness(fetcher) {
     };
     nodes.push(n); return n;
   }
-  const window = { addEventListener: (name, fn) => { events[name] = fn; },
+  let purchaseId = 0;
+  const window = { crypto: { randomUUID: () => `00000000-0000-4000-8000-${String(++purchaseId).padStart(12, '0')}` },
+    addEventListener: (name, fn) => { events[name] = fn; },
     Archero2FusionAPI: { reloadSaveFromStorage() { reloads++; } } };
   const document = { readyState: 'loading', createElement: node,
     getElementById: id => nodes.find(n => n.id === id && !n.removed),
@@ -44,6 +46,102 @@ function harness(fetcher) {
 }
 const me = () => response({ ok: true, authenticated: true, player: { id: 'A', username: 'alice' } });
 const saved = (data = { gold: 100 }, revision = 3) => response({ ok: true, hasSave: true, data, revision });
+
+test('shop purchase flushes pending progress, locks writes, and rebuilds the confirmed server snapshot', async () => {
+  const pending = deferred();
+  let current = { gold: 100, vipCoins: 100, gems: 50 }, revision = 3;
+  const h = harness((path, opts) => {
+    if (path.endsWith('/me')) return me();
+    if (path === '/api/shop') return pending.promise;
+    if (opts.method === 'PUT') { current = JSON.parse(opts.body).data; return response({ ok: true, revision: ++revision }); }
+    return saved(current, revision);
+  });
+  await h.boot(); await h.save({ ...current, gold: 101 });
+  assert.equal(typeof h.cloud.purchaseShopOffer, 'function');
+  const purchase = h.cloud.purchaseShopOffer('gems_80');
+  await settle();
+  const requests = h.requests.filter(r => r.method !== 'GET');
+  assert.deepEqual(requests.map(r => r.path), ['/api/save', '/api/shop']);
+  assert.equal(JSON.parse(requests[1].body).revision, 4);
+  assert.equal(JSON.parse(requests[1].body).playerId, 'A');
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, false);
+  await assert.rejects(h.cloud.purchaseShopOffer('gems_500'));
+  current = { ...current, vipCoins: 76, gems: 210 }; revision++;
+  pending.resolve(response({ ok: true, offerId: 'gems_80', revision }));
+  await purchase;
+  assert.deepEqual(JSON.parse(h.window.__ARTEMIS_SAVE_BUFFER), current);
+  assert.equal(h.cloud.getState().ready, true);
+  assert.equal(h.cloud.getState().dirty, false);
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, true);
+});
+
+test('lost shop acknowledgement retries the same request and never writes a stale snapshot', async () => {
+  let attempts = 0, current = { gold: 100, vipCoins: 100, gems: 50 };
+  const h = harness((path, opts) => {
+    if (path.endsWith('/me')) return me();
+    if (path === '/api/shop') {
+      attempts++;
+      if (attempts === 1) { current = { ...current, vipCoins: 76, gems: 210 }; throw new Error('lost reply'); }
+      return response({ ok: true, replayed: true, offerId: 'gems_80', revision: 4 });
+    }
+    return saved(current, attempts ? 4 : 3);
+  });
+  await h.boot();
+  assert.equal(typeof h.cloud.purchaseShopOffer, 'function');
+  await assert.rejects(h.cloud.purchaseShopOffer('gems_80'));
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, false);
+  await h.push(); await h.timer(1200);
+  assert.equal(h.requests.filter(r => r.method === 'PUT').length, 0);
+  await assert.rejects(h.cloud.purchaseShopOffer('gems_500'));
+  const result = await h.cloud.purchaseShopOffer('gems_80');
+  assert.equal(result.replayed, true);
+  const posts = h.requests.filter(r => r.path === '/api/shop');
+  assert.equal(posts.length, 2);
+  assert.equal(posts[0].body, posts[1].body);
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, true);
+  assert.equal(JSON.parse(h.window.__ARTEMIS_SAVE_BUFFER).vipCoins, 76);
+});
+
+test('failed flush blocks purchase, and rejected prices never fabricate local rewards', async () => {
+  const h = harness((path, opts) => path.endsWith('/me') ? me()
+    : path === '/api/shop' ? response({ ok: false, error: 'Không đủ xu VIP' }, 422)
+    : opts.method === 'PUT' ? response({ ok: false, error: 'Lưu thất bại' }, 503) : saved());
+  await h.boot();
+  assert.equal(typeof h.cloud.purchaseShopOffer, 'function');
+  await assert.rejects(h.cloud.purchaseShopOffer('gems_80'), /Không đủ xu VIP/);
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, true);
+  assert.equal(JSON.parse(h.window.__ARTEMIS_SAVE_BUFFER).gold, 100);
+  await h.save({ gold: 101 });
+  await assert.rejects(h.cloud.purchaseShopOffer('gems_80'));
+  assert.equal(h.requests.filter(r => r.path === '/api/shop').length, 1);
+});
+
+test('a confirmed shop purchase stays locked through a failed snapshot reload and can be retried', async () => {
+  let purchases = 0, failLoad = false;
+  const h = harness((path, opts) => {
+    if (path.endsWith('/me')) return me();
+    if (path === '/api/shop') { purchases++; failLoad = purchases === 1; return response({ ok: true, offerId: 'gems_80', revision: 4, replayed: purchases > 1 }); }
+    return failLoad ? response({ ok: false }, 503) : saved({ gold: 100, vipCoins: purchases ? 76 : 100 }, purchases ? 4 : 3);
+  });
+  await h.boot();
+  await assert.rejects(h.cloud.purchaseShopOffer('gems_80'));
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, false);
+  const firstBody = h.requests.find(r => r.path === '/api/shop').body;
+  assert.equal((await h.cloud.purchaseShopOffer('gems_80')).replayed, true);
+  assert.equal(h.requests.filter(r => r.path === '/api/shop')[1].body, firstBody);
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, true);
+});
+
+test('a conflict reload that cannot rebuild the character never unlocks stale writes', async () => {
+  const h = harness(path => path.endsWith('/me') ? me()
+    : path === '/api/shop' ? response({ ok: false, error: 'conflict' }, 409) : saved());
+  await h.boot();
+  h.window.Archero2FusionAPI.reloadSaveFromStorage = () => { throw new Error('bad rebuild'); };
+  await assert.rejects(h.cloud.purchaseShopOffer('gems_80'), /bad rebuild/);
+  assert.equal(h.window.__ARTEMIS_SAVE_READY, false);
+  await h.push();
+  assert.equal(h.requests.filter(r => r.method === 'PUT').length, 0);
+});
 
 test('the real game loader migrates an empty snapshot using the current defaults', () => {
   const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
