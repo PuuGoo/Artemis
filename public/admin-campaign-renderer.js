@@ -1881,6 +1881,9 @@ const ArenaV2 = (() => {
     if (flash) { ctx.filter = 'none'; orb(ctx, 0, 0, r * 1.25, '#ffffff', Math.min(1, e.hitFlashTimer / 0.14) * 0.8); }
     ctx.restore();
 
+    // VFX đi qua renderer đang dùng, trước cảnh báo và thanh máu.
+    if (typeof StatusVFX !== 'undefined') StatusVFX.drawEnemy(ctx, e, nowMs, Game);
+
     // cảnh báo sắp tấn công
     if (!big && e.attackTimer > 0 && e.attackTimer < 0.5) {
       const q = 1 - e.attackTimer / 0.5; ctx.strokeStyle = `rgba(248,113,113,${0.3 + q * 0.7})`; ctx.lineWidth = 2;

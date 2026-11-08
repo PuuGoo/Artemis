@@ -1,0 +1,153 @@
+{
+  "scope": "Chrome thật + fixture localhost, mock auth/save. Xác nhận texture tải/giải mã và hạt được vẽ trên quái thật; không đánh giá thẩm mỹ.",
+  "results": [
+    {
+      "name": "all-vfx-textures-load-with-alpha",
+      "details": [
+        {
+          "slot": "burn_a",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 38.9,
+          "maxA": 255
+        },
+        {
+          "slot": "burn_b",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 20.7,
+          "maxA": 255
+        },
+        {
+          "slot": "poison_a",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 20.6,
+          "maxA": 255
+        },
+        {
+          "slot": "poison_b",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 46.9,
+          "maxA": 255
+        },
+        {
+          "slot": "frost_a",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 25.5,
+          "maxA": 255
+        },
+        {
+          "slot": "frost_b",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 33.8,
+          "maxA": 255
+        },
+        {
+          "slot": "spark_a",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 46.9,
+          "maxA": 255
+        },
+        {
+          "slot": "smoke_a",
+          "w": 128,
+          "h": 128,
+          "opaquePct": 39.2,
+          "maxA": 255
+        }
+      ]
+    },
+    {
+      "name": "status-particles-render-on-real-enemy",
+      "details": {
+        "burnDraws": 15,
+        "perKind": {
+          "burn": 5,
+          "poison": 5,
+          "frost": 5
+        },
+        "burnTimer": 4,
+        "poisonTimer": 4,
+        "diag": {
+          "lowGfx": false,
+          "prefersReduce": false,
+          "shouldDraw": true,
+          "enemies": 2,
+          "running": true,
+          "paused": false,
+          "hasVfx": "object"
+        }
+      }
+    },
+    {
+      "name": "drawing-does-not-mutate-enemy",
+      "details": {
+        "unchanged": true
+      }
+    },
+    {
+      "name": "low-gfx-skips-particles",
+      "details": {
+        "drew": false,
+        "n": 0
+      }
+    },
+    {
+      "name": "vfx-http",
+      "details": {
+        "served": 8,
+        "files": [
+          "burn_a.webp",
+          "burn_b.webp",
+          "poison_a.webp",
+          "poison_b.webp",
+          "frost_a.webp",
+          "frost_b.webp",
+          "spark_a.webp",
+          "smoke_a.webp"
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": [],
+  "vfxRequests": [
+    {
+      "url": "burn_a.webp",
+      "status": 200
+    },
+    {
+      "url": "burn_b.webp",
+      "status": 200
+    },
+    {
+      "url": "poison_a.webp",
+      "status": 200
+    },
+    {
+      "url": "poison_b.webp",
+      "status": 200
+    },
+    {
+      "url": "frost_a.webp",
+      "status": 200
+    },
+    {
+      "url": "frost_b.webp",
+      "status": 200
+    },
+    {
+      "url": "spark_a.webp",
+      "status": 200
+    },
+    {
+      "url": "smoke_a.webp",
+      "status": 200
+    }
+  ]
+}

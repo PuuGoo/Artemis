@@ -18,6 +18,7 @@
   <script src="/combat-status.js"></script>
   <script src="/boss-attack-patterns.js"></script>
   <script src="/arena-ground.js"></script>
+  <script src="/status-vfx.js"></script>
   <script src="/monster-art.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -4756,6 +4757,9 @@ const ArenaV2 = (() => {
     }
     if (flash) { ctx.filter = 'none'; orb(ctx, 0, 0, r * 1.25, '#ffffff', Math.min(1, e.hitFlashTimer / 0.14) * 0.8); }
     ctx.restore();
+
+    // VFX đi qua renderer đang dùng, trước cảnh báo và thanh máu.
+    if (typeof StatusVFX !== 'undefined') StatusVFX.drawEnemy(ctx, e, nowMs, Game);
 
     // cảnh báo sắp tấn công
     if (!big && e.attackTimer > 0 && e.attackTimer < 0.5) {
@@ -32526,12 +32530,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           ctx.fill();
         }
 
-        // Burning Flame Status Overlay
-        if (e.burnTimer > 0) {
-          ctx.fillStyle = 'rgba(249, 115, 22, 0.8)';
-          ctx.beginPath();
-          ctx.arc(Math.sin(nowMs * 0.03) * 4, -e.r * 0.5, 5.5, 0, Math.PI * 2);
-          ctx.fill();
+        // Hạt trạng thái thật: cháy/độc/băng dùng texture riêng, không còn chấm cam chung.
+        // Sát thương và nhịp vẫn do combat-status.js quyết định; ở đây chỉ vẽ.
+        if (typeof StatusVFX !== 'undefined') {
+          StatusVFX.drawEnemy(ctx, e, nowMs, Game);
         }
 
         ctx.restore(); // end squash-stretch

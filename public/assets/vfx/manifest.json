@@ -1,0 +1,66 @@
+{
+  "burn_a": {
+    "source": "Fire_143",
+    "bundle": "mfx_debuff_fire_ground.prefab_f1316f0eb983bf9eccb9b081d49fcc05.bundle",
+    "w": 256,
+    "h": 256,
+    "mode": "RGBA",
+    "webp_bytes": 11830
+  },
+  "burn_b": {
+    "source": "Fire_165_Golden",
+    "bundle": "ultimatecup_1.prefab_18e52f69d728556e7162ade14fd9bf08.bundle",
+    "w": 512,
+    "h": 512,
+    "mode": "RGBA",
+    "webp_bytes": 9456
+  },
+  "poison_a": {
+    "source": "Liquid_150_Green",
+    "bundle": "mfx_shenjuanzhe_debuff_du.prefab_a936bb26894e7de7b81bfc4f1000923d.bundle",
+    "w": 256,
+    "h": 256,
+    "mode": "RGBA",
+    "webp_bytes": 6114
+  },
+  "poison_b": {
+    "source": "Fire_120_Green",
+    "bundle": "hanyandenglong_green.prefab_6bf73dcaff02018671af3b894235170d.bundle",
+    "w": 256,
+    "h": 256,
+    "mode": "RGBA",
+    "webp_bytes": 4072
+  },
+  "frost_a": {
+    "source": "Ice_031",
+    "bundle": "zhibingring.prefab_c8194f19b2644538da3a8bc1906eae0f.bundle",
+    "w": 256,
+    "h": 256,
+    "mode": "RGBA",
+    "webp_bytes": 8658
+  },
+  "frost_b": {
+    "source": "Ice_114_Blur",
+    "bundle": "xue.prefab_0ca631547ceb2432750a971610ff2c56.bundle",
+    "w": 128,
+    "h": 128,
+    "mode": "RGBA",
+    "webp_bytes": 6250
+  },
+  "spark_a": {
+    "source": "Light_116",
+    "bundle": "fx_moyaopenquan_du.prefab_5dd2881adab745717a4521baa1e84490.bundle",
+    "w": 256,
+    "h": 256,
+    "mode": "RGBA",
+    "webp_bytes": 636
+  },
+  "smoke_a": {
+    "source": "Smoke_021",
+    "bundle": "mfx_keliou_ranbao.prefab_7418d00739eca6be5319995781125e6d.bundle",
+    "w": 256,
+    "h": 256,
+    "mode": "RGBA",
+    "webp_bytes": 3808
+  }
+}
