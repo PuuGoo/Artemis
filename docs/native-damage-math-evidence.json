@@ -1,0 +1,77 @@
+{
+  "scope": "Selected ARM64 instruction interpreter against independent integer model; no APK execution, no live runtime, caller/buff/shield callees not included.",
+  "binary_sha256": "bed445a394a7b7e7f58a5f61399ccf1875a03087c574e76e726d4aa23ca7f7d3",
+  "range": [
+    "0x6562e44",
+    "0x6562eb4"
+  ],
+  "cases": 1440,
+  "passed": 1440,
+  "examples": [
+    {
+      "inputs": [
+        0,
+        13107,
+        0,
+        0,
+        0,
+        false,
+        false
+      ],
+      "damage": 1
+    },
+    {
+      "inputs": [
+        0,
+        13107,
+        0,
+        0,
+        0,
+        false,
+        true
+      ],
+      "damage": 1
+    },
+    {
+      "inputs": [
+        0,
+        13107,
+        0,
+        0,
+        0,
+        true,
+        false
+      ],
+      "damage": 1
+    },
+    {
+      "inputs": [
+        0,
+        13107,
+        0,
+        0,
+        0,
+        true,
+        true
+      ],
+      "damage": 1
+    },
+    {
+      "inputs": [
+        0,
+        13107,
+        0,
+        0,
+        16384,
+        false,
+        false
+      ],
+      "damage": 1
+    }
+  ],
+  "limitations": [
+    "No signed64 overflow cases.",
+    "Clamp factor is an input, not exercised by this oracle.",
+    "Crit roll and shield logic are not exercised here."
+  ]
+}
