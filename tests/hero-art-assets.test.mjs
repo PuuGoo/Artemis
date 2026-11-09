@@ -74,19 +74,11 @@ test('ảnh toàn thân được neo mép trên khi bị cắt vào khung vuông
   assert.match(html, /img\[src\^="assets\/heroes\/"\]\s*\{\s*object-position: top center;/);
 });
 
-test('tab Anh Hùng (dữ liệu PDF) hiển thị ảnh thật thay cho emoji', () => {
-  // Bí danh: hero "Mumy" trong dữ liệu PDF dùng chung ảnh với "Mymu".
-  assert.match(html, /const HERO_ART_ALIASES = \{ mumy: 'mymu' \};/);
-  assert.match(html, /function getHeroArtFile\(heroId\)/);
-  assert.match(html, /function heroArtImgTag\(heroId/);
-
-  // Bệ đá lớn + lưới 21 hero đều phải dùng heroArtImgTag, không còn render emoji trần.
-  const showcase = html.slice(html.indexOf('function renderVnHeroesAndWardrobeUI'), html.indexOf('function renderVnCollectiblesTabUI'));
-  assert.ok(showcase.length > 1000, 'không tìm thấy renderVnHeroesAndWardrobeUI');
-  assert.match(showcase, /heroArtImgTag\(heroMeta\.id, heroMeta\.spriteEmoji/);
-  assert.match(showcase, /heroArtImgTag\(h\.id, h\.spriteEmoji/);
-  assert.equal(/\n\s*\$\{heroMeta\.spriteEmoji\}\s*\n/.test(showcase), false, 'vẫn còn chỗ render emoji trần cho hero đang chọn');
-  assert.equal(/\n\s*\$\{h\.spriteEmoji\}\s*\n/.test(showcase), false, 'vẫn còn chỗ render emoji trần trong lưới hero');
+test('Roster canonical giữ ảnh qua provider, renderer PDF trùng đã xoá', () => {
+ assert.match(html,/function heroArtImgTag\(heroId/);
+ assert.equal(html.includes('function renderVnHeroesAndWardrobeUI'),false);
+ const roster=html.slice(html.indexOf('function renderHeroRoster()'),html.indexOf('function renderGameModePanel()'));
+ assert.match(roster,/data-hero-pick/);
 });
 
 test('chiến đấu và bệ đá lobby vẽ ảnh chân dung lên canvas, có fallback vector', () => {

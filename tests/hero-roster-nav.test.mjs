@@ -103,10 +103,10 @@ console.log('\n=== 4. PANEL CHI TIET DAY DU ===');
 
 check('hien moc sao (ms.name)', /\$\{ms\.name\}/.test(rosterBody));
 check('hien mo ta perk (ms.perkDesc)', /\$\{ms\.perkDesc\}/.test(rosterBody));
-check('hien shard hien tai / nguong', /Shard:.*\$\{shards\}/.test(rosterBody));
-check('co progress bar shard', /h-1\.5 rounded-full bg-slate-800/.test(rosterBody));
-check('nut len sao disable khi thieu shard', /disabled/.test(rosterBody) && /canUp/.test(rosterBody));
-check('nut len sao goi upgradeHeroStar', /upgradeHeroStar\(hero\.id\)/.test(rosterBody));
+check('chỉ một studio nâng sao trong chi tiết roster', (html.match(/data-hero-upgrade-disclosure=/g)||[]).length === 1 && /id="charHeroStatsStarSkinPanel"/.test(html));
+check('không còn nút nâng sao thứ hai trong roster', !/btnUpgradeStar/.test(rosterBody));
+check('studio vẫn hiển thị mảnh và chi phí', /nextMilestone.shardCost/.test(html) && /nextMilestone.goldCost/.test(html));
+check('studio gọi upgradeHeroStar qua handler thật', /upgradeHeroStar\(btn.getAttribute\('data-upgrade-star-hero'\)\)/.test(html));
 
 // ============================================================ 5. RESPONSIVE
 console.log('\n=== 5. RESPONSIVE ===');

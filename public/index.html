@@ -222,9 +222,8 @@
     .rune-workshop-row .rune-gold-btn:hover,.rune-workshop-row .rune-gold-btn:focus-visible{transform:translateY(-3px);filter:brightness(1.12)}
     .gear-context-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;max-width:760px;width:100%;margin:0 auto;padding:8px;border:1px solid #a78bfa77;border-radius:14px;background:#111936dc}
     .gear-context-controls:empty{display:none}
-    #btnToggleStageStarSkin{min-height:44px;min-width:44px}
     .gear-context-controls>div:not(.hidden){display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
-    .gear-context-controls #stageLoreDrawer,.gear-context-controls #stageStarSkinDrawer{width:100%}
+    .gear-context-controls #stageLoreDrawer{width:100%}
     .character-visual-settings{width:100%;padding:8px 10px;border:1px solid #a78bfa77;border-radius:10px;color:#e9d5ff;font-size:12px;font-weight:800}
     .character-visual-settings summary{cursor:pointer}
     .character-visual-settings button{margin-top:9px}
@@ -1735,27 +1734,8 @@
 
         <!-- Middle Grid: Hero Selection & Current Loadout Summary -->
           <details id="battlePrepDetails" class="battle-prep-details">
-            <summary>Đổi anh hùng &amp; xem trang bị <span aria-hidden="true">⌄</span></summary>
+            <summary>Xem trang bị xuất chiến <span aria-hidden="true">⌄</span></summary>
         <div class="battle-prep-content">
-          <!-- Hero Selector -->
-          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between gap-3">
-            <div class="flex items-center justify-between">
-              <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-400">Anh Hùng Xuất Chiến</h3>
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span id="activeHeroRole" class="text-[11px] text-emerald-400 font-semibold">Cân bằng & Linh hoạt</span>
-                <button id="btnBattleOpenStarSkin" type="button" class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-400 via-rose-500 to-fuchsia-500 text-slate-950 font-black text-[10px] shadow hover:brightness-110 transition">
-                  ⭐ Nâng sao &amp; cộng hưởng
-                </button>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2" id="heroSelectList">
-              <!-- Populated by JS -->
-            </div>
-            <div id="heroPassiveBox" class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-2.5 text-xs text-slate-300">
-              <!-- Populated by JS -->
-            </div>
-          </div>
-
           <!-- Active Loadout & Chapter Records -->
           <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between gap-3">
             <div class="flex items-center justify-between">
@@ -1863,16 +1843,11 @@
           <!-- Top-Right Preset Loadout Switcher (1 | 2 | 3 + Wardrobe Hanger) -->
           <div id="stageTopControls" class="relative z-10 flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
             <div class="flex items-center gap-1 flex-wrap">
-              <button id="btnStagePrevHero" type="button" class="w-6 h-6 rounded-full bg-slate-950/65 hover:bg-slate-900 border border-white/30 text-[10px] font-black text-amber-300 flex items-center justify-center shadow transition" title="Nhân vật trước">◀</button>
               <span class="px-2.5 py-0.5 rounded-full bg-slate-950/65 backdrop-blur border border-white/30 text-[11px] font-black text-white shadow flex items-center gap-1">
                 🌙 <span id="stageHeroTitleBadge">Artemis • Nữ Thần Săn Trăng Bạc</span>
               </span>
-              <button id="btnStageNextHero" type="button" class="w-6 h-6 rounded-full bg-slate-950/65 hover:bg-slate-900 border border-white/30 text-[10px] font-black text-amber-300 flex items-center justify-center shadow transition" title="Nhân vật tiếp theo">▶</button>
               <button id="btnToggleStageLore" type="button" class="px-2 py-0.5 rounded-full bg-purple-950/75 hover:bg-purple-900/85 border border-purple-300/50 text-[10px] font-black text-purple-100 shadow transition" title="Xem Backstory & Kỹ năng Nhân vật">
                 📜 Tiểu Sử
-              </button>
-              <button id="btnToggleStageStarSkin" type="button" aria-expanded="false" aria-controls="stageStarSkinDrawer" class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-400 text-slate-950 font-black text-[10px] sm:text-[11px] border border-white/70 shadow-[0_0_12px_rgba(244,114,182,0.6)] hover:brightness-110 active:scale-95 transition" title="Mở Nâng Cấp Sao Tướng & Tủ Đồ Trang Phục Siêu Đẹp">
-                ⭐ Nâng sao &amp; cộng hưởng
               </button>
               <button id="btnStageShowcaseUlt" type="button" class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-cyan-400 via-sky-500 to-indigo-500 text-slate-950 font-black text-[10px] sm:text-[11px] border border-white/80 shadow-[0_0_12px_rgba(56,189,248,0.75)] hover:brightness-110 active:scale-95 transition" title="Kích hoạt Mưa Tên Bão Tố & Tuyệt Kỹ Vũ Khí ngay trên Sân Khấu!">
                 ⚡ Biểu Diễn Tuyệt Kỹ
@@ -1893,13 +1868,11 @@
           </div>
 
           <!-- Quick Character Switcher Pills right on the Gear Stage -->
-          <div id="stageQuickHeroBar" class="relative z-10 flex items-center justify-center gap-1.5 mb-1.5 flex-wrap"></div>
 
           <!-- Collapsible Archero 2 Hero Backstory Overlay Card (Matches Silvermoon Hunt Reference) -->
           <div id="stageLoreDrawer" class="hidden relative z-20 max-w-xl mx-auto mb-2 rounded-2xl bg-slate-950/90 backdrop-blur-md border-2 border-amber-300/70 p-3 shadow-2xl text-xs"></div>
 
           <!-- Collapsible Hero Star Upgrade & Luxury Skin Wardrobe Drawer right on the Gear Stage -->
-          <div id="stageStarSkinDrawer" class="hidden relative z-20 max-w-2xl mx-auto mb-2.5 rounded-2xl bg-slate-950/95 backdrop-blur-md border-2 border-fuchsia-400/80 p-3 sm:p-4 shadow-[0_12px_32px_rgba(0,0,0,0.85)] text-xs" role="region" aria-label="Nâng sao và cộng hưởng" data-hero-upgrade-disclosure="stage"></div>
 
           <!-- Main 3-Column Stage: [3 Left Equipped Slots] - [Center 3D Chibi Hero & ATK/HP Pedestal] - [3 Right Equipped Slots] -->
           <div class="gear-stage-layout relative z-10 max-w-2xl mx-auto grid grid-cols-[76px_1fr_76px] sm:grid-cols-[92px_1fr_92px] items-center gap-2 sm:gap-4">
@@ -2024,37 +1997,20 @@
 
         <!-- 3B. SUB-PANEL: CHARACTERS, S-TIER WEAPON ARCHETYPES & SPIRIT PETS -->
         <div id="subpanelCharacters" class="hidden flex-1 bg-gradient-to-b from-[#111a3a] to-[#090d1e] px-3 sm:px-6 py-4 flex flex-col gap-4">
+          <button type="button" id="btnOpenHeroRoster" class="min-h-[44px] px-3 py-2 rounded-xl bg-indigo-700 text-white font-black">Thẻ Anh Hùng →</button>
+          <div id="characterReferenceNavigation"></div>
           <div id="characterStageControls" class="gear-context-controls" aria-label="Điều khiển anh hùng"></div>
-          <div class="max-w-3xl w-full mx-auto" id="vnCharactersAuthenticShowcase"></div>
           <div class="max-w-3xl w-full mx-auto flex flex-col gap-4">
-            <!-- Quick Hero Switcher inside Characters Subtab -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col gap-3">
-              <div class="flex items-center justify-between">
-                <h3 class="text-xs font-extrabold uppercase tracking-wider text-amber-400">Chọn Nhân Vật Xuất Chiến (4 Anh Hùng)</h3>
-                <span class="text-[11px] text-sky-300 font-bold">Đổi nhân vật sẽ cập nhật ngay trên đài Gear</span>
-              </div>
-              <div id="charSubtabHeroGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
-              <div class="flex items-center justify-between gap-2 mt-1 rounded-xl border border-fuchsia-400/30 bg-fuchsia-950/20 px-3 py-2"><div><b class="text-xs text-fuchsia-200">⭐ Phát triển anh hùng</b><p class="text-[10px] text-slate-400">Nâng sao và chọn kỹ năng cộng hưởng khi bạn chủ động mở bảng.</p></div><button type="button" id="btnToggleCharStarResonance" aria-expanded="false" aria-controls="charHeroStatsStarSkinPanel" class="shrink-0 min-h-[44px] px-3 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 text-slate-950 text-[10px] font-black shadow">⭐ Nâng sao &amp; cộng hưởng</button></div><div id="charHeroStatsStarSkinPanel" class="hidden mt-1" role="region" aria-label="Bảng nâng sao và cộng hưởng" data-hero-upgrade-disclosure="characters"></div>
-              <div id="charHeroLoreCard" class="mt-1"></div>
-            </div>
-
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5">
               <div>
-                <h2 class="text-sm sm:text-base font-black text-white">Kho Vũ Khí S-Tier & Linh Thú (Archero 2 Sets)</h2>
-                <p class="text-xs text-slate-400">Cường hóa toàn bộ cấp bậc tinh thông Vũ Khí & chọn Linh Thú bay hộ vệ trong hầm ngục.</p>
+                <h2 class="text-sm sm:text-base font-black text-white">Tinh thông vũ khí</h2>
+                <p class="text-xs text-slate-400">Cường hóa tinh thông vũ khí. Chọn và phát triển anh hùng tại Thẻ Anh Hùng.</p>
               </div>
               <button id="btnUpgradeAllGear" type="button" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shrink-0 transition">
                 ⬆️ Cường Hóa Vũ Khí (+25 ATK, +80 HP) - <span id="gearUpgradeCostText">250</span> 🪙
               </button>
             </div>
 
-            <!-- Spirit Pets List -->
-            <div>
-              <h3 class="text-xs font-extrabold uppercase tracking-wider text-purple-400 mb-2">2. Chọn Linh Thú Đồng Hành (Tự động tấn công cả khi bạn đang chạy)</h3>
-              <div id="petCardsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <!-- Populated by JS -->
-              </div>
-            </div>
           </div>
         </div>
 
@@ -2104,7 +2060,11 @@
         <div id="heroRosterGrid" class="max-w-4xl w-full mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2"></div>
 
         <!-- Chi tiết anh hùng đang chọn -->
-        <div id="heroDetailPanel" class="max-w-4xl w-full mx-auto"></div>
+        <div class="max-w-4xl w-full mx-auto">
+          <div id="heroDetailPanel"></div>
+          <button type="button" id="btnToggleCharStarResonance" aria-expanded="false" aria-controls="charHeroStatsStarSkinPanel" class="min-h-[44px] px-3 rounded-xl bg-gradient-to-r from-fuchsia-500 to-amber-400 text-slate-950 text-xs font-black">⭐ Nâng sao &amp; cộng hưởng</button>
+          <div id="charHeroStatsStarSkinPanel" class="hidden mt-2" role="region" aria-label="Phát triển anh hùng" data-hero-upgrade-disclosure="hero"></div>
+        </div>
 
         <!-- Nút vào Tài Năng (bản thật gộp talent vào màn Nhân Vật — ui_role) -->
         <div class="max-w-4xl w-full mx-auto">
@@ -13516,6 +13476,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             SaveState.heroSkinIdx = SaveState.heroSelectedSkins?.[id] || 0;
             SaveState.save();
             SoundFX.coinPickup();
+            closeHeroUpgradeDisclosures();
+            renderLobbyUI();
             renderHeroRoster();
           });
         });
@@ -13528,7 +13490,6 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         const ms = getHeroMilestoneData(stars, hero);
         const shards = (SaveState.heroShards || {})[hero.id] || 0;
         const nextCost = stars >= 8 ? null : getHeroShardRequirement(hero, stars + 1);
-        const canUp = nextCost !== null && shards >= nextCost && SaveState.gold >= (HERO_STAR_MILESTONES[stars + 1]?.goldCost || 0);
 
         detail.innerHTML = `
           <div class="rounded-2xl border border-slate-700 bg-slate-900/90 p-3.5 shadow-xl">
@@ -13554,34 +13515,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               <p class="text-[10px] text-slate-300 leading-snug mt-1">${ms.perkDesc}</p>
             </div>
 
-            <div class="mt-2">
-              <div class="flex items-center justify-between gap-2 mb-1">
-                <div class="text-[10px] text-slate-400">
-                  Shard: <b class="text-white">${shards}</b>${nextCost !== null ? ` / ${nextCost}` : ' · CỰC CẠN 8★'}
-                </div>
-                <button type="button" id="btnUpgradeStar"
-                  class="px-3 py-1.5 rounded-lg text-[10.5px] font-black transition ${canUp
-                    ? 'bg-emerald-500 text-slate-950 hover:brightness-110 active:scale-95'
-                    : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'}"
-                  ${canUp ? '' : 'disabled'}>
-                  ${stars >= 8 ? 'ĐÃ CỰC CẠN' : `⬆ Lên ${stars + 1}★`}
-                </button>
-              </div>
-              ${nextCost !== null ? `
-              <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
-                <div class="h-full rounded-full bg-gradient-to-r from-amber-400 to-yellow-300"
-                  style="width:${Math.min(100, Math.round((shards / nextCost) * 100))}%"></div>
-              </div>` : ''}
-            </div>
           </div>`;
 
-        const upBtn = document.getElementById('btnUpgradeStar');
-        if (upBtn && canUp) {
-          upBtn.addEventListener('click', () => {
-            if (typeof upgradeHeroStar === 'function') upgradeHeroStar(hero.id);
-            renderHeroRoster();
-          });
-        }
       }
 
       /**
@@ -16551,39 +16486,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           titleBadge.innerHTML = `${stats.hero.name} <span class="text-amber-300">${'★'.repeat(curStar)}</span> • <span class="text-fuchsia-200">${curSkin.name}</span>`;
         }
 
-        // Render Quick Hero Switcher Bar directly on the Gear Stage
-        const quickHeroBar = document.getElementById('stageQuickHeroBar');
-        if (quickHeroBar) {
-          quickHeroBar.innerHTML = HEROES.map(h => {
-            const isAct = h.id === SaveState.selectedHeroId;
-            return `
-              <button type="button" data-stage-hero="${h.id}" class="stage-quick-hero-btn px-2 py-0.5 rounded-full border text-[10px] sm:text-[11px] font-black flex items-center gap-1 transition shadow ${
-                isAct
-                  ? 'bg-amber-400 text-slate-950 border-white scale-105'
-                  : 'bg-slate-950/65 text-slate-200 border-white/25 hover:bg-slate-900/90'
-              }">
-                <img src="${h.avatar}" alt="${h.name}" class="w-4 h-4 rounded-full object-cover border border-white/50" />
-                <span>${h.name}</span>
-              </button>
-            `;
-          }).join('');
-          quickHeroBar.querySelectorAll('.stage-quick-hero-btn').forEach(b => {
-            b.addEventListener('click', () => {
-              const nextHeroId = b.getAttribute('data-stage-hero');
-              if (nextHeroId && nextHeroId !== SaveState.selectedHeroId) {
-                if (!isHeroOwned(nextHeroId)) { showToast('🔒 Anh hùng chưa mở khoá.', 'err'); return; }
-                SaveState.selectedHeroId = nextHeroId;
-                SaveState.save();
-                SoundFX.levelUp();
-                StageHeroAnim.triggerPose();
-                const picked = HEROES.find(x => x.id === nextHeroId);
-                if (picked) showToast(`🌙 Đã đổi nhân vật: ${picked.name} (${picked.title})!`);
-                renderLobbyUI();
-              }
-            });
-          });
-        }
-
         // Update Live Visual Gear Summary Pill under the Hero Stage Canvas
         const visSummaryEl = document.getElementById('stageVisualGearSummary');
         if (visSummaryEl) {
@@ -16641,11 +16543,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (stageLoreEl) {
           stageLoreEl.innerHTML = buildHeroLoreCardHTML(stats.hero);
         }
-        const charLoreEl = document.getElementById('charHeroLoreCard');
-        if (charLoreEl) {
-          charLoreEl.innerHTML = buildHeroLoreCardHTML(stats.hero);
-        }
-
         // Build Interactive Hero Star Upgrade (0★ -> 8★ Wiki Awakening), Resonance Studio (3★ & 6★) & Luxury Skin Wardrobe HTML
         const buildHeroStarAndSkinStudioHTML = (h, prefixId = 'char') => {
           const curStar = getHeroStarLevel(h.id);
@@ -16878,6 +16775,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           containerEl.querySelectorAll('.btn-upgrade-hero-star').forEach(btn => {
             btn.addEventListener('click', () => {
               upgradeHeroStar(btn.getAttribute('data-upgrade-star-hero'));
+              renderHeroRoster();
             });
           });
           containerEl.querySelectorAll('.btn-summon-hero-shard').forEach(btn => {
@@ -16912,14 +16810,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           });
         };
 
-        const stageStarSkinEl = document.getElementById('stageStarSkinDrawer');
-        if (stageStarSkinEl) {
-          stageStarSkinEl.innerHTML = buildHeroStarAndSkinStudioHTML(stats.hero, 'stage');
-          bindStarAndSkinEvents(stageStarSkinEl);
-        }
         const charStarSkinEl = document.getElementById('charHeroStatsStarSkinPanel');
         if (charStarSkinEl) {
-          charStarSkinEl.innerHTML = buildHeroStarAndSkinStudioHTML(stats.hero, 'char');
+          charStarSkinEl.innerHTML = buildHeroStarAndSkinStudioHTML(stats.hero, 'hero');
           bindStarAndSkinEvents(charStarSkinEl);
         }
 
@@ -17012,43 +16905,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           } else {
             bsBadge.classList.add('hidden');
           }
-        }
-
-        // 6. Characters Subtab Hero Selector Grid (All 18 Canonical Wiki Heroes)
-        const charHeroGrid = document.getElementById('charSubtabHeroGrid');
-        if (charHeroGrid) {
-          charHeroGrid.innerHTML = HEROES.map(h => {
-            const active = h.id === SaveState.selectedHeroId;
-            const hStar = getHeroStarLevel(h.id);
-            const hSkin = getActiveHeroSkin(h.id);
-            const rColor = h.rarity === 'Legendary' ? 'text-amber-300 border-amber-400/50 bg-amber-500/20' : (h.rarity === 'Epic' ? 'text-purple-300 border-purple-400/50 bg-purple-500/20' : 'text-sky-300 border-sky-400/50 bg-sky-500/20');
-            return `
-              <button type="button" data-char-hero="${h.id}" class="char-subtab-hero-btn p-2.5 rounded-2xl border-2 flex flex-col items-center text-center gap-1 transition ${
-                active ? 'bg-amber-500/20 border-amber-400 shadow-lg scale-[1.02]' : 'bg-slate-950/80 border-slate-800 hover:border-slate-600'
-              }">
-                <div class="relative w-14 h-14 rounded-xl overflow-hidden border-2" style="border-color:${hSkin.trimColor || h.color}">
-                  <img src="${h.avatar}" alt="${h.name}" class="w-full h-full object-cover" />
-                  <span class="absolute top-0.5 left-0.5 px-1 rounded text-[8px] font-black border ${rColor}">${h.rarity || 'Leg'}</span>
-                  <span class="absolute bottom-0 inset-x-0 bg-slate-950/90 text-[9px] font-black text-amber-300">${hStar}★</span>
-                </div>
-                <div class="font-black text-xs text-white">${h.name} <span class="text-amber-300">(${hStar}★)</span></div>
-                <div class="text-[9px] font-extrabold text-cyan-300 truncate max-w-full">⚡ ${h.skillName || h.title}</div>
-                <div class="text-[9px] font-bold text-emerald-300 truncate max-w-full">${h.globalAllStatText || ''}</div>
-                <div class="text-[10px] text-amber-300 font-bold">${active ? '✓ Đang Xuất Chiến' : 'Chọn & Cộng Hưởng'}</div>
-              </button>
-            `;
-          }).join('');
-          document.querySelectorAll('.char-subtab-hero-btn').forEach(b => {
-            b.addEventListener('click', () => {
-              const heroId = b.getAttribute('data-char-hero');
-              if (!isHeroOwned(heroId)) { showToast('🔒 Anh hùng chưa mở khoá.', 'err'); return; }
-              SaveState.selectedHeroId = heroId;
-              SaveState.save();
-              SoundFX.coinPickup();
-              StageHeroAnim.triggerPose();
-              renderLobbyUI();
-            });
-          });
         }
 
         // 7. Bảng ngọc và kho dùng cùng bố cục Trang bị, giữ nguyên cơ chế gắn/tháo.
@@ -18060,9 +17916,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 <button type="button" data-buy-hero-shard="${h.id}" class="flex-1 py-1 px-2 rounded-lg bg-emerald-600/25 hover:bg-emerald-600/40 border border-emerald-400/50 text-emerald-200 font-black text-[10px] transition">
                   +50 Mảnh (100 💎)
                 </button>
-                <button type="button" data-jump-upgrade-hero="${h.id}" class="py-1 px-2 rounded-lg bg-amber-500/25 hover:bg-amber-500/40 border border-amber-400/60 text-amber-200 font-black text-[10px] transition">
-                  🌟 Nâng Sao
-                </button>
               </div>
             </div>
           `;
@@ -18706,16 +18559,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           };
         });
 
-        container.querySelectorAll('[data-jump-upgrade-hero]').forEach(btn => {
-          btn.onclick = () => {
-            const hId = btn.getAttribute('data-jump-upgrade-hero');
-            if (!isHeroOwned(hId)) { showToast('🔒 Anh hùng chưa mở khoá.', 'err'); return; }
-            SaveState.selectedHeroId = hId;
-            SaveState.save();
-            const charSubBtn = document.querySelector('.gear-subtab-btn[data-gear-subtab="characters"]');
-            if (charSubBtn) charSubBtn.click();
-          };
-        });
+
       }
 
 
@@ -23602,330 +23446,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       // 2. RENDER TAB 2 SUB-SCREEN: ANH HÙNG (21 HEROES + CỘNG HƯỞNG + 8-TAB WARDROBE, PAGES 22-58)
-      function renderVnHeroesAndWardrobeUI() {
-        ensureVnAuthenticUIState();
-        const container = document.getElementById('vnCharactersAuthenticShowcase');
-        if (!container) return;
-        const st = SaveState.vnUiState;
-        const heroMeta = VN_21_HEROES_PDF.find(h => h.id === st.selectedHeroIdVn) || VN_21_HEROES_PDF[1];
-
-        if (st.wardrobeOpen) {
-          const wTab = VN_WARDROBE_TABS.find(t => t.id === st.wardrobeTab) || VN_WARDROBE_TABS[0];
-          container.innerHTML = `
-            <div class="rounded-3xl bg-[#131d3b] border-2 border-sky-400/60 overflow-hidden shadow-2xl">
-              <!-- Top Sky & Grass Stage with Duck/Hero + Xem trước 5 sao -->
-              <div class="relative h-56 bg-gradient-to-b from-[#0284c7] via-[#38bdf8] to-[#bae6fd] flex flex-col items-center justify-end pb-4 overflow-hidden">
-                <button type="button" id="btnVnWardrobePreview5Star" class="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-slate-900/60 border border-white/40 text-[11px] font-black text-white flex items-center gap-1 shadow">
-                  <span>🪐</span>
-                  <span>Xem trước 5 sao</span>
-                </button>
-                <div class="h-32 w-full flex items-end justify-center drop-shadow-[0_10px_12px_rgba(0,0,0,0.4)] mb-1">
-                  ${heroArtImgTag(heroMeta.id, '<span class="text-7xl">🦆✨</span>', 'max-h-32 object-contain object-bottom')}
-                </div>
-                <div class="w-44 h-6 rounded-t-xl bg-lime-500 border-t-2 border-lime-300"></div>
-                <div class="w-48 h-5 rounded-b-xl bg-amber-600 border-b-2 border-amber-800"></div>
-              </div>
-
-              <!-- 8 Category Tabs Bar (Skin | Phụ kiện đầu | mặt | tay | chân | lưng | Linh Hồn Trôi Nổi | Bầu không khí nền) -->
-              <div class="bg-[#1e293b] border-y-2 border-slate-700 px-2 py-1.5 grid grid-cols-4 sm:grid-cols-8 gap-1">
-                ${VN_WARDROBE_TABS.map(t => `
-                  <button type="button" data-vn-wardrobe-tab="${t.id}" class="py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 text-[10px] font-black transition ${wTab.id === t.id ? 'bg-amber-400/25 border-b-2 border-amber-400 text-amber-300' : 'text-slate-300 hover:text-white'}">
-                    <span class="text-base">${t.icon}</span>
-                    <span class="truncate max-w-full">${t.label}</span>
-                  </button>
-                `).join('')}
-              </div>
-
-              <!-- Items List / Grid -->
-              <div class="p-3 bg-[#151c33] max-h-[340px] overflow-y-auto">
-                ${wTab.id === 'skin' ? `
-                  <div class="space-y-2.5">
-                    ${wTab.items.map(sk => `
-                      <div class="rounded-2xl bg-[#26324d] border-2 ${st.equippedWardrobe.skin === sk.id ? 'border-amber-400' : 'border-slate-600'} p-3 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                          <div class="w-16 h-16 rounded-2xl bg-sky-500/30 border-2 border-sky-300 flex items-center justify-center text-3xl shrink-0">
-                            ${sk.icon}
-                          </div>
-                          <div>
-                            <div class="font-black text-white text-sm">${sk.name} ⓘ</div>
-                            <p class="text-[11px] text-slate-300 mt-0.5">${sk.desc}</p>
-                          </div>
-                        </div>
-                        <button type="button" data-vn-equip-wardrobe="${sk.id}" class="px-4 py-2 rounded-xl bg-gradient-to-b from-[#fde047] to-[#eab308] text-slate-950 font-black text-xs shrink-0 shadow">
-                          ${st.equippedWardrobe.skin === sk.id ? '✅ Đã kích hoạt' : sk.status}
-                        </button>
-                      </div>
-                    `).join('')}
-                  </div>
-                ` : `
-                  <div class="grid grid-cols-5 gap-2.5">
-                    ${wTab.items.map(acc => {
-                      const isEq = st.equippedWardrobe[wTab.id] === acc.id;
-                      return `
-                        <button type="button" data-vn-equip-wardrobe="${acc.id}" class="relative h-20 rounded-2xl border-2 flex flex-col items-center justify-center gap-1 transition ${isEq ? 'bg-indigo-600/40 border-amber-300 shadow-lg' : 'bg-[#232d45] border-slate-700 hover:border-slate-500'}">
-                          ${!acc.unlocked ? '<span class="absolute top-1 right-1 text-xs">🔒</span>' : ''}
-                          <span class="text-2xl">${acc.icon}</span>
-                          <span class="text-[9px] font-bold text-slate-200 truncate max-w-[90%]">${acc.name.replace(/^[^\s]+\s/, '')}</span>
-                        </button>
-                      `;
-                    }).join('')}
-                  </div>
-                `}
-              </div>
-
-              <!-- Bottom Bar: Back Arrow + Yellow Lưu Button -->
-              <div class="bg-[#1b243d] border-t border-slate-700 p-3 flex items-center justify-between">
-                <button type="button" id="btnVnCloseWardrobe" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-black text-sm">
-                  ⬅ Quay Lại
-                </button>
-                <button type="button" id="btnVnSaveWardrobe" class="px-10 py-2.5 rounded-2xl bg-gradient-to-b from-[#fde047] to-[#eab308] border-2 border-white text-slate-950 font-black text-sm shadow-lg">
-                  Lưu
-                </button>
-              </div>
-            </div>
-          `;
-
-          container.querySelectorAll('[data-vn-wardrobe-tab]').forEach(btn => {
-            btn.onclick = () => {
-              st.wardrobeTab = btn.getAttribute('data-vn-wardrobe-tab');
-              SaveState.save();
-              renderVnHeroesAndWardrobeUI();
-            };
-          });
-          container.querySelectorAll('[data-vn-equip-wardrobe]').forEach(btn => {
-            btn.onclick = () => {
-              st.equippedWardrobe[wTab.id] = btn.getAttribute('data-vn-equip-wardrobe');
-              SaveState.save();
-              SoundFX.levelUp();
-              renderVnHeroesAndWardrobeUI();
-              showToast('✨ Đã trang bị phụ kiện / trang phục lên nhân vật!');
-            };
-          });
-          const closeBtn = document.getElementById('btnVnCloseWardrobe');
-          if (closeBtn) closeBtn.onclick = () => { st.wardrobeOpen = false; renderVnHeroesAndWardrobeUI(); };
-          const saveBtn = document.getElementById('btnVnSaveWardrobe');
-          if (saveBtn) saveBtn.onclick = () => { st.wardrobeOpen = false; SaveState.save(); showToast('💾 Đã lưu bộ Trang Phục & Phụ Kiện nhân vật!'); renderVnHeroesAndWardrobeUI(); };
-          const prev5Btn = document.getElementById('btnVnWardrobePreview5Star');
-          if (prev5Btn) prev5Btn.onclick = () => showToast('🌟 Đang xem trước hiệu ứng Hào Quang 5 Sao của Trang Phục!');
-          return;
-        }
-
-        // Standard Anh Hùng View (Pages 22, 37-58)
-        const starsHtml = '⭐'.repeat(Math.max(1, heroMeta.stars)) + '☆'.repeat(Math.max(0, 6 - heroMeta.stars));
-
-        container.innerHTML = `
-          <div class="hero-reference-content rounded-3xl bg-[#132347] border-2 border-[#3b82f6] overflow-hidden shadow-2xl space-y-3 p-3">
-            <!-- UPPER STAGE: HERO MODEL ON LEFT + SKILL LEVELS ON RIGHT (MATCHES PAGES 22, 38-58) -->
-            <div class="hero-reference-stage rounded-2xl bg-gradient-to-b from-[#0284c7] via-[#2563eb] to-[#1e3a8a] border-2 border-sky-300/70 p-3 grid grid-cols-1 md:grid-cols-2 gap-3 items-center relative">
-              <!-- Left: Hero Pedestal + Trang Phục / Điện + Name Banner -->
-              <div class="relative flex flex-col items-center justify-center py-2">
-                <div class="absolute left-1 top-2 flex flex-col gap-2">
-                  <button type="button" id="btnVnOpenWardrobe" class="px-2.5 py-1.5 rounded-xl bg-slate-900/75 hover:bg-slate-900 border border-sky-300/60 text-white font-black text-[10px] flex flex-col items-center shadow">
-                    <span class="text-lg">👕</span>
-                    <span>Trang Phục</span>
-                  </button>
-                  <button type="button" id="btnVnOpenHeroHall" class="relative px-2.5 py-1.5 rounded-xl bg-slate-900/75 hover:bg-slate-900 border border-amber-300/60 text-white font-black text-[10px] flex flex-col items-center shadow">
-                    <span class="text-lg">🏛️</span>
-                    <span>Điện</span>
-                    <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 border border-white text-[9px] flex items-center justify-center">!</span>
-                  </button>
-                </div>
-
-                <div class="w-28 h-28 rounded-full flex items-center justify-center text-6xl overflow-hidden drop-shadow-[0_10px_14px_rgba(0,0,0,0.45)]" style="background:${heroMeta.avatarBg}">
-                  ${heroArtImgTag(heroMeta.id, heroMeta.spriteEmoji, 'w-full h-full object-contain object-top scale-110')}
-                </div>
-
-                <!-- White Silver-Riveted Name Plate -->
-                <div class="mt-2 px-7 py-1 rounded-xl bg-gradient-to-b from-white to-slate-200 border-2 border-slate-400 text-slate-900 font-black text-base shadow flex items-center gap-3">
-                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                  <span>${heroMeta.name}</span>
-                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                </div>
-                <div class="mt-1 text-sm tracking-widest">${starsHtml}</div>
-              </div>
-
-              <!-- Right: Translucent Blue Skill Card (Lv.1 / Lv.2 / Lv.3 / Lv.4) -->
-              <div class="rounded-2xl bg-slate-950/35 backdrop-blur border border-white/30 p-3 space-y-2 text-xs">
-                <div class="flex items-center justify-between bg-slate-900/80 rounded-xl px-3 py-1.5 border border-white/25">
-                  <div class="flex items-center gap-2">
-                    <span class="w-8 h-8 rounded-lg bg-amber-500/30 border border-amber-300 flex items-center justify-center text-lg">${heroMeta.skillIcon}</span>
-                    <span class="font-black text-white text-sm">${heroMeta.skillName}</span>
-                  </div>
-                  <span class="text-slate-300 font-black">ⓘ</span>
-                </div>
-                <div class="space-y-1.5 max-h-[175px] overflow-y-auto pr-1">
-                  <div class="rounded-xl bg-white/85 text-slate-900 p-2 font-bold text-[11px]">
-                    <span class="inline-block px-2 py-0.2 rounded bg-sky-700 text-white font-black text-[10px] mr-1">Lv.1</span>
-                    ${heroMeta.lv1}
-                  </div>
-                  <div class="rounded-xl bg-white/80 text-slate-900 p-2 font-bold text-[11px]">
-                    <span class="inline-block px-2 py-0.2 rounded bg-sky-700 text-white font-black text-[10px] mr-1">Lv.2</span>
-                    ${heroMeta.lv2}
-                  </div>
-                  <div class="rounded-xl bg-white/75 text-slate-800 p-2 font-bold text-[11px]">
-                    <span class="inline-block px-2 py-0.2 rounded bg-slate-700 text-white font-black text-[10px] mr-1">Lv.3</span>
-                    ${heroMeta.lv3}
-                  </div>
-                  <div class="rounded-xl bg-white/70 text-slate-800 p-2 font-bold text-[11px]">
-                    <span class="inline-block px-2 py-0.2 rounded bg-slate-700 text-white font-black text-[10px] mr-1">Lv.4</span>
-                    ${heroMeta.lv4}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            ${window.ArtemisRuneWorkspace.navigationMarkup('characters')}
-            ${st.showResonancePanel ? `
-              <!-- CỘNG HƯỞNG KỸ NĂNG VIEW (PAGE 37) -->
-              <div class="rounded-2xl bg-[#1c2a52] border-2 border-sky-400/60 p-3.5 space-y-3">
-                <div class="flex items-center justify-between">
-                  <span class="px-3 py-1 rounded-xl bg-sky-500 text-white font-black text-xs">Cộng Hưởng Kỹ Năng</span>
-                  <button type="button" id="btnVnCloseResonance" class="px-3 py-1 rounded-xl bg-slate-800 text-amber-300 font-black text-xs">✖ Đóng Cộng Hưởng</button>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div class="rounded-2xl bg-[#253666] p-3 flex items-center justify-between">
-                    <span class="font-black text-white text-xs">Kỹ Năng Nhân Vật</span>
-                    <div class="flex items-center gap-2">
-                      <div class="w-14 h-14 rounded-xl bg-sky-500/30 border-2 border-white flex flex-col items-center justify-center">
-                        <span class="text-xl">🌪️</span>
-                        <span class="text-[9px] font-black text-white">LV.4</span>
-                      </div>
-                      <div class="w-14 h-14 rounded-xl bg-slate-800/80 border border-slate-600 flex items-center justify-center text-slate-400">🔒</div>
-                    </div>
-                  </div>
-                  <div class="rounded-2xl bg-[#253666] p-3 flex items-center justify-between">
-                    <span class="font-black text-white text-xs">Kỹ năng skin</span>
-                    <div class="flex items-center gap-1.5">
-                      <div class="w-12 h-12 rounded-xl bg-emerald-500/30 border-2 border-emerald-300 flex flex-col items-center justify-center">
-                        <span class="text-lg">🦆</span>
-                        <span class="text-[8px] font-black text-white">Vịt Nyanja</span>
-                      </div>
-                      <div class="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-600 flex items-center justify-center text-slate-400">🔒</div>
-                      <div class="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-600 flex items-center justify-center text-slate-400">🔒</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="rounded-2xl bg-[#dbeafe] text-slate-900 p-3 space-y-1 text-xs font-bold">
-                  <div class="font-black text-sm text-sky-900">Hiệu Ứng Cộng Hưởng: Bước Chân Gió Lốc</div>
-                  <div><span class="text-emerald-700 font-black">Lv.1:</span> Tốc độ Di chuyển tăng 10%, đẩy thi triển Gió Lốc định kỳ và gây sát thương cho địch</div>
-                  <div><span class="text-emerald-700 font-black">Lv.2:</span> Phạm vi Gió Lốc lớn hơn, Sát Thương Gió Lốc gấp đôi</div>
-                  <div><span class="text-emerald-700 font-black">Lv.3:</span> Khi phạm vi Gió Lốc tiếp xúc địch sẽ kích hoạt nổ tung</div>
-                </div>
-              </div>
-            ` : ''}
-
-            <!-- 4-COLUMN 21-HERO GRID (MATCHES PAGES 22, 38-58) -->
-            <div class="hero-reference-grid grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-[380px] overflow-y-auto pr-1">
-              ${VN_21_HEROES_PDF.map(h => {
-                const isSel = h.id === heroMeta.id;
-                const isEquipped = (SaveState.selectedHeroId || 'nyanja') === h.id;
-                return `
-                  <div data-vn-select-hero="${h.id}" class="cursor-pointer relative rounded-2xl border-2 p-2 flex flex-col items-center justify-between transition ${isSel ? 'border-cyan-300 bg-sky-500/30 shadow-lg' : 'border-slate-700 bg-[#1b2a4a] hover:border-sky-400/60'}">
-                    ${isEquipped ? '<span class="absolute top-1 inset-x-6 rounded-full bg-slate-950/85 text-emerald-300 font-black text-[9px] text-center py-0.5">Đang Dùng</span>' : ''}
-                    ${!h.unlocked ? '<span class="absolute top-1.5 left-1.5 text-xs">🔒</span>' : ''}
-                    <div class="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl my-2 shadow-inner overflow-hidden" style="background:${h.avatarBg}">
-                      ${heroArtImgTag(h.id, h.spriteEmoji, 'w-full h-full object-contain object-top scale-110')}
-                    </div>
-                    <div class="font-black text-xs text-white">${h.name}</div>
-
-                    ${isSel ? `
-                      <div class="w-full space-y-1 mt-1.5 z-10">
-                        <button type="button" data-vn-hero-resonance="${h.id}" class="w-full py-1 rounded-xl bg-gradient-to-b from-[#fde047] to-[#eab308] text-slate-950 font-black text-[10px] shadow">
-                          Cộng Hưởng
-                        </button>
-                        <button type="button" data-vn-hero-starup="${h.id}" class="w-full py-1 rounded-xl bg-gradient-to-b from-[#fbbf24] to-[#d97706] text-white font-black text-[10px] shadow">
-                          Nâng Sao
-                        </button>
-                        <button type="button" data-vn-hero-use="${h.id}" class="w-full py-1 rounded-xl bg-gradient-to-b from-[#4ade80] to-[#16a34a] text-white font-black text-[10px] shadow">
-                          Dùng
-                        </button>
-                      </div>
-                    ` : `
-                      <div class="w-full mt-1.5 rounded-full bg-slate-950/80 border border-slate-700 px-2 py-0.5 text-[10px] font-black text-center text-white">
-                        🧩 ${h.shardText}
-                      </div>
-                    `}
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          </div>
-        `;
-
-        const btnWardrobe = document.getElementById('btnVnOpenWardrobe');
-        if (btnWardrobe) {
-          btnWardrobe.onclick = () => {
-            st.wardrobeOpen = true;
-            SaveState.save();
-            renderVnHeroesAndWardrobeUI();
-          };
-        }
-        const btnHall = document.getElementById('btnVnOpenHeroHall');
-        if (btnHall) {
-          btnHall.onclick = () => {
-            st.showResonancePanel = !st.showResonancePanel;
-            renderVnHeroesAndWardrobeUI();
-          };
-        }
-        const btnCloseRes = document.getElementById('btnVnCloseResonance');
-        if (btnCloseRes) {
-          btnCloseRes.onclick = () => {
-            st.showResonancePanel = false;
-            renderVnHeroesAndWardrobeUI();
-          };
-        }
-
-        container.querySelectorAll('[data-vn-select-hero]').forEach(card => {
-          card.onclick = (e) => {
-            if (e.target.closest('button')) return;
-            st.selectedHeroIdVn = card.getAttribute('data-vn-select-hero');
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderVnHeroesAndWardrobeUI();
-          };
-        });
-
-        container.querySelectorAll('[data-vn-hero-resonance]').forEach(btn => {
-          btn.onclick = (e) => {
-            e.stopPropagation();
-            st.showResonancePanel = !st.showResonancePanel;
-            SaveState.save();
-            SoundFX.levelUp();
-            renderVnHeroesAndWardrobeUI();
-          };
-        });
-
-        container.querySelectorAll('[data-vn-hero-starup]').forEach(btn => {
-          btn.onclick = (e) => {
-            e.stopPropagation();
-            const hId = btn.getAttribute('data-vn-hero-starup');
-            // Preview-only entries must go through canonical cost/ownership logic.
-            if (!HEROES.some(h => h.id === hId)) { showToast('🔒 Anh hùng chỉ có trong bản xem trước.', 'err'); return; }
-            const hObj = VN_21_HEROES_PDF.find(x => x.id === hId);
-            const ok = typeof upgradeHeroStar === 'function' && upgradeHeroStar(hId);
-            if (!ok) { renderVnHeroesAndWardrobeUI(); return; }
-            if (hObj) hObj.stars = Math.min(8, getHeroStarLevel(hId));
-            renderVnHeroesAndWardrobeUI();
-            showToast(`🌟 Đã nâng sao anh hùng [${hObj?.name || hId}] lên ${getHeroStarLevel(hId)}★!`);
-          };
-        });
-
-        container.querySelectorAll('[data-vn-hero-use]').forEach(btn => {
-          btn.onclick = (e) => {
-            e.stopPropagation();
-            const hId = btn.getAttribute('data-vn-hero-use');
-            const hObj = VN_21_HEROES_PDF.find(x => x.id === hId);
-            if (!isHeroOwned(hId)) { showToast('🔒 Anh hùng chưa mở khoá hoặc chỉ có trong bản xem trước.', 'err'); return; }
-            SaveState.selectedHeroId = hId;
-            st.selectedHeroIdVn = hId;
-            SaveState.save();
-            SoundFX.levelUp();
-            renderLobbyUI();
-            showToast(`✅ Đã chọn [${hObj?.name || hId}] xuất chiến!`);
-          };
-        });
-      }
-
       // 3. RENDER TAB 3: CHIẾN DỊCH (PAGE 59 100% REPLICA)
 
       // ==================== HỆ THỐNG THÀNH TỰU (ACHIEVEMENTS) ====================
@@ -25184,7 +24704,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         };
         safeRender('gear', () => renderGearSystemUI(stats));
         safeRender('shop', () => renderVnShopTabUI());
-        safeRender('heroes', () => renderVnHeroesAndWardrobeUI());
         // Khung mockup "Trang 59" đã bỏ: nó hiển thị chapter 34 "Thế Giới Dưới
         // Biển" (dữ liệu giả) chồng lên 3 chương thật, kèm nút PvP/event không
         // tồn tại. Chỉ còn mapSelectPanel là nguồn duy nhất.
@@ -25221,44 +24740,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const bestRm = getChapterBest(ch.id) || 0;
         document.getElementById('bestRecordText').textContent = `Kỷ lục: Phòng ${bestRm}/${ch.rooms}`;
 
-        // Hero Selector (Displays dynamic Star Level 1★-6★ & Equipped Luxury Skin)
-        const heroListEl = document.getElementById('heroSelectList');
-        heroListEl.innerHTML = HEROES.map(h => {
-          const active = h.id === SaveState.selectedHeroId;
-          const owned = isHeroOwned(h.id);
-          const hStar = getHeroStarLevel(h.id);
-          const hSkin = getActiveHeroSkin(h.id);
-          return `
-            <button type="button" data-hero-id="${h.id}" aria-pressed="${active}" aria-disabled="${!owned}" aria-label="${h.name}${!owned ? ' — chưa mở khóa' : (active ? ' — đang xuất chiến' : ' — chọn xuất chiến')}" class="hero-card-btn card-shine p-2 rounded-2xl border-2 text-left transition flex flex-col items-center text-center gap-1 ${active ? 'bg-amber-500/20 border-amber-400 shadow-lg scale-[1.02]' : 'bg-slate-950/80 border-slate-800 hover:border-slate-600'}">
-              <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 shadow-md" style="border-color:${active ? '#fbbf24' : (hSkin.trimColor || h.color)}">
-                <img src="${h.avatar}" alt="${h.name}" class="w-full h-full object-cover" />
-                <span class="absolute top-0.5 right-0.5 px-1 rounded bg-slate-950/85 text-[8px] font-black text-fuchsia-300 border border-fuchsia-400/40">${hSkin.tier === 'mythic' ? '👑 Skin Thần Thoại' : (hSkin.tier === 'legendary' ? '★ Skin Sử Thi' : 'Mặc Định')}</span>
-                <span class="absolute bottom-0 inset-x-0 bg-slate-950/85 text-[9px] font-black ${hStar >= 6 ? 'text-rose-300' : 'text-amber-300'} py-0.5">${'★'.repeat(hStar)} (${hStar}★)</span>
-              </div>
-              <div class="font-extrabold text-xs sm:text-sm text-white">${h.name}</div>
-              <div class="text-[9px] font-black text-fuchsia-300 leading-tight truncate max-w-full">${owned ? `🧥 ${hSkin.name}` : '🔒 Chưa mở khóa'}</div>
-              <div class="text-[10px] text-slate-300 font-semibold leading-tight">${h.title}</div>
-            </button>
-          `;
-        }).join('');
-
-        document.querySelectorAll('.hero-card-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const heroId = btn.getAttribute('data-hero-id');
-            if (!isHeroOwned(heroId)) {
-              showToast('🔒 Anh hùng chưa mở khoá — hãy thu thập mảnh để mở.', 'err');
-              return;
-            }
-            SaveState.selectedHeroId = heroId;
-            SaveState.save();
-            SoundFX.coinPickup();
-            renderLobbyUI();
-          });
-        });
-
-        document.getElementById('activeHeroRole').textContent = stats.hero.role;
-        document.getElementById('heroPassiveBox').textContent = stats.hero.passiveDesc;
-
         // Summary Loadout (includes equipped weapon quality & awakening stars)
         document.getElementById('summaryWeaponIcon').innerHTML = getWeaponSvgArt(stats.weapon.id);
         const eqWep = SaveState.equippedGear && SaveState.equippedGear.weapon;
@@ -25279,36 +24760,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // Equipment Tab (S-Tier Weapon Archetypes & Spirit Pets inside Characters Subtab)
         const gearUpgradeCost = 200 + (SaveState.gearLevel - 1) * 120;
         document.getElementById('gearUpgradeCostText').textContent = gearUpgradeCost;
-
-        const petGrid = document.getElementById('petCardsGrid');
-        petGrid.innerHTML = PETS.map(p => {
-          const isSelected = p.id === SaveState.selectedPetId;
-          return `
-            <div class="p-3.5 rounded-2xl border flex flex-col justify-between gap-3 transition ${isSelected ? 'bg-purple-500/15 border-purple-400 shadow-lg' : 'bg-slate-900/90 border-slate-800'}">
-              <div class="flex items-center gap-2.5">
-                <div class="w-12 h-12 rounded-xl bg-slate-950/90 border border-purple-500/40 shadow-inner flex items-center justify-center">${getPetSvgArt(p.id)}</div>
-                <div>
-                  <span class="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">Spirit Pet</span>
-                  <h4 class="font-extrabold text-sm text-white mt-0.5">${p.name}</h4>
-                </div>
-              </div>
-              <p class="text-xs text-slate-300 leading-relaxed">${p.desc}</p>
-              <button type="button" data-pet-id="${p.id}" class="select-pet-btn w-full py-2 rounded-xl font-extrabold text-xs transition ${isSelected ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-600'}">
-                ${isSelected ? '✓ Đang Đồng Hành' : 'Chọn Linh Thú Này'}
-              </button>
-            </div>
-          `;
-        }).join('');
-
-        document.querySelectorAll('.select-pet-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            SaveState.selectedPetId = btn.getAttribute('data-pet-id');
-            SaveState.save();
-            SoundFX.coinPickup();
-            showToast('Đã chọn Linh Thú đồng hành!');
-            renderLobbyUI();
-          });
-        });
 
         // Render Wiki Skills Codex & Hybrid Formula Simulator
         renderWikiSkillsCodex(stats);
@@ -30825,6 +30276,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       document.querySelectorAll('.nav-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const targetId = btn.getAttribute('data-tab');
+          closeHeroUpgradeDisclosures();
           NAV_TAB_IDS.forEach(id => {
             const sec = document.getElementById(id);
             if (sec) sec.classList.toggle('hidden', id !== targetId);
@@ -31269,38 +30721,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         // Battle has its own entry point; hero selection already lives in the Characters panel.
         document.getElementById('btnQuickJumpBattle')?.remove();
-        document.getElementById('stageQuickHeroBar')?.remove();
         stageControls.remove();
         characterControls.appendChild(document.getElementById('stageLoreDrawer'));
-        characterControls.appendChild(document.getElementById('stageStarSkinDrawer'));
       }
-
-      // Prev / Next Hero Switcher on Gear Stage
-      document.getElementById('btnStagePrevHero')?.addEventListener('click', () => {
-        const ownedHeroes = HEROES.filter(h => isHeroOwned(h.id));
-        if (!ownedHeroes.length) return;
-        const idx = ownedHeroes.findIndex(h => h.id === SaveState.selectedHeroId);
-        const nextHero = ownedHeroes[idx < 0 ? 0 : (idx - 1 + ownedHeroes.length) % ownedHeroes.length];
-        SaveState.selectedHeroId = nextHero.id;
-        SaveState.save();
-        SoundFX.levelUp();
-        StageHeroAnim.triggerPose();
-        showToast(`🌙 Đã chuyển sang nhân vật: ${nextHero.name} • ${nextHero.title}`);
-        renderLobbyUI();
-      });
-
-      document.getElementById('btnStageNextHero')?.addEventListener('click', () => {
-        const ownedHeroes = HEROES.filter(h => isHeroOwned(h.id));
-        if (!ownedHeroes.length) return;
-        const idx = ownedHeroes.findIndex(h => h.id === SaveState.selectedHeroId);
-        const nextHero = ownedHeroes[(idx + 1) % ownedHeroes.length];
-        SaveState.selectedHeroId = nextHero.id;
-        SaveState.save();
-        SoundFX.levelUp();
-        StageHeroAnim.triggerPose();
-        showToast(`🌙 Đã chuyển sang nhân vật: ${nextHero.name} • ${nextHero.title}`);
-        renderLobbyUI();
-      });
 
       document.getElementById('btnToggleStageLore')?.addEventListener('click', () => {
         const drawer = document.getElementById('stageLoreDrawer');
@@ -31334,15 +30757,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         button.setAttribute('aria-expanded', String(open));
       }
       function closeHeroUpgradeDisclosures() {
-        setHeroUpgradeDisclosure('stageStarSkinDrawer', 'btnToggleStageStarSkin', false);
         setHeroUpgradeDisclosure('charHeroStatsStarSkinPanel', 'btnToggleCharStarResonance', false);
       }
-      document.getElementById('btnToggleStageStarSkin')?.addEventListener('click', () => {
-        const b = document.getElementById('btnToggleStageStarSkin');
-        const open = b?.getAttribute('aria-expanded') !== 'true';
-        setHeroUpgradeDisclosure('stageStarSkinDrawer', 'btnToggleStageStarSkin', open);
-        if (open) document.getElementById('stageStarSkinDrawer')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      });
       document.getElementById('btnToggleCharStarResonance')?.addEventListener('click', () => {
         const b = document.getElementById('btnToggleCharStarResonance');
         const open = b?.getAttribute('aria-expanded') !== 'true';
@@ -31357,20 +30773,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         returnButton?.focus({ preventScroll: true });
       });
 
-      // Battle Tab Quick Jump to Hero Star & Skin Studio
-      document.getElementById('btnBattleOpenStarSkin')?.addEventListener('click', () => {
-        const equipTabBtn = document.querySelector('.nav-tab-btn[data-tab="tabEquip"]');
-        if (equipTabBtn) equipTabBtn.click();
-        const charSubBtn = document.querySelector('.gear-subtab-btn[data-gear-subtab="characters"]');
-        if (charSubBtn) charSubBtn.click();
-        SoundFX.levelUp();
-        setTimeout(() => {
-          const panel = document.getElementById('charHeroStatsStarSkinPanel');
-          if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 80);
+      document.getElementById('btnOpenHeroRoster').addEventListener('click', () => {
+        document.querySelector('#bottomNavBar [data-tab="tabHeroes"]')?.click();
       });
 
       // Gear Subtabs (Characters | Gear | Runes)
+      document.getElementById('characterReferenceNavigation').innerHTML = window.ArtemisRuneWorkspace.navigationMarkup('characters');
       document.getElementById('gearReferenceNavigation').innerHTML = window.ArtemisRuneWorkspace.navigationMarkup('gear');
       document.addEventListener('click', event => {
         const target = event.target.closest('[data-equipment-nav]');

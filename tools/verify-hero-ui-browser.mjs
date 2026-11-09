@@ -41,6 +41,11 @@ try {
   browser = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true, args: ['--disable-extensions', '--disable-background-networking'] });
   page = await browser.newPage({ viewport: { width: 360, height: 740 } });
   page.setDefaultTimeout(10000);
+  // Kiểm chứng riêng cơ chế async predicate của browser driver đang cài.
+  const predicateProbeStart = Date.now();
+  const falsePromise = await page.waitForFunction(async () => false, null, {timeout: 500});
+  result.asyncPredicateProbe = { returnedValue: await falsePromise.jsonValue(), elapsedMs: Date.now() - predicateProbeStart,
+    explanation: 'Async predicate trả Promise truthy: waitForFunction hoàn tất dù resolved value=false; không poll lại.' };
   page.on('pageerror', error => result.errors.push(error.message));
   await page.route('**/*', route => {
     const url = new URL(route.request().url());
@@ -50,7 +55,12 @@ try {
   assert.equal(registration.status(), 201);
   const playerId = (await registration.json()).player.id;
   const fresh = (await (await page.request.get(origin + '/api/save')).json()).data;
-  await (await getMongoDb()).collection(COLLECTIONS.saves).updateOne({ playerId }, { $set: { data: { ...fresh, beginnerJourney: { isCompleted: true, skipped: true } } } });
+  const fixture = { ...fresh, gold: 100000, heroShards: { ...fresh.heroShards, alex: 1000 },
+    heroStars: { ...fresh.heroStars, thor: 3 }, resonanceSlots: {slot1: 'thor', slot2: null},
+    runes: {rune_flame: 4}, equippedRuneSlots: {etched:[null,null,null],blessing:[null,null],enhancement:['rune_flame',null,null,null],ability:[null,null,null,null]},
+    equippedGear: {...fresh.equippedGear, weapon: {uid:'hero_fixture_bow',templateId:'crimson_bow',quality:'common',level:5,awakening:0,locked:true,favorite:true,sockets:[{gem:'ruby',level:1}],affixes:[{stat:'atk_flat',tier:'C',value:14}]}},
+    beginnerJourney: { isCompleted: true, skipped: true } };
+  await (await getMongoDb()).collection(COLLECTIONS.saves).updateOne({ playerId }, { $set: { data: fixture } });
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.Archero2FusionAPI && window.ArtemisCloud?.getState().ready);
   await page.evaluate(() => window.Archero2FusionAPI.stopGameLoop());
@@ -62,19 +72,26 @@ try {
     await heroNav.click();
     await page.locator('#subpanelCharacters').waitFor({ state: 'visible' });
     const panel = page.locator('#charHeroStatsStarSkinPanel');
-    const trigger = page.locator('#subpanelCharacters > .max-w-3xl').last().getByRole('button', { name: '⭐ Nâng sao & cộng hưởng', exact: true });
+    await page.locator('#btnOpenHeroRoster').click();
+    await page.locator('#tabHeroes').waitFor({state:'visible'});
+    const trigger = page.locator('#btnToggleCharStarResonance');
     assert.equal(await panel.isVisible(), false, 'star/resonance initially hidden');
-    assert.equal(await page.locator('#stageStarSkinDrawer').isVisible(), false);
+    assert.equal(await page.locator('#stageStarSkinDrawer, #charSubtabHeroGrid, #heroSelectList, #petCardsGrid, [data-pet-id], [data-vn-select-hero]').count(), 0);
+    assert.equal(await page.locator('[data-hero-upgrade-disclosure]').count(), 1);
+    assert.equal(await page.locator('.btn-upgrade-hero-star').count(), 1);
+    const before = await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedHeroId);
+    await page.locator('#heroRosterGrid [data-hero-pick="atreus"]').click();
+    assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedHeroId),before,'locked hero cannot be selected');
     assert.equal(await page.locator('#weaponCardsGrid, .select-weapon-btn, [data-weapon-id]').count(), 0);
     assert.equal(await page.getByText('Chọn Vũ Khí Chủ Đạo', { exact: true }).count(), 0);
-    const item = { viewport, heroNavLabel: await heroNav.innerText(), primaryWeaponSelectorAbsent: true, initiallyClosed: true };
+    const item = { viewport, heroNavLabel: 'Anh hùng → Thẻ Anh Hùng', primaryWeaponSelectorAbsent: true, initiallyClosed: true };
     result.viewports.push(item);
     await trigger.scrollIntoViewIfNeeded();
     item.triggerBox = await trigger.boundingBox();
     assert.ok(item.triggerBox.width >= 44 && item.triggerBox.height >= 44, '44px disclosure target');
     await page.screenshot({ path: resolve(evidence, `hero-${viewport.width}-closed.png`) });
     const geometry = async () => page.evaluate(() => {
-      const selectors = '#subpanelCharacters, #characterStageControls, #vnCharactersAuthenticShowcase, #charSubtabHeroGrid, #charSubtabHeroGrid > *, #btnToggleCharStarResonance, #charHeroStatsStarSkinPanel, #charHeroStatsStarSkinPanel button';
+      const selectors = '#heroRosterGrid, #heroDetailPanel, #btnToggleCharStarResonance, #charHeroStatsStarSkinPanel, #charHeroStatsStarSkinPanel button';
       const elements = [...document.querySelectorAll(selectors)].filter(el => el.getClientRects().length);
       return { viewportWidth: innerWidth, documentWidth: document.documentElement.scrollWidth,
         boxes: elements.map(el => { const b = el.getBoundingClientRect(); return { id: el.id || el.getAttribute('data-char-hero') || el.tagName, left: b.left, right: b.right, width: b.width }; }),
@@ -100,30 +117,85 @@ try {
     item.escapeClosesAndRestoresFocus = true;
     await trigger.click();
     assert.equal(await panel.isVisible(), true);
-    await page.locator('#tabEquip [data-equipment-nav="gear"]:visible').first().click();
-    await page.locator('#tabEquip [data-equipment-nav="characters"]:visible').first().click();
+    await page.locator('#bottomNavBar [data-tab="tabBattle"]').first().click();
+    await page.locator('#bottomNavBar [data-tab="tabHeroes"]').first().click();
     assert.equal(await panel.isVisible(), false, 're-entry resets disclosure');
     assert.equal(await trigger.getAttribute('aria-expanded'), 'false');
     item.reentryClosed = true;
-    const stageTrigger = page.locator('#btnToggleStageStarSkin');
-    await stageTrigger.scrollIntoViewIfNeeded();
-    item.stageTriggerBox = await stageTrigger.boundingBox();
-    assert.ok(item.stageTriggerBox.width >= 44 && item.stageTriggerBox.height >= 44, '44px stage disclosure target');
-    await stageTrigger.click();
-    assert.equal(await page.locator('#stageStarSkinDrawer').isVisible(), true);
-    await page.locator('#stageStarSkinDrawer button').first().focus();
-    await page.keyboard.press('Escape');
-    assert.equal(await page.locator('#stageStarSkinDrawer').isVisible(), false);
-    assert.equal(await stageTrigger.evaluate(el => document.activeElement === el), true);
-    item.stageDisclosureVerified = true;
     await trigger.click();
     await page.locator('#bottomNavBar [data-tab="tabBattle"]').first().click();
     await page.locator('#bottomNavBar [data-tab="tabEquip"]').first().click();
     await page.locator('#tabEquip [data-equipment-nav="characters"]:visible').first().click();
+    await page.locator('#btnOpenHeroRoster').click();
     assert.equal(await panel.isVisible(), false, 'main navigation re-entry closed');
     item.mainNavigationReentryClosed = true;
     await page.screenshot({ path: resolve(evidence, `hero-${viewport.width}-reentry.png`) });
   }
+  // Fixture nâng cấp có cấp vật liệu rõ ràng, không phải thu nhập chơi tự nhiên.
+  const progression = await page.evaluate(() => {
+    const api = window.Archero2FusionAPI, S = api.SaveState;
+    api.renderLobbyUI(); api.renderHeroRoster();
+    return { gold: S.gold, shards: S.heroShards.alex, star: S.heroStars.alex || 0,
+      pet: S.selectedPetId, resonance: JSON.stringify(S.resonanceSlots), gear: JSON.stringify(S.equippedGear), sockets: JSON.stringify(S.equippedRuneSlots) };
+  });
+  await page.locator('#btnToggleCharStarResonance').click();
+  await page.locator('#charHeroStatsStarSkinPanel .btn-upgrade-hero-star').click();
+  const after = await page.evaluate(() => {
+    const S = window.Archero2FusionAPI.SaveState;
+    return { gold: S.gold, shards: S.heroShards.alex, star: S.heroStars.alex,
+      pet: S.selectedPetId, resonance: JSON.stringify(S.resonanceSlots), gear: JSON.stringify(S.equippedGear), sockets: JSON.stringify(S.equippedRuneSlots) };
+  });
+  assert.equal(after.star, progression.star + 1);
+  assert.equal(progression.gold - after.gold, 500, 'exact gold cost once');
+  assert.equal(progression.shards - after.shards, 50, 'exact shard cost once');
+  for (const key of ['pet','resonance','gear','sockets']) assert.equal(after[key], progression[key]);
+  result.progressionDiagnostics = [];
+  page.on('response', async response => {
+    if (response.url() === origin + '/api/save' && response.request().method() === 'PUT') {
+      result.progressionDiagnostics.push({ status: response.status(), body: await response.json() });
+    }
+  });
+  // Predicate đồng bộ: không trả Promise truthy trước khi debounce/PUT hoàn tất.
+  // Neo vào kết quả click đã chụp, không so hai giá trị cùng có thể bị rollback.
+  await page.waitForFunction(expectedStar => {
+    const state = window.ArtemisCloud.getState();
+    return !state.dirty && !state.saving && !state.lastError
+      && window.Archero2FusionAPI.SaveState.heroStars.alex === expectedStar;
+  }, after.star, {timeout: 15000});
+  const persisted = (await (await page.request.get(origin + '/api/save')).json()).data;
+  assert.equal(persisted.heroStars.alex, after.star, 'HTTP upgrade star must persist');
+  assert.equal(persisted.selectedPetId, after.pet);
+  assert.deepEqual(persisted.resonanceSlots, JSON.parse(after.resonance));
+  assert.equal(persisted.gold, after.gold);
+  assert.equal(persisted.heroShards.alex, after.shards);
+  assert.deepEqual(persisted.equippedGear, JSON.parse(after.gear));
+  assert.deepEqual(persisted.equippedRuneSlots, JSON.parse(after.sockets));
+  assert.deepEqual(persisted.equippedGear.weapon, fixture.equippedGear.weapon);
+  assert.deepEqual(persisted.equippedRuneSlots, fixture.equippedRuneSlots);
+  assert.deepEqual(persisted.resonanceSlots, fixture.resonanceSlots);
+  // Retry snapshot cùng revision phải xung đột CAS, không thanh toán lần hai.
+  const saved = await (await page.request.get(origin + '/api/save')).json();
+  const staleRetry = await page.request.put(origin + '/api/save', {data:{playerId,revision:saved.revision-1,data:persisted}});
+  assert.equal(staleRetry.status(),409);
+  const retryRead = await (await page.request.get(origin + '/api/save')).json();
+  assert.equal(retryRead.revision,saved.revision);
+  assert.deepEqual(retryRead.data,persisted);
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.waitForFunction(() => window.ArtemisCloud?.getState().ready);
+  await page.evaluate(() => window.Archero2FusionAPI.stopGameLoop());
+  const reloaded = await page.evaluate(() => {
+    const S = window.Archero2FusionAPI.SaveState;
+    return {gold:S.gold,shards:S.heroShards.alex,star:S.heroStars.alex,pet:S.selectedPetId,
+      resonance:JSON.stringify(S.resonanceSlots),gear:JSON.stringify(S.equippedGear),sockets:JSON.stringify(S.equippedRuneSlots)};
+  });
+  for (const key of ['gold','shards','star','pet']) assert.equal(reloaded[key],after[key],`reload ${key}`);
+  for (const key of ['resonance','gear','sockets']) assert.deepEqual(JSON.parse(reloaded[key]),JSON.parse(after[key]),`reload ${key}`);
+  result.progression = { fixtureGold: progression.gold, fixtureShards: progression.shards, before: progression, after,
+    persisted: { star: persisted.heroStars.alex, shards: persisted.heroShards.alex, gold: persisted.gold },
+    reloaded, staleRetryStatus:staleRetry.status(), exactGoldCost:500,exactShardCost:50,
+    preserved:['pet','resonance','gear (including gems/affixes)','13 rune sockets'],
+    httpSaveReadBack: true, persistenceStatus:'PASS',
+    limitation: 'DB memory trong cùng process: chứng minh HTTP/client/reload, không phải Mongo durability hay production.' };
   assert.deepEqual(result.errors, []);
   result.status = 'PASS';
 } catch (error) {

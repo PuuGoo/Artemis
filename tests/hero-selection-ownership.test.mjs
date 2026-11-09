@@ -34,7 +34,7 @@ function fixture(extra = {}) {
   const btn = { getAttribute: () => null, addEventListener: (_, fn) => { handler = fn; } };
   const root = { querySelectorAll: () => [btn], getElementById: () => btn, querySelector: () => null };
   const ctx = vm.createContext({ SaveState: S, document: root, container: root, quickHeroBar: root,
-    showToast: (...v) => toasts.push(v), renderLobbyUI() {}, renderHeroRoster() {}, renderVnHeroesAndWardrobeUI() {},
+    showToast: (...v) => toasts.push(v), renderLobbyUI() {}, renderHeroRoster() {}, closeHeroUpgradeDisclosures() {},
     SoundFX: { levelUp() {}, coinPickup() {} }, StageHeroAnim: { triggerPose() {}, sparkles: [] }, st: {},
     getHeroShardRequirement: () => 50, makeWikiHeroPortraitURI: () => 'portrait-fixture' });
   vm.runInContext(`${heroesCode}\n${declaration('getHeroStarLevel')}\n${between('function isHeroOwned(', '/**\n       * Màn THẺ')}`, ctx);
@@ -45,14 +45,8 @@ function fixture(extra = {}) {
     (handler || btn.onclick)({ stopPropagation() {} });
   } };
 }
-const quick = "quickHeroBar.querySelectorAll('.stage-quick-hero-btn').forEach";
-const paths = [quick,
-  "document.querySelectorAll('.char-subtab-hero-btn').forEach",
-  "container.querySelectorAll('[data-jump-upgrade-hero]').forEach",
-  "container.querySelectorAll('[data-vn-hero-use]').forEach",
-  "document.querySelectorAll('.hero-card-btn').forEach",
-  "grid.querySelectorAll('[data-hero-pick]').forEach"];
-for (const anchor of paths.slice(1)) test(`${anchor}: locked and invalid selections have no writes`, () => {
+const paths = ["grid.querySelectorAll('[data-hero-pick]').forEach"];
+for (const anchor of paths) test(`${anchor}: locked and invalid selections have no writes`, () => {
   for (const id of ['thor', 'missing']) {
     const f = fixture();
     f.ctx.grid = f.ctx.container;
@@ -82,24 +76,8 @@ test('shared ownership rejects nonexistent selected/starred IDs and preserves se
   f.S.selectedHeroId = 'missing';
   assert.equal(f.run("isHeroOwned('missing')"), false);
 });
-const prev = "document.getElementById('btnStagePrevHero')?.addEventListener";
-const next = "document.getElementById('btnStageNextHero')?.addEventListener";
-for (const anchor of [prev, next]) test(`${anchor}: wraps across owned heroes, skipping locked neighbors`, () => {
-  const f = fixture({ heroStars: { alex: 0, thor: 3 } });
-  const assets = JSON.stringify([f.S.heroStars, f.S.heroShards, f.S.heroSelectedSkins]);
-  for (const expected of ['thor', 'alex', 'thor', 'alex']) {
-    f.click(anchor);
-    assert.equal(f.S.selectedHeroId, expected);
-  }
-  assert.equal(JSON.stringify([f.S.heroStars, f.S.heroShards, f.S.heroSelectedSkins]), assets);
-});
-for (const anchor of [prev, next]) test(`${anchor}: one owned hero stays usable and invalid current ID recovers safely`, () => {
-  const f = fixture();
-  f.click(anchor);
-  assert.equal(f.S.selectedHeroId, 'alex');
-  f.S.selectedHeroId = 'missing';
-  f.click(anchor);
-  assert.equal(f.S.selectedHeroId, 'alex');
+test('Picker phụ, nút mũi tên và lối tắt nâng sao đã được xoá cùng handler', () => {
+ assert.equal(/stage-quick-hero-btn|char-subtab-hero-btn|hero-card-btn|data-vn-hero-use|data-jump-upgrade-hero|btnStagePrevHero|btnStageNextHero/.test(html), false);
 });
 function runFixture(extra = {}) {
   const f = fixture(extra);
@@ -164,31 +142,27 @@ test('event trial preserves selected hero when startup is blocked or throws', ()
     assert.ok(f.saves.every(s => s.selectedHeroId === 'alex'));
   }
 });
-test('VN star-up cannot unlock preview metadata on failure or grant stars to unsupported IDs', () => {
-  for (const id of ['thor', 'missing']) {
-    const f = fixture({ gold: id === 'missing' ? 1000 : 0, heroShards: { thor: 12, missing: 100 } });
-    f.ctx.VN_21_HEROES_PDF = [{ id, stars: 0, unlocked: false, name: id }];
-    f.ctx.getHeroMilestoneData = () => ({ shardCost: 50, goldCost: 100, name: '1 star' });
-    f.run(`${declaration('getHeroShardsCount')}\n${declaration('upgradeHeroStar')}`);
-    const before = JSON.stringify([f.S, f.ctx.VN_21_HEROES_PDF]);
-    f.click("container.querySelectorAll('[data-vn-hero-starup]').forEach", id);
-    assert.equal(JSON.stringify([f.S, f.ctx.VN_21_HEROES_PDF]), before);
-    assert.equal(f.saves.length, 0);
-    assert.ok(!f.toasts.some(([text]) => text.startsWith('🌟 Đã nâng')));
-  }
+test('Studio chính nâng sao qua chi phí canonical, không sửa tài sản khác', () => {
+ const f = fixture({gold:1000, heroStars:{alex:0,thor:3}, heroShards:{thor:150}});
+ f.ctx.getHeroMilestoneData=()=>({shardCost:50,goldCost:100,name:'4 stars'});
+ f.ctx.containerEl=f.ctx.container;
+ f.run(declaration('getHeroShardsCount')+'\n'+declaration('upgradeHeroStar'));
+ f.click("containerEl.querySelectorAll('.btn-upgrade-hero-star').forEach",'thor');
+ assert.equal(f.S.heroStars.thor,4);assert.equal(f.S.heroShards.thor,100);assert.equal(f.S.gold,900);assert.equal(f.S.heroSelectedSkins.thor,1);
 });
-test('VN star-up uses canonical costs/stars, without rewriting preview metadata or existing hero assets', () => {
-  const f = fixture({ gold: 1000, heroStars: { alex: 0, thor: 3 }, heroShards: { thor: 150 } });
-  f.ctx.VN_21_HEROES_PDF = [{ id: 'thor', stars: 1, unlocked: false, name: 'Thor' }];
-  f.ctx.getHeroMilestoneData = () => ({ shardCost: 50, goldCost: 100, name: '4 stars' });
-  f.run(`${declaration('getHeroShardsCount')}\n${declaration('upgradeHeroStar')}`);
-  f.click("container.querySelectorAll('[data-vn-hero-starup]').forEach", 'thor');
-  assert.equal(f.S.heroStars.thor, 4);
-  assert.equal(f.S.heroShards.thor, 100);
-  assert.equal(f.S.gold, 900);
-  assert.equal(f.ctx.VN_21_HEROES_PDF[0].stars, 4); // display mirror follows canonical stars
-  assert.equal(f.ctx.VN_21_HEROES_PDF[0].unlocked, false); // preview flag is not an ownership grant
-  assert.equal(f.S.heroSelectedSkins.thor, 1);
+test('Studio chính từ chối thiếu tiền/mảnh hoặc id lạ, không ghi save', () => {
+ for(const id of ['thor','missing']){const f=fixture();f.ctx.containerEl=f.ctx.container;f.ctx.getHeroMilestoneData=()=>({shardCost:50,goldCost:100});f.run(declaration('getHeroShardsCount')+'\n'+declaration('upgradeHeroStar'));const before=JSON.stringify(f.S);f.click("containerEl.querySelectorAll('.btn-upgrade-hero-star').forEach",id);assert.equal(JSON.stringify(f.S),before);assert.equal(f.saves.length,0);}
+});
+test('star upgrade rejects insufficient gold with enough shards, and insufficient shards with enough gold', () => {
+ for (const resources of [{gold:499,heroShards:{alex:50}},{gold:500,heroShards:{alex:49}}]) {
+  const f=fixture(resources);
+  f.ctx.getHeroMilestoneData=()=>({shardCost:50,goldCost:500,name:'1 star'});
+  f.run(declaration('getHeroShardsCount')+'\n'+declaration('upgradeHeroStar'));
+  const before=JSON.stringify(f.S);
+  assert.equal(f.run("upgradeHeroStar('alex')"),false);
+  assert.equal(JSON.stringify(f.S),before);
+  assert.equal(f.saves.length,0);
+ }
 });
 test('stage gear summary renders actual zero stars, not six-star preview fallback', () => {
   const f = fixture();
@@ -217,13 +191,4 @@ test('gem shard purchase validates the hero before charging', () => {
   f.click("container.querySelectorAll('[data-buy-hero-shard]').forEach", 'missing');
   assert.equal(f.S.gems, 300);
   assert.equal(f.S.heroShards.missing, undefined);
-});
-test('quick-stage binding rejects unowned and nonexistent IDs without changing assets', () => {
-  const f = fixture();
-  const before = JSON.stringify(f.S);
-  for (const id of ['thor', 'missing']) {
-    f.click(quick, id);
-    assert.equal(JSON.stringify(f.S), before);
-  }
-  assert.equal(f.saves.length, 0);
 });

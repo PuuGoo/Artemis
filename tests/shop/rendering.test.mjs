@@ -7,7 +7,7 @@ import { SHOP_S_TIER_TEMPLATES } from '../../lib/shop/rewards.js';
 
 const html = fs.readFileSync(new URL('../../public/index.html', import.meta.url), 'utf8');
 const start = html.indexOf('      function renderVnShopTabUI()');
-const end = html.indexOf('      function renderVnHeroesAndWardrobeUI()', start);
+const end = html.indexOf('      // 3. RENDER TAB 3:', start);
 assert.ok(start >= 0 && end > start);
 const renderer = html.slice(start, end);
 const viewSource = fs.readFileSync(new URL('../../public/js/game/shop/vip-shop.js', import.meta.url), 'utf8');

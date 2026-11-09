@@ -60,23 +60,8 @@ test('Vũ khí đang mặc được ghi nhận như vũ khí trong túi, tháo/b
   assert.equal(f.run('grantStarterWeaponIfNeeded()'), null);
 });
 
-test('Selector hero cũ không vượt khoá sở hữu của roster mới', () => {
-  const f = fixture();
-  f.run(between('function getHeroStarLevel(', 'function getHeroShardRequirement('));
-  f.run(between('function isHeroOwned(', '/**\n       * Màn THẺ'));
-  const before = JSON.stringify(f.S);
-  clickHandler(f, '.hero-card-btn', "document.getElementById('activeHeroRole')", 'data-hero-id', 'thor');
-  assert.equal(JSON.stringify(f.S), before);
-});
-
-test('Alex 0 sao vẫn sở hữu sau khi đổi sang hero đã mở, có thể đổi trở lại', () => {
-  const f = fixture({ heroStars: { alex: 0, thor: 1 } });
-  f.run(between('function getHeroStarLevel(', 'function getHeroShardRequirement('));
-  f.run(between('function isHeroOwned(', '/**\n       * Màn THẺ'));
-  clickHandler(f, '.hero-card-btn', "document.getElementById('activeHeroRole')", 'data-hero-id', 'thor');
-  assert.equal(f.S.selectedHeroId, 'thor');
-  clickHandler(f, '.hero-card-btn', "document.getElementById('activeHeroRole')", 'data-hero-id', 'alex');
-  assert.equal(f.S.selectedHeroId, 'alex');
+test('Không còn picker cũ; sở hữu được kiểm tra bởi roster canonical', () => {
+ assert.equal(/hero-card-btn|select-pet-btn/.test(html),false);
 });
 
 test('N08 hiển thị Hoàn Tất khi đã xong bảy bước trước', () => {
@@ -186,10 +171,11 @@ for (const [gold, scrolls, success] of [[124,1,false], [125,0,false], [125,1,tru
   });
 }
 
-test('Pet hiện là ba lựa chọn miễn phí, đổi lựa chọn không cấp gear/currency', () => {
+test('Pet cũ vẫn lưu được dù không còn lựa chọn trong UI', () => {
   const f = fixture({ selectedPetId: 'spirit_sword' });
   const before = JSON.stringify({ gold: f.S.gold, gems: f.S.gems, gearBag: f.S.gearBag, equippedGear: f.S.equippedGear });
-  clickHandler(f, '.select-pet-btn', '// Render Wiki Skills Codex', 'data-pet-id', 'frost_bat');
+  f.S.selectedPetId = 'frost_bat'; // Dữ liệu save cũ, không phải UI đã nghỉ.
+  f.S.save();
   assert.equal(f.S.selectedPetId, 'frost_bat');
   assert.equal(JSON.stringify({ gold: f.S.gold, gems: f.S.gems, gearBag: f.S.gearBag, equippedGear: f.S.equippedGear }), before);
   assert.equal(f.saved().selectedPetId, 'frost_bat');

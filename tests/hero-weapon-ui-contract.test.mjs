@@ -11,8 +11,8 @@ test('UI không còn lựa chọn vũ khí chính và vẫn giữ tương thích
 });
 
 test('Bảng nâng sao và cộng hưởng chỉ mở sau click, có aria trạng thái và đóng bằng Escape', () => {
-  assert.match(html, /id="btnToggleStageStarSkin"[^>]*aria-expanded="false"/);
-  assert.match(html, /id="stageStarSkinDrawer"[^>]*class="hidden/);
+  assert.doesNotMatch(html, /btnToggleStageStarSkin|stageStarSkinDrawer|btnBattleOpenStarSkin/);
+  assert.equal((html.match(/data-hero-upgrade-disclosure=/g) || []).length, 1);
   assert.match(html, /id="btnToggleCharStarResonance"[^>]*aria-expanded="false"/);
   assert.match(html, /id="charHeroStatsStarSkinPanel"[^>]*class="hidden/);
   assert.match(html, /btnToggleCharStarResonance[\s\S]{0,1800}keydown/);
@@ -23,6 +23,14 @@ test('Nút mở bảng hero có copy tiếng Việt rõ ràng và target disclos
   assert.match(html, /⭐ Nâng sao &amp; cộng hưởng|⭐ Nâng sao & cộng hưởng/);
   assert.match(html, /aria-controls="charHeroStatsStarSkinPanel"/);
   assert.match(html, /data-hero-upgrade-disclosure/);
+});
+
+test('Chỉ roster chính chọn anh hùng; không còn picker phụ hoặc chọn linh thú', () => {
+  assert.doesNotMatch(html, /heroSelectList|hero-card-btn|charSubtabHeroGrid|char-subtab-hero-btn|stageQuickHeroBar|stage-quick-hero-btn|btnStagePrevHero|btnStageNextHero|petCardsGrid|select-pet-btn|data-pet-id|renderVnHeroesAndWardrobeUI|data-vn-hero-starup/);
+  assert.match(html, /id="heroRosterGrid"/);
+  assert.match(html, /grid.querySelectorAll\('\[data-hero-pick\]'\)/);
+  assert.match(html, /selectedPetId: this.selectedPetId/);
+  assert.match(html, /resonanceSlots: this.resonanceSlots/);
 });
 
 test('Không có export/handler chọn vũ khí chính còn sót trên production surface', () => {

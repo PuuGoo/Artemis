@@ -7,13 +7,13 @@
         "width": 360,
         "height": 740
       },
-      "heroNavLabel": "Anh hùng",
+      "heroNavLabel": "Anh hùng → Thẻ Anh Hùng",
       "primaryWeaponSelectorAbsent": true,
       "initiallyClosed": true,
       "triggerBox": {
-        "x": 161.71875,
-        "y": 347,
-        "width": 157.28125,
+        "x": 13,
+        "y": 546.75,
+        "width": 183.921875,
         "height": 44
       },
       "closedGeometry": {
@@ -21,142 +21,22 @@
         "documentWidth": 360,
         "boxes": [
           {
-            "id": "subpanelCharacters",
-            "left": 1,
-            "right": 359,
-            "width": 358
+            "id": "heroRosterGrid",
+            "left": 13,
+            "right": 347,
+            "width": 334
           },
           {
-            "id": "characterStageControls",
-            "left": 1,
-            "right": 359,
-            "width": 358
-          },
-          {
-            "id": "vnCharactersAuthenticShowcase",
-            "left": 1,
-            "right": 359,
-            "width": 358
-          },
-          {
-            "id": "charSubtabHeroGrid",
-            "left": 28,
-            "right": 332,
-            "width": 304
-          },
-          {
-            "id": "thor",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "wukong",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "cleo",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "atreus",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "rolla",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "nezha",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "otta",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "hou_yi",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "phynx",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "loki",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "dracoola",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "seraph",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "mymu",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "hela",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "helix",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "nyanja",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "alex",
-            "left": 26.529998779296875,
-            "right": 176.47000122070312,
-            "width": 149.94000244140625
-          },
-          {
-            "id": "artemis",
-            "left": 185,
-            "right": 332,
-            "width": 147
+            "id": "heroDetailPanel",
+            "left": 13,
+            "right": 347,
+            "width": 334
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 161.71875,
-            "right": 319,
-            "width": 157.28125
+            "left": 13,
+            "right": 196.921875,
+            "width": 183.921875
           }
         ],
         "clipped": []
@@ -167,191 +47,64 @@
         "documentWidth": 360,
         "boxes": [
           {
-            "id": "subpanelCharacters",
-            "left": 1,
-            "right": 359,
-            "width": 358
+            "id": "heroRosterGrid",
+            "left": 13,
+            "right": 347,
+            "width": 334
           },
           {
-            "id": "characterStageControls",
-            "left": 1,
-            "right": 359,
-            "width": 358
-          },
-          {
-            "id": "vnCharactersAuthenticShowcase",
-            "left": 1,
-            "right": 359,
-            "width": 358
-          },
-          {
-            "id": "charSubtabHeroGrid",
-            "left": 28,
-            "right": 332,
-            "width": 304
-          },
-          {
-            "id": "thor",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "wukong",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "cleo",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "atreus",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "rolla",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "nezha",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "otta",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "hou_yi",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "phynx",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "loki",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "dracoola",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "seraph",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "mymu",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "hela",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "helix",
-            "left": 28,
-            "right": 175,
-            "width": 147
-          },
-          {
-            "id": "nyanja",
-            "left": 185,
-            "right": 332,
-            "width": 147
-          },
-          {
-            "id": "alex",
-            "left": 26.529998779296875,
-            "right": 176.47000122070312,
-            "width": 149.94000244140625
-          },
-          {
-            "id": "artemis",
-            "left": 185,
-            "right": 332,
-            "width": 147
+            "id": "heroDetailPanel",
+            "left": 13,
+            "right": 347,
+            "width": 334
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 161.71875,
-            "right": 319,
-            "width": 157.28125
+            "left": 13,
+            "right": 196.921875,
+            "width": 183.921875
           },
           {
             "id": "charHeroStatsStarSkinPanel",
-            "left": 28,
-            "right": 332,
-            "width": 304
+            "left": 13,
+            "right": 347,
+            "width": 334
           },
           {
             "id": "BUTTON",
-            "left": 44,
-            "right": 232.765625,
+            "left": 29,
+            "right": 217.765625,
             "width": 188.765625
           },
           {
             "id": "BUTTON",
-            "left": 44,
-            "right": 182.078125,
+            "left": 29,
+            "right": 167.078125,
             "width": 138.078125
           },
           {
             "id": "BUTTON",
-            "left": 56.779998779296875,
-            "right": 303.219970703125,
-            "width": 246.43997192382812
+            "left": 41.6300048828125,
+            "right": 318.3699951171875,
+            "width": 276.739990234375
           },
           {
             "id": "BUTTON",
-            "left": 58,
-            "right": 302,
-            "width": 244
+            "left": 43,
+            "right": 317,
+            "width": 274
           },
           {
             "id": "BUTTON",
-            "left": 58,
-            "right": 302,
-            "width": 244
+            "left": 43,
+            "right": 317,
+            "width": 274
           }
         ],
         "clipped": []
       },
       "escapeClosesAndRestoresFocus": true,
       "reentryClosed": true,
-      "stageTriggerBox": {
-        "x": 33.890625,
-        "y": 346.5,
-        "width": 155.28125,
-        "height": 44
-      },
-      "stageDisclosureVerified": true,
       "mainNavigationReentryClosed": true
     },
     {
@@ -359,13 +112,13 @@
         "width": 1024,
         "height": 900
       },
-      "heroNavLabel": "Anh hùng",
+      "heroNavLabel": "Anh hùng → Thẻ Anh Hùng",
       "primaryWeaponSelectorAbsent": true,
       "initiallyClosed": true,
       "triggerBox": {
-        "x": 614.71875,
-        "y": 423,
-        "width": 157.28125,
+        "x": 64,
+        "y": 691,
+        "width": 183.921875,
         "height": 44
       },
       "closedGeometry": {
@@ -373,142 +126,22 @@
         "documentWidth": 1024,
         "boxes": [
           {
-            "id": "subpanelCharacters",
-            "left": 212,
-            "right": 812,
-            "width": 600
+            "id": "heroRosterGrid",
+            "left": 64,
+            "right": 960,
+            "width": 896
           },
           {
-            "id": "characterStageControls",
-            "left": 212,
-            "right": 812,
-            "width": 600
-          },
-          {
-            "id": "vnCharactersAuthenticShowcase",
-            "left": 212,
-            "right": 812,
-            "width": 600
-          },
-          {
-            "id": "charSubtabHeroGrid",
-            "left": 239,
-            "right": 785,
-            "width": 546
-          },
-          {
-            "id": "thor",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "wukong",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "cleo",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "atreus",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "rolla",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "nezha",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "otta",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "hou_yi",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "phynx",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "loki",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "dracoola",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "seraph",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "mymu",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "hela",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "helix",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "nyanja",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "alex",
-            "left": 237.70999145507812,
-            "right": 369.2900085449219,
-            "width": 131.58001708984375
-          },
-          {
-            "id": "artemis",
-            "left": 378,
-            "right": 507,
-            "width": 129
+            "id": "heroDetailPanel",
+            "left": 64,
+            "right": 960,
+            "width": 896
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 614.71875,
-            "right": 772,
-            "width": 157.28125
+            "left": 64,
+            "right": 247.921875,
+            "width": 183.921875
           }
         ],
         "clipped": []
@@ -519,193 +152,130 @@
         "documentWidth": 1024,
         "boxes": [
           {
-            "id": "subpanelCharacters",
-            "left": 212,
-            "right": 812,
-            "width": 600
+            "id": "heroRosterGrid",
+            "left": 64,
+            "right": 960,
+            "width": 896
           },
           {
-            "id": "characterStageControls",
-            "left": 212,
-            "right": 812,
-            "width": 600
-          },
-          {
-            "id": "vnCharactersAuthenticShowcase",
-            "left": 212,
-            "right": 812,
-            "width": 600
-          },
-          {
-            "id": "charSubtabHeroGrid",
-            "left": 239,
-            "right": 785,
-            "width": 546
-          },
-          {
-            "id": "thor",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "wukong",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "cleo",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "atreus",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "rolla",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "nezha",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "otta",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "hou_yi",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "phynx",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "loki",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "dracoola",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "seraph",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "mymu",
-            "left": 239,
-            "right": 368,
-            "width": 129
-          },
-          {
-            "id": "hela",
-            "left": 378,
-            "right": 507,
-            "width": 129
-          },
-          {
-            "id": "helix",
-            "left": 517,
-            "right": 646,
-            "width": 129
-          },
-          {
-            "id": "nyanja",
-            "left": 656,
-            "right": 785,
-            "width": 129
-          },
-          {
-            "id": "alex",
-            "left": 237.70999145507812,
-            "right": 369.2900085449219,
-            "width": 131.58001708984375
-          },
-          {
-            "id": "artemis",
-            "left": 378,
-            "right": 507,
-            "width": 129
+            "id": "heroDetailPanel",
+            "left": 64,
+            "right": 960,
+            "width": 896
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 614.71875,
-            "right": 772,
-            "width": 157.28125
+            "left": 64,
+            "right": 247.921875,
+            "width": 183.921875
           },
           {
             "id": "charHeroStatsStarSkinPanel",
-            "left": 239,
-            "right": 785,
-            "width": 546
+            "left": 64,
+            "right": 960,
+            "width": 896
           },
           {
             "id": "BUTTON",
-            "left": 255,
-            "right": 443.765625,
+            "left": 611.15625,
+            "right": 799.921875,
             "width": 188.765625
           },
           {
             "id": "BUTTON",
-            "left": 449.765625,
-            "right": 587.84375,
+            "left": 805.921875,
+            "right": 944,
             "width": 138.078125
           },
           {
             "id": "BUTTON",
-            "left": 268.31671142578125,
-            "right": 406.33953857421875,
-            "width": 138.0228271484375
+            "left": 92.73335266113281,
+            "right": 348.5947570800781,
+            "width": 255.8614044189453
           },
           {
             "id": "BUTTON",
-            "left": 443.65625,
-            "right": 580.328125,
-            "width": 136.671875
+            "left": 385.328125,
+            "right": 638.65625,
+            "width": 253.328125
           },
           {
             "id": "BUTTON",
-            "left": 618.328125,
-            "right": 755,
-            "width": 136.671875
+            "left": 676.65625,
+            "right": 930,
+            "width": 253.34375
           }
         ],
         "clipped": []
       },
       "escapeClosesAndRestoresFocus": true,
       "reentryClosed": true,
-      "stageTriggerBox": {
-        "x": 591.703125,
-        "y": 423,
-        "width": 168.59375,
-        "height": 44
-      },
-      "stageDisclosureVerified": true,
       "mainNavigationReentryClosed": true
     }
   ],
-  "errors": []
+  "errors": [],
+  "asyncPredicateProbe": {
+    "returnedValue": false,
+    "elapsedMs": 54,
+    "explanation": "Async predicate trả Promise truthy: waitForFunction hoàn tất dù resolved value=false; không poll lại."
+  },
+  "progressionDiagnostics": [
+    {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "revision": 2,
+        "updatedAt": "2026-11-09T00:17:51.445Z",
+        "bytes": 8895
+      }
+    }
+  ],
+  "progression": {
+    "fixtureGold": 100000,
+    "fixtureShards": 1000,
+    "before": {
+      "gold": 100000,
+      "shards": 1000,
+      "star": 0,
+      "pet": "spirit_sword",
+      "resonance": "{\"slot1\":\"thor\",\"slot2\":null}",
+      "gear": "{\"weapon\":{\"uid\":\"hero_fixture_bow\",\"templateId\":\"crimson_bow\",\"quality\":\"common\",\"level\":5,\"awakening\":0,\"locked\":true,\"favorite\":true,\"sockets\":[{\"gem\":\"ruby\",\"level\":1}],\"affixes\":[{\"stat\":\"atk_flat\",\"tier\":\"C\",\"value\":14}]},\"necklace\":null,\"ring\":null,\"armor\":null,\"helmet\":null,\"boots\":null}",
+      "sockets": "{\"etched\":[null,null,null],\"blessing\":[null,null],\"enhancement\":[\"rune_flame\",null,null,null],\"ability\":[null,null,null,null]}"
+    },
+    "after": {
+      "gold": 99500,
+      "shards": 950,
+      "star": 1,
+      "pet": "spirit_sword",
+      "resonance": "{\"slot1\":\"thor\",\"slot2\":null}",
+      "gear": "{\"weapon\":{\"uid\":\"hero_fixture_bow\",\"templateId\":\"crimson_bow\",\"quality\":\"common\",\"level\":5,\"awakening\":0,\"locked\":true,\"favorite\":true,\"sockets\":[{\"gem\":\"ruby\",\"level\":1}],\"affixes\":[{\"stat\":\"atk_flat\",\"tier\":\"C\",\"value\":14}]},\"necklace\":null,\"ring\":null,\"armor\":null,\"helmet\":null,\"boots\":null}",
+      "sockets": "{\"etched\":[null,null,null],\"blessing\":[null,null],\"enhancement\":[\"rune_flame\",null,null,null],\"ability\":[null,null,null,null]}"
+    },
+    "persisted": {
+      "star": 1,
+      "shards": 950,
+      "gold": 99500
+    },
+    "reloaded": {
+      "gold": 99500,
+      "shards": 950,
+      "star": 1,
+      "pet": "spirit_sword",
+      "resonance": "{\"slot1\":\"thor\",\"slot2\":null}",
+      "gear": "{\"weapon\":{\"uid\":\"hero_fixture_bow\",\"templateId\":\"crimson_bow\",\"quality\":\"common\",\"awakening\":0,\"level\":5,\"locked\":true,\"favorite\":true,\"sockets\":[{\"gem\":\"ruby\",\"level\":1}],\"affixes\":[{\"stat\":\"atk_flat\",\"tier\":\"C\",\"value\":14}]},\"necklace\":null,\"ring\":null,\"armor\":null,\"helmet\":null,\"boots\":null}",
+      "sockets": "{\"etched\":[null,null,null],\"blessing\":[null,null],\"enhancement\":[\"rune_flame\",null,null,null],\"ability\":[null,null,null,null]}"
+    },
+    "staleRetryStatus": 409,
+    "exactGoldCost": 500,
+    "exactShardCost": 50,
+    "preserved": [
+      "pet",
+      "resonance",
+      "gear (including gems/affixes)",
+      "13 rune sockets"
+    ],
+    "httpSaveReadBack": true,
+    "persistenceStatus": "PASS",
+    "limitation": "DB memory trong cùng process: chứng minh HTTP/client/reload, không phải Mongo durability hay production."
+  }
 }
