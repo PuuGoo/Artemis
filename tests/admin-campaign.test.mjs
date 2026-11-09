@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { Script, runInNewContext } from "node:vm";
 import { getCampaignSummaries, getCampaignDetail } from "../lib/campaignCatalog.js";
+import '../public/campaign-config.js';
+const campaign = globalThis.ArtemisCampaignConfig;
 
 const source = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
 const catalogCode = fs.readFileSync(new URL("../lib/campaignCatalog.js", import.meta.url), "utf8");
@@ -59,25 +61,75 @@ test("all chapters, every room and all map assets have valid details", () => {
     assert.ok(fs.existsSync(new URL("../public" + ch.mapAsset, import.meta.url)), ch.mapAsset);
     const detail = getCampaignDetail(ch.id);
     assert.equal(detail.roomsDetail.length, ch.rooms);
-    assert.equal(detail.roomsDetail.filter(r=>r.isBoss).length, ch.rooms===10?2:3);
+    assert.equal(ch.rooms,campaign.ROOM_COUNT);
+    assert.equal(detail.roomsDetail.filter(r=>r.isBoss).length,5);
+    assert.deepEqual(detail.valkyrieRooms,[5,10,15,20,25,30,35,40,45]);
+    assert.deepEqual(detail.skillRarities,Array.from(campaign.SKILL_RARITIES));
     assert.ok(detail.enemyRoster.length>=3);
     for(const room of detail.roomsDetail) {
       assert.ok(room.biome, "biome missing C"+ch.id+"R"+room.room);
-      assert.equal(room.isBoss,room.room%5===0||room.room===ch.rooms);
+      const plan=campaign.roomPlan(ch.id,room.room);
+      assert.equal(room.isBoss,plan.isBoss);
+      assert.equal(room.valkyrie,plan.valkyrie);
+      assert.equal(room.segment,plan.segment);
+      assert.equal(room.type,plan.type);
+      const tuned=campaign.tuning(detail.base,room.room);
+      for(const key of ['mobHp','mobAtk','bossHp','bossAtk']) assert.equal(room[key],tuned[key]);
       if(room.isBoss) {
         assert.ok(room.boss.hp>0 && room.boss.atk>0);
         assert.ok(room.boss.type && room.boss.name);
+        assert.equal(room.boss.type,plan.bossType);
       } else {
-        assert.equal(room.count,Math.min(8,3+Math.floor(room.room/2)));
+        assert.equal(room.count,campaign.mobCount(room.room));
         assert.equal(room.mobs.reduce((sum,m)=>sum+m.quantity,0),room.count);
         assert.ok(room.mobs.every(m=>m.hp>0&&m.atk>0&&m.speed>=0));
       }
     }
   }
-  assert.equal(getCampaignDetail(8).roomsDetail[14].boss.hp,102600);
-  assert.equal(getCampaignDetail(8).roomsDetail[14].boss.atk,1508);
-  assert.equal(getCampaignDetail(19).roomsDetail[14].boss.hp,577021);
+  assert.equal(getCampaignDetail(8).roomsDetail[49].boss.hp,102600);
+  assert.equal(getCampaignDetail(8).roomsDetail[49].boss.atk,1508);
+  assert.equal(getCampaignDetail(19).roomsDetail[49].boss.hp,577021);
   assert.equal(getCampaignDetail(20),null);
+});
+
+test('shared skill rarity identifiers match the actual skill registry', () => {
+  const skills=section(source,'const ROGUE_SKILLS = [','\n      ];');
+  assert.deepEqual([...new Set([...skills.matchAll(/rarity:\s*'([^']+)'/g)].map(m=>m[1]))].sort(),Array.from(campaign.SKILL_RARITIES).sort());
+});
+
+test('admin renders real 50-room detail, five bosses, Valkyrie offers and skill rarities', async () => {
+  const nodes = new Map();
+  function node(id) {
+    if(!nodes.has(id)) nodes.set(id,{innerHTML:'',textContent:'',addEventListener(){},querySelectorAll(){return []}});
+    return nodes.get(id);
+  }
+  const root={innerHTML:'',querySelector(s){return node(s)},querySelectorAll(){return []},addEventListener(){},closest(){return null}};
+  const window={};
+  runInNewContext(adminJs,{window,document:{hidden:true,addEventListener(){},querySelector(){return null},createElement(){return {dataset:{}}},head:{appendChild(s){if(s.onerror)s.onerror()}}},
+    location:{hash:''},performance:{now(){return 0}},console:{warn(){},error(){}},requestAnimationFrame(){return 1},cancelAnimationFrame(){}});
+  window.AdminCampaignUI.mount(root,{esc(s){return String(s??'')},num(n){return String(n)},api(url){return Promise.resolve({data:url.includes('?')?{ok:true,chapter:getCampaignDetail(1)}:{ok:true,chapters:getCampaignSummaries()}})}});
+  await new Promise(resolve=>setImmediate(resolve));
+  const markup=node('#ccDetail').innerHTML;
+  assert.match(markup,/50 PHÒNG/);
+  assert.match(markup,/5 trùm/);
+  assert.match(markup,/Valkyrie/);
+  for(const rarity of campaign.SKILL_RARITIES) assert.ok(markup.includes(rarity),rarity);
+  assert.match(node('#ccRoomNav').innerHTML,/Valkyrie sau khi dọn phòng/);
+  assert.doesNotMatch(markup,/phòng 5\/10/);
+});
+
+test('admin GET uses the shared catalog while preserving authorization and read-only behavior', async () => {
+  let allowed=false;
+  const sandbox={URL,requireAdmin:async()=>allowed?{ok:true}:{ok:false,response:{status:403}},
+    json:data=>({status:200,data}),fail:(error,status)=>({status,data:{error}}),getCampaignSummaries,getCampaignDetail};
+  runInNewContext(apiJs.replace(/^import .*;\r?\n/gm,'').replace(/export /g,'' )+'\nthis.routeGET=GET;',sandbox);
+  assert.equal((await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=1'})).status,403);
+  allowed=true;
+  const result=await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=19'});
+  assert.equal(result.data.chapter.roomsDetail.length,50);
+  assert.equal(result.data.readOnly,true);
+  assert.equal((await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=01'})).status,400);
+  assert.equal((await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=20'})).status,404);
 });
 
 test("real Canvas renderer can draw every campaign room and creature without throwing", () => {

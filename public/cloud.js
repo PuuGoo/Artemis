@@ -679,6 +679,14 @@
   window.ArtemisCloud = {
     getState: function () { return Object.assign({}, state); },
     pushNow: function () { pushCloudSave(); return state.revision; },
+    flushCheckpoint: async function () {
+      for (var attempt = 0; attempt < 3; attempt++) {
+        await pushCloudSave();
+        if (state.lastError) return false;
+        if (window.__ARTEMIS_SAVE_BUFFER === lastPushedPayload) return true;
+      }
+      return false;
+    },
     purchaseShopOffer: purchaseShopOffer,
     enchantRune: async function (runeId) {
       if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");

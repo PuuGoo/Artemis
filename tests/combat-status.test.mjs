@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { loadCampaignDependencies } from './fixtures/campaign-vm.mjs';
 const read = p => fs.readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const html = read('public/index.html').replace(/\r\n/g, '\n');
 function fn(name) {
@@ -21,6 +22,7 @@ function fixture({ skills = {}, hero = 'alex' } = {}) {
   const S = { runes:{},equippedRuneSlots:{ability:[],etched:[],blessing:[],enhancement:[]},gold:123,selectedHeroId:hero,save(){throw Error('unexpected save');} };
   const c=vm.createContext({Game,SaveState:S,Math:Object.create(Math),performance:{now:()=>1000},getActiveResonanceHeroIds:()=>({}),getHeroStarLevel:()=>0,getActiveHeroSkin:()=>({}),getEquippedSetCounts:()=>({}),updateUltimateCharge(){},updateInGameHUD(){},spawnFloatText(){},spawnParticles(){},spawnShockwave(){},spawnSkyLaser(){},spawnCombatSlashAndSparks(){},SoundFX:{hitEnemy(){}},hurtPlayer(){p.hp-=10;},ArtemisObstacleClearance:{moveEntity(e,x,y){e.x+=x;e.y+=y;},resolveEntity(){}},RuneEconomy:{copies:v=>Number(v)||0}});
   c.window=c;
+  loadCampaignDependencies(c);
   vm.runInContext(read('public/rune-wiki-data.js'),c);
   vm.runInContext(read('public/js/game/runes/rune-modifiers.js'),c);
   c.Math.random=()=>.99;
@@ -108,9 +110,9 @@ test('room and run reset remove Touch clocks, preserve save and clear enemy-loca
   assert.equal(f.Game.flamePoisonTouchTimer,0);assert.equal(f.Game.frostThunderTouchTimer,0);
   assert.equal(f.Game.enemies.length,0);assert.equal(JSON.stringify(f.S),before);
   // Dựng phòng bằng spawner thật, không sao chép quy tắc reset.
-  Object.assign(f.c,{MonsterArt:{assignRoom(){}},isBossRoom:()=>false,usesCampaignTuning:()=>false,document:{getElementById:()=>({classList:{add(){},remove(){}}})},hideBossIntro(){}});
+  Object.assign(f.c,{MonsterArt:{assignRoom(){}},isBossRoom:()=>false,document:{getElementById:()=>({classList:{add(){},remove(){}}})},hideBossIntro(){}});
   f.c.ArtemisObstacleClearance.findSafeSpawn=(x,y)=>({x,y});
-  Object.assign(f.Game,{chapter:{id:1,enemyScale:1},maxRooms:15,pet:{},flamePoisonTouchTimer:1.6,frostThunderTouchTimer:1.6});f.S.talents={};f.S.bestRooms={1:1};
+  Object.assign(f.Game,{mode:'practice',chapter:{id:1,enemyScale:1},maxRooms:15,pet:{},flamePoisonTouchTimer:1.6,frostThunderTouchTimer:1.6});f.S.talents={};f.S.bestRooms={1:1};
   const roomSave=JSON.stringify(f.S);vm.runInContext(fn('setupRoom'),f.c);f.c.setupRoom(1);
   assert.equal(f.Game.flamePoisonTouchTimer,0);assert.equal(f.Game.frostThunderTouchTimer,0);
   assert.ok(f.Game.enemies.every(e=>!e.poisonActive&&!e.burnTimer));assert.equal(JSON.stringify(f.S),roomSave);

@@ -4,6 +4,7 @@ import vm from 'node:vm';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { sanitizeSave } from '../lib/save/schema.js';
+import { loadCampaignDependencies } from './fixtures/campaign-vm.mjs';
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 function between(start, end) {
   const a = html.indexOf(start), b = html.indexOf(end, a + start.length);
@@ -183,7 +184,9 @@ test('Pet cũ vẫn lưu được dù không còn lựa chọn trong UI', () => 
 
 test('N06 applyRogueSkill thật: skill lỗi/pre-pin không hoàn thành, chọn trong trận có hoàn thành', () => {
   const f = fixture();
-  f.ctx.Game = { player: { skills: {}, skillList: [], hp: 100, maxHp: 100, x: 0, y: 0 } };
+  // This case covers legacy pre-pins outside campaign's offer-only progression.
+  f.ctx.Game = { mode: 'practice', player: { skills: {}, skillList: [], hp: 100, maxHp: 100, x: 0, y: 0 } };
+  loadCampaignDependencies(f.ctx);
   f.ctx.ROGUE_SKILLS = [{ id: 'attack_up', name: 'Attack' }];
   f.ctx.bumpLifetimeStat = () => {};
   f.ctx.spawnFloatText = () => {};
@@ -195,6 +198,27 @@ test('N06 applyRogueSkill thật: skill lỗi/pre-pin không hoàn thành, chọ
   f.run("applyRogueSkill('attack_up')");
   assert.ok(f.S.beginnerJourney.completedSteps.includes('N06'));
   assert.equal(f.ctx.Game.player.skills.attack_up, 2);
+});
+
+test('N06 chiến dịch chỉ hoàn thành khi nhận kỹ năng từ offer production hợp lệ', () => {
+  const f = fixture();
+  f.ctx.Game = { mode: 'campaign', player: { skills: {}, skillList: [], hp: 100, maxHp: 100, speed: 100, x: 0, y: 0 } };
+  loadCampaignDependencies(f.ctx, { skills: true });
+  Object.assign(f.ctx, { bumpLifetimeStat() {}, spawnFloatText() {},
+    computeWikiSkillMultipliers: () => ({ atkCatMult: 1, effectiveAspdMult: 1 }),
+    getComputedStats: () => ({ baseAtk: 100, baseAspd: 1, baseHp: 100 }),
+    saveCheckpoint() { f.S.save(); } });
+  f.run(between('function applyRogueSkill(', '/**\n       * Tính chi phí Máu'));
+  f.run('Game.runProgression = ArtemisCampaignSkills.normalizeState({seed: 42}, ROGUE_SKILLS)');
+  assert.equal(f.run("applyRogueSkill('attack_up')"), false);
+  assert.ok(!f.S.beginnerJourney.completedSteps.includes('N06'));
+  f.run('Game.runProgression = ArtemisCampaignSkills.generateOffer(Game.runProgression, ROGUE_SKILLS, {stageId: 0}).state');
+  const skillId = f.ctx.Game.runProgression.pendingOffer.skillIds[0];
+  assert.equal(f.run(`applyRogueSkill(${JSON.stringify(skillId)})`), true);
+  assert.ok(f.S.beginnerJourney.completedSteps.includes('N06'));
+  assert.equal(f.ctx.Game.player.skills[skillId], 1);
+  assert.equal(f.run(`applyRogueSkill(${JSON.stringify(skillId)})`), false);
+  assert.equal(f.ctx.Game.player.skills[skillId], 1);
 });
 
 test('Debug grant mặc định tắt: ba viện trợ, full skill và max systems không sửa save', () => {

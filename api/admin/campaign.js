@@ -4,7 +4,7 @@ import { getCampaignSummaries, getCampaignDetail } from "../../lib/campaignCatal
 
 export const config = { runtime: "nodejs" };
 
-// GET /api/admin/campaign (summary) hoặc ?chapter=8 (đủ 15 phòng).
+// GET /api/admin/campaign (summary) hoặc ?chapter=8 (đủ 50 phòng từ cấu hình chung).
 // Chỉ xem; không ghi database/save, không mở khóa chương.
 export async function GET(request) {
   const guard = await requireAdmin(request);

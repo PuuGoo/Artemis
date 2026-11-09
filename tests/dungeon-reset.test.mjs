@@ -86,7 +86,7 @@ console.log("\n=== 6. PHAN BIET RETRY / RESET / CONTINUE ===");
 check("DungeonSession co truong active", src.includes("active: false,"));
 check("DungeonSession co id tang dan", src.includes("this.id += 1;"));
 check("Game.sessionId duoc gan khi begin", src.includes("Game.sessionId = this.id;"));
-check("finishRun set Game.running = false", /finishRun\(isVictory\) \{\s*\n\s*Game\.running = false;/.test(src));
+check("finishRun set Game.running = false và chặn nhận thưởng lặp", /finishRun\(isVictory\) \{\s*if \(!Game.running\) return false;\s*Game.valkyrieNpc = null;\s*Game\.running = false;/.test(src));
 
 // ---------------------------------------------------------------- 7. Không phát thưởng trùng
 console.log("\n=== 7. RESET KHONG PHAT THUONG TRUNG ===");

@@ -1,7 +1,7 @@
 // ==================== MÔ PHỎNG CÂN BẰNG COMBAT (PARITY VỚI SOURCE) ====================
 //
-// Nguyên tắc: KHÔNG tự đặt công thức. Mọi hằng số đọc từ public/index.html bằng
-// regex; nếu source đổi mà regex không khớp, script NÉM LỖI thay vì tính sai.
+// Phân tích thuần số: quy tắc chiến dịch dùng public/campaign-config.js;
+// hằng số combat còn lại đọc từ index.html, không chạy game hay đo lại hồ sơ.
 //
 // Hai chế độ được mô phỏng:
 //   • Chiến dịch: địch dùng bảng TUYỆT ĐỐI `CAMPAIGN_TUNING` — không neo theo chỉ
@@ -14,6 +14,10 @@
 // Hồ sơ người chơi lấy từ tools/measure-profiles.mjs — đo bằng
 // getComputedStats() thật trên Chrome local, không gõ tay.
 import fs from 'node:fs';
+import '../public/campaign-config.js';
+
+const CampaignConfig = globalThis.ArtemisCampaignConfig;
+if (!CampaignConfig || CampaignConfig.ROOM_COUNT !== 50) throw new Error('Thiếu cấu hình chiến dịch 50 phòng dùng chung');
 
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
 const profilesPath = new URL('./combat-profiles.json', import.meta.url);
@@ -34,8 +38,8 @@ function block(startMarker, endMarker, label) {
 // ==================== HẰNG SỐ ĐỌC TỪ SOURCE ====================
 const BASE_ATK = num(/\((\d+) \+ gearAtk \+ gemAtk/, 'base ATK');
 const BASE_HP = num(/\((\d+) \+ gearHp \+ gemHp/, 'base HP');
-const MOB_COUNT_BASE = num(/const count = Math\.min\((\d+), 3 \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái max count');
-const MOB_COUNT_BASE_N = num(/const count = Math\.min\(\d+, (\d+) \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái base count');
+const MOB_COUNT_BASE = num(/const count = campaign \? ArtemisCampaignConfig\.mobCount\(roomNum\) : Math\.min\((\d+), \d+ \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái thích ứng max count');
+const MOB_COUNT_BASE_N = num(/const count = campaign \? ArtemisCampaignConfig\.mobCount\(roomNum\) : Math\.min\(\d+, (\d+) \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái thích ứng base count');
 const DEF_K_BASE = num(/const defK = (\d+) \+ 120 \*/, 'defK base');
 const DEF_K_PER_ROOM = num(/const defK = \d+ \+ (\d+) \*/, 'defK per room');
 const DEF_CAP = num(/Math\.min\((0\.\d+), defFlat \/ \(defFlat \+ defK\)\)/, 'DEF cap');
@@ -54,21 +58,6 @@ const CAMPAIGN_TUNING = (() => {
   return out;
 })();
 
-// Hệ số độ sâu trong getCampaignTuning.
-const DEPTH = (() => {
-  const blk = block('function getCampaignTuning(chapterId, room, maxRooms) {', '\n      }', 'getCampaignTuning');
-  const grab = (re, label) => {
-    const m = blk.match(re);
-    if (!m) throw new Error('Không đọc được độ sâu: ' + label);
-    return Number(m[1]);
-  };
-  return {
-    mobHp: grab(/mobHp: Math\.round\(t\.mobHp \* \(1 \+ depth \* ([\d.]+)\)\)/, 'mobHp'),
-    mobAtk: grab(/mobAtk: Math\.round\(t\.mobAtk \* \(1 \+ depth \* ([\d.]+)\)\)/, 'mobAtk'),
-    bossHp: grab(/bossHp: Math\.round\(t\.bossHp \* \(1 \+ depth \* ([\d.]+)\)\)/, 'bossHp'),
-    bossAtk: grab(/bossAtk: Math\.round\(t\.bossAtk \* \(1 \+ depth \* ([\d.]+)\)\)/, 'bossAtk'),
-  };
-})();
 
 // Công thức THÍCH ỨNG (Vô Tận/Tháp) — vẫn phải parity.
 const ADAPTIVE = {
@@ -103,18 +92,17 @@ const CHAPTER_ENEMIES = (() => {
     out[Number(m[1])] = [...m[2].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]);
   }
   if (!Object.keys(out).length) throw new Error('Không tìm thấy bảng quái theo chương');
+  const fallback = html.match(/: \['slime', ([^\]]+)\]/);
+  if (!fallback) throw new Error('Không tìm thấy bảng quái mặc định');
+  out[1] = ['slime', ...[...fallback[1].matchAll(/'([a-z_]+)'/g)].map((m) => m[1])];
+  const poolsBlock = block('const ZODIAC_ENEMY_POOLS = [', '];', 'ZODIAC_ENEMY_POOLS');
+  const pools = [...poolsBlock.matchAll(/\[('[^\]]+)\]/g)]
+    .map((m) => [...m[1].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]));
+  if (!pools.length) throw new Error('Không đọc được ZODIAC_ENEMY_POOLS');
+  for (let id = 8; id <= 19; id++) out[id] = pools[(id - 8) % pools.length];
   return out;
 })();
 
-// Boss theo chương (C4–C6 có trùm riêng; C1–C3 dùng golem/queen/demon_king theo phòng).
-const CHAPTER_BOSS = (() => {
-  const out = {};
-  const re = /Number\(Game\.chapter\.id\) === (\d+) \? '([a-z_]+)'/g;
-  for (const m of html.matchAll(re)) out[Number(m[1])] = m[2];
-  const signs = html.match(/const ZODIAC_IDS = \[([^\]]+)\]/);
-  if (signs) [...signs[1].matchAll(/'([a-z_]+)'/g)].forEach((m, i) => { out[i + 8] = 'zodiac_' + m[1]; });
-  return out;
-})();
 
 // Chương: rooms + enemyScale.
 const CHAPTERS = (() => {
@@ -122,28 +110,23 @@ const CHAPTERS = (() => {
   const ids = [...blk.matchAll(/\n {10}id: (\d+),/g)].map((m) => Number(m[1]));
   const rooms = [...blk.matchAll(/\n {10}rooms: (\d+),/g)].map((m) => Number(m[1]));
   const scale = [...blk.matchAll(/\n {10}enemyScale: ([\d.]+),/g)].map((m) => Number(m[1]));
-  return ids.map((id, k) => ({ id, rooms: rooms[k], enemyScale: scale[k] }));
+  if (ids.length !== 19 || rooms.length !== ids.length || scale.length !== ids.length) throw new Error('Không đọc đủ id/rooms/enemyScale của 19 chương');
+  return ids.map((id, k) => ({ id, rooms: CampaignConfig.ROOM_COUNT, legacyRooms: rooms[k], enemyScale: scale[k] }));
 })();
 
-const isBossRoom = (room, maxRooms) => (room % 5 === 0) || (room === maxRooms);
+const isBossRoom = (room) => CampaignConfig.roomPlan(1, room).isBoss;
 const depthOf = (room, maxRooms) => Math.min(1, Math.max(0, (room - 1) / Math.max(1, maxRooms - 1)));
-const mobCount = (room) => Math.min(MOB_COUNT_BASE, MOB_COUNT_BASE_N + Math.floor(room / 2));
+const mobCount = (room) => CampaignConfig.mobCount(room);
+const adaptiveMobCount = (room) => Math.min(MOB_COUNT_BASE, MOB_COUNT_BASE_N + Math.floor(room / 2));
 
 function bossType(chapterId, room) {
-  if (CHAPTER_BOSS[chapterId]) return CHAPTER_BOSS[chapterId];
-  return room === 5 ? 'golem' : (room === 10 ? 'queen' : 'demon_king');
+  return CampaignConfig.bossType(chapterId, room);
 }
 
-/** Bảng tuyệt đối — copy đúng getCampaignTuning(). */
-function campaignTuning(chapterId, room, maxRooms) {
+/** Cùng hàm thuần dữ liệu với getCampaignTuning() trong game. */
+function campaignTuning(chapterId, room) {
   const t = CAMPAIGN_TUNING[Number(chapterId)] || CAMPAIGN_TUNING[1];
-  const depth = depthOf(room, maxRooms);
-  return {
-    mobHp: Math.round(t.mobHp * (1 + depth * DEPTH.mobHp)),
-    mobAtk: Math.round(t.mobAtk * (1 + depth * DEPTH.mobAtk)),
-    bossHp: Math.round(t.bossHp * (1 + depth * DEPTH.bossHp)),
-    bossAtk: Math.round(t.bossAtk * (1 + depth * DEPTH.bossAtk)),
-  };
+  return CampaignConfig.tuning(t, room);
 }
 
 /** HP/ATK quái trong CHIẾN DỊCH — không phụ thuộc người chơi. */
@@ -173,7 +156,7 @@ function campaignBoss({ chapter, room }) {
 function adaptiveMob({ playerAtk, playerMaxHp, chapter, room, type }) {
   const depth = depthOf(room, chapter.rooms);
   const baseHits = ADAPTIVE.hitsBase + depth * ADAPTIVE.hitsDepth;
-  const count = mobCount(room);
+  const count = adaptiveMobCount(room);
   const scale = chapter.enemyScale * (1 + (room - 1) * ADAPTIVE.roomMulStep);
   const typeMul = ARCHETYPE_MULT[type] ?? ARCHETYPE_MULT.default;
   return {
@@ -233,9 +216,9 @@ for (const p of PROFILES) {
 // ==================== IN ====================
 console.log('=== HẰNG SỐ ĐỌC TỪ SOURCE ===');
 console.log(`  BASE_ATK=${BASE_ATK} BASE_HP=${BASE_HP} DEF K=${DEF_K_BASE}+${DEF_K_PER_ROOM}*rooms cap=${DEF_CAP}`);
-console.log(`  Quái: ${MOB_COUNT_BASE_N}+floor(r/2) con (max ${MOB_COUNT_BASE})`);
+console.log(`  Quái chiến dịch: campaign-config.mobCount; thích ứng: ${MOB_COUNT_BASE_N}+floor(r/2) con (max ${MOB_COUNT_BASE})`);
 console.log(`  CHIẾN DỊCH (tuyệt đối): ${CHAPTERS.map((c) => `C${c.id} ${CAMPAIGN_TUNING[c.id].mobHp}HP/${CAMPAIGN_TUNING[c.id].mobAtk}ATK`).join(' · ')}`);
-console.log(`  Độ sâu: mobHp +${DEPTH.mobHp} mobAtk +${DEPTH.mobAtk} bossHp +${DEPTH.bossHp} bossAtk +${DEPTH.bossAtk}`);
+console.log(`  Độ sâu: campaign-config.tuning; boss mỗi 10 phòng; demon_king HP ×${ADAPTIVE.demonMult}`);
 console.log(`  Hệ số quái: ${JSON.stringify(ARCHETYPE_MULT)}`);
 console.log(`  Vô hạn (thích ứng): baseHits ${ADAPTIVE.hitsBase}+depth*${ADAPTIVE.hitsDepth}, atk ${ADAPTIVE.mobAtkStart}-depth*${ADAPTIVE.mobAtkDepth}`);
 console.log(`  Chương: ${CHAPTERS.map((c) => `C${c.id}(${c.rooms} phòng)`).join(' ')}`);
@@ -332,10 +315,19 @@ const sameEnemy = sameRoom.every((r) => r.enemyHp === sameRoom[0].enemyHp && r.e
 ok(sameEnemy, 'cùng chương+phòng: mọi hồ sơ gặp ĐÚNG cùng quái (HP/ATK không đổi theo người chơi)');
 
 // 10. Vô Tận vẫn thích ứng (không bị đổi hành vi).
-const endlessRoom = CHAPTERS[0].rooms + 20;
-const endA = adaptiveMob({ playerAtk: A.atk, playerMaxHp: A.hp, chapter: CHAPTERS[0], room: endlessRoom, type: 'slime' });
-const endF = adaptiveMob({ playerAtk: F.atk, playerMaxHp: F.hp, chapter: CHAPTERS[0], room: endlessRoom, type: 'slime' });
+const legacyChapter = { ...CHAPTERS[0], rooms: CHAPTERS[0].legacyRooms };
+const endlessRoom = legacyChapter.rooms + 20;
+const endA = adaptiveMob({ playerAtk: A.atk, playerMaxHp: A.hp, chapter: legacyChapter, room: endlessRoom, type: 'slime' });
+const endF = adaptiveMob({ playerAtk: F.atk, playerMaxHp: F.hp, chapter: legacyChapter, room: endlessRoom, type: 'slime' });
 ok(endA.hp !== endF.hp, `Vô Tận vẫn neo người chơi (HP ${endA.hp} vs ${endF.hp})`);
+
+// 11. Phủ đủ chiến dịch mới, không lẫn lịch trùm/số quái thích ứng cũ.
+ok(rows.length === PROFILES.length * CHAPTERS.length * CampaignConfig.ROOM_COUNT,
+  `phủ đủ ${rows.length} mẫu phòng (${PROFILES.length} hồ sơ × ${CHAPTERS.length} chương × 50 phòng)`);
+ok(rows.every((r) => (r.kind === 'boss') === (r.room % 10 === 0)), 'chỉ phòng 10/20/30/40/50 là trùm');
+ok(rows.filter((r) => r.kind === 'boss').every((r) => r.bossType === CampaignConfig.bossType(r.ch, r.room)), 'trùm phụ và trùm cuối dùng bossType chia sẻ');
+ok(rows.filter((r) => r.kind === 'quái').every((r) => r.count === CampaignConfig.mobCount(r.room)), 'số quái chiến dịch dùng mobCount chia sẻ');
+ok(adaptiveMobCount(9) === Math.min(MOB_COUNT_BASE, MOB_COUNT_BASE_N + Math.floor(9 / 2)) && adaptiveMobCount(9) !== mobCount(9), 'số quái thích ứng giữ công thức cũ, tách biệt chiến dịch');
 
 const failed = results.filter((r) => !r.cond).length;
 console.log(`\n=== ${results.length - failed} PASS / ${failed} FAIL ===`);

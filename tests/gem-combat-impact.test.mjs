@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { loadCampaignDependencies } from './fixtures/campaign-vm.mjs';
 
 // Chạy các hàm stat thật trong VM, không tài khoản/DB/đọc .env.
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
@@ -38,6 +39,7 @@ function fixture(sockets = [], extra = {}) {
     getAllUnlockedSkinBonuses: zero, getSetBonuses: () => [], runeHasEffect: () => false,
   };
   const ctx = vm.createContext(sandbox);
+  loadCampaignDependencies(ctx);
   for (const source of [constant('GEM_META'), declaration('getGemBonuses'), declaration('getComputedStats'), declaration('getCampaignTuning'), constant('CAMPAIGN_TUNING')]) {
     vm.runInContext(source, ctx, { filename: source.slice(0, 100).split('\n')[0] });
   }

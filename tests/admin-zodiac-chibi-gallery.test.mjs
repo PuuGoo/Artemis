@@ -14,7 +14,8 @@ test('admin maps all 12 chapters to their actual native-Canvas zodiac bosses',()
     const ch=i+8,type='zodiac_'+signs[i];
     const d=getCampaignDetail(ch);
     assert.ok(d && d.bosses.length>0);
-    assert.ok(d.bosses.every(b=>b.type===type),'Chapter '+ch);
+    assert.equal(d.bosses.find(b=>b.room===50)?.type,type,'Chapter '+ch+' final boss');
+    assert.deepEqual(d.bosses.filter(b=>b.room<50).map(b=>b.room),[10,20,30,40]);
   }
   assert.match(code,/renderMode:'canvas-paths'/);
   assert.match(ui,/function bossArt\(id\)/);

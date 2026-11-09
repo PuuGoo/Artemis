@@ -121,7 +121,9 @@
       stat("HP boss gốc",c.base.bossHp)+stat("ATK boss gốc",c.base.bossAtk)+
       stat("HP boss cuối",last.boss.hp)+stat("ATK boss cuối",last.boss.atk)+
       stat("Số phòng",c.rooms)+stat("Mở khóa sau chương",c.unlockChapter===null?"Tự do":c.unlockChapter)+'</div>' +
-      '<p class="cc-help">Boss thực tế có thể khác tên boss quảng bá tại các phòng 5/10. ATK là sát thương đầu vào trước giảm sát thương của nhân vật.</p></div>' +
+      '<p class="cc-help">'+c.bosses.length+' trùm: 4 trùm phụ ở phòng 10/20/30/40 và trùm cuối ở phòng '+c.rooms+'. ATK là sát thương đầu vào trước giảm sát thương của nhân vật.</p>' +
+      '<p class="cc-help">🪽 Valkyrie sau khi dọn phòng: '+c.valkyrieRooms.map(function(n){return esc(n);}).join(', ')+'. Chọn kỹ năng trước khi tiếp tục.</p>' +
+      '<p class="cc-help">Độ hiếm kỹ năng: '+c.skillRarities.map(function(r){return '<span class="cc-pill" data-skill-rarity="'+esc(r)+'">'+esc(({common:'Tốt',rare:'Hiếm',epic:'Sử thi',legend:'Huyền thoại'})[r]||r)+'</span>';}).join(' ')+'.</p></div>' +
       (art?'<div class="cc-panel cc-boss-feature"><canvas width="220" height="195" data-zodiac="'+art+'" aria-label="Boss Canvas '+esc(finalBoss.name)+'"></canvas><div><h3>👑 '+esc(finalBoss.name)+'</h3><p class="cc-caption">Boss chibi vẽ trực tiếp bằng Canvas 2D, cùng mã với trận đấu</p><div class="cc-feature-stats"><span>HP '+num(finalBoss.hp)+'</span><span>ATK '+num(finalBoss.atk)+'</span><span>Tốc độ '+num(finalBoss.speed)+'</span></div></div></div>':'') +
       '<div class="cc-panel"><div class="cc-section-head"><h3>🎮 Xem phòng và đấu trường thật</h3>' +
       '<span class="cc-caption" id="ccRoomLabel"></span></div>' +
@@ -142,7 +144,7 @@
       '<div class="cc-table-wrap"><table class="cc-table"><thead><tr><th>Phòng</th><th>Loại</th><th>Số quái</th>' +
       '<th>HP quái nền</th><th>ATK quái nền</th><th>HP boss thực</th><th>ATK boss</th><th>Biome</th></tr></thead>' +
       '<tbody id="ccRoomTable">'+c.roomsDetail.map(function(r){
-        return '<tr data-room="'+r.room+'" aria-selected="false"><td><b>'+r.room+'</b></td><td>'+(r.isBoss?'👑 Boss':'👾 Quái')+'</td>' +
+        return '<tr data-room="'+r.room+'" aria-selected="false"><td><b>'+r.room+'</b></td><td>'+(r.isFinalBoss?'👑 Trùm cuối':r.isBoss?'👑 Trùm phụ':'👾 Quái')+(r.valkyrie?' • 🪽 Valkyrie':'')+'</td>' +
         '<td>'+r.count+'</td><td class="mono">'+(r.isBoss?'—':num(r.mobHp))+'</td><td class="mono">'+(r.isBoss?'—':num(r.mobs[0] ? r.mobs[0].atk : r.mobAtk))+'</td>' +
         '<td class="mono">'+(r.isBoss?num(r.boss.hp):'—')+'</td><td class="mono">'+(r.isBoss?num(r.boss.atk):'—')+'</td>' +
         '<td>'+esc(r.biome)+'</td></tr>';
@@ -160,7 +162,7 @@
   function stat(label,value) { return '<div class="cc-stat"><small>'+esc(label)+'</small><strong>'+esc(typeof value==="number"?num(value):value)+'</strong></div>'; }
   function renderRoomNav() {
     el("ccRoomNav").innerHTML=current.roomsDetail.map(function(r){
-      return '<button class="cc-room '+(r.isBoss?'is-boss':'')+'" data-room="'+r.room+'" aria-pressed="'+(r.room===roomNo)+'" title="'+(r.isBoss?'Boss':'Quái')+' phòng '+r.room+'">'+(r.isBoss?'👑':'')+r.room+'</button>';
+      return '<button class="cc-room '+(r.isBoss?'is-boss':'')+'" data-room="'+r.room+'" aria-pressed="'+(r.room===roomNo)+'" title="'+(r.isFinalBoss?'Trùm cuối':r.isBoss?'Trùm phụ':'Quái')+' phòng '+r.room+(r.valkyrie?' • Valkyrie sau khi dọn phòng':'')+'">'+(r.isBoss?'👑':'')+r.room+(r.valkyrie?' 🪽':'')+'</button>';
     }).join("");
   }
   function entityCard(e,isBoss,uid) {
@@ -176,7 +178,7 @@
     n=Math.max(1,Math.min(current.rooms,Math.floor(Number(n)||1)));
     roomNo=n;
     var r=current.roomsDetail[n-1];
-    el("ccRoomLabel").textContent="Phòng "+n+" / "+current.rooms+(r.isBoss?" • BOSS":" • Quái thường");
+    el("ccRoomLabel").textContent="Phòng "+n+" / "+current.rooms+(r.isFinalBoss?" • TRÙM CUỐI":r.isBoss?" • TRÙM PHỤ":" • Quái thường")+(r.valkyrie?" • Valkyrie sau khi dọn phòng":"");
     el("ccRoomStats").innerHTML=
       stat("Loại phòng",r.isBoss?"BOSS":"Quái thường")+
       stat("Số đối thủ",r.count)+

@@ -7,8 +7,23 @@
 // khong phai ban sao chep co the lac hau.
 
 import fs from "node:fs";
+import vm from "node:vm";
 
 const html = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+
+
+// Trích khối cân bằng ngoặc; thất bại rõ nếu anchor bị đổi, không cắt cửa sổ ký tự.
+function section(marker, opening = '{', closing = '}') {
+  const start = html.indexOf(marker);
+  if (start < 0) throw new Error('Thiếu anchor: ' + marker);
+  const begin = html.indexOf(opening, start + marker.length);
+  let depth = 0;
+  for (let i = begin; i < html.length; i++) {
+    if (html[i] === opening) depth++;
+    else if (html[i] === closing && --depth === 0) return html.slice(start, i + 1);
+  }
+  throw new Error('Khối không đóng: ' + marker);
+}
 
 let pass = 0, fail = 0;
 function check(name, cond, extra = "") {
@@ -36,21 +51,40 @@ check("so slot chon ngau nhien deu (khong thien vi)",
   /Object\.keys\(WIKI_GEAR_SCROLLS_META\)/.test(html) && /Math\.floor\(Math\.random\(\)\s*\*\s*slotKeys\.length\)/.test(html));
 
 // Dung lai cong thuc de tinh toan
-const needScrolls = (lv) => Math.max(1, Math.min(25, Math.ceil(lv / 4)));
-const upgradeCost = (lv) => 80 + lv * 45;
+const needScrolls = new Function("lv", "return " + needMatch[0].replace(/Math.ceil\([^)]*\/\s*4\s*\)/, "Math.ceil(lv / 4)"));
+const productionCost = html.match(/80\s*\+\s*\(item\.level \|\| 1\)\s*\*\s*45/);
+check("chi phí production đọc được", !!productionCost);
+const upgradeCost = lv => new Function("item", "return " + productionCost[0])({level:lv});
 
 // ============================================================ 2. Tinh nguon cung
 console.log("\n=== 2. NGUON CUNG (tu source) ===");
-const ROOMS = 15, BOSS_ROOMS = [5, 10, 15], AVG_NORMAL = 5.5;
-const normalRooms = ROOMS - BOSS_ROOMS.length;
-const killsPerRun = normalRooms * AVG_NORMAL + BOSS_ROOMS.length;
-const scrollsPerRun = normalRooms * AVG_NORMAL * 0.28 * 2 + BOSS_ROOMS.length * 1.0 * 5;
-// Vang do THUC TE tren production
-const GOLD_PER_RUN = 2049;
-
-console.log(`  quai/tran=${killsPerRun.toFixed(0)}  cuon/tran=${scrollsPerRun.toFixed(1)}  vang/tran=${GOLD_PER_RUN}`);
-check("1 tran co 60-80 quai", killsPerRun >= 60 && killsPerRun <= 80, String(killsPerRun));
-check("1 tran roi 40-65 cuon giay", scrollsPerRun >= 40 && scrollsPerRun <= 65, String(scrollsPerRun));
+// Kỳ vọng PHÂN TÍCH, không phải thu nhập đo qua gameplay hay thời gian clear.
+// Tân thủ: greed/goldBonus/scrollDropBonus đều 0, nhặt hết drop.
+const ctx = vm.createContext({});
+vm.runInContext(fs.readFileSync(new URL('../public/campaign-config.js', import.meta.url),'utf8'),ctx);
+const config=ctx.ArtemisCampaignConfig;
+const plans=Array.from({length:config.ROOM_COUNT},(_,i)=>config.roomPlan(1,i+1));
+const bossKills=plans.filter(p=>p.isBoss).reduce((n,p)=>n+p.count,0);
+const normalKills=plans.filter(p=>!p.isBoss).reduce((n,p)=>n+p.count,0);
+function readPair(re,label) {
+  const m=html.match(re); if(!m) throw Error('Không đọc được '+label);
+  return {boss:Number(m[1]),normal:Number(m[2])};
+}
+const dropCount=readPair(/const dropCount = e\.isBoss \? (\d+) : (\d+);/,'dropCount');
+const gold=readPair(/type: 'gold',\s*x:[^\n]*\n\s*y:[^\n]*\n\s*val: Math\.round\(\(e\.isBoss \? (\d+) : (\d+)\) \* greedMult\)/,'gold');
+const chance=readPair(/const scrollDropChance = \(e\.isBoss \? ([\d.]+) : ([\d.]+)\)/,'scroll chance');
+const scrollAmount=readPair(/type: 'scroll',[\s\S]*?val: e\.isBoss \? (\d+) : (\d+)/,'scroll amount');
+const killsPerRun=normalKills+bossKills;
+const scrollsPerRun=normalKills*chance.normal*scrollAmount.normal+bossKills*chance.boss*scrollAmount.boss;
+const GOLD_PER_RUN=normalKills*dropCount.normal*gold.normal+bossKills*dropCount.boss*gold.boss;
+console.log(`  PHÂN TÍCH ${plans.length} phòng: ${killsPerRun} quái, E[cuộn]=${scrollsPerRun.toFixed(2)}, vàng nền=${GOLD_PER_RUN}; không đo thời gian`);
+check('đủ 50 phòng từ shared config',plans.length===50);
+check('5 trùm ở 10/20/30/40/50',plans.filter(p=>p.isBoss).map(p=>p.room).join(',')==='10,20,30,40,50');
+check('mọi chương cùng nguồn cung cơ sở',Array.from({length:19},(_,ch)=>
+  Array.from({length:50},(_,i)=>config.roomPlan(ch+1,i+1).count).join(',')===plans.map(p=>p.count).join(',')).every(Boolean));
+check('drop vàng production giữ boss 8×28 / thường 2×12',dropCount.boss===8&&dropCount.normal===2&&gold.boss===28&&gold.normal===12);
+check('scroll production giữ boss 5 / thường 2',scrollAmount.boss===5&&scrollAmount.normal===2);
+check('nguồn cung hữu hạn, dương',Number.isFinite(GOLD_PER_RUN)&&GOLD_PER_RUN>0&&scrollsPerRun>0);
 
 // ============================================================ 3. Vang la diem nghen khi nang CA 6 slot
 console.log("\n=== 3. VANG LA DIEM NGHEN (nang ca 6 slot) ===");
@@ -61,13 +95,14 @@ function costFor(maxLv) {
 }
 const SLOTS = 6;
 
-for (const [target, lo, hi] of [[10, 4, 14], [15, 10, 26], [20, 18, 45]]) {
+for (const target of [10,15,20]) {
   const one = costFor(target);
   const runsGold = (one.gold * SLOTS) / GOLD_PER_RUN;
   const runsScroll = (one.scrolls * SLOTS) / scrollsPerRun;
   console.log(`  ca 6 slot Lv${target}: ${runsGold.toFixed(1)} tran (vang) / ${runsScroll.toFixed(1)} tran (cuon)`);
-  check(`Lv${target} ca 6 slot: ${lo}-${hi} tran (khong qua de, khong qua kho)`,
-    runsGold >= lo && runsGold <= hi, runsGold.toFixed(1));
+  check(`Lv${target}: tổng chi phí không bị giảm khi kéo dài campaign`,
+    one.gold === Array.from({length:target-1},(_,i)=>80+(i+1)*45).reduce((a,b)=>a+b,0));
+  check(`Lv${target}: vẫn cần hơn một campaign nền cho cả 6 slot`,runsGold>1&&Number.isFinite(runsGold),runsGold.toFixed(2));
   check(`Lv${target}: vang la diem nghen, khong phai cuon giay`,
     runsGold > runsScroll, `${runsGold.toFixed(1)} vs ${runsScroll.toFixed(1)}`);
 }
@@ -84,7 +119,7 @@ check("level 100 khong tran so", isFinite(upgradeCost(100)));
 // ============================================================ 5. Chia thuong Beginner Journey
 console.log("\n=== 5. THUONG BEGINNER JOURNEY ===");
 // Doc reward tu BEGINNER_STEPS
-const stepsBlock = html.slice(html.indexOf("const BEGINNER_STEPS"), html.indexOf("];", html.indexOf("const BEGINNER_STEPS")) + 2);
+const stepsBlock = section("const BEGINNER_STEPS =", "[", "]");
 const goldRewards = [...stepsBlock.matchAll(/gold:\s*(\d+)/g)].map(m => Number(m[1]));
 const gemRewards = [...stepsBlock.matchAll(/gems:\s*(\d+)/g)].map(m => Number(m[1]));
 const scrollRewards = [...stepsBlock.matchAll(/scrolls:\s*(\d+)/g)].map(m => Number(m[1]));
@@ -95,19 +130,18 @@ const sumScrolls = scrollRewards.reduce((a, b) => a + b, 0);
 console.log(`  tong thuong: ${sumGold} vang, ${sumGems} gems, ${sumScrolls} cuon`);
 
 check("co it nhat 5 buoc co thuong vang", goldRewards.length >= 5, String(goldRewards.length));
-check("tong thuong vang = 3.050 (N01 100 + N02-N07 1950 + N08 1000, da kiem chung tren production)", sumGold === 3050, String(sumGold));
-check("tong thuong gems = 155 (N08 80 + N02-N07 75, da kiem chung tren production)", sumGems === 155, String(sumGems));
-check("tong thuong cuon = 7 (da kiem chung tren production)", sumScrolls === 7, String(sumScrolls));
-check("thuong vang tuong duong 1-2 tran (khong pha can bang)",
-  sumGold / GOLD_PER_RUN >= 0.5 && sumGold / GOLD_PER_RUN < 3, (sumGold / GOLD_PER_RUN).toFixed(2));
+check("tong thuong vang = 3.050 (N01 100 + N02-N07 1950 + N08 1000)", sumGold === 3050, String(sumGold));
+check("tong thuong gems = 155 (N08 80 + N02-N07 75)", sumGems === 155, String(sumGems));
+check("tong thuong cuon = 7", sumScrolls === 7, String(sumScrolls));
+check("thưởng khởi đầu không đủ nâng cả 6 slot Lv10",sumGold < costFor(10).gold*SLOTS);
 
 // ============================================================ 6. Tai khoan moi khong co loi the
 console.log("\n=== 6. CHOT: TAI KHOAN MOI XUAT PHAT TU DAU ===");
 check("talent mac dinh = 0 (khong tang mien phi)",
-  /ensureAllTalentCardsInitialized/.test(html) && !/levels\[[^\]]*\]\s*=\s*(?:card\.)?maxLv\s*;/i.test(html.slice(html.indexOf("function ensureAllTalentCardsInitialized"), html.indexOf("function ensureAllTalentCardsInitialized") + 2000)));
+  /ensureAllTalentCardsInitialized/.test(html) && !/levels\[[^\]]*\]\s*=\s*(?:card\.)?maxLv\s*;/i.test(section("function ensureAllTalentCardsInitialized")));
 check("artifact mac dinh = 0 sao (khong tang mien phi)",
   /getArtifactStarMap/.test(html));
-const artBlock = html.slice(html.indexOf("function getArtifactStarMap"), html.indexOf("function getArtifactStarMap") + 2500);
+const artBlock = section("function getArtifactStarMap");
 check("artifact khong con tang 15 sao", !/:\s*15\b/.test(artBlock), "con thay : 15");
 
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);

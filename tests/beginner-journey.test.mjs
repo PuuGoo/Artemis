@@ -69,7 +69,7 @@ const HOOKS = [
   ["N07 chapter cleared", "BeginnerHooks.onChapterCleared", "if (isVictory) {"],
 ];
 for (const [label, hook, anchor] of HOOKS) {
-  const anchorIdx = src.indexOf(anchor);
+  const anchorIdx = label === 'N02 roomCleared' ? src.indexOf(anchor, src.indexOf('// If all enemies dead -> Room Cleared!')) : src.indexOf(anchor);
   check(`${label}: co hook`, src.includes(hook));
   if (anchorIdx > 0) {
     const near = src.slice(anchorIdx, anchorIdx + 900);

@@ -1,0 +1,749 @@
+{
+  "scope": "Chrome mock auth/save; real UI start and handler-driven state jumps, not natural combat, not real save API",
+  "results": [
+    {
+      "name": "start-real-ui",
+      "room": 1,
+      "max": 50,
+      "choices": 1,
+      "paused": false
+    }
+  ],
+  "checks": [
+    {
+      "room": 1,
+      "boss": null,
+      "choices": 1
+    },
+    {
+      "room": 5,
+      "boss": null,
+      "choices": 2
+    },
+    {
+      "room": 10,
+      "boss": "golem",
+      "choices": 3
+    },
+    {
+      "room": 15,
+      "boss": null,
+      "choices": 4
+    },
+    {
+      "room": 20,
+      "boss": "queen",
+      "choices": 5
+    },
+    {
+      "room": 25,
+      "boss": null,
+      "choices": 6
+    },
+    {
+      "room": 30,
+      "boss": "demon_king",
+      "choices": 7
+    },
+    {
+      "room": 35,
+      "boss": null,
+      "choices": 8
+    },
+    {
+      "room": 40,
+      "boss": "elder_dragon",
+      "choices": 9
+    },
+    {
+      "room": 45,
+      "boss": null,
+      "choices": 10
+    },
+    {
+      "room": 49,
+      "boss": null,
+      "choices": 10
+    },
+    {
+      "room": 50,
+      "boss": "golem",
+      "choices": 10
+    }
+  ],
+  "matrix": [
+    {
+      "chapter": 1,
+      "room": 10,
+      "type": "golem",
+      "hp": 5534,
+      "atk": 200
+    },
+    {
+      "chapter": 1,
+      "room": 20,
+      "type": "queen",
+      "hp": 5906,
+      "atk": 212
+    },
+    {
+      "chapter": 1,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 7219,
+      "atk": 224
+    },
+    {
+      "chapter": 1,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 6649,
+      "atk": 235
+    },
+    {
+      "chapter": 1,
+      "room": 50,
+      "type": "golem",
+      "hp": 7020,
+      "atk": 247
+    },
+    {
+      "chapter": 2,
+      "room": 10,
+      "type": "golem",
+      "hp": 9579,
+      "atk": 274
+    },
+    {
+      "chapter": 2,
+      "room": 20,
+      "type": "queen",
+      "hp": 10221,
+      "atk": 290
+    },
+    {
+      "chapter": 2,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 12494,
+      "atk": 306
+    },
+    {
+      "chapter": 2,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 11507,
+      "atk": 322
+    },
+    {
+      "chapter": 2,
+      "room": 50,
+      "type": "queen",
+      "hp": 12150,
+      "atk": 338
+    },
+    {
+      "chapter": 3,
+      "room": 10,
+      "type": "golem",
+      "hp": 15964,
+      "atk": 369
+    },
+    {
+      "chapter": 3,
+      "room": 20,
+      "type": "queen",
+      "hp": 17036,
+      "atk": 391
+    },
+    {
+      "chapter": 3,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 20823,
+      "atk": 412
+    },
+    {
+      "chapter": 3,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 19179,
+      "atk": 434
+    },
+    {
+      "chapter": 3,
+      "room": 50,
+      "type": "demon_king",
+      "hp": 23288,
+      "atk": 455
+    },
+    {
+      "chapter": 4,
+      "room": 10,
+      "type": "golem",
+      "hp": 35121,
+      "atk": 485
+    },
+    {
+      "chapter": 4,
+      "room": 20,
+      "type": "queen",
+      "hp": 37479,
+      "atk": 514
+    },
+    {
+      "chapter": 4,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 45811,
+      "atk": 542
+    },
+    {
+      "chapter": 4,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 42193,
+      "atk": 570
+    },
+    {
+      "chapter": 4,
+      "room": 50,
+      "type": "elder_dragon",
+      "hp": 44550,
+      "atk": 598
+    },
+    {
+      "chapter": 5,
+      "room": 10,
+      "type": "golem",
+      "hp": 36186,
+      "atk": 633
+    },
+    {
+      "chapter": 5,
+      "room": 20,
+      "type": "queen",
+      "hp": 38614,
+      "atk": 670
+    },
+    {
+      "chapter": 5,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 47199,
+      "atk": 707
+    },
+    {
+      "chapter": 5,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 43471,
+      "atk": 743
+    },
+    {
+      "chapter": 5,
+      "room": 50,
+      "type": "eclipse_sovereign",
+      "hp": 45900,
+      "atk": 780
+    },
+    {
+      "chapter": 6,
+      "room": 10,
+      "type": "golem",
+      "hp": 51086,
+      "atk": 802
+    },
+    {
+      "chapter": 6,
+      "room": 20,
+      "type": "queen",
+      "hp": 54514,
+      "atk": 848
+    },
+    {
+      "chapter": 6,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 66634,
+      "atk": 895
+    },
+    {
+      "chapter": 6,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 61371,
+      "atk": 941
+    },
+    {
+      "chapter": 6,
+      "room": 50,
+      "type": "astral_devourer",
+      "hp": 64800,
+      "atk": 988
+    },
+    {
+      "chapter": 7,
+      "room": 10,
+      "type": "golem",
+      "hp": 65986,
+      "atk": 981
+    },
+    {
+      "chapter": 7,
+      "room": 20,
+      "type": "queen",
+      "hp": 70414,
+      "atk": 1038
+    },
+    {
+      "chapter": 7,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 86069,
+      "atk": 1095
+    },
+    {
+      "chapter": 7,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 79271,
+      "atk": 1152
+    },
+    {
+      "chapter": 7,
+      "room": 50,
+      "type": "mycelium_queen",
+      "hp": 83700,
+      "atk": 1209
+    },
+    {
+      "chapter": 8,
+      "room": 10,
+      "type": "golem",
+      "hp": 80886,
+      "atk": 1224
+    },
+    {
+      "chapter": 8,
+      "room": 20,
+      "type": "queen",
+      "hp": 86314,
+      "atk": 1295
+    },
+    {
+      "chapter": 8,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 105504,
+      "atk": 1366
+    },
+    {
+      "chapter": 8,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 97171,
+      "atk": 1437
+    },
+    {
+      "chapter": 8,
+      "room": 50,
+      "type": "zodiac_aries",
+      "hp": 102600,
+      "atk": 1508
+    },
+    {
+      "chapter": 9,
+      "room": 10,
+      "type": "golem",
+      "hp": 94636,
+      "atk": 1395
+    },
+    {
+      "chapter": 9,
+      "room": 20,
+      "type": "queen",
+      "hp": 100988,
+      "atk": 1476
+    },
+    {
+      "chapter": 9,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 123440,
+      "atk": 1557
+    },
+    {
+      "chapter": 9,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 113691,
+      "atk": 1638
+    },
+    {
+      "chapter": 9,
+      "room": 50,
+      "type": "zodiac_taurus",
+      "hp": 120042,
+      "atk": 1719
+    },
+    {
+      "chapter": 10,
+      "room": 10,
+      "type": "golem",
+      "hp": 110724,
+      "atk": 1591
+    },
+    {
+      "chapter": 10,
+      "room": 20,
+      "type": "queen",
+      "hp": 118155,
+      "atk": 1683
+    },
+    {
+      "chapter": 10,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 144424,
+      "atk": 1776
+    },
+    {
+      "chapter": 10,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 133017,
+      "atk": 1868
+    },
+    {
+      "chapter": 10,
+      "room": 50,
+      "type": "zodiac_gemini",
+      "hp": 140449,
+      "atk": 1960
+    },
+    {
+      "chapter": 11,
+      "room": 10,
+      "type": "golem",
+      "hp": 129548,
+      "atk": 1814
+    },
+    {
+      "chapter": 11,
+      "room": 20,
+      "type": "queen",
+      "hp": 138243,
+      "atk": 1919
+    },
+    {
+      "chapter": 11,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 168978,
+      "atk": 2024
+    },
+    {
+      "chapter": 11,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 155632,
+      "atk": 2129
+    },
+    {
+      "chapter": 11,
+      "room": 50,
+      "type": "zodiac_cancer",
+      "hp": 164326,
+      "atk": 2235
+    },
+    {
+      "chapter": 12,
+      "room": 10,
+      "type": "golem",
+      "hp": 151570,
+      "atk": 2067
+    },
+    {
+      "chapter": 12,
+      "room": 20,
+      "type": "queen",
+      "hp": 161743,
+      "atk": 2187
+    },
+    {
+      "chapter": 12,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 197702,
+      "atk": 2307
+    },
+    {
+      "chapter": 12,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 182088,
+      "atk": 2427
+    },
+    {
+      "chapter": 12,
+      "room": 50,
+      "type": "zodiac_leo",
+      "hp": 192260,
+      "atk": 2547
+    },
+    {
+      "chapter": 13,
+      "room": 10,
+      "type": "golem",
+      "hp": 170286,
+      "atk": 2356
+    },
+    {
+      "chapter": 13,
+      "room": 20,
+      "type": "queen",
+      "hp": 181714,
+      "atk": 2493
+    },
+    {
+      "chapter": 13,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 222114,
+      "atk": 2629
+    },
+    {
+      "chapter": 13,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 204571,
+      "atk": 2766
+    },
+    {
+      "chapter": 13,
+      "room": 50,
+      "type": "zodiac_virgo",
+      "hp": 216000,
+      "atk": 2903
+    },
+    {
+      "chapter": 14,
+      "room": 10,
+      "type": "golem",
+      "hp": 214986,
+      "atk": 2686
+    },
+    {
+      "chapter": 14,
+      "room": 20,
+      "type": "queen",
+      "hp": 229414,
+      "atk": 2842
+    },
+    {
+      "chapter": 14,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 280419,
+      "atk": 2998
+    },
+    {
+      "chapter": 14,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 258271,
+      "atk": 3154
+    },
+    {
+      "chapter": 14,
+      "room": 50,
+      "type": "zodiac_libra",
+      "hp": 272700,
+      "atk": 3310
+    },
+    {
+      "chapter": 15,
+      "room": 10,
+      "type": "golem",
+      "hp": 242757,
+      "atk": 3063
+    },
+    {
+      "chapter": 15,
+      "room": 20,
+      "type": "queen",
+      "hp": 259050,
+      "atk": 3241
+    },
+    {
+      "chapter": 15,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 316643,
+      "atk": 3418
+    },
+    {
+      "chapter": 15,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 291634,
+      "atk": 3596
+    },
+    {
+      "chapter": 15,
+      "room": 50,
+      "type": "zodiac_scorpio",
+      "hp": 307927,
+      "atk": 3774
+    },
+    {
+      "chapter": 16,
+      "room": 10,
+      "type": "golem",
+      "hp": 284026,
+      "atk": 3491
+    },
+    {
+      "chapter": 16,
+      "room": 20,
+      "type": "queen",
+      "hp": 303088,
+      "atk": 3694
+    },
+    {
+      "chapter": 16,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 370473,
+      "atk": 3897
+    },
+    {
+      "chapter": 16,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 341212,
+      "atk": 4099
+    },
+    {
+      "chapter": 16,
+      "room": 50,
+      "type": "zodiac_sagittarius",
+      "hp": 360275,
+      "atk": 4302
+    },
+    {
+      "chapter": 17,
+      "room": 10,
+      "type": "golem",
+      "hp": 332310,
+      "atk": 3980
+    },
+    {
+      "chapter": 17,
+      "room": 20,
+      "type": "queen",
+      "hp": 354613,
+      "atk": 4211
+    },
+    {
+      "chapter": 17,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 433453,
+      "atk": 4442
+    },
+    {
+      "chapter": 17,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 399219,
+      "atk": 4673
+    },
+    {
+      "chapter": 17,
+      "room": 50,
+      "type": "zodiac_capricorn",
+      "hp": 421521,
+      "atk": 4904
+    },
+    {
+      "chapter": 18,
+      "room": 10,
+      "type": "golem",
+      "hp": 388804,
+      "atk": 4537
+    },
+    {
+      "chapter": 18,
+      "room": 20,
+      "type": "queen",
+      "hp": 414898,
+      "atk": 4800
+    },
+    {
+      "chapter": 18,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 507141,
+      "atk": 5063
+    },
+    {
+      "chapter": 18,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 467086,
+      "atk": 5327
+    },
+    {
+      "chapter": 18,
+      "room": 50,
+      "type": "zodiac_aquarius",
+      "hp": 493181,
+      "atk": 5590
+    },
+    {
+      "chapter": 19,
+      "room": 10,
+      "type": "golem",
+      "hp": 454900,
+      "atk": 5172
+    },
+    {
+      "chapter": 19,
+      "room": 20,
+      "type": "queen",
+      "hp": 485430,
+      "atk": 5472
+    },
+    {
+      "chapter": 19,
+      "room": 30,
+      "type": "demon_king",
+      "hp": 593355,
+      "atk": 5772
+    },
+    {
+      "chapter": 19,
+      "room": 40,
+      "type": "elder_dragon",
+      "hp": 546491,
+      "atk": 6072
+    },
+    {
+      "chapter": 19,
+      "room": 50,
+      "type": "zodiac_pisces",
+      "hp": 577021,
+      "atk": 6373
+    }
+  ],
+  "victory": {
+    "running": false,
+    "wins": 1,
+    "nextUnlocked": true
+  },
+  "updateError": null,
+  "renderError": null,
+  "errors": []
+}

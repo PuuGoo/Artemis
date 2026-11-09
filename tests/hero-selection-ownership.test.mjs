@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { loadCampaignDependencies } from './fixtures/campaign-vm.mjs';
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 function between(a, b) {
   const start = html.indexOf(a), end = html.indexOf(b, start + a.length);
@@ -89,6 +90,7 @@ test('Picker phụ, nút mũi tên và lối tắt nâng sao đã được xoá 
 });
 function runFixture(extra = {}) {
   const f = fixture(extra);
+  loadCampaignDependencies(f.ctx, { skills: true });
   // Phụ thuộc mới của startNewRun: chạy module thật, không bỏ hook ngoại hình.
   f.run(fs.readFileSync(new URL('../public/monster-art.js', import.meta.url), 'utf8'));
   f.run(fs.readFileSync(new URL('../public/combat-damage.js', import.meta.url), 'utf8'));
@@ -105,10 +107,11 @@ function runFixture(extra = {}) {
     resizeCanvas() {}, DungeonSession: { begin() { f.S.save(); } }, bumpLifetimeStat() {},
     checkAchievements() { f.S.save(); }, ULT_COST: 100, isRuneEquipped: () => false, runeHasEffect: () => false,
     hasHeroSkillActive: () => false, setupRoom() {}, updateInGameHUD() {}, performance: { now: () => 0 },
+    saveCheckpoint() { f.S.save(); }, triggerSkillSelection() {},
     requestAnimationFrame: () => 1, gameLoop() {} });
   f.ctx.SoundFX.init = () => {};
   f.ctx.document.getElementById = () => ({ classList: { add() {}, remove() {} } });
-  f.run(`${declaration('getComputedStats')}\n${declaration('startNewRun')}\n${declaration('launchEventCanvasRun')}`);
+  f.run(`${declaration('getComputedStats')}\n${declaration('openCampaignOffer')}\n${declaration('startNewRun')}\n${declaration('launchEventCanvasRun')}`);
   return f;
 }
 test('real Demon King binding plays Atreus for this run only, including saves during startup', () => {
@@ -119,6 +122,7 @@ test('real Demon King binding plays Atreus for this run only, including saves du
   f.run(between("const btnDkCanvas = document.getElementById('btnDemonPlayAtreusCanvas');", 'const btnDk55 ='));
   play();
   assert.equal(f.ctx.Game.player.hero.id, 'atreus');
+  assert.ok(f.ctx.Game.runProgression.pendingOffer.skillIds.length > 0);
   assert.equal(f.S.selectedHeroId, 'artemis');
   assert.ok(f.saves.length > 0);
   assert.ok(f.saves.every(s => s.selectedHeroId === 'artemis'));

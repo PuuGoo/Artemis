@@ -105,7 +105,7 @@ check("dung isChapterLocked (logic that)", /isChapterLocked\(ch\)/.test(block));
 check("dung getChapterBest (logic that)", /getChapterBest\(ch\.id\)/.test(block));
 check("doc winsByChapter", /SaveState\.winsByChapter/.test(block));
 check("ve 1 node cho moi phong", /for \(let r = 1; r <= ch\.rooms; r\+\+\)/.test(block));
-check("phong trum = boi 5 hoac cuoi", /const isBoss = \(r % 5 === 0\) \|\| \(r === ch\.rooms\)/.test(block));
+check("phong trum chien dich = boi 10", /const isBoss = r % 10 === 0/.test(block));
 check("phong trum hinh tron", /boss-node/.test(block));
 check("ve danh sach tab chuong dong", /CHAPTERS\.map\(\(c, i\)/.test(block));
 check("ban do khong tao nut start trung lap", !/id="msBtnStart"/.test(block));

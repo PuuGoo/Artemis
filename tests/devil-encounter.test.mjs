@@ -105,7 +105,7 @@ check(
 console.log("\n=== 5. Phong tru khong bi chen devil pact o phong cuoi ===");
 check(
   "chi goi triggerDevilEncounter khi room < maxRooms",
-  /if \(e\.isBoss && Game\.room < Game\.maxRooms\)/.test(src)
+  /if \(!usesCampaignTuning\(\) && e\.isBoss && Game\.room < Game\.maxRooms\)/.test(src)
 );
 
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);

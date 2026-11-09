@@ -2,8 +2,23 @@
 //
 // Chạy: node tests/room-clear.test.mjs
 import fs from "node:fs";
+import vm from "node:vm";
 
 const html = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+
+// Trích khối cân bằng ngoặc; thất bại rõ nếu anchor bị đổi, không cắt cửa sổ ký tự.
+function section(marker, opening = '{', closing = '}') {
+  const start = html.indexOf(marker);
+  if (start < 0) throw new Error('Thiếu anchor: ' + marker);
+  const begin = html.indexOf(opening, start + marker.length);
+  let depth = 0;
+  for (let i = begin; i < html.length; i++) {
+    if (html[i] === opening) depth++;
+    else if (html[i] === closing && --depth === 0) return html.slice(start, i + 1);
+  }
+  throw new Error('Khối không đóng: ' + marker);
+}
+
 let pass = 0, fail = 0;
 function check(name, cond, extra = "") {
   if (cond) { pass++; console.log("  PASS  " + name); }
@@ -33,47 +48,43 @@ check("co responsive <= 520px", /@media \(max-width: 520px\) \{ \.rc-title/.test
 console.log("\n=== 2. HAM ===");
 check("co showRoomClearOverlay", /function showRoomClearOverlay\(opts = \{\}\)/.test(html));
 check("co hideRoomClearOverlay", /function hideRoomClearOverlay\(\)/.test(html));
-check("tu an sau 1900ms", /setTimeout\(\(\) => \{[\s\S]{0,200}?\}, 1900\)/.test(html));
+check("tu an sau 1900ms", /setTimeout\(\(\) => \{[\s\S]*?\}, 1900\)/.test(section("function showRoomClearOverlay(opts = {})")));
 check("co animation out truoc khi an (rc-out)", /card\.classList\.add\('rc-out'\)/.test(html));
 check("xoa timer cu khi hien lai", /if \(_roomClearTimer\) clearTimeout\(_roomClearTimer\)/.test(html));
 
 // ============================================================ 3. Nối vào luồng
 console.log("\n=== 3. NOI VAO LUONG CHOI ===");
-check("goi khi phong sach", /Game\.roomCleared = true;[\s\S]{0,900}?showRoomClearOverlay\(/.test(html));
+check("goi khi phong sach", /Game\.roomCleared = true;[\s\S]*?showRoomClearOverlay\(/.test(section("function onEnemyKilled(e)")));
 check("truyen room/max/gold/wasBoss",
-  /showRoomClearOverlay\(\{[\s\S]{0,300}?room: Game\.room[\s\S]{0,120}?max: Game\.maxRooms[\s\S]{0,120}?gold: Game\.runGold[\s\S]{0,120}?wasBoss:/.test(html));
+  /showRoomClearOverlay\(\{[^}]*room: Game\.room[^}]*max: Game\.maxRooms[^}]*gold: Game\.runGold[^}]*wasBoss:/.test(section("function onEnemyKilled(e)")));
 check("setupRoom an overlay khi sang phong moi",
-  /function setupRoom\(roomNum\) \{[\s\S]{0,200}?hideRoomClearOverlay\(\)/.test(html));
-check("returnToLobby an overlay", /function returnToLobby\(\)[\s\S]{0,400}?hideRoomClearOverlay\(\)/.test(html));
+  section("function setupRoom(roomNum)").includes("hideRoomClearOverlay()"));
+check("returnToLobby an overlay", section("function returnToLobby()").includes("hideRoomClearOverlay()"));
 check("export showRoomClearOverlay", /^\s+showRoomClearOverlay,$/m.test(html));
 check("export hideRoomClearOverlay", /^\s+hideRoomClearOverlay,$/m.test(html));
 
 // ============================================================ 4. Mô phỏng nội dung
 console.log("\n=== 4. MO PHONG NOI DUNG (chay that) ===");
-// Trích logic tính phòng kế từ source rồi mô phỏng lại để khoá hành vi.
-function roomClearModel(room, max, gold, wasBoss) {
-  const nextRoom = room + 1;
-  const nextExists = nextRoom <= max;
-  const nextIsBoss = nextExists && ((nextRoom % 5 === 0) || (nextRoom === max));
-  const nextIsFinal = nextExists && nextRoom === max;
-
-  const title = wasBoss ? "TRÙM ĐÃ GỤC!" : "PHÒNG ĐÃ SẠCH";
-  let next;
-  if (!nextExists) {
-    next = { kind: "finish", text: "Vào cổng để hoàn thành chương!" };
-  } else if (nextIsBoss) {
-    next = { kind: "boss", final: nextIsFinal, text: `PHÒNG ${nextRoom}: ${nextIsFinal ? "TRÙM CUỐI" : "TRÙM"}` };
-  } else {
-    let nb = null;
-    for (let i = nextRoom; i <= max; i++) {
-      if (i % 5 === 0 || i === max) { nb = i; break; }
-    }
-    const dist = nb ? nb - nextRoom + 1 : 0;
-    next = { kind: "normal", dist, text: `Phòng ${nextRoom} · còn ${dist} tới trùm` };
-  }
-  return { title, next, gold };
+// Chạy renderer production trong VM với DOM/timer tối thiểu; không chép công thức.
+const card = {innerHTML:'',classList:{add(){},remove(){}}};
+const wrap = {classList:{add(){},remove(){}}};
+const ui = {Game:{mode:'endless',maxRooms:15}, getGameMode:id=>({hasChapters:id==='campaign',bossOnly:false}),
+  document:{getElementById:id=>id==='roomClearCard'?card:wrap},
+  _roomClearTimer:null,setTimeout(){return 1},clearTimeout(){}};
+vm.createContext(ui);
+vm.runInContext(fs.readFileSync(new URL('../public/campaign-config.js',import.meta.url),'utf8'),ui);
+vm.runInContext(section('function isBossRoom(room, maxRooms)'),ui);
+vm.runInContext(section('function showRoomClearOverlay(opts = {})'),ui);
+function roomClearModel(room,max,gold,wasBoss) {
+  card.innerHTML=''; ui.Game.maxRooms=max;
+  ui.showRoomClearOverlay({room,max,gold,wasBoss});
+  const rendered=card.innerHTML;
+  const dist=rendered.match(/còn (\d+) tới trùm/);
+  return {title:rendered.includes('TRÙM ĐÃ GỤC!')?'TRÙM ĐÃ GỤC!':'PHÒNG ĐÃ SẠCH',gold,
+    next:{kind:rendered.includes('hoàn thành chương!')?'finish':rendered.includes('rc-next-boss')?'boss':'normal',
+      final:rendered.includes('TRÙM CUỐI'),dist:dist?Number(dist[1]):undefined}};
 }
-
+// Các ca 10/12/15 phòng dưới đây bảo vệ chế độ không chiến dịch.
 // Chương 1: 15 phòng
 let m = roomClearModel(1, 15, 145, false);
 check("C1 P1 xong -> phong 2, con 4 toi trum", m.next.kind === "normal" && m.next.dist === 4, JSON.stringify(m.next));
@@ -117,5 +128,15 @@ check("C3 P9 xong -> phong 10 la TRUM CUOI (boi 5 VA cuoi)",
 check("vang 0 thi khong hien khoi thong ke", roomClearModel(1, 15, 0, false).gold === 0);
 check("vang > 0 duoc dinh dang vi-VN", (1240).toLocaleString("vi-VN") === "1.240");
 
+// Chiến dịch thật: tất cả 50 biên phòng phải khớp shared config (trùm mỗi 10).
+ui.Game.mode='campaign';
+for (let room=1;room<=50;room++) {
+  const m=roomClearModel(room,50,0,room%10===0);
+  const next=room+1;
+  const expected=room===50?'finish':ui.ArtemisCampaignConfig.roomPlan(1,next).isBoss?'boss':'normal';
+  check(`chiến dịch P${room}: loại phòng kế đúng`,m.next.kind===expected,JSON.stringify(m.next));
+  if(expected==='normal') check(`chiến dịch P${room}: khoảng cách tới trùm đúng`,m.next.dist===Math.ceil(next/10)*10-room);
+  if(expected==='boss') check(`chiến dịch P${room}: chỉ P50 là trùm cuối`,m.next.final===(next===50));
+}
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);
 process.exit(fail > 0 ? 1 : 0);

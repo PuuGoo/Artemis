@@ -1,0 +1,1507 @@
+{
+  "evidence": "analytical-only",
+  "profileSource": "getComputedStats() trong public/index.html, đo trên Chrome local",
+  "measuredAt": "2026-11-07T02:01:27.245Z",
+  "assumptions": [
+    "Hồ sơ fixture đo sẵn, không phải tài khoản thật hay chỉ số được đo lại hiện tại.",
+    "12 mốc theo yêu cầu: 1,5,10,15,20,25,30,35,40,45,49,50.",
+    "DPS kỳ vọng crit, bắn liên tục đứng yên, một mục tiêu; tổng HP từng loại quái thật trong phòng.",
+    "Không kỹ năng được chọn/pin; chạy công thức ROGUE production với bộ rỗng, cấp không buff chỉ số.",
+    "Số đòn chịu là đòn ATK thường sau DEF 50 phòng, không dodge/khiên/rune/crit địch/burst.",
+    "Phần thưởng/phút là trần phân tích thời gian DPS thuần; chưa có di chuyển, né, nhặt, menu hay chuyển phòng.",
+    "Giữ greed 0; talent production = 1 + greed * 0.15, làm tròn từng ngọc.",
+    "Không mô phỏng AI, va chạm hay xác suất thắng; không chứng minh gameplay thắng 50 phòng."
+  ],
+  "milestones": [
+    1,
+    5,
+    10,
+    15,
+    20,
+    25,
+    30,
+    35,
+    40,
+    45,
+    49,
+    50
+  ],
+  "rowCount": 1596,
+  "exp": {
+    "thresholds": [
+      80,
+      130,
+      210,
+      340,
+      551,
+      893,
+      1446,
+      2343,
+      3795
+    ],
+    "firstLevel10Room": 45,
+    "totalXp": 11300,
+    "totalGold": 6520,
+    "mobs": 225,
+    "bosses": 5
+  },
+  "profiles": [
+    {
+      "name": "A. Tân thủ (tay không, Alex 0★)",
+      "atk": 152,
+      "hp": 775,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3215,
+      "hero": "alex",
+      "heroStar": 0
+    },
+    {
+      "name": "B. Starter (Cung Gỉ Sét Lv.1)",
+      "atk": 164,
+      "hp": 775,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3289,
+      "hero": "alex",
+      "heroStar": 0
+    },
+    {
+      "name": "C. Nâng cấp đầu (Lv.5 + uncommon)",
+      "atk": 183,
+      "hp": 868,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3514,
+      "hero": "alex",
+      "heroStar": 0
+    },
+    {
+      "name": "D. Giữa chương 1 (rare Lv.15)",
+      "atk": 491,
+      "hp": 1929,
+      "aspd": 2.13,
+      "crit": 0.27,
+      "critMult": 1.85,
+      "def": 4,
+      "dmgReduction": 0.0018,
+      "powerScore": 10028,
+      "hero": "alex",
+      "heroStar": 2
+    },
+    {
+      "name": "E. Cuối chương 1 (epic Lv.30, 4★)",
+      "atk": 1073,
+      "hp": 4020,
+      "aspd": 2.62,
+      "crit": 0.34,
+      "critMult": 1.85,
+      "def": 8,
+      "dmgReduction": 0.0036,
+      "powerScore": 19500,
+      "hero": "alex",
+      "heroStar": 4
+    },
+    {
+      "name": "F. Người cũ quay lại (mythic Lv.100, 8★)",
+      "atk": 5934,
+      "hp": 19489,
+      "aspd": 3.13,
+      "crit": 0.52,
+      "critMult": 1.85,
+      "def": 16,
+      "dmgReduction": 0.0072,
+      "powerScore": 74290,
+      "hero": "alex",
+      "heroStar": 8
+    },
+    {
+      "name": "G. Yếu ở chương cao (starter gear)",
+      "atk": 164,
+      "hp": 775,
+      "aspd": 1.94,
+      "crit": 0.22,
+      "critMult": 1.85,
+      "def": 0,
+      "dmgReduction": 0,
+      "powerScore": 3289,
+      "hero": "alex",
+      "heroStar": 0
+    }
+  ],
+  "chapters": [
+    {
+      "id": 1,
+      "name": "Chương 1: Hầm Ngục Đá Cổ",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "golem",
+        "name": "Golem Dung Nham",
+        "hp": 7020,
+        "atk": 247,
+        "speed": 68,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Chương 2: Thung Lũng Dung Nham",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "queen",
+        "name": "Nữ Hoàng Nhện Độc",
+        "hp": 12150,
+        "atk": 338,
+        "speed": 68,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Chương 3: Thánh Điện Hư Không",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "demon_king",
+        "name": "Đại Ma Vương Atreus",
+        "hp": 23288,
+        "atk": 455,
+        "speed": 68,
+        "radius": 34,
+        "hpMultiplier": 1.15
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Chương 4: Long Vực Thiên Không",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "elder_dragon",
+        "name": "Cổ Long Thiên Không",
+        "hp": 44550,
+        "atk": 598,
+        "speed": 68,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Chương 5: Vương Quốc Nhật Thực",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "eclipse_sovereign",
+        "name": "Bạo Chúa Nhật Thực",
+        "hp": 45900,
+        "atk": 780,
+        "speed": 76,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Chương 6: Vực Thẳm Thiên Hà",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "astral_devourer",
+        "name": "Thực Thần Tinh Hà",
+        "hp": 64800,
+        "atk": 988,
+        "speed": 68,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Chương 7: Mê Lâm Bào Tử",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "mycelium_queen",
+        "name": "Nữ Hoàng Sợi Nấm",
+        "hp": 83700,
+        "atk": 1209,
+        "speed": 72,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Chương 8: Hỏa Sơn Sừng Đỏ",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_aries",
+        "name": "Hỏa Dương Chiến Vương",
+        "hp": 102600,
+        "atk": 1508,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Chương 9: Thảo Nguyên Kim Giác",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_taurus",
+        "name": "Kim Ngưu Cự Thần",
+        "hp": 120042,
+        "atk": 1719,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Chương 10: Song Thành Ảo Ảnh",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_gemini",
+        "name": "Song Tử Huyễn Vương",
+        "hp": 140449,
+        "atk": 1960,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Chương 11: Thủy Cung Nguyệt Triều",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_cancer",
+        "name": "Cự Giải Nguyệt Giáp",
+        "hp": 164326,
+        "atk": 2235,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Chương 12: Thánh Điện Nhật Luân",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_leo",
+        "name": "Sư Vương Thái Dương",
+        "hp": 192260,
+        "atk": 2547,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Chương 13: Vườn Sao Trinh Nữ",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_virgo",
+        "name": "Tinh Nữ Thánh Vệ",
+        "hp": 216000,
+        "atk": 2903,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Chương 14: Điện Cân Bằng",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_libra",
+        "name": "Phán Quan Thiên Bình",
+        "hp": 272700,
+        "atk": 3310,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Chương 15: Hoang Mạc Độc Tinh",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_scorpio",
+        "name": "Hạt Vương Độc Vĩ",
+        "hp": 307927,
+        "atk": 3774,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Chương 16: Thiên Lộ Xạ Thủ",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_sagittarius",
+        "name": "Nhân Mã Thần Xạ",
+        "hp": 360275,
+        "atk": 4302,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Chương 17: Đỉnh Sơn Tinh Tú",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_capricorn",
+        "name": "Sơn Thần Ma Kết",
+        "hp": 421521,
+        "atk": 4904,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Chương 18: Hải Đài Thiên Thủy",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_aquarius",
+        "name": "Thủy Sứ Bảo Bình",
+        "hp": 493181,
+        "atk": 5590,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Chương 19: Hải Vực Mộng Ảo",
+      "rooms": 50,
+      "boss": {
+        "room": 50,
+        "type": "zodiac_pisces",
+        "name": "Song Ngư Mộng Chủ",
+        "hp": 577021,
+        "atk": 6373,
+        "speed": 70,
+        "radius": 34,
+        "hpMultiplier": 1
+      },
+      "valkyries": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "profile": "A. Tân thủ (tay không, Alex 0★)",
+      "chapter": 1,
+      "room": 1,
+      "kind": "mob",
+      "count": 3,
+      "enemies": [
+        {
+          "type": "goblin",
+          "hp": 300
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 336
+        },
+        {
+          "type": "plant_turret",
+          "hp": 369
+        }
+      ],
+      "incomingAtk": 70,
+      "dps": 350.02256,
+      "damageReduction": 0,
+      "damagePerHit": 70,
+      "hitsToDie": 12,
+      "roomTtkSeconds": 2.871243499276161,
+      "xp": 132,
+      "gold": 72,
+      "xpPerMinute": 2758.386741492537,
+      "goldPerMinute": 1504.5745862686567
+    },
+    {
+      "profile": "A. Tân thủ (tay không, Alex 0★)",
+      "chapter": 1,
+      "room": 10,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 5534
+        }
+      ],
+      "incomingAtk": 200,
+      "dps": 350.02256,
+      "damageReduction": 0,
+      "damagePerHit": 200,
+      "hitsToDie": 4,
+      "roomTtkSeconds": 15.810409477606244,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 1062.5910748102638,
+      "goldPerMinute": 850.072859848211
+    },
+    {
+      "profile": "A. Tân thủ (tay không, Alex 0★)",
+      "chapter": 1,
+      "room": 49,
+      "kind": "mob",
+      "count": 7,
+      "enemies": [
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        },
+        {
+          "type": "goblin",
+          "hp": 653
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 731
+        },
+        {
+          "type": "plant_turret",
+          "hp": 803
+        },
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        }
+      ],
+      "incomingAtk": 68,
+      "dps": 350.02256,
+      "damageReduction": 0,
+      "damagePerHit": 68,
+      "hitsToDie": 12,
+      "roomTtkSeconds": 13.710544828881886,
+      "xp": 308,
+      "gold": 168,
+      "xpPerMinute": 1347.8676617628673,
+      "goldPerMinute": 735.2005427797458
+    },
+    {
+      "profile": "A. Tân thủ (tay không, Alex 0★)",
+      "chapter": 1,
+      "room": 50,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 7020
+        }
+      ],
+      "incomingAtk": 247,
+      "dps": 350.02256,
+      "damageReduction": 0,
+      "damagePerHit": 247,
+      "hitsToDie": 4,
+      "roomTtkSeconds": 20.055850114346914,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 837.6608273504274,
+      "goldPerMinute": 670.128661880342
+    },
+    {
+      "profile": "B. Starter (Cung Gỉ Sét Lv.1)",
+      "chapter": 1,
+      "room": 1,
+      "kind": "mob",
+      "count": 3,
+      "enemies": [
+        {
+          "type": "goblin",
+          "hp": 300
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 336
+        },
+        {
+          "type": "plant_turret",
+          "hp": 369
+        }
+      ],
+      "incomingAtk": 70,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 70,
+      "hitsToDie": 12,
+      "roomTtkSeconds": 2.661152511524247,
+      "xp": 132,
+      "gold": 72,
+      "xpPerMinute": 2976.154115820895,
+      "goldPerMinute": 1623.356790447761
+    },
+    {
+      "profile": "B. Starter (Cung Gỉ Sét Lv.1)",
+      "chapter": 1,
+      "room": 10,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 5534
+        }
+      ],
+      "incomingAtk": 200,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 200,
+      "hitsToDie": 4,
+      "roomTtkSeconds": 14.653550247537495,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 1146.4798438742318,
+      "goldPerMinute": 917.1838750993855
+    },
+    {
+      "profile": "B. Starter (Cung Gỉ Sét Lv.1)",
+      "chapter": 1,
+      "room": 49,
+      "kind": "mob",
+      "count": 7,
+      "enemies": [
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        },
+        {
+          "type": "goblin",
+          "hp": 653
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 731
+        },
+        {
+          "type": "plant_turret",
+          "hp": 803
+        },
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        }
+      ],
+      "incomingAtk": 68,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 68,
+      "hitsToDie": 12,
+      "roomTtkSeconds": 12.707334231646627,
+      "xp": 308,
+      "gold": 168,
+      "xpPerMinute": 1454.2782666388832,
+      "goldPerMinute": 793.2426908939362
+    },
+    {
+      "profile": "B. Starter (Cung Gỉ Sét Lv.1)",
+      "chapter": 1,
+      "room": 50,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 7020
+        }
+      ],
+      "incomingAtk": 247,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 247,
+      "hitsToDie": 4,
+      "roomTtkSeconds": 18.588348886467873,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 903.7919452991453,
+      "goldPerMinute": 723.0335562393162
+    },
+    {
+      "profile": "C. Nâng cấp đầu (Lv.5 + uncommon)",
+      "chapter": 1,
+      "room": 1,
+      "kind": "mob",
+      "count": 3,
+      "enemies": [
+        {
+          "type": "goblin",
+          "hp": 300
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 336
+        },
+        {
+          "type": "plant_turret",
+          "hp": 369
+        }
+      ],
+      "incomingAtk": 70,
+      "dps": 421.40874,
+      "damageReduction": 0,
+      "damagePerHit": 70,
+      "hitsToDie": 13,
+      "roomTtkSeconds": 2.3848579884698164,
+      "xp": 132,
+      "gold": 72,
+      "xpPerMinute": 3320.9524585074632,
+      "goldPerMinute": 1811.4286137313436
+    },
+    {
+      "profile": "C. Nâng cấp đầu (Lv.5 + uncommon)",
+      "chapter": 1,
+      "room": 10,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 5534
+        }
+      ],
+      "incomingAtk": 200,
+      "dps": 421.40874,
+      "damageReduction": 0,
+      "damagePerHit": 200,
+      "hitsToDie": 5,
+      "roomTtkSeconds": 13.132143391235786,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 1279.303728225515,
+      "goldPerMinute": 1023.442982580412
+    },
+    {
+      "profile": "C. Nâng cấp đầu (Lv.5 + uncommon)",
+      "chapter": 1,
+      "room": 49,
+      "kind": "mob",
+      "count": 7,
+      "enemies": [
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        },
+        {
+          "type": "goblin",
+          "hp": 653
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 731
+        },
+        {
+          "type": "plant_turret",
+          "hp": 803
+        },
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        }
+      ],
+      "incomingAtk": 68,
+      "dps": 421.40874,
+      "damageReduction": 0,
+      "damagePerHit": 68,
+      "hitsToDie": 13,
+      "roomTtkSeconds": 11.387993519071294,
+      "xp": 308,
+      "gold": 168,
+      "xpPerMinute": 1622.7617243592415,
+      "goldPerMinute": 885.1427587414045
+    },
+    {
+      "profile": "C. Nâng cấp đầu (Lv.5 + uncommon)",
+      "chapter": 1,
+      "room": 50,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 7020
+        }
+      ],
+      "incomingAtk": 247,
+      "dps": 421.40874,
+      "damageReduction": 0,
+      "damagePerHit": 247,
+      "hitsToDie": 4,
+      "roomTtkSeconds": 16.65841102393842,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 1008.4995487179488,
+      "goldPerMinute": 806.799638974359
+    },
+    {
+      "profile": "D. Giữa chương 1 (rare Lv.15)",
+      "chapter": 1,
+      "room": 1,
+      "kind": "mob",
+      "count": 3,
+      "enemies": [
+        {
+          "type": "goblin",
+          "hp": 300
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 336
+        },
+        {
+          "type": "plant_turret",
+          "hp": 369
+        }
+      ],
+      "incomingAtk": 70,
+      "dps": 1285.8479849999999,
+      "damageReduction": 0.0006,
+      "damagePerHit": 70,
+      "hitsToDie": 28,
+      "roomTtkSeconds": 0.7815853909045088,
+      "xp": 132,
+      "gold": 72,
+      "xpPerMinute": 10133.249792238807,
+      "goldPerMinute": 5527.227159402985
+    },
+    {
+      "profile": "D. Giữa chương 1 (rare Lv.15)",
+      "chapter": 1,
+      "room": 10,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 5534
+        }
+      ],
+      "incomingAtk": 200,
+      "dps": 1285.8479849999999,
+      "damageReduction": 0.0006,
+      "damagePerHit": 200,
+      "hitsToDie": 10,
+      "roomTtkSeconds": 4.303774679866221,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 3903.5500809541018,
+      "goldPerMinute": 3122.8400647632816
+    },
+    {
+      "profile": "D. Giữa chương 1 (rare Lv.15)",
+      "chapter": 1,
+      "room": 49,
+      "kind": "mob",
+      "count": 7,
+      "enemies": [
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        },
+        {
+          "type": "goblin",
+          "hp": 653
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 731
+        },
+        {
+          "type": "plant_turret",
+          "hp": 803
+        },
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        }
+      ],
+      "incomingAtk": 68,
+      "dps": 1285.8479849999999,
+      "damageReduction": 0.0006,
+      "damagePerHit": 68,
+      "hitsToDie": 29,
+      "roomTtkSeconds": 3.7321674536823264,
+      "xp": 308,
+      "gold": 168,
+      "xpPerMinute": 4951.546314398833,
+      "goldPerMinute": 2700.8434442175453
+    },
+    {
+      "profile": "D. Giữa chương 1 (rare Lv.15)",
+      "chapter": 1,
+      "room": 50,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 7020
+        }
+      ],
+      "incomingAtk": 247,
+      "dps": 1285.8479849999999,
+      "damageReduction": 0.0006,
+      "damagePerHit": 247,
+      "hitsToDie": 8,
+      "roomTtkSeconds": 5.459432282735973,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 3077.2430410256407,
+      "goldPerMinute": 2461.7944328205126
+    },
+    {
+      "profile": "E. Cuối chương 1 (epic Lv.30, 4★)",
+      "chapter": 1,
+      "room": 1,
+      "kind": "mob",
+      "count": 3,
+      "enemies": [
+        {
+          "type": "goblin",
+          "hp": 300
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 336
+        },
+        {
+          "type": "plant_turret",
+          "hp": 369
+        }
+      ],
+      "incomingAtk": 70,
+      "dps": 3623.7141400000005,
+      "damageReduction": 0.0012,
+      "damagePerHit": 70,
+      "hitsToDie": 58,
+      "roomTtkSeconds": 0.27733975726904325,
+      "xp": 132,
+      "gold": 72,
+      "xpPerMinute": 28557.030834626872,
+      "goldPerMinute": 15576.562273432839
+    },
+    {
+      "profile": "E. Cuối chương 1 (epic Lv.30, 4★)",
+      "chapter": 1,
+      "room": 10,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 5534
+        }
+      ],
+      "incomingAtk": 200,
+      "dps": 3623.7141400000005,
+      "damageReduction": 0.0012,
+      "damagePerHit": 200,
+      "hitsToDie": 21,
+      "roomTtkSeconds": 1.5271624047033685,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 11000.794642573186,
+      "goldPerMinute": 8800.63571405855
+    },
+    {
+      "profile": "E. Cuối chương 1 (epic Lv.30, 4★)",
+      "chapter": 1,
+      "room": 49,
+      "kind": "mob",
+      "count": 7,
+      "enemies": [
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        },
+        {
+          "type": "goblin",
+          "hp": 653
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 731
+        },
+        {
+          "type": "plant_turret",
+          "hp": 803
+        },
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        }
+      ],
+      "incomingAtk": 68,
+      "dps": 3623.7141400000005,
+      "damageReduction": 0.0012,
+      "damagePerHit": 68,
+      "hitsToDie": 60,
+      "roomTtkSeconds": 1.3243318359543668,
+      "xp": 308,
+      "gold": 168,
+      "xpPerMinute": 13954.206565367787,
+      "goldPerMinute": 7611.38539929152
+    },
+    {
+      "profile": "E. Cuối chương 1 (epic Lv.30, 4★)",
+      "chapter": 1,
+      "room": 50,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 7020
+        }
+      ],
+      "incomingAtk": 247,
+      "dps": 3623.7141400000005,
+      "damageReduction": 0.0012,
+      "damagePerHit": 247,
+      "hitsToDie": 17,
+      "roomTtkSeconds": 1.9372389015210782,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 8672.136403418805,
+      "goldPerMinute": 6937.709122735044
+    },
+    {
+      "profile": "F. Người cũ quay lại (mythic Lv.100, 8★)",
+      "chapter": 1,
+      "room": 1,
+      "kind": "mob",
+      "count": 3,
+      "enemies": [
+        {
+          "type": "goblin",
+          "hp": 300
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 336
+        },
+        {
+          "type": "plant_turret",
+          "hp": 369
+        }
+      ],
+      "incomingAtk": 70,
+      "dps": 26782.87164,
+      "damageReduction": 0.0025,
+      "damagePerHit": 70,
+      "hitsToDie": 279,
+      "roomTtkSeconds": 0.03752398224912674,
+      "xp": 132,
+      "gold": 72,
+      "xpPerMinute": 211065.01829731345,
+      "goldPerMinute": 115126.37361671643
+    },
+    {
+      "profile": "F. Người cũ quay lại (mythic Lv.100, 8★)",
+      "chapter": 1,
+      "room": 10,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 5534
+        }
+      ],
+      "incomingAtk": 200,
+      "dps": 26782.87164,
+      "damageReduction": 0.0025,
+      "damagePerHit": 200,
+      "hitsToDie": 98,
+      "roomTtkSeconds": 0.20662459479270384,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 81306.87451246839,
+      "goldPerMinute": 65045.49960997471
+    },
+    {
+      "profile": "F. Người cũ quay lại (mythic Lv.100, 8★)",
+      "chapter": 1,
+      "room": 49,
+      "kind": "mob",
+      "count": 7,
+      "enemies": [
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        },
+        {
+          "type": "goblin",
+          "hp": 653
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 731
+        },
+        {
+          "type": "plant_turret",
+          "hp": 803
+        },
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        }
+      ],
+      "incomingAtk": 68,
+      "dps": 26782.87164,
+      "damageReduction": 0.0025,
+      "damagePerHit": 68,
+      "hitsToDie": 287,
+      "roomTtkSeconds": 0.17918168240155147,
+      "xp": 308,
+      "gold": 168,
+      "xpPerMinute": 103135.54238533028,
+      "goldPerMinute": 56255.750391998336
+    },
+    {
+      "profile": "F. Người cũ quay lại (mythic Lv.100, 8★)",
+      "chapter": 1,
+      "room": 50,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 7020
+        }
+      ],
+      "incomingAtk": 247,
+      "dps": 26782.87164,
+      "damageReduction": 0.0025,
+      "damagePerHit": 246,
+      "hitsToDie": 80,
+      "roomTtkSeconds": 0.26210781630733304,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 64095.76118974359,
+      "goldPerMinute": 51276.60895179487
+    },
+    {
+      "profile": "G. Yếu ở chương cao (starter gear)",
+      "chapter": 1,
+      "room": 1,
+      "kind": "mob",
+      "count": 3,
+      "enemies": [
+        {
+          "type": "goblin",
+          "hp": 300
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 336
+        },
+        {
+          "type": "plant_turret",
+          "hp": 369
+        }
+      ],
+      "incomingAtk": 70,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 70,
+      "hitsToDie": 12,
+      "roomTtkSeconds": 2.661152511524247,
+      "xp": 132,
+      "gold": 72,
+      "xpPerMinute": 2976.154115820895,
+      "goldPerMinute": 1623.356790447761
+    },
+    {
+      "profile": "G. Yếu ở chương cao (starter gear)",
+      "chapter": 1,
+      "room": 10,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 5534
+        }
+      ],
+      "incomingAtk": 200,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 200,
+      "hitsToDie": 4,
+      "roomTtkSeconds": 14.653550247537495,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 1146.4798438742318,
+      "goldPerMinute": 917.1838750993855
+    },
+    {
+      "profile": "G. Yếu ở chương cao (starter gear)",
+      "chapter": 1,
+      "room": 49,
+      "kind": "mob",
+      "count": 7,
+      "enemies": [
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        },
+        {
+          "type": "goblin",
+          "hp": 653
+        },
+        {
+          "type": "skeleton_mage",
+          "hp": 731
+        },
+        {
+          "type": "plant_turret",
+          "hp": 803
+        },
+        {
+          "type": "bat",
+          "hp": 653
+        },
+        {
+          "type": "slime",
+          "hp": 653
+        }
+      ],
+      "incomingAtk": 68,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 68,
+      "hitsToDie": 12,
+      "roomTtkSeconds": 12.707334231646627,
+      "xp": 308,
+      "gold": 168,
+      "xpPerMinute": 1454.2782666388832,
+      "goldPerMinute": 793.2426908939362
+    },
+    {
+      "profile": "G. Yếu ở chương cao (starter gear)",
+      "chapter": 1,
+      "room": 50,
+      "kind": "boss",
+      "count": 1,
+      "enemies": [
+        {
+          "type": "golem",
+          "hp": 7020
+        }
+      ],
+      "incomingAtk": 247,
+      "dps": 377.65592,
+      "damageReduction": 0,
+      "damagePerHit": 247,
+      "hitsToDie": 4,
+      "roomTtkSeconds": 18.588348886467873,
+      "xp": 280,
+      "gold": 224,
+      "xpPerMinute": 903.7919452991453,
+      "goldPerMinute": 723.0335562393162
+    }
+  ]
+}

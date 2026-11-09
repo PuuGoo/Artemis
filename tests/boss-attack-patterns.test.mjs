@@ -27,7 +27,7 @@ test('kế hoạch đòn/cảnh báo khớp nhánh bắn production của mọi 
   const art = patterns();
   const bosses = ['golem', 'queen', 'demon_king', 'elder_dragon', 'eclipse_sovereign', 'astral_devourer', 'mycelium_queen',
     ...['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'].map(x => `zodiac_${x}`)];
-  for (const type of bosses) for (const phaseTimer of [0, 1, 2]) for (const hp of [100, 20]) {
+  for (const type of bosses) for (const phaseTimer of [0, 1, 2]) for (const hp of [100, 70, 50, 35, 20]) {
     const e = { type, phaseTimer, isBoss: true, x: 100, y: 160, hp, maxHp: 100, atk: 55,
       zodiacIndex: type.startsWith('zodiac_') ? bosses.indexOf(type) - 7 : 0 };
     const p = { x: 330, y: 440 };
@@ -136,7 +136,7 @@ test('nhánh bắn và cảnh báo production thực sự gọi cùng một bộ
   const types = ['golem', 'queen', 'demon_king', 'elder_dragon', 'eclipse_sovereign', 'astral_devourer', 'mycelium_queen',
     ...Array.from({ length: 12 }, (_, i) => `zodiac_${i}`)];
   let cases = 0;
-  for (const type of types) for (const phaseTimer of [0, 1, 2]) for (const hp of [100, 20]) {
+  for (const type of types) for (const phaseTimer of [0, 1, 2]) for (const hp of [100, 70, 50, 35, 20]) {
     const e = { type, isBoss: true, x: 100, y: 160, r: 20, hp, maxHp: 100, atk: 55, phaseTimer, zodiacIndex: types.indexOf(type) - 7, attackTimer: .2 };
     const p = { x: 330, y: 440 }, expected = currentAttack(e, p), bullets = [], endpoints = [];
     const before = JSON.stringify(e);

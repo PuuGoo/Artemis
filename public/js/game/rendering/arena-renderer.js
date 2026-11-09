@@ -231,6 +231,7 @@
   // Mỗi chương có một bản sắc trùm riêng; các chương đầu giữ nguyên bộ boss cũ.
   const ZODIAC_IDS = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
   function bossTypeOfRoom(room) {
+    if ((!Game.mode || Game.mode === 'campaign') && root.ArtemisCampaignConfig) return root.ArtemisCampaignConfig.bossType(Game.chapter && Game.chapter.id, room);
     if (Game.chapter && Number(Game.chapter.id) >= 8 && Number(Game.chapter.id) <= 19) return 'zodiac_' + ZODIAC_IDS[Number(Game.chapter.id) - 8];
     if (Game.chapter && Number(Game.chapter.id) === 7) return 'mycelium_queen';
     if (Game.chapter && Number(Game.chapter.id) === 6) return 'astral_devourer';
@@ -244,6 +245,8 @@
    */
   function isBossRoomForBiome(room, maxRooms) {
     const max = maxRooms || Game.maxRooms || 1;
+    if (Game.mode === 'tower' || Game.mode === 'bossrush') return true;
+    if ((!Game.mode || Game.mode === 'campaign') && max === 50) return room % 10 === 0;
     return (room % 5 === 0) || (room === max);
   }
 
