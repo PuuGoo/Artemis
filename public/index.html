@@ -35,7 +35,7 @@
   <script src="/combat-damage.js"></script>
   <script src="/combat-loot.js"></script>
   <script src="/boss-attack-patterns.js"></script>
-  <script src="/arena-ground.js"></script>
+
   <script src="/status-vfx.js"></script>
   <script src="/monster-art.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -1267,8 +1267,6 @@
     @keyframes hv2shine { from { transform: translateX(-100%);} to { transform: translateX(100%);} }
     .hv2-btn { height: 36px; min-width: 36px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 900; color: #f8fafc; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; transition: transform .12s, filter .12s; }
     .hv2-btn:hover { filter: brightness(1.2); } .hv2-btn:active { transform: scale(.92); }
-    .hv2-ult { white-space: nowrap; color: #1c0a00; background: linear-gradient(135deg,#f0abfc,#fb7185 45%,#fbbf24); border: 1px solid #fff7; box-shadow: 0 0 16px rgba(251,113,133,.65); animation: hv2ult 1.8s ease-in-out infinite; }
-    @keyframes hv2ult { 50% { box-shadow: 0 0 26px rgba(251,191,36,.95); } }
     .hv2-boss { border-radius: 14px; padding: 6px 12px 8px; border: 1px solid rgba(244,63,94,.65) !important; background: linear-gradient(180deg, rgba(60,8,22,.92), rgba(18,4,10,.94)) !important; box-shadow: 0 0 22px rgba(244,63,94,.4), inset 0 1px 0 rgba(255,255,255,.1) !important; animation: hv2bossin .5s cubic-bezier(.2,1.4,.4,1); }
     @keyframes hv2bossin { from { transform: translateY(-14px) scale(.92); opacity: 0; } }
     .hv2-boss-track { position: relative; height: 12px; border-radius: 999px; background: rgba(2,6,23,.85); overflow: hidden; border: 1px solid rgba(251,113,133,.35); }
@@ -2270,7 +2268,6 @@
             </div>
 
             <div class="pointer-events-auto flex items-center gap-1.5 flex-wrap justify-end">
-              <button id="btnTriggerUltimate" type="button" class="hv2-btn hv2-ult" title="Tuyệt Kỹ Thần Uy">🔥 <span class="hidden sm:inline">Tuyệt Kỹ</span></button>
               <button id="btnMaxRunSkills" type="button" class="hv2-btn gold-gradient !text-slate-950" title="Full 18 Kỹ Năng">⚡ <span class="hidden sm:inline">Full Kỹ Năng</span></button>
               <button id="btnPauseGame" type="button" class="hv2-btn hv2-glass" title="Tạm dừng">⏸</button>
               <button id="btnHudGfx" type="button" class="hv2-btn hv2-glass" title="Bật/tắt đồ hoạ HD">✨ HD</button>
@@ -25591,10 +25588,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           atk: stats.baseAtk,
           aspd: stats.baseAspd,
           critRate: stats.baseCrit,
-          // Năng lượng Tuyệt Kỹ: bắt đầu đầy để người chơi dùng được ngay đầu trận,
-          // sau đó hồi dần 18 NL/giây (xem updateUltimateCharge).
-          ultCharge: ULT_COST,
-          ultMax: ULT_COST,
           // CRIT DMG đã gom đủ 5 nguồn (talent/artifact/hero-star/set/skin) —
           // trước đây damageEnemy hardcode 1.85 nên mọi nguồn này vô hiệu.
           critDmgMult: stats.critDmgMult || 1.85,
@@ -27229,104 +27222,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
       }
 
-      // Tuyệt kỹ Thần Uy Tinh Hà — CÓ HỒI CHIÊU.
-      //
-      // Trước đây hàm này không có bất kỳ giới hạn nào: bấm nút HUD hoặc phím Space
-      // liên tục thì mỗi lần bắn 20 đạn × 1.45 ATK. Với ATK 99.763 (tài khoản thật)
-      // mỗi lần bấm ≈ 2,89 triệu sát thương, không cooldown => phá toàn bộ cân bằng
-      // phó bản.
-      //
-      // Nay: năng lượng đầy 100 mới dùng được, mỗi lần dùng trừ 100, hồi 18 NL/giây
-      // (≈5,6 giây mỗi lần). Đánh trúng quái cũng nạp thêm (xem damageEnemy).
-      const ULT_COST = 100;
-      const ULT_REGEN_PER_SEC = 18;
-
-      function updateUltimateCharge(dt) {
-        const p = Game.player;
-        if (!p) return;
-        if (typeof p.ultCharge !== 'number') p.ultCharge = 0;
-        if (typeof p.ultMax !== 'number') p.ultMax = ULT_COST;
-        if (p.ultCharge < p.ultMax) {
-          p.ultCharge = Math.min(p.ultMax, p.ultCharge + ULT_REGEN_PER_SEC * dt);
-        }
-        syncUltimateButton();
-      }
-
-      function syncUltimateButton() {
-        const btn = document.getElementById('btnTriggerUltimate');
-        if (!btn || !Game.player) return;
-        const p = Game.player;
-        const pct = Math.max(0, Math.min(100, Math.round(((p.ultCharge || 0) / (p.ultMax || ULT_COST)) * 100)));
-        const ready = pct >= 100;
-        // Nhấp nháy CHỈ khi thật sự sẵn sàng — trước đây luôn nhấp nháy gây hiểu nhầm.
-        btn.classList.toggle('animate-pulse', ready);
-        btn.style.opacity = ready ? '1' : '0.55';
-        btn.textContent = ready ? '🔥 Tuyệt Kỹ Thần Uy' : `🔥 Tuyệt Kỹ (${pct}%)`;
-        btn.title = ready
-          ? 'Phóng Tuyệt Kỹ Thần Uy Tinh Hà (Phím Space) — SẴN SÀNG!'
-          : `Đang hồi năng lượng: ${pct}% (cần ${ULT_COST})`;
-      }
-
-      function triggerCelestialUltimate() {
-        if (!Game.running || !Game.player) return;
-        const p = Game.player;
-        if (typeof p.ultCharge !== 'number') p.ultCharge = 0;
-        if (typeof p.ultMax !== 'number') p.ultMax = ULT_COST;
-        if (p.ultCharge < p.ultMax) {
-          // Chưa đủ năng lượng: báo rõ thay vì im lặng
-          const pct = Math.round((p.ultCharge / p.ultMax) * 100);
-          spawnFloatText(p.x, p.y - 40, `⚡ Năng lượng ${pct}%`, '#94a3b8', 12);
-          return;
-        }
-        p.ultCharge = 0;   // tiêu hết năng lượng => có hồi chiêu thật
-        syncUltimateButton();   // cập nhật nút ngay, không đợi frame sau
-        const activeSkin = getActiveHeroSkin(p.hero.id);
-        const ultColor = activeSkin.projColor || '#f43f5e';
-
-        Game.screenFlashTimer = 0.38;
-        Game.screenFlashColor = ultColor;
-        Game.shakeTime = 0.42;
-        Game.shakeMag = 9;
-        Game.comboCount = (Game.comboCount || 0) + 12;
-        Game.comboTimer = 4.0;
-
-        SoundFX.levelUp();
-        spawnShockwave(p.x, p.y, 240, '#fde047', 0.58);
-        spawnShockwave(p.x, p.y, 170, ultColor, 0.45);
-        spawnSkyLaser(p.x, p.y, 38, '#fde047');
-        spawnFloatText(p.x, p.y - 42, '🌌 THẦN UY TINH HÀ • THIÊN PHẠT!', '#fde047', 16);
-
-        // Fire 20 Spiraling Mythic Projectiles + Flying Swords
-        const now = performance.now();
-        for (let k = 0; k < 20; k++) {
-          const ang = (k * Math.PI * 2) / 20 + now * 0.001;
-          Game.playerBullets.push({
-            x: p.x,
-            y: p.y,
-            vx: Math.cos(ang) * 640,
-            vy: Math.sin(ang) * 640,
-            r: 8.5,
-            dmg: p.atk * 1.45,
-            bouncesLeft: 2,
-            ricochetsLeft: 2,
-            pierce: true,
-            homing: 0.09,
-            hitSet: new Set(),
-            color: k % 2 === 0 ? '#fde047' : ultColor,
-            isSword: k % 3 === 0
-          });
-        }
-
-        // Smite every active enemy on screen with a Celestial Sky Laser & Meteor!
-        for (const e of [...Game.enemies]) {
-          if (e.hp > 0) {
-            spawnSkyLaser(e.x, e.y, e.isBoss ? 42 : 26, '#38bdf8');
-            spawnCombatSlashAndSparks(e.x, e.y, '#fde047', true, e.r + 12);
-            damageEnemy(e, p.atk * 2.2, true);
-          }
-        }
-      }
-
       // ==================== MAIN UPDATE LOOP ====================
       function updateGame(dt) {
         const p = Game.player;
@@ -27337,9 +27232,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (Game.shakeTime > 0) Game.shakeTime -= dt;
         if (p.invulnTimer > 0) p.invulnTimer -= dt;
         if (p.echoScytheCooldown > 0) p.echoScytheCooldown = Math.max(0, p.echoScytheCooldown - dt);
-
-        // Hồi năng lượng Tuyệt Kỹ (18 NL/giây) + cập nhật nút HUD
-        updateUltimateCharge(dt);
 
         // 1. Player Movement (WASD / Arrows / Virtual Joystick)
         let mx = 0;
@@ -31476,7 +31368,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         renderBeginnerJourneyUI();
       });
       document.getElementById('btnMaxRunSkills')?.addEventListener('click', grantAllRogueSkillsInRun);
-      document.getElementById('btnTriggerUltimate')?.addEventListener('click', triggerCelestialUltimate);
 
       document.getElementById('btnStageShowcaseUlt')?.addEventListener('click', () => {
         StageHeroAnim.triggerPose();
@@ -31495,13 +31386,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         SoundFX.levelUp();
         showToast('⚡ Biểu diễn Tuyệt Kỹ Thần Khí & Linh Thú Hộ Vệ trên Sân Khấu!');
-      });
-
-      window.addEventListener('keydown', (ev) => {
-        if (ev.code === 'Space' && Game.running && !Game.paused) {
-          ev.preventDefault();
-          triggerCelestialUltimate();
-        }
       });
 
       // Initialize App on Load

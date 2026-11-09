@@ -953,13 +953,7 @@
     const key = `${w}x${h}|${pad}|${B.id}|${seed}`;
     if (key !== cacheKey) { cache = buildStatic(w, h, pad, B, seed); cacheKey = key; applyHudTheme(B); }
     ctx.drawImage(cache.canvas, 0, 0);
-    // Nền sàn ảnh thật vẽ đè phần sàn của nền vector (tường/viền vẫn giữ);
-    // hitbox/va chạm vẫn do logic gốc quyết định, không đổi.
-    ctx.save();
-    if (typeof ArenaGround !== 'undefined') {
-      ArenaGround.draw(ctx, w, h, pad, Game.chapter ? Game.chapter.id : 1, Game.room || 1, Game);
-    }
-    ctx.restore();
+    // Chỉ dùng nền biome; bỏ lớp ảnh map phủ để sân khớp vùng va chạm thực tế.
     drawAnim(ctx, cache.anim, nowMs, B);
     drawCenterSigil(ctx, w, h, nowMs, B);
     drawArenaSpecial(ctx, w, h, pad, nowMs, B);

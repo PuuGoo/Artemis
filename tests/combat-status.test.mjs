@@ -20,7 +20,7 @@ function fixture({ skills = {}, hero = 'alex' } = {}) {
   const Game = { player:p,width:600,height:800,wallPad:24,keys:{},joy:{active:false},pet:{x:300,y:530,cooldown:10000},enemies:[],obstacles:[],kills:0 };
   for (const k of ['playerBullets','enemyBullets','drops','swords','meteors','artemisHawks','particles','shockwaves','lightningBolts','ambientMotes','afterimages','muzzleFlashes','floorDecals','floatTexts']) Game[k]=[];
   const S = { runes:{},equippedRuneSlots:{ability:[],etched:[],blessing:[],enhancement:[]},gold:123,selectedHeroId:hero,save(){throw Error('unexpected save');} };
-  const c=vm.createContext({Game,SaveState:S,Math:Object.create(Math),performance:{now:()=>1000},getActiveResonanceHeroIds:()=>({}),getHeroStarLevel:()=>0,getActiveHeroSkin:()=>({}),getEquippedSetCounts:()=>({}),updateUltimateCharge(){},updateInGameHUD(){},spawnFloatText(){},spawnParticles(){},spawnShockwave(){},spawnSkyLaser(){},spawnCombatSlashAndSparks(){},SoundFX:{hitEnemy(){}},hurtPlayer(){p.hp-=10;},ArtemisObstacleClearance:{moveEntity(e,x,y){e.x+=x;e.y+=y;},resolveEntity(){}},RuneEconomy:{copies:v=>Number(v)||0}});
+  const c=vm.createContext({Game,SaveState:S,Math:Object.create(Math),performance:{now:()=>1000},getActiveResonanceHeroIds:()=>({}),getHeroStarLevel:()=>0,getActiveHeroSkin:()=>({}),getEquippedSetCounts:()=>({}),updateInGameHUD(){},spawnFloatText(){},spawnParticles(){},spawnShockwave(){},spawnSkyLaser(){},spawnCombatSlashAndSparks(){},SoundFX:{hitEnemy(){}},hurtPlayer(){p.hp-=10;},ArtemisObstacleClearance:{moveEntity(e,x,y){e.x+=x;e.y+=y;},resolveEntity(){}},RuneEconomy:{copies:v=>Number(v)||0}});
   c.window=c;
   loadCampaignDependencies(c);
   vm.runInContext(read('public/rune-wiki-data.js'),c);

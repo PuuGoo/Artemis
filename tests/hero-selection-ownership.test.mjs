@@ -105,7 +105,7 @@ function runFixture(extra = {}) {
     stopGameLoop() {}, clearRunState() {}, syncContinueButton() {},
     getActiveGameMode: () => ({ id: 'campaign', hasChapters: true }), isChapterLocked: () => false,
     resizeCanvas() {}, DungeonSession: { begin() { f.S.save(); } }, bumpLifetimeStat() {},
-    checkAchievements() { f.S.save(); }, ULT_COST: 100, isRuneEquipped: () => false, runeHasEffect: () => false,
+    checkAchievements() { f.S.save(); }, isRuneEquipped: () => false, runeHasEffect: () => false,
     hasHeroSkillActive: () => false, setupRoom() {}, updateInGameHUD() {}, performance: { now: () => 0 },
     saveCheckpoint() { f.S.save(); }, triggerSkillSelection() {},
     requestAnimationFrame: () => 1, gameLoop() {} });

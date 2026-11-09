@@ -108,14 +108,14 @@ test('thiếu ảnh thì bỏ qua an toàn, không ném lỗi', () => {
   assert.equal(drew, 0);
 });
 
-test('game thật gọi lớp nền này trong drawArena và có script', () => {
-  assert.match(html, /<script src="\/arena-ground\.js"><\/script>/);
+test('game nghỉ lớp ảnh map nhưng giữ renderer biome và HUD', () => {
+  assert.doesNotMatch(html, /<script src="\/arena-ground\.js"><\/script>/);
   assert.match(html, /<script src="\/js\/game\/rendering\/arena-renderer\.js"><\/script>/);
   const start = renderer.indexOf('  function drawArena(ctx, w, h, pad, nowMs, chId) {');
   assert.ok(start > 0);
   const end = renderer.indexOf('\n  }', start);
   const body = renderer.slice(start, end);
-  assert.match(body, /ArenaGround\.draw\(/, 'drawArena chưa dùng nền thật');
-  // Nền phải vẽ TRƯỚC decal/hạt để không che nhân vật.
-  assert.ok(body.indexOf('ArenaGround.draw(') < body.indexOf('Game.floorDecals'), 'nền vẽ sau decal');
+  assert.doesNotMatch(body, /ArenaGround\.draw\(/);
+  assert.match(body, /ctx\.drawImage\(cache\.canvas/);
+  for (const id of ['hudLevelText','btnPauseGame','bossHpBar']) assert.ok(html.includes(`id="${id}"`));
 });

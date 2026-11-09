@@ -61,7 +61,7 @@ test('factory không đụng DOM khi nạp và mỗi instance có Game, biome, c
   assert.equal(output.depth(), 0);
 });
 
-test('renderer thật dùng nền biome ở phòng 1 mọi chương, phòng sau vẫn vẽ ảnh phủ', () => {
+test('renderer mọi chương giữ nền biome, không tải ảnh map ở các phòng sau', () => {
   const requested = [];
   class FakeImage {
     constructor() { this.complete = true; this.naturalWidth = 720; }
@@ -89,8 +89,8 @@ test('renderer thật dùng nền biome ở phòng 1 mọi chương, phòng sau 
     g.room = 2;
     const laterBefore = JSON.stringify(g), later = canvas();
     arena.drawArena(later.ctx, 600, 800, 24, 1100, chapter);
-    assert.equal(later.images.length, 2, `chương ${chapter}: phòng 2 vẫn có ảnh phủ`);
-    assert.equal(later.images[1].src, `assets/maps/${c.ArenaGround.pick(chapter, 2)}.webp`);
+    assert.equal(later.images.length, 1, `chương ${chapter}: phòng 2 chỉ vẽ nền biome`);
+    assert.equal(requested.length, requestsBefore, 'không tải lại lớp ảnh đã nghỉ');
     assert.equal(JSON.stringify(g), laterBefore);
     assert.equal(later.depth(), 0);
 

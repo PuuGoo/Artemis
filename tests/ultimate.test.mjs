@@ -1,67 +1,58 @@
-// Khoa lai co che Tuyet Ky co hoi chieu.
-//
-// LO HONG DA VA: triggerCelestialUltimate() truoc day chi co
-//   if (!Game.running || !Game.player) return;
-// => bam nut HUD hoac phim Space lien tuc deu ban 20 dan x 1.45 ATK moi lan.
-// Voi ATK 99.763 (tai khoan that) = 2,89 trieu sat thuong moi click, khong gioi
-// han. Bam 10 lan = 28,9 trieu sat thuong => pha toan bo can bang pho ban.
-//
-// Chay: node tests/ultimate.test.mjs
-import fs from "node:fs";
+// Kiểm thử offline source/VM: nghỉ Tuyệt Kỹ Thần Uy, giữ đòn đánh thường.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
 
-const html = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
-let pass = 0, fail = 0;
-function check(name, cond, extra = "") {
-  if (cond) { pass++; console.log("  PASS  " + name); }
-  else { fail++; console.log("  FAIL  " + name + (extra ? "  -> " + extra : "")); }
+const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+function fn(name) {
+  const start = html.indexOf(`function ${name}(`);
+  assert.ok(start >= 0, name);
+  const end = html.indexOf('\n      }', start);
+  assert.ok(end > start, `${name}: kết thúc hàm`);
+  return html.slice(start, end + '\n      }'.length);
 }
 
-const ultFnStart = html.indexOf("function triggerCelestialUltimate()");
-const ultFnBody = html.slice(ultFnStart, html.indexOf("\n      function ", ultFnStart + 10));
+test('Tuyệt Kỹ Thần Uy không còn control, trạng thái, hàm gọi trực tiếp hay cập nhật', () => {
+  const retired = /\b(?:btnTriggerUltimate|ultCharge|ultMax|ULT_COST|ULT_REGEN_PER_SEC|updateUltimateCharge|syncUltimateButton|triggerCelestialUltimate)\b|hv2-ult|hv2ult/;
+  assert.equal(html.match(retired)?.[0], undefined);
+  assert.equal(/THẦN UY TINH HÀ • THIÊN PHẠT|Tuyệt Kỹ Thần Uy/.test(html), false);
+});
 
-console.log("\n=== 1. KHONG CON BAN KHONG GIOI HAN ===");
-check("tim thay ham triggerCelestialUltimate", ultFnStart > 0);
-check("co khai bao ULT_COST", /const ULT_COST\s*=\s*(\d+)/.test(html));
-check("co khai bao ULT_REGEN_PER_SEC", /const ULT_REGEN_PER_SEC\s*=\s*(\d+)/.test(html));
-check("ham kiem tra ultCharge truoc khi ban", /if\s*\(\s*p\.ultCharge\s*<\s*p\.ultMax\s*\)/.test(ultFnBody));
-check("ham tieu het nang luong sau khi ban", /p\.ultCharge\s*=\s*0/.test(ultFnBody));
-check("co return khi chua du nang luong",
-  /if\s*\(\s*p\.ultCharge\s*<\s*p\.ultMax\s*\)\s*\{[\s\S]{0,300}?return;/.test(ultFnBody));
-check("co canh bao khi bam luc chua du (khong im lang)",
-  /Năng lượng|NL|nang luong/i.test(ultFnBody));
+test('Space không tạo sát thương hoặc chặn mặc định; WASD vẫn nhận keydown/keyup', () => {
+  const handlers = {};
+  const Game = { running: true, paused: false, player: {}, keys: {}, playerBullets: [], enemies: [{ hp: 100 }] };
+  let activations = 0;
+  const context = vm.createContext({ Game, triggerCelestialUltimate() { activations++; }, window: { addEventListener(type, handler) { (handlers[type] ||= []).push(handler); } } });
+  const listeners = [...html.matchAll(/      window\.addEventListener\('key(?:down|up)', \((?:e|ev)\) => \{[\s\S]*?\n      \}\);/g)];
+  assert.ok(listeners.length >= 2);
+  for (const [source] of listeners) vm.runInContext(source, context);
+  let prevented = false;
+  for (let n = 0; n < 3; n++) for (const listener of handlers.keydown) listener({ code: 'Space', preventDefault() { prevented = true; } });
+  assert.equal(prevented, false);
+  assert.equal(Game.playerBullets.length, 0);
+  assert.equal(Game.enemies[0].hp, 100);
+  assert.equal(activations, 0);
+  for (const listener of handlers.keydown) listener({ code: 'KeyW' });
+  assert.equal(Game.keys.KeyW, true);
+  for (const listener of handlers.keyup) listener({ code: 'KeyW' });
+  assert.equal(Game.keys.KeyW, false);
+});
 
-console.log("\n=== 2. NANG LUONG DUOC HOI THEO THOI GIAN ===");
-check("co ham updateUltimateCharge", /function updateUltimateCharge\(dt\)/.test(html));
-const regen = html.match(/const ULT_REGEN_PER_SEC\s*=\s*(\d+)/);
-check("toc do hoi 10-30 NL/giay (5-10s moi lan dung)",
-  regen && Number(regen[1]) >= 10 && Number(regen[1]) <= 30, regen ? regen[1] : "?");
-check("updateUltimateCharge duoc goi trong updateGame",
-  /function updateGame\(dt\)[\s\S]{0,1200}?updateUltimateCharge\(dt\)/.test(html));
-// Thoi gian hoi day
-const cost = html.match(/const ULT_COST\s*=\s*(\d+)/);
-const secs = cost && regen ? Number(cost[1]) / Number(regen[1]) : 0;
-console.log(`  hoi day sau ${secs.toFixed(1)} giay`);
-check("hoi day trong 4-10 giay (khong qua nhanh, khong qua cham)",
-  secs >= 4 && secs <= 10, secs.toFixed(1));
-
-console.log("\n=== 3. NUT HUD PHAN ANH DUNG TRANG THAI ===");
-check("co ham syncUltimateButton", /function syncUltimateButton\(\)/.test(html));
-const syncBody = html.slice(html.indexOf("function syncUltimateButton()"),
-  html.indexOf("\n      function ", html.indexOf("function syncUltimateButton()") + 10));
-check("nut chi nhap nhay khi san sang", /classList\.toggle\('animate-pulse',\s*ready\)/.test(syncBody));
-check("hien phan tram khi dang hoi", /Tuyệt Kỹ \(\$\{pct\}%\)/.test(syncBody));
-check("lam mo nut khi chua san sang", /opacity/.test(syncBody));
-check("sync duoc goi ngay sau khi ban", /p\.ultCharge\s*=\s*0;[\s\S]{0,120}?syncUltimateButton\(\)/.test(ultFnBody));
-
-console.log("\n=== 4. KHOI TAO DUNG KHI VAO TRAN ===");
-check("player co ultCharge khi tao moi", /ultCharge:\s*ULT_COST/.test(html));
-check("player co ultMax khi tao moi", /ultMax:\s*ULT_COST/.test(html));
-
-console.log("\n=== 5. PHIM SPACE CUNG BI CHAN ===");
-check("phim Space chi goi triggerCelestialUltimate (da co guard ben trong)",
-  /ev\.code === 'Space'[\s\S]{0,140}?triggerCelestialUltimate\(\)/.test(html));
-check("khong co duong nao khac ban truc tiep 20 dan ma bo qua guard",
-  (html.match(/Game\.playerBullets\.push/g) || []).length >= 1);
-
-console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);
-process.exit(fail > 0 ? 1 : 0);
+test('đòn đánh thường vẫn bắn volley qua đường production, không đổi save anh hùng/ngọc', () => {
+  const SaveState = { selectedHeroId: 'artemis', heroStars: { artemis: 3 }, runes: { arrow_rain: 4 }, equippedRuneSlots: { ability: ['arrow_rain'] } };
+  const before = JSON.stringify(SaveState);
+  const Game = { running: true, paused: false, player: { x: 100, y: 100, skills: {}, weapon: { id: 'bow', color: '#fff' } }, muzzleFlashes: [] };
+  const volleys = [];
+  let shots = 0;
+  const context = vm.createContext({ Game, SaveState, Math, findNearestEnemy: () => ({ x: 200, y: 100 }), SoundFX: { shootBow() { shots++; } }, setTimeout: callback => callback(), spawnVolleyProjectiles: angle => volleys.push(angle) });
+  vm.runInContext(fn('firePlayerVolley'), context);
+  context.firePlayerVolley();
+  assert.deepEqual(volleys, [0]);
+  assert.equal(shots, 1);
+  assert.equal(Game.muzzleFlashes.length, 1);
+  assert.equal(JSON.stringify(SaveState), before);
+  assert.match(fn('updateGame'), /firePlayerVolley\(\)/);
+  assert.match(html, /id="btnStageShowcaseUlt"/);
+  assert.match(html, /function hasHeroSkillActive\(/);
+});
