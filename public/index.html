@@ -1626,6 +1626,8 @@
   @media(min-width:700px){.hero-reference-model{min-height:360px}.hero-reference-model>img{height:280px}.hero-reference-skills article{font-size:12px;padding:10px}.hero-reference-card>button img{height:130px}.hero-reference-card>button b,.hero-shards,.hero-card-actions button{font-size:12px}.hero-reference-grid{gap:12px}}
 </style>
   <link rel="stylesheet" href="/battle-hub.css">
+  <link rel="stylesheet" href="/arena-viewport.css">
+  <script src="/arena-viewport.js"></script>
 
 </head>
 <body class="flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
@@ -2239,11 +2241,8 @@
 
       <!-- ==================== ACTIVE GAME ARENA VIEW ==================== -->
       <section id="gameArenaView" class="hidden relative flex-1 w-full h-full bg-slate-950 overflow-hidden select-none">
-        <!-- Main HTML5 Canvas -->
-        <canvas id="battleCanvas" class="block w-full h-full"></canvas>
-
-        <!-- In-Game HUD Top Overlay (Arena V2) -->
-        <div class="pointer-events-none absolute top-0 inset-x-0 p-2.5 sm:p-3 flex flex-col gap-2 z-10">
+        <!-- HUD ngoài sân; hàng máu trùm được chừa sẵn. -->
+        <header id="arenaHudHeader" class="pointer-events-none">
           <div class="flex items-start justify-between gap-2 hv2-top">
             <div class="pointer-events-auto hv2-glass hv2-room">
               <div class="hv2-room-stage" id="hudStageName">Hầm Ngục</div>
@@ -2271,6 +2270,7 @@
               <button id="btnMaxRunSkills" type="button" class="hv2-btn gold-gradient !text-slate-950" title="Full 18 Kỹ Năng">⚡ <span class="hidden sm:inline">Full Kỹ Năng</span></button>
               <button id="btnPauseGame" type="button" class="hv2-btn hv2-glass" title="Tạm dừng">⏸</button>
               <button id="btnHudGfx" type="button" class="hv2-btn hv2-glass" title="Bật/tắt đồ hoạ HD">✨ HD</button>
+              <button id="btnArenaSize" type="button" class="hv2-btn hv2-glass" title="Hiện tại: Vừa màn hình • Bấm để đổi">Hiển thị lớn</button>
             </div>
           </div>
 
@@ -2282,7 +2282,10 @@
             <div class="hv2-boss-track"><div id="bossHpBar" class="h-full transition-all duration-100" style="width: 100%;"></div></div>
           </div>
 
-          <!-- Banner "TRÙM XUẤT HIỆN" — hiện 2.2s rồi tự mờ, tạo nhịp căng thẳng -->
+        </header>
+        <div id="arenaPlayfield">
+          <canvas id="battleCanvas" width="800" height="600"></canvas>
+          <!-- Banner trùm không đổi kích thước sân. -->
           <div id="bossIntroBanner" class="hidden w-full max-w-md mx-auto">
             <div class="hv2-bossintro">
               <div class="hv2-bossintro-glow"></div>
@@ -2295,30 +2298,24 @@
             </div>
           </div>
 
+          <div id="roomClearOverlay" class="hidden">
+            <div id="roomClearCard"></div>
+          </div>
         </div>
 
-        <div class="pointer-events-none absolute inset-x-0 flex justify-center z-10 px-2 hv2-hintwrap">
+        <footer id="arenaHudFooter" class="pointer-events-none">
+        <div class="flex justify-center px-2 arena-hint">
           <div id="hudHintBanner" class="hv2-hint">💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!</div>
         </div>
 
         <!-- Bottom Acquired Skills Strip -->
-        <div class="pointer-events-none absolute bottom-2 left-2 right-2 flex items-end justify-between z-10">
+        <div class="arena-skills flex items-end justify-between gap-2">
           <div id="hudSkillIcons" class="flex flex-wrap gap-1.5 max-w-[70%]"></div>
           <div class="hv2-glass hv2-loot">🪙 <span>Chiến lợi phẩm</span> <b id="hudRunGold">0</b></div>
         </div>
 
-        <!-- ==================== ROOM CLEAR OVERLAY ====================
-             Hiện 1,9s khi dọn sạch phòng: số phòng vừa xong, thưởng nhặt được,
-             và phòng kế (thường / trùm). Trước đây chỉ đổi dòng gợi ý nhỏ trên HUD
-             — người chơi không cảm nhận được mình vừa đạt một mốc. -->
-        <div id="roomClearOverlay" class="hidden">
-          <div id="roomClearCard"></div>
-        </div>
-
-        <!-- ==================== PLAYER VITALS (góc dưới trái) ====================
-             Trước đây KHÔNG có thanh máu người chơi trong HUD — người chơi chỉ biết
-             mình sắp chết khi nhìn nhân vật nhấp nháy. Nay hiện rõ HP + tỉ lệ. -->
-        <div class="pointer-events-none absolute left-2" style="bottom:52px;max-width:min(52%,260px);z-index:11">
+        <!-- Máu người chơi chỉ có một bản, nằm ở chân HUD. -->
+        <div class="arena-vitals">
           <div class="hv2-vitals">
             <div class="hv2-vitals-top">
               <span class="hv2-vitals-icon" id="hudVitalsIcon">❤️</span>
@@ -2331,6 +2328,7 @@
             </div>
           </div>
         </div>
+        </footer>
       </section>
 
     </main>
@@ -25201,21 +25199,18 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       ArenaV2.init(Game);
 
       function resizeCanvas() {
-        const container = document.getElementById('gameArenaView');
+        // Tương thích VM cũ: thiếu module thì giữ nguyên hình học hiện tại.
+        if (typeof ArtemisArenaViewport === 'undefined') return;
+        const container = document.getElementById('arenaPlayfield');
         if (!container) return;
         const rect = container.getBoundingClientRect();
-        if (rect.width > 0 && rect.height > 0) {
-          canvas.width = rect.width;
-          canvas.height = rect.height;
-          Game.width = rect.width;
-          Game.height = rect.height;
-          Game.portalRect = {
-            x: Game.width / 2 - 44,
-            y: 12,
-            w: 88,
-            h: 34
-          };
-        }
+        if (rect.width <= 0 || rect.height <= 0) return;
+        const fit = ArtemisArenaViewport.fitLayout(rect.width, rect.height, Game.width, Game.height, ArtemisArenaViewport.getMode());
+        if (canvas.width !== Game.width) canvas.width = Game.width;
+        if (canvas.height !== Game.height) canvas.height = Game.height;
+        canvas.style.width = fit.width + 'px';
+        canvas.style.height = fit.height + 'px';
+        ArtemisArenaViewport.syncButton(document.getElementById('btnArenaSize'));
       }
       window.addEventListener('resize', resizeCanvas);
 
@@ -25550,6 +25545,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         document.getElementById('bottomNavBar').classList.add('hidden');
         document.getElementById('gameArenaView').classList.remove('hidden');
 
+        // Chọn hình học lúc vào lượt mới; resize/tiếp tục không đổi thế giới.
+        if (reason !== 'continue' && typeof ArtemisArenaViewport !== 'undefined') {
+          ArtemisArenaViewport.beginRun(Game, window.innerWidth);
+        }
         resizeCanvas();
 
         // Mở session mới — chỉ chứa trạng thái lượt chơi, không đụng SaveState.
@@ -30357,8 +30356,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function handlePointerStart(clientX, clientY) {
         if (!Game.running || Game.paused) return;
         const rect = canvas.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
+        const x = (clientX - rect.left) * Game.width / (rect.width || Game.width);
+        const y = (clientY - rect.top) * Game.height / (rect.height || Game.height);
         Game.joy.active = true;
         Game.joy.startX = x;
         Game.joy.startY = y;
@@ -30371,8 +30370,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function handlePointerMove(clientX, clientY) {
         if (!Game.joy.active) return;
         const rect = canvas.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
+        const x = (clientX - rect.left) * Game.width / (rect.width || Game.width);
+        const y = (clientY - rect.top) * Game.height / (rect.height || Game.height);
         const dx = x - Game.joy.startX;
         const dy = y - Game.joy.startY;
         const dist = Math.hypot(dx, dy);
@@ -30720,6 +30719,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       // Pause / Resume / Lobby / Play Again
       // Nút HD trong HUD trận đấu: bật/tắt chế độ hiệu năng.
+      document.getElementById('btnArenaSize')?.addEventListener('click', () => {
+        if (typeof ArtemisArenaViewport === 'undefined') return;
+        ArtemisArenaViewport.toggleMode();
+        resizeCanvas();
+      });
+
       function syncHudGfxBtn() {
         const btn = document.getElementById('btnHudGfx');
         if (!btn) return;
