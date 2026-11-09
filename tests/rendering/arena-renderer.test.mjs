@@ -102,6 +102,26 @@ test('renderer mọi chương giữ nền biome, không tải ảnh map ở các
   }
 });
 
+test('static cache follows backing density, invalidates on resize and preserves logical draw bounds', () => {
+  const created=[];
+  const c=load({document:{createElement(){const spy=canvas();const node={getContext:()=>spy.ctx,spy};created.push(node);return node;},getElementById(){return null;}}});
+  const arena=c.ArtemisArenaRenderer.create(),g=game(1),before=JSON.stringify(g);
+  arena.init(g);
+  const output=canvas(),calls=[];
+  output.ctx.canvas={width:2400,height:1800};
+  output.ctx.drawImage=(...args)=>calls.push(args);
+  arena.drawArena(output.ctx,800,600,24,1000,1);
+  assert.equal(created[0].width,2400);assert.equal(created[0].height,1800);
+  assert.deepEqual(calls[0].slice(1),[0,0,2400,1800,0,0,800,600]);
+  arena.drawArena(output.ctx,800,600,24,1100,1);
+  assert.equal(created.length,1);
+  output.ctx.canvas={width:1601,height:1201};
+  arena.drawArena(output.ctx,800,600,24,1200,1);
+  assert.equal(created.length,2);assert.equal(created[1].width,1601);assert.equal(created[1].height,1201);
+  assert.equal(created[0].spy.depth(),0);assert.equal(created[1].spy.depth(),0);
+  assert.equal(output.depth(),0);assert.equal(JSON.stringify(g),before);
+});
+
 test('game nạp factory trước bootstrap, không còn bản sao renderer game/admin', () => {
   load();
   const html = read('public/index.html'), admin = read('public/admin-campaign.js');

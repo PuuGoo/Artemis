@@ -423,9 +423,10 @@
     egg(g, L, R, B) { PROP.egg(g, 0, -L * 0.45, 0.8, R, B, []); }
   };
 
-  function buildStatic(w, h, pad, B, seed) {
-    const c = document.createElement('canvas'); c.width = w; c.height = h;
+  function buildStatic(w, h, pad, B, seed, pixelWidth = w, pixelHeight = h) {
+    const c = document.createElement('canvas'); c.width = pixelWidth; c.height = pixelHeight;
     const g = c.getContext('2d');
+    g.setTransform(pixelWidth / w, 0, 0, pixelHeight / h, 0, 0);
     const R = mulberry(seed * 7919 + 17);
     const an = [];
     const ix0 = pad, iy0 = pad, iw = w - pad * 2, ih = h - pad * 2;
@@ -950,9 +951,12 @@
   function drawArena(ctx, w, h, pad, nowMs, chId) {
     const B = pickBiome(); curBiome = B;
     const seed = (Game.room || 1) * 131 + ((chId | 0) % 1000) * 7;
-    const key = `${w}x${h}|${pad}|${B.id}|${seed}`;
-    if (key !== cacheKey) { cache = buildStatic(w, h, pad, B, seed); cacheKey = key; applyHudTheme(B); }
-    ctx.drawImage(cache.canvas, 0, 0);
+    // Cache duy nhất có cùng mật độ với canvas đích (DPR đã giới hạn ở viewport).
+    const pw = Number.isFinite(ctx.canvas?.width) && ctx.canvas.width > 0 ? ctx.canvas.width : w;
+    const ph = Number.isFinite(ctx.canvas?.height) && ctx.canvas.height > 0 ? ctx.canvas.height : h;
+    const key = `${w}x${h}|${pad}|${B.id}|${seed}|${pw}x${ph}`;
+    if (key !== cacheKey) { cache = buildStatic(w, h, pad, B, seed, pw, ph); cacheKey = key; applyHudTheme(B); }
+    ctx.drawImage(cache.canvas, 0, 0, cache.canvas.width, cache.canvas.height, 0, 0, w, h);
     // Chỉ dùng nền biome; bỏ lớp ảnh map phủ để sân khớp vùng va chạm thực tế.
     drawAnim(ctx, cache.anim, nowMs, B);
     drawCenterSigil(ctx, w, h, nowMs, B);

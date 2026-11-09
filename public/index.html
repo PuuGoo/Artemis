@@ -25206,8 +25206,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const rect = container.getBoundingClientRect();
         if (rect.width <= 0 || rect.height <= 0) return;
         const fit = ArtemisArenaViewport.fitLayout(rect.width, rect.height, Game.width, Game.height, ArtemisArenaViewport.getMode());
-        if (canvas.width !== Game.width) canvas.width = Game.width;
-        if (canvas.height !== Game.height) canvas.height = Game.height;
+        const backing = ArtemisArenaViewport.backingSize(fit.width, fit.height, window.devicePixelRatio);
+        if (canvas.width !== backing.width) canvas.width = backing.width;
+        if (canvas.height !== backing.height) canvas.height = backing.height;
         canvas.style.width = fit.width + 'px';
         canvas.style.height = fit.height + 'px';
         ArtemisArenaViewport.syncButton(document.getElementById('btnArenaSize'));
@@ -28410,6 +28411,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const nowMs = performance.now();
         const chId = Game.chapter ? Game.chapter.id : 1;
 
+        // Đặt lại tỉ lệ mỗi khung; xoá toàn sân trước khi rung để không lưu vệt mép.
+        ctx.setTransform(canvas.width / w, 0, 0, canvas.height / h, 0, 0);
+        ctx.clearRect(0, 0, w, h);
         ctx.save();
         if (Game.shakeTime > 0) {
           ctx.translate((Math.random() - 0.5) * Game.shakeMag, (Math.random() - 0.5) * Game.shakeMag);

@@ -31,7 +31,8 @@ test('production resize keeps world and portal identity while fitting canvas', (
   const {sandbox,game,canvas} = production(); const before = JSON.stringify(game), portal = game.portalRect;
   sandbox.resizeCanvas();
   assert.equal(JSON.stringify(game),before); assert.equal(game.portalRect,portal);
-  assert.equal(canvas.width,800); assert.equal(canvas.height,600);
+  assert.equal(canvas.width,Math.ceil(parseFloat(canvas.style.width)));
+  assert.equal(canvas.height,Math.ceil(parseFloat(canvas.style.height)));
   assert.ok(parseFloat(canvas.style.width)>0);
   sandbox.ArtemisArenaViewport.beginRun(game,390);
   game.player={x:240,y:625,r:17}; game.obstacles=[{x:40,y:90,w:20,h:100}];
@@ -40,13 +41,53 @@ test('production resize keeps world and portal identity while fitting canvas', (
     if (sandbox.ArtemisArenaViewport.getMode() !== mode) sandbox.ArtemisArenaViewport.toggleMode();
     sandbox.window.innerWidth=1920; sandbox.resizeCanvas();
     assert.equal(JSON.stringify(game),mobile); assert.equal(game.portalRect,mobilePortal);
-    assert.equal(canvas.width,480); assert.equal(canvas.height,720);
+    assert.equal(canvas.width,Math.ceil(parseFloat(canvas.style.width)));
+    assert.equal(canvas.height,Math.ceil(parseFloat(canvas.style.height)));
+  }
+});
+test('production backing follows display pixels with DPR capped at two', () => {
+  for (const dpr of [1,1.25,2,3,undefined,NaN]) {
+    const {sandbox,canvas,game}=production();
+    sandbox.window.devicePixelRatio=dpr;
+    const before=JSON.stringify(game);
+    sandbox.resizeCanvas();
+    const density=Number.isFinite(dpr) ? Math.min(2,Math.max(1,dpr)) : 1;
+    assert.equal(canvas.width,Math.ceil(parseFloat(canvas.style.width)*density));
+    assert.equal(canvas.height,Math.ceil(parseFloat(canvas.style.height)*density));
+    assert.equal(JSON.stringify(game),before);
   }
 });
 test('production pointer start and drag use logical coordinates and 44-unit joystick radius', () => {
   const {sandbox,game} = production();
   sandbox.handlePointerStart(200,125); assert.equal(game.joy.startX,200); assert.equal(game.joy.startY,150);
   sandbox.handlePointerMove(230,125); assert.equal(game.joy.currX,244); assert.equal(game.joy.dx,1);
+});
+test('render resets HiDPI transform each frame, clears before shake and balances state', () => {
+  const {sandbox,game,canvas}=production();
+  Object.assign(game,{wallPad:24,shakeTime:1,shakeMag:8,lowGfx:true,player:null,joy:{},_vignetteCache:{w:800,h:600}});
+  for (const key of ['shockwaves','enemies','drops','afterimages','muzzleFlashes','playerBullets','enemyBullets','lightningBolts','meteors','ambientMotes','particles','floatTexts']) game[key]=[];
+  canvas.width=1600; canvas.height=1200;
+  let transform=[1,0,0,1,0,0],stack=[],events=[];
+  const gradient={addColorStop(){}};
+  const ctx=new Proxy({
+    save(){stack.push([...transform]);},restore(){assert.ok(stack.length);transform=stack.pop();},
+    setTransform(...args){transform=args;events.push(['transform',...args]);},
+    clearRect(...args){events.push(['clear',...args]);},
+    translate(x,y){transform[4]+=x*transform[0];transform[5]+=y*transform[3];events.push(['shake']);},
+    createRadialGradient(){return gradient;},createLinearGradient(){return gradient;}
+  },{get:(o,k)=>k in o?o[k]:()=>{},set:(o,k,v)=>(o[k]=v,true)});
+  sandbox.ctx=ctx; sandbox.performance={now:()=>1000};
+  sandbox.ArenaV2={drawArena(){events.push(['arena',...transform]);}};
+  vm.runInContext(body('renderGame'),sandbox);
+  for(let frame=0;frame<2;frame++) {
+    events=[];sandbox.renderGame();
+    assert.equal(stack.length,0);
+    assert.deepEqual(events[0],['transform',2,0,0,2,0,0]);
+    assert.deepEqual(events[1],['clear',0,0,800,600]);
+    assert.ok(events.findIndex(e=>e[0]==='shake')>1);
+    assert.equal(events.find(e=>e[0]==='arena')[1],2);
+    assert.equal(events.filter(e=>e[0]==='transform').length,1);
+  }
 });
 test('production fallback resize works in legacy VM without module and never changes geometry', () => {
   const {sandbox,game} = production(); delete sandbox.ArtemisArenaViewport;

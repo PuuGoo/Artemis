@@ -79,7 +79,9 @@ export async function verifyArenaViewport() {
       });
       const layout = (s,width,height,label)=>{
         assert.deepEqual(s.world,{width,height},`${label} logical profile`);
-        assert.deepEqual(s.backing,{width,height},`${label} logical canvas backing`);
+        // launch() cố định deviceScaleFactor:1; backing phủ đủ pixel hiển thị, không bằng world.
+        near(s.backing.width,Math.ceil(s.canvas.width),`${label} display-pixel backing width`,1);
+        near(s.backing.height,Math.ceil(s.canvas.height),`${label} display-pixel backing height`,1);
         assert.ok(s.canvas.width>0&&s.canvas.height>0,`${label} canvas visible`);
         near(s.canvas.width/width,s.canvas.height/height,`${label} uniform display scale`,0.005);
         assert.ok(s.header.bottom<=s.canvas.y+1,`${label} header outside canvas`);

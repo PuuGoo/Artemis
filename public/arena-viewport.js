@@ -13,6 +13,10 @@
     const displayWidth = width * scale, displayHeight = height * scale;
     return { width: displayWidth, height: displayHeight, left: (aw - displayWidth) / 2, top: (ah - displayHeight) / 2 };
   }
+  function backingSize(displayWidth, displayHeight, devicePixelRatio) {
+    const dpr = Number.isFinite(devicePixelRatio) ? Math.min(2, Math.max(1, devicePixelRatio)) : 1;
+    return { width: Math.max(1, Math.ceil(displayWidth * dpr)), height: Math.max(1, Math.ceil(displayHeight * dpr)) };
+  }
   const preferenceKey = 'artemis.arenaSize';
   let mode = 'fit';
   try { if (root.localStorage?.getItem(preferenceKey) === 'large') mode = 'large'; } catch (_) { /* Bộ nhớ riêng tư vẫn chơi được. */ }
@@ -29,5 +33,5 @@
     button.dataset.mode = mode;
     button.setAttribute('aria-label', button.title + ': ' + button.textContent);
   }
-  root.ArtemisArenaViewport = { beginRun, fitLayout, getMode, toggleMode, syncButton };
+  root.ArtemisArenaViewport = { beginRun, fitLayout, backingSize, getMode, toggleMode, syncButton };
 })(globalThis);
