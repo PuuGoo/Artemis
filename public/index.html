@@ -2243,35 +2243,22 @@
       <section id="gameArenaView" class="hidden relative flex-1 w-full h-full bg-slate-950 overflow-hidden select-none">
         <!-- HUD ngoài sân; hàng máu trùm được chừa sẵn. -->
         <header id="arenaHudHeader" class="pointer-events-none">
-          <div class="flex items-start justify-between gap-2 hv2-top">
-            <div class="pointer-events-auto hv2-glass hv2-room">
-              <div class="hv2-room-stage" id="hudStageName">Hầm Ngục</div>
-              <div class="hv2-room-main">
-                <span id="hudRoomText">Phòng 1 / 15</span>
-                <span id="hudEnemyLeftText" class="hv2-enemy">Quái: 4</span>
-              </div>
-              <!-- Dòng định hướng: còn bao xa tới trùm kế / hết chương -->
-              <div class="hv2-nextup" id="hudNextUp">🐾 Còn 4 phòng tới Trùm</div>
-              <div class="hv2-pips" id="hudRoomPips"></div>
-            </div>
-
-            <div class="hv2-glass hv2-xp">
-              <div class="hv2-lv" id="hudLevelBadge">1</div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between text-[10px] font-extrabold mb-0.5">
-                  <span id="hudLevelText" class="text-emerald-300">Cấp 1</span>
-                  <span id="hudXpRatioText" class="text-slate-400">0 / 100 EXP</span>
+          <div class="hv2-top">
+            <button id="btnPauseGame" type="button" class="pointer-events-auto hv2-btn hv2-glass" aria-label="Tạm dừng trận đấu" title="Tạm dừng">⏸</button>
+            <div class="arena-progress">
+              <div class="hv2-xp">
+                <div class="hv2-lv" id="hudLevelBadge">1</div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between text-[10px] font-extrabold mb-0.5">
+                    <span id="hudLevelText" class="text-emerald-300">Cấp 1</span>
+                    <span id="hudXpRatioText" class="text-slate-400">0 / 100 EXP</span>
+                  </div>
+                  <div class="hv2-xp-track"><div id="hudXpBar" class="h-full transition-all duration-150" style="width: 0%;"></div></div>
                 </div>
-                <div class="hv2-xp-track"><div id="hudXpBar" class="h-full transition-all duration-150" style="width: 0%;"></div></div>
               </div>
+              <div id="hudRoomText" class="arena-room-counter">Phòng 1 / 50</div>
             </div>
-
-            <div class="pointer-events-auto flex items-center gap-1.5 flex-wrap justify-end">
-              <button id="btnMaxRunSkills" type="button" class="hv2-btn gold-gradient !text-slate-950" title="Full 18 Kỹ Năng">⚡ <span class="hidden sm:inline">Full Kỹ Năng</span></button>
-              <button id="btnPauseGame" type="button" class="hv2-btn hv2-glass" title="Tạm dừng">⏸</button>
-              <button id="btnHudGfx" type="button" class="hv2-btn hv2-glass" title="Bật/tắt đồ hoạ HD">✨ HD</button>
-              <button id="btnArenaSize" type="button" class="hv2-btn hv2-glass" title="Hiện tại: Vừa màn hình • Bấm để đổi">Hiển thị lớn</button>
-            </div>
+            <div class="hv2-loot" aria-label="Vàng trong trận">🪙 <b id="hudRunGold">0</b></div>
           </div>
 
           <div id="bossHudContainer" class="hidden hv2-boss w-full max-w-md mx-auto">
@@ -2304,16 +2291,6 @@
         </div>
 
         <footer id="arenaHudFooter" class="pointer-events-none">
-        <div class="flex justify-center px-2 arena-hint">
-          <div id="hudHintBanner" class="hv2-hint">💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!</div>
-        </div>
-
-        <!-- Bottom Acquired Skills Strip -->
-        <div class="arena-skills flex items-end justify-between gap-2">
-          <div id="hudSkillIcons" class="flex flex-wrap gap-1.5 max-w-[70%]"></div>
-          <div class="hv2-glass hv2-loot">🪙 <span>Chiến lợi phẩm</span> <b id="hudRunGold">0</b></div>
-        </div>
-
         <!-- Máu người chơi chỉ có một bản, nằm ở chân HUD. -->
         <div class="arena-vitals">
           <div class="hv2-vitals">
@@ -2452,14 +2429,29 @@
     </div>
 
     <!-- ==================== MODAL 3: PAUSE / GAME OVER / VICTORY ==================== -->
-    <div id="summaryModal" class="hidden absolute inset-0 z-40 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-4">
+    <div id="summaryModal" role="dialog" aria-modal="true" aria-labelledby="summaryModalTitle" class="hidden absolute inset-0 z-40 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-4">
       <div class="w-full max-w-md bg-slate-900 border border-slate-700 rounded-3xl p-5 shadow-2xl flex flex-col items-center text-center gap-3">
         <div id="summaryModalIcon" class="text-4xl">🏆</div>
         <h3 id="summaryModalTitle" class="text-xl font-black text-white">Hoàn Thành Chương!</h3>
         <p id="summaryModalSubtitle" class="text-xs text-slate-300">Bạn đã chiến đấu vô cùng quả cảm trong hầm ngục Archero 2.</p>
 
+        <details id="pauseSettings" class="w-full text-left">
+          <summary>Cài đặt trận đấu</summary>
+          <div class="pause-settings-controls">
+            <button id="btnHudGfx" type="button" class="hv2-btn hv2-glass" title="Chất lượng đồ họa">✨ HD</button>
+            <button id="btnArenaSize" type="button" class="hv2-btn hv2-glass" title="Đổi kích thước hiển thị">Hiển thị lớn</button>
+          </div>
+          <p id="hudHintBanner">Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!</p>
+        </details>
+        <!-- Chi tiết phụ giữ id cho các bộ ghi chỉ số, không xuất hiện trong combat. -->
+        <div id="combatSecondaryDetails" hidden inert>
+          <span id="hudStageName"></span><span id="hudEnemyLeftText"></span>
+          <span id="hudNextUp"></span><div id="hudRoomPips"></div><div id="hudSkillIcons"></div>
+          <button id="btnMaxRunSkills" type="button" hidden disabled>Full Kỹ Năng</button>
+        </div>
+
         <!-- Run Stats Box -->
-        <div class="w-full grid grid-cols-3 gap-2 bg-slate-950/90 border border-slate-800 rounded-2xl p-3 my-1">
+        <div class="summary-run-stats w-full grid grid-cols-3 gap-2 bg-slate-950/90 border border-slate-800 rounded-2xl p-3 my-1">
           <div>
             <div class="text-[10px] text-slate-400">Phòng đạt được</div>
             <div id="summaryRoomReached" class="text-sm font-black text-amber-400">15 / 15</div>
@@ -2484,10 +2476,10 @@
 
         <div class="flex items-center gap-2.5 w-full mt-2">
           <button id="btnResumeGame" type="button" class="hidden flex-1 py-2.5 rounded-xl emerald-500 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs sm:text-sm transition">
-            ▶ Tiếp Tục Chơi
+            Tiếp tục
           </button>
           <button id="btnReturnLobby" type="button" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-bold text-xs sm:text-sm transition">
-            🏠 Về Sảnh Chính
+            Rời trận
           </button>
           <button id="btnPlayAgain" type="button" class="flex-1 py-2.5 rounded-xl gold-gradient text-slate-950 font-black text-xs sm:text-sm shadow hover:brightness-110 transition">
             🔄 Chơi Lại Ngay
@@ -25510,6 +25502,20 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       // Initialize a new Run
+      // Khóa sảnh cả khi trận đang tạm dừng; giữ nguyên trạng thái inert cũ.
+      function setCombatImmersive(active) {
+        document.getElementById('appRoot').classList.toggle('combat-immersive', active);
+        document.querySelectorAll('#appRoot > header, #appRoot > nav, #appRoot > main > section:not(#gameArenaView), #cloudSaveIndicator').forEach(node => {
+          if (active) {
+            if (node.dataset.combatWasInert === undefined) node.dataset.combatWasInert = node.inert ? '1' : '0';
+            node.inert = true;
+          } else if (node.dataset.combatWasInert !== undefined) {
+            node.inert = node.dataset.combatWasInert === '1';
+            delete node.dataset.combatWasInert;
+          }
+        });
+      }
+
       function startNewRun(reason = 'fresh') {
         SoundFX.init();
         // Nạp mẫu âm thanh thật sau thao tác của người chơi (được phép mở AudioContext).
@@ -25538,6 +25544,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // Switch UI view
+        setCombatImmersive(true);
         document.getElementById('tabShopVn')?.classList.add('hidden');
         document.getElementById('tabBattle').classList.add('hidden');
         document.getElementById('tabEquip').classList.add('hidden');
@@ -30323,6 +30330,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       function showSummaryModal(title, subtitle, icon, isPause, bonusGems = 0) {
         const modal = document.getElementById('summaryModal');
+        modal.dataset.pause = String(!!isPause);
+        document.getElementById('btnPlayAgain').classList.toggle('hidden', !!isPause);
+        document.getElementById('btnReturnLobby').textContent = isPause ? 'Rời trận' : 'Về sảnh';
         document.getElementById('summaryModalIcon').textContent = icon;
         document.getElementById('summaryModalTitle').textContent = title;
         document.getElementById('summaryModalSubtitle').textContent = subtitle;
@@ -30333,7 +30343,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const skContainer = document.getElementById('summarySkillsList');
         if (Game.player && Game.player.skillList.length > 0) {
           skContainer.innerHTML = Game.player.skillList.map(sk => `
-            <span class="px-2 py-1 rounded-lg bg-slate-900 border border-slate-700 font-bold text-slate-200">${renderSkillIcon(sk)} ${sk.name}</span>
+            <span class="pause-skill-card">${renderSkillIcon(sk)} <b>${sk.name}</b><small>Cấp ${Game.player.skills?.[sk.id] || 1}</small></span>
           `).join('');
         } else {
           skContainer.innerHTML = `<span class="text-slate-500">Chưa nhận kỹ năng nào trong trận này.</span>`;
@@ -30419,6 +30429,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       const NAV_TAB_IDS = ['tabBattle', 'tabEquip', 'tabEvents', 'tabShopVn', 'tabGuild', 'tabTalents'];
       document.querySelectorAll('.nav-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+          if (Game.running) return;
           const targetId = btn.getAttribute('data-tab');
           closeHeroUpgradeDisclosures();
           NAV_TAB_IDS.forEach(id => {
@@ -30467,6 +30478,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       /** Chuyển sang tab khác bằng id (dùng nội bộ + debug). */
       function gotoNavTab(tabId) {
+        if (Game.running) return;
         if (tabId === 'tabHeroes') { gotoNavTab('tabEquip'); document.querySelector('[data-gear-subtab="characters"]')?.click(); return; }
         const btn = document.querySelector(`#bottomNavBar .grid .nav-tab-btn[data-tab="${tabId}"]`);
         if (btn) btn.click();
@@ -30758,6 +30770,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       });
 
       document.getElementById('btnResumeGame').addEventListener('click', () => {
+        if (!Game.running || !Game.paused) return;
         document.getElementById('summaryModal').classList.add('hidden');
         Game.paused = false;
         Game.lastTime = performance.now();
@@ -30768,6 +30781,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
        * victory panel, nút Về Sảnh) đều dọn cùng một tập trạng thái.
        */
       function returnToLobby() {
+        setCombatImmersive(false);
         Game.running = false;
         Game.paused = false;
         if (Game.animId) cancelAnimationFrame(Game.animId);
@@ -30783,6 +30797,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       document.getElementById('btnReturnLobby').addEventListener('click', () => {
+        if (Game.running && (!Game.paused || !window.confirm('Rời trận và về sảnh? Tài sản đã nhận được giữ nguyên; tiến độ đang chơi không được lưu thêm.'))) return;
         returnToLobby();
       });
 

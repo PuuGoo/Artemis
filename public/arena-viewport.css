@@ -1,92 +1,46 @@
-/* HUD tách khỏi sân; mọi thay đổi cỡ chỉ là tỉ lệ hiển thị đồng nhất. */
-#gameArenaView:not(.hidden) {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100dvh;
-  z-index: 0;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  min-width: 0;
-  min-height: 0;
-}
-#arenaHudHeader {
-  display: grid;
-  grid-template-rows: 112px 40px;
-  gap: 4px;
-  padding: 4px 6px;
-  min-width: 0;
-  box-sizing: border-box;
-  background: #080f20;
-  z-index: 10;
-}
-#arenaHudHeader .hv2-top {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: 64px 44px;
-  gap: 4px 6px;
-  align-items: center;
-  min-width: 0;
-}
-#arenaHudHeader .hv2-top > * { min-width: 0; max-width: 100%; }
-#arenaHudHeader .hv2-top > :last-child { grid-column: 1 / -1; justify-content: flex-end; flex-wrap: nowrap; }
-#arenaHudHeader .hv2-room { padding: 4px 6px; min-width: 0; border-radius: 10px; }
-#arenaHudHeader .hv2-room-main { flex-wrap: wrap; gap: 1px 6px; }
-#arenaHudHeader .hv2-room-main #hudRoomText { font-size: 12px; }
-#arenaHudHeader .hv2-room-stage { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#arenaHudHeader .hv2-nextup { font-size: 8px; margin-top: 1px; }
-#arenaHudHeader .hv2-pips { margin-top: 2px; }
-#arenaHudHeader .hv2-xp { order: 0; width: auto; min-width: 0; padding: 4px 6px; }
-#arenaHudHeader .hv2-xp .flex-1 > div:first-child { display:flex; flex-wrap: wrap; gap: 1px 4px; }
-#arenaHudHeader .hv2-btn { min-height: 44px; padding: 4px 8px; font-size: 10px; white-space: nowrap; }
-#arenaHudHeader #bossHudContainer { min-width: 0; width: 100%; height: 40px; padding: 3px 8px; box-sizing: border-box; overflow: hidden; }
-#arenaHudHeader #bossHudContainer.hidden { display: block; visibility: hidden; }
-#arenaHudHeader #bossNameText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#arenaHudHeader #bossHpNumbers { flex-shrink: 0; }
-#arenaPlayfield {
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-  min-width: 0;
-  overflow: hidden;
-  background: #020617;
-}
-#arenaPlayfield #battleCanvas { display: block; flex: none; max-width: 100%; max-height: 100%; touch-action: none; }
-#arenaPlayfield #bossIntroBanner { position: absolute; top: 8px; left: 0; right: 0; z-index: 12; pointer-events: none; }
-#arenaHudFooter {
-  display: grid;
-  grid-template-areas: 'hint hint' 'vitals skills';
-  grid-template-columns: minmax(120px, 240px) minmax(0, 1fr);
-  grid-template-rows: 24px 48px;
-  align-items: center;
-  gap: 4px 8px;
-  padding: 4px 6px;
-  min-width: 0;
-  box-sizing: border-box;
-  background: #080f20;
-  z-index: 10;
-}
-#arenaHudFooter .arena-hint { grid-area: hint; min-width: 0; max-height: 24px; overflow: hidden; }
-#arenaHudFooter #hudHintBanner { font-size: 9px; white-space: normal; line-height: 12px; padding: 0; text-align: center; }
-#arenaHudFooter .arena-vitals { grid-area: vitals; min-width: 0; }
-#arenaHudFooter .hv2-vitals { min-width: 0; padding: 5px 7px; }
-#arenaHudFooter .hv2-vitals-top { gap: 4px; }
-#arenaHudFooter .hv2-vitals-num { font-size: 10px; }
-#arenaHudFooter .arena-skills { grid-area: skills; min-width: 0; max-height: 48px; overflow: auto; }
-#arenaHudFooter #hudSkillIcons { min-width: 0; max-width: none; gap: 3px; }
-#arenaHudFooter .hv2-loot { flex-shrink: 0; padding: 4px 6px; font-size: 10px; }
-#arenaHudFooter .hv2-loot > span { display: none; }
-@media (min-width: 1000px) {
-  #arenaHudHeader { grid-template-rows: 76px 40px; padding: 6px 12px; }
-  #arenaHudHeader .hv2-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; grid-template-rows: 76px; }
-  #arenaHudHeader .hv2-top > :last-child { grid-column: auto; }
-  #arenaHudHeader .hv2-room-main #hudRoomText { font-size: 15px; }
-  #arenaHudHeader .hv2-nextup { font-size: 9px; }
-  #arenaHudHeader .hv2-btn { font-size: 11px; }
-}
-@media (max-width: 420px) {
-  #arenaHudFooter { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  #arenaHudHeader .hv2-btn { padding: 4px 6px; }
-}
+/* Sảnh khóa suốt trận, modal vẫn trên sân. */
+body:has(#appRoot.combat-immersive) #cloudSaveIndicator { display:none !important; }
+#arenaHudHeader .hv2-xp > div:last-child > div:first-child { display:flex; }
+
+#appRoot.combat-immersive > header,
+#appRoot.combat-immersive > nav,
+#appRoot.combat-immersive > main > section:not(#gameArenaView) { display:none !important; }
+#gameArenaView:not(.hidden) { position:fixed; inset:0; width:100%; height:100dvh; z-index:0; display:grid; grid-template-rows:auto minmax(0,1fr) auto; min-width:0; min-height:0; }
+#arenaHudHeader { display:grid; grid-template-rows:64px 40px; gap:2px; padding:4px 10px; min-width:0; box-sizing:border-box; background:#080f20; z-index:10; }
+#arenaHudHeader .hv2-top { display:grid; grid-template-columns:44px minmax(0,420px) minmax(54px,auto); gap:8px; justify-content:space-between; align-items:start; min-width:0; }
+#arenaHudHeader .arena-progress { min-width:0; }
+#arenaHudHeader .hv2-xp { width:auto; min-width:0; padding:3px 5px; }
+#arenaHudHeader .hv2-lv { width:26px; height:26px; font-size:13px; }
+#arenaHudHeader .arena-room-counter { text-align:center; font-size:13px; font-weight:900; line-height:22px; color:#e2e8f0; }
+#arenaHudHeader .hv2-btn { min-height:44px; min-width:44px; padding:4px; font-size:20px; }
+#arenaHudHeader .hv2-loot { padding:9px 0; font-size:13px; white-space:nowrap; }
+#arenaHudHeader #bossHudContainer { min-width:0; width:100%; height:40px; padding:3px 8px; box-sizing:border-box; overflow:hidden; }
+#arenaHudHeader #bossHudContainer.hidden { display:block; visibility:hidden; }
+#arenaHudHeader #bossNameText { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#arenaHudHeader #bossHpNumbers { flex-shrink:0; }
+#arenaPlayfield { display:flex; position:relative; align-items:center; justify-content:center; min-height:0; min-width:0; overflow:hidden; background:#020617; }
+#arenaPlayfield #battleCanvas { display:block; flex:none; max-width:100%; max-height:100%; touch-action:none; }
+#arenaPlayfield #bossIntroBanner { position:absolute; top:8px; left:0; right:0; z-index:12; pointer-events:none; }
+#arenaHudFooter { display:flex; justify-content:center; padding:4px 10px; min-width:0; box-sizing:border-box; background:#080f20; z-index:10; }
+#arenaHudFooter .arena-vitals { width:min(280px,100%); min-width:0; }
+#arenaHudFooter .hv2-vitals { min-width:0; padding:4px 8px; }
+#arenaHudFooter .hv2-vitals-top { gap:4px; }
+#arenaHudFooter .hv2-vitals-num { font-size:11px; }
+#summaryModal { position:fixed; inset:0; z-index:60; }
+#summaryModal:not(.hidden) { display:flex; align-items:center; justify-content:center; background:#020617cc; padding:16px; }
+#summaryModal > div { max-height:calc(100dvh - 32px); overflow-y:auto; }
+#summaryModal #pauseSettings { display:none; }
+#summaryModal[data-pause="true"] #pauseSettings { display:block; }
+#summaryModal[data-pause="true"] #summaryModalIcon,
+#summaryModal[data-pause="true"] #summaryModalSubtitle,
+#summaryModal[data-pause="true"] .summary-run-stats { display:none; }
+#summaryModal[data-pause="true"] #summarySkillsList { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); max-height:42dvh; gap:7px; padding:8px; }
+#summarySkillsList .pause-skill-card { display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 3px; border:1px solid #64748b; border-radius:9px; background:#13213b; text-align:center; min-width:0; font-size:10px; }
+#summarySkillsList .pause-skill-card img { width:36px; height:36px; object-fit:contain; }
+#summarySkillsList .pause-skill-card small { color:#a7f3d0; }
+#pauseSettings summary { cursor:pointer; min-height:44px; padding:12px 4px; font-size:12px; font-weight:800; }
+#pauseSettings .pause-settings-controls { display:flex; flex-wrap:wrap; gap:8px; }
+#pauseSettings button { min-height:44px; padding:8px 12px; border:1px solid #475569; border-radius:10px; }
+#pauseSettings #hudHintBanner { margin-top:8px; font-size:11px; color:#94a3b8; }
+#summaryModal button { min-height:44px; }
+@media(max-width:420px) { #arenaHudHeader { padding:4px 6px; } #arenaHudHeader .hv2-top { gap:5px; } #arenaHudHeader #hudXpRatioText { font-size:8px; } }

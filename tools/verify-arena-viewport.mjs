@@ -90,8 +90,8 @@ export async function verifyArenaViewport() {
         assert.ok(s.header.y>=-1&&s.footer.bottom<=s.viewport.height+1,`${label} vertical fit`);
         assert.ok(s.viewport.scrollWidth<=s.viewport.width+1,`${label} no page horizontal overflow`);
         for(const h of s.hud) {
-          assert.ok(h.inHeader||h.inFooter||['bossIntroBanner','hudHintBanner'].includes(h.id),`${label} preserved HUD position ${h.id}`);
-          if(['hudRoomText','hudLevelText','hudXpRatioText','btnPauseGame','btnHudGfx','hudRunGold','hudHpText','btnArenaSize'].includes(h.id)) {
+          assert.ok(h.inHeader||h.inFooter||['bossIntroBanner','hudHintBanner','hudSkillIcons','btnArenaSize','btnHudGfx','hudStageName','hudEnemyLeftText','hudNextUp','hudRoomPips'].includes(h.id),`${label} preserved HUD position ${h.id}`);
+          if(['hudRoomText','hudLevelText','hudXpRatioText','btnPauseGame','hudRunGold','hudHpText'].includes(h.id)) {
             assert.ok(h.rect.width>0&&h.rect.height>0&&h.display!=='none'&&h.visibility!=='hidden',`${label} HUD visible ${h.id}`);
             assert.ok(h.rect.x>=-1&&h.rect.right<=s.viewport.width+1,`${label} HUD not clipped ${h.id}`);
           }
@@ -130,14 +130,29 @@ export async function verifyArenaViewport() {
       // Cùng chiều cao có thể chạm trần fit: không bắt buộc tăng rộng khi đã height-limited.
       check('width profile is monotonic with viewport width',{widths:{1440:initial.canvas.width,1920:widths[0],1024:widths[1]}});
       await page.setViewportSize({width:1920,height:900});await settle();const before=await snapshot();
+      await page.locator('#btnPauseGame').click();
+      await page.locator('#summaryModal details').click();
       await page.locator('#btnArenaSize').click();await settle();const after=await snapshot();layout(after,800,600,'size toggle');
+      await page.locator('#btnResumeGame').click();
       assert.deepEqual(after.geometry,before.geometry,'size toggle preserves entities and portal');
       assert.ok(Math.abs(after.canvas.width-before.canvas.width)>1||Math.abs(after.canvas.height-before.canvas.height)>1,'size button actually changes display dimensions');
       check('size toggle changes display, not logical geometry',{before,after,screenshot:await screenshot('desktop-size-toggle')});
       await pointer();await desktop.close();
       const mobile=await launch({width:360,height:740},true);await settle();const phone=await snapshot();layout(phone,480,720,'mobile 360x740');
       check('fresh mobile run uses portrait profile without overflow',{state:phone,screenshot:await screenshot('mobile-360')});
-      await pointer(true);await mobile.close();
+      await pointer(true);
+      await page.locator('#btnPauseGame').click();
+      assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.Game.paused),true);
+      await page.locator('#btnResumeGame').click();
+      assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.Game.paused),false);
+      await page.locator('#btnPauseGame').click();
+      page.once('dialog',d=>d.dismiss());await page.locator('#btnReturnLobby').click();
+      assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.Game.running),true);
+      page.once('dialog',d=>d.accept());await page.locator('#btnReturnLobby').click();
+      assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.Game.running),false);
+      await page.waitForSelector('#gameArenaView',{state:'hidden'});
+      check('pause resumes in arena; cancelled exit stays; confirmed exit returns lobby');
+      await mobile.close();
       assert.deepEqual(report.errors,[],'no uncaught browser errors');
       assert.deepEqual(fixture.requests.filter(r=>r.status>=400),[],'no HTTP handler failures');
       report.status='PASS';
