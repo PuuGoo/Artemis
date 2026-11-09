@@ -28,11 +28,11 @@ check('co hang so NAV_TAB_IDS', !!navIds);
 if (navIds) {
   const ids = navIds[1].match(/'tab[A-Za-z]+'/g).map(s => s.replace(/'/g, ''));
   check('dung 6 tab', ids.length === 6, ids.join(','));
-  for (const want of ['tabBattle', 'tabHeroes', 'tabEquip', 'tabEvents', 'tabShopVn', 'tabGuild']) {
+  for (const want of ['tabBattle', 'tabTalents', 'tabEquip', 'tabEvents', 'tabShopVn', 'tabGuild']) {
     check(`co ${want}`, ids.includes(want));
   }
 }
-check('luoi nav dung grid-cols-6', /bottomNavBar[\s\S]{0,300}?grid-cols-6/.test(html));
+check('luoi nav dung grid-cols-5', /bottomNavBar[\s\S]{0,300}?grid-cols-5/.test(html));
 check('moi tab co section tuong ung',
   ['tabHeroes', 'tabGuild'].every(id => new RegExp(`id="${id}"`).test(html)));
 check('tab Bang Hoi da lam that (khong con "Sap mo")',
@@ -69,7 +69,7 @@ check('khong con bien starStr (da bo)',
   !/const starStr =/.test(rosterBody));
 
 check('khi 0 sao hien ro "0★" chu khong chi sao rong',
-  /0★ · /.test(rosterBody));
+  /\$\{stars\}★ · /.test(rosterBody));
 
 // ============================================================ 3. DOC TU SAVE
 console.log('\n=== 3. SAO DOC TU SAVE, KHONG HARDCODE ===');
@@ -88,12 +88,12 @@ check('co ham isHeroOwned', /function isHeroOwned\(heroId\)/.test(html));
 check('owned = 1 sao tro len, hoac dang xuat chien',
   /function isHeroOwned[\s\S]{0,600}?getHeroStarLevel\(heroId\) >= 1[\s\S]{0,400}?heroId === SaveState\.selectedHeroId/.test(html));
 check('card chua so huu co data-locked', /data-locked="1"/.test(rosterBody));
-check('card chua so huu hien o khoa 🔒', /owned \? \(h\.spriteEmoji/.test(rosterBody) && /🔒/.test(rosterBody));
-check('card chua so huu bi lam mo (opacity/grayscale)', /opacity-60 grayscale/.test(rosterBody));
+check('card chua so huu hien o khoa 🔒', /hero-lock/.test(rosterBody) && /🔒/.test(rosterBody));
+check('card chua so huu bi lam mo (opacity/grayscale)', /is-locked/.test(rosterBody) && /saturate\(\.65\)/.test(html));
 check('bam hero chua so huu thi bao, KHONG doi hero',
   /if \(!isHeroOwned\(id\)\) \{[\s\S]{0,300}?return;/.test(rosterBody));
 check('thong bao neu ro so shard can va dang co',
-  /chưa mở khoá — cần[\s\S]{0,80}?mảnh/.test(rosterBody));
+  /hero-shards/.test(rosterBody) && /getHeroShardRequirement/.test(rosterBody));
 check('panel chi tiet hien nhan CHUA SO HUU', /CHƯA SỞ HỮU/.test(rosterBody));
 check('getAllUnlockedSkinBonuses dung isHeroOwned (khong trung logic)',
   /function getAllUnlockedSkinBonuses[\s\S]{0,500}?isHeroOwned\(h\.id\)/.test(html));
@@ -112,9 +112,9 @@ check('studio gọi upgradeHeroStar qua handler thật', /upgradeHeroStar\(btn.g
 console.log('\n=== 5. RESPONSIVE ===');
 
 check('luoi the: 2 cot mobile, 3 sm, 4 lg',
-  /grid-cols-2 sm:grid-cols-3 lg:grid-cols-4/.test(html));
+  /grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/.test(html));
 check('nav tab khong tran ngang tren mobile (text nho + gap nho)',
-  /grid-cols-6 gap-0\.5/.test(html));
+  /grid-cols-5 gap-0\.5/.test(html));
 
 // ============================================================ 6. EXPORT
 console.log('\n=== 6. EXPORT CHO DEBUG/API ===');

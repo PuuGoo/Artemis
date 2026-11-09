@@ -11,9 +11,9 @@
       "primaryWeaponSelectorAbsent": true,
       "initiallyClosed": true,
       "triggerBox": {
-        "x": 13,
-        "y": 546.75,
-        "width": 183.921875,
+        "x": 26,
+        "y": 473,
+        "width": 64.25,
         "height": 44
       },
       "closedGeometry": {
@@ -21,22 +21,22 @@
         "documentWidth": 360,
         "boxes": [
           {
-            "id": "heroRosterGrid",
-            "left": 13,
-            "right": 347,
-            "width": 334
+            "id": "heroDetailPanel",
+            "left": 11,
+            "right": 349,
+            "width": 338
           },
           {
-            "id": "heroDetailPanel",
-            "left": 13,
-            "right": 347,
-            "width": 334
+            "id": "heroRosterGrid",
+            "left": 11,
+            "right": 349,
+            "width": 338
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 13,
-            "right": 196.921875,
-            "width": 183.921875
+            "left": 26,
+            "right": 90.25,
+            "width": 64.25
           }
         ],
         "clipped": []
@@ -47,58 +47,58 @@
         "documentWidth": 360,
         "boxes": [
           {
-            "id": "heroRosterGrid",
-            "left": 13,
-            "right": 347,
-            "width": 334
+            "id": "heroDetailPanel",
+            "left": 11,
+            "right": 349,
+            "width": 338
           },
           {
-            "id": "heroDetailPanel",
-            "left": 13,
-            "right": 347,
-            "width": 334
+            "id": "heroRosterGrid",
+            "left": 11,
+            "right": 349,
+            "width": 338
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 13,
-            "right": 196.921875,
-            "width": 183.921875
+            "left": 26,
+            "right": 90.25,
+            "width": 64.25
           },
           {
             "id": "charHeroStatsStarSkinPanel",
-            "left": 13,
-            "right": 347,
-            "width": 334
+            "left": 11,
+            "right": 349,
+            "width": 338
           },
           {
             "id": "BUTTON",
-            "left": 29,
-            "right": 217.765625,
+            "left": 27,
+            "right": 215.765625,
             "width": 188.765625
           },
           {
             "id": "BUTTON",
-            "left": 29,
-            "right": 167.078125,
+            "left": 27,
+            "right": 165.078125,
             "width": 138.078125
           },
           {
             "id": "BUTTON",
-            "left": 41.6300048828125,
-            "right": 318.3699951171875,
-            "width": 276.739990234375
+            "left": 39.61000061035156,
+            "right": 320.3899688720703,
+            "width": 280.77996826171875
           },
           {
             "id": "BUTTON",
-            "left": 43,
-            "right": 317,
-            "width": 274
+            "left": 41,
+            "right": 319,
+            "width": 278
           },
           {
             "id": "BUTTON",
-            "left": 43,
-            "right": 317,
-            "width": 274
+            "left": 41,
+            "right": 319,
+            "width": 278
           }
         ],
         "clipped": []
@@ -116,9 +116,9 @@
       "primaryWeaponSelectorAbsent": true,
       "initiallyClosed": true,
       "triggerBox": {
-        "x": 64,
-        "y": 691,
-        "width": 183.921875,
+        "x": 239,
+        "y": 623.5,
+        "width": 123,
         "height": 44
       },
       "closedGeometry": {
@@ -126,22 +126,22 @@
         "documentWidth": 1024,
         "boxes": [
           {
-            "id": "heroRosterGrid",
-            "left": 64,
-            "right": 960,
-            "width": 896
+            "id": "heroDetailPanel",
+            "left": 222,
+            "right": 802,
+            "width": 580
           },
           {
-            "id": "heroDetailPanel",
-            "left": 64,
-            "right": 960,
-            "width": 896
+            "id": "heroRosterGrid",
+            "left": 222,
+            "right": 802,
+            "width": 580
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 64,
-            "right": 247.921875,
-            "width": 183.921875
+            "left": 239,
+            "right": 362,
+            "width": 123
           }
         ],
         "clipped": []
@@ -152,58 +152,58 @@
         "documentWidth": 1024,
         "boxes": [
           {
-            "id": "heroRosterGrid",
-            "left": 64,
-            "right": 960,
-            "width": 896
+            "id": "heroDetailPanel",
+            "left": 222,
+            "right": 802,
+            "width": 580
           },
           {
-            "id": "heroDetailPanel",
-            "left": 64,
-            "right": 960,
-            "width": 896
+            "id": "heroRosterGrid",
+            "left": 222,
+            "right": 802,
+            "width": 580
           },
           {
             "id": "btnToggleCharStarResonance",
-            "left": 64,
-            "right": 247.921875,
-            "width": 183.921875
+            "left": 239,
+            "right": 362,
+            "width": 123
           },
           {
             "id": "charHeroStatsStarSkinPanel",
-            "left": 64,
-            "right": 960,
-            "width": 896
+            "left": 222,
+            "right": 802,
+            "width": 580
           },
           {
             "id": "BUTTON",
-            "left": 611.15625,
-            "right": 799.921875,
+            "left": 238,
+            "right": 426.765625,
             "width": 188.765625
           },
           {
             "id": "BUTTON",
-            "left": 805.921875,
-            "right": 944,
+            "left": 432.765625,
+            "right": 570.84375,
             "width": 138.078125
           },
           {
             "id": "BUTTON",
-            "left": 92.73335266113281,
-            "right": 348.5947570800781,
-            "width": 255.8614044189453
+            "left": 251.260009765625,
+            "right": 400.739990234375,
+            "width": 149.47998046875
           },
           {
             "id": "BUTTON",
-            "left": 385.328125,
-            "right": 638.65625,
-            "width": 253.328125
+            "left": 438,
+            "right": 586,
+            "width": 148
           },
           {
             "id": "BUTTON",
-            "left": 676.65625,
-            "right": 930,
-            "width": 253.34375
+            "left": 624,
+            "right": 772,
+            "width": 148
           }
         ],
         "clipped": []
@@ -216,7 +216,7 @@
   "errors": [],
   "asyncPredicateProbe": {
     "returnedValue": false,
-    "elapsedMs": 54,
+    "elapsedMs": 51,
     "explanation": "Async predicate trả Promise truthy: waitForFunction hoàn tất dù resolved value=false; không poll lại."
   },
   "progressionDiagnostics": [
@@ -224,8 +224,8 @@
       "status": 200,
       "body": {
         "ok": true,
-        "revision": 2,
-        "updatedAt": "2026-11-09T00:17:51.445Z",
+        "revision": 3,
+        "updatedAt": "2026-11-09T01:00:53.751Z",
         "bytes": 8895
       }
     }
@@ -238,7 +238,7 @@
       "shards": 1000,
       "star": 0,
       "pet": "spirit_sword",
-      "resonance": "{\"slot1\":\"thor\",\"slot2\":null}",
+      "resonance": "{\"slot1\":\"cleo\",\"slot2\":null}",
       "gear": "{\"weapon\":{\"uid\":\"hero_fixture_bow\",\"templateId\":\"crimson_bow\",\"quality\":\"common\",\"level\":5,\"awakening\":0,\"locked\":true,\"favorite\":true,\"sockets\":[{\"gem\":\"ruby\",\"level\":1}],\"affixes\":[{\"stat\":\"atk_flat\",\"tier\":\"C\",\"value\":14}]},\"necklace\":null,\"ring\":null,\"armor\":null,\"helmet\":null,\"boots\":null}",
       "sockets": "{\"etched\":[null,null,null],\"blessing\":[null,null],\"enhancement\":[\"rune_flame\",null,null,null],\"ability\":[null,null,null,null]}"
     },
@@ -247,7 +247,7 @@
       "shards": 950,
       "star": 1,
       "pet": "spirit_sword",
-      "resonance": "{\"slot1\":\"thor\",\"slot2\":null}",
+      "resonance": "{\"slot1\":\"cleo\",\"slot2\":null}",
       "gear": "{\"weapon\":{\"uid\":\"hero_fixture_bow\",\"templateId\":\"crimson_bow\",\"quality\":\"common\",\"level\":5,\"awakening\":0,\"locked\":true,\"favorite\":true,\"sockets\":[{\"gem\":\"ruby\",\"level\":1}],\"affixes\":[{\"stat\":\"atk_flat\",\"tier\":\"C\",\"value\":14}]},\"necklace\":null,\"ring\":null,\"armor\":null,\"helmet\":null,\"boots\":null}",
       "sockets": "{\"etched\":[null,null,null],\"blessing\":[null,null],\"enhancement\":[\"rune_flame\",null,null,null],\"ability\":[null,null,null,null]}"
     },
@@ -261,7 +261,7 @@
       "shards": 950,
       "star": 1,
       "pet": "spirit_sword",
-      "resonance": "{\"slot1\":\"thor\",\"slot2\":null}",
+      "resonance": "{\"slot1\":\"cleo\",\"slot2\":null}",
       "gear": "{\"weapon\":{\"uid\":\"hero_fixture_bow\",\"templateId\":\"crimson_bow\",\"quality\":\"common\",\"awakening\":0,\"level\":5,\"locked\":true,\"favorite\":true,\"sockets\":[{\"gem\":\"ruby\",\"level\":1}],\"affixes\":[{\"stat\":\"atk_flat\",\"tier\":\"C\",\"value\":14}]},\"necklace\":null,\"ring\":null,\"armor\":null,\"helmet\":null,\"boots\":null}",
       "sockets": "{\"etched\":[null,null,null],\"blessing\":[null,null],\"enhancement\":[\"rune_flame\",null,null,null],\"ability\":[null,null,null,null]}"
     },

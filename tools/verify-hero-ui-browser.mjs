@@ -56,7 +56,7 @@ try {
   const playerId = (await registration.json()).player.id;
   const fresh = (await (await page.request.get(origin + '/api/save')).json()).data;
   const fixture = { ...fresh, gold: 100000, heroShards: { ...fresh.heroShards, alex: 1000 },
-    heroStars: { ...fresh.heroStars, thor: 3 }, resonanceSlots: {slot1: 'thor', slot2: null},
+    heroStars: { ...fresh.heroStars, thor: 3, cleo: 3 }, resonanceSlots: {slot1: 'cleo', slot2: null},
     runes: {rune_flame: 4}, equippedRuneSlots: {etched:[null,null,null],blessing:[null,null],enhancement:['rune_flame',null,null,null],ability:[null,null,null,null]},
     equippedGear: {...fresh.equippedGear, weapon: {uid:'hero_fixture_bow',templateId:'crimson_bow',quality:'common',level:5,awakening:0,locked:true,favorite:true,sockets:[{gem:'ruby',level:1}],affixes:[{stat:'atk_flat',tier:'C',value:14}]}},
     beginnerJourney: { isCompleted: true, skipped: true } };
@@ -72,7 +72,6 @@ try {
     await heroNav.click();
     await page.locator('#subpanelCharacters').waitFor({ state: 'visible' });
     const panel = page.locator('#charHeroStatsStarSkinPanel');
-    await page.locator('#btnOpenHeroRoster').click();
     await page.locator('#tabHeroes').waitFor({state:'visible'});
     const trigger = page.locator('#btnToggleCharStarResonance');
     assert.equal(await panel.isVisible(), false, 'star/resonance initially hidden');
@@ -80,8 +79,19 @@ try {
     assert.equal(await page.locator('[data-hero-upgrade-disclosure]').count(), 1);
     assert.equal(await page.locator('.btn-upgrade-hero-star').count(), 1);
     const before = await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedHeroId);
+    const tracks = await page.locator('#heroRosterGrid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+    assert.equal(tracks, 4, 'four portrait columns at both widths');
+    await page.locator('#heroRosterGrid [data-hero-pick="thor"]').click();
+    assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedHeroId), before, 'owned preview does not equip');
+    assert.equal(await page.locator('.hero-reference-model h2').innerText(), 'Thor');
+    await page.locator('[data-hero-use="thor"]').click();
+    assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedHeroId), 'thor', 'real Use equips owned hero');
+    await page.locator('#heroRosterGrid [data-hero-pick="alex"]').click();
+    await page.locator('[data-hero-use="alex"]').click();
+
     await page.locator('#heroRosterGrid [data-hero-pick="atreus"]').click();
     assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedHeroId),before,'locked hero cannot be selected');
+    await page.locator('#heroRosterGrid [data-hero-pick="alex"]').click();
     assert.equal(await page.locator('#weaponCardsGrid, .select-weapon-btn, [data-weapon-id]').count(), 0);
     assert.equal(await page.getByText('Chọn Vũ Khí Chủ Đạo', { exact: true }).count(), 0);
     const item = { viewport, heroNavLabel: 'Anh hùng → Thẻ Anh Hùng', primaryWeaponSelectorAbsent: true, initiallyClosed: true };
@@ -118,7 +128,8 @@ try {
     await trigger.click();
     assert.equal(await panel.isVisible(), true);
     await page.locator('#bottomNavBar [data-tab="tabBattle"]').first().click();
-    await page.locator('#bottomNavBar [data-tab="tabHeroes"]').first().click();
+    await page.locator('#bottomNavBar [data-tab="tabEquip"]').first().click();
+    await page.locator('#tabEquip [data-equipment-nav="characters"]:visible').first().click();
     assert.equal(await panel.isVisible(), false, 're-entry resets disclosure');
     assert.equal(await trigger.getAttribute('aria-expanded'), 'false');
     item.reentryClosed = true;
@@ -126,11 +137,11 @@ try {
     await page.locator('#bottomNavBar [data-tab="tabBattle"]').first().click();
     await page.locator('#bottomNavBar [data-tab="tabEquip"]').first().click();
     await page.locator('#tabEquip [data-equipment-nav="characters"]:visible').first().click();
-    await page.locator('#btnOpenHeroRoster').click();
     assert.equal(await panel.isVisible(), false, 'main navigation re-entry closed');
     item.mainNavigationReentryClosed = true;
     await page.screenshot({ path: resolve(evidence, `hero-${viewport.width}-reentry.png`) });
   }
+  await page.locator('#heroRosterGrid [data-hero-pick="alex"]').click();
   // Fixture nâng cấp có cấp vật liệu rõ ràng, không phải thu nhập chơi tự nhiên.
   const progression = await page.evaluate(() => {
     const api = window.Archero2FusionAPI, S = api.SaveState;

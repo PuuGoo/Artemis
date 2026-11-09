@@ -37,8 +37,13 @@
 #tabEquip #subpanelCharacters > div { max-width:600px; }
 #tabEquip .hero-reference-content { padding:0; border:0; border-radius:0; background:#171934; box-shadow:none; }
 #tabEquip .hero-reference-content > * { margin-top:0; }
-#tabEquip .hero-reference-stage { padding:16px 12px; border:0; border-radius:0; background:#332540 url('/assets/ui/rune-altar.svg') center/cover no-repeat; }
-#tabEquip .hero-reference-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; max-height:none; overflow:visible; padding:12px; }
+#tabEquip .hero-reference-stage { padding:12px 0; border:0; border-radius:0 0 16px 16px; background:radial-gradient(ellipse at 20% 30%,#c7edff,#70bfdf 40%,#295d85); }
+#tabEquip .hero-reference-name h2 {color:#15354d;text-shadow:none}
+#tabEquip .hero-reference-card>button {height:120px}
+#tabEquip .hero-reference-card>button>span:not(.hero-lock):not(.hero-equipped) {display:flex;align-items:center;justify-content:center;height:86px;font-size:38px}
+#tabEquip .hero-reference-model>span {font-size:100px;height:220px;display:flex;align-items:center}
+@media(min-width:700px){#tabEquip .hero-reference-card>button{height:164px}}
+#tabEquip .hero-reference-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; max-height:none; overflow:visible; padding:12px; }
 #tabEquip [data-vn-select-hero] { min-width:0; border:2px solid #9279b7; border-radius:11px; background:linear-gradient(145deg,#4c366e,#272541); box-shadow:inset 0 0 0 2px #ffffff15,0 3px 0 #24203e; }
 #tabEquip [data-vn-select-hero]:has([data-vn-hero-use]) { border-color:#ffdf59; background:linear-gradient(145deg,#714585,#35274f); }
 #tabEquip .hero-reference-grid button { min-height:44px; }

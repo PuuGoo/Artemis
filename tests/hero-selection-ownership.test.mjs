@@ -45,7 +45,15 @@ function fixture(extra = {}) {
     (handler || btn.onclick)({ stopPropagation() {} });
   } };
 }
-const paths = ["grid.querySelectorAll('[data-hero-pick]').forEach"];
+const paths = ["grid.querySelectorAll('[data-hero-use]').forEach"];
+test('portrait preview never equips or writes, including locked heroes', () => {
+ for (const id of ['thor','alex','missing']) {
+  const f=fixture(); f.ctx.grid=f.ctx.container;
+  const before=JSON.stringify(f.S);
+  f.click("grid.querySelectorAll('[data-hero-pick]').forEach",id);
+  assert.equal(JSON.stringify(f.S),before); assert.equal(f.saves.length,0);
+ }
+});
 for (const anchor of paths) test(`${anchor}: locked and invalid selections have no writes`, () => {
   for (const id of ['thor', 'missing']) {
     const f = fixture();

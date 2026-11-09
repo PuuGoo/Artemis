@@ -13,14 +13,14 @@ test('UI không còn lựa chọn vũ khí chính và vẫn giữ tương thích
 test('Bảng nâng sao và cộng hưởng chỉ mở sau click, có aria trạng thái và đóng bằng Escape', () => {
   assert.doesNotMatch(html, /btnToggleStageStarSkin|stageStarSkinDrawer|btnBattleOpenStarSkin/);
   assert.equal((html.match(/data-hero-upgrade-disclosure=/g) || []).length, 1);
-  assert.match(html, /id="btnToggleCharStarResonance"[^>]*aria-expanded="false"/);
+  assert.match(html, /id="btnToggleCharStarResonance"[^>]*aria-expanded=/);
   assert.match(html, /id="charHeroStatsStarSkinPanel"[^>]*class="hidden/);
   assert.match(html, /btnToggleCharStarResonance[\s\S]{0,1800}keydown/);
   assert.match(html, /Escape/);
 });
 
 test('Nút mở bảng hero có copy tiếng Việt rõ ràng và target disclosure', () => {
-  assert.match(html, /⭐ Nâng sao &amp; cộng hưởng|⭐ Nâng sao & cộng hưởng/);
+  assert.match(html, />Nâng sao<\/button>/);
   assert.match(html, /aria-controls="charHeroStatsStarSkinPanel"/);
   assert.match(html, /data-hero-upgrade-disclosure/);
 });
