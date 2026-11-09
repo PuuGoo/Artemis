@@ -27808,8 +27808,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         // 4. Update Player Projectiles
-        for (let i = Game.playerBullets.length - 1; i >= 0; i--) {
-          const b = Game.playerBullets[i];
+        const playerBullets = Game.playerBullets;
+        playerProjectileLoop: for (let i = playerBullets.length - 1; i >= 0; i--) {
+          const b = playerBullets[i];
 
           // Homing steering (Oracle Staff / Flying Swords)
           if (b.homing > 0 && Game.enemies.length > 0) {
@@ -27872,6 +27873,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             if (Math.hypot(e.x - b.x, e.y - b.y) < e.r + b.r) {
               b.hitSet.add(e);
               damageEnemy(e, b.dmg, false, null, {exHurtAttack:b.isSword ? 2 : b.spriteKind ? 5 : b.exHurtAttack || 0});
+              // Hạ quái cuối/chuyển phòng có thể thay mảng: dừng xử lý đạn cũ ngay.
+              if (Game.playerBullets !== playerBullets) break playerProjectileLoop;
               spawnParticles(b.x, b.y, b.color, 4);
 
               // Ricochet to another enemy
@@ -28095,8 +28098,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (Game.lightningBolts[i].life <= 0) Game.lightningBolts.splice(i, 1);
         }
 
-        for (let i = Game.meteors.length - 1; i >= 0; i--) {
-          const mt = Game.meteors[i];
+        const meteors = Game.meteors;
+        meteorLoop: for (let i = meteors.length - 1; i >= 0; i--) {
+          const mt = meteors[i];
           mt.progress += dt * 3.4;
           if (mt.progress >= 1) {
             spawnParticles(mt.targetX, mt.targetY, '#f97316', 28);
@@ -28104,10 +28108,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             spawnFloorDecal(mt.targetX, mt.targetY, 34, 'rgba(249, 115, 22, 0.42)', 'crater');
             if (mt.targetRef && mt.targetRef.hp > 0) {
               damageEnemy(mt.targetRef, p.atk * 1.45, true, null, {exHurtAttack:3});
+              // Reset phòng cũng hủy thiên thạch: không để tham chiếu cũ gây sát thương tiếp.
+              if (Game.meteors !== meteors) break meteorLoop;
             }
             for (const other of Game.enemies) {
               if (other !== mt.targetRef && Math.hypot(other.x - mt.targetX, other.y - mt.targetY) < 70) {
                 damageEnemy(other, p.atk * 0.85, true, null, {exHurtAttack:3});
+                if (Game.meteors !== meteors) break meteorLoop;
               }
             }
             spawnFloatText(mt.targetX, mt.targetY - 28, '☄️ THIÊN THẠCH!', '#fb7185', 14);

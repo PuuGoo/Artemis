@@ -32,6 +32,10 @@
     lastPushedHash: "",
     dirty: false,
     lastError: "",
+    lastErrorCode: "",
+    lastErrorDetail: "",
+    lastErrorStatus: 0,
+    lastErrorRetryable: false,
     booted: false,
     saveHookInstalled: false,
     saving: false,
@@ -432,7 +436,15 @@
     var nextRevision = state.revision + 1;
     savePromise = api(API.save, { method: "PUT", body: { data: data, revision: state.revision, playerId: state.player.id } })
       .then(function (r) {
+        state.lastErrorCode = (r.data && r.data.code) || "";
+        state.lastErrorDetail = (r.data && r.data.detail) || "";
+        state.lastErrorStatus = r.status;
+        state.lastErrorRetryable = r.status === 429 || r.status >= 500;
         if (r.ok && r.data && r.data.ok === true && r.data.revision === nextRevision) {
+          state.lastErrorCode = "";
+          state.lastErrorDetail = "";
+          state.lastErrorStatus = 0;
+          state.lastErrorRetryable = false;
           state.revision = r.data.revision;
           state.lastPushedHash = h;
           lastPushedPayload = payload;
@@ -460,14 +472,25 @@
           toast("Không tìm thấy tiến trình trên máy chủ. Đang tải lại để khôi phục…", "err");
           setTimeout(function () { location.reload(); }, 1400);
           return;
-        } else if (r.data && r.data.conflict) {
+        } else if (r.status === 422) {
+          // Transition rejection is not a revision conflict, even if the API sets conflict:true.
+          state.lastError = ((r.data && r.data.error) || "Tiến trình không hợp lệ, chưa được lưu.")
+            + (state.lastErrorDetail ? " (" + state.lastErrorDetail + ")" : "");
+          toast(state.lastError + " Yêu cầu bị từ chối; bấm lại cùng dữ liệu sẽ không khắc phục. Dữ liệu máy chủ chưa bị ghi đè.", "err");
+        } else if (r.status === 409 && r.data && r.data.conflict) {
           toast("Tiến trình đã đổi từ thiết bị khác. Tải lại trang để đồng bộ.", "warn");
           state.lastError = "conflict";
         } else {
           state.lastError = (r.data && r.data.error) || "Lưu thất bại";
         }
       })
-      .catch(function () { state.lastError = "Lỗi mạng"; })
+      .catch(function () {
+        state.lastError = "Lỗi mạng. Kiểm tra kết nối rồi thử lưu lại.";
+        state.lastErrorCode = "NETWORK_ERROR";
+        state.lastErrorDetail = "";
+        state.lastErrorStatus = 0;
+        state.lastErrorRetryable = true;
+      })
       .then(function () {
         state.saving = false;
         if (state.dirty && !state.lastError) scheduleSave();

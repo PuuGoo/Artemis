@@ -47,6 +47,49 @@ function harness(fetcher) {
 const me = () => response({ ok: true, authenticated: true, player: { id: 'A', username: 'alice' } });
 const saved = (data = { gold: 100 }, revision = 3) => response({ ok: true, hasSave: true, data, revision });
 
+test('ledger 422 preserves its exact diagnostic and never masquerades as another-device conflict', async () => {
+  const h = harness((path, opts) => path.endsWith('/me') ? me()
+    : opts.method === 'GET' ? saved() : response({ ok: false, conflict: true,
+      code: 'CAMPAIGN_CHECKPOINT_TRANSITION', detail: 'support_hp_replay',
+      error: 'Checkpoint chiến dịch không hợp lệ.', serverRevision: 3, serverData: { gold: 100 } }, 422));
+  await h.boot(); await h.save({ gold: 101 });
+  assert.equal(await h.cloud.flushCheckpoint(), false);
+  const state = h.cloud.getState();
+  assert.equal(state.lastErrorCode, 'CAMPAIGN_CHECKPOINT_TRANSITION');
+  assert.equal(state.lastErrorDetail, 'support_hp_replay');
+  assert.equal(state.lastErrorStatus, 422);
+  assert.equal(state.lastErrorRetryable, false);
+  assert.notEqual(state.lastError, 'conflict');
+  assert.equal(state.revision, 3);
+  assert.equal(state.dirty, true);
+  assert.equal(JSON.parse(h.window.__ARTEMIS_SAVE_BUFFER).gold, 101);
+  assert.ok(h.nodes.some(n => /support_hp_replay/.test(n.textContent || '')));
+  assert.ok(!h.nodes.some(n => /thiết bị khác/.test(n.textContent || '')));
+});
+
+test('network and server failures remain retryable while revision conflicts require reload', async () => {
+  for (const failure of ['network', 429, 503, 409]) {
+    let attempts = 0;
+    const h = harness((path, opts) => {
+      if (path.endsWith('/me')) return me();
+      if (opts.method === 'GET') return saved();
+      if (++attempts > 1) return response({ok:true,revision:4});
+      if (failure === 'network') throw new Error('offline');
+      return response({ok:false,conflict:failure === 409,error:'not saved'},failure);
+    });
+    await h.boot();await h.save({gold:101});
+    assert.equal(await h.cloud.flushCheckpoint(),false);
+    assert.equal(h.cloud.getState().lastErrorRetryable,failure !== 409);
+    if (failure === 409) assert.equal(h.cloud.getState().lastError,'conflict');
+    else {
+      assert.equal(await h.cloud.flushCheckpoint(),true);
+      assert.equal(h.cloud.getState().lastError,'');
+      assert.equal(h.cloud.getState().lastErrorStatus,0);
+      assert.equal(h.cloud.getState().lastErrorRetryable,false);
+    }
+  }
+});
+
 test('shop purchase flushes pending progress, locks writes, and rebuilds the confirmed server snapshot', async () => {
   const pending = deferred();
   let current = { gold: 100, vipCoins: 100, gems: 50 }, revision = 3;
