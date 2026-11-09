@@ -15,6 +15,8 @@
 // getComputedStats() thật trên Chrome local, không gõ tay.
 import fs from 'node:fs';
 import '../public/campaign-config.js';
+import '../public/campaign-rooms.js';
+const CampaignRooms = globalThis.ArtemisCampaignRooms;
 
 const CampaignConfig = globalThis.ArtemisCampaignConfig;
 if (!CampaignConfig || CampaignConfig.ROOM_COUNT !== 50) throw new Error('Thiếu cấu hình chiến dịch 50 phòng dùng chung');
@@ -38,8 +40,8 @@ function block(startMarker, endMarker, label) {
 // ==================== HẰNG SỐ ĐỌC TỪ SOURCE ====================
 const BASE_ATK = num(/\((\d+) \+ gearAtk \+ gemAtk/, 'base ATK');
 const BASE_HP = num(/\((\d+) \+ gearHp \+ gemHp/, 'base HP');
-const MOB_COUNT_BASE = num(/const count = campaign \? ArtemisCampaignConfig\.mobCount\(roomNum\) : Math\.min\((\d+), \d+ \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái thích ứng max count');
-const MOB_COUNT_BASE_N = num(/const count = campaign \? ArtemisCampaignConfig\.mobCount\(roomNum\) : Math\.min\(\d+, (\d+) \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái thích ứng base count');
+const MOB_COUNT_BASE = num(/const count = campaignRoster \? campaignRoster\.length : Math\.min\((\d+), \d+ \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái thích ứng max count');
+const MOB_COUNT_BASE_N = num(/const count = campaignRoster \? campaignRoster\.length : Math\.min\(\d+, (\d+) \+ Math\.floor\(roomNum \/ 2\)\)/, 'quái thích ứng base count');
 const DEF_K_BASE = num(/const defK = (\d+) \+ 120 \*/, 'defK base');
 const DEF_K_PER_ROOM = num(/const defK = \d+ \+ (\d+) \*/, 'defK per room');
 const DEF_CAP = num(/Math\.min\((0\.\d+), defFlat \/ \(defFlat \+ defK\)\)/, 'DEF cap');
@@ -84,24 +86,11 @@ const ARCHETYPE_MULT = (() => {
   return out;
 })();
 
-// Bảng quái theo chương (types array trong setupRoom).
-const CHAPTER_ENEMIES = (() => {
-  const out = {};
-  const re = /Game\.chapter && Number\(Game\.chapter\.id\) === (\d)\s*\?\s*\[([^\]]+)\]/g;
-  for (const m of html.matchAll(re)) {
-    out[Number(m[1])] = [...m[2].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]);
-  }
-  if (!Object.keys(out).length) throw new Error('Không tìm thấy bảng quái theo chương');
-  const fallback = html.match(/: \['slime', ([^\]]+)\]/);
-  if (!fallback) throw new Error('Không tìm thấy bảng quái mặc định');
-  out[1] = ['slime', ...[...fallback[1].matchAll(/'([a-z_]+)'/g)].map((m) => m[1])];
-  const poolsBlock = block('const ZODIAC_ENEMY_POOLS = [', '];', 'ZODIAC_ENEMY_POOLS');
-  const pools = [...poolsBlock.matchAll(/\[('[^\]]+)\]/g)]
-    .map((m) => [...m[1].matchAll(/'([a-z_]+)'/g)].map((x) => x[1]));
-  if (!pools.length) throw new Error('Không đọc được ZODIAC_ENEMY_POOLS');
-  for (let id = 8; id <= 19; id++) out[id] = pools[(id - 8) % pools.length];
-  return out;
-})();
+// Campaign lấy đội hình authored thật; bảng types cũ chỉ còn dành cho mode thích ứng.
+if (!html.includes('ArtemisCampaignRooms.getRoster(Game.chapter.id, roomNum)') ||
+    !html.includes('ArtemisCampaignRooms.getModifiers(Game.chapter.id, roomNum, i)')) {
+  throw new Error('setupRoom không còn dùng roster/modifiers chia sẻ');
+}
 
 
 // Chương: rooms + enemyScale.
@@ -116,7 +105,7 @@ const CHAPTERS = (() => {
 
 const isBossRoom = (room) => CampaignConfig.roomPlan(1, room).isBoss;
 const depthOf = (room, maxRooms) => Math.min(1, Math.max(0, (room - 1) / Math.max(1, maxRooms - 1)));
-const mobCount = (room) => CampaignConfig.mobCount(room);
+const mobCount = (room, chapterId = 1) => CampaignRooms.getRoster(chapterId, room).length;
 const adaptiveMobCount = (room) => Math.min(MOB_COUNT_BASE, MOB_COUNT_BASE_N + Math.floor(room / 2));
 
 function bossType(chapterId, room) {
@@ -130,14 +119,17 @@ function campaignTuning(chapterId, room) {
 }
 
 /** HP/ATK quái trong CHIẾN DỊCH — không phụ thuộc người chơi. */
-function campaignMob({ chapter, room, type }) {
+function campaignMob({ chapter, room, index = 0 }) {
   const t = campaignTuning(chapter.id, room, chapter.rooms);
-  const count = mobCount(room);
+  const roster = CampaignRooms.getRoster(chapter.id, room);
+  const {type,isElite} = roster[index];
+  const mods = CampaignRooms.getModifiers(chapter.id, room, index);
+  const count = roster.length;
   const typeMul = ARCHETYPE_MULT[type] ?? ARCHETYPE_MULT.default;
   return {
-    count,
-    hp: Math.max(1, Math.round(t.mobHp * typeMul)),
-    atk: Math.max(1, Math.round(t.mobAtk / Math.max(1, Math.sqrt(count / 3)))),
+    count, type, isElite,
+    hp: Math.max(1, Math.round(Math.max(1, Math.round(t.mobHp * typeMul)) * mods.hpMultiplier)),
+    atk: Math.max(1, Math.round(Math.max(1, Math.round(t.mobAtk / Math.max(1, Math.sqrt(count / 3)))) * mods.atkMultiplier)),
   };
 }
 
@@ -147,7 +139,8 @@ function campaignBoss({ chapter, room }) {
   const type = bossType(chapter.id, room);
   return {
     type,
-    hp: Math.round(t.bossHp * (type === 'demon_king' ? ADAPTIVE.demonMult : 1)),
+    // Chiến dịch: HP trùm tuyệt đối theo độ sâu; hệ số demon chỉ còn ở nhánh thích ứng.
+    hp: Math.round(t.bossHp),
     atk: Math.max(1, t.bossAtk),
   };
 }
@@ -198,14 +191,12 @@ for (const p of PROFILES) {
           ttk: b.hp / d, hits: s.hits, dr: s.dr, hitsToKill: b.hp / Math.max(1, p.atk),
         });
       } else {
-        const types = CHAPTER_ENEMIES[chapter.id] || CHAPTER_ENEMIES[1] || ['slime'];
-        // setupRoom chọn type theo (roomNum + i) % types.length -> lấy đại diện theo phòng.
-        const type = types[room % types.length];
-        const m = campaignMob({ chapter, room, type });
+        const enemies = CampaignRooms.getRoster(chapter.id, room).map((_,index) => campaignMob({chapter,room,index}));
+        const m = enemies[0]; // Bảng TTK hiển thị vị trí đầu; report giữ đủ roster.
         const s = survivability(p, m.atk, chapter.rooms);
         rows.push({
           profile: p.name, profileKey: p.name.slice(0, 2), ch: chapter.id, room, kind: 'quái',
-          bossType: type, count: m.count, enemyHp: m.hp, enemyAtk: m.atk,
+          bossType: m.type, count: m.count, enemies, enemyHp: m.hp, enemyAtk: m.atk,
           ttk: m.hp / d, hits: s.hits, dr: s.dr, hitsToKill: m.hp / Math.max(1, p.atk),
         });
       }
@@ -216,7 +207,7 @@ for (const p of PROFILES) {
 // ==================== IN ====================
 console.log('=== HẰNG SỐ ĐỌC TỪ SOURCE ===');
 console.log(`  BASE_ATK=${BASE_ATK} BASE_HP=${BASE_HP} DEF K=${DEF_K_BASE}+${DEF_K_PER_ROOM}*rooms cap=${DEF_CAP}`);
-console.log(`  Quái chiến dịch: campaign-config.mobCount; thích ứng: ${MOB_COUNT_BASE_N}+floor(r/2) con (max ${MOB_COUNT_BASE})`);
+console.log(`  Quái chiến dịch: campaign-rooms.getRoster/getModifiers; thích ứng: ${MOB_COUNT_BASE_N}+floor(r/2) con (max ${MOB_COUNT_BASE})`);
 console.log(`  CHIẾN DỊCH (tuyệt đối): ${CHAPTERS.map((c) => `C${c.id} ${CAMPAIGN_TUNING[c.id].mobHp}HP/${CAMPAIGN_TUNING[c.id].mobAtk}ATK`).join(' · ')}`);
 console.log(`  Độ sâu: campaign-config.tuning; boss mỗi 10 phòng; demon_king HP ×${ADAPTIVE.demonMult}`);
 console.log(`  Hệ số quái: ${JSON.stringify(ARCHETYPE_MULT)}`);
@@ -326,9 +317,10 @@ ok(rows.length === PROFILES.length * CHAPTERS.length * CampaignConfig.ROOM_COUNT
   `phủ đủ ${rows.length} mẫu phòng (${PROFILES.length} hồ sơ × ${CHAPTERS.length} chương × 50 phòng)`);
 ok(rows.every((r) => (r.kind === 'boss') === (r.room % 10 === 0)), 'chỉ phòng 10/20/30/40/50 là trùm');
 ok(rows.filter((r) => r.kind === 'boss').every((r) => r.bossType === CampaignConfig.bossType(r.ch, r.room)), 'trùm phụ và trùm cuối dùng bossType chia sẻ');
-ok(rows.filter((r) => r.kind === 'quái').every((r) => r.count === CampaignConfig.mobCount(r.room)), 'số quái chiến dịch dùng mobCount chia sẻ');
+ok(rows.filter((r) => r.kind === 'quái').every((r) => r.count === mobCount(r.room,r.ch)), 'số quái chiến dịch dùng roster chia sẻ');
 ok(adaptiveMobCount(9) === Math.min(MOB_COUNT_BASE, MOB_COUNT_BASE_N + Math.floor(9 / 2)) && adaptiveMobCount(9) !== mobCount(9), 'số quái thích ứng giữ công thức cũ, tách biệt chiến dịch');
 
 const failed = results.filter((r) => !r.cond).length;
 console.log(`\n=== ${results.length - failed} PASS / ${failed} FAIL ===`);
 if (failed) process.exitCode = 1;
+if (process.argv.includes('--json')) console.log(JSON.stringify({rows,results}));

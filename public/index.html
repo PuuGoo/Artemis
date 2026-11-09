@@ -16,6 +16,9 @@
   <script src="/zodiac-chibi-bosses.js"></script>
   <script src="/obstacle-clearance.js"></script>
   <script src="/campaign-config.js"></script>
+  <script src="/campaign-rooms.js"></script>
+  <script src="/campaign-telemetry.js"></script>
+  <script src="/campaign-support.js"></script>
   <script src="/campaign-skills.js"></script>
   <script src="/campaign-exp.js"></script>
   <script src="/campaign-valkyrie.js"></script>
@@ -994,7 +997,7 @@
     .hv2-room-main { display: flex; align-items: baseline; gap: 8px; }
     .hv2-room-main #hudRoomText { font-size: 15px; font-weight: 900; color: #fcd34d; text-shadow: 0 0 10px rgba(251,191,36,.5); }
     .hv2-enemy { font-size: 11px; font-weight: 800; color: #fda4af; padding: 1px 7px; border-radius: 999px; background: rgba(244,63,94,.14); border: 1px solid rgba(244,63,94,.35); }
-    .hv2-pips { display: flex; gap: 3px; margin-top: 5px; }
+    .hv2-pips { display: flex; gap: 1px; margin-top: 5px; max-width:100%; }
     /* Dòng định hướng: cho người chơi biết còn bao xa tới trùm kế / hết chương.
        Trước đây chỉ thấy "Phòng 7/15" — không biết phòng nào có trùm, còn bao lâu. */
     .hv2-nextup { font-size: 9px; font-weight: 900; letter-spacing: .02em; margin-top: 3px;
@@ -1241,7 +1244,16 @@
       .df-tip { font-size: 9.5px; padding: 6px 8px; }
       .df-actions { padding: 11px 14px 14px; } .df-btn { font-size: 11.5px; padding: 10px; }
     }
-    .hv2-pip { flex: 1; height: 4px; border-radius: 3px; background: rgba(148,163,184,.25); min-width: 5px; }
+    .hv2-pip { flex: 1 1 0; height: 4px; border-radius: 3px; background: rgba(148,163,184,.25); min-width: 0; }
+    .hv2-pip.valkyrie { background:#c4b5fd; }
+    .hv2-pip.segment-end { margin-right:3px; }
+    #campaignSupportChoices { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    #campaignSupportChoices p { flex-basis:100%;font-size:12px; }
+    #campaignSupportChoices button { min-height:44px; padding:8px 12px; border:1px solid #64748b; border-radius:10px; background:#172033; color:#e2e8f0;font-size:12px; }
+    #campaignRarityInfo { font-size:12px;max-width:100%;padding:8px; }
+    #skillSelectModal { overflow-y:auto; overscroll-behavior:contain; }
+    #skillSelectModal > div { max-height:calc(100dvh - 24px);overflow-y:auto; }
+    #bossNameText { min-width:0;overflow-wrap:anywhere; }
     .hv2-pip.done { background: linear-gradient(90deg,#34d399,#2dd4bf); box-shadow: 0 0 6px rgba(52,211,153,.7); }
     .hv2-pip.cur { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; animation: hv2pulse 1s ease-in-out infinite; }
     .hv2-pip.boss { height: 6px; margin-top: -1px; background: rgba(244,63,94,.45); }
@@ -13290,6 +13302,10 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
           }
         }
         // Chỉ hiện tối đa 3 gợi ý để không ngợp
+        const combatReport = Game.campaignTelemetry ? ArtemisCampaignTelemetry.summarize(Game.campaignTelemetry,{room,tuning:getCampaignTuning(ch.id,room,max)}) : null;
+        if (combatReport) {
+          tips.splice(0,tips.length,...combatReport.suggestions.map(t=>({icon:t.category==='dodge'?'👟':t.category==='build'?'✨':'⚒️',text:t.text})));
+        }
         const tipHtml = tips.slice(0, 3).map(t => `
           <div class="df-tip"><span class="df-tip-icon">${t.icon}</span><span>${t.text}</span></div>
         `).join('');
@@ -13363,6 +13379,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             <div class="df-stat"><b>${diedToBoss ? 'TRÙM' : 'QUÁI'}</b><span>NGUYÊN NHÂN</span></div>
           </div>
 
+          ${combatReport ? `<div class="df-tips"><div class="df-tip">DPS giao tranh: ${combatReport.effectiveDps.toFixed(1)} · Boss mất ${(combatReport.bossDamagePercent || 0).toFixed(1)}% HP</div><div class="df-tip">Nguồn cuối: ${String(combatReport.lastAttacker?.enemyType || 'Chưa ghi nhận').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</div></div>` : ''}
           <div class="df-tips">${tipHtml}</div>
 
           <div class="df-actions">
@@ -25248,8 +25265,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function canSaveCheckpoint() {
         return !!(
           Game.running &&
-          Game.roomCleared &&
+          (Game.roomCleared || (usesCampaignTuning() && Game.room === 1 && Game.campaignEntrySafe === true)) &&
           Game.player &&
+          Game.player.hp > 0 &&
           Game.chapter &&
           Game.room >= 1 &&
           Game.room < Game.maxRooms
@@ -25269,8 +25287,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           kills: Game.kills,
           runGold: Game.runGold,
           savedAt: Date.now(),
-          roomCleared: true,
+          runId: Game.runId,
+          rewardSettled: !Game.drops?.length,
+          boundary: Game.roomCleared ? 'cleared' : 'entry',
+          roomCleared: Game.roomCleared === true,
           runProgression: Game.runProgression ? JSON.parse(JSON.stringify(Game.runProgression)) : null,
+          support: Game.campaignSupport ? CampaignSupport.normalize(Game.campaignSupport) : null,
+          telemetry: Game.campaignTelemetry ? ArtemisCampaignTelemetry.checkpoint(Game.campaignTelemetry) : null,
           // Chỉ số nhân vật — dựng lại được hoàn toàn, không phải entity
           player: {
             hp: Math.max(1, Math.round(p.hp)),
@@ -25289,6 +25312,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             mainWepDmgMult: p.mainWepDmgMult || 1,
             dmgCatMult: p.dmgCatMult || 1,
             sacredShieldStacks: p.sacredShieldStacks || 0,
+            runeReviveUsed: p.runeReviveUsed === true,
+            reviveSkillUsed: p.reviveSkillUsed === true,
+            mymuOverdrawUsed: p.mymuOverdrawUsed === true,
             // Kỹ năng đã nhặt trong lượt này (id -> bậc)
             skills: { ...p.skills },
           },
@@ -25342,7 +25368,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // Vẫn dựng lại từ getComputedStats để chỉ số trang bị mới nhất được áp,
         // sau đó ghi đè bằng chỉ số đã lưu của lượt chơi.
-        startNewRun('continue');
+        if (startNewRun('continue') === false) return false;
+        // Checkpoint cũ tiếp tục giao thức legacy đến hết run, không giả thành run mới ở giữa chương.
+        Game.runId = cp.runId || null;
+        Game.campaignSupport = CampaignSupport.normalize(cp.support);
+        Game.campaignTelemetry = ArtemisCampaignTelemetry.normalize(cp.telemetry);
 
         Game.room = cp.room;
         Game.maxRooms = usesCampaignTuning() ? 50 : cp.maxRooms;
@@ -25363,6 +25393,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           p.level = Math.min(usesCampaignTuning() ? 10 : 999, Math.max(1, Math.round(sp.level || 1)));
           p.xp = Math.max(0, Number(sp.xp) || 0);
           p.xpNext = Math.max(1, Number(sp.xpNext) || 80);
+          p.runeReviveUsed = sp.runeReviveUsed === true;
+          p.reviveSkillUsed = sp.reviveSkillUsed === true;
+          p.mymuOverdrawUsed = sp.mymuOverdrawUsed === true;
           // Khôi phục kỹ năng đã nhặt trong lượt (không tính lại thành tựu)
           p.skills = {};
           p.skillList = [];
@@ -25382,7 +25415,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         for (const key of ['speed','gearDodge','mainWepDmgMult','dmgCatMult','sacredShieldStacks']) {
           if (Number.isFinite(cp.player[key])) p[key] = cp.player[key];
         }
-        if (usesCampaignTuning()) restoreClearedCampaignRoom(cp);
+        if (usesCampaignTuning() && cp.boundary === 'entry') {
+          Game.campaignEntrySafe = true;
+          setupRoom(1);
+          if (Game.runProgression.pendingOffer) openCampaignOffer('start');
+        }
+        else if (usesCampaignTuning()) restoreClearedCampaignRoom(cp);
         else setupRoom(cp.room);
         updateInGameHUD();
         saveCheckpoint();
@@ -25525,6 +25563,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // Ngoại hình chỉ sống trong lượt chơi, không ghi vào tài khoản/checkpoint.
         MonsterArt.beginRun(Game);
         Game.mode = mode.id;
+        Game.runId = globalThis.crypto?.randomUUID?.() || ('run-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));
+        Game.campaignEntrySafe = mode.hasChapters;
+        Game.campaignTelemetry = mode.hasChapters ? ArtemisCampaignTelemetry.begin({stats}) : null;
+        Game.campaignSupport = mode.hasChapters ? CampaignSupport.create() : null;
         Game.room = 1;
         // Số phòng: Vô Tận/Tháp/Luyện Tập là vô hạn (dùng số lớn thay cho
         // Infinity để các phép chia/so sánh số học vẫn hữu hạn); Săn Trùm
@@ -25572,7 +25614,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           invulnTimer: 0,
           level: 1,
           xp: 0,
-          xpNext: 80,
+          xpNext: mode.hasChapters ? ArtemisCampaignExp.threshold(1) : 80,
           skills: {},
           skillList: []
         };
@@ -25842,17 +25884,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           // thêm roomMul thì trùm cuối thành bức tường 53 giây.
           const hitsToKill = roomNum === 5 ? 24 : (roomNum === 10 ? 30 : 40);
           // Chiến dịch dùng HP trùm tuyệt đối; chế độ vô hạn vẫn neo theo ATK người chơi.
+          // Chiến dịch: HP trùm tuyệt đối theo độ sâu, không cộng hệ số riêng cho demon_king —
+          // nếu cộng, HP trùm ải 30 vượt ải 40 và đường khó bị đảo.
           const maxHp = campaign
-            ? Math.round(campaign.bossHp * (bossType === 'demon_king' ? 1.15 : 1.0))
+            ? Math.round(campaign.bossHp)
             : Math.round(playerAtk * hitsToKill * chapterMul * (bossType === 'demon_king' ? 1.15 : 1.0));
+          const bossMods = campaign ? ArtemisCampaignRooms.getModifiers(Game.chapter.id, roomNum) : null;
+          const bossVariant = bossMods?.bossVariant;
           Game.enemies.push({
             isBoss: true,
             campaignFinalBoss: !!campaign && roomNum === 50,
+            campaignChapter: campaign ? Number(Game.chapter.id) : undefined,
+            campaignRoom: campaign ? roomNum : undefined,
             type: bossType,
-            name: bossNames[bossType] || `✦ TRÙM: ${Game.chapter.bossName.toUpperCase()}`,
+            name: bossVariant?.name || bossNames[bossType] || `✦ TRÙM: ${Game.chapter.bossName.toUpperCase()}`,
             x: Game.width / 2,
             y: Math.min(180, Game.height * 0.25),
-            r: 34,
+            r: 34 * (bossMods?.sizeMultiplier || 1),
             hp: maxHp,
             maxHp: maxHp,
             // ATK boss = số đòn phải chịu, khó dần: trùm đầu 9 đòn, trùm giữa 7,
@@ -25861,7 +25909,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             atk: campaign
               ? Math.max(1, campaign.bossAtk)
               : Math.max(1, Math.round(playerMaxHp / (roomNum === 5 ? 9 : (roomNum === 10 ? 7 : 5)))),
-            speed: bossType.startsWith('zodiac_') ? 70 : (bossType === 'mycelium_queen' ? 72 : (bossType === 'eclipse_sovereign' ? 76 : 68)),
+            speed: (bossType.startsWith('zodiac_') ? 70 : (bossType === 'mycelium_queen' ? 72 : (bossType === 'eclipse_sovereign' ? 76 : 68))) * (bossMods?.speedMultiplier || 1),
             zodiacIndex: bossType.startsWith('zodiac_') ? Number(Game.chapter.id) - 8 : -1,
             vx: 45,
             vy: 30,
@@ -25874,13 +25922,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             color: bossType.startsWith('zodiac_') ? Game.chapter.accent : (bossType === 'mycelium_queen' ? '#a3e635' : (bossType === 'eclipse_sovereign' ? '#c084fc' : (bossType === 'elder_dragon' ? '#67e8f9' : (bossType === 'golem' ? '#f97316' : (bossType === 'queen' ? '#a855f7' : '#e11d48')))))
           });
           document.getElementById('bossHudContainer').classList.remove('hidden');
+          if (bossVariant) Game.enemies[0].color = bossVariant.color;
           showBossIntro(bossType, bossNames[bossType] || Game.chapter.bossName);
           document.getElementById('hudHintBanner').textContent = '⚠️ CẢNH BÁO TRÙM XUẤT HIỆN! Di chuyển né vòng đạn và dừng lại để phản công!';
         } else {
           document.getElementById('bossHudContainer').classList.add('hidden');
           hideBossIntro();
           document.getElementById('hudHintBanner').textContent = '💡 Kéo chuột / chạm hoặc dùng WASD để di chuyển • Dừng lại để tự động bắn!';
-          const count = campaign ? ArtemisCampaignConfig.mobCount(roomNum) : Math.min(8, 3 + Math.floor(roomNum / 2));
+          const campaignRoster = campaign ? ArtemisCampaignRooms.getRoster(Game.chapter.id, roomNum) : null;
+          const count = campaignRoster ? campaignRoster.length : Math.min(8, 3 + Math.floor(roomNum / 2));
           const types = Game.chapter && Number(Game.chapter.id) >= 8 && Number(Game.chapter.id) <= 19
             ? ZODIAC_ENEMY_POOLS[(Number(Game.chapter.id) - 8) % ZODIAC_ENEMY_POOLS.length]
             : (Game.chapter && Number(Game.chapter.id) === 7
@@ -25894,10 +25944,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 : ['slime', 'goblin', 'skeleton_mage', 'plant_turret', 'bat']))));
 
           for (let i = 0; i < count; i++) {
-            const t = types[(roomNum + i) % types.length];
+            const t = campaignRoster ? campaignRoster[i].type : types[(roomNum + i) % types.length];
+            const enemyMods = campaignRoster ? ArtemisCampaignRooms.getModifiers(Game.chapter.id, roomNum, i) : null;
             const ex = Game.wallPad + 35 + Math.random() * Math.max(80, Game.width - (Game.wallPad + 35) * 2);
             const ey = Game.wallPad + 45 + Math.random() * (Game.height * 0.42);
-            const enemyRadius = ({ hive_guardian: 20, mire_shaman: 17, spore_runner: 14, bat: 13, cloud_wisp: 14, sky_sentinel: 19, obsidian_brute: 19, rift_stalker: 14 })[t] || 16;
+            const enemyRadius = (({ hive_guardian: 20, mire_shaman: 17, spore_runner: 14, bat: 13, cloud_wisp: 14, sky_sentinel: 19, obsidian_brute: 19, rift_stalker: 14 })[t] || 16) * (enemyMods?.sizeMultiplier || 1);
             const spawnOpts = { width: Game.width, height: Game.height, wallPad: Game.wallPad,
               player: Game.player, others: Game.enemies, enemyGap: 8, playerGap: 18 };
             // Random positions can fall inside the large illustrated cover props.
@@ -25924,6 +25975,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               : Math.max(1, Math.round(playerAtk * typeMul * baseHits * scale));
             Game.enemies.push({
               isBoss: false,
+              isElite: enemyMods?.isElite || false,
+              campaignRole: campaignRoster?.[i].role,
               type: t,
               x: safePos.x,
               y: safePos.y,
@@ -25950,6 +26003,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               burnDmg: 0,
               slowTimer: 0
             });
+            if (enemyMods) {
+              const enemy = Game.enemies[Game.enemies.length-1];
+              enemy.hp = enemy.maxHp = Math.max(1,Math.round(enemyHp * enemyMods.hpMultiplier));
+              enemy.atk = Math.max(1,Math.round(enemy.atk * enemyMods.atkMultiplier));
+              enemy.speed *= enemyMods.speedMultiplier;
+            }
           }
         }
 
@@ -26020,6 +26079,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       function openCampaignOffer(stageId) {
         if (!Game.running || !Game.player || Game.player.hp <= 0) return false;
+        if (Game.skillClaimBusy) return !!Game.runProgression?.pendingOffer;
         const result = ArtemisCampaignSkills.generateOffer(Game.runProgression, ROGUE_SKILLS, {
           stageId, segment: Math.min(4, Math.floor((Game.room-1)/10)),
           starterPriority: SaveState.starterSkillIds || [],
@@ -26028,19 +26088,79 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         });
         Game.runProgression = result.state;
         if (!result.ok) return false;
+        if ([10,20,30,40].includes(Game.room)) {
+          const offered = CampaignSupport.offer(Game.campaignSupport,{stage:Game.room,hp:Game.player.hp,maxHp:Game.player.maxHp,cost:computeDevilCost('rare')});
+          Game.campaignSupport = offered.state;
+        }
         saveCheckpoint();
+        // Keep the synchronous open contract, but serialize offer acknowledgement
+        // with claims/rerolls so debounce cannot collapse two server transitions.
+        Game.skillClaimBusy = true;
+        Game.campaignOfferPendingAck = true;
+        const runId = Game.runId, progression = Game.runProgression;
+        const rerollButton = document.getElementById('btnRerollSkills');
+        if (rerollButton) rerollButton.disabled = true;
         triggerSkillSelection('🪽 Valkyrie • Chọn kỹ năng chiến dịch');
+        (async () => {
+          try {
+            const acknowledged = !window.ArtemisCloud?.flushCheckpoint || await window.ArtemisCloud.flushCheckpoint();
+            if (Game.runId !== runId || Game.runProgression !== progression) return;
+            if (acknowledged) Game.campaignOfferPendingAck = false;
+            else showToast('Lượt chọn đang chờ đồng bộ. Bấm đổi để thử lưu lại, không tạo danh sách mới.');
+          } catch (_) {
+            if (Game.runId === runId && Game.runProgression === progression) showToast('Chưa đồng bộ lượt chọn. Kiểm tra mạng rồi thử lại.');
+          } finally {
+            if (Game.runId === runId && Game.runProgression === progression) {
+              Game.skillClaimBusy = false;
+              if (rerollButton) rerollButton.disabled = false;
+            }
+          }
+        })();
         return true;
       }
 
       function spawnCampaignValkyrie() {
         if (!usesCampaignTuning() || !Game.running || !Game.roomCleared || Game.player.hp <= 0 || Game.room >= 50 || Game.room%5 !== 0) return false;
         if (Game.valkyrieNpc || Game.runProgression.claimedStages.includes(Game.room) || Game.runProgression.skippedValkyrieStages?.includes(Game.room)) return false;
+        const offer = ArtemisCampaignSkills.generateOffer(Game.runProgression,ROGUE_SKILLS,{stageId:Game.room,segment:Math.min(4,Math.floor((Game.room-1)/10)),seraph:hasHeroSkillActive(Game.player,'seraph'),heroRerolls:hasHeroSkillActive(Game.player,'seraph')?1:0});
+        Game.runProgression = offer.state;
+        if (!offer.ok) return false;
         const pos = ArtemisCampaignValkyrie.findPosition(Game);
-        if (!pos) return openCampaignOffer(Game.room);
+        if (!pos) {
+          Game.valkyrieNpc = {state:'waiting-loot',stage:Game.room};
+          return true;
+        }
         Game.valkyrieNpc = {...pos, stage:Game.room, state:'spawned'};
         document.getElementById('hudHintBanner').textContent = '🪽 Đến gần Valkyrie để chọn kỹ năng, hoặc vào cổng để bỏ qua có xác nhận.';
         return true;
+      }
+
+      async function skipCampaignValkyrie() {
+        if (Game.skillClaimBusy || !Game.valkyrieNpc || !Game.runProgression.pendingOffer) return false;
+        const runId = Game.runId, room = Game.room;
+        Game.skillClaimBusy = true;
+        Game.paused = true;
+        try {
+          saveCheckpoint();
+          if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {
+            showToast('Chưa đồng bộ lượt chọn. Kiểm tra mạng rồi thử lại.');
+            return false;
+          }
+          if (!Game.running || Game.runId !== runId || Game.room !== room) return false;
+          Game.runProgression.skippedValkyrieStages = [...new Set([...(Game.runProgression.skippedValkyrieStages || []),room])];
+          Game.runProgression.pendingOffer = null;
+          Game.valkyrieNpc = null;
+          saveCheckpoint();
+          if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {
+            showToast('Lượt bỏ qua đang chờ đồng bộ; hãy chờ lưu trước khi sang phòng.');
+            return false;
+          }
+          return true;
+        } finally {
+          Game.skillClaimBusy = false;
+          Game.paused = false;
+          Game.lastTime = performance.now();
+        }
       }
 
       function triggerSkillSelection(sourceLabel = '🪽 Phước Lành Valkyrie • Lên Cấp!', provider = 'valkyrie') {
@@ -26128,6 +26248,32 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           `;
         }).join('');
 
+        let supportHost = document.getElementById('campaignSupportChoices');
+        if (!supportHost && container) {
+          supportHost = document.createElement('div');
+          supportHost.id = 'campaignSupportChoices';
+          container.after(supportHost);
+        }
+        const support = Game.campaignSupport?.pending;
+        if (supportHost) {
+          supportHost.innerHTML = usesCampaignTuning() && support ? '<p>Hỗ trợ một lần — không tiêu lượt chọn kỹ năng</p><button type="button" data-support="angel">👼 Hồi 20% HP</button><button type="button" data-support="devil">💀 Hiến '+support.cost.pct+'% '+(support.cost.directHp?'HP':'Max HP')+' • +5% sát thương (tổng tối đa 15%)</button><button type="button" data-support="skip">Bỏ qua hỗ trợ</button>' : '';
+          supportHost.querySelectorAll('[data-support]').forEach(button=>button.addEventListener('click',async()=>{
+            if (Game.skillClaimBusy || Game.pendingClaimId) return;
+            Game.skillClaimBusy = true;
+            try {
+              saveCheckpoint();
+              if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {showToast('Chưa lưu hỗ trợ, kiểm tra mạng rồi thử lại.');return;}
+              const result = CampaignSupport.claim(Game.campaignSupport,{stage:Game.room,choice:button.dataset.support,hp:p.hp,maxHp:p.maxHp});
+              if (!result.ok) return;
+              Game.campaignSupport = result.state;
+              p.hp = result.hp;p.maxHp = result.maxHp;
+              saveCheckpoint();
+              if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) showToast('Hỗ trợ đã áp dụng một lần, đang chờ đồng bộ.');
+              populateSkillChoices(provider);updateInGameHUD();
+            } finally {Game.skillClaimBusy=false;}
+          }));
+        }
+
         document.querySelectorAll('.skill-choice-card').forEach(btn => {
           btn.addEventListener('click', async () => {
             const skId = btn.getAttribute('data-skill-id');
@@ -26167,6 +26313,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if ((p.skills[skId] || 0) >= ArtemisCampaignSkills.skillCap(sk) || Object.values(p.skills).reduce((sum,n)=>sum+(Number(n)||0),0) >= 10) return false;
           const result = ArtemisCampaignSkills.claimOffer(Game.runProgression, ROGUE_SKILLS, skId);
           if (!result.ok) return false;
+          if (Game.campaignSupport?.pending) {
+            showToast('Chọn hỗ trợ Thiên Thần / Khế Ước hoặc Bỏ qua hỗ trợ trước khi chọn kỹ năng.');
+            return false;
+          }
           Game.runProgression = result.state;
           Game.valkyrieNpc = null;
         }
@@ -26582,6 +26732,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const sourceType = options.element || ({1:'circle',2:'strike',3:'meteor',4:'weapon',5:'sprite',6:'plant',7:'circle'})[options.context?.exHurtAttack];
         const runeBonus = window.ArtemisRuneModifiers?.damage(SaveState, RuneWikiData, sourceType, e, Game.player) || {flat:0,pct:0,critRate:0,critDmg:0,bossPct:0};
         attack = (attack + runeBonus.flat) * (1 + runeBonus.pct) * (1 + runeBonus.bossPct);
+        if (Game.campaignSupport) attack *= 1 + Game.campaignSupport.damageBonus;
         source.CritRate += runeBonus.critRate;
         source.CritValue += runeBonus.critDmg;
         source.CritRate += options.critRateBonus || 0;
@@ -26593,7 +26744,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             ...options.context }
         });
         if (typeof e.displayHp !== 'number') e.displayHp = e.hp;
+        const hpBeforeTelemetry = e.hp;
         e.hp = Math.max(0, e.hp - hit.hpDamage);
+        if (Game.campaignTelemetry) ArtemisCampaignTelemetry.recordDamage(Game.campaignTelemetry,{amount:hit.hpDamage,hpBefore:hpBeforeTelemetry,enemy:e});
         e.hitFlashTimer = 0.14;
         Game.lastCombatHit = { direction:'enemy', ...hit };
         if (hit.absorbed > 0) spawnFloatText(e.x, e.y - e.r - 22, `🛡️ ${hit.absorbed}`, '#a5b4fc', 11);
@@ -27178,6 +27331,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function updateGame(dt) {
         const p = Game.player;
         if (!p) return;
+        if (usesCampaignTuning() && !Game.paused) Game.campaignEntrySafe = false;
+        if (Game.campaignTelemetry) ArtemisCampaignTelemetry.tick(Game.campaignTelemetry,dt,{running:Game.running,paused:Game.paused,enemiesAlive:Game.enemies.filter(e=>e.hp>0).length,room:Game.room});
 
         if (Game.shakeTime > 0) Game.shakeTime -= dt;
         if (p.invulnTimer > 0) p.invulnTimer -= dt;
@@ -27301,6 +27456,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (p.lokiFocusTimer > 0) p.lokiFocusTimer -= dt;
         if (p.alexCritAspdTimer > 0) p.alexCritAspdTimer -= dt;
 
+        if (usesCampaignTuning() && Game.drops.length === 0 && Game.valkyrieNpc?.state === 'waiting-loot') {
+          Game.valkyrieNpc = null;
+          saveCheckpoint();
+          openCampaignOffer(Game.room);
+          return;
+        }
         if (usesCampaignTuning() && Game.drops.length === 0 && Game.valkyrieNpc?.state === 'spawned' && Math.hypot(p.x-Game.valkyrieNpc.x,p.y-Game.valkyrieNpc.y)<p.r+30) {
           Game.valkyrieNpc.state = 'interacting';
           if (!openCampaignOffer(Game.room)) Game.valkyrieNpc = null;
@@ -27319,10 +27480,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 p.y = pr.y + pr.h + 65;
                 return;
               }
-              Game.runProgression.skippedValkyrieStages = [...(Game.runProgression.skippedValkyrieStages || []), Game.room];
-              Game.runProgression.pendingOffer = null;
-              Game.valkyrieNpc = null;
-              saveCheckpoint();
+              p.y = pr.y + pr.h + 65;
+              void skipCampaignValkyrie();
+              return;
             }
             // Chiến Dịch: hết phòng cuối = phá đảo chương.
             // Vô Tận / Tháp / Luyện Tập: maxRooms là 9999 nên không bao giờ
@@ -28272,6 +28432,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if ((p.skills.assault_strike || 0) > 0) {
           for (let k = 0; k < 5; k++) spawnFloatingSword();
         }
+        if (Game.campaignTelemetry) ArtemisCampaignTelemetry.recordIncoming(Game.campaignTelemetry,{amount:dmg,hpBefore:p.hp,kind:hitContext.attackerType===3?'contact':hitContext.attackerType===1?'projectile':'unknown',source:hitContext.source,room:Game.room});
         p.hp -= dmg;
         // HP không bao giờ âm (trước đây có thể xuống số âm lớn trước khi kiểm tra chết).
         if (p.hp < 0) p.hp = 0;
@@ -28365,7 +28526,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // 1-8. Map chiến đấu V2 (tường, sàn, pháp trận, vết chiến trường, đuốc, cổng, chướng ngại)
         ArenaV2.drawArena(ctx, w, h, pad, nowMs, chId);
-        if (Game.valkyrieNpc) ArtemisCampaignValkyrie.draw(ctx, Game.valkyrieNpc, nowMs, Game.lowGfx,
+        if (Game.valkyrieNpc && Number.isFinite(Game.valkyrieNpc.x)) ArtemisCampaignValkyrie.draw(ctx, Game.valkyrieNpc, nowMs, Game.lowGfx,
           Math.hypot(Game.player.x-Game.valkyrieNpc.x,Game.player.y-Game.valkyrieNpc.y)<85);
 
         // 9. Ground Shockwaves & Boss Laser Telegraphs
@@ -30159,6 +30320,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       // ==================== FINISH RUN / PAUSE SUMMARY ====================
       function finishRun(isVictory) {
         if (!Game.running) return false;
+        if (Game.campaignSupport) Game.campaignSupport = CampaignSupport.finish(Game.campaignSupport);
         Game.valkyrieNpc = null;
         Game.running = false;
         Game.paused = true;
@@ -30556,13 +30718,37 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       });
 
       // Reroll Skills in Modal
-      document.getElementById('btnRerollSkills').addEventListener('click', () => {
+      document.getElementById('btnRerollSkills').addEventListener('click', async () => {
         if (usesCampaignTuning()) {
-          const result = ArtemisCampaignSkills.rerollOffer(Game.runProgression, ROGUE_SKILLS);
-          if (!result.ok) { showToast('Đã dùng hết lượt đổi danh sách.'); return; }
-          Game.runProgression = result.state;
-          saveCheckpoint();
-          populateSkillChoices();
+          if (Game.skillClaimBusy || Game.pendingClaimId) return;
+          Game.skillClaimBusy = true;
+          const runId = Game.runId;
+          const rerollButton = document.getElementById('btnRerollSkills');
+          if (rerollButton) rerollButton.disabled = true;
+          try {
+            // A failed/lost acknowledgement retries exactly the pending payload,
+            // never draws again (including when the last reroll was already used).
+            if (!Game.campaignOfferPendingAck) {
+              const result = ArtemisCampaignSkills.rerollOffer(Game.runProgression, ROGUE_SKILLS);
+              if (!result.ok) { showToast('Đã dùng hết lượt đổi danh sách.'); return; }
+              Game.runProgression = result.state;
+              Game.campaignOfferPendingAck = true;
+              saveCheckpoint();
+              populateSkillChoices();
+            }
+            if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {
+              showToast('Danh sách đang chờ đồng bộ. Bấm đổi để thử lưu lại, không dùng thêm lượt.');
+              return;
+            }
+            if (Game.runId === runId) Game.campaignOfferPendingAck = false;
+          } catch (_) {
+            if (Game.runId === runId) showToast('Chưa lưu danh sách. Kiểm tra mạng rồi bấm đổi để thử lại.');
+          } finally {
+            if (Game.runId === runId) {
+              Game.skillClaimBusy = false;
+              if (rerollButton) rerollButton.disabled = false;
+            }
+          }
           return;
         }
         if (SaveState.gems < 15) {

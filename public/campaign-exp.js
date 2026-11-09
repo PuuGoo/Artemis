@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
   function threshold(level) {
-    return Math.round(80 * Math.pow(1.62, Math.max(0, Math.min(8, Math.floor(Number(level) || 1) - 1))));
+    return Math.round(66 * Math.pow(1.62, Math.max(0, Math.min(8, Math.floor(Number(level) || 1) - 1))));
   }
   // Trả số cấp tăng; chỉ sửa level/xp/xpNext của player, không chạm kỹ năng/save.
   function gain(player, amount) {

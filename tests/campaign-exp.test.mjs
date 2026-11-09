@@ -17,10 +17,10 @@ test('EXP classic global: gain trả số cấp tăng, cập nhật player, khô
   const exp = loadExp();
   const skills = { attack: 2 };
   const player = { level: 1, xp: 0, xpNext: 80, skills, hp: 775, atk: 152 };
-  assert.equal(exp.threshold(1), 80);
-  assert.equal(exp.threshold(2), 130);
-  assert.equal(exp.gain(player, 81), 1);
-  assert.deepEqual(player, { level: 2, xp: 1, xpNext: 130, skills, hp: 775, atk: 152 });
+  assert.equal(exp.threshold(1), 66);
+  assert.equal(exp.threshold(2), 107);
+  assert.equal(exp.gain(player, 67), 1);
+  assert.deepEqual(player, { level: 2, xp: 1, xpNext: 107, skills, hp: 775, atk: 152 });
 });
 
 test('giữ đúng drop production, làm tròn từng ngọc trước khi cộng greed', () => {
@@ -57,13 +57,14 @@ test('amount không hợp lệ không làm mất EXP hay sinh NaN', () => {
 test('50 phòng cấu hình thật: greed 0 đạt cấp 10 ở phòng 40–47, không nhận skill', () => {
   const sandbox = {};
   vm.runInNewContext(fs.readFileSync(new URL('public/campaign-config.js', root), 'utf8'), sandbox);
-  const config = sandbox.ArtemisCampaignConfig;
+  vm.runInNewContext(fs.readFileSync(new URL('public/campaign-rooms.js', root), 'utf8'), sandbox);
+  const config = sandbox.ArtemisCampaignRooms;
   const exp = loadExp();
   const player = { level: 1, xp: 0, skills: {} };
   let firstCap = null;
   for (let room = 1; room <= 50; room++) {
-    const boss = !!config.bossType(1, room);
-    const count = boss ? 1 : config.mobCount(room);
+    const boss = config.roomPlan(1, room).isBoss;
+    const count = config.getRoster(1, room).length;
     for (let mob = 0; mob < count; mob++) {
       for (let gem = 0; gem < (boss ? 8 : 2); gem++) exp.gain(player, exp.dropValue(boss, 1));
     }

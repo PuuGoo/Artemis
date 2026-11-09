@@ -7,7 +7,8 @@ const read = file => fs.readFileSync(new URL('../../' + file, import.meta.url), 
 test('save domain không phụ thuộc HTTP, DB, filesystem hay global environment', () => {
   const source = read('lib/save/policy.js');
   const imports = [...source.matchAll(/^import\s+.*?from\s+['"]([^'"]+)['"]/gm)].map(match => match[1]);
-  assert.deepEqual(imports.sort(), ['../economy.js', '../economyLedger.js', '../privilegeCards.js']);
+  assert.deepEqual(imports.sort(), ['../economy.js', '../economyLedger.js', '../privilegeCards.js', './campaignCheckpoint.js']);
+  assert.doesNotMatch(read('lib/save/campaignCheckpoint.js'), /\b(?:process\.env|Date\.now|fetch|Request|Response)\b/);
   assert.doesNotMatch(source, /\b(?:process\.env|Date\.now|fetch|Request|Response)\b/);
 });
 

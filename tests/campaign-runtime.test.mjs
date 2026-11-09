@@ -19,7 +19,17 @@ test('LV10 chiến dịch không mở modal từ EXP; gọi trực tiếp không
  assert.ok(branch, 'chiến dịch phải tách EXP khỏi nhánh modal cũ của các mode khác');
 });
 test('checkpoint lưu phòng sạch và không sinh lại boss khi Continue',()=>{
- assert.match(fn('saveCheckpoint'),/roomCleared: true/);
+ const context = vm.createContext({Game:{running:true,chapter:{id:1},room:1,maxRooms:50,player:{hp:100,maxHp:100,atk:10,skills:{}}},SaveState:{selectedChapterIdx:0,save(){}},CHECKPOINT_VERSION:2,usesCampaignTuning:()=>true});
+ vm.runInContext(fn('canSaveCheckpoint')+'\n'+fn('saveCheckpoint'),context);
+ assert.equal(context.saveCheckpoint(),false,'không lưu giữa combat');
+ context.Game.campaignEntrySafe=true;
+ assert.equal(context.saveCheckpoint(),true);
+ assert.equal(context.SaveState.dungeonCheckpoint.boundary,'entry');
+ assert.equal(context.SaveState.dungeonCheckpoint.roomCleared,false);
+ context.Game.room=10;context.Game.roomCleared=true;
+ assert.equal(context.saveCheckpoint(),true);
+ assert.equal(context.SaveState.dungeonCheckpoint.boundary,'cleared');
+ assert.equal(context.SaveState.dungeonCheckpoint.roomCleared,true);
  assert.match(fn('continueRun'),/restoreClearedCampaignRoom/);
  assert.doesNotMatch(fn('continueRun'),/applyRogueSkill\(/);
 });

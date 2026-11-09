@@ -1,0 +1,86 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const path = new URL('../public/campaign-telemetry.js', import.meta.url);
+function api() {
+  const box = {};
+  if (fs.existsSync(path)) vm.runInNewContext(fs.readFileSync(path, 'utf8'), box);
+  assert.ok(box.ArtemisCampaignTelemetry, 'classic global telemetry module must exist');
+  return box.ArtemisCampaignTelemetry;
+}
+test('boss progress follows latest damaged boss, not accumulated bosses; advice uses real tuning', () => {
+  const T = api();
+  const html = fs.readFileSync(new URL('../public/index.html', import.meta.url),'utf8');
+  const row = html.match(/1:\s*\{\s*mobHp:\s*(\d+),\s*mobAtk:\s*(\d+),\s*bossHp:\s*(\d+),\s*bossAtk:\s*(\d+)/);
+  assert.ok(row, 'production campaign tuning exists');
+  const tuning = {mobHp:+row[1],mobAtk:+row[2],bossHp:+row[3],bossAtk:+row[4]};
+  const s = T.begin({stats:{baseAtk:80,baseAspd:2,baseHp:400}});
+  T.recordDamage(s,{amount:1300,hpBefore:tuning.bossHp,enemy:{type:'golem',isBoss:true,maxHp:tuning.bossHp,hp:tuning.bossHp-1300}});
+  const out = T.summarize(s,{room:10,tuning});
+  assert.equal(out.bossDamagePercent,1300/tuning.bossHp*100);
+  assert.equal(out.failedRoom,10);
+  assert.equal(out.benchmarks.mobHp,tuning.mobHp);
+  assert.equal(out.benchmarks.bossHp,tuning.bossHp);
+  assert.equal(out.benchmarks.baselineDps,160);
+  assert.equal(out.suggestions.length,3);
+  assert.deepEqual(Array.from(out.suggestions,x=>x.category),['dodge','upgrade','build']);
+  for (const tip of out.suggestions) assert.doesNotMatch(tip.text,/mua|nạp|cửa hàng|shop/i);
+  assert.match(out.labels.activeCombatSeconds,/chiến đấu/);
+  T.recordDamage(s,{amount:10,hpBefore:100,enemy:{type:'queen',isBoss:true,maxHp:100,hp:90}});
+  assert.equal(T.summarize(s).bossDamagePercent,10);
+  T.recordIncoming(s,{amount:50,hpBefore:100,kind:'status',source:{type:'poison'}});
+  assert.match(T.summarize(s).suggestions[0].text,/hiệu ứng/);
+  T.recordIncoming(s,{amount:10,hpBefore:100,kind:'contact',source:{type:'slime'}});
+  assert.match(T.summarize(s).suggestions[0].text,/áp sát/);
+  assert.equal(T.summarize(T.begin()).benchmarks,null);
+});
+test('bounded checkpoint normalizes hostile data and resumes finite isolated telemetry', () => {
+  const T = api();
+  const s = T.begin();
+  for(let i=0;i<100;i++) {
+    T.recordDamage(s,{amount:2,hpBefore:2,enemy:{type:'enemy'+i}});
+    T.recordIncoming(s,{amount:1,hpBefore:1,kind:'contact',source:{type:'enemy'+i}});
+  }
+  T.recordIncoming(s,{amount:Infinity,hpBefore:10,source:{type:'__proto__'}});
+  T.tick(s,NaN,{running:true,enemiesAlive:1});
+  const encoded = JSON.stringify(T.checkpoint(s));
+  assert.ok(encoded.length < 6000);
+  assert.ok(Object.keys(s.incomingByEnemy).length<=32);
+  const restored = T.normalize(JSON.parse(encoded));
+  assert.equal(T.summarize(restored).damageTaken,100);
+  assert.equal(T.summarize(restored).damageDealt,200);
+  const bad = T.normalize({version:1,damageDealt:Infinity,activeCombatSeconds:-2,stats:{baseAtk:NaN},incomingByEnemy:JSON.parse('{"__proto__":99}'),inventory:['must not persist'],lastAttacker:{enemyType:'<img>',amount:Infinity},bossDamagePercent:900});
+  assert.equal(bad.damageDealt,0);
+  assert.equal(bad.activeCombatSeconds,0);
+  assert.equal(bad.bossDamagePercent,100);
+  assert.equal(Object.hasOwn(bad,'inventory'),false);
+  const out = T.summarize(bad);
+  const numbers = value => { if(typeof value==='number') assert.ok(Number.isFinite(value)); else if(value && typeof value==='object') Object.values(value).forEach(numbers); };
+  numbers(out);
+  assert.equal(T.normalize(null).damageDealt,0);
+  const copy = T.checkpoint(s); copy.stats.baseAtk=999; copy.incomingByEnemy.enemy0=999;
+  assert.equal(s.stats.baseAtk,0);
+  assert.equal(s.incomingByEnemy.enemy0,1);
+});
+test('run counters use actual HP loss and active combat seconds only; begin preserves account', () => {
+  const T = api();
+  const account = {gold:123,inventory:[{uid:'owned'}],heroStars:{artemis:0}};
+  const before = JSON.stringify(account);
+  const s = T.begin({stats:{baseAtk:80,baseAspd:2,baseHp:400},account});
+  for (const flags of [{running:false,enemiesAlive:1},{running:true,paused:true,enemiesAlive:1},{running:true,enemiesAlive:0},{running:true,menuOpen:true,enemiesAlive:1}]) T.tick(s, 10, flags);
+  T.tick(s, 2, {running:true,paused:false,enemiesAlive:2,room:4});
+  T.recordDamage(s, {amount:1000,hpBefore:50,enemy:{type:'slime',hp:0,maxHp:100}});
+  T.recordIncoming(s, {amount:900,hpBefore:20,kind:'projectile',source:{type:'archer',isBoss:false}});
+  const out = T.summarize(s);
+  assert.equal(out.activeCombatSeconds,2);
+  assert.equal(out.damageDealt,50);
+  assert.equal(out.effectiveDps,25);
+  assert.equal(out.damageTaken,20);
+  assert.equal(out.incomingByKind.projectile,20);
+  assert.equal(out.incomingByEnemy.archer,20);
+  assert.equal(out.lastAttacker.enemyType,'archer');
+  assert.equal(out.failedRoom,4);
+  assert.equal(JSON.stringify(account),before);
+  assert.equal(T.summarize(T.begin()).damageDealt,0);
+});

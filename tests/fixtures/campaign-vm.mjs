@@ -16,7 +16,7 @@ function arrayDeclaration(name) {
   return html.slice(start, end + '\n      ];'.length);
 }
 export function loadCampaignDependencies(context, { skills = false } = {}) {
-  for (const file of ['campaign-config.js', 'campaign-skills.js', 'campaign-exp.js', 'campaign-valkyrie.js']) {
+  for (const file of ['campaign-config.js', 'campaign-rooms.js', 'campaign-support.js', 'campaign-telemetry.js', 'campaign-skills.js', 'campaign-exp.js', 'campaign-valkyrie.js']) {
     vm.runInContext(fs.readFileSync(new URL('../../public/' + file, import.meta.url), 'utf8'), context, { filename: file });
   }
   vm.runInContext([arrayDeclaration('GAME_MODES'), declaration('getGameMode'), declaration('usesCampaignTuning')].join('\n'), context);

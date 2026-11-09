@@ -119,7 +119,8 @@
       } else shot(e.x, e.y, angle, 310, 8);
       cooldown = 1.45;
     }
-    return { phase, cooldown, shots };
+    const pattern = { phase, cooldown, shots };
+    return root.ArtemisCampaignRooms ? root.ArtemisCampaignRooms.applyBossPattern(pattern,e,p) : pattern;
   }
 
   function fire(e, p, spawn) {

@@ -1,9 +1,16 @@
 // Test dungeon reset: retry luôn về màn 1, xoá đúng state, giữ dữ liệu nhân vật.
 // Chạy: node tests/dungeon-reset.test.mjs
 import fs from "node:fs";
+import vm from 'node:vm';
 
 const HTML = new URL("../public/index.html", import.meta.url);
 const src = fs.readFileSync(HTML, "utf8");
+function declaration(name) {
+  const start = src.indexOf(`function ${name}(`);
+  const end = src.indexOf('\n      }', start);
+  if (start < 0 || end < start) throw Error('Thiếu function ' + name);
+  return src.slice(start, end + '\n      }'.length);
+}
 
 let pass = 0, fail = 0;
 function check(name, cond, extra = "") {
@@ -23,7 +30,7 @@ check("finishRun goi DungeonSession.end", src.includes("DungeonSession.end();"))
 console.log("\n=== 2. CLEAR RUN STATE ===");
 const clearStart = src.indexOf("function clearRunState() {");
 check("co ham clearRunState", clearStart > 0);
-const clearBody = src.slice(clearStart, clearStart + 2200);
+const clearBody = declaration('clearRunState');
 
 // Tất cả array entity phải được reset
 const ARRAYS = ["enemies", "obstacles", "playerBullets", "enemyBullets", "swords",
@@ -53,14 +60,15 @@ console.log("\n=== 3. CHAN HAI SESSION SONG SONG ===");
 check("co ham stopGameLoop", src.includes("function stopGameLoop() {"));
 check("stopGameLoop dung cancelAnimationFrame", src.includes("cancelAnimationFrame(Game.animId)"));
 const snrStart = src.indexOf("function startNewRun(reason = 'fresh')");
-const snrBody = src.slice(snrStart, snrStart + 900);
+const snrBody = declaration('startNewRun');
 check("startNewRun goi stopGameLoop TRUOC khi dung tran", snrBody.indexOf("stopGameLoop()") < snrBody.indexOf("clearRunState()"));
 check("startNewRun goi clearRunState", snrBody.includes("clearRunState()"));
-check("finishRun dung stopGameLoop (khong let animId cu)", /finishRun\(isVictory\) \{[\s\S]{0,300}?stopGameLoop\(\);/.test(src));
+const finishBody = declaration('finishRun');
+check("finishRun dung stopGameLoop (khong let animId cu)", finishBody.includes('stopGameLoop();'));
 
 // ---------------------------------------------------------------- 4. Retry về màn 1
 console.log("\n=== 4. RETRY LUON BAT DAU MAN 1 ===");
-const fullSnr = src.slice(snrStart, src.indexOf("// Setup Room Obstacles", snrStart));
+const fullSnr = snrBody;
 check("startNewRun dat Game.room = 1", fullSnr.includes("Game.room = 1"));
 check("startNewRun dat Game.kills = 0", fullSnr.includes("Game.kills = 0"));
 check("startNewRun dat Game.runGold = 0", fullSnr.includes("Game.runGold = 0"));
@@ -86,7 +94,18 @@ console.log("\n=== 6. PHAN BIET RETRY / RESET / CONTINUE ===");
 check("DungeonSession co truong active", src.includes("active: false,"));
 check("DungeonSession co id tang dan", src.includes("this.id += 1;"));
 check("Game.sessionId duoc gan khi begin", src.includes("Game.sessionId = this.id;"));
-check("finishRun set Game.running = false và chặn nhận thưởng lặp", /finishRun\(isVictory\) \{\s*if \(!Game.running\) return false;\s*Game.valkyrieNpc = null;\s*Game\.running = false;/.test(src));
+// Chạy đoạn chốt lifecycle production trước nhánh thưởng/UI; lời gọi thứ hai
+// phải bị chặn trước cả support.finish, dừng loop và kết thúc session.
+const finishBoundary = finishBody.indexOf('const bonusGold =');
+if (finishBoundary < 0) throw Error('Thiếu boundary thưởng finishRun');
+let stopped = 0, ended = 0, supportFinished = 0;
+const lifecycle = vm.createContext({Game:{running:true,campaignSupport:{},valkyrieNpc:{}},
+  SaveState:{dungeonCheckpoint:{}},CampaignSupport:{finish(s){supportFinished++;return {...s,finished:true};}},
+  stopGameLoop(){stopped++;},DungeonSession:{end(){ended++;}},syncContinueButton(){}});
+vm.runInContext(finishBody.slice(0,finishBoundary)+'}',lifecycle);
+lifecycle.finishRun(false);
+check('finishRun chốt support và dừng session', lifecycle.Game.campaignSupport.finished && !lifecycle.Game.running && lifecycle.Game.paused && lifecycle.Game.valkyrieNpc===null && lifecycle.SaveState.dungeonCheckpoint===null);
+check("finishRun set Game.running = false và chặn nhận thưởng lặp", lifecycle.finishRun(false)===false && stopped===1 && ended===1 && supportFinished===1);
 
 // ---------------------------------------------------------------- 7. Không phát thưởng trùng
 console.log("\n=== 7. RESET KHONG PHAT THUONG TRUNG ===");

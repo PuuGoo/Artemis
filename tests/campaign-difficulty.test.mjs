@@ -10,6 +10,7 @@ import vm from 'node:vm';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { getCampaignDetail } from '../lib/campaignCatalog.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = fs.readFileSync(resolve(root, 'public/index.html'), 'utf8').replaceAll(String.fromCharCode(13), '');
@@ -87,7 +88,8 @@ function spawnHarness() {
     SoundFX:{bossSpawn(){}},ArtemisObstacleClearance:{findSafeSpawn:(x,y)=>({x,y})},
     document:{getElementById:()=>({classList:{add(){},remove(){}}})},
     MonsterArt:{assignRoom(){}},showBossIntro(){},hideBossIntro(){},updateInGameHUD(){}});
-  vm.runInContext(fs.readFileSync(resolve(root,'public/campaign-config.js'),'utf8'),c);
+  for(const file of ['campaign-config.js','campaign-rooms.js','campaign-telemetry.js'])
+    vm.runInContext(fs.readFileSync(resolve(root,'public',file),'utf8'),c);
   for (const marker of ['const GAME_MODES =','const ZODIAC_IDS =','const ZODIAC_ENEMY_POOLS =']) {
     const begin=html.indexOf(marker), end=html.indexOf(';',begin);
     assert.ok(begin>0&&end>begin); vm.runInContext(html.slice(begin,end+1),c);
@@ -102,13 +104,29 @@ function enemies(c,ch,room,p) {
   c.setupRoom(room);
   return JSON.parse(JSON.stringify(c.Game.enemies.map(e=>({type:e.type,isBoss:e.isBoss,hp:e.maxHp,atk:e.atk}))));
 }
+test('catalog Admin khớp chỉ số từng entity từ setupRoom thật trên 19×50 phòng',()=>{
+  const c=spawnHarness();
+  for(let ch=1;ch<=19;ch++) {
+    const detail=getCampaignDetail(ch);
+    for(const room of detail.roomsDetail) {
+      enemies(c,ch,room.room,profiles[1]);
+      const actual=JSON.parse(JSON.stringify(c.Game.enemies.map(e=>({type:e.type,hp:e.maxHp,atk:e.atk,speed:e.speed,radius:e.r}))));
+      const expected=(room.isBoss?[room.boss]:room.mobs).map(e=>({type:e.type,hp:e.hp,atk:e.atk,speed:e.speed,radius:e.radius}));
+      assert.deepEqual(actual,expected,`C${ch}-P${room.room}`);
+      if(room.isBoss&&!room.isFinalBoss) {
+        assert.equal(c.Game.enemies[0].name,room.boss.name);
+        assert.equal(c.Game.enemies[0].color,room.boss.color);
+      }
+    }
+  }
+});
 const profiles=JSON.parse(fs.readFileSync(resolve(root,'tools/combat-profiles.json'),'utf8')).profiles;
 test('setupRoom thật: cả 19×50 phòng độc lập hồ sơ, số quái/trùm theo shared config',()=>{
   const c=spawnHarness();
   for(let ch=1;ch<=19;ch++) for(let room=1;room<=50;room++) {
     const a=enemies(c,ch,room,profiles[1]), b=enemies(c,ch,room,profiles[5]);
     assert.deepEqual(a,b,`C${ch}-P${room}: không được neo theo người chơi`);
-    const plan=c.ArtemisCampaignConfig.roomPlan(ch,room);
+    const plan=c.ArtemisCampaignRooms.roomPlan(ch,room);
     assert.equal(a.length,plan.count,`C${ch}-P${room}: số quái`);
     for(const e of a) {assert.equal(e.isBoss,plan.isBoss);assert.ok(e.hp>0&&e.atk>0&&Number.isFinite(e.hp)&&Number.isFinite(e.atk));}
     if(plan.isBoss) assert.equal(a[0].type,plan.bossType);

@@ -123,7 +123,9 @@
       stat("Số phòng",c.rooms)+stat("Mở khóa sau chương",c.unlockChapter===null?"Tự do":c.unlockChapter)+'</div>' +
       '<p class="cc-help">'+c.bosses.length+' trùm: 4 trùm phụ ở phòng 10/20/30/40 và trùm cuối ở phòng '+c.rooms+'. ATK là sát thương đầu vào trước giảm sát thương của nhân vật.</p>' +
       '<p class="cc-help">🪽 Valkyrie sau khi dọn phòng: '+c.valkyrieRooms.map(function(n){return esc(n);}).join(', ')+'. Chọn kỹ năng trước khi tiếp tục.</p>' +
-      '<p class="cc-help">Độ hiếm kỹ năng: '+c.skillRarities.map(function(r){return '<span class="cc-pill" data-skill-rarity="'+esc(r)+'">'+esc(({common:'Tốt',rare:'Hiếm',epic:'Sử thi',legend:'Huyền thoại'})[r]||r)+'</span>';}).join(' ')+'.</p></div>' +
+      '<p class="cc-help">Độ hiếm kỹ năng: '+c.skillRarities.map(function(r){return '<span class="cc-pill" data-skill-rarity="'+esc(r)+'">'+esc(({common:'Tốt',rare:'Hiếm',epic:'Sử thi',legend:'Huyền thoại'})[r]||r)+'</span>';}).join(' ')+'.</p>' +
+      c.roomsDetail.filter(function(r){return r.room%10===1;}).map(function(r){return '<p class="cc-help" data-rarity-segment="'+r.segment+'">Chặng '+(r.segment+1)+': '+rarityText(r.rarityRates)+'</p>';}).join('')+
+      '<p class="cc-caption">Tỷ lệ cơ sở mỗi ô, trước giới hạn kho kỹ năng, pity và Seraph; không phải tỷ lệ đã bảo đảm.</p></div>' +
       (art?'<div class="cc-panel cc-boss-feature"><canvas width="220" height="195" data-zodiac="'+art+'" aria-label="Boss Canvas '+esc(finalBoss.name)+'"></canvas><div><h3>👑 '+esc(finalBoss.name)+'</h3><p class="cc-caption">Boss chibi vẽ trực tiếp bằng Canvas 2D, cùng mã với trận đấu</p><div class="cc-feature-stats"><span>HP '+num(finalBoss.hp)+'</span><span>ATK '+num(finalBoss.atk)+'</span><span>Tốc độ '+num(finalBoss.speed)+'</span></div></div></div>':'') +
       '<div class="cc-panel"><div class="cc-section-head"><h3>🎮 Xem phòng và đấu trường thật</h3>' +
       '<span class="cc-caption" id="ccRoomLabel"></span></div>' +
@@ -134,7 +136,7 @@
       '<div class="cc-stats" id="ccRoomStats"></div></div>' +
       '<div class="cc-panel"><div class="cc-section-head"><h3 id="ccEntitiesTitle">👾 Quái / Boss của phòng</h3><span class="cc-caption">HP, ATK, tốc độ và số lượng</span></div>' +
       '<div id="ccEntities" class="cc-entities"></div></div>' +
-      '<div class="cc-panel"><div class="cc-section-head"><h3>📚 Sinh vật trong chương</h3><span class="cc-caption">Sprite từ game • Thông số mẫu phòng 1</span></div>' +
+      '<div class="cc-panel"><div class="cc-section-head"><h3>📚 Sinh vật trong chương</h3><span class="cc-caption">Sprite từ game • Chỉ số từ phòng xuất hiện thật</span></div>' +
       '<div id="ccRoster" class="cc-entities"></div><h3 style="font-size:14px;margin:18px 0 10px">👑 Danh sách boss và vị trí</h3>' +
       '<div class="cc-boss-list" id="ccBossList">'+c.bosses.map(function(b){
         return '<button class="cc-boss-row" data-viewroom="'+b.room+'"><span>Phòng '+b.room+': <b>'+esc(b.name)+'</b></span>' +
@@ -144,7 +146,7 @@
       '<div class="cc-table-wrap"><table class="cc-table"><thead><tr><th>Phòng</th><th>Loại</th><th>Số quái</th>' +
       '<th>HP quái nền</th><th>ATK quái nền</th><th>HP boss thực</th><th>ATK boss</th><th>Biome</th></tr></thead>' +
       '<tbody id="ccRoomTable">'+c.roomsDetail.map(function(r){
-        return '<tr data-room="'+r.room+'" aria-selected="false"><td><b>'+r.room+'</b></td><td>'+(r.isFinalBoss?'👑 Trùm cuối':r.isBoss?'👑 Trùm phụ':'👾 Quái')+(r.valkyrie?' • 🪽 Valkyrie':'')+'</td>' +
+        return '<tr data-room="'+r.room+'" aria-selected="false"><td><b>'+r.room+'</b></td><td>'+(r.isFinalBoss?'👑 Trùm cuối':r.isBoss?'👑 Trùm phụ':r.rhythm==='rest'?'Phòng nghỉ':'👾 Quái')+' • '+esc(r.archetype)+(r.valkyrie?' • 🪽 Valkyrie':'')+'</td>' +
         '<td>'+r.count+'</td><td class="mono">'+(r.isBoss?'—':num(r.mobHp))+'</td><td class="mono">'+(r.isBoss?'—':num(r.mobs[0] ? r.mobs[0].atk : r.mobAtk))+'</td>' +
         '<td class="mono">'+(r.isBoss?num(r.boss.hp):'—')+'</td><td class="mono">'+(r.isBoss?num(r.boss.atk):'—')+'</td>' +
         '<td>'+esc(r.biome)+'</td></tr>';
@@ -160,6 +162,10 @@
     selectRoom(1);
   }
   function stat(label,value) { return '<div class="cc-stat"><small>'+esc(label)+'</small><strong>'+esc(typeof value==="number"?num(value):value)+'</strong></div>'; }
+  function rarityText(rates) {
+    var total=Object.keys(rates).reduce(function(sum,k){return sum+rates[k];},0);
+    return Object.keys(rates).map(function(k){return esc(k)+' '+(rates[k]/total*100).toFixed(1)+'%';}).join(' • ');
+  }
   function renderRoomNav() {
     el("ccRoomNav").innerHTML=current.roomsDetail.map(function(r){
       return '<button class="cc-room '+(r.isBoss?'is-boss':'')+'" data-room="'+r.room+'" aria-pressed="'+(r.room===roomNo)+'" title="'+(r.isFinalBoss?'Trùm cuối':r.isBoss?'Trùm phụ':'Quái')+' phòng '+r.room+(r.valkyrie?' • Valkyrie sau khi dọn phòng':'')+'">'+(r.isBoss?'👑':'')+r.room+(r.valkyrie?' 🪽':'')+'</button>';
@@ -171,7 +177,10 @@
     return '<article class="cc-entity'+(isBoss?' boss':'')+'">'+graphic +
       '<div class="cc-entity-title"><b>'+esc(e.name)+'</b><small>'+(isBoss?'BOSS':('x'+(e.quantity||1)))+'</small></div>' +
       '<div class="cc-kvs"><div class="cc-kv">HP<strong>'+num(e.hp)+'</strong></div><div class="cc-kv">ATK<strong>'+num(e.atk)+'</strong></div>' +
-      '<div class="cc-kv">Tốc độ<strong>'+num(e.speed)+'</strong></div><div class="cc-kv">Hệ số HP<strong>x'+(e.hpMultiplier||1)+'</strong></div></div></article>';
+      '<div class="cc-kv">Tốc độ<strong>'+num(e.speed)+'</strong></div><div class="cc-kv">Hệ số HP<strong>x'+(e.hpMultiplier||1)+'</strong></div>'+
+      '<div class="cc-kv">Bán kính<strong>'+num(e.radius)+'</strong></div><div class="cc-kv">Vai trò<strong>'+esc(e.role)+'</strong></div>'+
+      '<div class="cc-kv">Áp lực đạn<strong>'+num(e.pressure)+'</strong></div><div class="cc-kv">Tinh anh<strong>'+(e.isElite?'Có':'Không')+'</strong></div></div>'+
+      '<p class="cc-caption">'+esc(e.counter)+(e.sampleRoom?' • Mẫu phòng '+e.sampleRoom:'')+(e.color?' • Màu '+esc(e.color):'')+'</p></article>';
   }
   function selectRoom(n) {
     if(!current || !current.roomsDetail) return;
@@ -182,8 +191,11 @@
     el("ccRoomStats").innerHTML=
       stat("Loại phòng",r.isBoss?"BOSS":"Quái thường")+
       stat("Số đối thủ",r.count)+
+      stat("Dạng đội hình",r.archetype)+stat("Nhịp phòng",r.rhythm==='rest'?'Phòng nghỉ':r.rhythm)+
+      stat("Áp lực đạn",r.pressure)+stat("Ngân sách áp lực",r.pressureBudget)+stat("Tinh anh",r.eliteCount)+
       stat("HP "+(r.isBoss?"Boss":"quái nền"),r.isBoss?r.boss.hp:r.mobHp)+
-      stat("ATK "+(r.isBoss?"Boss":"mỗi quái"),r.isBoss?r.boss.atk:(r.mobs[0]?r.mobs[0].atk:r.mobAtk));
+      stat("ATK "+(r.isBoss?"Boss":"quái đầu đội hình"),r.isBoss?r.boss.atk:(r.mobs[0]?r.mobs[0].atk:r.mobAtk))+
+      stat("Tỷ lệ cơ sở kỹ năng",rarityText(r.rarityRates));
     el("ccEntitiesTitle").textContent=r.isBoss?"👑 Boss phòng "+n:"👾 Đội hình quái phòng "+n;
     var units=r.isBoss?[r.boss]:r.mobs;
     el("ccEntities").innerHTML=units.map(function(e,i){return entityCard(e,r.isBoss,"room-"+i);}).join("");
@@ -195,12 +207,8 @@
     drawScene(performance.now());
   }
   function renderRoster() {
-    var first=current.roomsDetail[0];
-    var count=first.count;
     el("ccRoster").innerHTML=current.enemyRoster.map(function(e,i) {
-      var hp=Math.round(first.mobHp*e.hpMultiplier);
-      var atk=Math.max(1,Math.round(first.mobAtk/Math.max(1,Math.sqrt(count/3))));
-      return entityCard({...e,hp,atk,quantity:0},false,"roster-"+i);
+      return entityCard(e,false,"roster-"+i);
     }).join("");
   }
   function loadRenderer() {

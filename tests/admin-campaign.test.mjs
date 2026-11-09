@@ -4,7 +4,39 @@ import fs from "node:fs";
 import { Script, runInNewContext } from "node:vm";
 import { getCampaignSummaries, getCampaignDetail } from "../lib/campaignCatalog.js";
 import '../public/campaign-config.js';
+import '../public/campaign-rooms.js';
+import '../public/campaign-skills.js';
 const campaign = globalThis.ArtemisCampaignConfig;
+const encounters = globalThis.ArtemisCampaignRooms;
+
+test('catalog projects the real encounter roster, elite modifiers and subboss variants', () => {
+  for (const chapter of getCampaignSummaries()) {
+    const detail = getCampaignDetail(chapter.id);
+    for (const room of detail.roomsDetail) {
+      const plan = encounters.roomPlan(chapter.id, room.room);
+      const roster = encounters.getRoster(chapter.id, room.room);
+      assert.equal(room.archetype, plan.archetype);
+      assert.equal(room.rhythm, plan.rhythm);
+      assert.equal(room.pressureBudget, plan.pressureBudget);
+      assert.equal(room.count, roster.length);
+      const projected = room.isBoss ? [room.boss] : room.mobs.flatMap(m => Array(m.quantity).fill(m));
+      const expected = roster.map((entry, index) => {
+        const mod = encounters.getModifiers(chapter.id, room.room, index);
+        return { type:entry.type, role:entry.role, pressure:entry.pressure, isElite:entry.isElite,
+          hpMultiplier:mod.hpMultiplier, atkMultiplier:mod.atkMultiplier,
+          speedMultiplier:mod.speedMultiplier, sizeMultiplier:mod.sizeMultiplier };
+      });
+      assert.deepEqual(projected.map(e => ({type:e.type,role:e.role,pressure:e.pressure,isElite:e.isElite,
+        hpMultiplier:e.modifiers.hpMultiplier,atkMultiplier:e.modifiers.atkMultiplier,
+        speedMultiplier:e.modifiers.speedMultiplier,sizeMultiplier:e.modifiers.sizeMultiplier})), expected);
+      if (room.isBoss) {
+        const variant = encounters.getModifiers(chapter.id, room.room, 0).bossVariant;
+        if (variant) { assert.equal(room.boss.name,variant.name); assert.equal(room.boss.color,variant.color); }
+      }
+      assert.deepEqual(room.rarityRates, globalThis.ArtemisCampaignSkills.rarityWeights(plan.segment, false));
+    }
+  }
+});
 
 const source = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
 const catalogCode = fs.readFileSync(new URL("../lib/campaignCatalog.js", import.meta.url), "utf8");
@@ -80,7 +112,7 @@ test("all chapters, every room and all map assets have valid details", () => {
         assert.ok(room.boss.type && room.boss.name);
         assert.equal(room.boss.type,plan.bossType);
       } else {
-        assert.equal(room.count,campaign.mobCount(room.room));
+        assert.equal(room.count,encounters.getRoster(ch.id,room.room).length);
         assert.equal(room.mobs.reduce((sum,m)=>sum+m.quantity,0),room.count);
         assert.ok(room.mobs.every(m=>m.hp>0&&m.atk>0&&m.speed>=0));
       }
@@ -115,6 +147,12 @@ test('admin renders real 50-room detail, five bosses, Valkyrie offers and skill 
   assert.match(markup,/Valkyrie/);
   for(const rarity of campaign.SKILL_RARITIES) assert.ok(markup.includes(rarity),rarity);
   assert.match(node('#ccRoomNav').innerHTML,/Valkyrie sau khi dọn phòng/);
+  assert.match(node('#ccRoomStats').innerHTML,/Dạng đội hình/);
+  assert.match(node('#ccRoomStats').innerHTML,/Áp lực đạn/);
+  assert.match(node('#ccEntities').innerHTML,/Vai trò/);
+  assert.match(node('#ccEntities').innerHTML,/Bán kính/);
+  assert.match(markup,/data-rarity-segment="4"/);
+  assert.match(markup,/Phòng nghỉ/);
   assert.doesNotMatch(markup,/phòng 5\/10/);
 });
 

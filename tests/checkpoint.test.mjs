@@ -3,6 +3,7 @@
 // Chạy: node tests/checkpoint.test.mjs
 import fs from "node:fs";
 import vm from "node:vm";
+import { loadCampaignDependencies } from './fixtures/campaign-vm.mjs';
 
 const HTML = new URL("../public/index.html", import.meta.url);
 const src = fs.readFileSync(HTML, "utf8");
@@ -50,7 +51,7 @@ check("luu chapterIdx de so khop", saveBody.includes("chapterIdx: SaveState.sele
 // Chỉ lưu scalar, không lưu entity
 const ENTITIES = ["enemies", "playerBullets", "enemyBullets", "particles", "drops", "obstacles"];
 for (const e of ENTITIES) {
-  check(`KHONG luu entity ${e}`, !saveBody.includes(e));
+  check(`KHONG luu entity ${e}`, !new RegExp('\\b' + e + '\\s*:').test(saveBody));
 }
 
 // ---------------------------------------------------------------- 2. Điều kiện dùng
@@ -197,10 +198,16 @@ const resume = {Game:{running:true,roomCleared:true,chapter:{id:1},room:10,maxRo
   startNewRun(reason){ if(reason!=='continue')throw Error('sai reason');resume.Game.player={skills:{},maxHp:1000,atk:164}; },
   spawnCampaignValkyrie(){},openCampaignOffer(){},updateInGameHUD(){},syncContinueButton(){},showToast(){}};
 vm.createContext(resume);
-vm.runInContext(fs.readFileSync(new URL('../public/campaign-skills.js',import.meta.url),'utf8'),resume);
+loadCampaignDependencies(resume);
+resume.usesCampaignTuning=()=>true;
 resume.Game.runProgression=resume.ArtemisCampaignSkills.normalizeState({skills:{multishot:2}},resume.ROGUE_SKILLS);
 vm.runInContext([canBody,saveBody,useBody,restoreBody,contBody].join('\n'),resume);
+resume.Game.drops=[{val:999}];
 resume.saveCheckpoint();
+check('serializer không lưu entity/drop dù đọc rewardSettled', ENTITIES.every(key=>!Object.hasOwn(resume.SaveState.dungeonCheckpoint,key)) && resume.SaveState.dungeonCheckpoint.rewardSettled===false);
+resume.Game.drops=[];
+resume.saveCheckpoint();
+check('rewardSettled phản ánh đã nhặt hết drop',resume.SaveState.dungeonCheckpoint.rewardSettled===true);
 for(let round=1;round<=2;round++) {
   const sanitized=sanitizeSave({dungeonCheckpoint:JSON.parse(JSON.stringify(resume.SaveState.dungeonCheckpoint))}).data.dungeonCheckpoint;
   resume.SaveState.dungeonCheckpoint=sanitized;
