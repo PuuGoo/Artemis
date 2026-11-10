@@ -31278,6 +31278,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         });
         document.getElementById('btnActiveSkill')?.addEventListener('click',()=>{
           if (!Game.running || Game.paused) return;
+          Game.paused = true;
+          Game.joy.active = false;
           showSummaryModal('KỸ NĂNG ĐÃ HỌC','Các năng lực đang có trong lượt chơi','✦',true);
         });
         window.ArtemisCombatReferenceUI?.install({frame:document.getElementById('appRoot'),getState:()=>({offer:Game.runProgression?.pendingOffer,skills:Game.player?.skills,catalog:ROGUE_SKILLS,busy:Game.skillClaimBusy,campaign:usesCampaignTuning()})});
