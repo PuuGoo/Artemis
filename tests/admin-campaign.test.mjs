@@ -95,18 +95,25 @@ test("all chapters, every room and all map assets have valid details", () => {
     assert.equal(detail.roomsDetail.length, ch.rooms);
     assert.equal(ch.rooms,campaign.ROOM_COUNT);
     assert.equal(detail.roomsDetail.filter(r=>r.isBoss).length,5);
-    assert.deepEqual(detail.valkyrieRooms,[5,10,15,20,25,30,35,40,45]);
+    assert.deepEqual(detail.valkyrieRooms,[5,15,25,35,45]);
     assert.deepEqual(detail.skillRarities,Array.from(campaign.SKILL_RARITIES));
     assert.ok(detail.enemyRoster.length>=3);
     for(const room of detail.roomsDetail) {
       assert.ok(room.biome, "biome missing C"+ch.id+"R"+room.room);
-      const plan=campaign.roomPlan(ch.id,room.room);
+      const plan=encounters.roomPlan(ch.id,room.room);
       assert.equal(room.isBoss,plan.isBoss);
       assert.equal(room.valkyrie,plan.valkyrie);
       assert.equal(room.segment,plan.segment);
       assert.equal(room.type,plan.type);
       const tuned=campaign.tuning(detail.base,room.room);
       for(const key of ['mobHp','mobAtk','bossHp','bossAtk']) assert.equal(room[key],tuned[key]);
+      if(plan.valkyrie) {
+        assert.equal(room.count,0);
+        assert.deepEqual(room.mobs,[]);
+        assert.equal(room.boss,null);
+        assert.equal(room.pressure,0);
+        assert.equal(room.eliteCount,0);
+      }
       if(room.isBoss) {
         assert.ok(room.boss.hp>0 && room.boss.atk>0);
         assert.ok(room.boss.type && room.boss.name);

@@ -66,14 +66,14 @@
       runSkillLevel:choicesUsed, claimedStages, valkyrieOffers:integer(raw.valkyrieOffers,10),
       pityCounter:integer(raw.pityCounter,4), pendingOffer:null};
     state.skippedValkyrieStages = Array.isArray(raw.skippedValkyrieStages)
-      ? Array.from(new Set(raw.skippedValkyrieStages.filter(n => Number.isInteger(n) && n>=5 && n<=45 && n%5===0))) : [];
+      ? Array.from(new Set(raw.skippedValkyrieStages.filter(n => Number.isInteger(n) && n>=5 && n<=45 && n%10===5))) : [];
     const pending = raw.pendingOffer;
-    if (choicesUsed < MAX_RUN_SKILL_LEVEL && pending && validStage(pending.stageId)
+    if (choicesUsed < MAX_RUN_SKILL_LEVEL && pending && validStage(pending.stageId) && validProviderStage(pending.stageId,pending.provider)
         && !claimedStages.includes(pending.stageId)) {
       const pool = legalPool(catalog,{provider:pending.provider,skills});
       const ids = new Set(pool.map(s => s.id));
       const skillIds = Array.isArray(pending.skillIds)
-        ? Array.from(new Set(pending.skillIds.filter(id => ids.has(id)))).slice(0,3) : [];
+        ? Array.from(new Set(pending.skillIds.filter(id => ids.has(id)))).slice(0,offerSize(pending)) : [];
       if(skillIds.length) state.pendingOffer = {stageId:pending.stageId, provider:pending.provider || 'valkyrie',
         segment:integer(pending.segment,4), seraph:pending.seraph === true,
         pity:pending.pity === true, skillIds,
@@ -118,6 +118,8 @@
   }
   const validStage = id => (typeof id === 'string' && /^[a-zA-Z0-9_:-]{1,80}$/.test(id))
     || (typeof id === 'number' && Number.isSafeInteger(id) && id >= 0 && id <= 10000);
+  const validProviderStage = (id, provider) => provider && provider !== 'valkyrie' || typeof id !== 'number' || (id >= 5 && id <= 45 && id % 10 === 5);
+  const offerSize = offer => (offer.provider || 'valkyrie') === 'valkyrie' && typeof offer.stageId === 'number' ? 2 : 3;
   const result = (state, ok, reason = null) => ({state, ok, reason, offer:state.pendingOffer});
   function buildOffer(state, catalog, options) {
     const skillIds = [], base = {...options, skills:state.skills};
@@ -132,7 +134,7 @@
       state.seed = d.seed;
       if (d.skillId) skillIds.push(d.skillId);
     }
-    while (skillIds.length < 3) {
+    while (skillIds.length < offerSize(options)) {
       const d = drawSlot(catalog,{...base,exclude:skillIds},state.seed);
       state.seed = d.seed;
       if (!d.skillId) break;
@@ -145,7 +147,7 @@
     const state = normalizeState(raw,catalog);
     if (state.choicesUsed >= MAX_RUN_SKILL_LEVEL) return result(state,false,'budget');
     if (state.pendingOffer) return result(state,true,'pending');
-    if (!validStage(options.stageId)) return result(state,false,'stage');
+    if (!validStage(options.stageId) || !validProviderStage(options.stageId,options.provider)) return result(state,false,'stage');
     if (state.claimedStages.includes(options.stageId)) return result(state,false,'claimed');
     if (state.skippedValkyrieStages.includes(options.stageId)) return result(state,false,'skipped');
     const provider = options.provider || 'valkyrie';

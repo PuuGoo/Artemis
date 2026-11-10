@@ -257,11 +257,12 @@ test('schema + ledger persists entry start offer and claim, rejects replay and u
   after=await get();assert.equal(after.data.dungeonCheckpoint.runId,'campaign-test-run-2');
 }));
 
-test('schema + ledger accepts ten acknowledged choices and never permits an eleventh',async()=>harness(async({get,put})=>{
+test('schema + ledger accepts all six available choices and rejects unoffered extras below the ten-skill cap',async()=>harness(async({get,put})=>{
   let cur=await get(), cp=checkpoint('campaign-budget-run');
   cp.runProgression.pendingOffer.skillIds=['max_hp_up'];
   assert.equal((await put(cur,{...cur.data,dungeonCheckpoint:cp})).status,200);
-  for (const [index,stage] of ['start',5,10,15,20,25,30,35,40,45].entries()) {
+  assert.equal(progression.MAX_RUN_SKILL_LEVEL,10,'the skill cap is independent of available NPC opportunities');
+  for (const [index,stage] of ['start',5,15,25,35,45].entries()) {
     cur=await get();cp=structuredClone(cur.data.dungeonCheckpoint);
     if(stage!=='start') {
       Object.assign(cp,{boundary:'cleared',roomCleared:true,room:stage});
@@ -273,7 +274,8 @@ test('schema + ledger accepts ten acknowledged choices and never permits an elev
       claimedStages:[...cp.runProgression.claimedStages,stage],pendingOffer:null});
     assert.equal((await put(cur,{...cur.data,dungeonCheckpoint:cp})).status,200);
   }
-  cur=await get();assert.equal(cur.data.dungeonCheckpoint.runProgression.choicesUsed,10);
+  cur=await get();assert.equal(cur.data.dungeonCheckpoint.runProgression.choicesUsed,6);
+  assert.deepEqual(cur.data.dungeonCheckpoint.runProgression.claimedStages,['start',5,15,25,35,45]);
   cp=structuredClone(cur.data.dungeonCheckpoint);cp.player.skills.multishot=1;cp.runProgression.skills.multishot=1;
   assert.equal((await put(cur,{...cur.data,dungeonCheckpoint:cp})).status,422);
 }));

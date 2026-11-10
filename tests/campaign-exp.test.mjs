@@ -17,10 +17,10 @@ test('EXP classic global: gain trả số cấp tăng, cập nhật player, khô
   const exp = loadExp();
   const skills = { attack: 2 };
   const player = { level: 1, xp: 0, xpNext: 80, skills, hp: 775, atk: 152 };
-  assert.equal(exp.threshold(1), 66);
-  assert.equal(exp.threshold(2), 107);
-  assert.equal(exp.gain(player, 67), 1);
-  assert.deepEqual(player, { level: 2, xp: 1, xpNext: 107, skills, hp: 775, atk: 152 });
+  assert.equal(exp.threshold(1), 59);
+  assert.equal(exp.threshold(2), 96);
+  assert.equal(exp.gain(player, 60), 1);
+  assert.deepEqual(player, { level: 2, xp: 1, xpNext: 96, skills, hp: 775, atk: 152 });
 });
 
 test('giữ đúng drop production, làm tròn từng ngọc trước khi cộng greed', () => {
@@ -94,6 +94,14 @@ test('báo cáo phân tích dùng đủ chương/hồ sơ thật và 12 mốc, k
   assert.equal(firstRoom.gold, firstRoom.count * 2 * Number(gold[2]));
   assert.ok(report.exp.firstLevel10Room >= 40 && report.exp.firstLevel10Room <= 47);
   for (const row of report.rows) {
+    if ([5,15,25,35,45].includes(row.room)) {
+      assert.equal(row.kind,'safe');
+      assert.equal(row.count,0);
+      assert.deepEqual(row.enemies,[]);
+      for (const key of ['incomingAtk','roomTtkSeconds','damagePerHit','xp','gold','xpPerMinute','goldPerMinute']) assert.equal(row[key],0,key);
+      assert.equal(row.hitsToDie,null); // No incoming attacks: survival count is not applicable.
+      continue;
+    }
     for (const key of ['roomTtkSeconds', 'damagePerHit', 'hitsToDie', 'xpPerMinute', 'goldPerMinute']) {
       assert.ok(Number.isFinite(row[key]) && row[key] > 0, `${key}: ${row[key]}`);
     }

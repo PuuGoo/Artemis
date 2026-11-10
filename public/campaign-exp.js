@@ -2,7 +2,8 @@
 (function (root) {
   'use strict';
   function threshold(level) {
-    return Math.round(66 * Math.pow(1.62, Math.max(0, Math.min(8, Math.floor(Number(level) || 1) - 1))));
+    // Safe Valkyrie rooms drop no gems. Total LV10 cost 7218 fits all combat rosters (7176, 7368].
+    return Math.round(59 * Math.pow(1.62, Math.max(0, Math.min(8, Math.floor(Number(level) || 1) - 1))));
   }
   // Trả số cấp tăng; chỉ sửa level/xp/xpNext của player, không chạm kỹ năng/save.
   function gain(player, amount) {

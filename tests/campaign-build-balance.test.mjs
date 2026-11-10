@@ -40,13 +40,19 @@ test('roster, elite và nghỉ 49 dùng module thật trên mọi hàng',()=>{
  for(const row of report.rows){const roster=sandbox.ArtemisCampaignRooms.getRoster(row.chapter,row.room);assert.deepEqual(row.enemies.map(e=>e.type),Array.from(roster,e=>e.type));assert.equal(row.count,roster.length);for(let i=0;i<roster.length;i++)assert.equal(row.enemies[i].modifiers.hpMultiplier,sandbox.ArtemisCampaignRooms.getModifiers(row.chapter,row.room,i).hpMultiplier);if(row.room===49)assert.equal(row.count,3);}
 });
 test('upgrade ATK/HP có lợi, DEF có thể không đổi do làm tròn; không bịa hồ sơ chương cao',()=>{
- for(const r of report.upgradeBenefits){assert.ok(r.ttkBenefit>1.98);assert.ok(r.hpHitsBenefit>=1);assert.ok(r.defHitsBenefit>=1);}
+ for(const r of report.upgradeBenefits){
+  if([5,15,25,35,45].includes(r.room)){for(const key of ['ttkBenefit','hpHitsBenefit','defHitsBenefit'])assert.equal(r[key],null);continue;}
+  assert.ok(r.ttkBenefit>1.98);assert.ok(r.hpHitsBenefit>=1);assert.ok(r.defHitsBenefit>=1);
+ }
+ for(const r of report.buildRows.filter(r=>[5,15,25,35,45].includes(r.room))){assert.equal(r.kind,'safe');assert.equal(r.roomTtkSeconds,0);assert.equal(r.damagePerHit,0);assert.equal(r.hitsToDie,null);}
  assert.equal(report.chapterProfileAssignments.filter(a=>a.profile===null).length,18);
  assert.ok(report.bossTargets.some(t=>t.appropriateProfile&&t.status==='TOO_FAST'));
  for(const r of report.rows){const b=report.buildRows.find(b=>b.profile===r.profile&&b.chapter===r.chapter&&b.room===r.room&&b.build==='none');assert.equal(b.roomTtkSeconds,r.roomTtkSeconds);assert.equal(b.damagePerHit,r.damagePerHit);}
 });
 test('đề xuất EXP phải nằm trong cửa sổ TẤT CẢ chương, không chỉ chương ít quái',()=>{
  const c=report.exp.calibration;
+ assert.ok(c.currentThresholdTotal>c.thresholdTotalWindow.exclusiveMin&&c.currentThresholdTotal<=c.thresholdTotalWindow.inclusiveMax);
+ for(const chapter of report.exp.chapterProgressions){assert.ok(chapter.firstLevel10Room>=40&&chapter.firstLevel10Room<=47);for(const r of chapter.progression.filter(r=>[5,15,25,35,45].includes(r.room))){assert.equal(r.count,0);assert.equal(r.gainedXp,0);}}
  const total=Array.from({length:9},(_,i)=>Math.round(c.recommendedBaseAtFixedGrowth1_62*1.62**i)).reduce((a,b)=>a+b,0);
  assert.ok(total>c.thresholdTotalWindow.exclusiveMin&&total<=c.thresholdTotalWindow.inclusiveMax, `Tổng đề xuất ${total} ngoài cửa sổ`);
 });

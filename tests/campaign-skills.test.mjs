@@ -210,7 +210,7 @@ test('1000 real-catalog runs bound legendary claims and preserve pity after relo
   for(let run=0;run<1000;run++) {
     let state={seed:run*12345}, legends=0, misses=0;
     for(let stage=0;stage<10;stage++) {
-      const out=A.generateOffer(state,skills,{stageId:stage,segment:Math.floor(stage/2)});
+      const out=A.generateOffer(state,skills,{stageId:`simulation-${stage}`,segment:Math.floor(stage/2)});
       assert.equal(out.ok,true);
       assert.equal(out.offer.pity,misses===4);
       const high=out.offer.skillIds.some(id=>tiers.indexOf(map.get(id).rarity)>=2);

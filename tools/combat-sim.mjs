@@ -192,6 +192,12 @@ for (const p of PROFILES) {
         });
       } else {
         const enemies = CampaignRooms.getRoster(chapter.id, room).map((_,index) => campaignMob({chapter,room,index}));
+        if (!enemies.length) {
+          rows.push({profile:p.name,profileKey:p.name.slice(0,2),ch:chapter.id,room,kind:'safe',
+            bossType:null,count:0,enemies:[],enemyHp:0,enemyAtk:0,ttk:0,hits:null,
+            dr:survivability(p,0,chapter.rooms).dr,hitsToKill:0});
+          continue;
+        }
         const m = enemies[0]; // Bảng TTK hiển thị vị trí đầu; report giữ đủ roster.
         const s = survivability(p, m.atk, chapter.rooms);
         rows.push({
@@ -237,7 +243,7 @@ if (verbose) {
   console.log('\n| Hồ sơ | Ch | Phòng | Loại | HP địch | ATK địch | TTK | Số đòn chịu | DR |');
   console.log('|---|---|---|---|---|---|---|---|---|');
   for (const r of rows) {
-    console.log(`| ${r.profileKey} | C${r.ch} | ${r.room} | ${r.kind}/${r.bossType} | ${r.enemyHp} | ${r.enemyAtk} | ${r.ttk.toFixed(2)}s | ${r.hits.toFixed(1)} | ${(r.dr * 100).toFixed(1)}% |`);
+    console.log(`| ${r.profileKey} | C${r.ch} | ${r.room} | ${r.kind}/${r.bossType} | ${r.enemyHp} | ${r.enemyAtk} | ${r.ttk.toFixed(2)}s | ${r.hits === null ? 'N/A' : r.hits.toFixed(1)} | ${(r.dr * 100).toFixed(1)}% |`);
   }
 }
 
@@ -285,8 +291,8 @@ ok(e1.ttk < a1.ttk / 4, `E giết quái C1 nhanh hơn tân thủ ${(a1.ttk / e1.
 ok(eBoss1.hits > bossC1.hits, `E chịu trùm C1 tốt hơn tân thủ (${eBoss1.hits.toFixed(1)} > ${bossC1.hits.toFixed(1)} đòn)`);
 
 // 8. Bất biến kỹ thuật.
-ok(rows.every((r) => Number.isFinite(r.ttk) && r.ttk > 0), 'không NaN/Infinity, TTK > 0');
-ok(rows.every((r) => r.hits >= 1), 'số đòn chịu được ≥ 1');
+ok(rows.every((r) => Number.isFinite(r.ttk) && (r.kind === 'safe' ? r.ttk === 0 : r.ttk > 0)), 'không NaN/Infinity, TTK combat > 0; safe = 0');
+ok(rows.every((r) => r.kind === 'safe' ? r.hits === null : r.hits >= 1), 'số đòn chịu combat ≥ 1; safe không áp dụng');
 // Trùm phải vừa sức với hồ sơ ĐÚNG TẦM của chương đó (10–60s), và người yếu ở
 // chương cao phải bị chặn thật (không thể gặm trùm cuối bằng đồ tân thủ).
 const APPROPRIATE = { 1: 'A.', 2: 'B.', 3: 'D.', 4: 'E.', 5: 'E.', 6: 'E.', 7: 'E.', ...Object.fromEntries(Array.from({ length: 12 }, (_, i) => [i + 8, i < 6 ? 'E.' : 'F.'])) };

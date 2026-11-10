@@ -87,7 +87,7 @@ function spawnHarness() {
     SaveState:{talents:{},bestRooms:Object.fromEntries(Array.from({length:19},(_,i)=>[i+1,999])),save(){throw Error('ghi save ngoài dự kiến')}},
     SoundFX:{bossSpawn(){}},ArtemisObstacleClearance:{findSafeSpawn:(x,y)=>({x,y})},
     document:{getElementById:()=>({classList:{add(){},remove(){}}})},
-    MonsterArt:{assignRoom(){}},showBossIntro(){},hideBossIntro(){},updateInGameHUD(){}});
+    MonsterArt:{assignRoom(){}},showBossIntro(){},hideBossIntro(){},updateInGameHUD(){},spawnCampaignValkyrie(){},saveCheckpoint(){}});
   for(const file of ['campaign-config.js','campaign-rooms.js','campaign-telemetry.js'])
     vm.runInContext(fs.readFileSync(resolve(root,'public',file),'utf8'),c);
   for (const marker of ['const GAME_MODES =','const ZODIAC_IDS =','const ZODIAC_ENEMY_POOLS =']) {

@@ -70,6 +70,7 @@ test('render resets HiDPI transform each frame, clears before shake and balances
   let transform=[1,0,0,1,0,0],stack=[],events=[];
   const gradient={addColorStop(){}};
   const ctx=new Proxy({
+    canvas,
     save(){stack.push([...transform]);},restore(){assert.ok(stack.length);transform=stack.pop();},
     setTransform(...args){transform=args;events.push(['transform',...args]);},
     clearRect(...args){events.push(['clear',...args]);},
@@ -110,13 +111,16 @@ test('fresh start chooses profile before resizing and continue does not rechoose
   assert.match(start,/reason !== 'continue'[\s\S]*?ArtemisArenaViewport.beginRun/);
   assert.ok(start.indexOf('ArtemisArenaViewport.beginRun') < start.indexOf('resizeCanvas()'));
 });
-test('display preference persists locally, labels target action, and blocked storage is safe', () => {
+test('legacy display preference cannot change portrait framing and blocked storage is safe', () => {
   const sandbox={localStorage:{value:'large',getItem(key){assert.equal(key,'artemis.arenaSize');return this.value;},setItem(key,v){assert.equal(key,'artemis.arenaSize');this.value=v;}}};
   vm.createContext(sandbox); const source=fs.readFileSync(modulePath,'utf8'); vm.runInContext(source,sandbox);
   const api=sandbox.ArtemisArenaViewport, button={dataset:{},setAttribute(k,v){this[k]=v;}};
-  assert.equal(api.getMode(),'large'); api.syncButton(button); assert.equal(button.textContent,'Vừa màn hình');
-  api.toggleMode(); api.syncButton(button); assert.equal(api.getMode(),'fit'); assert.equal(button.textContent,'Hiển thị lớn');
-  assert.equal(sandbox.localStorage.value,'fit'); assert.match(button.title,/Vừa màn hình/);
+  assert.equal(api.getMode(),'fit'); api.syncButton(button); assert.equal(button.textContent,'Khung dọc');
+  const beforeLayout=api.fitLayout(1100,700,480,1200);
+  api.toggleMode(); api.syncButton(button); assert.equal(api.getMode(),'large'); assert.equal(button.textContent,'Khung dọc');
+  assert.equal(button.dataset.mode,'large'); assert.match(button['aria-label'],/9:16/);
+  assert.deepEqual(api.fitLayout(1100,700,480,1200),beforeLayout);
+  assert.equal(sandbox.localStorage.value,'large','obsolete stored preference is not rewritten');
   sandbox.localStorage={getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}};
   vm.runInContext(source,sandbox); assert.equal(sandbox.ArtemisArenaViewport.getMode(),'fit'); sandbox.ArtemisArenaViewport.toggleMode();
   const {sandbox: productionContext,game,canvas}=production();
@@ -129,24 +133,47 @@ test('display preference persists locally, labels target action, and blocked sto
   assert.equal(productionContext.ArtemisArenaViewport.getMode(),'large');
   assert.ok(parseFloat(canvas.style.width)>0); assert.equal(JSON.stringify(game),before);
 });
-test('uniform fit contains the entire canvas with centered letterboxing in both modes', () => {
+test('uniform fit contains the viewport with identical centered framing in both modes', () => {
   const api = load();
-  for (const [w,h] of [[800,600],[480,720]]) for (const [aw,ah] of [[1400,700],[360,400],[100,50],[0,0]]) {
+  for (const [w,h] of [[800,600],[480,720],[480,1200]]) for (const [aw,ah] of [[1400,700],[360,400],[100,50],[0,0]]) {
     for (const mode of ['fit','large']) {
       const fit = api.fitLayout(aw, ah, w, h, mode);
       assert.ok(fit.width <= aw + 1e-8 && fit.height <= ah + 1e-8);
       assert.equal(fit.left, (aw-fit.width)/2); assert.equal(fit.top, (ah-fit.height)/2);
-      if (aw && ah) assert.ok(Math.abs(fit.width / fit.height - w/h) < 1e-8);
+      const view=api.viewSize({width:w,height:h});
+      if (aw && ah) assert.ok(Math.abs(fit.width / fit.height - view.width/view.height) < 1e-8);
     }
-    if (aw && ah) assert.ok(api.fitLayout(aw,ah,w,h,'large').width > api.fitLayout(aw,ah,w,h,'fit').width);
+    assert.deepEqual(api.fitLayout(aw,ah,w,h,'large'),api.fitLayout(aw,ah,w,h,'fit'));
   }
 });
-test('fresh run selects desktop or mobile logical profile once', () => {
+test('fresh run selects the same tall world and portrait viewport on desktop and mobile', () => {
   const api = load();
-  for (const [width, w, h] of [[1440,800,600], [768,800,600], [390,480,720]]) {
+  for (const width of [1440,768,390]) {
+    const w=480,h=1200;
     const game = { width: 12, height: 12 };
     api.beginRun(game, width);
     assert.equal(game.width, w); assert.equal(game.height, h);
     assert.equal(game.portalRect.x, w / 2 - 44);
+    assert.equal(api.viewSize(game).width,480);
+    assert.ok(Math.abs(api.viewSize(game).height-853.3333333333334)<1e-8);
   }
+});
+
+test('portrait camera follows up and back down without changing room geometry', () => {
+  const api=load(),game={room:1};api.beginRun(game);
+  game.player={x:240,y:1105};
+  const portal=game.portalRect, entrance=api.camera(game,0);
+  assert.ok(entrance.y>0);
+  game.player.y=95;
+  const top=api.camera(game,100);
+  assert.ok(top.y<entrance.y,'camera follows player upwards');
+  game.player.y=1105;
+  const back=api.camera(game,200);
+  assert.ok(back.y>top.y,'camera also follows player back down');
+  assert.ok(back.y<=game.height-back.height);
+  assert.equal(game.width,480);assert.equal(game.height,1200);assert.equal(game.portalRect,portal);
+  const rect={left:100,top:50,width:240,height:426.6666666666667};
+  const screen=api.worldToScreen(game,rect,game.player.x,game.player.y);
+  const world=api.screenToWorld(game,rect,screen.x,screen.y);
+  assert.ok(Math.abs(world.x-game.player.x)<1e-8 && Math.abs(world.y-game.player.y)<1e-8);
 });

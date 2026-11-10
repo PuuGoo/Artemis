@@ -1,0 +1,50 @@
+{
+  "scope": "Chrome local fixture mocked auth/save, actual client code; not production",
+  "results": [
+    {
+      "enemies": 0,
+      "bullets": 0,
+      "drops": 0,
+      "npc": true,
+      "room": 5
+    },
+    {
+      "enemies": 0,
+      "bullets": 0,
+      "drops": 0,
+      "npc": true,
+      "room": 15
+    },
+    {
+      "enemies": 0,
+      "bullets": 0,
+      "drops": 0,
+      "npc": true,
+      "room": 25
+    },
+    {
+      "enemies": 0,
+      "bullets": 0,
+      "drops": 0,
+      "npc": true,
+      "room": 35
+    },
+    {
+      "enemies": 0,
+      "bullets": 0,
+      "drops": 0,
+      "npc": true,
+      "room": 45
+    },
+    {
+      "camera": {
+        "bottom": 346.66666666666663,
+        "top": 0.0000015902230055044695,
+        "width": 480,
+        "height": 1200
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

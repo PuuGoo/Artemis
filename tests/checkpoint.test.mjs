@@ -160,7 +160,7 @@ const restoreBody = section('function restoreClearedCampaignRoom(cp)');
 check('restore không spawn quái, clear lại hay cấp kỹ năng',
   !/setupRoom\(|damageEnemy\(|applyRogueSkill\(|grant|onRoomCleared\(/.test(restoreBody));
 const fixture = {Game: {player: {maxHp: 1000, hp: 500}, runProgression: {pendingOffer: null},
-  runGold: 90, kills: 8}, spawnCampaignValkyrie() {}, openCampaignOffer() {}};
+  runGold: 90, kills: 8}, spawnCampaignValkyrie() {}, spawnCampaignWheel() {}, openCampaignOffer() {}};
 vm.createContext(fixture); vm.runInContext(restoreBody, fixture);
 for (let i = 0; i < 2; i++) {
   fixture.Game.enemies = [{hp:100}]; fixture.Game.drops = [{val:999}];
@@ -196,7 +196,7 @@ const resume = {Game:{running:true,roomCleared:true,chapter:{id:1},room:10,maxRo
   SaveState:{selectedChapterIdx:0,gold:12345,save(){}},CHECKPOINT_VERSION:2,Date,
   ROGUE_SKILLS:[{id:'multishot',maxStack:2,rarity:'rare'}],usesCampaignTuning:()=>true,
   startNewRun(reason){ if(reason!=='continue')throw Error('sai reason');resume.Game.player={skills:{},maxHp:1000,atk:164}; },
-  spawnCampaignValkyrie(){},openCampaignOffer(){},updateInGameHUD(){},syncContinueButton(){},showToast(){}};
+  spawnCampaignValkyrie(){},spawnCampaignWheel(){},openCampaignOffer(){},updateInGameHUD(){},syncContinueButton(){},showToast(){}};
 vm.createContext(resume);
 loadCampaignDependencies(resume);
 resume.usesCampaignTuning=()=>true;

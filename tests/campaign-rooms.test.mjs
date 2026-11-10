@@ -23,6 +23,7 @@ test('rosters use implemented AI, diverse roles, pressure caps and a quiet room 
       const roster = rooms.getRoster(chapter, room);
       assert.equal(roster.length, plan.count);
       if (plan.isBoss) { assert.equal(roster[0].type, plan.bossType); continue; }
+      if (plan.isSafeRoom) { assert.equal(roster.length,0); continue; }
       assert.ok(roster.length >= 3 && roster.length <= 8);
       assert.ok(new Set(roster.map(e => e.role)).size >= 2);
       assert.ok(roster.every(e => supported.has(e.type) && e.counter.length > 10));
@@ -33,8 +34,8 @@ test('rosters use implemented AI, diverse roles, pressure caps and a quiet room 
     assert.equal(rest.rhythm, 'rest');
     assert.equal(rest.count, 3);
     assert.ok(rooms.getRoster(chapter, 49).every(e => !e.isElite));
-    assert.ok(rooms.getRoster(chapter, 35).some(e => e.role === 'area'));
-    assert.ok(rooms.getRoster(chapter, 45).some(e => e.role === 'ranged'));
+    assert.ok(rooms.getRoster(chapter, 34).some(e => e.role === 'area'));
+    assert.ok(rooms.getRoster(chapter, 44).some(e => e.role === 'ranged'));
   }
 });
 
@@ -44,7 +45,7 @@ test('elite stages are bounded, absolute-stat multipliers ignore player power an
     for (let room = 1; room <= 50; room++) {
       const roster = rooms.getRoster(chapter, room);
       const eliteCount = roster.filter(e => e.isElite).length;
-      const expected = room >= 21 && room !== 49 && room % 10 !== 0 ? (room >= 41 ? 2 : 1) : 0;
+      const expected = room >= 21 && room !== 49 && room % 10 !== 0 && !rooms.isSafeRoom(room) ? (room >= 41 ? 2 : 1) : 0;
       assert.equal(eliteCount, expected);
       for (let i = 0; i < roster.length; i++) {
         const mods = rooms.getModifiers(chapter, room, i);
@@ -56,9 +57,9 @@ test('elite stages are bounded, absolute-stat multipliers ignore player power an
       }
     }
   }
-  const copy = rooms.getRoster(1, 25);
+  const copy = rooms.getRoster(1, 24);
   copy[0].type = 'unsupported';
-  assert.notEqual(rooms.getRoster(1, 25)[0].type, 'unsupported');
+  assert.notEqual(rooms.getRoster(1, 24)[0].type, 'unsupported');
   assert.deepEqual(plain(rooms.roomPlan(1, NaN)), plain(rooms.roomPlan(1, 1)));
   assert.deepEqual(plain(rooms.roomPlan(100, 100)), plain(rooms.roomPlan(19, 50)));
 });
@@ -104,7 +105,7 @@ test('all 19 chapters have five ten-room archetype segments and unchanged boss/e
       const base = config.roomPlan(chapter, room);
       assert.equal(plan.segment, Math.floor((room - 1) / 10));
       assert.equal(plan.archetype, ['learning', 'ranged', 'elite', 'control', 'group'][plan.segment]);
-      for (const key of ['room', 'isBoss', 'isFinalBoss', 'bossType', 'valkyrie']) assert.equal(plan[key], base[key]);
+      for (const key of ['room', 'isBoss', 'isFinalBoss', 'bossType']) assert.equal(plan[key], base[key]);
     }
   }
 });

@@ -34,7 +34,7 @@ function runtime(player = {}) {
       context.Game.player = {skills: {}, maxHp: 1000, atk: 100};
     },
     applyRogueSkill() { assert.fail('Continue must not reapply skill effects'); },
-    spawnCampaignValkyrie() {}, openCampaignOffer() {}, updateInGameHUD() {},
+    spawnCampaignValkyrie() {}, spawnCampaignWheel() {}, openCampaignOffer() {}, updateInGameHUD() {},
     syncContinueButton() {}, showToast() {},
   };
   vm.createContext(context);

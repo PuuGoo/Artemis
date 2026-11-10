@@ -212,7 +212,7 @@ test('N06 chiến dịch chỉ hoàn thành khi nhận kỹ năng từ offer pro
   f.run('Game.runProgression = ArtemisCampaignSkills.normalizeState({seed: 42}, ROGUE_SKILLS)');
   assert.equal(f.run("applyRogueSkill('attack_up')"), false);
   assert.ok(!f.S.beginnerJourney.completedSteps.includes('N06'));
-  f.run('Game.runProgression = ArtemisCampaignSkills.generateOffer(Game.runProgression, ROGUE_SKILLS, {stageId: 0}).state');
+  f.run('Game.runProgression = ArtemisCampaignSkills.generateOffer(Game.runProgression, ROGUE_SKILLS, {stageId: "start"}).state');
   const skillId = f.ctx.Game.runProgression.pendingOffer.skillIds[0];
   assert.equal(f.run(`applyRogueSkill(${JSON.stringify(skillId)})`), true);
   assert.ok(f.S.beginnerJourney.completedSteps.includes('N06'));

@@ -120,25 +120,25 @@ for (const p of measured.profiles) {
         const rawHp=boss ? Math.round(tuning.bossHp) : Math.max(1,Math.round(tuning.mobHp*(typeMult[entry.type]||1)));
         return {...entry, hp:Math.max(1,Math.round(rawHp*mods.hpMultiplier)), modifiers:mods};
       });
-      const incomingAtk = boss ? Math.max(1, tuning.bossAtk) : Math.max(1, Math.round(tuning.mobAtk / Math.max(1, Math.sqrt(count / 3))));
-      const damagePerHit = incomingDamage(Math.max(...enemies.map(e=>Math.round(incomingAtk*e.modifiers.atkMultiplier))), dr);
+      const incomingAtk = !count ? 0 : boss ? Math.max(1, tuning.bossAtk) : Math.max(1, Math.round(tuning.mobAtk / Math.max(1, Math.sqrt(count / 3))));
+      const damagePerHit = count ? incomingDamage(Math.max(...enemies.map(e=>Math.round(incomingAtk*e.modifiers.atkMultiplier))), dr) : 0;
       const roomTtkSeconds = enemies.reduce((sum, enemy) => sum + enemy.hp, 0) / dps;
       const index = boss ? 0 : 1;
       const xp = count * dropCount[index] * exp.dropValue(boss, 1);
       const gold = count * dropCount[index] * goldValues[index];
-      rows.push({ profile: p.name, chapter, room, kind: boss ? 'boss' : 'mob', count,
+      rows.push({ profile: p.name, chapter, room, kind: !count ? 'safe' : boss ? 'boss' : 'mob', count,
         enemies, incomingAtk, dps, damageReduction: dr, damagePerHit,
-        hitsToDie: Math.ceil(p.hp / damagePerHit), roomTtkSeconds,
-        xp, gold, xpPerMinute: xp * 60 / roomTtkSeconds, goldPerMinute: gold * 60 / roomTtkSeconds });
+        hitsToDie: count ? Math.ceil(p.hp / damagePerHit) : null, roomTtkSeconds,
+        xp, gold, xpPerMinute: count ? xp * 60 / roomTtkSeconds : 0, goldPerMinute: count ? gold * 60 / roomTtkSeconds : 0 });
     }
   }
 }
 const buildRows = rows.flatMap(row => builds.map(build => {
  const p=measured.profiles.find(p=>p.name===row.profile), stats=buildStats(p,build,row.kind==='boss');
- const attack=Math.max(...row.enemies.map(e=>Math.max(1,Math.round(row.incomingAtk*e.modifiers.atkMultiplier))));
- const damagePerHit=incomingDamage(attack,row.damageReduction);
+ const attack=Math.max(0,...row.enemies.map(e=>Math.max(1,Math.round(row.incomingAtk*e.modifiers.atkMultiplier))));
+ const damagePerHit=row.count ? incomingDamage(attack,row.damageReduction) : 0;
  const roomTtkSeconds=row.enemies.reduce((n,e)=>n+e.hp,0)/stats.dps;
- return {profile:row.profile,chapter:row.chapter,room:row.room,kind:row.kind,build:build.id,...stats,damagePerHit,hitsToDie:Math.ceil(stats.hp/damagePerHit),roomTtkSeconds};
+ return {profile:row.profile,chapter:row.chapter,room:row.room,kind:row.kind,build:build.id,...stats,damagePerHit,hitsToDie:row.count ? Math.ceil(stats.hp/damagePerHit) : null,roomTtkSeconds};
 }));
 // Không gọi F là hồ sơ đo cho chương 19: fixture chỉ chứng minh cựu binh ở chương 1.
 const chapterProfileAssignments = chapterIds.map(chapter=>({chapter,profile:chapter===1?measured.profiles[4].name:null,status:chapter===1?'fixture-labelled-chapter-1':'BLOCKED: chưa có hồ sơ đo phù hợp chương'}));
@@ -147,6 +147,7 @@ const bossTargets = buildRows.filter(r=>r.kind==='boss').map(r=>{
  return {profile:r.profile,chapter:r.chapter,room:r.room,build:r.build,seconds:r.roomTtkSeconds,min,max,appropriateProfile:r.profile===assignment.profile,status:r.profile!==assignment.profile?'UNASSIGNED':r.roomTtkSeconds<min?'TOO_FAST':r.roomTtkSeconds>max?'TOO_SLOW':'IN_RANGE'};
 });
 const upgradeBenefits=rows.map(row=>{
+ if(!row.count) return {profile:row.profile,chapter:row.chapter,room:row.room,atkMultiplier:2,ttkBenefit:null,hpMultiplier:2,hpHitsBenefit:null,defAdded:100,defHitsBenefit:null,enemyHpUnchanged:true,enemyAtkUnchanged:true};
  const p=measured.profiles.find(p=>p.name===row.profile), b=builds[0];
  const baseStats=buildStats(p,b,row.kind==='boss'), upgraded=buildStats({...p,atk:p.atk*2},b,row.kind==='boss');
  const attack=Math.max(...row.enemies.map(e=>Math.round(row.incomingAtk*e.modifiers.atkMultiplier)));
@@ -185,6 +186,7 @@ const report = {
     'Build là đối chiếu full-build tại cùng mốc, không khẳng định nhận đủ kỹ năng đó sớm hoặc tỷ lệ offer.',
     'Số đòn chịu là đòn ATK thường sau DEF 50 phòng, không dodge/khiên/rune/crit địch/burst.',
     'Phần thưởng/phút là trần phân tích thời gian DPS thuần; chưa có di chuyển, né, nhặt, menu hay chuyển phòng.',
+    'Safe rooms: không có địch, TTK/damage/EXP/vàng = 0; số đòn chịu và tỷ lệ lợi nâng cấp = null (không áp dụng), không chia 0.',
     'Giữ greed 0; talent production = 1 + greed * ' + greedStep + ', làm tròn từng ngọc.',
     'Không mô phỏng AI, va chạm hay xác suất thắng; không chứng minh gameplay thắng 50 phòng.'
   ],

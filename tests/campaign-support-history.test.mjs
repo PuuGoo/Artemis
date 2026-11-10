@@ -73,15 +73,29 @@ test('old support receipts do not freeze natural HP healing at a later skill off
 
 test('support claim plus skill claim must remain two acknowledged transitions',()=>{
   const c=runtime();let ledger=save(c,null);
-  Object.assign(c.Game,{room:10,roomCleared:true});
-  c.Game.campaignSupport=support.offer(c.Game.campaignSupport,{stage:10,hp:60,maxHp:100,cost:{pct:10,costHp:10,directHp:true}}).state;
-  c.Game.runProgression=skills.generateOffer(c.Game.runProgression,catalog,{stageId:10,segment:0}).state;
+  Object.assign(c.Game,{room:15,roomCleared:true});
+  const offered=skills.generateOffer(c.Game.runProgression,catalog,{stageId:15,segment:1});
+  assert.equal(offered.ok,true);
+  c.Game.runProgression=offered.state;ledger=save(c,ledger);
+  // An acknowledged, unclaimed skill receipt can remain pending at a later support boundary.
+  c.Game.room=20;
+  c.Game.campaignSupport=support.offer(c.Game.campaignSupport,{stage:20,hp:60,maxHp:100,cost:{pct:10,costHp:10,directHp:true}}).state;
   ledger=save(c,ledger);
-  const claim=support.claim(c.Game.campaignSupport,{stage:10,choice:'skip',hp:60,maxHp:100});
+  const claim=support.claim(c.Game.campaignSupport,{stage:20,choice:'skip',hp:60,maxHp:100});
   c.Game.campaignSupport=claim.state;
-  c.Game.runProgression=skills.claimOffer(c.Game.runProgression,catalog,c.Game.runProgression.pendingOffer.skillIds[0]).state;
-  c.Game.player.skills={...c.Game.runProgression.skills};
+  const chosen=skills.claimOffer(offered.state,catalog,offered.state.pendingOffer.skillIds[0]);
+  assert.equal(chosen.ok,true);
+  c.Game.runProgression=chosen.state;c.Game.player.skills={...chosen.state.skills};
   c.saveCheckpoint();
   const cp=sanitizeSave({dungeonCheckpoint:JSON.parse(JSON.stringify(c.SaveState.dungeonCheckpoint))}).data.dungeonCheckpoint;
   assert.equal(validateCampaignCheckpoint(ledger,cp).error?.detail,'support_not_offered');
+  // Separate acknowledgements succeed and identical retries remain harmless.
+  c.Game.runProgression=offered.state;c.Game.player.skills={};
+  ledger=save(c,ledger);
+  const savedOffer=structuredClone(ledger.active);
+  c.Game.runProgression=chosen.state;c.Game.player.skills={...chosen.state.skills};
+  ledger=save(c,ledger);ledger=save(c,ledger);
+  assert.equal(ledger.active.runProgression.choicesUsed,1);
+  assert.equal(ledger.active.support.receipts.length,1);
+  assert.equal(validateCampaignCheckpoint(ledger,savedOffer).ok,false,'claim cannot be reopened');
 });

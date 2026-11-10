@@ -423,7 +423,43 @@
     egg(g, L, R, B) { PROP.egg(g, 0, -L * 0.45, 0.8, R, B, []); }
   };
 
+  // Reference corridor: a 2D painted bevel, not a perspective/physics transform.
+  function buildPortraitCorridor(w, h, pad, B, seed, pixelWidth, pixelHeight) {
+    const c = document.createElement('canvas'); c.width = pixelWidth; c.height = pixelHeight;
+    const g = c.getContext('2d'); g.setTransform(pixelWidth / w, 0, 0, pixelHeight / h, 0, 0);
+    g.fillStyle = '#98572f'; g.fillRect(0, 0, w, h);
+    const stone = Object.assign({}, B, { f1: '#777c7e', f2: '#717779', floor: 'tiles' });
+    for (let y = pad, row = 0; y < h - pad; y += 48, row++) {
+      for (let x = pad, col = 0; x < w - pad; x += 48, col++)
+        floorCell(g, stone, x, y, Math.min(48, w-pad-x), Math.min(48, h-pad-y), seed+row*31+col, col, row);
+    }
+    // All raised scenery stays inside the existing non-playable boundary pad.
+    for (const x of [0, w-pad]) {
+      g.fillStyle = '#28413c'; g.fillRect(x, pad, pad, h-pad*2);
+      for (let y = pad; y < h-pad; y += 50) {
+        g.fillStyle = '#566863'; g.fillRect(x+2, y+2, pad-4, 40);
+        g.fillStyle = '#87938a'; g.fillRect(x+2, y+2, pad-4, 6);
+        g.fillStyle = '#233a35'; g.fillRect(x+2, y+36, pad-4, 7);
+      }
+    }
+    for (const y of [0, h-pad]) {
+      g.fillStyle = '#455b51'; g.fillRect(0, y, w, pad);
+      g.fillStyle = '#96a18b'; g.fillRect(0, y, w, 7);
+      for (let x = 0; x < w; x += 48) {
+        g.fillStyle = x % 96 ? '#ad6b35' : '#c78140'; g.fillRect(x+3, y+7, 42, Math.max(0,pad-9));
+      }
+    }
+    const entranceW = Math.min(100, w*.23), entranceY = h-pad;
+    g.fillStyle = '#371e60'; g.fillRect(w/2-entranceW/2-5, entranceY, entranceW+10, pad);
+    const violet = g.createLinearGradient(0, entranceY, 0, h);
+    violet.addColorStop(0, '#dc9aff'); violet.addColorStop(.35, '#a34de7'); violet.addColorStop(1, '#5e2b8d');
+    g.fillStyle = violet; g.fillRect(w/2-entranceW/2, entranceY+3, entranceW, pad-3);
+    g.fillStyle = '#efc9ff'; g.fillRect(w/2-entranceW/2, entranceY+3, entranceW, 3);
+    return { canvas: c, anim: [] };
+  }
+
   function buildStatic(w, h, pad, B, seed, pixelWidth = w, pixelHeight = h) {
+    if (h > w * 2) return buildPortraitCorridor(w, h, pad, B, seed, pixelWidth, pixelHeight);
     const c = document.createElement('canvas'); c.width = pixelWidth; c.height = pixelHeight;
     const g = c.getContext('2d');
     g.setTransform(pixelWidth / w, 0, 0, pixelHeight / h, 0, 0);
@@ -755,7 +791,8 @@
   // ---------- Cổng qua phòng ----------
   function drawPortal(ctx, nowMs, B) {
     const pr = Game.portalRect, cx = pr.x + pr.w / 2, cy = pr.y + pr.h / 2;
-    const pA = B.trim, pB = mix(B.accent, '#000000', 0.5);
+    const portrait = Game.height > Game.width * 2;
+    const pA = portrait ? '#fffbe2' : B.trim, pB = portrait ? '#ffe47d' : mix(B.accent, '#000000', 0.5);
     ctx.save();
     for (const sx of [pr.x - 12, pr.x + pr.w + 2]) {
       const gr = ctx.createLinearGradient(sx, 0, sx + 10, 0); gr.addColorStop(0, '#475569'); gr.addColorStop(1, '#1e293b');
@@ -777,7 +814,11 @@
       ctx.beginPath(); ctx.ellipse(0, 0, pr.w * 0.38, pr.h * 0.34, 0, 0, TAU); ctx.stroke(); ctx.restore();
       const off = (nowMs * 0.03) % 14; ctx.fillStyle = 'rgba(255,255,255,0.9)';
       for (let i = 0; i < 2; i++) { const yy = pr.y + pr.h - 6 - off - i * 14; if (yy > pr.y + 2 && yy < pr.y + pr.h) { ctx.beginPath(); ctx.moveTo(cx - 7, yy + 5); ctx.lineTo(cx, yy - 3); ctx.lineTo(cx + 7, yy + 5); ctx.lineTo(cx, yy + 1); ctx.closePath(); ctx.fill(); } }
-      ctx.font = '900 10px Inter'; ctx.textAlign = 'center'; ctx.fillStyle = '#082f49'; ctx.fillText('TIẾN LÊN', cx, pr.y + pr.h + 14);
+      ctx.save(); ctx.translate(cx, pr.y + pr.h + 36 + Math.sin(nowMs * .004) * 4);
+      ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#52635c'; ctx.lineWidth = 3;
+      poly(ctx, [[0,-22],[19,-3],[8,-3],[8,15],[-8,15],[-8,-3],[-19,-3]]); ctx.stroke(); ctx.fill();
+      ctx.font = '900 17px sans-serif'; ctx.textAlign = 'center'; ctx.lineWidth = 4;
+      ctx.strokeText('Tiến Lên', 0, 39); ctx.fillText('Tiến Lên', 0, 39); ctx.restore();
       const bl = Math.min(Game.height * 0.5, 330), top = pr.y + pr.h;
       ctx.save(); if (Game.ultraGfx) addMode(ctx);
       const bm = ctx.createLinearGradient(0, top, 0, top + bl); bm.addColorStop(0, B.glow + '0.45)'); bm.addColorStop(1, B.glow + '0)');
@@ -953,13 +994,14 @@
     const seed = (Game.room || 1) * 131 + ((chId | 0) % 1000) * 7;
     // Cache duy nhất có cùng mật độ với canvas đích (DPR đã giới hạn ở viewport).
     const pw = Number.isFinite(ctx.canvas?.width) && ctx.canvas.width > 0 ? ctx.canvas.width : w;
-    const ph = Number.isFinite(ctx.canvas?.height) && ctx.canvas.height > 0 ? ctx.canvas.height : h;
+    const viewHeight = h > w * 2 ? w * 16 / 9 : h;
+    const ph = Number.isFinite(ctx.canvas?.height) && ctx.canvas.height > 0 ? Math.ceil(ctx.canvas.height * h / viewHeight) : h;
     const key = `${w}x${h}|${pad}|${B.id}|${seed}|${pw}x${ph}`;
     if (key !== cacheKey) { cache = buildStatic(w, h, pad, B, seed, pw, ph); cacheKey = key; applyHudTheme(B); }
     ctx.drawImage(cache.canvas, 0, 0, cache.canvas.width, cache.canvas.height, 0, 0, w, h);
     // Chỉ dùng nền biome; bỏ lớp ảnh map phủ để sân khớp vùng va chạm thực tế.
     drawAnim(ctx, cache.anim, nowMs, B);
-    drawCenterSigil(ctx, w, h, nowMs, B);
+    if (h <= w * 2) drawCenterSigil(ctx, w, h, nowMs, B);
     drawArenaSpecial(ctx, w, h, pad, nowMs, B);
     drawFog(ctx, w, h, nowMs, B);
 

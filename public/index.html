@@ -1636,6 +1636,10 @@
   <script src="/campaign-world-map.js" defer></script>
   <link rel="stylesheet" href="/patrol.css">
   <script src="/patrol.js" defer></script>
+  <link rel="stylesheet" href="/combat-reference-ui.css">
+  <script src="/combat-reference-ui.js" defer></script>
+  <link rel="stylesheet" href="/campaign-wheel.css">
+  <script src="/campaign-wheel.js"></script>
   <script src="/arena-viewport.js"></script>
 
 </head>
@@ -2281,6 +2285,9 @@
         </header>
         <div id="arenaPlayfield">
           <canvas id="battleCanvas" width="800" height="600"></canvas>
+          <button id="btnCombatSpeed" type="button" aria-label="Đổi tốc độ chiến đấu">×1</button>
+          <aside id="arenaObjectiveSidebar" aria-label="Tiến độ trận"><span id="combatElapsed">00:00</span><span id="combatHitCount">Trúng đòn: 0</span><span id="combatRoomCount">1 / 50</span></aside>
+          <button id="btnActiveSkill" type="button" aria-label="Kỹ năng đang dùng">✦</button>
           <!-- Banner trùm không đổi kích thước sân. -->
           <div id="bossIntroBanner" class="hidden w-full max-w-md mx-auto">
             <div class="hv2-bossintro">
@@ -16085,9 +16092,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           document.getElementById('btnBriefingCancel').addEventListener('click', closeRunBriefing);
           document.getElementById('btnBriefingStart').addEventListener('click', () => {
             modal.classList.add('hidden');
-            startNewRun('fresh');
-          });
-          document.getElementById('btnBriefingCancel').focus();
+            if (window.ArtemisCombatReferenceUI) window.ArtemisCombatReferenceUI.withLoading(() => startNewRun('fresh'), {frame:document.getElementById('appRoot')});
+            else startNewRun('fresh');
+            });
+            document.getElementById('btnBriefingCancel').focus();
           return;
         }
         const stats = getComputedStats();
@@ -16179,7 +16187,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         });
         document.getElementById('btnBriefingStart').addEventListener('click', () => {
           modal.classList.add('hidden');
-          startNewRun('fresh');
+          if (window.ArtemisCombatReferenceUI) window.ArtemisCombatReferenceUI.withLoading(() => startNewRun('fresh'), {frame:document.getElementById('appRoot')});
+          else startNewRun('fresh');
         });
         document.getElementById('btnBriefingCancel').focus();
       }
@@ -25211,7 +25220,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (!container) return;
         const rect = container.getBoundingClientRect();
         if (rect.width <= 0 || rect.height <= 0) return;
-        const fit = ArtemisArenaViewport.fitLayout(rect.width, rect.height, Game.width, Game.height, ArtemisArenaViewport.getMode());
+        const fit = ArtemisArenaViewport.fitLayout(rect.width, rect.height, Game.width, Game.viewHeight || Game.height, ArtemisArenaViewport.getMode());
         const backing = ArtemisArenaViewport.backingSize(fit.width, fit.height, window.devicePixelRatio);
         if (canvas.width !== backing.width) canvas.width = backing.width;
         if (canvas.height !== backing.height) canvas.height = backing.height;
@@ -25291,6 +25300,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           boundary: Game.roomCleared ? 'cleared' : 'entry',
           roomCleared: Game.roomCleared === true,
           runProgression: Game.runProgression ? JSON.parse(JSON.stringify(Game.runProgression)) : null,
+          wheel: Game.campaignWheelReceipt || null,
           support: Game.campaignSupport ? CampaignSupport.normalize(Game.campaignSupport) : null,
           telemetry: Game.campaignTelemetry ? ArtemisCampaignTelemetry.checkpoint(Game.campaignTelemetry) : null,
           // Chỉ số nhân vật — dựng lại được hoàn toàn, không phải entity
@@ -25441,6 +25451,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         Game.drops = [];
         Game.roomCleared = true;
         Game.portalOpen = true;
+        Game.campaignWheelReceipt = cp.wheel || null;
+        spawnCampaignWheel();
         Game.valkyrieNpc = null;
         if (Game.runProgression.pendingOffer) openCampaignOffer(Game.runProgression.pendingOffer.stageId);
         else spawnCampaignValkyrie();
@@ -25448,6 +25460,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       function clearRunState() {
         Game.valkyrieNpc = null;
+        Game.wheelNpc = null; Game.campaignWheelReceipt = null;
         Game.skillClaimBusy = false;
         Game.pendingClaimId = null;
         // Array entity
@@ -25606,6 +25619,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         bumpLifetimeStat('runs', 1);
         checkAchievements();
         Game.runGold = 0;
+        Game.elapsedRun = 0;
         Game.running = true;
         Game.paused = false;
 
@@ -25738,6 +25752,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       function setupRoom(roomNum) {
         Game.valkyrieNpc = null;
+        Game.wheelNpc = null;
         // Overlay "phòng đã sạch" của phòng trước phải tắt khi sang phòng mới.
         if (typeof hideRoomClearOverlay === 'function') hideRoomClearOverlay();
         // Kẹp số phòng về khoảng hợp lệ của chương đang chơi.
@@ -25853,6 +25868,19 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           SaveState.save();
         }
 
+        // Blessing stages are safe destinations, never combat waves.
+        if (usesCampaignTuning() && ArtemisCampaignRooms.isSafeRoom?.(roomNum)) {
+          Game.enemies = []; Game.enemyBullets = []; Game.playerBullets = [];
+          Game.drops = []; Game.obstacles = [];
+          Game.roomCleared = true; Game.portalOpen = true;
+          Game.roomBannerTitle = 'Bạn đã gặp Valkyrie';
+          document.getElementById('bossHudContainer').classList.add('hidden');
+          hideBossIntro();
+          spawnCampaignValkyrie();
+          saveCheckpoint();
+          updateInGameHUD();
+          return;
+        }
         const isBossRoomNow = isBossRoom(roomNum);
 
         // Create cover obstacles (Blocks & Water/Lava Pits) for non-boss rooms
@@ -26054,6 +26082,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         document.getElementById('hudXpRatioText').textContent = usesCampaignTuning() && Game.player.level >= 10 ? 'MAX' : `${Math.floor(Game.player.xp)} / ${Game.player.xpNext} EXP`;
         document.getElementById('hudXpBar').style.width = usesCampaignTuning() && Game.player.level >= 10 ? '100%' : `${Math.min(100, (Game.player.xp / Game.player.xpNext) * 100)}%`;
         document.getElementById('hudRunGold').textContent = Game.runGold;
+        const elapsed = Math.floor(Game.elapsedRun || 0);
+        const elapsedNode = document.getElementById('combatElapsed');
+        if (elapsedNode) elapsedNode.textContent = String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
+        const roomNode = document.getElementById('combatRoomCount');
+        if (roomNode) roomNode.textContent = Game.room+' / '+Game.maxRooms;
+        const hitsNode = document.getElementById('combatHitCount');
+        if (hitsNode) hitsNode.textContent = 'Kỹ năng: '+(Game.runProgression?.choicesUsed || 0);
 
         // ---- Thanh máu người chơi ----
         // Trước đây HUD không có HP: người chơi chỉ biết mình yếu đi qua việc
@@ -26147,8 +26182,42 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         return true;
       }
 
+      function spawnCampaignWheel() {
+        if (!usesCampaignTuning() || !Game.running || !Game.roomCleared || Game.drops.length || !ArtemisCampaignWheel.isEncounterRoom(Game.room)) return false;
+        if (Game.campaignWheelReceipt?.status === 'claimed' && Game.campaignWheelReceipt.room === Game.room) return false;
+        if (Game.wheelNpc) return true;
+        const receipt = ArtemisCampaignWheel.prepare({runId:Game.runId,chapter:Game.chapter.id,room:Game.room},Game.campaignWheelReceipt);
+        const pos = ArtemisCampaignWheel.findPosition(Game);
+        if (!receipt || !pos) return false;
+        Game.campaignWheelReceipt = receipt;
+        Game.wheelNpc = pos;
+        saveCheckpoint();
+        return true;
+      }
+
+      async function openCampaignWheel() {
+        if (Game.paused || !Game.wheelNpc || Game.skillClaimBusy) return false;
+        Game.paused = true; Game.joy.active = false;
+        saveCheckpoint();
+        if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) { Game.paused = false; showToast('Chưa lưu được vòng quay. Hãy thử lại.'); return false; }
+        const cp = SaveState.dungeonCheckpoint;
+        const dialog = ArtemisCampaignWheel.open({checkpoint:cp,save:SaveState,
+          persist:async checkpoint => {
+            Game.runGold = checkpoint.runGold;
+            Game.campaignWheelReceipt = checkpoint.wheel;
+            SaveState.dungeonCheckpoint = checkpoint;
+            SaveState.save();
+            if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) return false;
+            return true;
+          },
+          onClose:()=>{Game.wheelNpc = null;Game.paused = false;Game.lastTime = performance.now();}
+        });
+        if (!dialog) Game.paused = false;
+        return !!dialog;
+      }
+
       function spawnCampaignValkyrie() {
-        if (!usesCampaignTuning() || !Game.running || !Game.roomCleared || Game.player.hp <= 0 || Game.room >= 50 || Game.room%5 !== 0) return false;
+        if (!usesCampaignTuning() || !Game.running || !Game.roomCleared || Game.player.hp <= 0 || Game.room >= 50 || !(ArtemisCampaignRooms.isSafeRoom?.(Game.room) ?? (Game.room % 10 === 5))) return false;
         if (Game.valkyrieNpc || Game.runProgression.claimedStages.includes(Game.room) || Game.runProgression.skippedValkyrieStages?.includes(Game.room)) return false;
         const offer = ArtemisCampaignSkills.generateOffer(Game.runProgression,ROGUE_SKILLS,{stageId:Game.room,segment:Math.min(4,Math.floor((Game.room-1)/10)),seraph:hasHeroSkillActive(Game.player,'seraph'),heroRerolls:hasHeroSkillActive(Game.player,'seraph')?1:0});
         Game.runProgression = offer.state;
@@ -26211,6 +26280,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (rerollButton) rerollButton.textContent = usesCampaignTuning() ? '🎲 Đổi miễn phí (tối đa mỗi lần gặp)' : '🎲 Đổi Kỹ Năng (15 💎)';
 
         populateSkillChoices(_currentSkillProvider);
+        window.ArtemisCombatReferenceUI?.sync();
       }
 
       function populateSkillChoices(provider = _currentSkillProvider) {
@@ -27395,6 +27465,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
         // Check Portal Walk-In when Room is Cleared
+        if (Game.roomCleared && Game.drops.length === 0) {
+          spawnCampaignWheel();
+          if (Game.wheelNpc && ArtemisCampaignWheel.isNear(p, Game.wheelNpc)) openCampaignWheel();
+        }
         if (Game.portalOpen && (!usesCampaignTuning() || Game.drops.length === 0)) {
           const pr = Game.portalRect;
           if (
@@ -28454,8 +28528,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const chId = Game.chapter ? Game.chapter.id : 1;
 
         // Đặt lại tỉ lệ mỗi khung; xoá toàn sân trước khi rung để không lưu vệt mép.
-        ctx.setTransform(canvas.width / w, 0, 0, canvas.height / h, 0, 0);
-        ctx.clearRect(0, 0, w, h);
+        ArtemisArenaViewport.applyWorldTransform(ctx, Game, nowMs);
         ctx.save();
         if (Game.shakeTime > 0) {
           ctx.translate((Math.random() - 0.5) * Game.shakeMag, (Math.random() - 0.5) * Game.shakeMag);
@@ -28463,6 +28536,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // 1-8. Map chiến đấu V2 (tường, sàn, pháp trận, vết chiến trường, đuốc, cổng, chướng ngại)
         ArenaV2.drawArena(ctx, w, h, pad, nowMs, chId);
+        if (Game.wheelNpc) ArtemisCampaignWheel.drawNPC(ctx, Game.wheelNpc, nowMs, Game.lowGfx, ArtemisCampaignWheel.isNear(Game.player, Game.wheelNpc));
         if (Game.valkyrieNpc && Number.isFinite(Game.valkyrieNpc.x)) ArtemisCampaignValkyrie.draw(ctx, Game.valkyrieNpc, nowMs, Game.lowGfx,
           Math.hypot(Game.player.x-Game.valkyrieNpc.x,Game.player.y-Game.valkyrieNpc.y)<85);
 
@@ -29014,6 +29088,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // 25. Virtual Joystick Visual Overlay
         if (Game.joy.active) {
           ctx.save();
+          ctx.translate(0, ArtemisArenaViewport.camera(Game).y);
           const jGrad = ctx.createRadialGradient(Game.joy.startX, Game.joy.startY, 8, Game.joy.startX, Game.joy.startY, 46);
           jGrad.addColorStop(0, 'rgba(15, 23, 42, 0.25)');
           jGrad.addColorStop(1, 'rgba(250, 204, 21, 0.28)');
@@ -30216,7 +30291,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (Game.paused) {
           Game._pausedNoModalFrames = (Game._pausedNoModalFrames || 0) + 1;
           if (Game._pausedNoModalFrames > 45) { // ~0.75s
-            const anyModalOpen = ['skillSelectModal', 'devilModal', 'summaryModal'].some(id => {
+            const anyModalOpen = !!document.querySelector('.campaign-wheel-overlay') || ['skillSelectModal', 'devilModal', 'summaryModal'].some(id => {
               const el = document.getElementById(id);
               return el && !el.classList.contains('hidden');
             });
@@ -30232,11 +30307,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         if (!Game.paused) {
+          Game.elapsedRun = (Game.elapsedRun || 0) + dt;
           trackPerformance(dt, now);
           // update/render KHÔNG ĐƯỢC phép giết game loop: một entity hỏng (NaN)
           // từng làm cả trận đứng im vĩnh viễn (createLinearGradient non-finite throw).
           try {
-            updateGame(dt);
+            updateGame(dt * (Game.combatSpeed || 1));
           } catch (err) {
             console.error('[Archero2] updateGame error:', err);
             Game._lastUpdateError = String(err && err.message || err);
@@ -30405,8 +30481,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function handlePointerStart(clientX, clientY) {
         if (!Game.running || Game.paused) return;
         const rect = canvas.getBoundingClientRect();
-        const x = (clientX - rect.left) * Game.width / (rect.width || Game.width);
-        const y = (clientY - rect.top) * Game.height / (rect.height || Game.height);
+        const { x, y } = ArtemisArenaViewport.clientToViewport(Game, rect, clientX, clientY);
         Game.joy.active = true;
         Game.joy.startX = x;
         Game.joy.startY = y;
@@ -30419,8 +30494,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       function handlePointerMove(clientX, clientY) {
         if (!Game.joy.active) return;
         const rect = canvas.getBoundingClientRect();
-        const x = (clientX - rect.left) * Game.width / (rect.width || Game.width);
-        const y = (clientY - rect.top) * Game.height / (rect.height || Game.height);
+        const { x, y } = ArtemisArenaViewport.clientToViewport(Game, rect, clientX, clientY);
         const dx = x - Game.joy.startX;
         const dy = y - Game.joy.startY;
         const dist = Math.hypot(dx, dy);
@@ -31197,9 +31271,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         confirmAndExecuteQuickMergePlan();
       });
 
+      function installCombatReference() {
+        document.getElementById('btnCombatSpeed')?.addEventListener('click',()=>{
+          Game.combatSpeed = Game.combatSpeed === 3 ? 1 : 3;
+          document.getElementById('btnCombatSpeed').textContent = '×'+Game.combatSpeed;
+        });
+        document.getElementById('btnActiveSkill')?.addEventListener('click',()=>{
+          if (!Game.running || Game.paused) return;
+          showSummaryModal('KỸ NĂNG ĐÃ HỌC','Các năng lực đang có trong lượt chơi','✦',true);
+        });
+        window.ArtemisCombatReferenceUI?.install({frame:document.getElementById('appRoot'),getState:()=>({offer:Game.runProgression?.pendingOffer,skills:Game.player?.skills,catalog:ROGUE_SKILLS,busy:Game.skillClaimBusy,campaign:usesCampaignTuning()})});
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',installCombatReference,{once:true}); else installCombatReference();
+
       // Expose Fusion System Diagnostic & Test API for verification
       window.Archero2FusionAPI = {
         GEAR_QUALITIES,
+        renderGame,
         getCampaignChapters: () => CHAPTERS.map(ch => ({ ...ch, unlock: ch.unlock ? { ...ch.unlock } : null })),
         reloadSaveFromStorage,
         // Expose Game de debug/kiem thu hieu nang & vi tri nhan vat.

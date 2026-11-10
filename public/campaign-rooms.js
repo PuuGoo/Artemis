@@ -19,14 +19,18 @@
     var number = Number(value);
     return Number.isFinite(number) ? Math.max(1, Math.min(19, Math.floor(number))) : 1;
   }
+  function isSafeRoom(room) { return Number.isInteger(room) && room >= 5 && room <= 45 && room % 10 === 5; }
   function basePlan(chapterId, room) {
     var plan = root.ArtemisCampaignConfig.roomPlan(chapterNumber(chapterId), room);
-    return Object.assign({}, plan, { archetype: archetypes[plan.segment],
-      rhythm: plan.room === 49 ? 'rest' : plan.isBoss ? 'boss' : 'combat',
+    return Object.assign({}, plan, { isSafeRoom: isSafeRoom(plan.room),
+      valkyrie: isSafeRoom(plan.room), type: isSafeRoom(plan.room) ? 'safe' : plan.type,
+      archetype: archetypes[plan.segment],
+      rhythm: isSafeRoom(plan.room) ? 'safe' : plan.room === 49 ? 'rest' : plan.isBoss ? 'boss' : 'combat',
       pressureBudget: plan.room === 49 ? 4.5 : 5 + plan.segment });
   }
   function getRoster(chapterId, room) {
     var plan = basePlan(chapterId, room);
+    if (plan.isSafeRoom) return [];
     if (plan.isBoss) return [{ type: plan.bossType, role: 'boss', isElite: false, pressure: 0,
       counter: 'Né cảnh báo rồi dừng lại phản công.' }];
     var chapter = chapterNumber(chapterId);
@@ -55,6 +59,7 @@
     var plan = basePlan(chapterId, room);
     var roster = getRoster(chapterId, room);
     var entry = roster[Math.max(0, Math.min(roster.length - 1, Math.floor(Number(index) || 0)))];
+    if (!entry) return { isElite: false, eliteStage: 0, bossVariant: null, hpMultiplier: 1, atkMultiplier: 1, speedMultiplier: 1, sizeMultiplier: 1 };
     var stage = entry.isElite ? plan.segment - 1 : 0;
     var variant = subBossVariant(chapterId, plan);
     return { isElite: entry.isElite, eliteStage: stage, bossVariant: variant,
@@ -96,5 +101,5 @@
     plan.count = getRoster(chapterId, room).length;
     return plan;
   }
-  root.ArtemisCampaignRooms = Object.freeze({ ROOM_COUNT: 50, roomPlan: roomPlan, getRoster: getRoster, getModifiers: getModifiers, applyBossPattern: applyBossPattern });
+  root.ArtemisCampaignRooms = Object.freeze({ ROOM_COUNT: 50, isSafeRoom: isSafeRoom, roomPlan: roomPlan, getRoster: getRoster, getModifiers: getModifiers, applyBossPattern: applyBossPattern });
 })(globalThis);

@@ -14,7 +14,7 @@ import vm from 'node:vm';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 test('combat-sim đọc được mọi hằng số từ source (không lệch công thức)', () => {
-  const out = execFileSync(process.execPath, ['tools/combat-sim.mjs', '--json'], {
+  const out = execFileSync(process.execPath, ['tools/combat-sim.mjs', '--verbose', '--json'], {
     cwd: root,
     encoding: 'utf8',
     maxBuffer: 16 * 1024 * 1024,
@@ -25,7 +25,7 @@ test('combat-sim đọc được mọi hằng số từ source (không lệch c�
   assert.match(out, /CHIẾN DỊCH \(tuyệt đối\): C1 300HP\/70ATK/);
   assert.match(out, /C6 2400HP\/520ATK/);
   assert.match(out, /Chương: C1\(50 phòng\)/);
-  assert.match(out, /không NaN\/Infinity, TTK > 0/);
+  assert.match(out, /TTK combat > 0; safe = 0/);
   assert.match(out, /=== \d+ PASS \/ 0 FAIL ===/);
   // So từng entity với setupRoom thật: không chỉ xác nhận simulator chạy được.
   const report = JSON.parse(out.trim().split('\n').at(-1));
@@ -39,7 +39,7 @@ test('combat-sim đọc được mọi hằng số từ source (không lệch c�
     player:{skills:{},maxHp:775,atk:164,hp:775},pet:{}},SaveState:{talents:{},bestRooms:Object.fromEntries(Array.from({length:19},(_,i)=>[i+1,999])),save(){throw Error('ghi save ngoài dự kiến');}},
     SoundFX:{bossSpawn(){}},ArtemisObstacleClearance:{findSafeSpawn:(x,y)=>({x,y})},
     document:{getElementById:()=>({classList:{add(){},remove(){}}})},MonsterArt:{assignRoom(){}},
-    showBossIntro(){},hideBossIntro(){},updateInGameHUD(){}});
+    showBossIntro(){},hideBossIntro(){},updateInGameHUD(){},spawnCampaignValkyrie(){},saveCheckpoint(){}});
   for(const file of ['campaign-config.js','campaign-rooms.js','campaign-telemetry.js'])
     vm.runInContext(readFileSync(resolve(root,'public',file),'utf8'),c);
   for(const name of ['GAME_MODES','ZODIAC_IDS','ZODIAC_ENEMY_POOLS']) {
@@ -59,6 +59,11 @@ test('combat-sim đọc được mọi hằng số từ source (không lệch c�
       : row.enemies.map(e=>({type:e.type,hp:e.hp,atk:e.atk}));
     assert.deepEqual(actual,expected,`C${row.ch} phòng ${row.room}`);
     if(row.kind!=='boss')assert.equal(row.count,actual.length);
+    if([5,15,25,35,45].includes(row.room)){
+      assert.equal(row.kind,'safe');assert.deepEqual(row.enemies,[]);assert.equal(row.count,0);
+      for(const key of ['enemyHp','enemyAtk','ttk','hitsToKill'])assert.equal(row[key],0,key);
+      assert.equal(row.hits,null);assert.equal(row.bossType,null);
+    }
   }
 });
 
