@@ -5,6 +5,7 @@
   const doc = document;
   let chapters, observer, queued = false, panel, root, viewport, returnButton;
   let savedScroll = null, pendingCenter = false, lastFocused = null;
+  let effectObserver;
   const api = () => window.Archero2FusionAPI;
 
   function getChapters() {
@@ -146,6 +147,15 @@
     image.alt = ''; image.draggable = false;
     image.addEventListener('error', () => { if (!image.src.endsWith('/assets/native-campaign-island.svg')) image.src = '/assets/native-campaign-island.svg'; },{once:true});
     art.append(image);
+    // Trang trí thuần hình ảnh; không thêm nút chọn/chương hoặc sửa SaveState.
+    const fxType = chapter.id === 4 || chapter.id === 17 ? 'snow'
+      : [3,5,6,10,14,18,19].includes(chapter.id) ? 'aurora'
+      : [7,9,13,16].includes(chapter.id) ? 'leaves'
+      : [2,8,12].includes(chapter.id) ? 'rays' : 'fog';
+    const effect = element('span',`world-map-effect fx-${fxType}`);
+    effect.setAttribute('aria-hidden','true');
+    effect.style.setProperty('--pixel-delay',`${-chapter.id * .73}s`);
+    art.append(effect);
     if (locked) {
       const lock = element('span','world-map-lock'); lock.setAttribute('aria-hidden','true');
       art.append(lock);
@@ -170,7 +180,7 @@
     panel = nextPanel;
     const campaign = api().getActiveGameMode?.().hasChapters !== false && !!panel.querySelector('[data-map-tab]');
     screen.classList.toggle('has-world-map',campaign);
-    if (!campaign) { root?.remove(); root = viewport = returnButton = null; return; }
+    if (!campaign) { effectObserver?.disconnect(); root?.remove(); root = viewport = returnButton = null; return; }
     if (!root?.isConnected || root.parentNode !== panel) {
       root = element('div','campaign-world-map');
       viewport = element('div','world-map-scroll'); viewport.dataset.worldMapScroll = '';
@@ -184,6 +194,13 @@
     const fragment = doc.createDocumentFragment();
     getChapters().slice().sort((a,b)=>b.id-a.id).forEach(ch => fragment.append(makeNode(ch)));
     viewport.replaceChildren(fragment);
+    effectObserver?.disconnect();
+    if (typeof IntersectionObserver === 'function') {
+      effectObserver = new IntersectionObserver(entries => {
+        for (const entry of entries) entry.target.classList.toggle('is-fx-visible',entry.isIntersecting);
+      }, {root:viewport,threshold:.05});
+      viewport.querySelectorAll('[data-world-chapter]').forEach(node => effectObserver.observe(node));
+    }
     if (savedScroll === null || pendingCenter) centerCurrent();
     else viewport.scrollTop = savedScroll;
     if (focused) viewport.querySelector(`[data-world-chapter="${focused}"]`)?.focus({preventScroll:true});
@@ -209,6 +226,7 @@
         if (records.some(r => (r.type === 'childList' && (r.target.id === 'mapSelectPanel' || r.target.id === 'tabBattle' || Array.from(r.addedNodes).some(n=>n.id==='mapSelectPanel'))) || (r.type==='attributes' && r.target.id==='tabBattle' && (r.oldValue || '').split(/\s+/).includes('hidden') !== r.target.classList.contains('hidden')))) schedule();
       });
       window.addEventListener('resize', () => { if (pendingCenter) centerCurrent(); updateRegion(); }, {passive:true});
+      doc.addEventListener('visibilitychange', () => root?.classList.toggle('is-fx-paused',doc.hidden));
     }
     refresh();
   }

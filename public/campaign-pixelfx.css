@@ -1,0 +1,53 @@
+/* Pixelfx chỉ trang trí; không đổi hình học, thứ tự nút hay vùng chạm. */
+#tabBattle .campaign-world-map {
+  background:radial-gradient(ellipse at 20% 35%,#7ce5f033,transparent 46%),radial-gradient(ellipse at 80% 70%,#8675d83d,transparent 50%),linear-gradient(145deg,#133653,#266e98 48%,#183752);
+}
+#tabBattle .campaign-world-map::after {
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 42%,transparent 30%,#071b3d66),radial-gradient(circle at 12% 24%,#defaff99 0 1px,transparent 2px),radial-gradient(circle at 83% 67%,#defaff88 0 1px,transparent 2px);
+  background-size:100% 100%,93px 137px,147px 189px;
+}
+#tabBattle .world-map-scroll {z-index:1}
+#tabBattle .world-map-return {z-index:3}
+#tabBattle .world-map-chapter::before {
+  content:'';position:absolute;z-index:-1;top:160px;left:calc(50% - 65px);width:140px;height:250px;pointer-events:none;opacity:.5;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='250' viewBox='0 0 140 250'%3E%3Cpath d='M85 0C140 85 10 140 35 250' fill='none' stroke='%23bcecf4' stroke-width='3' stroke-dasharray='3 13' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+#tabBattle .world-map-chapter:nth-child(even)::before {transform:scaleX(-1)}
+#tabBattle .world-map-chapter:last-child::before {display:none}
+#tabBattle .world-map-island::before {
+  content:'';position:absolute;inset:25% 9% 4%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(ellipse,#b5eeff24,transparent 66%);box-shadow:0 30px 26px -20px #061b4999;
+}
+#tabBattle .world-map-chapter.is-active:not(.is-locked) .world-map-island::after {
+  content:'';position:absolute;left:17%;right:17%;bottom:12%;height:30%;border:1px solid #b7f7ff88;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 20px #91ecff55,inset 0 0 17px #91ecff33;transform:rotate(-6deg);
+}
+#tabBattle .world-map-art {z-index:1}
+#tabBattle .world-map-lock {z-index:4}
+#tabBattle .world-map-requirements {z-index:5}
+.world-map-effect {
+  position:absolute;inset:0 -6% auto;width:112%;aspect-ratio:16/9;z-index:2;pointer-events:none;
+  background-repeat:no-repeat;background-image:none;opacity:.7;image-rendering:pixelated;
+  animation:var(--pixel-animation) var(--pixel-duration,12s) steps(1,end) infinite;
+  animation-delay:var(--pixel-delay,0s);animation-play-state:paused;
+}
+#tabBattle .is-fx-visible .world-map-effect {background-image:var(--pixel-image);animation-play-state:running}
+#tabBattle .world-map-effect.fx-fog {top:8%;opacity:.65}
+#tabBattle .world-map-effect.fx-rays {opacity:.35}
+#tabBattle .world-map-effect.fx-aurora {top:-8%;opacity:.46;mix-blend-mode:screen}
+#tabBattle .is-locked .world-map-effect {opacity:.22;filter:saturate(.6)}
+#tabBattle .is-fx-visible .world-map-art {animation:world-island-float 7s ease-in-out infinite;animation-delay:var(--island-delay,0s)}
+#tabBattle.hidden .world-map-effect,
+#tabBattle.hidden .world-map-art,
+.combat-immersive #tabBattle .world-map-effect,
+.combat-immersive #tabBattle .world-map-art,
+#tabBattle .is-fx-paused .world-map-effect,
+#tabBattle .is-fx-paused .world-map-art {animation-play-state:paused!important}
+#tabBattle.battle-motion-low .world-map-effect {display:none;background-image:none}
+#tabBattle.battle-motion-low .world-map-art {animation:none}
+@keyframes world-island-float {0%,100%{translate:0 0}50%{translate:0 -4px}}
+@media(prefers-reduced-motion:reduce){
+  #tabBattle .world-map-effect {display:none!important;background-image:none!important;animation:none!important}
+  #tabBattle .world-map-art {animation:none!important}
+}

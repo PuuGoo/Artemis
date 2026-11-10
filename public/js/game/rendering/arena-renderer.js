@@ -754,6 +754,7 @@
 
   // ---------- Đuốc theo kiểu biome ----------
   function drawTorch(ctx, t, now, B) {
+    if (root.ArtemisPixelFX?.drawTorch(ctx, t, now, Game, B)) return;
     const fl = 0.82 + Math.sin(now * 0.016 + t.phase) * 0.12 + Math.sin(now * 0.037 + t.phase * 2) * 0.06;
     const style = B.torchStyle, big = style === 'brazier';
     const lr = (Game.ultraGfx ? 110 : 74) * fl * (big ? 1.25 : 1);
@@ -806,6 +807,7 @@
       const gl = ctx.createRadialGradient(cx, cy + 4, 4, cx, cy + 4, 92 * pulse);
       gl.addColorStop(0, 'rgba(254,240,138,0.9)'); gl.addColorStop(0.4, B.glow + '0.5)'); gl.addColorStop(1, B.glow + '0)');
       ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(cx, cy + 4, 92 * pulse, 0, TAU); ctx.fill(); ctx.restore();
+      if (!root.ArtemisPixelFX?.drawPortal(ctx, pr, nowMs, Game)) {
       const pf = ctx.createLinearGradient(pr.x, pr.y, pr.x, pr.y + pr.h); pf.addColorStop(0, pA); pf.addColorStop(1, pB);
       ctx.fillStyle = pf; ctx.strokeStyle = '#fde047'; ctx.lineWidth = 2.6;
       ctx.beginPath(); ctx.roundRect(pr.x, pr.y, pr.w, pr.h, 12); ctx.fill(); ctx.stroke();
@@ -814,6 +816,7 @@
       ctx.beginPath(); ctx.ellipse(0, 0, pr.w * 0.38, pr.h * 0.34, 0, 0, TAU); ctx.stroke(); ctx.restore();
       const off = (nowMs * 0.03) % 14; ctx.fillStyle = 'rgba(255,255,255,0.9)';
       for (let i = 0; i < 2; i++) { const yy = pr.y + pr.h - 6 - off - i * 14; if (yy > pr.y + 2 && yy < pr.y + pr.h) { ctx.beginPath(); ctx.moveTo(cx - 7, yy + 5); ctx.lineTo(cx, yy - 3); ctx.lineTo(cx + 7, yy + 5); ctx.lineTo(cx, yy + 1); ctx.closePath(); ctx.fill(); } }
+      }
       ctx.save(); ctx.translate(cx, pr.y + pr.h + 36 + Math.sin(nowMs * .004) * 4);
       ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#52635c'; ctx.lineWidth = 3;
       poly(ctx, [[0,-22],[19,-3],[8,-3],[8,15],[-8,15],[-8,-3],[-19,-3]]); ctx.stroke(); ctx.fill();
@@ -1004,6 +1007,7 @@
     if (h <= w * 2) drawCenterSigil(ctx, w, h, nowMs, B);
     drawArenaSpecial(ctx, w, h, pad, nowMs, B);
     drawFog(ctx, w, h, nowMs, B);
+    root.ArtemisPixelFX?.drawAtmosphere(ctx, w, h, pad, nowMs, Game, B);
 
     // vết chiến trường (giữ dữ liệu cũ)
     for (const dc of Game.floorDecals) {
