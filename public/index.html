@@ -1647,6 +1647,8 @@
   <link rel="stylesheet" href="/campaign-encounters.css">
   <script src="/arena-viewport.js"></script>
 
+  <link rel="stylesheet" href="chest-results.css">
+  <script src="chest-results.js"></script>
 </head>
 <body class="flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
 
@@ -17555,6 +17557,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       function executeCanonicalChestPull(chestType, count = 1) {
+        // The lobby rebuild replaces the purchase button; restore focus to its new node.
+        const pullTrigger = document.activeElement;
+        const triggerSelector = pullTrigger?.hasAttribute('data-vn-chest-pull')
+          ? `[data-vn-chest-pull="${chestType}"][data-vn-pulls="${count}"]`
+          : (pullTrigger?.hasAttribute('data-chest-pull') ? `[data-chest-pull="${count}"]` : null);
         ensureWikiCurrencyAndItemsState();
         const keyId = chestType === 'silver'
           ? 'silver_chest_key'
@@ -17592,6 +17599,18 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         SoundFX.levelUp();
         StageHeroAnim.triggerPose();
         renderLobbyUI();
+
+        if (window.ArtemisChestResults) {
+          window.ArtemisChestResults.show({
+            results,
+            chestName: chestType === 'mythstone' ? 'Rương Tinh Thạch Lấp Lánh' : keyMeta.chestName,
+            renderArt: getGearItemSvgArt,
+            returnFocus: () => {
+              const target = (triggerSelector && document.querySelector(triggerSelector)) || pullTrigger;
+              if (target?.isConnected) target.focus({ preventScroll: true });
+            }
+          });
+        }
 
         const sTierCount = results.filter(r => r.isSTier).length;
         const epicCount = results.filter(r => r.quality === 'epic').length;
@@ -23383,7 +23402,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         el.querySelectorAll('[data-vn-chest-pull]').forEach(btn => {
           btn.onclick = () => {
             const cType = btn.getAttribute('data-vn-chest-pull');
-            const cnt = Math.min(20, parseInt(btn.getAttribute('data-vn-pulls') || '1', 10));
+            const requestedPulls = Number(btn.getAttribute('data-vn-pulls') || '1');
+            const cnt = [1, 10, 100].includes(requestedPulls) ? requestedPulls : 1;
             executeCanonicalChestPull(cType, cnt);
             renderVnShopTabUI();
           };

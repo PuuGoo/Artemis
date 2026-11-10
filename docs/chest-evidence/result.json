@@ -1,0 +1,224 @@
+{
+  "scope": "Real Chrome + real HTTP + seeded isolated memory DB; no production, no Mongo durability claim",
+  "cases": [
+    {
+      "entrypoint": "shop",
+      "type": "mythstone",
+      "count": 1,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "shop",
+      "type": "mythstone",
+      "count": 10,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "shop",
+      "type": "mythstone",
+      "count": 100,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "shop",
+      "type": "chromatic",
+      "count": 1,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "shop",
+      "type": "chromatic",
+      "count": 10,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "shop",
+      "type": "chromatic",
+      "count": 100,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "shop",
+      "type": "silver",
+      "count": 10,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "shop",
+      "type": "obsidian",
+      "count": 10,
+      "exactInventoryIds": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 0,
+      "type": "mythstone",
+      "count": 1,
+      "wired": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 1,
+      "type": "mythstone",
+      "count": 10,
+      "wired": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 2,
+      "type": "chromatic",
+      "count": 1,
+      "wired": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 3,
+      "type": "chromatic",
+      "count": 10,
+      "wired": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 4,
+      "type": "obsidian",
+      "count": 1,
+      "wired": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 5,
+      "type": "obsidian",
+      "count": 10,
+      "wired": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 6,
+      "type": "silver",
+      "count": 1,
+      "wired": true,
+      "singleDebit": true
+    },
+    {
+      "entrypoint": "legacy",
+      "index": 7,
+      "type": "silver",
+      "count": 10,
+      "wired": true,
+      "singleDebit": true
+    }
+  ],
+  "legacyPresent": [
+    {
+      "index": 0,
+      "type": "mythstone",
+      "count": 1,
+      "wired": true
+    },
+    {
+      "index": 1,
+      "type": "mythstone",
+      "count": 10,
+      "wired": true
+    },
+    {
+      "index": 2,
+      "type": "chromatic",
+      "count": 1,
+      "wired": true
+    },
+    {
+      "index": 3,
+      "type": "chromatic",
+      "count": 10,
+      "wired": true
+    },
+    {
+      "index": 4,
+      "type": "obsidian",
+      "count": 1,
+      "wired": true
+    },
+    {
+      "index": 5,
+      "type": "obsidian",
+      "count": 10,
+      "wired": true
+    },
+    {
+      "index": 6,
+      "type": "silver",
+      "count": 1,
+      "wired": true
+    },
+    {
+      "index": 7,
+      "type": "silver",
+      "count": 10,
+      "wired": true
+    }
+  ],
+  "geometry": [
+    {
+      "count": 1,
+      "width": 1024,
+      "fits": true
+    },
+    {
+      "count": 1,
+      "width": 390,
+      "fits": true
+    },
+    {
+      "count": 1,
+      "width": 360,
+      "fits": true
+    },
+    {
+      "count": 10,
+      "width": 1024,
+      "fits": true
+    },
+    {
+      "count": 10,
+      "width": 390,
+      "fits": true
+    },
+    {
+      "count": 10,
+      "width": 360,
+      "fits": true
+    },
+    {
+      "count": 100,
+      "width": 1024,
+      "fits": true
+    },
+    {
+      "count": 100,
+      "width": 390,
+      "fits": true
+    },
+    {
+      "count": 100,
+      "width": 360,
+      "fits": true
+    }
+  ],
+  "failureNoPopupOrMutation": true,
+  "errors": []
+}

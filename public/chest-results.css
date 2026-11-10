@@ -1,0 +1,61 @@
+/* Scoped treasure-room surfaces; no global game, dialog or button overrides. */
+.acr-dialog { color-scheme: dark; --acr-ink:#f5f2ff; --acr-muted:#b7b4cb; width:min(900px,calc(100vw - 32px)); max-width:900px; max-height:calc(100dvh - 32px); padding:0; margin:auto; overflow:hidden; border:1px solid #8f79b766; border-radius:24px; background:#12111e; color:var(--acr-ink); box-shadow:0 30px 120px #000b,0 0 70px #9b64e522; font-family:inherit; text-align:left; }
+.acr-dialog::backdrop { background:#070713d9; backdrop-filter:blur(8px); }
+.acr-shell { display:flex; flex-direction:column; max-height:calc(100dvh - 34px); background:radial-gradient(ellipse at 10% 0%,#4d326737,transparent 55%),#12111e; }
+.acr-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:26px 28px 21px; border-bottom:1px solid #ffffff12; flex-shrink:0; }
+.acr-eyebrow { margin:0 0 9px; font-size:10px; font-weight:800; letter-spacing:2.3px; color:#e4be79; }
+.acr-header h2 { margin:0; color:#fff7e8; font-size:clamp(22px,3.5vw,32px); line-height:1.2; font-weight:900; letter-spacing:-.7px; }
+.acr-chest-name { margin:7px 0 0; color:var(--acr-muted); font-size:13px; }
+.acr-close { border:1px solid #ffffff25; border-radius:50%; background:#ffffff08; color:#e5dfef; width:40px; height:40px; flex-shrink:0; font-size:27px; line-height:1; cursor:pointer; }
+.acr-scroll { padding:24px 28px; min-height:0; overflow-y:auto; overscroll-behavior:contain; scrollbar-color:#716083 #171321; scrollbar-width:thin; }
+.acr-feature { position:relative; display:flex; align-items:center; gap:28px; padding:23px 28px; border:1px solid color-mix(in srgb,var(--rarity) 48%,transparent); border-radius:16px; background:radial-gradient(ellipse at 12% 50%,color-mix(in srgb,var(--rarity) 15%,transparent),transparent 70%),linear-gradient(120deg,#272038,#171624); overflow:hidden; }
+.acr-feature::after { content:'✧'; position:absolute; right:18px; top:-25px; font-size:150px; line-height:1; color:#ffffff04; pointer-events:none; }
+.acr-feature-art { width:116px; height:116px; flex-shrink:0; padding:6px; filter:drop-shadow(0 8px 20px #0008); }
+.acr-dialog .acr-feature-art img,.acr-dialog .acr-feature-art svg,.acr-dialog .acr-art img,.acr-dialog .acr-art svg { display:block; width:100%; height:100%; object-fit:contain; }
+.acr-feature h3 { margin:0 0 8px; color:#fff5e2; font-size:23px; font-weight:900; line-height:1.25; overflow-wrap:anywhere; }
+.acr-feature-rarity { color:var(--rarity); font-size:12px; font-weight:800; margin:0; }
+.acr-feature-note { color:var(--acr-muted); font-size:12px; line-height:1.6; margin:10px 0 0; }
+.acr-collection-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:26px 0 12px; }
+.acr-collection-heading h3 { font-size:14px; font-weight:700; margin:0; }
+.acr-collection-heading strong { color:#f8d898; }
+.acr-collection-heading>span { color:var(--acr-muted); font-size:10px; }
+.acr-summary { display:flex; flex-wrap:wrap; gap:7px; margin:0 0 17px; }
+.acr-summary>span { display:inline-flex; gap:6px; align-items:center; padding:5px 9px; background:#ffffff06; border:1px solid #ffffff12; border-radius:6px; font-size:10px; color:var(--rarity,#f8d898); }
+.acr-summary i { width:5px; height:5px; background:var(--rarity); border-radius:50%; }
+.acr-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); list-style:none; padding:0; margin:0; gap:10px; }
+.acr-card { position:relative; min-width:0; padding:11px 10px 12px; border:1px solid color-mix(in srgb,var(--rarity) 35%,transparent); border-radius:11px; background:radial-gradient(ellipse at 50% 37%,color-mix(in srgb,var(--rarity) 12%,transparent),transparent 75%),#1b1928; box-shadow:inset 0 2px 0 color-mix(in srgb,var(--rarity) 32%,transparent); animation:acr-arrive .3s ease-out both; }
+.acr-card-s { background:radial-gradient(ellipse at 50% 30%,#d8a25325,transparent 75%),#221b2a; border-color:#d5ad5d9c; }
+.acr-card-top { display:flex; align-items:center; justify-content:space-between; gap:4px; min-height:18px; font-size:9px; font-weight:700; color:var(--rarity); }
+.acr-index { color:#b5acc3; font-size:9px; font-variant-numeric:tabular-nums; }
+.acr-s-badge { background:linear-gradient(145deg,#f9e5a5,#d29235); color:#32220d; font-size:11px; width:19px; text-align:center; clip-path:polygon(0 0,100% 0,100% 75%,50% 100%,0 75%); }
+.acr-art { width:72px; height:72px; max-width:100%; margin:8px auto 12px; }
+.acr-card-name { font-size:11px; font-weight:800; line-height:1.45; color:#f8f3ff; overflow-wrap:anywhere; }
+.acr-card-detail { font-size:9px; color:var(--acr-muted); margin-top:5px; }
+.acr-locked { font-size:8px; color:#f3cf8b; font-weight:700; margin-top:8px; }
+.acr-footer { padding:17px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; border-top:1px solid #ffffff12; background:#16131ff5; flex-shrink:0; }
+.acr-footer p { font-size:11px; line-height:1.6; color:var(--acr-muted); margin:0; }
+.acr-footer p>span { color:#82dfb2; margin-right:5px; }
+.acr-done { display:flex; align-items:center; justify-content:center; gap:24px; border:1px solid #ffe2a4; padding:12px 24px; min-height:45px; border-radius:9px; background:linear-gradient(135deg,#f7dfaa,#d8ac67); color:#302313; font-weight:900; font-size:13px; white-space:nowrap; cursor:pointer; box-shadow:0 3px 16px #cf9c4b18; }
+.acr-dialog button:hover { filter:brightness(1.12); }
+.acr-dialog :focus-visible { outline:3px solid #a4dfff; outline-offset:3px; }
+@keyframes acr-arrive { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+@media(max-width:650px) { .acr-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; } .acr-header { padding:21px 18px 17px; } .acr-scroll { padding:17px 18px; } .acr-feature { padding:18px 15px; gap:15px; } .acr-feature-art { width:85px; height:85px; } .acr-feature h3 { font-size:19px; } .acr-eyebrow { font-size:8px; letter-spacing:1.5px; } .acr-footer { padding:14px 18px; } .acr-done { padding:11px 18px; gap:15px; } .acr-collection-heading>span { display:none; } }
+@media(max-width:390px) { .acr-dialog { width:calc(100vw - 16px); border-radius:18px; } .acr-scroll { padding:14px 12px; } .acr-card { padding:9px 7px; } .acr-art { width:58px; height:58px; } .acr-feature { gap:10px; } .acr-feature-art { width:65px; height:65px; } .acr-feature h3 { font-size:17px; } .acr-footer { flex-direction:column; gap:10px; } .acr-done { width:100%; } }
+@media(max-height:550px) { .acr-header { padding:12px 20px; } .acr-header h2 { font-size:22px; } .acr-header .acr-eyebrow { display:none; } .acr-scroll { padding:14px 20px; } .acr-feature { padding:12px 20px; } .acr-feature-art { width:68px; height:68px; } .acr-footer { padding:10px 20px; } }
+@media(prefers-reduced-motion:reduce) { .acr-dialog *, .acr-dialog *::before, .acr-dialog *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+
+/* Chest shop: midnight-vault palette, isolated from other shop sections. */
+#shopSecChests { background:radial-gradient(ellipse at 0 0,#55407044,transparent 65%),#161423; border:1px solid #85709866; border-radius:20px; padding:18px; box-shadow:0 10px 30px #0003; }
+#shopSecChests .sv2-title { background:transparent; border:0; box-shadow:none; color:#f7dc9f; }
+#shopSecChests .sv2-title-text { color:#f7dc9f; text-shadow:none; letter-spacing:.4px; }
+#shopSecChests>.sv2-panel { background:linear-gradient(120deg,#2b203d,#1b1a2c); border:1px solid #aa80d347; border-radius:14px; box-shadow:none; }
+#shopSecChests>.sv2-panel>.sv2-panel { background:transparent; border:0; box-shadow:none; }
+#shopSecChests .sv2-item { background:linear-gradient(145deg,#27233a,#191a2b); border:1px solid #85709866; border-radius:14px; box-shadow:none; }
+#shopSecChests .sv2-pill { background:#0c0b194f; border:1px solid #e3d4ff18; color:#e6ddf5; box-shadow:none; }
+#shopSecChests .sv2-buy { background:linear-gradient(135deg,#f6dda8,#d4a661); color:#2c2112; border:1px solid #f7dfa8; border-radius:9px; text-shadow:none; box-shadow:0 3px 0 #71542f; min-height:46px; }
+#shopSecChests .sv2-buy span,#shopSecChests .sv2-buy div { color:inherit; }
+#shopSecChests .sv2-buy:hover { filter:brightness(1.08); }
+#shopSecChests button:focus-visible { outline:3px solid #a4dfff; outline-offset:3px; }
+#shopSecChests .sv2-tab { background:#151322; color:#d8c9e8; border:1px solid #ffffff20; border-radius:7px; box-shadow:none; }
+#shopSecChests .sv2-tab.on { background:#493451; color:#fff0c5; border-color:#c5a270; }
+@media(max-width:450px) { #shopSecChests { padding:12px; } }
