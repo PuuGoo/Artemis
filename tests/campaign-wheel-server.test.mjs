@@ -82,6 +82,18 @@ test('receipt survives later rooms, advances to each next wheel, rejects past-ro
  const ended=accept(ledger,null).campaignCheckpoint;
  assert.equal(validateCampaignCheckpoint(ended,clean(cp)).ok,false);
 });
+test('coalesced save can carry an unclaimed earlier wheel into Valkyrie without granting rewards',()=>{
+ const cp=entry();let ledger=accept(null,cp).campaignCheckpoint;
+ Object.assign(cp,{room:3,boundary:'cleared',roomCleared:true});ledger=accept(ledger,cp).campaignCheckpoint;
+ cp.room=5;cp.wheel=W.prepare({runId:cp.runId,chapter:1,room:4});
+ const result=accept(ledger,cp);
+ assert.deepEqual(result.wheelReceiptDelta,{ok:true,gold:0,scrolls:0});
+ const lateClaim=structuredClone(cp);lateClaim.wheel.status='claimed';
+ assert.equal(validateCampaignCheckpoint(result.campaignCheckpoint,clean(lateClaim)).ok,false);
+ const preclaim=structuredClone(cp);preclaim.wheel.status='claimed';
+ assert.equal(validateCampaignCheckpoint(ledger,clean(preclaim)).ok,false);
+});
+
 test('claim gold remains exact even while normal loot settlement closes',()=>{
  const {cp,ledger}=ready();cp.rewardSettled=false;ledger.active.rewardSettled=false;
  const paid=structuredClone(cp);W.claim({checkpoint:paid,save:{}});paid.rewardSettled=true;
