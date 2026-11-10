@@ -35,6 +35,8 @@
   }
   function draw(ctx,npc,now,low,near) {
     if(!npc)return;
+    const reduced=!!low || !!root.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if(root.ArtemisCampaignNPCArt?.draw(ctx,npc,now,reduced,near,'valkyrie'))return;
     const bob=low?0:Math.sin(now*.003)*3;
     ctx.save();ctx.translate(npc.x,npc.y+bob);
     // Cánh trắng, váy xanh và quầng sáng: vector nội bộ, không tải asset ngoài.

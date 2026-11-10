@@ -40,7 +40,10 @@
  function findPosition(g){return root.ArtemisCampaignValkyrie?root.ArtemisCampaignValkyrie.findPosition(g):null;}
  function isNear(player,npc){return !!(player&&npc&&Math.hypot(player.x-npc.x,player.y-npc.y)<=((player.r||17)+(npc.r||22)+30));}
  function drawNPC(ctx,npc,now,low,near){
-  if(!npc)return;ctx.save();ctx.translate(npc.x,npc.y);ctx.fillStyle='#713f12';ctx.fillRect(-19,8,38,15);
+  if(!npc)return;
+  const reduced=!!low || !!root.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if(root.ArtemisCampaignNPCArt?.draw(ctx,npc,now,reduced,near,'wheel'))return;
+  ctx.save();ctx.translate(npc.x,npc.y);ctx.fillStyle='#713f12';ctx.fillRect(-19,8,38,15);
   for(let i=0;i<6;i++){ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,22,i*Math.PI/3,(i+1)*Math.PI/3);ctx.closePath();ctx.fillStyle=['#d9f99d','#e9d5ff','#fef3c7','#bae6fd','#fecdd3','#bbf7d0'][i];ctx.fill();}
   ctx.strokeStyle='#fbbf24';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,23,0,Math.PI*2);ctx.stroke();
   ctx.fillStyle='#ef4444';ctx.beginPath();ctx.moveTo(-6,-29);ctx.lineTo(6,-29);ctx.lineTo(0,-16);ctx.closePath();ctx.fill();

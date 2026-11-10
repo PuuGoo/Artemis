@@ -83,6 +83,8 @@
   }
   function draw(ctx,npc,now,low,near){
     if(!npc)return;
+    const reduced=!!low || !!root.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if(root.ArtemisCampaignNPCArt?.draw(ctx,npc,now,reduced,near,npc.kind==='devil'?'devil':'angel'))return;
     if(npc.kind!=='devil'){if(root.ArtemisCampaignValkyrie)root.ArtemisCampaignValkyrie.draw(ctx,{...npc,label:'Thiên thần',prompt:'Chạm để nhận phước lành'},now,low,near);return;}
     ctx.save();ctx.translate(npc.x,npc.y+(low?0:Math.sin(now*.003)*3));ctx.fillStyle='#b91c1c';
     ctx.beginPath();ctx.moveTo(0,-8);ctx.lineTo(-19,24);ctx.lineTo(19,24);ctx.closePath();ctx.fill();
