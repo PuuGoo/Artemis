@@ -1,0 +1,11 @@
+{
+  "scope": "Chrome with real auth/patrol/save HTTP handlers, isolated memory DB; no production",
+  "quickEnergy": true,
+  "adUnavailable": true,
+  "staminaBefore": 20,
+  "staminaAfter": 15,
+  "goldGranted": 480,
+  "expGranted": 240,
+  "reloadPersists": true,
+  "errors": []
+}

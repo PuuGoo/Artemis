@@ -8,11 +8,12 @@ import {execFileSync} from 'node:child_process';
 import {freemem,homedir} from 'node:os';
 import assert from 'node:assert/strict';
 const repo=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-export async function startFixture() {
+export async function startFixture({ extraHandlers = {} } = {}) {
   process.env.NODE_ENV='test'; process.env.DB_BACKEND='memory';
   process.env.JWT_SECRET=randomBytes(32).toString('hex');
   assert.equal(process.env.NODE_ENV,'test'); assert.equal(process.env.DB_BACKEND,'memory');
   const handlers={'/api/auth/register':await import('../api/auth/register.js'),'/api/auth/me':await import('../api/auth/me.js'),'/api/save':await import('../api/save.js')};
+  Object.assign(handlers, extraHandlers);
   const requests=[],root=resolve(repo,'public');
   const server=createServer(async(req,res)=>{
     try {

@@ -710,6 +710,47 @@
       }
       return false;
     },
+    patrolPreview: async function () {
+      if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");
+      shopBusy = true;
+      try {
+        await pushCloudSave();
+        if (state.lastError || state.dirty || !state.authenticated || window.__ARTEMIS_SAVE_READY !== true) throw new Error("Chưa đồng bộ tiến trình.");
+        var response = await api("/api/patrol");
+        if (!response.ok || response.data.ok !== true) throw new Error(response.data.error || "Không tải được tuần tra.");
+        // First preview initializes the server clock and may increment revision.
+        if (response.data.revision !== state.revision) {
+          state.saving = true;
+          window.__ARTEMIS_SAVE_READY = false;
+          await refreshAfterShopPurchase();
+        }
+        return response.data;
+      } finally { state.saving = false; shopBusy = false; }
+    },
+    patrolRequest: async function (action, requestId) {
+      if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");
+      shopBusy = true;
+      try {
+        await pushCloudSave();
+        if (state.lastError || state.dirty || !state.authenticated || window.__ARTEMIS_SAVE_READY !== true) throw new Error("Chưa đồng bộ tiến trình.");
+        if (state.saveTimer) clearTimeout(state.saveTimer);
+        state.saving = true;
+        window.__ARTEMIS_SAVE_READY = false;
+        var response;
+        try {
+          response = await api("/api/patrol", { method: "POST", body: { action: action, requestId: requestId, revision: state.revision } });
+        } finally {
+          // Even a lost response may have committed. Reload authoritative state before unlocking writes.
+          await refreshAfterShopPurchase();
+        }
+        if (!response.ok || response.data.ok !== true) {
+          var patrolError = new Error(response.data.error || "Không nhận được thưởng tuần tra.");
+          patrolError.definitive = response.status >= 400 && response.status < 500;
+          throw patrolError;
+        }
+        return response.data;
+      } finally { state.saving = false; shopBusy = false; }
+    },
     purchaseShopOffer: purchaseShopOffer,
     enchantRune: async function (runeId) {
       if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");

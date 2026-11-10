@@ -5,7 +5,8 @@
   "buildCommand": null,
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/api/shop", "destination": "/api/privileges?__resource=shop" }
+    { "source": "/api/shop", "destination": "/api/privileges?__resource=shop" },
+    { "source": "/api/patrol", "destination": "/api/privileges?__resource=patrol" }
   ],
   "functions": {
     "api/**/*.js": {

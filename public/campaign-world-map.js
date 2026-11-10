@@ -73,6 +73,9 @@
     savedScroll = viewport.scrollTop;
     original.click(); // Locked preview and CTA disable are owned by renderMapSelect.
     refresh();
+    // The source handler owns eligibility and selection. Only a successful selection
+    // recenters: preserving the old exploration offset can otherwise hide its launch CTA.
+    if (original.dataset.locked !== '1' && selectedId() === id) centerCurrent();
     viewport?.querySelector(`[data-world-chapter="${id}"]`)?.focus({preventScroll:true});
   }
   function returnCurrent() {

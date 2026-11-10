@@ -2,6 +2,7 @@ import { getMongoDb, COLLECTIONS } from '../lib/mongo.js';
 import { getCurrentPlayer, json, fail } from '../lib/http.js';
 import { VIP_CARD_IDS, VIP_CARD_PRICE, VIP_CARD_DURATION_MS, normalizeVipPasses } from '../lib/privilegeCards.js';
 import { GET as getShop, POST as purchaseShop } from '../lib/shop/handler.js';
+import { GET as getPatrol, POST as claimPatrol } from '../lib/patrol/handler.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -11,11 +12,18 @@ function isShopRequest(request) {
   return url.pathname.replace(/\/+$/, '') === '/api/shop' || url.searchParams.get('__resource') === 'shop';
 }
 
+function isPatrolRequest(request) {
+  const url = new URL(request.url);
+  return url.pathname.replace(/\/+$/, '') === '/api/patrol' || url.searchParams.get('__resource') === 'patrol';
+}
+
 export async function GET(request) {
+  if (isPatrolRequest(request)) return getPatrol(request);
   return isShopRequest(request) ? getShop(request) : fail('Phương thức không được hỗ trợ.', 405);
 }
 
 export async function POST(request) {
+  if (isPatrolRequest(request)) return claimPatrol(request);
   if (isShopRequest(request)) return purchaseShop(request);
   const player = await getCurrentPlayer(request);
   if (!player) return fail('Bạn cần đăng nhập để mua thẻ.', 401);

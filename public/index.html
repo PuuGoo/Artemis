@@ -1634,6 +1634,8 @@
   <link rel="stylesheet" href="/campaign-world-map.css">
   <script src="/campaign-world-map-art.js" defer></script>
   <script src="/campaign-world-map.js" defer></script>
+  <link rel="stylesheet" href="/patrol.css">
+  <script src="/patrol.js" defer></script>
   <script src="/arena-viewport.js"></script>
 
 </head>
@@ -8928,6 +8930,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         gems: 50,
         vipCoins: 0,
         aurocite: 0,
+        patrolExp: 0,
         vipPasses: { hunting: 0, cave: 0, sealing: 0 },
         stamina: 20,
         playerLevel: 1,
@@ -9373,6 +9376,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               gems: this.gems,
               vipCoins: this.vipCoins,
               aurocite: this.aurocite,
+              patrolExp: this.patrolExp,
               vipPasses: this.vipPasses,
               stamina: this.stamina,
               playerLevel: this.playerLevel,

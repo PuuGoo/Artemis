@@ -76,6 +76,10 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     const scroll=page.locator('[data-world-map-scroll]');
     assert.ok(await scroll.evaluate(e=>e.scrollHeight>e.clientHeight*4));
     assert.ok(await scroll.evaluate(e=>e.scrollTop>3000),'initial scroll reaches current chapter');
+    assert.equal(await scroll.evaluate(v=>{
+      const title=v.querySelector('[data-world-chapter="1"] .world-map-title').getBoundingClientRect(),bounds=v.getBoundingClientRect();
+      return title.top>=bounds.top && title.bottom<=bounds.bottom;
+    }),true,'initial chapter title is visible');
     const initial=await scroll.evaluate(e=>e.scrollTop);
     await scroll.hover(); await page.mouse.wheel(0,-650); await page.waitForTimeout(250);
     const wheeled=await scroll.evaluate(e=>e.scrollTop);
@@ -90,6 +94,8 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x,y+120,{steps:10});await page.mouse.up();
     assert.ok(await scroll.evaluate(e=>e.scrollTop)<beforeDrag-50,'left mouse dragging scrolls');
     assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedChapterIdx),0,'drag never selects a chapter');
+    await page.locator('[data-world-chapter="19"]').dispatchEvent('click',{detail:1});
+    assert.equal(await page.locator('#btnStartGame').isDisabled(),false,'pending drag release click never opens locked preview');
     const cdp=await page.context().newCDPSession(page);
     await cdp.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
     const beforeTouch=await scroll.evaluate(e=>e.scrollTop);
@@ -110,6 +116,7 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     await page.waitForTimeout(100);
     assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedChapterIdx),0);
     assert.equal(await page.locator('#btnStartGame').isDisabled(),true);
+    assert.equal(await page.locator('#btnStartGame').isVisible(),false,'locked preview never exposes launch');
     assert.equal(await page.locator('[data-world-chapter="19"] .world-map-requirements > span').count(),2);
     await page.locator('[data-world-map-return]').click();
     assert.equal(await page.locator('#btnStartGame').isDisabled(),false);
@@ -127,6 +134,38 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     assert.equal(await page.locator('#btnStartGame').isDisabled(),true,'keyboard can preview locked chapter');
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#btnStartGame').isDisabled(),false);
+    // Earlier completed chapters must launch, not stay in the scroll-exploration state.
+    await page.evaluate(()=>{
+      const a=window.Archero2FusionAPI;
+      Object.assign(a.SaveState.winsByChapter,{1:1,2:1,3:1});
+      a.SaveState.selectedChapterIdx=3; a.renderLobbyUI();
+      window.ArtemisWorldMap.returnToCurrent();
+    });
+    await page.waitForTimeout(100);
+    for (const id of [1,2]) {
+      await scroll.evaluate((v,id)=>{const n=v.querySelector(`[data-world-chapter="${id}"]`);v.scrollTop=n.offsetTop-100;},id);
+      await page.waitForTimeout(50);
+      if(id===1) await page.locator(`[data-world-chapter="${id}"] .world-map-name`).click();
+      else {await page.locator(`[data-world-chapter="${id}"]`).focus();await page.keyboard.press('Enter');}
+      assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedChapterIdx),id-1,'completed selection uses original live handler');
+      assert.equal(await page.locator('#btnStartGame').isVisible(),true,'completed replay always restores visible launch CTA');
+      assert.equal(await page.locator('#btnStartGame').isEnabled(),true);
+      assert.equal(await page.locator('#btnStartGame').getAttribute('data-replay-cost'),'5');
+      assert.equal(await page.locator('#tabBattle').evaluate(e=>e.classList.contains('world-map-exploring')),false);
+      assert.equal(await page.locator(`[data-world-chapter="${id}"] .world-map-completed-label`).textContent(),'Đã vượt ải');
+      assert.equal(await page.locator(`[data-world-chapter="${id}"] .world-map-stars`).textContent(),'★ ★ ★');
+      assert.equal(await scroll.evaluate((v,id)=>{
+        const title=v.querySelector(`[data-world-chapter="${id}"] .world-map-title`).getBoundingClientRect(),bounds=v.getBoundingClientRect();
+        return title.top>=bounds.top && title.bottom<=bounds.bottom;
+      },id),true,'selected chapter title stays inside visible map');
+      const selectedScroll=await scroll.evaluate(v=>v.scrollTop);
+      await page.locator('#btnStartGame').click();
+      assert.match(await page.locator('#battleBriefingTitle').textContent(),new RegExp(`Chương ${id}`));
+      await page.locator('#btnBriefingCancel').click();
+      assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedChapterIdx),id-1,'briefing return preserves replay choice');
+      assert.equal(await page.locator('#btnStartGame').isVisible(),true);
+      assert.ok(Math.abs(await scroll.evaluate(v=>v.scrollTop)-selectedScroll)<2,'briefing return preserves map position');
+    }
     await page.evaluate(()=>{const a=window.Archero2FusionAPI;a.SaveState.gameMode='endless';a.renderMapSelect();});
     await page.waitForTimeout(100);
     assert.equal(await page.locator('[data-world-map-scroll]').count(),0);
@@ -135,6 +174,6 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     await page.waitForTimeout(100);
     assert.equal(await page.locator('[data-world-chapter]').count(),19);
     assert.deepEqual(errors,[]);
-    console.log('Real Chrome fixture PASS: 19 chapters, wheel, drag, locked preview, return, selection, keyboard, mode switching, render preservation.');
+    console.log('Real Chrome fixture PASS: 19 chapters, wheel, drag suppression, touch, locked preview, return, completed replay CTA/cost/briefing, keyboard, mode switching, render preservation.');
   } finally {await browser?.close();await new Promise(r=>server.close(r));}
 });

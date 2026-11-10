@@ -41,7 +41,7 @@
     const banner = button('Khám phá sự kiện', 'events', () => click('#btnTopOpenEventsHub'), 'native-campaign-banner');
     const lower = doc.createElement('div'); lower.className = 'native-campaign-lower';
     lower.append(
-      button('Trang bị', 'armor', () => nav('tabEquip')),
+      button('Tuần Tra', 'map', () => window.ArtemisPatrol?.open()),
       button('Kho vật phẩm', 'chest', () => click('#btnTopOpenItemsVault')),
       button('Bộ Lạc', 'shield', () => nav('tabGuild'))
     );
