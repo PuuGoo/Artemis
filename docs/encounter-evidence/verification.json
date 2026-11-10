@@ -1,0 +1,37 @@
+{
+  "scope": "actual client local fixture, not production",
+  "results": [
+    {
+      "stage": 9,
+      "position": {
+        "npc": {
+          "x": 240,
+          "y": 588,
+          "r": 22,
+          "kind": "angel"
+        },
+        "player": {
+          "x": 240,
+          "y": 1105
+        }
+      }
+    },
+    {
+      "stage": 10,
+      "position": {
+        "npc": {
+          "x": 240,
+          "y": 111,
+          "r": 22,
+          "kind": "devil"
+        },
+        "player": {
+          "x": 240,
+          "y": 1105
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

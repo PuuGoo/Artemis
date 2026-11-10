@@ -24,9 +24,25 @@
     const dpr = Number.isFinite(devicePixelRatio) ? Math.min(2, Math.max(1, devicePixelRatio)) : 1;
     return { width: Math.max(1, Math.ceil(displayWidth * dpr)), height: Math.max(1, Math.ceil(displayHeight * dpr)) };
   }
+  function roomFraming(game) {
+    const room = Number(game.room) || 0;
+    const safe = [5,15,25,35,45].includes(room);
+    const expansive = !safe && (room > 0 && room % 10 === 0 || game.roomIsBoss === true);
+    // Screen-height occupancy, not fraction of a landscape monitor's area.
+    return { occupancy: expansive ? .93 : .78, zoom: room > 0 && !safe && !expansive ? 1.06 : 1,
+      kind: expansive ? 'expansive' : 'compact' };
+  }
+  function syncFrame(game, element) {
+    if (!element) return;
+    const frame = roomFraming(game);
+    element.style.setProperty('--arena-frame-height', `${frame.occupancy * 100}dvh`);
+    element.dataset.arenaFrame = frame.kind;
+  }
   function resetCamera(game) { cameras.delete(game); }
   function camera(game, nowMs) {
-    const view = viewSize(game), maxY = Math.max(0, game.height - view.height);
+    const base = viewSize(game), zoom = roomFraming(game).zoom;
+    const view = { width: base.width / zoom, height: base.height / zoom };
+    const maxY = Math.max(0, game.height - view.height);
     const target = clamp((game.player?.y ?? game.height - 95) - view.height * .63, 0, maxY);
     let state = cameras.get(game);
     // New rooms snap to their entrance; no interpolation across a teleport.
@@ -39,7 +55,7 @@
       state.y = clamp(state.y, 0, maxY);
       state.time = nowMs;
     }
-    return { x: 0, y: state.y, width: view.width, height: view.height };
+    return { x: Math.max(0, (game.width - view.width) / 2), y: state.y, width: view.width, height: view.height };
   }
   function applyWorldTransform(ctx, game, nowMs) {
     const view = camera(game, nowMs);
@@ -48,13 +64,19 @@
     ctx.translate(-view.x, -view.y);
     return view;
   }
+  // Screen-space overlays must reset BOTH zoom and camera translation.
+  function applyViewportTransform(ctx, game) {
+    const view = viewSize(game);
+    ctx.setTransform(ctx.canvas.width / view.width, 0, 0, ctx.canvas.height / view.height, 0, 0);
+  }
   function clientToViewport(game, rect, clientX, clientY) {
     const view = viewSize(game);
     return { x: (clientX - rect.left) * view.width / (rect.width || 1), y: (clientY - rect.top) * view.height / (rect.height || 1) };
   }
   function screenToWorld(game, rect, clientX, clientY) {
-    const point = clientToViewport(game, rect, clientX, clientY), view = camera(game);
-    return { x: point.x + view.x, y: point.y + view.y };
+    const view = camera(game);
+    return { x: view.x + (clientX - rect.left) * view.width / (rect.width || 1),
+      y: view.y + (clientY - rect.top) * view.height / (rect.height || 1) };
   }
   function worldToScreen(game, rect, x, y) {
     const view = camera(game);
@@ -70,5 +92,5 @@
     button.setAttribute('aria-label', 'Khung chiến đấu dọc 9:16');
   }
   root.ArtemisArenaViewport = { beginRun, fitLayout, backingSize, getMode, toggleMode, syncButton,
-    viewSize, camera, resetCamera, applyWorldTransform, clientToViewport, screenToWorld, worldToScreen };
+    viewSize, roomFraming, syncFrame, camera, resetCamera, applyWorldTransform, applyViewportTransform, clientToViewport, screenToWorld, worldToScreen };
 })(globalThis);

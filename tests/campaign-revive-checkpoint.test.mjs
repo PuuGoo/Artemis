@@ -22,7 +22,7 @@ function productionFunction(name) {
 
 function runtime(player = {}) {
   const context = {
-    Game: { running: true, roomCleared: true, chapter: {id: 1}, room: 10,
+    Game: { runId: 'revive-checkpoint-fixture', running: true, roomCleared: true, chapter: {id: 1}, room: 10,
       maxRooms: 50, kills: 42, runGold: 900, drops: [],
       player: {hp: 700, maxHp: 1000, atk: 164, aspd: 2, level: 4, xp: 20,
         xpNext: 100, skills: {revive: 1}, speed: 260, ...player}},

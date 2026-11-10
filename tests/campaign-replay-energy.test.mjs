@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { loadCampaignDependencies } from './fixtures/campaign-vm.mjs';
 
 // Execute the shipped inline handler, not a reimplementation of its economy logic.
 const html = fs.readFileSync(new URL('../public/index.html', import.meta.url), 'utf8');
@@ -35,6 +36,7 @@ function harness({ stamina = 20, won = true, mode = 'campaign', running = false,
     performance: { now: () => 1 }, requestAnimationFrame() { calls.push(['raf', c.SaveState.stamina]); return 99; }, gameLoop() {},
   };
   vm.createContext(c);
+  loadCampaignDependencies(c);
   vm.runInContext(helper + '\n' + start, c);
   return { c, calls, checkpoint };
 }

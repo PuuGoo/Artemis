@@ -1,7 +1,7 @@
 /* NPC Canvas: tìm đường trong miền đi được trước khi chọn vị trí, không tạo timer. */
 (function(root) {
   'use strict';
-  function findPosition(g) {
+  function findPosition(g,placement='center') {
     const geo=root.ArtemisObstacleClearance, p=g.player;
     if(!geo || !p) return null;
     const step=12, radius=Math.max(22,p.r||17), pad=g.wallPad+radius;
@@ -16,15 +16,19 @@
     const queue=[[sx,sy]],seen=new Set([sy*cols+sx]);let best=null,score=Infinity;
     for(let i=0;i<queue.length;i++) {
       const [x,y]=queue[i],t=point(x,y),portal=g.portalRect;
-      const dist=Math.hypot(t.x-p.x,t.y-p.y);
-      if(dist>radius+(p.r||17)+18 && (!portal||Math.hypot(t.x-(portal.x+portal.w/2),t.y-(portal.y+portal.h/2))>85)) {
-        const s=Math.abs(dist-100)+Math.abs(t.x-g.width/2)*.1;
-        if(s<score){score=s;best={...t,r:22};}
-      }
+      const target=placement==='portal'&&portal
+        ? {x:portal.x+portal.w/2,y:portal.y+portal.h+65}
+        : {x:g.width/2,y:g.height/2};
+      const distance=Math.hypot(t.x-target.x,t.y-target.y);
+      if(distance<score){score=distance;best={...t,r:22};}
+      // Snap to the exact center when a connected clear segment reaches it.
+      if(distance<=step*1.5 && [0,.25,.5,.75,1].every(f=>geo.isFree(t.x+(target.x-t.x)*f,t.y+(target.y-t.y)*f,radius,g.obstacles,opts)))return {...target,r:22};
       for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]) {
         const nx=x+dx,ny=y+dy,key=ny*cols+nx;
         if(nx<0||ny<0||nx>=cols||ny>=rows||seen.has(key))continue;
-        seen.add(key);if(allowed(nx,ny))queue.push([nx,ny]);
+        seen.add(key);
+        const next=point(nx,ny);
+        if(allowed(nx,ny)&&[.25,.5,.75].every(f=>geo.isFree(t.x+(next.x-t.x)*f,t.y+(next.y-t.y)*f,radius,g.obstacles,opts)))queue.push([nx,ny]);
       }
     }
     return best;
@@ -44,7 +48,7 @@
     ctx.fillStyle='#0f172a';ctx.fillRect(-5,-16,2,3);ctx.fillRect(3,-16,2,3);
     ctx.beginPath();ctx.ellipse(0,-34,16,5,0,0,Math.PI*2);ctx.stroke();
     if(!low){ctx.globalAlpha=.25;ctx.beginPath();ctx.ellipse(0,28,near?34:26,8,0,0,Math.PI*2);ctx.fillStyle='#fde68a';ctx.fill();ctx.globalAlpha=1;}
-    ctx.textAlign='center';ctx.fillStyle='#fef3c7';ctx.font='bold 11px system-ui';ctx.fillText(near?'Chạm để chọn kỹ năng':'Valkyrie',0,46);
+    ctx.textAlign='center';ctx.fillStyle='#fef3c7';ctx.font='bold 11px system-ui';ctx.fillText(near?(npc.prompt||'Chạm để chọn kỹ năng'):(npc.label||'Valkyrie'),0,46);
     ctx.restore();
   }
   root.ArtemisCampaignValkyrie=Object.freeze({findPosition,draw});

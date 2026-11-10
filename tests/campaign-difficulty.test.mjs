@@ -11,6 +11,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { getCampaignDetail } from '../lib/campaignCatalog.js';
+import { loadCampaignDependencies } from './fixtures/campaign-vm.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = fs.readFileSync(resolve(root, 'public/index.html'), 'utf8').replaceAll(String.fromCharCode(13), '');
@@ -86,11 +87,10 @@ function spawnHarness() {
     maxRooms:50,width:600,height:800,wallPad:24,player:{skills:{},maxHp:775,atk:164,hp:775},pet:{}},
     SaveState:{talents:{},bestRooms:Object.fromEntries(Array.from({length:19},(_,i)=>[i+1,999])),save(){throw Error('ghi save ngoài dự kiến')}},
     SoundFX:{bossSpawn(){}},ArtemisObstacleClearance:{findSafeSpawn:(x,y)=>({x,y})},
-    document:{getElementById:()=>({classList:{add(){},remove(){}}})},
+    document:{getElementById:()=>({classList:{add(){},remove(){}},style:{setProperty(){}},dataset:{}})},resizeCanvas(){},
     MonsterArt:{assignRoom(){}},showBossIntro(){},hideBossIntro(){},updateInGameHUD(){},spawnCampaignValkyrie(){},saveCheckpoint(){}});
-  for(const file of ['campaign-config.js','campaign-rooms.js','campaign-telemetry.js'])
-    vm.runInContext(fs.readFileSync(resolve(root,'public',file),'utf8'),c);
-  for (const marker of ['const GAME_MODES =','const ZODIAC_IDS =','const ZODIAC_ENEMY_POOLS =']) {
+  loadCampaignDependencies(c);
+  for (const marker of ['const ZODIAC_IDS =','const ZODIAC_ENEMY_POOLS =']) {
     const begin=html.indexOf(marker), end=html.indexOf(';',begin);
     assert.ok(begin>0&&end>begin); vm.runInContext(html.slice(begin,end+1),c);
   }
@@ -111,7 +111,8 @@ test('catalog Admin khớp chỉ số từng entity từ setupRoom thật trên 
     for(const room of detail.roomsDetail) {
       enemies(c,ch,room.room,profiles[1]);
       const actual=JSON.parse(JSON.stringify(c.Game.enemies.map(e=>({type:e.type,hp:e.maxHp,atk:e.atk,speed:e.speed,radius:e.r}))));
-      const expected=(room.isBoss?[room.boss]:room.mobs).map(e=>({type:e.type,hp:e.hp,atk:e.atk,speed:e.speed,radius:e.radius}));
+      // Catalog radius is authored geometry; pressure applies the shared live size multiplier.
+      const expected=(room.isBoss?[room.boss]:room.mobs).map(e=>({type:e.type,hp:e.hp,atk:e.atk,speed:e.speed,radius:e.radius*(room.isBoss?1:c.ArtemisEnemyPressure.sizeMultiplier(e.type))}));
       assert.deepEqual(actual,expected,`C${ch}-P${room.room}`);
       if(room.isBoss&&!room.isFinalBoss) {
         assert.equal(c.Game.enemies[0].name,room.boss.name);

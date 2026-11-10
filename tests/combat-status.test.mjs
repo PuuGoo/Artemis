@@ -110,7 +110,7 @@ test('room and run reset remove Touch clocks, preserve save and clear enemy-loca
   assert.equal(f.Game.flamePoisonTouchTimer,0);assert.equal(f.Game.frostThunderTouchTimer,0);
   assert.equal(f.Game.enemies.length,0);assert.equal(JSON.stringify(f.S),before);
   // Dựng phòng bằng spawner thật, không sao chép quy tắc reset.
-  Object.assign(f.c,{MonsterArt:{assignRoom(){}},isBossRoom:()=>false,document:{getElementById:()=>({classList:{add(){},remove(){}}})},hideBossIntro(){}});
+  Object.assign(f.c,{MonsterArt:{assignRoom(){}},isBossRoom:()=>false,document:{getElementById:()=>({classList:{add(){},remove(){}},style:{setProperty(){}},dataset:{}})},resizeCanvas(){},hideBossIntro(){}});
   f.c.ArtemisObstacleClearance.findSafeSpawn=(x,y)=>({x,y});
   Object.assign(f.Game,{mode:'practice',chapter:{id:1,enemyScale:1},maxRooms:15,pet:{},flamePoisonTouchTimer:1.6,frostThunderTouchTimer:1.6});f.S.talents={};f.S.bestRooms={1:1};
   const roomSave=JSON.stringify(f.S);vm.runInContext(fn('setupRoom'),f.c);f.c.setupRoom(1);
@@ -163,8 +163,26 @@ test('Rolla slow and Cleo burn use the shared update path without changing owner
 });
 test('Freeze cannot shorten Rolla frost; a slow expiring mid-step only reduces the active fraction of movement/attack clock',()=>{
   const rolla=fixture({hero:'rolla',skills:{ice_arrow:1}}),r=rolla.enemy();rolla.hit(r);assert.equal(r.slowTimer,3.2);
-  const f=fixture(),e=f.enemy({x:100,y:500,type:'bat',speed:100,slowTimer:.05,attackTimer:10});f.tick(.1);
-  assert.ok(Math.abs(e.x-107.75)<1e-9);assert.ok(Math.abs(e.attackTimer-9.9225)<1e-9);assert.equal(e.slowTimer,0);
+  const f=fixture(),e=f.enemy({x:100,y:500,type:'bat',speed:100,slowTimer:.05});f.tick(.1);
+  assert.ok(Math.abs(e.x-107.75)<1e-9);assert.equal(e.slowTimer,0);
+  // Bosses retain attackTimer; nonbosses now use the real authored pressure clocks.
+  const boss=fixture(),b=boss.enemy({isBoss:true,type:'boss',slowTimer:.05,attackTimer:10});boss.tick(.1);
+  assert.ok(Math.abs(b.attackTimer-9.9225)<1e-9);
+});
+
+test('nonboss pressure warning and firing clocks slow, including a mid-step expiry',()=>{
+  const times=[];
+  for(const slowTimer of [0,.05,10]) {
+    const f=fixture(),e=f.enemy({x:100,y:500,type:'goblin',slowTimer});
+    f.c.ArtemisEnemyPressure.prepareRoom(f.Game);
+    let elapsed=0;
+    while(!f.Game.enemyBullets.length && elapsed<4) {f.tick(.01);elapsed+=.01;}
+    assert.ok(f.Game.enemyBullets.length>0,'real pressure eventually fires');
+    assert.equal(f.Game.enemyBullets[0].source,e);
+    times.push(elapsed);
+  }
+  assert.ok(times[1]>times[0],JSON.stringify(times));
+  assert.ok(Math.abs(times[2]/times[0]-1/.55)<.04,JSON.stringify(times));
 });
 
 test('Hỏa Độc Ấn chỉ tăng cháy từ Epic và độc từ Legendary khi đã sở hữu/khảm',()=>{

@@ -16,9 +16,20 @@ function arrayDeclaration(name) {
   return html.slice(start, end + '\n      ];'.length);
 }
 export function loadCampaignDependencies(context, { skills = false } = {}) {
-  for (const file of ['campaign-config.js', 'campaign-rooms.js', 'campaign-support.js', 'campaign-telemetry.js', 'campaign-skills.js', 'campaign-exp.js', 'campaign-valkyrie.js']) {
+  context.window ||= context;
+  for (const file of ['arena-viewport.js', 'enemy-pressure.js', 'boss-attack-patterns.js', 'campaign-encounters.js', 'campaign-config.js', 'campaign-rooms.js', 'campaign-support.js', 'campaign-telemetry.js', 'campaign-skills.js', 'campaign-exp.js', 'campaign-valkyrie.js']) {
     vm.runInContext(fs.readFileSync(new URL('../../public/' + file, import.meta.url), 'utf8'), context, { filename: file });
   }
+  for (const name of ['ArtemisArenaViewport', 'ArtemisEnemyPressure', 'BossAttackPatterns', 'ArtemisCampaignEncounters']) {
+    context[name] ||= context.window[name];
+    context.window[name] = context[name];
+  }
+  // These checkpoint fixtures have no devil grants or computed-stat engine.
+  // Fail closed if a grant enters this seam instead of silently skipping effects.
+  context.applyEncounterSkills ||= () => {
+    assert.ok(!(context.Game.campaignEncounters?.receipts || []).some(r => r.grant?.skillId),
+      'Encounter skill grants require the real skill/stat harness');
+  };
   vm.runInContext([arrayDeclaration('GAME_MODES'), declaration('getGameMode'), declaration('usesCampaignTuning')].join('\n'), context);
   if (skills) vm.runInContext(arrayDeclaration('ROGUE_SKILLS'), context);
   return context;

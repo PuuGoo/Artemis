@@ -1,5 +1,5 @@
 /* Compact portrait combat. HUD overlays never consume world viewport rows. */
-#appRoot.combat-immersive #gameArenaView:not(.hidden) { display:block; inset:50% auto auto 50%; transform:translate(-50%,-50%); width:min(562px,100vw,56.25dvh); height:auto; aspect-ratio:9/16; max-height:100dvh; box-shadow:0 0 80px #000b; }
+#appRoot.combat-immersive #gameArenaView:not(.hidden) { display:block; inset:50% auto auto 50%; transform:translate(-50%,-50%); width:min(562px,96vw,calc(var(--arena-frame-height,78dvh) * .5625)); height:auto; aspect-ratio:9/16; max-height:var(--arena-frame-height,78dvh); box-shadow:0 0 80px #000b; }
 #appRoot.combat-immersive #arenaPlayfield { position:absolute; inset:0; display:block; }
 #appRoot.combat-immersive #battleCanvas { width:100%; height:100%; }
 #appRoot.combat-immersive #arenaHudHeader { position:absolute; inset:0 0 auto; display:block; padding:max(9px,env(safe-area-inset-top)) 9px 0; background:linear-gradient(#243333b3,transparent); }

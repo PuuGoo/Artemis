@@ -1,7 +1,7 @@
 /* Một kế hoạch đạn dùng chung cho bắn và cảnh báo: không nhân sát thương hoặc đổi nhịp AI. */
 (function (root) {
   'use strict';
-  const TAU = Math.PI * 2;
+  const TAU = Math.PI * 2, WARNING = .75, prepared = new WeakMap();
   const motion = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
   // Chỉ trùm cuối chiến dịch: hình học theo chủ đề, không dùng chỉ số cung để xoay cùng một vòng đạn.
   // Tia xuất phát sát boss; chừa khe giữa và cả một cung sau lưng để né.
@@ -123,9 +123,29 @@
     return root.ArtemisCampaignRooms ? root.ArtemisCampaignRooms.applyBossPattern(pattern,e,p) : pattern;
   }
 
+  // Call before decrementing attackTimer, independent of render/FPS.
+  function arm(e, p) {
+    if (!e || !(e.attackTimer <= WARNING)) return null;
+    let next = prepared.get(e);
+    if (!next) {
+      next = plan(e, p);
+      if (next) prepared.set(e, next);
+    }
+    return next;
+  }
   function fire(e, p, spawn) {
-    const next = plan(e, p);
+    if (!e || !(e.hp > 0)) { if (e) prepared.delete(e); return false; }
+    let next = prepared.get(e);
+    if (!next && Number.isFinite(e.attackTimer)) {
+      // Missing first warning must delay, never surprise-fire on an overdue timer.
+      next = arm(e, p);
+      if (!next) return false;
+      e.attackTimer = WARNING;
+      return false;
+    }
+    next = next || plan(e, p); // Compatibility for stateless preview/simulation callers.
     if (!next) return false;
+    prepared.delete(e);
     e.phaseTimer = next.phase;
     e.attackTimer = next.cooldown;
     if (e.campaignFinalBoss === true) e.hpPhase = next.hpPhase;
@@ -134,10 +154,10 @@
   }
 
   function draw(c, e, p, now, quiet) {
-    if (!e || !(e.attackTimer > 0 && e.attackTimer < .48)) return false;
-    const next = plan(e, p);
+    if (!e || !(e.attackTimer > 0 && e.attackTimer <= WARNING)) return false;
+    const next = arm(e, p);
     if (!next) return false;
-    const charge = 1 - e.attackTimer / .48;
+    const charge = 1 - e.attackTimer / WARNING;
     c.save();
     try {
       const width = 1.8 + charge;
@@ -163,5 +183,5 @@
     } finally { c.restore(); }
     return true;
   }
-  root.BossAttackPatterns = { plan, fire, draw };
+  root.BossAttackPatterns = { plan, arm, fire, draw, warningDuration: WARNING };
 })(globalThis);

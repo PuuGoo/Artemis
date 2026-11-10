@@ -159,9 +159,9 @@ check("dmgReduction chan 0.75", capped?.player?.dmgReduction === 0.75, "got " + 
 const restoreBody = section('function restoreClearedCampaignRoom(cp)');
 check('restore không spawn quái, clear lại hay cấp kỹ năng',
   !/setupRoom\(|damageEnemy\(|applyRogueSkill\(|grant|onRoomCleared\(/.test(restoreBody));
-const fixture = {Game: {player: {maxHp: 1000, hp: 500}, runProgression: {pendingOffer: null},
+const fixture = {Game: {runId:'checkpoint-restore-fixture',player: {maxHp: 1000, hp: 500}, runProgression: {pendingOffer: null},
   runGold: 90, kills: 8}, spawnCampaignValkyrie() {}, spawnCampaignWheel() {}, openCampaignOffer() {}};
-vm.createContext(fixture); vm.runInContext(restoreBody, fixture);
+vm.createContext(fixture); loadCampaignDependencies(fixture); vm.runInContext(restoreBody, fixture);
 for (let i = 0; i < 2; i++) {
   fixture.Game.enemies = [{hp:100}]; fixture.Game.drops = [{val:999}];
   fixture.restoreClearedCampaignRoom({room:10});
@@ -191,7 +191,7 @@ check('schema v2 từ chối phòng cuối', sanitizeSave({dungeonCheckpoint:{..
 
 
 // Vòng serializer → sanitizer → Continue thật, lặp hai lần; hiệu ứng không được áp lại.
-const resume = {Game:{running:true,roomCleared:true,chapter:{id:1},room:10,maxRooms:50,kills:42,runGold:900,
+const resume = {Game:{runId:'checkpoint-resume-fixture',running:true,roomCleared:true,chapter:{id:1},room:10,maxRooms:50,kills:42,runGold:900,
   player:{hp:700,maxHp:1000,atk:164,aspd:2,level:4,xp:20,xpNext:100,skills:{multishot:2},speed:260}},
   SaveState:{selectedChapterIdx:0,gold:12345,save(){}},CHECKPOINT_VERSION:2,Date,
   ROGUE_SKILLS:[{id:'multishot',maxStack:2,rarity:'rare'}],usesCampaignTuning:()=>true,

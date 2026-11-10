@@ -23,7 +23,9 @@ test('NPC không xuyên bức tường kín; không treo khi không còn vị tr
   const api=sandbox.window.ArtemisCampaignValkyrie;
   assert.ok(api);
   const g={width:360,height:600,wallPad:28,player:{x:180,y:500,r:17},portalRect:{x:160,y:10,w:40,h:46},obstacles:[{x:28,y:280,w:304,h:50}]};
-  const p=api.findPosition(g);assert.ok(p);assert.ok(p.y>370);
+  const p=api.findPosition(g);assert.ok(p);
+  assert.ok(p.y - 22 > g.obstacles[0].y + g.obstacles[0].h, 'NPC remains on the player side of the sealed wall');
+  assert.equal(sandbox.window.ArtemisObstacleClearance.overlapsObstacle(p.x,p.y,22,g.obstacles[0]),false);
   g.obstacles=[{x:0,y:0,w:360,h:600}];assert.equal(api.findPosition(g),null);
 });
 test('dessin Canvas hữu hạn, không thay đổi state, có nhánh giảm hiệu ứng',()=>{

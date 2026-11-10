@@ -45,6 +45,13 @@ test('đạn vũ khí mang context thật tới GetDecrease khi va chạm trong 
 test('va chạm body có giảm riêng; projectile giữ source của quái lúc bắn',()=>{
   const f=combat();f.p.combatAttributes={BodyHurtDecrease:10,BodyHurtDecreasePercent:.5};
   f.c.hurtPlayer(100,{source:{isBoss:true},attackerType:3});assert.equal(f.p.hp,955);
-  const e=f.enemy({type:'goblin',x:100,y:100,attackTimer:0});f.tick(.01);
+  const e=f.enemy({type:'goblin',x:100,y:100,attackTimer:0});
+  f.c.ArtemisEnemyPressure.prepareRoom(f.Game);
+  // Authored pressure waits before its 750ms warning, independent of attackTimer.
+  for(let i=0;i<8;i++)f.tick(.1);
+  assert.equal(f.Game.enemyBullets.length,0);
+  for(let i=0;i<7;i++)f.tick(.1);
+  assert.equal(f.Game.enemyBullets.length,0,'warning must finish before emission');
+  for(let i=0;i<3 && !f.Game.enemyBullets.length;i++)f.tick(.1);
   assert.ok(f.Game.enemyBullets.length>0);assert.equal(f.Game.enemyBullets[0].source,e);
 });
