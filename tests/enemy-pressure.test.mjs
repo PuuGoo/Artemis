@@ -14,27 +14,30 @@ function load() {
 const enemy = (type = 'goblin') => ({type, hp:100, atk:10, x:240, y:400, r:20});
 test('room framing is compact or expansive with finite reversible camera and fixed physics', () => {
   const {ArtemisArenaViewport:a}=load();
-  const g={room:1};a.beginRun(g);g.player={x:240,y:1050};
+  const g={room:1};a.beginRun(g);g.player={x:240,y:g.height-150};
   const portal=g.portalRect;
   assert.equal(a.roomFraming(g).occupancy,.78);
-  let applied;const ctx={canvas:{width:960,height:1706},setTransform(...args){applied=args;}};
+  let applied;const ctx={canvas:{width:960,height:g.height*2},setTransform(...args){applied=args;}};
   a.applyViewportTransform(ctx,g);
-  assert.equal(applied[0],2);assert.equal(applied[4],0);assert.equal(applied[5],0);
+  assert.equal(applied[0],2);assert.equal(applied[3],2);assert.equal(applied[4],0);assert.equal(applied[5],0);
   const el={style:{setProperty(k,v){this[k]=v;}},dataset:{}};a.syncFrame(g,el);
   assert.equal(el.style['--arena-frame-height'],'78dvh');
   g.room=10;assert.equal(a.roomFraming(g).occupancy,.93);
   for (const room of [1,2,5,10,15,20,49,50]) {
     g.room=room;
-    for(const y of [60,600,1140]) {
+    const zoom=[5,15].includes(room)||room%10===0?1:1.06;
+    assert.equal(a.roomFraming(g).zoom,zoom);
+    for(const y of [60,g.height/2,g.height-60]) {
       g.player.y=y;
       const c=a.camera(g,room*100);
       assert.ok(Object.values(c).every(Number.isFinite));
-      assert.ok(c.x>=0 && c.y>=0 && c.x+c.width<=480.000001 && c.y+c.height<=1200.000001);
-      const rect={left:10,top:20,width:360,height:640};
+      assert.ok(Math.abs(c.width-g.width/zoom)<1e-7 && Math.abs(c.height-g.height/zoom)<1e-7);
+      assert.ok(c.x>=0 && c.y>=0 && c.x+c.width<=480.000001 && c.y+c.height<=769.600001);
+      const rect={left:10,top:20,width:360,height:360*g.height/g.width};
       const q=a.worldToScreen(g,rect,240,y),p=a.screenToWorld(g,rect,q.x,q.y);
       assert.ok(Math.abs(p.x-240)<1e-7 && Math.abs(p.y-y)<1e-7);
       a.fitLayout(320,568,g.width,g.height);a.fitLayout(1920,1080,g.width,g.height);
-      assert.equal(g.width,480);assert.equal(g.height,1200);assert.equal(g.portalRect,portal);
+      assert.equal(g.width,480);assert.ok(Math.abs(g.height-769.6)<1e-7);assert.equal(g.portalRect,portal);
     }
   }
 });

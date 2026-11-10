@@ -3,15 +3,26 @@
   'use strict';
   const cameras = new WeakMap();
   const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+  const ROOM_WIDTH = 480;
+  const ORIGINAL_ROOM_HEIGHT = 1200;
+  const SPAWN_BOTTOM_MARGIN = 95;
+  const PORTAL_TOP = 12;
+  const PORTAL_HEIGHT = 34;
+  const PORTAL_CENTER_Y = PORTAL_TOP + PORTAL_HEIGHT / 2;
+  const TRAVEL_RETAINED = .6;
+  // Retain entrance/portal margins; shorten centerline travel, not total height, by 40%.
+  const ROOM_HEIGHT = SPAWN_BOTTOM_MARGIN + PORTAL_CENTER_Y +
+    (ORIGINAL_ROOM_HEIGHT - SPAWN_BOTTOM_MARGIN - PORTAL_CENTER_Y) * TRAVEL_RETAINED;
   function beginRun(game) {
-    game.width = 480;
-    game.height = 1200;
-    game.portalRect = { x: game.width / 2 - 44, y: 12, w: 88, h: 34 };
+    game.width = ROOM_WIDTH;
+    game.height = ROOM_HEIGHT;
+    game.portalRect = { x: game.width / 2 - 44, y: PORTAL_TOP, w: 88, h: PORTAL_HEIGHT };
     resetCamera(game);
   }
   function viewSize(game) {
-    const width = Math.max(1, game.width || 480);
-    return { width, height: Math.min(game.height || 1200, width * 16 / 9) };
+    const width = Math.max(1, game.width || ROOM_WIDTH);
+    // Short rooms cap the view; fitLayout scales both axes uniformly, without squashing.
+    return { width, height: Math.min(game.height || ROOM_HEIGHT, width * 16 / 9) };
   }
   function fitLayout(availableWidth, availableHeight, width, height) {
     const aw = Math.max(0, availableWidth), ah = Math.max(0, availableHeight);
@@ -43,7 +54,7 @@
     const base = viewSize(game), zoom = roomFraming(game).zoom;
     const view = { width: base.width / zoom, height: base.height / zoom };
     const maxY = Math.max(0, game.height - view.height);
-    const target = clamp((game.player?.y ?? game.height - 95) - view.height * .63, 0, maxY);
+    const target = clamp((game.player?.y ?? game.height - SPAWN_BOTTOM_MARGIN) - view.height * .63, 0, maxY);
     let state = cameras.get(game);
     // New rooms snap to their entrance; no interpolation across a teleport.
     if (!state || state.room !== game.room || state.worldHeight !== game.height) {

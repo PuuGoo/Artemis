@@ -25601,8 +25601,8 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         document.getElementById('bottomNavBar').classList.add('hidden');
         document.getElementById('gameArenaView').classList.remove('hidden');
 
-        // Chọn hình học lúc vào lượt mới; resize/tiếp tục không đổi thế giới.
-        if (reason !== 'continue' && typeof ArtemisArenaViewport !== 'undefined') {
+        // Dựng cùng hình học ngắn cho lượt mới và Continue; resize không đổi thế giới.
+        if (typeof ArtemisArenaViewport !== 'undefined') {
           ArtemisArenaViewport.beginRun(Game, window.innerWidth);
         }
         resizeCanvas();

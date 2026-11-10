@@ -106,10 +106,21 @@ test('header and footer are siblings outside playfield, boss space is reserved, 
   assert.match(css, /#bossHudContainer\.hidden[\s\S]*?visibility:\s*hidden/);
   assert.match(html,/src="\/arena-viewport.js"/); assert.match(html,/href="\/arena-viewport.css"/);
 });
-test('fresh start chooses profile before resizing and continue does not rechoose', () => {
+test('every run including continue establishes shortened geometry before resizing', () => {
   const start=body('startNewRun');
-  assert.match(start,/reason !== 'continue'[\s\S]*?ArtemisArenaViewport.beginRun/);
-  assert.ok(start.indexOf('ArtemisArenaViewport.beginRun') < start.indexOf('resizeCanvas()'));
+  const begin=start.indexOf('ArtemisArenaViewport.beginRun');
+  const resize=start.indexOf('resizeCanvas()');
+  assert.ok(begin>=0 && begin<resize);
+  const setup=start.slice(start.lastIndexOf('\n        if (',begin),resize+'resizeCanvas()'.length);
+  for (const reason of ['fresh','retry','reset','continue']) {
+    const Game={width:800,height:600};
+    let atResize;
+    const sandbox={Game,reason,window:{innerWidth:390},resizeCanvas(){atResize={width:Game.width,height:Game.height};}};
+    vm.createContext(sandbox);
+    vm.runInContext(fs.readFileSync(modulePath,'utf8'),sandbox);
+    vm.runInContext(setup,sandbox);
+    assert.deepEqual(atResize,{width:480,height:769.6},`${reason} initializes geometry before resizing`);
+  }
 });
 test('legacy display preference cannot change portrait framing and blocked storage is safe', () => {
   const sandbox={localStorage:{value:'large',getItem(key){assert.equal(key,'artemis.arenaSize');return this.value;},setItem(key,v){assert.equal(key,'artemis.arenaSize');this.value=v;}}};
@@ -146,33 +157,47 @@ test('uniform fit contains the viewport with identical centered framing in both 
     assert.deepEqual(api.fitLayout(aw,ah,w,h,'large'),api.fitLayout(aw,ah,w,h,'fit'));
   }
 });
-test('fresh run selects the same tall world and portrait viewport on desktop and mobile', () => {
+test('production beginRun retains exactly 60% of entrance-to-portal centerline travel', () => {
+  const api=load(), game={player:{speed:180}};
+  api.beginRun(game);
+  const spawnY=game.height-95;
+  const portalCenterY=game.portalRect.y+game.portalRect.h/2;
+  const originalTravel=1200-95-29;
+  assert.equal((spawnY-portalCenterY)/originalTravel,.6);
+  assert.equal(spawnY-portalCenterY,645.6);
+  assert.equal(game.width,480);
+  assert.equal(JSON.stringify(game.portalRect),JSON.stringify({x:196,y:12,w:88,h:34}));
+  assert.equal(game.player.speed,180,'shorter travel must not change movement speed');
+});
+test('fresh run selects the same shortened world and undistorted viewport on desktop and mobile', () => {
   const api = load();
   for (const width of [1440,768,390]) {
-    const w=480,h=1200;
+    const w=480,h=769.6;
     const game = { width: 12, height: 12 };
     api.beginRun(game, width);
     assert.equal(game.width, w); assert.equal(game.height, h);
     assert.equal(game.portalRect.x, w / 2 - 44);
     assert.equal(api.viewSize(game).width,480);
-    assert.ok(Math.abs(api.viewSize(game).height-853.3333333333334)<1e-8);
+    assert.equal(api.viewSize(game).height,h,'viewport is capped to the shorter room');
+    const fit=api.fitLayout(width,700,w,h);
+    assert.ok(Math.abs(fit.width/fit.height-w/h)<1e-8,'fit keeps uniform world scaling');
   }
 });
 
 test('portrait camera follows up and back down without changing room geometry', () => {
   const api=load(),game={room:1};api.beginRun(game);
-  game.player={x:240,y:1105};
+  game.player={x:240,y:game.height-95};
   const portal=game.portalRect, entrance=api.camera(game,0);
   assert.ok(entrance.y>0);
   game.player.y=95;
   const top=api.camera(game,100);
   assert.ok(top.y<entrance.y,'camera follows player upwards');
-  game.player.y=1105;
+  game.player.y=game.height-95;
   const back=api.camera(game,200);
   assert.ok(back.y>top.y,'camera also follows player back down');
   assert.ok(back.y<=game.height-back.height);
-  assert.equal(game.width,480);assert.equal(game.height,1200);assert.equal(game.portalRect,portal);
-  const rect={left:100,top:50,width:240,height:426.6666666666667};
+  assert.equal(game.width,480);assert.equal(game.height,769.6);assert.equal(game.portalRect,portal);
+  const rect={left:100,top:50,width:240,height:game.height/2};
   const screen=api.worldToScreen(game,rect,game.player.x,game.player.y);
   const world=api.screenToWorld(game,rect,screen.x,screen.y);
   assert.ok(Math.abs(world.x-game.player.x)<1e-8 && Math.abs(world.y-game.player.y)<1e-8);
