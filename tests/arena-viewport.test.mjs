@@ -129,7 +129,7 @@ test('legacy display preference cannot change portrait framing and blocked stora
   assert.equal(api.getMode(),'fit'); api.syncButton(button); assert.equal(button.textContent,'Khung dọc');
   const beforeLayout=api.fitLayout(1100,700,480,1200);
   api.toggleMode(); api.syncButton(button); assert.equal(api.getMode(),'large'); assert.equal(button.textContent,'Khung dọc');
-  assert.equal(button.dataset.mode,'large'); assert.match(button['aria-label'],/9:16/);
+  assert.equal(button.dataset.mode,'large'); assert.match(button['aria-label'],/tự vừa màn hình/);
   assert.deepEqual(api.fitLayout(1100,700,480,1200),beforeLayout);
   assert.equal(sandbox.localStorage.value,'large','obsolete stored preference is not rewritten');
   sandbox.localStorage={getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}};
@@ -155,6 +155,19 @@ test('uniform fit contains the viewport with identical centered framing in both 
       if (aw && ah) assert.ok(Math.abs(fit.width / fit.height - view.width/view.height) < 1e-8);
     }
     assert.deepEqual(api.fitLayout(aw,ah,w,h,'large'),api.fitLayout(aw,ah,w,h,'fit'));
+  }
+});
+test('shell ratio follows the actual viewport without changing world or camera', () => {
+  const api=load();
+  for (const height of [600,769.6,1200]) {
+    const game={width:480,height,room:1,player:{x:240,y:height-95}};
+    const before=JSON.stringify(game),camera=JSON.stringify(api.camera(game,0));
+    const element={style:{setProperty(k,v){this[k]=v;}},dataset:{}};
+    api.syncFrame(game,element);
+    const view=api.viewSize(game);
+    assert.equal(Number(element.style['--arena-view-ratio']),view.width/view.height);
+    assert.equal(JSON.stringify(game),before);
+    assert.equal(JSON.stringify(api.camera(game,0)),camera);
   }
 });
 test('production beginRun retains exactly 60% of entrance-to-portal centerline travel', () => {

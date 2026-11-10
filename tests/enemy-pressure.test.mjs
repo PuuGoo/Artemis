@@ -16,13 +16,15 @@ test('room framing is compact or expansive with finite reversible camera and fix
   const {ArtemisArenaViewport:a}=load();
   const g={room:1};a.beginRun(g);g.player={x:240,y:g.height-150};
   const portal=g.portalRect;
-  assert.equal(a.roomFraming(g).occupancy,.78);
+  assert.ok(a.roomFraming(g).occupancy >= .94, 'sân tận dụng chiều cao màn laptop');
   let applied;const ctx={canvas:{width:960,height:g.height*2},setTransform(...args){applied=args;}};
   a.applyViewportTransform(ctx,g);
   assert.equal(applied[0],2);assert.equal(applied[3],2);assert.equal(applied[4],0);assert.equal(applied[5],0);
   const el={style:{setProperty(k,v){this[k]=v;}},dataset:{}};a.syncFrame(g,el);
-  assert.equal(el.style['--arena-frame-height'],'78dvh');
-  g.room=10;assert.equal(a.roomFraming(g).occupancy,.93);
+  assert.equal(el.style['--arena-frame-height'],`${a.roomFraming(g).occupancy * 100}dvh`);
+  assert.equal(Number(el.style['--arena-view-ratio']),a.viewSize(g).width/a.viewSize(g).height);
+  const normalOccupancy=a.roomFraming(g).occupancy;
+  g.room=10;assert.ok(a.roomFraming(g).occupancy >= normalOccupancy);
   for (const room of [1,2,5,10,15,20,49,50]) {
     g.room=room;
     const zoom=[5,15].includes(room)||room%10===0?1:1.06;

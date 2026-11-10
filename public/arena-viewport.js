@@ -40,13 +40,16 @@
     const safe = [5,15,25,35,45].includes(room);
     const expansive = !safe && (room > 0 && room % 10 === 0 || game.roomIsBoss === true);
     // Screen-height occupancy, not fraction of a landscape monitor's area.
-    return { occupancy: expansive ? .93 : .78, zoom: room > 0 && !safe && !expansive ? 1.06 : 1,
+    return { occupancy: expansive ? .98 : .96, zoom: room > 0 && !safe && !expansive ? 1.06 : 1,
       kind: expansive ? 'expansive' : 'compact' };
   }
   function syncFrame(game, element) {
     if (!element) return;
     const frame = roomFraming(game);
+    const view = viewSize(game);
     element.style.setProperty('--arena-frame-height', `${frame.occupancy * 100}dvh`);
+    // Khớp tỷ lệ khung với viewport thật, tránh khoảng trống và HUD lệch khỏi sân.
+    element.style.setProperty('--arena-view-ratio', String(view.width / view.height));
     element.dataset.arenaFrame = frame.kind;
   }
   function resetCamera(game) { cameras.delete(game); }
@@ -100,7 +103,7 @@
   function syncButton(button) {
     if (!button) return;
     button.textContent = 'Khung dọc'; button.dataset.mode = mode;
-    button.setAttribute('aria-label', 'Khung chiến đấu dọc 9:16');
+    button.setAttribute('aria-label', 'Khung chiến đấu dọc tự vừa màn hình');
   }
   root.ArtemisArenaViewport = { beginRun, fitLayout, backingSize, getMode, toggleMode, syncButton,
     viewSize, roomFraming, syncFrame, camera, resetCamera, applyWorldTransform, applyViewportTransform, clientToViewport, screenToWorld, worldToScreen };
