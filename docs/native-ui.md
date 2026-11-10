@@ -2,7 +2,7 @@
 
 Màn Chiến Dịch mặc định dùng khung dọc tối đa 562px, nền bản đồ xanh, đảo trại SVG tự vẽ, nhãn chương lấy từ renderer hiện tại, shortcut dùng handler hiện hữu và nút Bắt Đầu giữ nguyên flow briefing → xuất chiến. Trên desktop khung game được căn giữa.
 
-`native-campaign.css/js` và `native-navigation.css/js` được nạp sau stylesheet hiện hữu. Không thay đổi API, số dư, save hay nội dung chương để giả lập ảnh. Thanh chat ghi rõ chưa khả dụng vì bản này chưa có dịch vụ chat. Nút bắt đầu không ghi tiêu hao x5 vì logic hiện tại chưa trừ thể lực. Trạng thái hoàn thành chỉ xuất hiện khi renderer báo chương đã hoàn thành.
+`native-campaign.css/js` và `native-navigation.css/js` được nạp sau stylesheet hiện hữu. Không thay đổi API, số dư, save hay nội dung chương để giả lập ảnh. Thanh chat ghi rõ chưa khả dụng vì bản này chưa có dịch vụ chat. Chương đã hoàn thành hiển thị chi phí chơi lại ⚡ ×5; chi phí chỉ trừ khi xác nhận khởi tạo lượt mới thành công. Hủy xác nhận, tiếp tục checkpoint và chương chưa hoàn thành không bị tính phí chơi lại. Trạng thái hoàn thành chỉ xuất hiện khi renderer báo chương đã hoàn thành.
 
 Asset minh họa được vẽ lại, không phải bộ asset gốc của ảnh tham chiếu; do đó không tuyên bố giống pixel 100%. Tên chương, tiến độ và tài nguyên phản ánh dữ liệu tài khoản thật, không chép dữ liệu người chơi trong ảnh.
 

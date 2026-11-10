@@ -152,6 +152,8 @@
     }
     button.append(title,art);
     if (won) {
+      const completed = element('span', 'world-map-completed-label', 'Đã vượt ải');
+      button.append(completed);
       // The game records clear/no-clear, not a graded three-star score.
       const stars = element('span','world-map-stars','★ ★ ★');
       stars.setAttribute('aria-hidden','true'); button.append(stars);

@@ -39,7 +39,9 @@
 #tabBattle[data-native-campaign] .battle-launch-actions{display:flex;width:100%;height:100%;gap:3px;flex-direction:column!important}
 #tabBattle[data-native-campaign] #btnStartGame{position:relative;flex:1;width:100%;min-height:48px!important;padding:3px 4px!important;border:3px solid #db9714!important;border-radius:12px!important;background:linear-gradient(135deg,#fff08b 0,#ffe66a 40%,#fff7ac 41%,#ffdc36 48%,#ffd42b 100%)!important;color:#572e12!important;box-shadow:inset 0 2px #fff6cd,0 4px #9a651a!important;font-size:0!important;text-shadow:0 1px #fff7b6}
 #tabBattle[data-native-campaign] #btnStartGame::before{content:'Bắt Đầu';display:block;font-size:clamp(23px,5.2vw,32px);font-weight:1000;line-height:1.05}
-/* Campaign engine does not charge stamina for startNewRun. Never imply a fake x5 debit. */
+/* startNewRun charges cleared campaign replay only on confirmed successful launch. */
+#tabBattle[data-native-campaign] #btnStartGame[data-replay-cost="5"]::after{content:'×5';color:#fff;font-size:16px;line-height:1.2;padding-left:19px;text-shadow:0 2px #52622e,1px 0 #52622e,-1px 0 #52622e;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cpath d='M11 1 2 16h7L7 27l12-17h-8l3-9Z' fill='%236fe63e' stroke='%23287931' stroke-width='1.5'/%3E%3C/svg%3E") calc(50% - 13px) center/15px 21px no-repeat;clip-path:none}
+#tabBattle[data-native-campaign] #btnStartGame[data-replay-cost="5"]{background-image:linear-gradient(135deg,#fff08b 0,#ffe66a 40%,#fff7ac 41%,#ffdc36 48%,#ffd42b 100%)!important}
 #tabBattle[data-native-campaign] #btnStartGame::after{content:'Lượt mới';display:block;font-size:11px;font-weight:900;color:#7e541a}
 #tabBattle[data-native-campaign] #btnStartGame:disabled{filter:grayscale(.65);opacity:.8}#tabBattle[data-native-campaign] #btnStartGame:disabled::before{content:'Chưa mở'}
 #tabBattle[data-native-campaign] #btnContinueRun{min-height:24px!important;position:absolute;bottom:calc(100% + 4px);left:0;width:100%;padding:3px;background:#17476ddd;border:1px solid #90d7fa;color:#fff;font-size:10px;border-radius:7px}

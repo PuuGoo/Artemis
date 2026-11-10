@@ -1,0 +1,10 @@
+{
+  "scope": "Chrome local with isolated auth/save fixture, not production",
+  "clearedReplay": true,
+  "cancelFree": true,
+  "insufficientBlocked": true,
+  "staminaBefore": 10,
+  "staminaAfter": 5,
+  "errors": [],
+  "failedLocal": []
+}

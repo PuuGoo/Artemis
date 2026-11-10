@@ -41,7 +41,7 @@ function launchHarness({ mode = 'campaign', preview = null, checkpoint = null } 
   const elements = new Map();
   const get = id => {
     if (!elements.has(id)) elements.set(id, {
-      textContent: '', disabled: false, style: { setProperty() {} },
+      textContent: '', disabled: false, dataset: {}, setAttribute(name, value) { this[name] = value; }, style: { setProperty() {} },
       classList: { toggle() {}, add() {}, remove() {} },
     });
     return elements.get(id);
@@ -52,9 +52,10 @@ function launchHarness({ mode = 'campaign', preview = null, checkpoint = null } 
     SaveState: { selectedChapterIdx: 0 }, previewChapterIdx: preview,
     getActiveGameMode: () => ({ id: mode, name: mode === 'campaign' ? 'Chiến Dịch' : 'Luyện Tập', hasChapters: mode === 'campaign' }),
     isChapterLocked: ch => ch.id === 2,
+    isChapterWon: () => false,
     getUsableCheckpoint: () => checkpoint,
   };
-  vm.runInNewContext(`${functionSource('syncContinueButton')}\n${functionSource('syncBattleLaunch')}\nsyncBattleLaunch();`, sandbox);
+  vm.runInNewContext(`${functionSource('getCampaignReplayCost')}\n${functionSource('syncContinueButton')}\n${functionSource('syncBattleLaunch')}\nsyncBattleLaunch();`, sandbox);
   return { get };
 }
 

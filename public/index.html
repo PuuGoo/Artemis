@@ -15873,7 +15873,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           : (checkpoint ? `Có lượt đã lưu ở phòng ${checkpoint.room}. Tiếp tục hoặc bắt đầu lại từ phòng 1.` : (mode.practice ? 'Luyện tập không nhận thưởng. Lượt mới từ phòng 1.' : 'Sẵn sàng. Lượt mới bắt đầu từ phòng 1.'));
         if (start) {
           start.disabled = locked;
-          start.textContent = locked ? '🔒 Chương chưa mở' : '⚔️ Bắt đầu lượt mới';
+          const replayCost = !locked ? getCampaignReplayCost(ch, 'fresh', mode) : 0;
+          start.dataset.replayCost = String(replayCost);
+          start.setAttribute('aria-label', locked ? 'Chương chưa mở' : replayCost ? `Bắt Đầu Chương ${ch.id}, tiêu hao ${replayCost} năng lượng` : 'Bắt đầu lượt mới');
+          start.textContent = locked ? '🔒 Chương chưa mở' : replayCost ? `Bắt Đầu · ⚡ ×${replayCost}` : '⚔️ Bắt đầu lượt mới';
         }
         syncContinueButton();
         const resume = document.getElementById('btnContinueRun');
@@ -20062,7 +20065,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // Áp hero trial CHỈ trong lúc dựng trận, rồi trả lại ngay — không ghi vào SaveState.
         runHeroOverrideId = forceHeroId || null;
         try {
-          if (startNewRun() === false) return false;
+          if (startNewRun('event') === false) return false;
         } finally {
           runHeroOverrideId = null;
         }
@@ -25523,7 +25526,28 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         });
       }
 
+      function getCampaignReplayCost(ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0], reason = 'fresh', mode = getActiveGameMode()) {
+        return mode?.id === 'campaign' && ['fresh', 'retry', 'reset'].includes(reason) && ch && isChapterWon(ch.id) ? 5 : 0;
+      }
+
       function startNewRun(reason = 'fresh') {
+        // Một lần nhấn lặp không được dựng lại hoặc thu phí trận đang chạy.
+        // Retry/Reset là yêu cầu bắt đầu lại có chủ ý; Continue có luồng riêng.
+        if (Game.running && reason !== 'retry' && reason !== 'reset' && reason !== 'continue') return false;
+        const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
+        const mode = getActiveGameMode();
+        if (mode.hasChapters && isChapterLocked(ch)) {
+          showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
+          return false;
+        }
+        const replayCost = getCampaignReplayCost(ch, reason, mode);
+        const stamina = Math.max(0, Number(SaveState.stamina) || 0);
+        // Kiểm tra trước khi dừng trận hoặc xoá checkpoint hiện có.
+        if (replayCost > stamina) {
+          showToast(`⚡ Không đủ năng lượng để chơi lại: cần ${replayCost}, hiện có ${stamina}.`);
+          return false;
+        }
+        const stats = getComputedStats();
         SoundFX.init();
         // Nạp mẫu âm thanh thật sau thao tác của người chơi (được phép mở AudioContext).
         SoundFX.preload?.();
@@ -25537,18 +25561,6 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         // Nút Continue phải ẩn ngay khi vừa xoá checkpoint.
         syncContinueButton();
-
-        const stats = getComputedStats();
-        const ch = CHAPTERS[SaveState.selectedChapterIdx] || CHAPTERS[0];
-        const mode = getActiveGameMode();
-
-        // Chặn vào chương chưa mở khoá — chỉ áp cho chế độ Chiến Dịch.
-        // Các chế độ khác (Vô Tận, Tháp, Săn Trùm, Luyện Tập) không phụ
-        // thuộc tiến trình chương nên không được chặn oan.
-        if (mode.hasChapters && isChapterLocked(ch)) {
-          showToast(`🔒 Cần "${ch.unlock.label}" để mở ${ch.name.split(':')[0]}!`);
-          return false;
-        }
 
         // Switch UI view
         setCombatImmersive(true);
@@ -25664,6 +25676,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         Game.lastTime = performance.now();
         Game.animId = requestAnimationFrame(gameLoop);
+        // Thu phí đúng một lần, sau khi toàn bộ bước dựng trận đã thành công.
+        if (replayCost > 0 && Game.running) {
+          SaveState.stamina = stamina - replayCost;
+          SaveState.save();
+        }
       }
 
       // Setup Room Obstacles & Enemies

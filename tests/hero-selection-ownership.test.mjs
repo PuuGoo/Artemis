@@ -103,7 +103,7 @@ function runFixture(extra = {}) {
     computeAllArtifactsAndSetsBonuses: () => zero, getHeroMilestoneData: () => zero,
     getActiveHeroSkin: () => zero, getAllUnlockedSkinBonuses: () => zero, getSetBonuses: () => [],
     stopGameLoop() {}, clearRunState() {}, syncContinueButton() {},
-    getActiveGameMode: () => ({ id: 'campaign', hasChapters: true }), isChapterLocked: () => false,
+    getActiveGameMode: () => ({ id: 'campaign', hasChapters: true }), isChapterLocked: () => false, isChapterWon: () => false,
     resizeCanvas() {}, DungeonSession: { begin() { f.S.save(); } }, bumpLifetimeStat() {},
     checkAchievements() { f.S.save(); }, isRuneEquipped: () => false, runeHasEffect: () => false,
     hasHeroSkillActive: () => false, setupRoom() {}, updateInGameHUD() {}, performance: { now: () => 0 },
@@ -111,7 +111,7 @@ function runFixture(extra = {}) {
     requestAnimationFrame: () => 1, gameLoop() {} });
   f.ctx.SoundFX.init = () => {};
   f.ctx.document.getElementById = () => ({ classList: { add() {}, remove() {} } });
-  f.run(`${declaration('getComputedStats')}\n${declaration('openCampaignOffer')}\n${declaration('startNewRun')}\n${declaration('launchEventCanvasRun')}`);
+  f.run(`${declaration('getComputedStats')}\n${declaration('openCampaignOffer')}\n${declaration('getCampaignReplayCost')}\n${declaration('startNewRun')}\n${declaration('launchEventCanvasRun')}`);
   return f;
 }
 test('real Demon King binding plays Atreus for this run only, including saves during startup', () => {
@@ -129,7 +129,7 @@ test('real Demon King binding plays Atreus for this run only, including saves du
   assert.equal(f.run("isHeroOwned('atreus')"), false);
   assert.equal(f.run("isHeroOwned('artemis')"), true);
   assert.equal(JSON.stringify([f.S.heroStars, f.S.heroShards, f.S.heroSelectedSkins]), assets);
-  f.run('startNewRun()');
+  f.run("startNewRun('retry')");
   assert.equal(f.ctx.Game.player.hero.id, 'artemis');
 });
 test('forced invalid/unowned non-trial hero never persists or launches a run', () => {
