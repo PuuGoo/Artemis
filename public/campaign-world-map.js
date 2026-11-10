@@ -6,6 +6,7 @@
   let chapters, observer, queued = false, panel, root, viewport, returnButton;
   let savedScroll = null, pendingCenter = false, lastFocused = null;
   let effectObserver;
+  let celebrating = null;
   const api = () => window.Archero2FusionAPI;
 
   function getChapters() {
@@ -192,7 +193,13 @@
     }
     const focused = viewport.contains(doc.activeElement) ? doc.activeElement?.dataset.worldChapter : null;
     const fragment = doc.createDocumentFragment();
-    getChapters().slice().sort((a,b)=>b.id-a.id).forEach(ch => fragment.append(makeNode(ch)));
+    const canCelebrate = !screen.classList.contains('hidden') && !doc.getElementById('appRoot')?.classList.contains('combat-immersive');
+    getChapters().slice().sort((a,b)=>b.id-a.id).forEach(ch => {
+      const node=makeNode(ch);
+      if (canCelebrate && sourceButton(ch.index)?.dataset.locked !== '1' && window.ArtemisMapJuice?.takeUnlock(ch.id)) celebrating={id:ch.id,until:performance.now()+1800,center:true};
+      if (celebrating?.id===ch.id && performance.now()<celebrating.until) node.classList.add('is-newly-unlocked');
+      fragment.append(node);
+    });
     viewport.replaceChildren(fragment);
     effectObserver?.disconnect();
     if (typeof IntersectionObserver === 'function') {
@@ -203,6 +210,10 @@
     }
     if (savedScroll === null || pendingCenter) centerCurrent();
     else viewport.scrollTop = savedScroll;
+    if (celebrating?.center && !screen.classList.contains('hidden') && !doc.getElementById('appRoot')?.classList.contains('combat-immersive')) {
+      const node=viewport.querySelector(`[data-world-chapter="${celebrating.id}"]`);
+      if(node){viewport.scrollTo({top:Math.max(0,node.offsetTop+node.offsetHeight/2-viewport.clientHeight/2),behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});celebrating.center=false;}
+    }
     if (focused) viewport.querySelector(`[data-world-chapter="${focused}"]`)?.focus({preventScroll:true});
     updateRegion();
   }

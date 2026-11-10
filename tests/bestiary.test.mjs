@@ -40,7 +40,7 @@ check("tang 'seen'", /rec\.seen = \(rec\.seen \|\| 0\) \+ 1/.test(html));
 check("tang 'killed'", /rec\.killed = \(rec\.killed \|\| 0\) \+ 1/.test(html));
 check("ghi firstAt lan dau", /if \(!rec\.firstAt\) rec\.firstAt = Date\.now\(\)/.test(html));
 check("onEnemyKilled goi recordBestiaryKill",
-  /function onEnemyKilled\(e\)[\s\S]{0,300}?recordBestiaryKill\(e\.type/.test(html));
+  /recordBestiaryKill\(e\.type/.test(html.slice(html.indexOf('function onEnemyKilled(e)'), html.indexOf('// Bloodthirst skill heal', html.indexOf('function onEnemyKilled(e)')))));
 check("co ham getBestiaryRecord", /function getBestiaryRecord\(type\)/.test(html));
 check("co ham getBestiaryDiscoveredCount", /function getBestiaryDiscoveredCount\(\)/.test(html));
 

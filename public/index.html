@@ -1637,6 +1637,7 @@
   <link rel="stylesheet" href="/campaign-pixelfx-atlas.css">
   <script src="/campaign-pixelfx-atlas.js"></script>
   <script src="/campaign-pixelfx.js"></script>
+  <script src="/campaign-map-juice.js"></script>
   <script src="/campaign-world-map-art.js" defer></script>
   <script src="/campaign-world-map.js" defer></script>
   <link rel="stylesheet" href="/patrol.css">
@@ -25855,6 +25856,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       function setupRoom(roomNum) {
+        globalThis.ArtemisMapJuice?.reset(Game);
         Game.encounterNpc = null;Game.encounterController?.destroy();Game.encounterController=null;
         Game.valkyrieNpc = null;
         Game.wheelNpc = null;
@@ -26175,6 +26177,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // Gán sau khi constructor gốc đã giữ nguyên AI, chỉ số và vị trí an toàn.
         MonsterArt.assignRoom(Game);
+        for (const boss of Game.enemies.filter(e => e.isBoss)) globalThis.ArtemisMapJuice?.emit(Game, 'boss-spawn', boss.x, boss.y);
         globalThis.ArtemisEnemyPressure?.prepareRoom(Game);
         Game.roomIsBoss = isBossRoom(roomNum);
         if (typeof ArtemisArenaViewport !== 'undefined') {
@@ -27347,6 +27350,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       function onEnemyKilled(e) {
         if (e.deathProcessed) return;
+        if (e.isBoss) globalThis.ArtemisMapJuice?.emit(Game, 'boss-death', e.x, e.y);
         e.deathProcessed = true;
         Game.kills++;
         bumpLifetimeStat('kills', 1);
@@ -27429,6 +27433,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           Game.roomCleared = true;
           Game.portalOpen = true;
           SoundFX.portalOpen();
+          globalThis.ArtemisMapJuice?.emit(Game, 'clear', e.x, e.y);
           document.getElementById('hudHintBanner').textContent = '✨ PHÒNG ĐÃ SẠCH QUÁI! Di chuyển vào CỔNG ÁNH SÁNG phía trên để sang phòng tiếp theo!';
           // Overlay phản hồi rõ: phòng vừa xong, vàng nhặt được, phòng kế (thường/trùm).
           showRoomClearOverlay({
@@ -27605,6 +27610,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
       // ==================== MAIN UPDATE LOOP ====================
       function updateGame(dt) {
+        globalThis.ArtemisMapJuice?.tick(Game, dt);
         const p = Game.player;
         if (!p) return;
         if (usesCampaignTuning() && !Game.paused) Game.campaignEntrySafe = false;
@@ -27778,6 +27784,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               return;
             } else {
               setupRoom(Game.room + 1);
+              globalThis.ArtemisMapJuice?.emit(Game, 'transition', Game.player.x, Game.player.y);
               return;
             }
           }
@@ -28797,6 +28804,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
         // 1-8. Map chiến đấu V2 (tường, sàn, pháp trận, vết chiến trường, đuốc, cổng, chướng ngại)
         ArenaV2.drawArena(ctx, w, h, pad, nowMs, chId);
+        globalThis.ArtemisMapJuice?.draw(ctx, Game, 'floor');
         globalThis.ArtemisEnemyPressure?.draw(ctx,Game);
         if(Game.encounterNpc)ArtemisCampaignEncounters.draw(ctx,Game.encounterNpc,nowMs,Game.lowGfx,ArtemisCampaignEncounters.isTouching(Game.player,Game.encounterNpc));
         if (Game.wheelNpc) ArtemisCampaignWheel.drawNPC(ctx, Game.wheelNpc, nowMs, Game.lowGfx, ArtemisCampaignWheel.isNear(Game.player, Game.wheelNpc));
@@ -29186,6 +29194,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         ctx.fillStyle = Game._vignetteCache.grad;
         ctx.fillRect(0, 0, w, h);
 
+        globalThis.ArtemisMapJuice?.draw(ctx, Game, 'front');
         // 24. Cinematic Room / Boss Entrance Banner Overlay
         if (Game.roomBannerTimer > 0) {
           ctx.save();
@@ -30623,6 +30632,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         // 'runs' da duoc dem luc bat dau tran (startNewRun) de khong dem 2 lan.
         bumpLifetimeStat('goldEarned', Game.runGold);
         setLifetimeStatMax('deepestRoom', Game.room);
+        let firstCampaignWin = false;
         if (isVictory) {
           // Beginner Journey: N07 — hoàn thành Chương 1.
           if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onChapterCleared(Game.chapter && Game.chapter.id);
@@ -30630,6 +30640,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           const chId = Game.chapter ? Game.chapter.id : 'x';
           SaveState.winsByChapter = SaveState.winsByChapter || {};
           const firstWinHere = !SaveState.winsByChapter[chId];
+          firstCampaignWin = firstWinHere;
           SaveState.winsByChapter[chId] = (SaveState.winsByChapter[chId] || 0) + 1;
           if (firstWinHere) bumpLifetimeStat('chaptersCleared', 1);
         }
@@ -30674,6 +30685,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const curIdx = CHAPTERS.findIndex(c => c.id === (Game.chapter && Game.chapter.id));
             const nextCh = CHAPTERS[curIdx + 1] || null;
             const unlockedNext = nextCh && !isChapterLocked(nextCh);
+            if (firstCampaignWin && unlockedNext) globalThis.ArtemisMapJuice?.unlock(nextCh.id);
             openChapterVictory(Game.chapter, unlockedNext ? nextCh : null, {
               rooms: Game.maxRooms,
               kills: Game.kills,

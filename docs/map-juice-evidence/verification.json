@@ -1,0 +1,186 @@
+{
+  "scope": "Chrome thật; HTTP mock auth/save + sanitizer thật; phòng khác dùng spawner thật nhưng nhảy fixture, không phải vượt chương tự nhiên; không production",
+  "results": [
+    {
+      "name": "world-map-real-clicks-animation-offscreen-pause-reduced-low-responsive",
+      "chapters": 19
+    },
+    {
+      "name": "real-ui-start-and-live-combat",
+      "lastTime": 20585.1,
+      "hp": 775,
+      "enemies": 3,
+      "running": true
+    },
+    {
+      "name": "real-HTTP-PNG-decode-alpha",
+      "assets": [
+        {
+          "id": "torch",
+          "visible": 7025,
+          "transparent": 1615,
+          "width": 576,
+          "height": 480
+        },
+        {
+          "id": "portal",
+          "visible": 16958,
+          "transparent": 674,
+          "width": 1216,
+          "height": 580
+        },
+        {
+          "id": "leaves",
+          "visible": 284,
+          "transparent": 14116,
+          "width": 1280,
+          "height": 720
+        },
+        {
+          "id": "snow",
+          "visible": 1165,
+          "transparent": 13235,
+          "width": 1280,
+          "height": 1080
+        },
+        {
+          "id": "fog",
+          "visible": 6066,
+          "transparent": 8334,
+          "width": 1280,
+          "height": 720
+        },
+        {
+          "id": "rays",
+          "visible": 6165,
+          "transparent": 8235,
+          "width": 1280,
+          "height": 630
+        },
+        {
+          "id": "aurora",
+          "visible": 7267,
+          "transparent": 7133,
+          "width": 1280,
+          "height": 720
+        }
+      ]
+    },
+    {
+      "name": "production-spawner-renderer-fixture",
+      "chapter": 1,
+      "room": 1,
+      "unchanged": true,
+      "draws": [
+        "fog.png",
+        "torch.png"
+      ],
+      "enemies": 3,
+      "biome": "Hầm Ngục Đá Cổ"
+    },
+    {
+      "name": "production-spawner-renderer-fixture",
+      "chapter": 1,
+      "room": 2,
+      "unchanged": true,
+      "draws": [
+        "leaves.png",
+        "rays.png"
+      ],
+      "enemies": 3,
+      "biome": "Rừng Cổ Thụ Phủ Rêu"
+    },
+    {
+      "name": "production-spawner-renderer-fixture",
+      "chapter": 2,
+      "room": 1,
+      "unchanged": true,
+      "draws": [
+        "fog.png",
+        "torch.png"
+      ],
+      "enemies": 3,
+      "biome": "Thung Lũng Dung Nham"
+    },
+    {
+      "name": "production-spawner-renderer-fixture",
+      "chapter": 3,
+      "room": 1,
+      "unchanged": true,
+      "draws": [
+        "aurora.png",
+        "fog.png"
+      ],
+      "enemies": 3,
+      "biome": "Thánh Điện Hư Không"
+    },
+    {
+      "name": "production-spawner-renderer-fixture",
+      "chapter": 4,
+      "room": 1,
+      "unchanged": true,
+      "draws": [
+        "snow.png",
+        "fog.png"
+      ],
+      "enemies": 3,
+      "biome": "Long Vực Thiên Không"
+    },
+    {
+      "name": "production-spawner-renderer-fixture",
+      "chapter": 7,
+      "room": 1,
+      "unchanged": true,
+      "draws": [
+        "leaves.png",
+        "rays.png"
+      ],
+      "enemies": 3,
+      "biome": "Rừng Nấm Phát Quang"
+    },
+    {
+      "name": "production-spawner-renderer-fixture",
+      "chapter": 19,
+      "room": 10,
+      "unchanged": true,
+      "draws": [
+        "fog.png",
+        "torch.png",
+        "portal.png"
+      ],
+      "enemies": 1,
+      "biome": "Lò Rèn Dung Nham"
+    },
+    {
+      "name": "portal-open-and-low-gfx-fallback",
+      "portal": true,
+      "lowDraws": 0
+    },
+    {
+      "name": "map-event-hook-probe",
+      "spawn": true,
+      "killed": [
+        "boss-spawn",
+        "boss-death",
+        "clear"
+      ],
+      "transition": true,
+      "room": 2,
+      "unchanged": true
+    },
+    {
+      "name": "six-map-effects-production-hooks-local-fixture-not-natural-victory",
+      "spawn": true,
+      "killed": [
+        "boss-spawn",
+        "boss-death",
+        "clear"
+      ],
+      "transition": true,
+      "room": 2,
+      "unchanged": true
+    }
+  ],
+  "errors": [],
+  "failures": []
+}

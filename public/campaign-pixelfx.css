@@ -47,7 +47,18 @@
 #tabBattle.battle-motion-low .world-map-effect {display:none;background-image:none}
 #tabBattle.battle-motion-low .world-map-art {animation:none}
 @keyframes world-island-float {0%,100%{translate:0 0}50%{translate:0 -4px}}
+#tabBattle .is-newly-unlocked .world-map-island::after {content:'';position:absolute;inset:8% 12%;z-index:3;border:2px solid #fff1b0;border-radius:50%;pointer-events:none;animation:world-unseal 1.8s ease-out both;box-shadow:0 0 24px #fff1b077}
+#tabBattle .is-newly-unlocked::before {animation:world-path-reveal 1.5s ease-out both}
+#tabBattle .is-newly-unlocked .world-map-title {animation:world-unlock-title 1.8s ease-out both}
+@keyframes world-unseal {0%{transform:scale(.5);opacity:0}20%{opacity:.8}100%{transform:scale(1.55);opacity:0}}
+@keyframes world-path-reveal {0%{opacity:0;clip-path:inset(100% 0 0)}100%{opacity:.5;clip-path:inset(0)}}
+@keyframes world-unlock-title {20%{color:#fff0a0;text-shadow:0 0 14px #fcd34d}100%{color:#fff}}
+#tabBattle.battle-motion-low .is-newly-unlocked::before,
+#tabBattle.battle-motion-low .is-newly-unlocked .world-map-island::after,
+#tabBattle.battle-motion-low .is-newly-unlocked .world-map-title {animation:none;box-shadow:none}
 @media(prefers-reduced-motion:reduce){
+  #tabBattle .is-newly-unlocked::before,#tabBattle .is-newly-unlocked .world-map-title {animation:none!important}
+  #tabBattle .is-newly-unlocked .world-map-island::after {display:none}
   #tabBattle .world-map-effect {display:none!important;background-image:none!important;animation:none!important}
   #tabBattle .world-map-art {animation:none!important}
 }

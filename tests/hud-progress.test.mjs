@@ -41,7 +41,8 @@ check("gan class theo trang thai", /nextEl\.className = 'hv2-nextup ' \+ cls/.te
 // ============================================================ 3. Kẹp số phòng
 console.log("\n=== 3. KEP SO PHONG (bug: setupRoom(15) tren chuong 10 phong) ===");
 const srStart = html.indexOf("function setupRoom(roomNum)");
-const srBlock = html.slice(srStart, srStart + 900);
+// Giới hạn theo ranh giới khởi tạo phòng, không theo số ký tự (hook hình ảnh làm cửa sổ cũ bị cụt).
+const srBlock = html.slice(srStart, html.indexOf('Game.roomCleared = false;', srStart));
 check("setupRoom kep ve [1, Game.maxRooms]", /roomNum = Math\.max\(1, Math\.min\(_maxRooms, Math\.floor\(Number\(roomNum\) \|\| 1\)\)\)/.test(srBlock));
 check("lay _maxRooms tu Game.maxRooms", /const _maxRooms = Math\.max\(1, Game\.maxRooms \|\| 1\)/.test(srBlock));
 check("kep chay TRUOC khi gan Game.room", srBlock.indexOf("roomNum = Math.max") < srBlock.indexOf("Game.room = roomNum"));

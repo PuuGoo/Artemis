@@ -1008,6 +1008,7 @@
     drawArenaSpecial(ctx, w, h, pad, nowMs, B);
     drawFog(ctx, w, h, nowMs, B);
     root.ArtemisPixelFX?.drawAtmosphere(ctx, w, h, pad, nowMs, Game, B);
+    root.ArtemisMapJuice?.scenery(ctx, Game, B);
 
     // vết chiến trường (giữ dữ liệu cũ)
     for (const dc of Game.floorDecals) {

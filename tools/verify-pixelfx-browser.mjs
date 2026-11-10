@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { sanitizeSave } from '../lib/save/schema.js';
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
 const publicDir = fileURLToPath(new URL('../public/', import.meta.url));
-const evidence = fileURLToPath(new URL('../docs/pixelfx-evidence/', import.meta.url));
+const evidence = resolve(process.env.ARTEMIS_EVIDENCE_DIR || fileURLToPath(new URL('../docs/pixelfx-evidence/', import.meta.url)));
 await mkdir(evidence, { recursive: true });
 let saved = null, revision = 0;
 const errors = [], failures = [], results = [];
@@ -140,6 +140,46 @@ try {
   });
   assert.ok(portal.portal); assert.equal(portal.lowDraws, 0);
   results.push({ name: 'portal-open-and-low-gfx-fallback', ...portal });
+  if (process.env.ARTEMIS_VERIFY_JUICE === '1') {
+    const events = await page.evaluate(() => {
+      const a=window.Archero2FusionAPI,g=a.Game,j=window.ArtemisMapJuice;
+      g.chapter=a.getCampaignChapters()[0];g.lowGfx=false;g.perfMode='high';g.running=true;g.paused=false;
+      a.setupRoom(10);a.stopGameLoop();
+      const spawn=j.inspect(g).events.some(e=>e.kind==='boss-spawn');
+      const boss=g.enemies.find(e=>e.isBoss);a.damageEnemy(boss,boss.hp*100,true);
+      const killed=j.inspect(g).events.map(e=>e.kind);
+      a.renderGame();
+      // Fixture bỏ NPC/drops để riêng việc qua cổng; không gọi đây là tự chơi vượt phòng.
+      // Phòng 10 tự sinh Ác Quỷ khi gọi update; thử cổng ở phòng thường không có encounter.
+      g.room=1;
+      g.encounterNpc=null;g.valkyrieNpc=null;g.wheelNpc=null;g.drops=[];g.roomCleared=true;g.portalOpen=true;g.paused=false;
+      g.player.x=g.portalRect.x+g.portalRect.w/2;g.player.y=g.portalRect.y+g.portalRect.h/2;
+      a.updateGame(.016);a.stopGameLoop();
+      const transition=j.inspect(g).events.some(e=>e.kind==='transition');
+      const snapshot=JSON.stringify({player:g.player,enemies:g.enemies,portal:g.portalRect,obstacles:g.obstacles});
+      for(const kind of ['angel','devil','valkyrie']) {
+        const n={x:g.width/2,y:g.height/2,kind};
+        if(kind==='valkyrie')g.valkyrieNpc=n;else g.encounterNpc=n;
+        a.renderGame();g.encounterNpc=null;g.valkyrieNpc=null;
+      }
+      const unchanged=snapshot===JSON.stringify({player:g.player,enemies:g.enemies,portal:g.portalRect,obstacles:g.obstacles});
+      // Hook finishRun thật trong fixture local; không phải chiến thắng tự nhiên.
+      g.chapter=a.getCampaignChapters()[0];a.SaveState.winsByChapter={};g.running=true;a.finishRun(true);
+      a.returnToLobby();window.ArtemisWorldMap.refresh();
+      return {spawn,killed,transition,room:g.room,unchanged};
+    });
+    results.push({name:'map-event-hook-probe',...events});
+    assert.ok(events.spawn && events.killed.includes('boss-death') && events.killed.includes('clear') && events.transition && events.unchanged,JSON.stringify(events));
+    await page.locator('#bottomNavBar .grid [data-tab="tabBattle"]').click();
+    await page.waitForSelector('[data-world-chapter="2"].is-newly-unlocked');
+    const unlocked=page.locator('[data-world-chapter="2"]');
+    assert.equal(await unlocked.evaluate(n=>n.classList.contains('is-locked')),false);
+    await page.screenshot({path:resolve(evidence,'unlock-chapter-2.png')});
+    await page.waitForTimeout(1900);
+    await page.evaluate(()=>window.ArtemisWorldMap.refresh());
+    assert.equal(await page.locator('.is-newly-unlocked').count(),0);
+    results.push({name:'six-map-effects-production-hooks-local-fixture-not-natural-victory',...events});
+  }
   assert.deepEqual(errors, []); assert.deepEqual(failures, []);
   const report = { scope: 'Chrome thật; HTTP mock auth/save + sanitizer thật; phòng khác dùng spawner thật nhưng nhảy fixture, không phải vượt chương tự nhiên; không production', results, errors, failures };
   await writeFile(resolve(evidence, 'verification.json'), JSON.stringify(report, null, 2));
