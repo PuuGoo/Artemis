@@ -25471,6 +25471,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         Game.encounterNpc = null;Game.encounterController?.destroy();Game.encounterController=null;Game.campaignEncounters=null;
         Game.skillClaimBusy = false;
         Game.pendingClaimId = null;
+        Game.skillSelectionRequest = null;
+        Game.campaignOfferAckPromise = null;
+        Game.campaignOfferPendingAck = false;
         // Array entity
         Game.enemies = [];
         Game.obstacles = [];
@@ -26181,18 +26184,19 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const rerollButton = document.getElementById('btnRerollSkills');
         if (rerollButton) rerollButton.disabled = true;
         triggerSkillSelection('🪽 Valkyrie • Chọn kỹ năng chiến dịch');
-        (async () => {
+        Game.campaignOfferAckPromise = (async () => {
           try {
             const acknowledged = !window.ArtemisCloud?.flushCheckpoint || await window.ArtemisCloud.flushCheckpoint();
-            if (Game.runId !== runId || Game.runProgression !== progression) return;
+            if (Game.runId !== runId || Game.runProgression !== progression) return false;
             if (acknowledged) Game.campaignOfferPendingAck = false;
             else showToast('Lượt chọn đang chờ đồng bộ. Bấm đổi để thử lưu lại, không tạo danh sách mới.');
+            return acknowledged;
           } catch (_) {
             if (Game.runId === runId && Game.runProgression === progression) showToast('Chưa đồng bộ lượt chọn. Kiểm tra mạng rồi thử lại.');
           } finally {
             if (Game.runId === runId && Game.runProgression === progression) {
-              Game.skillClaimBusy = false;
-              if (rerollButton) rerollButton.disabled = false;
+              Game.skillClaimBusy = !!Game.skillSelectionRequest;
+              if (rerollButton) rerollButton.disabled = Game.skillClaimBusy;
             }
           }
         })();
@@ -26398,7 +26402,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               </div>
               <p class="text-[11px] text-slate-300 leading-snug">${sk.desc}</p>
               <p class="text-[11px] text-cyan-200">Hiện tại: ${currentStack ? 'Bậc '+currentStack : 'Chưa sở hữu'} → Bậc ${currentStack+1}</p>
-              <div class="w-full py-1.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-300 font-extrabold text-xs mt-1">
+              <div data-skill-claim-status aria-live="polite" class="w-full py-1.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-300 font-extrabold text-xs mt-1">
                 Chọn Kỹ Năng Này
               </div>
             </button>
@@ -26434,14 +26438,31 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         document.querySelectorAll('.skill-choice-card').forEach(btn => {
           btn.addEventListener('click', async () => {
             const skId = btn.getAttribute('data-skill-id');
-            if (Game.skillClaimBusy || (Game.pendingClaimId && Game.pendingClaimId !== skId)) return;
+            // Accept one early click while the offer is saving, rather than dropping it.
+            // Keep offer -> claim as distinct acknowledged server transitions.
+            const offerAck = Game.campaignOfferPendingAck && Game.campaignOfferAckPromise;
+            if (Game.skillSelectionRequest || (Game.skillClaimBusy && !offerAck)
+                || (Game.pendingClaimId && Game.pendingClaimId !== skId)) return;
+            const request = { runId: Game.runId, progression: Game.runProgression };
+            Game.skillSelectionRequest = request;
             Game.skillClaimBusy = true;
             btn.dataset.claimBusy = '1';
+            btn.setAttribute('aria-busy', 'true');
+            btn.setAttribute('aria-pressed', 'true');
+            const status = btn.querySelector('[data-skill-claim-status]');
+            if (status) status.textContent = 'Đã chọn • Đang đồng bộ…';
+            window.ArtemisCombatReferenceUI?.sync();
             try {
-              if (usesCampaignTuning() && window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {
+              let offerAcknowledged = false;
+              if (offerAck) offerAcknowledged = await offerAck;
+              if (Game.runId !== request.runId || Game.runProgression !== request.progression) return;
+              if (!offerAcknowledged && usesCampaignTuning() && window.ArtemisCloud?.flushCheckpoint
+                  && !await window.ArtemisCloud.flushCheckpoint()) {
                 showToast('Chưa lưu được lựa chọn. Kiểm tra mạng và bấm lại; chưa cấp kỹ năng.');
                 return;
               }
+              if (Game.runId !== request.runId || Game.runProgression !== request.progression) return;
+              Game.campaignOfferPendingAck = false;
               if (btn.dataset.applied !== '1') {
                 if (applyRogueSkill(skId) === false) return;
                 btn.dataset.applied = '1';
@@ -26451,12 +26472,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
                 showToast('Kỹ năng đã chọn đang chờ đồng bộ. Bấm lại để lưu, không cấp thêm lần nữa.');
                 return;
               }
-            document.getElementById('skillSelectModal').classList.add('hidden');
-            Game.paused = false;
-            Game.lastTime = performance.now();
-            updateInGameHUD();
-            Game.pendingClaimId = null;
-            } finally { btn.dataset.claimBusy = '0'; Game.skillClaimBusy = false; }
+              if (Game.runId !== request.runId || Game.skillSelectionRequest !== request) return;
+              document.getElementById('skillSelectModal').classList.add('hidden');
+              Game.paused = false;
+              Game.lastTime = performance.now();
+              updateInGameHUD();
+              Game.pendingClaimId = null;
+            } finally {
+              btn.dataset.claimBusy = '0';
+              btn.removeAttribute('aria-busy');
+              if (btn.dataset.applied !== '1') btn.removeAttribute('aria-pressed');
+              if (status) status.textContent = 'Chọn Kỹ Năng Này';
+              if (Game.skillSelectionRequest === request) {
+                Game.skillSelectionRequest = null;
+                Game.skillClaimBusy = false;
+                window.ArtemisCombatReferenceUI?.sync();
+              }
+            }
           });
         });
       }
