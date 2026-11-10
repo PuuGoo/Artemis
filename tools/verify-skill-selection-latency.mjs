@@ -104,11 +104,11 @@ export async function verifySkillSelectionLatency() {
         document.querySelectorAll('.skill-choice-card')[1]?.click();
         return { busy: element.dataset.claimBusy, ariaBusy: element.getAttribute('aria-busy'), selected: element.classList.contains('selected') || element.getAttribute('aria-selected') === 'true' || element.getAttribute('aria-pressed') === 'true' };
       });
-      assert.equal(feedback.busy, '1', `${stage}: immediate click must be accepted while offer PUT is delayed`);
-      assert.equal(feedback.ariaBusy, 'true', `${stage}: busy selection exposed immediately`);
-      assert.equal(feedback.selected, true, `${stage}: selected feedback appears synchronously`);
-      assert.deepEqual((await state()).skills, before.skills, 'no grant before offer acknowledgement');
-      await assertPaused('offer acknowledgement');
+      // Immediate grant closes the picker synchronously; no intermediate busy card is required.
+      const immediate = await state();
+      assert.deepEqual(immediate.skills, { ...before.skills, [skill]: (before.skills[skill] || 0) + 1 }, 'skill applies before any offer acknowledgement');
+      assert.equal(immediate.paused, false, 'combat resumes immediately');
+      assert.equal(await page.locator('#skillSelectModal').isVisible(), false, 'modal closes immediately');
       const savedBefore = await read();
       assert.equal(savedBefore?.runProgression?.choicesUsed || 0, choices, 'server has no early grant');
       claimGate = Object.assign(gate(), { choices: choices + 1 });
@@ -118,10 +118,11 @@ export async function verifySkillSelectionLatency() {
       const applied = await state();
       assert.equal(applied.progression.choicesUsed, choices + 1);
       assert.deepEqual(applied.skills, { ...before.skills, [skill]: (before.skills[skill] || 0) + 1 }, 'double tap and alternate choice grant only selected skill once');
-      await assertPaused('claim acknowledgement');
+      assert.equal((await state()).paused, false, 'claim saves in background without pausing combat');
       assert.equal((await read()).runProgression.choicesUsed, choices, 'real GET still has unclaimed offer while claim PUT is held');
       claimGate.release.resolve();
-      await waitIdle();
+      if (loseClaim) await page.waitForFunction(() => !!window.ArtemisCloud.getState().lastError);
+      else await flush();
       if (!loseClaim) {
         await page.waitForSelector('#skillSelectModal.hidden', { state: 'attached' });
         assert.equal((await state()).paused, false);
@@ -130,7 +131,7 @@ export async function verifySkillSelectionLatency() {
         assert.equal(saved.runProgression.choicesUsed, choices + 1);
         assert.equal(saved.runProgression.claimedStages.filter(value => value === stage).length, 1);
       }
-      result.checks.push({ name: `${stage}: immediate selection accepted once, busy/selected immediately, gameplay waits for both real acknowledgements`, skill, offerRequests: offerGate.hits, claimRequests: claimGate.hits });
+      result.checks.push({ name: `${stage}: skill applied and combat resumed immediately; ordered offer/claim saved in background`, skill, offerRequests: offerGate.hits, claimRequests: claimGate.hits });
       offerGate = null;
       claimGate = null;
       return applied;
@@ -158,22 +159,17 @@ export async function verifySkillSelectionLatency() {
       });
     }, true);
     assert.ok(droppedClaims > 0, 'post-apply claim request actually lost transport');
-    await assertPaused('failed offline claim');
+    assert.equal(await page.locator('#skillSelectModal').isVisible(), false, 'failed background save does not reopen card picker');
     assert.equal((await read()).runProgression.choicesUsed, 1);
-    // Retry with network still unavailable, then restore it. Neither attempt may
-    // apply the already-granted skill or its max-HP side effects a second time.
+    // Retry transport only, never re-run the card grant or its max-HP side effects.
     await context.setOffline(true);
-    await page.locator('.skill-choice-card[data-applied="1"]').click();
-    await waitIdle();
+    assert.equal(await page.evaluate(() => window.ArtemisCloud.flushCheckpoint()), false);
     assert.deepEqual((await state()).skills, applied.skills);
     assert.equal((await state()).maxHp, applied.maxHp);
-    await assertPaused('offline retry');
     await context.setOffline(false);
     dropClaims = false;
-    await page.locator('.skill-choice-card[data-applied="1"]').click();
-    await waitIdle();
-    await page.waitForSelector('#skillSelectModal.hidden', { state: 'attached' });
     await flush();
+    await page.waitForSelector('#skillSelectModal.hidden', { state: 'attached' });
     const final = await state(), saved = await read();
     assert.deepEqual(final.skills, applied.skills);
     assert.equal(final.maxHp, applied.maxHp);

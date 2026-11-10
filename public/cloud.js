@@ -42,6 +42,95 @@
   };
   var lastPushedPayload = null;
   var savePromise = null;
+  var saveEpoch = 0;
+  var checkpoints = [];
+  var checkpointWorker = null;
+  var checkpointBlocked = false;
+  var checkpointOverflow = false;
+
+  function settleCheckpoint(entry, ok) {
+    entry.waiters.splice(0).forEach(function (resolve) { resolve(ok); });
+  }
+  function invalidateCheckpoints() {
+    saveEpoch++;
+    checkpoints.forEach(function (entry) { settleCheckpoint(entry, false); });
+    checkpoints = [];
+    checkpointBlocked = false;
+    checkpointOverflow = false;
+    if (state.saveTimer) clearTimeout(state.saveTimer);
+  }
+
+  // Immutable strings, not references to the gameplay buffer. A failed head
+  // stays a barrier: dependent claims cannot replace an unacknowledged offer.
+  function enqueueCheckpoint() {
+    var payload = window.__ARTEMIS_SAVE_BUFFER;
+    if (!state.authenticated || window.__ARTEMIS_SAVE_READY !== true || !payload) return Promise.resolve(false);
+    try { JSON.parse(payload); } catch (e) { return Promise.resolve(false); }
+    var tail = checkpoints[checkpoints.length - 1];
+    if (!tail || tail.payload !== payload) {
+      if (checkpoints.length >= 64 || checkpointOverflow) {
+        checkpointOverflow = checkpointBlocked = true;
+        state.dirty = true;
+        state.lastError = "Có quá nhiều tiến trình chưa đồng bộ. Hãy tải lại để khôi phục dữ liệu máy chủ.";
+        state.lastErrorCode = "CHECKPOINT_QUEUE_FULL";
+        state.lastErrorRetryable = false;
+        checkpoints.forEach(function (pending) { settleCheckpoint(pending, false); });
+        updateIndicator("error");
+        toast(state.lastError, "err");
+        return Promise.resolve(false);
+      }
+      tail = { payload: payload, epoch: saveEpoch, playerId: state.player.id, waiters: [] };
+      checkpoints.push(tail);
+    }
+    state.dirty = true;
+    var result = new Promise(function (resolve) { tail.waiters.push(resolve); });
+    if (checkpointOverflow || (checkpointBlocked && !state.lastErrorRetryable)) {
+      settleCheckpoint(tail, false);
+      return result;
+    }
+    checkpointBlocked = false;
+    drainCheckpoints();
+    return result;
+  }
+
+  function drainCheckpoints() {
+    if (checkpointWorker || checkpointBlocked || !checkpoints.length) return checkpointWorker;
+    var epoch = saveEpoch;
+    checkpointWorker = Promise.resolve().then(async function () {
+      if (state.saving) await savePromise;
+      while (checkpoints.length && !checkpointBlocked && epoch === saveEpoch) {
+        var entry = checkpoints[0];
+        if (!state.authenticated || window.__ARTEMIS_SAVE_READY !== true
+            || entry.playerId !== state.player.id) { invalidateCheckpoints(); break; }
+        var acknowledged = entry.payload === lastPushedPayload;
+        for (var attempt = 0; !acknowledged && attempt < 3; attempt++) {
+          if (state.lastError && !state.lastErrorRetryable) break;
+          if (attempt) await new Promise(function (resolve) { setTimeout(resolve, attempt === 1 ? 500 : 1500); });
+          if (epoch !== saveEpoch || checkpointBlocked || !state.authenticated || window.__ARTEMIS_SAVE_READY !== true) break;
+          await sendCloudPayload(entry.payload);
+          if (epoch !== saveEpoch) break;
+          acknowledged = entry.payload === lastPushedPayload && !state.lastError;
+          if (!acknowledged && !state.lastErrorRetryable) break;
+        }
+        if (epoch !== saveEpoch || checkpointOverflow) break;
+        if (!acknowledged) {
+          checkpointBlocked = true;
+          state.dirty = true;
+          checkpoints.forEach(function (pending) { settleCheckpoint(pending, false); });
+          updateIndicator("error");
+          if (state.lastErrorRetryable) toast("Chưa lưu được lựa chọn. Tiến trình đang chờ; hãy kiểm tra mạng và thử lưu lại trước khi tải lại trang.", "warn");
+          break;
+        }
+        checkpoints.shift();
+        settleCheckpoint(entry, true);
+      }
+    }).finally(function () {
+      checkpointWorker = null;
+      if (checkpoints.length && !checkpointBlocked) drainCheckpoints();
+      else if (!checkpoints.length && state.dirty && !state.lastError) scheduleSave();
+    });
+    return checkpointWorker;
+  }
   var shopBusy = false;
   var pendingShopRequest = null;
 
@@ -382,6 +471,7 @@
    * tai khoan khac tren cung trinh duyet lot vao.
    */
   function loadCloudSave() {
+    invalidateCheckpoints();
     purgeLegacyLocalSave();
     // Khoa ghi: SaveState.save() khong lam gi cho den khi co save that tu server.
     window.__ARTEMIS_SAVE_READY = false;
@@ -421,9 +511,15 @@
 
   /** Day buffer hien tai len MongoDB. */
   function pushCloudSave() {
+    if (checkpoints.length) return checkpointBlocked ? Promise.resolve(false) : drainCheckpoints();
     if (state.saving) return savePromise;
     if (!state.authenticated || window.__ARTEMIS_SAVE_READY !== true) return;
     var payload = window.__ARTEMIS_SAVE_BUFFER;
+    return sendCloudPayload(payload);
+  }
+
+  function sendCloudPayload(payload) {
+    if (!state.authenticated || window.__ARTEMIS_SAVE_READY !== true) return;
     if (!payload) return;
 
     var h = hashStr(payload);
@@ -434,8 +530,10 @@
 
     state.saving = true;
     var nextRevision = state.revision + 1;
+    var epoch = saveEpoch;
     savePromise = api(API.save, { method: "PUT", body: { data: data, revision: state.revision, playerId: state.player.id } })
       .then(function (r) {
+        if (epoch !== saveEpoch || !state.authenticated || checkpointOverflow) return;
         state.lastErrorCode = (r.data && r.data.code) || "";
         state.lastErrorDetail = (r.data && r.data.detail) || "";
         state.lastErrorStatus = r.status;
@@ -485,6 +583,7 @@
         }
       })
       .catch(function () {
+        if (epoch !== saveEpoch || !state.authenticated || checkpointOverflow) return;
         state.lastError = "Lỗi mạng. Kiểm tra kết nối rồi thử lưu lại.";
         state.lastErrorCode = "NETWORK_ERROR";
         state.lastErrorDetail = "";
@@ -493,7 +592,7 @@
       })
       .then(function () {
         state.saving = false;
-        if (state.dirty && !state.lastError) scheduleSave();
+        if (epoch === saveEpoch && !checkpoints.length && state.dirty && !state.lastError) scheduleSave();
       });
     return savePromise;
   }
@@ -589,6 +688,9 @@
     indicator.addEventListener("click", function () {
       var who = (state.player && state.player.username) || "";
       if (!confirm("Đăng xuất khỏi tài khoản " + who + "?")) return;
+      state.authenticated = false;
+      window.__ARTEMIS_SAVE_READY = false;
+      invalidateCheckpoints();
       api(API.logout, { method: "POST" }).then(function () {
         state.authenticated = false;
         window.__ARTEMIS_SAVE_BUFFER = null;
@@ -700,9 +802,13 @@
 
   // Cong khai de debug/kiem thu.
   window.ArtemisCloud = {
-    getState: function () { return Object.assign({}, state); },
+    getState: function () { return Object.assign({}, state, {
+      checkpointQueueDepth: checkpoints.length, checkpointBlocked: checkpointBlocked,
+    }); },
     pushNow: function () { pushCloudSave(); return state.revision; },
+    enqueueCheckpoint: enqueueCheckpoint,
     flushCheckpoint: async function () {
+      if (checkpoints.length) return enqueueCheckpoint();
       for (var attempt = 0; attempt < 3; attempt++) {
         await pushCloudSave();
         if (state.lastError) return false;

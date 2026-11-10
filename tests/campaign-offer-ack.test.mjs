@@ -22,7 +22,7 @@ function harness({ seraph = false } = {}) {
     usesCampaignTuning: () => true,
     hasHeroSkillActive: () => seraph,
     document: { getElementById: () => button },
-    window: { ArtemisCloud: { flushCheckpoint() {
+    window: { ArtemisCloud: { enqueueCheckpoint() { return this.flushCheckpoint(); }, flushCheckpoint() {
       const snapshot = copy(c.Game.runProgression);
       return new Promise((resolve, reject) => requests.push({ snapshot, resolve, reject }));
     } } },

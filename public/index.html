@@ -25474,6 +25474,9 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         Game.pendingClaimId = null;
         Game.skillSelectionRequest = null;
         Game.campaignOfferAckPromise = null;
+        Game.campaignOfferSnapshot = null;
+        Game.skillClaimSync = null;
+        if (typeof document !== 'undefined') document.getElementById('skillClaimSyncBanner')?.remove();
         Game.campaignOfferPendingAck = false;
         // Array entity
         Game.enemies = [];
@@ -25560,6 +25563,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       }
 
       function startNewRun(reason = 'fresh') {
+        if (Game.skillClaimFatal) { showToast('Lượt chọn bị từ chối. Hãy tải lại dữ liệu máy chủ trước khi tiếp tục.'); return false; }
         // Một lần nhấn lặp không được dựng lại hoặc thu phí trận đang chạy.
         // Retry/Reset là yêu cầu bắt đầu lại có chủ ý; Continue có luồng riêng.
         if (Game.running && reason !== 'retry' && reason !== 'reset' && reason !== 'continue') return false;
@@ -26161,8 +26165,61 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       // ==================== ROGUELIKE SKILL MODAL (VALKYRIE / ANGEL / DEVIL PROVIDERS) ====================
       let _currentSkillProvider = 'valkyrie';
 
+      function watchSkillClaimSync(request, promise) {
+        Game.skillClaimSync = request;
+        const current = () => Game.runId === request.runId && Game.skillClaimSync === request;
+        const finish = acknowledged => {
+          if (!current()) return;
+          if (acknowledged === true) {
+            Game.pendingClaimId = null;
+            Game.campaignOfferPendingAck = false;
+            Game.skillClaimSync = null;
+            if (typeof document !== 'undefined') document.getElementById('skillClaimSyncBanner')?.remove();
+            return;
+          }
+          const state = window.ArtemisCloud?.getState?.() || {};
+          const fatal = state.lastErrorRetryable === false || [400,401,403,409,422].includes(state.lastErrorStatus);
+          if (fatal) {
+            Game.skillClaimFatal = true;
+            Game.paused = true;
+            Game.running = false;
+            if (Game.joy) Game.joy.active = false;
+          }
+          if (typeof document !== 'undefined') document.getElementById('skillClaimSyncBanner')?.remove();
+          const banner = document.createElement('div');
+          banner.id = 'skillClaimSyncBanner';
+          banner.setAttribute('role', 'status');
+          banner.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:99999;max-width:90vw;padding:12px;border:1px solid #fbbf24;border-radius:12px;background:#0f172a;color:#fef3c7;font-size:13px;pointer-events:auto';
+          const label = document.createElement('span');
+          label.textContent = fatal
+            ? 'Máy chủ từ chối lượt chọn. Đã dừng trận; tải lại dữ liệu máy chủ để tiếp tục. '
+            : 'Kỹ năng đã áp dụng trên máy này, chưa lưu lên máy chủ. Đang giữ thứ tự đồng bộ. ';
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = fatal ? 'Tải lại dữ liệu máy chủ' : 'Thử đồng bộ lại';
+          button.style.cssText = 'padding:6px 10px;border:1px solid #fbbf24;border-radius:8px;margin-left:8px';
+          request.retry = async () => {
+            if (!current() || button.disabled || fatal) return;
+            button.disabled = true;
+            try { finish(await window.ArtemisCloud.flushCheckpoint()); }
+            catch (_) { finish(false); }
+          };
+          button.addEventListener('click', () => {
+            if (fatal) { if (current()) window.location.reload(); return; }
+            return request.retry();
+          });
+          banner.append(label, button);
+          document.body.append(banner);
+        };
+        Promise.resolve(promise).then(finish, () => finish(false));
+      }
+
+      // Retry once per real reconnect or explicit button click, never a network polling loop.
+      window.addEventListener?.('online', () => Game.skillClaimSync?.retry?.());
+
       function openCampaignOffer(stageId) {
         if (!Game.running || !Game.player || Game.player.hp <= 0) return false;
+        if (Game.pendingClaimId || Game.skillClaimFatal) return false;
         if (Game.skillClaimBusy) return !!Game.runProgression?.pendingOffer;
         const result = ArtemisCampaignSkills.generateOffer(Game.runProgression, ROGUE_SKILLS, {
           stageId, segment: Math.min(4, Math.floor((Game.room-1)/10)),
@@ -26184,10 +26241,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         const runId = Game.runId, progression = Game.runProgression;
         const rerollButton = document.getElementById('btnRerollSkills');
         if (rerollButton) rerollButton.disabled = true;
+        // Capture OFFER before exposing any clickable card; debounce must never collapse it into CLAIM.
+        const offerWrite = window.ArtemisCloud?.enqueueCheckpoint
+          ? window.ArtemisCloud.enqueueCheckpoint() : Promise.resolve(false);
+        Game.campaignOfferSnapshot = { progression, promise: offerWrite };
         triggerSkillSelection('🪽 Valkyrie • Chọn kỹ năng chiến dịch');
         Game.campaignOfferAckPromise = (async () => {
           try {
-            const acknowledged = !window.ArtemisCloud?.flushCheckpoint || await window.ArtemisCloud.flushCheckpoint();
+            const acknowledged = await offerWrite;
             if (Game.runId !== runId || Game.runProgression !== progression) return false;
             if (acknowledged) Game.campaignOfferPendingAck = false;
             else showToast('Lượt chọn đang chờ đồng bộ. Bấm đổi để thử lưu lại, không tạo danh sách mới.');
@@ -26437,56 +26498,49 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
 
         document.querySelectorAll('.skill-choice-card').forEach(btn => {
-          btn.addEventListener('click', async () => {
+          btn.addEventListener('click', () => {
             const skId = btn.getAttribute('data-skill-id');
-            // Accept one early click while the offer is saving, rather than dropping it.
-            // Keep offer -> claim as distinct acknowledged server transitions.
+            // Snapshot barriers are synchronous; only real network acknowledgements run later.
             const offerAck = Game.campaignOfferPendingAck && Game.campaignOfferAckPromise;
-            if (Game.skillSelectionRequest || (Game.skillClaimBusy && !offerAck)
-                || (Game.pendingClaimId && Game.pendingClaimId !== skId)) return;
+            if (btn.dataset.applied === '1' || Game.skillSelectionRequest
+                || (Game.skillClaimBusy && !offerAck) || Game.pendingClaimId) return;
             const request = { runId: Game.runId, progression: Game.runProgression };
             Game.skillSelectionRequest = request;
             Game.skillClaimBusy = true;
-            btn.dataset.claimBusy = '1';
-            btn.setAttribute('aria-busy', 'true');
-            btn.setAttribute('aria-pressed', 'true');
-            const status = btn.querySelector('[data-skill-claim-status]');
-            if (status) status.textContent = 'Đã chọn • Đang đồng bộ…';
-            window.ArtemisCombatReferenceUI?.sync();
             try {
-              let offerAcknowledged = false;
-              if (offerAck) offerAcknowledged = await offerAck;
-              if (Game.runId !== request.runId || Game.runProgression !== request.progression) return;
-              if (!offerAcknowledged && usesCampaignTuning() && window.ArtemisCloud?.flushCheckpoint
-                  && !await window.ArtemisCloud.flushCheckpoint()) {
-                showToast('Chưa lưu được lựa chọn. Kiểm tra mạng và bấm lại; chưa cấp kỹ năng.');
-                return;
+              if (usesCampaignTuning()) {
+                if (!window.ArtemisCloud?.enqueueCheckpoint) {
+                  showToast('Chưa sẵn sàng đồng bộ. Vui lòng tải lại trước khi chọn kỹ năng.');
+                  return;
+                }
+                if (Game.campaignOfferSnapshot?.progression !== Game.runProgression) {
+                  saveCheckpoint();
+                  const promise = window.ArtemisCloud.enqueueCheckpoint();
+                  Game.campaignOfferSnapshot = { progression: Game.runProgression, promise };
+                  // A failed offer remains at the queue head; never enqueue its mutable replacement.
+                  Promise.resolve(promise).catch(() => false);
+                }
               }
-              if (Game.runId !== request.runId || Game.runProgression !== request.progression) return;
-              Game.campaignOfferPendingAck = false;
-              if (btn.dataset.applied !== '1') {
-                if (applyRogueSkill(skId) === false) return;
-                btn.dataset.applied = '1';
-                Game.pendingClaimId = skId;
-              }
-              if (usesCampaignTuning() && window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {
-                showToast('Kỹ năng đã chọn đang chờ đồng bộ. Bấm lại để lưu, không cấp thêm lần nữa.');
-                return;
-              }
-              if (Game.runId !== request.runId || Game.skillSelectionRequest !== request) return;
+              if (applyRogueSkill(skId) === false) return;
+              btn.dataset.applied = '1';
+              Game.pendingClaimId = skId;
+              request.progression = Game.runProgression;
+              // applyRogueSkill saves CLAIM into the buffer. Capture it before resuming gameplay.
+              const claim = usesCampaignTuning() ? window.ArtemisCloud.enqueueCheckpoint() : Promise.resolve(true);
               document.getElementById('skillSelectModal').classList.add('hidden');
               Game.paused = false;
               Game.lastTime = performance.now();
               updateInGameHUD();
-              Game.pendingClaimId = null;
+              watchSkillClaimSync(request, claim);
+            } catch (error) {
+              // A synchronous queue failure must not leave an unsaved optimistic run playable.
+              Game.paused = true;
+              watchSkillClaimSync(request, Promise.resolve(false));
             } finally {
-              btn.dataset.claimBusy = '0';
-              btn.removeAttribute('aria-busy');
-              if (btn.dataset.applied !== '1') btn.removeAttribute('aria-pressed');
-              if (status) status.textContent = 'Chọn Kỹ Năng Này';
               if (Game.skillSelectionRequest === request) {
                 Game.skillSelectionRequest = null;
                 Game.skillClaimBusy = false;
+                if (btn.dataset.applied !== '1') Game.pendingClaimId = null;
                 window.ArtemisCombatReferenceUI?.sync();
               }
             }
@@ -30853,9 +30907,15 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               Game.runProgression = result.state;
               Game.campaignOfferPendingAck = true;
               saveCheckpoint();
+              const promise = window.ArtemisCloud.enqueueCheckpoint();
+              Game.campaignOfferSnapshot = { progression: Game.runProgression, promise };
+              Game.campaignOfferAckPromise = promise;
               populateSkillChoices();
-            }
-            if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {
+              if (!await promise) {
+                showToast('Danh sách đang chờ đồng bộ. Bấm đổi để thử lưu lại, không dùng thêm lượt.');
+                return;
+              }
+            } else if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) {
               showToast('Danh sách đang chờ đồng bộ. Bấm đổi để thử lưu lại, không dùng thêm lượt.');
               return;
             }

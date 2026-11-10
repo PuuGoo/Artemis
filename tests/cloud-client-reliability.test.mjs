@@ -47,6 +47,134 @@ function harness(fetcher) {
 const me = () => response({ ok: true, authenticated: true, player: { id: 'A', username: 'alice' } });
 const saved = (data = { gold: 100 }, revision = 3) => response({ ok: true, hasSave: true, data, revision });
 
+test('critical snapshots capture synchronously and serialize offer, claim, then newer gameplay', async () => {
+  const pending = [];
+  const h = harness((path, opts) => {
+    if (path.endsWith('/me')) return me();
+    if (opts.method === 'GET') return saved();
+    const d = deferred(); pending.push(d); return d.promise;
+  });
+  await h.boot();
+  h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'offer' });
+  const offer = h.cloud.enqueueCheckpoint();
+  h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'claim' });
+  const claim = h.cloud.enqueueCheckpoint();
+  await h.save({ stage: 'gameplay' }); await h.push(); await h.timer(1200);
+  assert.equal(pending.length, 1);
+  pending[0].resolve(response({ ok: true, revision: 4 })); await settle();
+  assert.equal(await offer, true);
+  assert.equal(pending.length, 2);
+  pending[1].resolve(response({ ok: true, revision: 5 })); await settle();
+  assert.equal(await claim, true);
+  await h.timer(1200);
+  assert.deepEqual(h.requests.filter(r => r.method === 'PUT').map(r => JSON.parse(r.body)), [
+    { data: { stage: 'offer' }, revision: 3, playerId: 'A' },
+    { data: { stage: 'claim' }, revision: 4, playerId: 'A' },
+    { data: { stage: 'gameplay' }, revision: 5, playerId: 'A' },
+  ]);
+  pending[2].resolve(response({ ok: true, revision: 6 })); await settle();
+});
+
+test('critical retry backoff retains the exact head, blocks gameplay, and explicit flush recovers in order', async () => {
+  let online = false, revision = 3;
+  const h = harness((path, opts) => path.endsWith('/me') ? me() : opts.method === 'GET' ? saved()
+    : online ? response({ ok: true, revision: ++revision }) : Promise.reject(new Error('offline')));
+  await h.boot();
+  h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'offer' });
+  const offer = h.cloud.enqueueCheckpoint();
+  h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'claim' });
+  const claim = h.cloud.enqueueCheckpoint();
+  await settle();
+  assert.equal(h.requests.filter(r => r.method === 'PUT').length, 1);
+  await h.timer(500); await h.timer(1500);
+  assert.equal(await offer, false); assert.equal(await claim, false);
+  await h.save({ stage: 'gameplay' }); await h.push(); await h.timer(1200);
+  assert.equal(h.requests.filter(r => r.method === 'PUT').length, 3);
+  assert.equal(h.cloud.getState().checkpointBlocked, true);
+  assert.equal(h.cloud.getState().checkpointQueueDepth, 2);
+  online = true;
+  assert.equal(await h.cloud.flushCheckpoint(), true);
+  assert.deepEqual(h.requests.filter(r => r.method === 'PUT').map(r => JSON.parse(r.body).data.stage),
+    ['offer', 'offer', 'offer', 'offer', 'claim', 'gameplay']);
+  assert.equal(h.cloud.getState().revision, 6);
+});
+
+test('critical queue deduplicates an already in-flight offer and fails closed on a lost acknowledgement conflict', async () => {
+  for (const lostReply of [false, true]) {
+    const first = deferred(); let puts = 0;
+    const h = harness((path, opts) => path.endsWith('/me') ? me() : opts.method === 'GET' ? saved()
+      : ++puts === 1 ? first.promise : response({ ok: false, conflict: true }, 409));
+    await h.boot(); await h.save({ stage: 'offer' }); await h.push();
+    const offer = h.cloud.enqueueCheckpoint();
+    h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'claim' });
+    const claim = h.cloud.enqueueCheckpoint(); await settle();
+    if (lostReply) first.reject(new Error('committed but lost response'));
+    else first.resolve(response({ ok: true, revision: 4 }));
+    await settle();
+    assert.equal(await offer, !lostReply);
+    assert.equal(await claim, false);
+    assert.equal(puts, 2);
+    assert.equal(h.cloud.getState().lastError, 'conflict');
+    assert.equal(await h.cloud.flushCheckpoint(), false);
+    await h.push(); await h.timer(1200);
+    assert.equal(puts, 2, 'fatal conflict cannot retry or drain dependent snapshots');
+  }
+});
+
+test('an in-flight fatal rejection is not resubmitted by its critical waiter', async () => {
+  for (const status of [409, 422]) {
+    const first = deferred(); let puts = 0;
+    const h = harness((path, opts) => path.endsWith('/me') ? me() : opts.method === 'GET' ? saved()
+      : (puts++, first.promise));
+    await h.boot(); await h.save({ stage: 'offer' }); await h.push();
+    const offer = h.cloud.enqueueCheckpoint();
+    h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'claim' });
+    const claim = h.cloud.enqueueCheckpoint();
+    first.resolve(response({ ok: false, conflict: true, code: 'CAMPAIGN_CHECKPOINT_TRANSITION',
+      detail: 'offer_rejected', error: 'invalid checkpoint' }, status));
+    await settle();
+    assert.equal(await offer, false); assert.equal(await claim, false);
+    assert.equal(puts, 1);
+    assert.equal(h.cloud.getState().lastErrorStatus, status);
+  }
+});
+
+test('logout and authoritative reload cancel dependent critical writes and ignore stale acknowledgements', async () => {
+  for (const logout of [false, true]) {
+    const first = deferred();
+    const h = harness((path, opts) => path.endsWith('/me') ? me()
+      : path.endsWith('/logout') ? response({ ok: true }) : opts.method === 'GET' ? saved() : first.promise);
+    await h.boot();
+    h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'offer' });
+    const offer = h.cloud.enqueueCheckpoint();
+    h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ stage: 'claim' });
+    const claim = h.cloud.enqueueCheckpoint(); await settle();
+    if (logout) h.nodes.find(n => n.id === 'cloudSaveIndicator').listeners.click();
+    else await h.cloud.loadCloudSave();
+    assert.equal(await offer, false); assert.equal(await claim, false);
+    first.resolve(response({ ok: true, revision: 4 })); await settle(); await h.timer(1200);
+    assert.equal(h.cloud.getState().revision, 3);
+    assert.equal(h.requests.filter(r => r.method === 'PUT').length, 1);
+  }
+});
+
+test('critical queue has a bounded capacity and visibly fails closed instead of dropping dependencies', async () => {
+  const first = deferred();
+  const h = harness((path, opts) => path.endsWith('/me') ? me() : opts.method === 'GET' ? saved() : first.promise);
+  await h.boot();
+  const results = [];
+  for (let i = 0; i < 65; i++) {
+    h.window.__ARTEMIS_SAVE_BUFFER = JSON.stringify({ checkpoint: i });
+    results.push(h.cloud.enqueueCheckpoint());
+  }
+  await settle();
+  assert.ok(h.cloud.getState().checkpointQueueDepth <= 64);
+  assert.equal(h.cloud.getState().checkpointBlocked, true);
+  assert.ok((await Promise.all(results)).every(ok => ok === false));
+  assert.equal(await h.cloud.flushCheckpoint(), false);
+  assert.ok(h.nodes.some(n => /tải lại|đồng bộ/.test(n.textContent || '')));
+});
+
 test('ledger 422 preserves its exact diagnostic and never masquerades as another-device conflict', async () => {
   const h = harness((path, opts) => path.endsWith('/me') ? me()
     : opts.method === 'GET' ? saved() : response({ ok: false, conflict: true,
