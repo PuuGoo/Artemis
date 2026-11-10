@@ -1631,6 +1631,9 @@
   <link rel="stylesheet" href="/native-navigation.css">
   <script src="/native-campaign.js" defer></script>
   <script src="/native-navigation.js" defer></script>
+  <link rel="stylesheet" href="/campaign-world-map.css">
+  <script src="/campaign-world-map-art.js" defer></script>
+  <script src="/campaign-world-map.js" defer></script>
   <script src="/arena-viewport.js"></script>
 
 </head>
@@ -31176,6 +31179,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
       // Expose Fusion System Diagnostic & Test API for verification
       window.Archero2FusionAPI = {
         GEAR_QUALITIES,
+        getCampaignChapters: () => CHAPTERS.map(ch => ({ ...ch, unlock: ch.unlock ? { ...ch.unlock } : null })),
         reloadSaveFromStorage,
         // Expose Game de debug/kiem thu hieu nang & vi tri nhan vat.
         Game,

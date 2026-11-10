@@ -1,0 +1,43 @@
+{
+  "scope": "Real Chrome, isolated local auth/save fixture, not production",
+  "results": [
+    {
+      "chapterCount": 19
+    },
+    {
+      "wheel": {
+        "before": {
+          "top": 4267,
+          "selected": 0
+        },
+        "after": {
+          "top": 3617,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "leftDrag": {
+        "before": {
+          "top": 3617,
+          "selected": 0
+        },
+        "after": {
+          "top": 3363,
+          "selected": 0
+        }
+      }
+    },
+    {
+      "lockedPreviewAndReturn": "PASS"
+    },
+    {
+      "touch": {
+        "before": 4424,
+        "after": 4227
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}
