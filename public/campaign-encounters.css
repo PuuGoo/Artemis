@@ -1,1 +1,117 @@
-.campaign-encounter{position:absolute;z-index:90;left:50%;top:50%;transform:translate(-50%,-50%);box-sizing:border-box;width:min(92%,390px);max-height:85%;overflow:auto;padding:18px;border:2px solid #86efac;border-radius:20px;background:linear-gradient(155deg,#15382b,#071b15);color:#f0fdf4;box-shadow:0 14px 60px #000b;text-align:center;font:700 14px system-ui;pointer-events:auto}.campaign-encounter h2{margin:0 0 14px;font-size:18px;letter-spacing:.08em}.encounter-cards{display:flex;gap:10px}.campaign-encounter button{font:inherit;touch-action:manipulation;cursor:pointer;white-space:pre-line}.encounter-card{flex:1;min-width:0;min-height:136px;border:2px solid #86efac;border-radius:14px;padding:14px 8px;color:#dcfce7;background:linear-gradient(#238b51,#11482d);box-shadow:inset 0 0 20px #b8ffb320;line-height:1.6}.campaign-encounter.devil{border-color:#fbbf24;background:linear-gradient(155deg,#4b260c,#1a0d08);color:#fef3c7}.devil .encounter-card{border-color:#fde68a;color:#fff7c2;background:linear-gradient(145deg,#9a650d,#493108);box-shadow:inset 0 0 28px #ffcf5c44,0 0 15px #fbbf2430}.encounter-action{display:inline-block;margin:12px 5px 0;padding:9px 14px;min-height:42px;background:#0f172acc;color:inherit;border:1px solid #a7f3d066;border-radius:10px}.campaign-encounter button:focus-visible{outline:3px solid white;outline-offset:3px}.campaign-encounter button:disabled{opacity:.55;cursor:wait}.campaign-encounter [data-error]{font-size:12px;color:#fecaca;margin:10px 0 0}.campaign-encounter [data-error]:empty{display:none}@media(max-width:340px){.campaign-encounter{padding:12px}.encounter-card{padding:10px 5px;font-size:12px}}
+/* Encounter-only skin, coordinated with combat-reference-ui.css.
+   Original flat markup works; .encounter-panel enables a full hit-blocking backdrop. */
+.campaign-encounter {
+  position:absolute; z-index:140; left:50%; top:50%; transform:translate(-50%,-50%);
+  box-sizing:border-box; width:min(94%,490px); max-height:94%; max-height:min(94%,94dvh);
+  overflow:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#5986aa #102b4b;
+  padding:25px 22px 20px; border:2px solid #6494b8; border-radius:18px;
+  background:radial-gradient(ellipse at 50% 0,#24517b,transparent 65%),#102b4b;
+  box-shadow:0 18px 65px #000b,inset 0 0 0 3px #071c3570,0 0 0 100vmax #02181cd9;
+  color:#ecf7ff; text-align:center; font:700 14px/1.45 Arial,sans-serif; pointer-events:auto; color-scheme:dark;
+}
+.campaign-encounter,.campaign-encounter *,.campaign-encounter *::before,.campaign-encounter *::after { box-sizing:border-box; }
+.campaign-encounter:has(>.encounter-panel) {
+  position:fixed; inset:0; width:100%; height:100%; max-height:none; transform:none;
+  display:flex; flex-direction:column; align-items:center;
+  padding:max(16px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  border:0; border-radius:0; background:#02181cd9; box-shadow:none;
+}
+.campaign-encounter .encounter-panel {
+  position:relative; flex:0 0 auto; width:min(100%,490px); min-width:0; margin-block:auto;
+  padding:25px 22px 20px; border:2px solid #6494b8; border-radius:18px;
+  background:radial-gradient(ellipse at 50% 0,#24517b,transparent 65%),#102b4b;
+  box-shadow:0 18px 65px #000b,inset 0 0 0 3px #071c3570;
+}
+.campaign-encounter[hidden],.campaign-encounter button[hidden] { display:none; }
+.campaign-encounter h2 {
+  position:relative; isolation:isolate; display:flex; align-items:center; justify-content:center;
+  width:90%; min-height:47px; margin:0 auto 19px; padding:9px 8px;
+  border:3px solid #ddaa34; background:linear-gradient(#fff7b0,#f9d458);
+  box-shadow:0 3px 0 #79531c,inset 0 0 0 2px #fff6bc; color:#81500e;
+  font-size:clamp(16px,4.3vw,23px); font-weight:900; line-height:1.2; letter-spacing:.025em;
+  text-shadow:0 1px #fff3a6; overflow-wrap:anywhere; transform:rotate(-1deg);
+}
+.campaign-encounter h2::before,.campaign-encounter h2::after {
+  content:""; position:absolute; z-index:-1; top:8px; bottom:-7px; width:22px;
+  border:2px solid #916322; background:#e3b344; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,25% 50%);
+}
+.campaign-encounter h2::before { left:-20px; }
+.campaign-encounter h2::after { right:-20px; transform:scaleX(-1); }
+.campaign-encounter .encounter-intro,.campaign-encounter .encounter-instruction { margin:0 0 14px; color:#fff0a1; font-size:13px; }
+.campaign-encounter .encounter-cards { display:flex; align-items:stretch; justify-content:center; gap:clamp(8px,2vw,14px); width:100%; margin:0 0 17px; }
+.campaign-encounter button { appearance:none; font:inherit; touch-action:manipulation; cursor:pointer; white-space:pre-line; -webkit-tap-highlight-color:transparent; }
+.campaign-encounter .encounter-card {
+  --card-edge:#71dafc; --card-top:#a4e8ff; --card-title:#12316a;
+  --card-fill:linear-gradient(#93eaff 0 43px,#184578 44px,#133568 82%,#14528d);
+  position:relative; isolation:isolate; display:flex; flex:1 1 0; flex-direction:column;
+  align-items:center; justify-content:center; gap:12px; min-width:0; max-width:208px; min-height:245px;
+  margin:4px 0 0; padding:24px 13px 42px; border:0; border-radius:0; background:var(--card-edge);
+  color:white; line-height:1.5; overflow-wrap:anywhere; text-shadow:0 1px #071c3b;
+  clip-path:polygon(0 0,100% 0,100% 88%,50% 100%,0 88%); transition:transform .14s ease,filter .14s ease;
+}
+.campaign-encounter .encounter-card::before {
+  content:""; position:absolute; z-index:-1; inset:3px; background:var(--card-fill);
+  clip-path:polygon(0 0,100% 0,100% 88%,50% 100%,0 88%);
+}
+.campaign-encounter .encounter-card::after { content:"◆"; position:absolute; bottom:7px; left:0; width:100%; color:var(--card-edge); font-size:15px; }
+.campaign-encounter.devil .encounter-card,.campaign-encounter .encounter-card[data-rarity="legendary"],.campaign-encounter .encounter-card[data-rarity="legend"] {
+  --card-edge:#ffd679; --card-top:#ffe9a1; --card-title:#70430e;
+  --card-fill:linear-gradient(#ffe8a2 0 43px,#634c24 44px,#342d32 82%,#725028); max-width:290px;
+}
+.campaign-encounter .encounter-rarity {
+  position:absolute; inset:3px 3px auto; min-height:20px; padding:3px 5px; background:var(--card-top);
+  color:var(--card-title); font-size:10px; font-weight:900; letter-spacing:.08em; line-height:1.4; text-shadow:none;
+}
+.campaign-encounter .encounter-icon {
+  display:grid; place-items:center; flex-shrink:0; width:62px; height:62px; margin:5px auto 0;
+  border:3px solid var(--card-edge); border-radius:7px; background:linear-gradient(#fff,#dfedff);
+  color:#183969; box-shadow:0 3px 0 #06254c; font-size:34px; line-height:1; text-shadow:none;
+}
+.campaign-encounter .encounter-icon img { display:block; width:100%; height:100%; object-fit:contain; }
+.campaign-encounter .encounter-name { font-size:16px; font-weight:900; line-height:1.3; }
+.campaign-encounter .encounter-desc { color:#e1efff; font-size:12px; line-height:1.5; }
+.campaign-encounter .encounter-cost { display:block; padding:6px 9px; border:1px solid #ffc98580; border-radius:6px; background:#231b25; color:#ffdfad; font-size:12px; line-height:1.4; }
+.campaign-encounter .encounter-accept { display:block; margin-top:auto; padding:6px 12px; border:1px solid #edb94a; border-radius:6px; background:linear-gradient(#fff17c,#ffd032); color:#70430e; font-size:12px; font-weight:900; text-shadow:none; }
+.campaign-encounter .encounter-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+.campaign-encounter .encounter-action {
+  display:inline-block; min-height:44px; max-width:100%; margin:5px 4px 0; padding:10px 17px;
+  border:2px solid #e8a71b; border-radius:8px; background:linear-gradient(#fff17c,#ffd032 60%,#efb721);
+  box-shadow:0 3px 0 #84501e,inset 0 2px #fff6b7; color:#70430e; font-weight:900; text-shadow:0 1px #fff1a0; overflow-wrap:anywhere;
+}
+/* Flat controller appends refuse last; data-action is the preferred explicit contract. */
+.campaign-encounter .encounter-action:last-of-type,.campaign-encounter .encounter-action[data-action="refuse"] {
+  border-color:#7193b3; background:#132e4e; box-shadow:0 3px 0 #07182d,inset 0 1px #365978; color:#d9ecff; text-shadow:none;
+}
+.campaign-encounter button:focus-visible { outline:3px solid #fff5ba; outline-offset:4px; }
+/* A shield clips outer outlines, so keyboard focus also changes its inset frame. */
+.campaign-encounter .encounter-card:focus-visible { outline:none; background:#fff7bb; filter:brightness(1.16); text-decoration:underline; text-underline-offset:4px; }
+.campaign-encounter .encounter-card:focus-visible::before { inset:6px; }
+.campaign-encounter button:disabled { opacity:.62; cursor:wait; filter:saturate(.45); }
+.campaign-encounter [data-error] { margin:14px 0 0; color:#ffe0df; padding:10px; border:1px solid #ef9b9866; border-radius:8px; background:#481e2d; font-size:12px; overflow-wrap:anywhere; }
+.campaign-encounter [data-error]:empty { display:none; }
+@media (hover:hover) and (pointer:fine) {
+  .campaign-encounter .encounter-card:not(:disabled):hover { transform:translateY(-4px); filter:brightness(1.08); }
+  .campaign-encounter .encounter-action:not(:disabled):hover { filter:brightness(1.1); }
+}
+@media (max-width:360px) {
+  .campaign-encounter { padding:20px 12px 16px; }
+  .campaign-encounter .encounter-panel { padding:20px 12px 16px; }
+  .campaign-encounter h2 { width:86%; font-size:16px; }
+  .campaign-encounter .encounter-card { min-height:235px; padding:26px 8px 38px; gap:10px; }
+  .campaign-encounter .encounter-name { font-size:14px; }
+  .campaign-encounter .encounter-desc { font-size:12px; }
+  .campaign-encounter .encounter-action { padding-inline:12px; }
+}
+@media (max-height:500px) {
+  .campaign-encounter .encounter-panel { margin-block:0; }
+  .campaign-encounter .encounter-card { min-height:200px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .campaign-encounter *,.campaign-encounter *::before,.campaign-encounter *::after { animation:none; transition:none; scroll-behavior:auto; }
+  .campaign-encounter .encounter-card { transition:none; }
+}
+@media (forced-colors:active) {
+  .campaign-encounter .encounter-card { clip-path:none; border:2px solid ButtonText; }
+  .campaign-encounter .encounter-card::before,.campaign-encounter .encounter-card::after { display:none; }
+  .campaign-encounter .encounter-card:focus-visible { outline:3px solid Highlight; }
+}

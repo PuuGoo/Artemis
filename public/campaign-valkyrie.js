@@ -1,7 +1,7 @@
 /* NPC Canvas: tìm đường trong miền đi được trước khi chọn vị trí, không tạo timer. */
 (function(root) {
   'use strict';
-  function findPosition(g,placement='center') {
+  function findPosition(g,placement='portal') {
     const geo=root.ArtemisObstacleClearance, p=g.player;
     if(!geo || !p) return null;
     const step=12, radius=Math.max(22,p.r||17), pad=g.wallPad+radius;

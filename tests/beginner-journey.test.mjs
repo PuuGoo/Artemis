@@ -62,7 +62,7 @@ check("danh dau isCompleted khi het buoc", compBody.includes("bj.isCompleted = t
 console.log("\n=== 5. HOOK GAMEPLAY THAT (khong phai nut gia) ===");
 const HOOKS = [
   ["N02 roomCleared", "BeginnerHooks.onRoomCleared()", "Game.roomCleared = true;"],
-  ["N03 loot", "BeginnerHooks.onLoot(1)", "Game.drops.splice(i, 1);"],
+  ["N03 loot", "BeginnerHooks.onLoot(1)", "function collectFloorDrop(d)"],
   ["N04 gear equipped", "BeginnerHooks.onGearEquipped()", "SaveState.equippedGear[slotKey] = newItem;"],
   ["N05 gear upgraded", "BeginnerHooks.onGearUpgraded()", "item.level = (item.level || 1) + 1;"],
   ["N06 skill picked", "BeginnerHooks.onSkillPicked()", "p.skills[skId] = (p.skills[skId] || 0) + 1;"],
@@ -72,7 +72,9 @@ for (const [label, hook, anchor] of HOOKS) {
   const anchorIdx = label === 'N02 roomCleared' ? src.indexOf(anchor, src.indexOf('// If all enemies dead -> Room Cleared!')) : src.indexOf(anchor);
   check(`${label}: co hook`, src.includes(hook));
   if (anchorIdx > 0) {
-    const near = src.slice(anchorIdx, anchorIdx + 900);
+    const near = label === 'N03 loot'
+      ? src.slice(anchorIdx, src.indexOf('function settleClearedRoomLoot()', anchorIdx))
+      : src.slice(anchorIdx, anchorIdx + 900);
     check(`${label}: hook nam ngay sau su kien that`, near.includes(hook));
   }
 }

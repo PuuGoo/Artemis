@@ -14,7 +14,7 @@ test('chiến dịch boss chỉ ở mốc10; mode săn trùm vẫn mọi phòng'
 test('LV10 chiến dịch không mở modal từ EXP; gọi trực tiếp không cấp thứ11',()=>{
  assert.match(fn('applyRogueSkill'),/runProgression/);
  assert.match(html,/ArtemisCampaignSkills/);
- const update=fn('updateGame');
+ const update=fn('collectFloorDrop');
  const branch=update.match(/if \(usesCampaignTuning\(\)\) \{\s*ArtemisCampaignExp\.gain\(p, d.val\);\s*\} else \{/);
  assert.ok(branch, 'chiến dịch phải tách EXP khỏi nhánh modal cũ của các mode khác');
 });

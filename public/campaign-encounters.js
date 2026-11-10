@@ -79,7 +79,7 @@
   function isTouching(player,npc){return !!(player&&npc&&Number.isFinite(player.x)&&Number.isFinite(player.y)&&Number.isFinite(npc.x)&&Number.isFinite(npc.y)&&Math.hypot(player.x-npc.x,player.y-npc.y)<40+Math.max(0,player.r||0));}
   function findPosition(g,kind){
     const helper=root.ArtemisCampaignValkyrie;if(!helper)return null;
-    return helper.findPosition(g,kind==='devil'?'portal':'center');
+    return helper.findPosition(g,'portal');
   }
   function draw(ctx,npc,now,low,near){
     if(!npc)return;
@@ -99,38 +99,57 @@
   function createController(options){
     if(!options||typeof options.persist!=='function'||typeof options.onCommitted!=='function')throw Error('Persistence and commit callbacks required');
     const doc=options.document||root.document,host=options.host||doc.body;
-    let panel=null,busy=false,disposed=false;
+    let panel=null,busy=false,disposed=false,offerReady=false;
     function close(){if(panel){panel.remove();panel=null;}}
     function message(text){if(panel)panel.querySelector('[data-error]').textContent=text;}
     function render(result){
       close();const p=result.offer;if(!p||disposed)return;
       panel=doc.createElement('section');panel.className='campaign-encounter '+p.kind;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label',p.kind==='angel'?'Phước lành thiên thần':'Khế ước ác quỷ');
-      const title=doc.createElement('h2');title.textContent=p.kind==='angel'?'PHƯỚC LÀNH':'KHẾ ƯỚC ÁC QUỶ';panel.appendChild(title);
-      const cards=doc.createElement('div');cards.className='encounter-cards';panel.appendChild(cards);
-      const button=(text,action,choice,card)=>{const b=doc.createElement('button');b.type='button';b.className=card?'encounter-card':'encounter-action';b.textContent=text;b.onclick=()=>act(action,choice);(card?cards:panel).appendChild(b);};
+      const inner=doc.createElement('div');inner.className='encounter-panel';panel.appendChild(inner);
+      const title=doc.createElement('h2');title.textContent=p.kind==='angel'?'PHƯỚC LÀNH':'KHẾ ƯỚC ÁC QUỶ';inner.appendChild(title);
+      const instruction=doc.createElement('p');instruction.className='encounter-instruction';instruction.textContent=p.kind==='angel'?'Chọn 1 phước lành để tiếp tục hành trình.':'Chọn thẻ để nhận kỹ năng huyền thoại hoặc từ chối khế ước.';inner.appendChild(instruction);
+      const cards=doc.createElement('div');cards.className='encounter-cards';inner.appendChild(cards);
+      const actions=doc.createElement('div');actions.className='encounter-actions';inner.appendChild(actions);
+      const button=(text,action,choice,card)=>{const b=doc.createElement('button');b.type='button';b.className=card?'encounter-card':'encounter-action';b.dataset.action=action;if(card)b.setAttribute('aria-label',text);else b.textContent=text;b.onclick=()=>act(action,choice);(card?cards:actions).appendChild(b);return b;};
+      const span=(card,part,text)=>{const s=doc.createElement('span');s.className='encounter-'+part;s.textContent=text;if(part==='icon')s.setAttribute('aria-hidden','true');card.appendChild(s);return s;};
       if(p.kind==='angel'){
-        button('♥ Tăng 10% máu tối đa','claim','maxHp',true);
-        button(`✚ Hồi ${Math.round(p.healRatio*100)}% máu tối đa`,'claim','heal',true);
+        const maxHp=button('♥ Tăng 10% máu tối đa','claim','maxHp',true);
+        span(maxHp,'rarity','PHƯỚC LÀNH');span(maxHp,'icon','♥');span(maxHp,'name','Tăng 10% máu tối đa');span(maxHp,'desc','Tăng giới hạn sinh lực và nhận thêm lượng máu tương ứng.');span(maxHp,'accept','Chọn phước lành');
+        const heal=button(`✚ Hồi ${Math.round(p.healRatio*100)}% máu tối đa`,'claim','heal',true);
+        span(heal,'rarity','PHƯỚC LÀNH');span(heal,'icon','✚');span(heal,'name',`Hồi ${Math.round(p.healRatio*100)}% máu tối đa`);span(heal,'desc','Hồi phục sinh lực để sẵn sàng cho trận chiến tiếp theo.');span(heal,'accept','Chọn phước lành');
       }else{
         const skill=(options.getContext().catalog||[]).find(s=>s.id===p.skillId);
-        button(`★ HUYỀN THOẠI · ${skill?skill.name||skill.id:p.skillId}\nNhận kỹ năng · Mất ${Math.max(1,Math.round(result.maxHp*p.hpCostRatio))} HP tối đa`,'claim','accept',true);
+        const name=skill?skill.name||skill.id:p.skillId,cost=`Nhận kỹ năng · Mất ${Math.max(1,Math.round(result.maxHp*p.hpCostRatio))} HP tối đa`;
+        const card=button(`★ HUYỀN THOẠI · ${name}\n${cost}`,'claim','accept',true);card.dataset.rarity='legend';
+        span(card,'rarity','★ HUYỀN THOẠI');span(card,'icon',skill?.icon||'★');span(card,'name',name);span(card,'desc',skill?.desc||skill?.description||'Kỹ năng huyền thoại từ khế ước ác quỷ.');span(card,'cost',cost);span(card,'accept','Chấp nhận khế ước');
         if(p.attempt===0)button('Đổi kỹ năng · 1 lần','reroll');
       }
-      button('Từ chối','refuse');const error=doc.createElement('p');error.dataset.error='';error.setAttribute('role','status');panel.appendChild(error);host.appendChild(panel);
+      button('Từ chối','refuse');button('Thử lưu lại','offer').hidden=true;const error=doc.createElement('p');error.dataset.error='';error.setAttribute('role','status');inner.appendChild(error);host.appendChild(panel);
+    }
+    function updateActions(){
+      if(!panel)return;
+      panel.querySelectorAll('button').forEach(b=>{
+        const retry=b.dataset.action==='offer';
+        b.hidden=retry&&(busy||offerReady);
+        b.disabled=busy||(retry?offerReady:!offerReady);
+      });
     }
     async function act(action,choice){
-      if(busy||disposed)return false;busy=true;
+      if(busy||disposed||(action!=='offer'&&!offerReady))return false;busy=true;
       if(panel)panel.querySelectorAll('button').forEach(b=>{b.disabled=true;});
       try{
         const context={...options.getContext(),choice};
         const result=transition(options.getState(),context,action,choice);
         if(!result.ok){message(result.reason==='insufficient-hp'?'Không đủ HP để lập khế ước.':'Không thể nhận lựa chọn này.');return false;}
+        // Preview only: do not publish pending state or grant until durable OFFER ack.
+        if(action==='offer'){offerReady=false;render(result);updateActions();}
         const ack=await options.persist(result,{action,context});
         if(ack!==true&&(!ack||ack.ok!==true))throw Error('save-rejected');
         await options.onCommitted(result);
+        if(action==='offer')offerReady=true;
         if(!disposed){if(result.offer)render(result);else close();}return true;
       }catch(error){message('Lưu chưa thành công. Vui lòng thử lại.');if(options.onError)options.onError(error);return false;}
-      finally{busy=false;if(panel)panel.querySelectorAll('button').forEach(b=>{b.disabled=false;});}
+      finally{busy=false;updateActions();}
     }
     return Object.freeze({
       async touch(player,npc){if(disposed||panel||busy||!isTouching(player,npc))return false;const c=options.getContext();if(!npc||npc.kind!==kindAt(c.stage))return false;return act('offer');},

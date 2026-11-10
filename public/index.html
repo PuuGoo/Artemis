@@ -26320,14 +26320,56 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         return true;
       }
 
+      function collectFloorDrop(d) {
+        const p = Game.player;
+        if (d.type === 'gold') {
+          const goldValue = Math.round(d.val * (1 + (p.goldBonus || 0)));
+          Game.runGold += goldValue;
+          SaveState.gold += goldValue;
+          SoundFX.coinPickup();
+        } else if (d.type === 'xp') {
+          if (usesCampaignTuning()) {
+            ArtemisCampaignExp.gain(p, d.val);
+          } else {
+            p.xp += d.val;
+            if (p.xp >= p.xpNext) {
+              p.xp -= p.xpNext;
+              p.level++;
+              p.xpNext = Math.round(p.xpNext * 1.25);
+              triggerSkillSelection('Phước Lành Valkyrie • Lên Cấp ' + p.level + '!');
+            }
+          }
+        } else if (d.type === 'heart') {
+          p.hp = Math.min(p.maxHp, p.hp + d.val);
+          spawnFloatText(p.x, p.y - 20, `+${d.val} HP`, '#4ade80', 13, { kind: 'heal' });
+        } else if (d.type === 'scroll') {
+          ensureWikiCurrencyAndItemsState();
+          const slotKey = d.slot || 'weapon';
+          const scMeta = WIKI_GEAR_SCROLLS_META[slotKey] || WIKI_GEAR_SCROLLS_META.weapon;
+          SaveState.gearScrolls[slotKey] = (SaveState.gearScrolls[slotKey] || 0) + (d.val || 1);
+          SoundFX.coinPickup();
+          spawnFloatText(p.x, p.y - 28, `+${d.val || 1} ${scMeta.shortName}`, '#38bdf8', 12);
+        }
+        if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onLoot(1);
+      }
+
+      function settleClearedRoomLoot() {
+        if (!Game.roomCleared || !Game.player) return;
+        const drops = Game.drops.splice(0);
+        for (const drop of drops) collectFloorDrop(drop);
+        if (drops.length) { updateInGameHUD(); saveCheckpoint(); }
+      }
+
       async function openCampaignWheel() {
         if (Game.paused || !Game.wheelNpc || Game.skillClaimBusy) return false;
         Game.paused = true; Game.joy.active = false;
         saveCheckpoint();
-        if (window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) { Game.paused = false; showToast('Chưa lưu được vòng quay. Hãy thử lại.'); return false; }
+        // Show the contact dialog now; preserve its entry checkpoint before a spin can persist.
+        const entryWrite = window.ArtemisCloud?.enqueueCheckpoint?.() || Promise.resolve(true);
         const cp = SaveState.dungeonCheckpoint;
         const dialog = ArtemisCampaignWheel.open({checkpoint:cp,save:SaveState,
           persist:async checkpoint => {
+            if (!await entryWrite && window.ArtemisCloud?.flushCheckpoint && !await window.ArtemisCloud.flushCheckpoint()) return false;
             Game.runGold = checkpoint.runGold;
             Game.campaignWheelReceipt = checkpoint.wheel;
             SaveState.dungeonCheckpoint = checkpoint;
@@ -26353,7 +26395,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return true;
         }
         Game.valkyrieNpc = {...pos, stage:Game.room, state:'spawned'};
-        document.getElementById('hudHintBanner').textContent = '🪽 Đến gần Valkyrie để chọn kỹ năng, hoặc vào cổng để bỏ qua có xác nhận.';
+        document.getElementById('hudHintBanner').textContent = '🪽 Chạm Valkyrie trước cổng để chọn kỹ năng và tiếp tục qua ải.';
         return true;
       }
 
@@ -27612,11 +27654,18 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           return;
         }
         // Check Portal Walk-In when Room is Cleared
-        if (Game.roomCleared && Game.drops.length === 0) {
-          spawnCampaignEncounter();
+        if (Game.roomCleared) {
+          // Existing wheel contact wins over slow loot flight; settle the real drops first.
+          if (Game.wheelNpc && ArtemisCampaignWheel.isNear(p, Game.wheelNpc)) {
+            settleClearedRoomLoot();
+            void openCampaignWheel();
+            return;
+          }
+          if (Game.drops.length === 0) spawnCampaignEncounter();
           if(Game.encounterNpc)void Game.encounterController.touch(p,Game.encounterNpc);
-          spawnCampaignWheel();
-          if (Game.wheelNpc && ArtemisCampaignWheel.isNear(p, Game.wheelNpc)) openCampaignWheel();
+          if (Game.encounterController?.isOpen || Game.encounterController?.busy || Game.paused) return;
+          if (Game.drops.length === 0) spawnCampaignWheel();
+          if (Game.wheelNpc && ArtemisCampaignWheel.isNear(p, Game.wheelNpc)) { void openCampaignWheel(); return; }
         }
         if (Game.portalOpen && (!usesCampaignTuning() || Game.drops.length === 0)) {
           const pr = Game.portalRect;
@@ -27627,12 +27676,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           ) {
             if (Game.encounterNpc) { p.y=pr.y+pr.h+70;return; }
             if (usesCampaignTuning() && Game.valkyrieNpc) {
-              if (!window.confirm('Bỏ qua lượt chọn Valkyrie ở ải này? Không thể nhận lại sau khi tải lại.')) {
-                p.y = pr.y + pr.h + 65;
-                return;
-              }
+              // Portal contact must open the choice, never a browser confirmation.
               p.y = pr.y + pr.h + 65;
-              void skipCampaignValkyrie();
+              Game.valkyrieNpc.state = 'interacting';
+              openCampaignOffer(Game.room);
               return;
             }
             // Chiến Dịch: hết phòng cuối = phá đảo chương.
@@ -28286,42 +28333,14 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           if (Game.roomCleared || dist < 135) {
             const ang = Math.atan2(p.y - d.y, p.x - d.x);
             const pullSpd = Game.roomCleared ? 520 : 320;
-            d.x += Math.cos(ang) * pullSpd * dt;
-            d.y += Math.sin(ang) * pullSpd * dt;
+            const travel = Math.min(dist, pullSpd * dt);
+            d.x += Math.cos(ang) * travel;
+            d.y += Math.sin(ang) * travel;
           }
           if (dist < p.r + 14) {
-            if (d.type === 'gold') {
-              const goldValue = Math.round(d.val * (1 + (p.goldBonus || 0)));
-              Game.runGold += goldValue;
-              SaveState.gold += goldValue;
-              SoundFX.coinPickup();
-            } else if (d.type === 'xp') {
-              if (usesCampaignTuning()) {
-                ArtemisCampaignExp.gain(p, d.val);
-              } else {
-                p.xp += d.val;
-                if (p.xp >= p.xpNext) {
-                  p.xp -= p.xpNext;
-                  p.level++;
-                  p.xpNext = Math.round(p.xpNext * 1.25);
-                  triggerSkillSelection('Phước Lành Valkyrie • Lên Cấp ' + p.level + '!');
-                }
-              }
-            } else if (d.type === 'heart') {
-              p.hp = Math.min(p.maxHp, p.hp + d.val);
-              spawnFloatText(p.x, p.y - 20, `+${d.val} HP`, '#4ade80', 13, { kind: 'heal' });
-            } else if (d.type === 'scroll') {
-              ensureWikiCurrencyAndItemsState();
-              const slotKey = d.slot || 'weapon';
-              const scMeta = WIKI_GEAR_SCROLLS_META[slotKey] || WIKI_GEAR_SCROLLS_META.weapon;
-              SaveState.gearScrolls[slotKey] = (SaveState.gearScrolls[slotKey] || 0) + (d.val || 1);
-              SoundFX.coinPickup();
-              spawnFloatText(p.x, p.y - 28, `+${d.val || 1} ${scMeta.shortName}`, '#38bdf8', 12);
-            }
+            collectFloorDrop(d);
             Game.drops.splice(i, 1);
             if (usesCampaignTuning() && Game.roomCleared && Game.drops.length === 0) saveCheckpoint();
-            // Beginner Journey: N03 — đếm vật phẩm nhặt được trên chiến trường.
-            if (typeof BeginnerHooks !== 'undefined') BeginnerHooks.onLoot(1);
             updateInGameHUD();
           }
         }
