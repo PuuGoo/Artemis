@@ -1,0 +1,109 @@
+{
+  "scope": "Real Chrome local with isolated auth/save fixture; not production",
+  "results": [
+    {
+      "viewport": {
+        "width": 562,
+        "height": 1001
+      },
+      "geometry": {
+        "overflow": 0,
+        "start": {
+          "x": 157.359375,
+          "y": 801.75,
+          "width": 258.53125,
+          "height": 67.859375,
+          "bottom": 869.609375,
+          "visible": true
+        },
+        "nav": {
+          "x": 0,
+          "y": 912,
+          "width": 562,
+          "height": 89,
+          "bottom": 1001,
+          "visible": true
+        }
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "geometry": {
+        "overflow": 0,
+        "start": {
+          "x": 109.1875,
+          "y": 665.15625,
+          "width": 179.421875,
+          "height": 55.296875,
+          "bottom": 720.453125,
+          "visible": true
+        },
+        "nav": {
+          "x": 0,
+          "y": 755,
+          "width": 390,
+          "height": 89,
+          "bottom": 844,
+          "visible": true
+        }
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "geometry": {
+        "overflow": 0,
+        "start": {
+          "x": 516.359375,
+          "y": 713.875,
+          "width": 258.53125,
+          "height": 59.78125,
+          "bottom": 773.65625,
+          "visible": true
+        },
+        "nav": {
+          "x": 359,
+          "y": 811,
+          "width": 562,
+          "height": 89,
+          "bottom": 900,
+          "visible": true
+        }
+      }
+    },
+    {
+      "tab": "tabShopVn",
+      "status": "PASS"
+    },
+    {
+      "tab": "tabEquip",
+      "status": "PASS"
+    },
+    {
+      "tab": "tabBattle",
+      "status": "PASS"
+    },
+    {
+      "tab": "nativeArtifacts",
+      "status": "PASS"
+    },
+    {
+      "tab": "tabEvents",
+      "status": "PASS"
+    },
+    {
+      "realCombatStart": {
+        "running": true,
+        "enemies": 3,
+        "room": 1
+      }
+    }
+  ],
+  "errors": [],
+  "failedLocal": []
+}

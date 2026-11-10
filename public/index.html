@@ -1627,6 +1627,10 @@
 </style>
   <link rel="stylesheet" href="/battle-hub.css">
   <link rel="stylesheet" href="/arena-viewport.css">
+  <link rel="stylesheet" href="/native-campaign.css">
+  <link rel="stylesheet" href="/native-navigation.css">
+  <script src="/native-campaign.js" defer></script>
+  <script src="/native-navigation.js" defer></script>
   <script src="/arena-viewport.js"></script>
 
 </head>
@@ -1730,7 +1734,7 @@
     <main class="relative flex-1 w-full overflow-hidden flex flex-col cyber-grid-bg">
 
       <!-- ==================== TAB 1: BATTLE LOBBY ==================== -->
-      <section id="tabBattle" class="battle-hub hidden flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-4" aria-label="Chuẩn bị chiến đấu">
+      <section id="tabBattle" class="battle-hub flex-1 overflow-y-auto p-3 sm:p-5 flex flex-col gap-4" aria-label="Chuẩn bị chiến đấu">
         <div class="battle-header">
           <div><span class="battle-eyebrow">ARTEMIS / VIỄN CHINH</span><h1>Hành trình của bạn</h1><p>Chọn điểm đến. Chuẩn bị đội hình. Chinh phục thử thách.</p></div>
           <button type="button" class="battle-help" id="btnBattleHelp" aria-label="Mở hướng dẫn chiến đấu">? <span>Cách chơi</span></button>
@@ -1840,7 +1844,7 @@
       </section>
 
       <!-- ==================== TAB 2: ARCHERO 2 AUTHENTIC 6-SLOT GEAR & BLACKSMITH SYSTEM ==================== -->
-      <section id="tabEquip" class="flex-1 overflow-y-auto flex flex-col bg-[#0b132b] select-none">
+      <section id="tabEquip" class="hidden flex-1 overflow-y-auto flex flex-col bg-[#0b132b] select-none">
 
         <!-- 1. UPPER HERO & 6-SLOT EQUIPMENT STAGE (60FPS CELESTIAL SANCTUARY + ASTROLABE + AURORA) -->
         <div id="gearHeroStage" class="a2-sky-stage w-full px-2.5 sm:px-6 pt-2.5 pb-3 shrink-0">
