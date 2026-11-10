@@ -143,7 +143,7 @@ check('plinkoPlay ho tro noSave (khong luu 200 lan)', /opts && opts\.noSave/.tes
 check('luu theo lo + luu khi ket thuc', /PLINKO_BATCH_SAVE_EVERY = \d+/.test(html) && /started % PLINKO_BATCH_SAVE_EVERY === 0\) SaveState\.save\(\)/.test(startBatch) && /const end = \(\) => \{[\s\S]{0,200}SaveState\.save\(\)/.test(startBatch));
 check('tu dung khi het vang', /SaveState\.gold < bet\) \{ bt\.reason = ' \(hết vàng\)'/.test(startBatch));
 check('co nut dung giua chung', /bt\.stop = true/.test(html) && /bt\.stop\) \{ bt\.reason = ' \(đã dừng\)'/.test(startBatch));
-check('luu khi roi tab giua chung (khong mat ket qua)', /plinkoFx !== fx\) \{ bt\.spawning = false; SaveState\.save\(\)/.test(startBatch));
+check('luu khi roi tab giua chung (khong mat ket qua)', /plinkoFx !== fx\) \{ end\(\); return; \}/.test(startBatch) && /const end = \(\) => \{[\s\S]*?SaveState\.save\(\)/.test(startBatch));
 check('khong bat dau khi dang co bong thuong dang roi', /fx\.pending > 0\) return/.test(startBatch));
 check('tong ket: lai/lo, cao nhat, phan bo o', /Số bóng mỗi ô/.test(html) && /Tổng cược/.test(html));
 

@@ -858,6 +858,26 @@
       } finally { state.saving = false; shopBusy = false; }
     },
     purchaseShopOffer: purchaseShopOffer,
+    exploreRunes: async function (details) {
+      if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");
+      shopBusy = true;
+      try {
+        await pushCloudSave();
+        if (state.lastError || state.dirty || !state.authenticated || window.__ARTEMIS_SAVE_READY !== true) throw new Error("Chưa đồng bộ tiến trình.");
+        if (state.saveTimer) clearTimeout(state.saveTimer);
+        state.saving = true;
+        window.__ARTEMIS_SAVE_READY = false;
+        var response;
+        try {
+          response = await api("/api/runes", { method: "POST", body: Object.assign({}, details, { action: "explore", revision: state.revision }) });
+        } finally {
+          // Resolve any committed grant before allowing ordinary client saves again.
+          await refreshAfterShopPurchase();
+        }
+        if (!response.ok || response.data.ok !== true) throw new Error(response.data.error || "Không khám phá được cổ ngữ.");
+        return response.data;
+      } finally { state.saving = false; shopBusy = false; }
+    },
     enchantRune: async function (runeId) {
       if (shopBusy || state.saving || pendingShopRequest) throw new Error("Đang đồng bộ tiến trình. Hãy thử lại.");
       shopBusy = true;

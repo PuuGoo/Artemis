@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { SHOP_OFFERS } from '../../lib/shop/catalog.js';
 const html = fs.readFileSync(new URL('../../public/index.html', import.meta.url), 'utf8');
-function runWish(value, state) {
+async function runWish(value, state) {
   const start = html.indexOf("        el.querySelectorAll('[data-vn-wish-pull]')");
   const end = html.indexOf('        el.querySelectorAll(', start + 1);
   assert.ok(start > 0 && end > start);
@@ -16,20 +16,20 @@ function runWish(value, state) {
     SoundFX: { levelUp() {} }, renderLobbyUI() {},
     executeWikiOtherItemAction() { state.wishTokens--; pulls++; },
   });
-  button.onclick();
+  await button.onclick();
   return { pulls, saves };
 }
-test('wish buttons retain main fix: charge 400 gems per pull and preserve tokens', () => {
+test('wish buttons retain main fix: charge 400 gems per pull and preserve tokens', async () => {
   for (const count of [1, 10, 100]) {
     const state = { gems: 50000, wishTokens: 7 };
-    const result = runWish(String(count), state);
+    const result = await runWish(String(count), state);
     assert.equal(result.pulls, count);
     assert.equal(state.gems, 50000 - count * 400);
     assert.equal(state.wishTokens, 7);
     assert.equal(result.saves, 1);
   }
   const poor = { gems: 399, wishTokens: 7 };
-  assert.equal(runWish('1', poor).pulls, 0);
+  assert.equal((await runWish('1', poor)).pulls, 0);
   assert.equal(poor.wishTokens, 7);
 });
 test('daily/exchange client grants replaced by canonical checkout; main rewards preserved', () => {

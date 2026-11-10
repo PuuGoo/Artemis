@@ -1649,6 +1649,8 @@
 
   <link rel="stylesheet" href="chest-results.css">
   <script src="chest-results.js"></script>
+  <link rel="stylesheet" href="reward-results.css">
+  <script src="reward-results.js"></script>
 </head>
 <body class="flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
 
@@ -9938,6 +9940,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
             renderLobbyUI();
             renderGemTool();
             showToast(`💎 Đúc thành công 1x ${GEM_META[pick].icon} ${GEM_META[pick].name} (${GEM_META[pick].desc})!`);
+            window.ArtemisRewardResults?.show({ title: 'Đúc Đá Ngẫu Nhiên', subtitle: GEM_META[pick].desc, rewards: [{ name: GEM_META[pick].name, amount: 1, rarity: 'rare', icon: GEM_META[pick].icon }] });
           };
         }
       }
@@ -14438,7 +14441,10 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (p.history.length > 20) p.history.length = 20;
 
         // Thả hàng loạt: người gọi tự lưu theo lô (save() serialize cả save lớn, không gọi 200 lần).
-        if (!(opts && opts.noSave)) SaveState.save();
+        if (!(opts && opts.noSave)) {
+          SaveState.save();
+          window.ArtemisRewardResults?.show({ title: 'Plinko', subtitle: `×${mult} · Cược ${amount} vàng`, rewards: [{ name: 'Vàng', amount: win, rarity: mult >= 5 ? 'legendary' : mult >= 2 ? 'epic' : 'common', icon: '🪙' }] });
+        }
         return { bin, mult, win, delta, bet: amount, path };
       }
 
@@ -14675,23 +14681,27 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         }
         const bt = fx.batch = {
           total: count, started: 0, landed: 0, spent: 0, won: 0, best: 0, bet,
-          counts: new Array(PLINKO_BINS).fill(0), spawning: true, stop: false, reason: '',
+          counts: new Array(PLINKO_BINS).fill(0), spawning: true, stop: false, reason: '', rewards: [],
         };
         const end = () => {
+          if (bt.revealed) return;
+          bt.revealed = true;
           bt.spawning = false;
           bt.total = bt.started;
           SaveState.save();
           plinkoBatchRender(fx);
           plinkoRefreshMeta();
+          if (bt.rewards.length) window.ArtemisRewardResults?.show({ title: 'Plinko', subtitle: `${bt.started}/${count} bóng${bt.reason}`, rewards: bt.rewards });
         };
         const step = () => {
-          if (plinkoFx !== fx) { bt.spawning = false; SaveState.save(); return; } // đã rời tab/vẽ lại bảng
+          if (plinkoFx !== fx) { end(); return; } // đã rời tab/vẽ lại bảng
           if (bt.stop) { bt.reason = ' (đã dừng)'; end(); return; }
           if (bt.started >= bt.total) { end(); return; }
           if (SaveState.gold < bet) { bt.reason = ' (hết vàng)'; end(); return; }
           const res = plinkoPlay(bet, { noSave: true });
           if (!res) { bt.reason = ' (hết vàng)'; end(); return; }
           bt.started += 1;
+          bt.rewards.push({ name: `Vàng · Bóng ${bt.started} · ×${res.mult}`, amount: res.win, rarity: res.mult >= 5 ? 'legendary' : res.mult >= 2 ? 'epic' : 'common', icon: '🪙' });
           if (!plinkoFxSpawn(res, true)) { plinkoBatchOnLand(fx, res); }
           if (bt.started % PLINKO_BATCH_SAVE_EVERY === 0) SaveState.save();
           plinkoRefreshMeta();
@@ -17050,9 +17060,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             SaveState.wishPityCount = ((SaveState.wishPityCount || 0) + 10) % 100;
             const map = getArtifactStarMap();
             const picks = [];
+            const rewards = [];
             for (let i = 0; i < 3; i++) {
               const randArt = ARTIFACTS_DATA[Math.floor(Math.random() * ARTIFACTS_DATA.length)];
+              const before = map[randArt.id] || 0;
               map[randArt.id] = Math.min(15, (map[randArt.id] || 0) + 1);
+              if (map[randArt.id] > before) rewards.push({ name: randArt.wikiName, amount: map[randArt.id] - before, rarity: randArt.rarity, icon: randArt.icon, art: renderArtifactIcon(randArt) });
               picks.push(`${randArt.icon} ${randArt.wikiName} (${map[randArt.id]}★)`);
             }
             SaveState.save();
@@ -17060,6 +17073,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             StageHeroAnim.triggerPose();
             renderLobbyUI();
             showToast(`🌠 Cầu Nguyện ×10 thành công: Nhận ${picks.join(', ')}!`);
+            if (rewards.length) window.ArtemisRewardResults?.show({ title: 'Cầu Nguyện Cổ Vật', subtitle: 'Kết quả đã cộng sao', rewards });
           };
         }
 
@@ -17629,17 +17643,24 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         if (runeDigging) return;
         runeDigging = true;
         try {
-          const response = await fetch('/api/runes', { method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},
-            body:JSON.stringify({action:'explore',promised:isPromised,count,pool:SaveState.runeRuinsState?.promisedPool||'elemental_circle',tileIdx,boardCell:SaveState.wikiEventsState?.selectedEventId==='rune_ruins'?tileIdx:-1}) });
-          const result = await response.json();
-          if (!response.ok || !result.ok) { showToast(result.error || 'Không đào được Ngọc lúc này.','err'); return; }
-          const names = result.drops.map(drop => {
+          const details = { promised:isPromised,count,pool:SaveState.runeRuinsState?.promisedPool||'elemental_circle',tileIdx,boardCell:SaveState.wikiEventsState?.selectedEventId==='rune_ruins'?tileIdx:-1 };
+          const result = await window.ArtemisCloud.exploreRunes(details);
+          if (!result.ok) { showToast(result.error || 'Không đào được Ngọc lúc này.','err'); return; }
+          const rewards = result.drops.map(drop => {
             const rune = RUNES_DATA.find(r=>r.id===drop.runeId);
-            return `${rune?.wikiName||drop.runeId} (${RuneEconomy.tier(drop.rank).replaceAll('_',' ')})`;
+            const rarity = Number.isInteger(drop.quality) ? ['common', 'uncommon', 'rare', 'epic'][drop.quality] || RuneEconomy.tier(drop.rank) : RuneEconomy.tier(drop.rank);
+            return { name: `${rune?.wikiName || drop.runeId} (${rarity.replaceAll('_', ' ')})`, amount: 1, rarity, icon: rune?.icon || '💠' };
           });
           SoundFX.levelUp(); StageHeroAnim.triggerPose();
-          showToast(`⛏️ Khám phá được ${names.slice(0,2).join(', ')}${names.length>2?` và ${names.length-2} viên khác`:''}!`);
-          setTimeout(()=>window.location.reload(),850);
+          // The server has committed these exact drops. Keep its authoritative reload,
+          // but allow every reward to be inspected before navigating away.
+          if (window.ArtemisRewardResults && rewards.length) {
+            await window.ArtemisRewardResults.show({ title: isPromised ? 'Di Tích Hứa Hẹn' : 'Di Tích Cổ Ngữ', subtitle: `Khám phá ×${rewards.length} · Máy chủ đã xác nhận`, rewards });
+            window.location.reload();
+          } else {
+            showToast(`⛏️ Đã nhận ${rewards.length} Cổ Ngữ!`);
+            setTimeout(()=>window.location.reload(),850);
+          }
         } catch { showToast('Không kết nối được máy chủ. Hãy thử lại.','err'); }
         finally { runeDigging = false; }
       }
@@ -17649,6 +17670,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         ensureWikiCurrencyAndItemsState();
         const items = SaveState.wikiOtherItems;
         const ev = SaveState.wikiEventsState;
+        const rewardFocus = document.activeElement;
 
         if (itemId === 'shovel') {
           executeRuneRuinsDig(false, 1);
@@ -17678,18 +17700,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
           const pool = (typeof ARTIFACTS_DATA !== 'undefined' ? ARTIFACTS_DATA : []).filter(a => a.rarity === targetRarity);
           const picked = pool[Math.floor(Math.random() * pool.length)] || (typeof ARTIFACTS_DATA !== 'undefined' ? ARTIFACTS_DATA[0] : null);
+          let awardedStars = 0;
           if (picked && typeof getArtifactStarMap === 'function') {
             const starMap = getArtifactStarMap();
+            const previousStars = starMap[picked.id] || 0;
             starMap[picked.id] = Math.min(15, (starMap[picked.id] || 0) + 1);
+            awardedStars = Math.max(0, starMap[picked.id] - previousStars);
             ev.lastEventLog = `🌠 Cầu Nguyện Đền Wish Token: Trúng ${isFullArtifact ? 'Cổ Vật Nguyên Bản' : 'Mảnh Cổ Vật'} [${picked.icon} ${picked.wikiName}] (${targetRarity.toUpperCase()}) ➔ Lên ${starMap[picked.id]}★!`;
-            if (!batchWish) showToast(ev.lastEventLog);
           }
+          const reward = picked ? { name: `${isFullArtifact ? 'Cổ Vật' : 'Mảnh Cổ Vật'} · ${picked.wikiName || picked.name}${awardedStars ? '' : ' · Đã tối đa sao — không tăng thêm'}`, amount: awardedStars, rarity: targetRarity, icon: picked.icon || '🏺', art: renderArtifactIcon(picked) } : null;
           if (!batchWish) {
             SaveState.save();
             SoundFX.levelUp();
             renderLobbyUI();
+            if (reward && window.ArtemisRewardResults) window.ArtemisRewardResults.show({ title: 'Đền Nữ Thần', subtitle: 'Cầu nguyện ×1', rewards: [reward], returnFocus: rewardFocus });
+            else showToast(ev.lastEventLog);
           }
-          return;
+          return reward;
         }
         if (itemId === 'enchantium') {
           document.getElementById('bottomNavBar')?.querySelector('[data-tab="tabRunes"]')?.click();
@@ -20754,7 +20781,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
 
                   <div class="rounded-2xl bg-slate-900/95 border border-slate-700 p-3 space-y-2">
                     <div class="flex items-center justify-between text-xs font-black">
-                      <span>🎣 Trạng Thái Cần Câu: <strong class="${hk.rarity === 'leg' ? 'text-amber-300' : (hk.rarity === 'epic' ? 'text-purple-300' : 'text-sky-300')}">${hk.name} (${hk.rarity.toUpperCase()} • ~${hk.kg} kg)</strong></span>
+                      <span>🎣 Trạng Thái Cần Câu: <strong class="${hk.rarity === 'leg' ? 'text-amber-300' : (hk.rarity === 'epic' ? 'text-purple-300' : 'text-sky-300')}">${hk.name || 'Chưa có cá'} (${(hk.rarity || 'chưa mắc câu').toUpperCase()} • ~${hk.kg || 0} kg)</strong></span>
                       <span class="text-rose-300">Khoảng cách dây: ${hk.distanceM}m / 125m (Đứt dây ở 125m)</span>
                     </div>
                     <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-700 flex">
@@ -21318,12 +21345,13 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const goldGain = Math.min(25000, Math.round((4000 + chMeta.id * 500) * 1.2));
             SaveState.gold = (SaveState.gold || 0) + goldGain;
             grantAll6GearScrolls(5);
-            rollSingleCanonicalChestPull('obsidian');
+            const sweepGear = rollSingleCanonicalChestPull('obsidian');
             ev.campaignClaimedSteps[chMeta.id] = chMeta.progressMilestones.length;
             SaveState.save();
             SoundFX.levelUp();
             renderLobbyUI();
             showToast(`🗺️ Hoàn thành Ch.${chMeta.id} (${chMeta.wikiName}): Nhận +${goldGain.toLocaleString('vi-VN')} 🪙, +30 📜 Gear Scrolls & 1 Trang Bị Mới!`);
+            window.ArtemisRewardResults?.show({ title: 'Càn Quét Chiến Dịch', subtitle: `Ch.${chMeta.id}`, rewards: [{ name: 'Vàng', amount: goldGain, rarity: 'common', icon: '🪙' }, ...Object.values(WIKI_GEAR_SCROLLS_META).map(sc => ({ name: sc.name, amount: 5, rarity: 'common', icon: sc.icon })), { name: sweepGear.tpl.name, amount: 1, rarity: sweepGear.quality, icon: '🛡️', art: getGearItemSvgArt(sweepGear.item.templateId) }] });
           };
         }
 
@@ -21579,6 +21607,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           ev.goldCaveRun = null;
           ev.goldCaveCurrentWave = 0;
           SaveState.save(); SoundFX.levelUp(); renderLobbyUI(); showToast(ev.goldCaveLastRoulette);
+          window.ArtemisRewardResults?.show({ title: 'Kho Báu Hang Vàng', subtitle: `Tầng ${run.difficulty} · ${run.wave}/10 đợt · Đã nhận`, rewards: [{ name: 'Vàng', amount: gold, rarity: 'rare', icon: '🪙' }, ...Object.values(WIKI_GEAR_SCROLLS_META).map(sc => ({ name: sc.name, amount: Math.min(24, run.scrolls || 0), rarity: 'common', icon: sc.icon }))].filter(r => r.amount > 0) });
         };
         const btnGcCashout = document.getElementById('btnGoldCaveCashout');
         if (btnGcCashout) btnGcCashout.onclick = finishGoldCaveRun;
@@ -21757,6 +21786,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             SoundFX.levelUp();
             renderLobbyUI();
             showToast(`🎲 Tung được ${pip} nút (×${mult}) ➔ Tới Ô #${nextPos + 1}/20: Nhận +${ptsGain.toLocaleString('vi-VN')} Điểm Otta, +${mult} 🪙🏝️ Treasure Coin & +${40 * mult} 💎!`);
+            window.ArtemisRewardResults?.show({ title: 'Đảo Kho Báu', subtitle: `${pip} nút · Ô ${nextPos + 1}/20 · ×${mult}`, rewards: [{ name: 'Điểm Otta', amount: ptsGain, rarity: 'common', icon: '🎯' }, { name: 'Treasure Coin', amount: mult * (prevPos + pip >= 20 ? 3 : 1), rarity: 'rare', icon: '🪙' }, { name: 'Gems', amount: 40 * mult, rarity: 'rare', icon: '💎' }] });
           };
         }
 
@@ -21909,6 +21939,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             SoundFX.levelUp();
             renderLobbyUI();
             showToast(caughtMsg);
+            window.ArtemisRewardResults?.show({ title: "Angler's Bounty", subtitle: `${hk.name} · ${hk.kg} kg · Đã kéo lên`, rewards: [{ name: `Silver Tickets · ${hk.name}`, amount: silverGain, rarity: hk.rarity === 'leg' ? 'legendary' : hk.rarity, icon: '🎫' }, ...(goldGain ? [{ name: 'Gold Tickets', amount: goldGain, rarity: 'legendary', icon: '🎫' }] : [])] });
           };
         }
 
@@ -21939,6 +21970,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             SoundFX.levelUp();
             renderLobbyUI();
             showToast(`⚡ Câu nhanh ×10 Lures tại ${zMeta.name}: Tăng +${kgGain} kg, nhận +1,450 🎫🥈 Silver Tickets & +2 🎫🥇 Gold Tickets!`);
+            window.ArtemisRewardResults?.show({ title: 'Câu Nhanh ×10', subtitle: `${zMeta.name} · +${kgGain} kg`, rewards: [{ name: 'Silver Tickets', amount: 1450, rarity: 'rare', icon: '🎫' }, { name: 'Gold Tickets', amount: 2, rarity: 'legendary', icon: '🎫' }] });
           };
         }
 
@@ -22024,6 +22056,17 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             const cell = ev.worldTreeGrid[idx];
             if (!cell || cell.cleared) return;
             const tool = ev.worldTreeTool || 'pickaxe';
+            const beforeShamrocks = ev.shamrocks || 0;
+            const beforeGoldPots = ev.goldPots || 0;
+            const revealWorldTreeRewards = () => window.ArtemisRewardResults?.show({
+              title: "World Tree's Pulse",
+              subtitle: 'Phần thưởng đã nhận',
+              rewards: [
+                { name: 'Shamrock', amount: (ev.shamrocks || 0) - beforeShamrocks, rarity: 'uncommon', icon: '☘️' },
+                { name: 'Gold Pot', amount: (ev.goldPots || 0) - beforeGoldPots, rarity: 'rare', icon: '🏺' }
+              ].filter(reward => reward.amount > 0),
+              returnFocus: btn
+            });
 
             if (cell.type === 'free_chest') {
               if ((ev.elfPickaxes || 0) < 1) {
@@ -22037,6 +22080,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               SoundFX.levelUp();
               renderLobbyUI();
               showToast('🧰 Chạm mở Rương Kho Báu Miễn Phí (Không tốn Pickaxe): Nhận +250 ☘️ Shamrock & +120 🏺 Gold Pot!');
+              revealWorldTreeRewards();
               return;
             }
 
@@ -22065,6 +22109,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               SoundFX.levelUp();
               renderLobbyUI();
               showToast(`🍺💣 Beer Bomb phát nổ vùng 3×3 (${clearedCnt} ô kể cả Mystery Mine): Nhận +${clearedCnt * 180} ☘️ Shamrock & +${clearedCnt * 95} 🏺 Gold Pot!`);
+              revealWorldTreeRewards();
               return;
             }
 
@@ -22087,6 +22132,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               SoundFX.levelUp();
               renderLobbyUI();
               showToast(`🔩 Gnome Drill khoan xuyên toàn bộ Cột #${col + 1}: Nhận +${clearedCnt * 200} ☘️ Shamrock & +${clearedCnt * 110} 🏺 Gold Pot!`);
+              revealWorldTreeRewards();
               return;
             }
 
@@ -22110,6 +22156,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             SaveState.save();
             SoundFX.coinPickup();
             renderLobbyUI();
+            revealWorldTreeRewards();
           };
         });
 
@@ -22253,6 +22300,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           ev.demonSummonTickets -= count;
           let eonWon = 0;
           let badgesWon = 0;
+          const rewards = [];
           for (let i = 0; i < count; i++) {
             ev.demonTotalSpins = (ev.demonTotalSpins || 0) + 1;
             ev.demonLuckMeter = (ev.demonLuckMeter || 0) + 1;
@@ -22261,20 +22309,28 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
               ev.eonCores = (ev.eonCores || 0) + 1;
               ev.demonLuckMeter = 0;
               eonWon++;
+              rewards.push({ name: 'Eon Core', amount: 1, rarity: 'mythic', icon: '🌌' });
             } else if (r < 1.14) {
               badgesWon += 800;
+              rewards.push({ name: 'Clash Badges', amount: 800, rarity: 'legendary', icon: '🛡️' });
             } else if (r < 2.94) {
               badgesWon += 360;
+              rewards.push({ name: 'Clash Badges', amount: 360, rarity: 'epic', icon: '🛡️' });
             } else if (r < 7.54) {
               badgesWon += 75;
+              rewards.push({ name: 'Clash Badges', amount: 75, rarity: 'rare', icon: '🛡️' });
             } else if (r < 12.59) {
               SaveState.chestKeys.chromatic_chest_key = (SaveState.chestKeys.chromatic_chest_key || 0) + 1;
+              rewards.push({ name: 'Chromatic Chest Key', amount: 1, rarity: 'epic', icon: '🗝️🌈' });
             } else if (r < 17.64) {
               SaveState.wikiOtherItems.promised_relic_shovel = (SaveState.wikiOtherItems.promised_relic_shovel || 0) + 1;
+              rewards.push({ name: 'Promised Relic Shovel', amount: 1, rarity: 'epic', icon: '⛏️' });
             } else if (r < 33.69) {
               badgesWon += 35;
+              rewards.push({ name: 'Clash Badges', amount: 35, rarity: 'uncommon', icon: '🛡️' });
             } else {
               badgesWon += 20;
+              rewards.push({ name: 'Clash Badges', amount: 20, rarity: 'common', icon: '🛡️' });
             }
           }
           ev.clashBadges = (ev.clashBadges || 0) + badgesWon;
@@ -22282,6 +22338,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           SoundFX.levelUp();
           renderLobbyUI();
           showToast(`🎰 Quay ×${count} Demon King Summon: Nhận ${eonWon > 0 ? `+${eonWon} 🌌 EON CORE, ` : ''}+${badgesWon} 🛡️ Clash Badges! (Tổng lượt quay: ${ev.demonTotalSpins})`);
+          window.ArtemisRewardResults?.show({ title: 'Demon King Summon', subtitle: `×${count} · Tổng ${ev.demonTotalSpins} lượt`, rewards });
         };
 
         const btnDkSpin1 = document.getElementById('btnDemonSpin1');
@@ -22302,11 +22359,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             if (ms.type === 'shovel') SaveState.wikiOtherItems.shovel = (SaveState.wikiOtherItems.shovel || 0) + ms.amount;
             if (ms.type === 'wish') { SaveState.wishTokens = (SaveState.wishTokens || 0) + ms.amount; syncWishTokenMirrors(); }
             if (ms.type === 'chromatic_key') SaveState.chestKeys.chromatic_chest_key = (SaveState.chestKeys.chromatic_chest_key || 0) + ms.amount;
-            if (ms.type === 's_gear') rollSingleCanonicalChestPull('chromatic');
+            const milestoneGear = ms.type === 's_gear' ? rollSingleCanonicalChestPull('chromatic') : null;
             SaveState.save();
             SoundFX.levelUp();
             renderLobbyUI();
             showToast(`🎁 Đã nhận mốc ${sp} Spins: [${ms.rewardText}]!`);
+            if (milestoneGear) window.ArtemisRewardResults?.show({ title: 'Mốc Demon King', subtitle: `${sp} lượt · Trang bị đã nhận`, rewards: [{ name: milestoneGear.tpl.name, amount: 1, rarity: milestoneGear.quality, icon: '🛡️', art: getGearItemSvgArt(milestoneGear.item.templateId) }] });
           };
         });
 
@@ -23410,18 +23468,23 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
         });
 
         el.querySelectorAll('[data-vn-wish-pull]').forEach(btn => {
-          btn.onclick = () => {
+          btn.onclick = async () => {
             const cnt = parseInt(btn.getAttribute('data-vn-wish-pull') || '1', 10);
             if (![1, 10, 100].includes(cnt)) return;
             const cost = cnt * 400;
             if ((SaveState.gems || 0) < cost) { showToast('Không đủ Kim Cương để cầu nguyện.', 'err'); return; }
             SaveState.gems -= cost;
             SaveState.wishTokens = (SaveState.wishTokens || 0) + cnt;
-            for (let pull = 0; pull < cnt; pull++) executeWikiOtherItemAction('wish_token', true);
+            const rewards = [];
+            for (let pull = 0; pull < cnt; pull++) {
+              const reward = await executeWikiOtherItemAction('wish_token', true);
+              if (reward) rewards.push(reward);
+            }
             SaveState.save();
             SoundFX.levelUp();
             renderLobbyUI();
-            showToast(`🪽 Đã Cầu Nguyện ×${cnt} lần tại Đền Nữ Thần!`);
+            if (rewards.length && window.ArtemisRewardResults) window.ArtemisRewardResults.show({ title: 'Đền Nữ Thần', subtitle: `Cầu nguyện ×${cnt}`, rewards, returnFocus: () => document.querySelector(`[data-vn-wish-pull="${cnt}"]`)?.focus({ preventScroll: true }) });
+            else showToast(`🪽 Đã Cầu Nguyện ×${cnt} lần tại Đền Nữ Thần!`);
           };
         });
 

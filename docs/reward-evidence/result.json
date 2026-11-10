@@ -1,0 +1,1190 @@
+{
+  "scope": "Real Chrome + isolated memory DB + real HTTP handlers; not production or Mongo durability",
+  "cases": [
+    {
+      "name": "wish-1",
+      "status": "passed",
+      "rewardCount": 1,
+      "rewards": [
+        {
+          "name": "Mảnh Cổ Vật · Red Hood",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🧣🐺",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🧣🐺</span><img src=\"assets/artifacts/Red_Hood.png\" alt=\"Red Hood\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        }
+      ],
+      "imageCount": 2,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "wish-10",
+      "status": "passed",
+      "rewardCount": 10,
+      "rewards": [
+        {
+          "name": "Mảnh Cổ Vật · Red Hood",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🧣🐺",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🧣🐺</span><img src=\"assets/artifacts/Red_Hood.png\" alt=\"Red Hood\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Red Hood",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🧣🐺",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🧣🐺</span><img src=\"assets/artifacts/Red_Hood.png\" alt=\"Red Hood\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Red Hood",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🧣🐺",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🧣🐺</span><img src=\"assets/artifacts/Red_Hood.png\" alt=\"Red Hood\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Four-Leaf Clover",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍀✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍀✨</span><img src=\"assets/artifacts/Four-Leaf_Clover.png\" alt=\"Four-Leaf Clover\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        }
+      ],
+      "imageCount": 11,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "wish-100",
+      "status": "passed",
+      "rewardCount": 100,
+      "rewards": [
+        {
+          "name": "Cổ Vật · Margic Carpet",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": " rugs🧶",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\"> rugs🧶</span><img src=\"assets/artifacts/Margic_Carpet.png\" alt=\"Margic Carpet\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Poison Apple",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍎☠️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍎☠️</span><img src=\"assets/artifacts/Poison_Apple.png\" alt=\"Poison Apple\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Thronebreaker Shield",
+          "amount": 1,
+          "rarity": "legendary",
+          "icon": "🛡️🔥",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🛡️🔥</span><img src=\"assets/artifacts/Thronebreaker_Shield.png\" alt=\"Thronebreaker Shield\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Margic Carpet",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": " rugs🧶",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\"> rugs🧶</span><img src=\"assets/artifacts/Margic_Carpet.png\" alt=\"Margic Carpet\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Poison Apple",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍎☠️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍎☠️</span><img src=\"assets/artifacts/Poison_Apple.png\" alt=\"Poison Apple\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Four-Leaf Clover",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍀✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍀✨</span><img src=\"assets/artifacts/Four-Leaf_Clover.png\" alt=\"Four-Leaf Clover\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Broodmother Scale",
+          "amount": 1,
+          "rarity": "legendary",
+          "icon": "🐉🛡️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🐉🛡️</span><img src=\"assets/artifacts/Broodmother_Scale.png\" alt=\"Broodmother Scale\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Laurel Wreath",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🌿👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🌿👑</span><img src=\"assets/artifacts/Laurel_Wreath.png\" alt=\"Laurel Wreath\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Poison Apple",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍎☠️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍎☠️</span><img src=\"assets/artifacts/Poison_Apple.png\" alt=\"Poison Apple\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Margic Carpet",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": " rugs🧶",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\"> rugs🧶</span><img src=\"assets/artifacts/Margic_Carpet.png\" alt=\"Margic Carpet\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Four-Leaf Clover",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍀✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍀✨</span><img src=\"assets/artifacts/Four-Leaf_Clover.png\" alt=\"Four-Leaf Clover\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Poison Apple",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍎☠️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍎☠️</span><img src=\"assets/artifacts/Poison_Apple.png\" alt=\"Poison Apple\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Margic Carpet",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": " rugs🧶",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\"> rugs🧶</span><img src=\"assets/artifacts/Margic_Carpet.png\" alt=\"Margic Carpet\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Poison Apple",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍎☠️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍎☠️</span><img src=\"assets/artifacts/Poison_Apple.png\" alt=\"Poison Apple\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Margic Carpet",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": " rugs🧶",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\"> rugs🧶</span><img src=\"assets/artifacts/Margic_Carpet.png\" alt=\"Margic Carpet\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Red Hood",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🧣🐺",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🧣🐺</span><img src=\"assets/artifacts/Red_Hood.png\" alt=\"Red Hood\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Laurel Wreath",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🌿👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🌿👑</span><img src=\"assets/artifacts/Laurel_Wreath.png\" alt=\"Laurel Wreath\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Laurel Wreath",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🌿👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🌿👑</span><img src=\"assets/artifacts/Laurel_Wreath.png\" alt=\"Laurel Wreath\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Laurel Wreath",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🌿👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🌿👑</span><img src=\"assets/artifacts/Laurel_Wreath.png\" alt=\"Laurel Wreath\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Laurel Wreath",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🌿👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🌿👑</span><img src=\"assets/artifacts/Laurel_Wreath.png\" alt=\"Laurel Wreath\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Iron Throne",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪑⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪑⚔️</span><img src=\"assets/artifacts/Iron_Throne.png\" alt=\"Iron Throne\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Gladiator's Helm",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪖⚔️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪖⚔️</span><img src=\"assets/artifacts/Gladiator_s_Helm.png\" alt=\"Gladiator&#39;s Helm\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Margic Carpet",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": " rugs🧶",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\"> rugs🧶</span><img src=\"assets/artifacts/Margic_Carpet.png\" alt=\"Margic Carpet\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Magic Lamp",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🪔✨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🪔✨</span><img src=\"assets/artifacts/Magic_Lamp.png\" alt=\"Magic Lamp\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Laurel Wreath",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🌿👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🌿👑</span><img src=\"assets/artifacts/Laurel_Wreath.png\" alt=\"Laurel Wreath\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Red Hood",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🧣🐺",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🧣🐺</span><img src=\"assets/artifacts/Red_Hood.png\" alt=\"Red Hood\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Margic Carpet",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": " rugs🧶",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\"> rugs🧶</span><img src=\"assets/artifacts/Margic_Carpet.png\" alt=\"Margic Carpet\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Crystal Shoe",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "👠💎",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">👠💎</span><img src=\"assets/artifacts/Crystal_Shoe.png\" alt=\"Crystal Shoe\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Supreme Staff · Đã tối đa sao — không tăng thêm",
+          "amount": 0,
+          "rarity": "rare",
+          "icon": "🦯👑",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🦯👑</span><img src=\"assets/artifacts/Supreme_Staff.png\" alt=\"Supreme Staff\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Pumpkin Lantern",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🎃🕯️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🎃🕯️</span><img src=\"assets/artifacts/Pumpkin_Lantern.png\" alt=\"Pumpkin Lantern\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Cổ Vật · Sword in the Stone",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🗡️🪨",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🗡️🪨</span><img src=\"assets/artifacts/Sword_in_the_Stone.png\" alt=\"Sword in the Stone\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        },
+        {
+          "name": "Mảnh Cổ Vật · Poison Apple",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🍎☠️",
+          "art": "<span class=\"artifact-art\"><span class=\"artifact-art-fallback\" aria-hidden=\"true\">🍎☠️</span><img src=\"assets/artifacts/Poison_Apple.png\" alt=\"Poison Apple\" loading=\"lazy\" decoding=\"async\" onerror=\"this.hidden=true\" onload=\"this.previousElementSibling.hidden=true\"></span>"
+        }
+      ],
+      "imageCount": 101,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "wish-failure",
+      "status": "passed",
+      "failureNoPopupOrMutation": true
+    },
+    {
+      "name": "island-dice",
+      "status": "passed",
+      "rewardCount": 3,
+      "rewards": [
+        {
+          "name": "Điểm Otta",
+          "amount": 670,
+          "rarity": "common",
+          "icon": "🎯"
+        },
+        {
+          "name": "Treasure Coin",
+          "amount": 1,
+          "rarity": "rare",
+          "icon": "🪙"
+        },
+        {
+          "name": "Gems",
+          "amount": 40,
+          "rarity": "rare",
+          "icon": "💎"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "demon-1",
+      "status": "passed",
+      "rewardCount": 1,
+      "rewards": [
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "demon-10",
+      "status": "passed",
+      "rewardCount": 10,
+      "rewards": [
+        {
+          "name": "Clash Badges",
+          "amount": 35,
+          "rarity": "uncommon",
+          "icon": "🛡️"
+        },
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        },
+        {
+          "name": "Chromatic Chest Key",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🗝️🌈"
+        },
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        },
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        },
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        },
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        },
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        },
+        {
+          "name": "Chromatic Chest Key",
+          "amount": 1,
+          "rarity": "epic",
+          "icon": "🗝️🌈"
+        },
+        {
+          "name": "Clash Badges",
+          "amount": 20,
+          "rarity": "common",
+          "icon": "🛡️"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "fishing-reel",
+      "status": "passed",
+      "rewardCount": 1,
+      "rewards": [
+        {
+          "name": "Silver Tickets · Bluegill Carp (Rare)",
+          "amount": 65,
+          "rarity": "rare",
+          "icon": "🎫"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "fishing-ten",
+      "status": "passed",
+      "rewardCount": 2,
+      "rewards": [
+        {
+          "name": "Silver Tickets",
+          "amount": 1450,
+          "rarity": "rare",
+          "icon": "🎫"
+        },
+        {
+          "name": "Gold Tickets",
+          "amount": 2,
+          "rarity": "legendary",
+          "icon": "🎫"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "world-tree-pickaxe",
+      "status": "passed",
+      "rewardCount": 2,
+      "rewards": [
+        {
+          "name": "Shamrock",
+          "amount": 120,
+          "rarity": "uncommon",
+          "icon": "☘️"
+        },
+        {
+          "name": "Gold Pot",
+          "amount": 60,
+          "rarity": "rare",
+          "icon": "🏺"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "world-tree-bomb",
+      "status": "passed",
+      "rewardCount": 2,
+      "rewards": [
+        {
+          "name": "Shamrock",
+          "amount": 900,
+          "rarity": "uncommon",
+          "icon": "☘️"
+        },
+        {
+          "name": "Gold Pot",
+          "amount": 475,
+          "rarity": "rare",
+          "icon": "🏺"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "world-tree-drill",
+      "status": "passed",
+      "rewardCount": 2,
+      "rewards": [
+        {
+          "name": "Shamrock",
+          "amount": 1000,
+          "rarity": "uncommon",
+          "icon": "☘️"
+        },
+        {
+          "name": "Gold Pot",
+          "amount": 550,
+          "rarity": "rare",
+          "icon": "🏺"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "rune-board-single",
+      "status": "passed",
+      "rewardCount": 1,
+      "serverSingleDebit": true,
+      "serverAward": true,
+      "closeNoMutation": true
+    },
+    {
+      "name": "gold-cave-roulette",
+      "status": "passed",
+      "rewardCount": 7,
+      "rewards": [
+        {
+          "name": "Vàng",
+          "amount": 432,
+          "rarity": "rare",
+          "icon": "🪙"
+        },
+        {
+          "name": "Cuộn Vũ Khí (Weapon Scroll)",
+          "amount": 3,
+          "rarity": "common",
+          "icon": "📜🏹"
+        },
+        {
+          "name": "Cuộn Áo Giáp (Armor Scroll)",
+          "amount": 3,
+          "rarity": "common",
+          "icon": "📜🛡️"
+        },
+        {
+          "name": "Cuộn Mũ Giáp (Helmet Scroll)",
+          "amount": 3,
+          "rarity": "common",
+          "icon": "📜🎭"
+        },
+        {
+          "name": "Cuộn Nhẫn (Ring Scroll)",
+          "amount": 3,
+          "rarity": "common",
+          "icon": "📜💍"
+        },
+        {
+          "name": "Cuộn Dây Chuyền (Amulet Scroll)",
+          "amount": 3,
+          "rarity": "common",
+          "icon": "📜📿"
+        },
+        {
+          "name": "Cuộn Giày (Boots Scroll)",
+          "amount": 3,
+          "rarity": "common",
+          "icon": "📜🥾"
+        }
+      ],
+      "imageCount": 0,
+      "singleDebit": true,
+      "closeNoMutation": true
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "path": "/api/auth/register",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/shop",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "PUT",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "PUT",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "PUT",
+      "status": 200
+    },
+    {
+      "path": "/api/runes",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/auth/me",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/api/save",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "gaps": [
+    "wish-1: observed star delta 1/1; 15-star saturation may prevent one star per displayed draw. Reward-to-artifact ID mapping not exposed in presentation contract.",
+    "wish-10: observed star delta 10/10; 15-star saturation may prevent one star per displayed draw. Reward-to-artifact ID mapping not exposed in presentation contract.",
+    "wish-100: observed star delta 99/100; 15-star saturation may prevent one star per displayed draw. Reward-to-artifact ID mapping not exposed in presentation contract.",
+    "[data-vn-wish-pull=\"100\"]: mobile 390x600 and 360x480, keyboard trap, final-card footer clearance and Escape no-mutation passed.",
+    "#btnIslandRollDice: mobile 390x600 and 360x480, keyboard trap, final-card footer clearance and Escape no-mutation passed.",
+    "No production/deployed verification. Event persistence must be distinguished from local client delta; HTTP save results recorded below.",
+    "Promised rune pool, rune x5/x10 VIP, artifact-tab wish x10, legacy wiki inventory actions, bingo, plinko and mystery-mine special branches require additional coverage."
+  ],
+  "moduleAvailable": true,
+  "passed": 14,
+  "failed": 0
+}

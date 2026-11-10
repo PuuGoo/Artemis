@@ -80,8 +80,10 @@
   overlay.className='campaign-wheel-overlay';overlay.innerHTML='<section class="campaign-wheel-panel" role="dialog" aria-modal="true" aria-label="Vòng Quay"><h2>Vòng Quay</h2><div class="campaign-wheel-stage"><div class="campaign-wheel-pointer"></div><div class="campaign-wheel-disc"></div></div><button class="campaign-wheel-start">Bắt Đầu</button><p class="campaign-wheel-help">Nhấn chỗ trống để đóng</p><div class="campaign-wheel-reward" role="status" hidden><h3>Thưởng đã nhận</h3><strong></strong><p>Nhấn chỗ trống để đóng</p></div></section>';
   const disc=overlay.querySelector('.campaign-wheel-disc'),button=overlay.querySelector('button'),banner=overlay.querySelector('.campaign-wheel-reward'),help=overlay.querySelector('.campaign-wheel-help');
   REWARDS.forEach((r,i)=>{const item=doc.createElement('span');item.className='campaign-wheel-prize';item.style.transform='rotate('+(i*60+30)+'deg) translateY(calc(min(310px,82vw,100vh - 280px) * -.34)) rotate(90deg)';item.textContent=(r.kind==='gold'?'🪙 ':'📜 ')+label(r);disc.appendChild(item);});
-  let timer=null,closed=false;
-  function showReward(){if(closed)return;session.settle();disc.style.transition='transform .16s ease-out';disc.style.transform='rotate('+(1800-(session.reward.index*60+30))+'deg)';banner.hidden=false;banner.querySelector('strong').textContent=label(session.reward);button.textContent='Đã nhận';button.disabled=true;}
+  let timer=null,closed=false,revealed=false;
+  function showReward(){if(closed)return;session.settle();disc.style.transition='transform .16s ease-out';disc.style.transform='rotate('+(1800-(session.reward.index*60+30))+'deg)';banner.hidden=false;banner.querySelector('strong').textContent=label(session.reward);button.textContent='Đã nhận';button.disabled=true;
+   if(!revealed){revealed=true;const reward=session.reward;root.ArtemisRewardResults?.show({title:'Vòng Quay May Mắn',subtitle:'Thưởng đã lưu',rewards:[{name:reward.kind==='gold'?'Vàng trong lượt chơi':'Weapon Scroll',amount:reward.amount,rarity:reward.kind==='gold'?'rare':'epic',icon:reward.kind==='gold'?'🪙':'📜'}],returnFocus:()=>{if(button.isConnected)button.focus();}});}
+  }
   function close(){if(closed)return;closed=true;if(timer)root.clearTimeout(timer);overlay.remove();active=null;if(opts.onClose)opts.onClose();}
   button.addEventListener('click',async()=>{
    button.disabled=true;button.textContent='Đang lưu…';
