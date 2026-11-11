@@ -13,7 +13,36 @@
     skill:Object.freeze({row:4,count:6,frameMs:125,loop:false})
   });
   // Each mapping preserves the original asset identity; new sheets opt in one by one.
+  // The visual identities are unique to Chapter 1 (Thánh Điện Nhật Luân).
+  // They are selected from the existing four campaign enemy archetypes, without
+  // altering their AI, stats, roster, save identifiers or collision geometry.
+  const LEO_CHAPTER_ONE=Object.freeze({
+    slime:Object.freeze({file:'leo_sun_cub',name:'Ấu Sư Nhật Quang',role:'Tập kích cận chiến'}),
+    goblin:Object.freeze({file:'leo_golden_guard',name:'Sư Vệ Hoàng Kim',role:'Chiến binh hoàng gia'}),
+    plant_turret:Object.freeze({file:'leo_sun_turret',name:'Pháo Đài Nhật Luân',role:'Bắn đạn mặt trời'}),
+    skeleton_mage:Object.freeze({file:'leo_sun_priest',name:'Tư Tế Sư Tử',role:'Pháp sư nhật quang'})
+  });
   const MANIFEST=Object.freeze({
+    leo_sun_cub:Object.freeze({
+      id:'leo-sun-cub',name:'Ấu Sư Nhật Quang',
+      path:'/assets/monster-sprites/leo-cub.svg',width:CELL*COLUMNS,height:CELL*ROWS,
+      foot:139,scale:2.75,chapter:1
+    }),
+    leo_golden_guard:Object.freeze({
+      id:'leo-golden-guard',name:'Sư Vệ Hoàng Kim',
+      path:'/assets/monster-sprites/leo-guard.svg',width:CELL*COLUMNS,height:CELL*ROWS,
+      foot:139,scale:2.78,chapter:1
+    }),
+    leo_sun_turret:Object.freeze({
+      id:'leo-sun-turret',name:'Pháo Đài Nhật Luân',
+      path:'/assets/monster-sprites/leo-turret.svg',width:CELL*COLUMNS,height:CELL*ROWS,
+      foot:139,scale:2.85,chapter:1
+    }),
+    leo_sun_priest:Object.freeze({
+      id:'leo-sun-priest',name:'Tư Tế Sư Tử',
+      path:'/assets/monster-sprites/leo-priest.svg',width:CELL*COLUMNS,height:CELL*ROWS,
+      foot:139,scale:2.86,chapter:1
+    }),
     'Icon_SmilmeSmall_ccca1d.png':Object.freeze({
       id:'slime-blue',name:'Slime Lam',path:'/assets/monster-sprites/slime-blue.svg',
       width:CELL*COLUMNS,height:CELL*ROWS,foot:130,scale:2.55
@@ -31,9 +60,22 @@
     return !!(game?.lowGfx || game?.reduceMotion
       || root.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches);
   }
-  function eligible(enemy) {
+  function spriteFileFor(enemy,game){
+    if(!enemy||enemy.isBoss===true)return null;
+    const campaign=game && (!game.mode || game.mode==='campaign');
+    if(campaign && Number(game.chapter?.id)===1){
+      return LEO_CHAPTER_ONE[enemy.type]?.file || null;
+    }
+    // Old monster atlases remain available for other chapters and previews.
+    return enemy.monsterArtFile || null;
+  }
+  function eligible(enemy,game) {
     return !!(enemy && enemy.isBoss!==true && Number(enemy.r)>0
-      && MANIFEST[enemy.monsterArtFile]);
+      && MANIFEST[spriteFileFor(enemy,game)]);
+  }
+  function nameFor(enemy,game){
+    const file=spriteFileFor(enemy,game);
+    return MANIFEST[file]?.name || null;
   }
   function imageFor(file){
     const def=MANIFEST[file];
@@ -118,14 +160,15 @@
   }
   function keyFor(game){return String(game?.mode||'campaign')+':'+String(game?.chapter?.id||0)+':'+String(game?.room||0);}
   function drawEnemy(ctx,enemy,nowMs,game){
-    if(!eligible(enemy)||!imageFor(enemy.monsterArtFile))return false;
+    const file=spriteFileFor(enemy,game);
+    if(!eligible(enemy,game)||!imageFor(file))return false;
     const now=safeTime(nowMs),anim=animationFor(enemy,now,game);
-    const drew=drawFrame(ctx,enemy.monsterArtFile,anim.action,anim.frame,enemy.r);
+    const drew=drawFrame(ctx,file,anim.action,anim.frame,enemy.r);
     if(!drew)return false;
     if(game && Number(enemy.hp)>0){
       const key=keyFor(game);
       if(activeRoom!==key){visible.clear();activeRoom=key;}
-      visible.set(enemy,{file:enemy.monsterArtFile,r:enemy.r,x:enemy.x,y:enemy.y,
+      visible.set(enemy,{file,r:enemy.r,x:enemy.x,y:enemy.y,
         at:now,room:key,deathSince:null});
       // Avoid retaining entities forever when waves keep spawning.
       if(visible.size>48)visible.delete(visible.keys().next().value);
@@ -156,7 +199,8 @@
     return total;
   }
   root.ArtemisMonsterSprites=Object.freeze({
-    CELL,COLUMNS,ROWS,ACTIONS,MANIFEST,eligible,imageFor,preloadAll,frameAt,
+    CELL,COLUMNS,ROWS,ACTIONS,MANIFEST,LEO_CHAPTER_ONE,
+    spriteFileFor,eligible,nameFor,imageFor,preloadAll,frameAt,
     actionFrameForTimer,animationFor,drawFrame,drawEnemy,drawDeaths
   });
 })(typeof window!=='undefined'?window:globalThis);

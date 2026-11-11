@@ -121,7 +121,7 @@ test('four skill projectiles crop their actual row and never replace multi-eleme
 });
 
 test('first wave sprite system is linked to live game and studio; original fallback retained',()=>{
- assert.match(monsterArt,/monster-sprite-animation\.js\?v=atlas-first-wave-20261111/);
+ assert.match(monsterArt,/monster-sprite-animation\.js\?v=leo-royal-minions-20261111/);
  assert.match(renderer,/ArtemisMonsterSprites\?\.drawEnemy\(ctx,e,nowMs,Game\)/);
  assert.match(renderer,/ArtemisMonsterSprites\?\.drawDeaths\(ctx,Game,nowMs\)/);
  assert.match(renderer,/MonsterArt\.draw\(ctx, e\)/);

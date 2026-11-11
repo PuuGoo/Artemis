@@ -25,14 +25,15 @@ button[aria-pressed=true]{background:#ffe29b;color:#372144;border-color:#ffe5a6}
 </head>
 <body>
 <header><h1>🎞️ Artemis — Monster &amp; Skill Sprite Studio</h1>
-<p>Hệ thống sprite sheet dùng thật trong trận: <strong>Idle · Attack · Hit · Death · Skill</strong>. Bản đầu tiên sử dụng các atlas Slime Lam, Dơi Tro Đỏ và 4 bộ đạn nguyên tố. Chỉ thay đổi hình ảnh, không thay đổi sát thương, AI, hitbox hoặc tiến trình.</p>
+<p>Hệ thống sprite sheet dùng thật trong trận: <strong>Idle · Attack · Hit · Death · Skill</strong>. Chương 1 có 4 quái riêng của Thánh Điện Nhật Luân (Sư Tử): Ấu Sư Nhật Quang, Sư Vệ Hoàng Kim, Pháo Đài Nhật Luân và Tư Tế Sư Tử. Các atlas cũ của chương khác vẫn được giữ làm dự phòng. Chỉ thay đổi hình ảnh, không thay đổi sát thương, AI, hitbox hoặc tiến trình.</p>
 <p><a class="link" href="/leo-subboss-sprites.html">Xem 4 boss phụ Chương 1 đã có sprite PNG</a></p></header>
 <main>
-<section><h2>Quái thường — 5 hàng animation</h2><div id="monsters" class="grid"></div></section>
+<section><h2>🦁 Chương 1 — Thánh Điện Nhật Luân (Sư Tử)</h2><p>Bộ binh chủng riêng của Chương 1: mỗi quái có 30 khung vẽ thật (Idle / Attack / Hit / Death / Skill).</p><div id="leoMonsters" class="grid"></div></section>
+<section style="margin-top:28px"><h2>Quái từ các biome khác</h2><div id="monsters" class="grid"></div></section>
 <section style="margin-top:28px"><h2>Kỹ năng — 6 frame / nguyên tố</h2><div id="skills" class="grid"></div></section>
 </main>
 <footer>Quái: 6 cột × 5 hàng, 160×160px mỗi frame · Kỹ năng: 6 cột × 4 hàng, 128×128px mỗi frame. Nếu asset chưa tải, Canvas của game vẫn dùng artwork cũ.</footer>
-<script src="/monster-sprite-animation.js?v=atlas-first-wave-20261111"></script>
+<script src="/monster-sprite-animation.js?v=leo-royal-minions-20261111"></script>
 <script src="/skill-sprite-animation.js?v=atlas-elements-20261111"></script>
 <script>
 (function(){
@@ -47,7 +48,8 @@ function card(name,meta){
 }
 if(!mons||!skill){document.getElementById('monsters').textContent='Thiếu sprite engine.';return;}
 Object.entries(mons.MANIFEST).forEach(([file,def])=>{
- const c=card(def.name,'Tài nguyên: '+def.path),view={kind:'monster',file,action:'idle',ctx:c.ctx,started:performance.now()};
+ const role=Object.values(mons.LEO_CHAPTER_ONE||{}).find(entry=>entry.file===file)?.role||'';
+ const c=card(def.name,(def.chapter===1?'Chương 1 · '+role+' · ':'')+'Tài nguyên: '+def.path),view={kind:'monster',file,action:'idle',ctx:c.ctx,started:performance.now()};
  for(const action of Object.keys(mons.ACTIONS)){
    const btn=e('button','',action.toUpperCase());btn.type='button';
    btn.setAttribute('aria-pressed',String(action===view.action));
@@ -58,7 +60,7 @@ Object.entries(mons.MANIFEST).forEach(([file,def])=>{
    c.bar.append(btn);
  }
  c.detail.textContent='Idle / Attack / Hit / Death / Skill: 6 frame mỗi trạng thái';
- document.getElementById('monsters').append(c.box);views.push(view);
+ document.getElementById(def.chapter===1?'leoMonsters':'monsters').append(c.box);views.push(view);
 });
 const names={fire:'🔥 Lửa',ice:'❄️ Băng',poison:'☠️ Độc',bolt:'⚡ Sét'};
 Object.entries(skill.ELEMENTS).forEach(([kind,def])=>{

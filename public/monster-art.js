@@ -108,7 +108,7 @@
   if(root.document?.head && !root.document.querySelector('script[data-monster-sprite-animation]')){
     const script=root.document.createElement('script');
     script.dataset.monsterSpriteAnimation='1';
-    script.src='/monster-sprite-animation.js?v=atlas-first-wave-20261111';
+    script.src='/monster-sprite-animation.js?v=leo-royal-minions-20261111';
     root.document.head.appendChild(script);
   }
 })(globalThis);
