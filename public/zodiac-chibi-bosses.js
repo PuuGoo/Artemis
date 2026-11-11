@@ -253,7 +253,7 @@ g.ArtemisZodiacBosses=Object.freeze({draw,preload,renderMode:'canvas-paths',sour
  if (typeof document !== 'undefined' && document.head && !document.querySelector('script[data-content-studio-runtime]')) {
   const script=document.createElement('script');
   script.dataset.contentStudioRuntime='1';
-  script.src='/content-studio-runtime.js?v=studio-mvp-1';
+  script.setAttribute('src','/content-studio-runtime.js?v=studio-mvp-1');
   document.head.appendChild(script);
  }
 })(typeof window!=='undefined'?window:{});
