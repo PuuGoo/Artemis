@@ -36,7 +36,7 @@ check("co bossIntroBanner", html.includes('id="bossIntroBanner"'));
 check("co bossIntroIcon + bossIntroName", html.includes('id="bossIntroIcon"') && html.includes('id="bossIntroName"'));
 check("co ham showBossIntro", /function showBossIntro\(bossType, bossNameText\)/.test(html));
 check("co ham hideBossIntro", /function hideBossIntro\(\)/.test(html));
-check("showBossIntro duoc goi khi boss spawn", /showBossIntro\(bossType, bossNames\[bossType\] \|\| Game\.chapter\.bossName\)/.test(html));
+check("showBossIntro duoc goi khi boss spawn", /showBossIntro\(bossType, bossVariant \? '🌞 TRÙM: ' \+ bossVariant\.name : \(bossNames\[bossType\] \|\| Game\.chapter\.bossName\)\)/.test(html));
 check("hideBossIntro duoc goi o phong thuong", /classList\.add\('hidden'\);\s*hideBossIntro\(\);/.test(html));
 check("banner tu an sau ~2.2s", /_bossIntroTimer = setTimeout\([\s\S]{0,200}?\}, 2200\)/.test(html));
 check("ten trum duoc cat tien to 'TRUM:'",
