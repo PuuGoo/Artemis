@@ -129,8 +129,11 @@
       action='hit'; frame=frameAt('hit',now-t.hitStart);
     }
     const room=Number(enemy.campaignRoom);
+    // VFX are placed around the real sprite frame, not painted over or substituted for it.
+    if (isReady(room)) root.ArtemisLeoSubBossVFX?.drawAura(ctx,enemy,now,action,frame,'behind');
     const drawn = drawFrame(ctx,room,action,frame,enemy.r)
       || (action!=='idle' && drawFrame(ctx,room,'idle',frameAt('idle',now),enemy.r));
+    if (drawn) root.ArtemisLeoSubBossVFX?.drawAura(ctx,enemy,now,action,frame,'front');
     if (drawn && Number(enemy.hp) > 0)
       lastSeen={ entity:enemy, chapter:1, room, x:enemy.x, y:enemy.y, r:enemy.r, seenAt:now };
     return drawn;
