@@ -245,7 +245,7 @@ g.ArtemisZodiacBosses=Object.freeze({draw,preload,renderMode:'canvas-paths',sour
  if (typeof document !== 'undefined' && document.head && !document.querySelector('script[data-leo-subboss-animation]')) {
   const spriteScript = document.createElement('script');
   spriteScript.dataset.leoSubbossAnimation = '1';
-  spriteScript.setAttribute('src', '/leo-subboss-animation.js');
+  spriteScript.setAttribute('src', '/leo-subboss-animation.js?v=leo-real-atlas-v1');
   document.head.appendChild(spriteScript);
  }
 })(typeof window!=='undefined'?window:{});
