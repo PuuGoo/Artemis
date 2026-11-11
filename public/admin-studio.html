@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Artemis — Game Content Studio</title>
+<link rel="stylesheet" href="/admin-studio.css?v=studio-mvp-1">
+</head>
+<body>
+<header>
+  <div><h1>👑 Artemis Game Content Studio</h1>
+  <p>Import ảnh → tạo boss → dựng map từ biome có sẵn → gắn vào ải → Publish, không cần push code.</p></div>
+  <a href="/admin.html#campaign">← Về Admin</a>
+</header>
+<nav role="tablist" aria-label="Các công cụ sáng tạo">
+  <button role="tab" type="button" data-tab="boss" aria-selected="true">👑 Boss Builder</button>
+  <button role="tab" type="button" data-tab="map" aria-selected="false">🗺️ Map Editor</button>
+  <button role="tab" type="button" data-tab="placement" aria-selected="false">📍 Gắn boss vào chương</button>
+</nav>
+<main>
+  <div id="studioMessage" role="status" aria-live="polite" class="message" hidden></div>
+  <section id="boss" class="section active" aria-label="Boss Builder">
+    <div class="grid">
+      <div class="panel">
+        <h2>1. Import sprite và tạo Boss</h2>
+        <div class="drop">
+          <label for="spriteAtlas">Ảnh sprite atlas RGBA PNG — 6 cột × 4 hàng</label>
+          <input type="file" id="spriteAtlas" accept="image/png">
+          <p class="hint">Có thể dùng atlas Ares/Boreas/Terra/Nyx. Mỗi hàng lần lượt là Idle 6, Attack 6, Hit 4, Death 6 frame. Kích thước ô 64–512px vuông.</p>
+          <label for="spriteFrames">Hoặc import 22 frame PNG riêng lẻ (tên: idle_01.png ... death_06.png)</label>
+          <input type="file" id="spriteFrames" accept="image/png" multiple>
+          <p class="hint">Hệ thống sẽ ghép tự động các frame đúng trạng thái thành atlas 1152×768. File thiếu frame sẽ được báo rõ.</p>
+        </div>
+        <div class="fields" style="margin-top:14px">
+          <div class="formField"><label for="bossName">Tên boss</label><input id="bossName" maxlength="80" placeholder="Ví dụ: Hỏa Long Vương"></div>
+          <div class="formField"><label for="bossElement">Hệ nguyên tố</label><input id="bossElement" maxlength="30" placeholder="Hỏa / Băng / Đất / Hư Ảnh"></div>
+          <div class="formField"><label for="bossAI">AI chiến đấu giữ từ boss mặc định</label>
+            <select id="bossAI"><option value="golem">Cận chiến: Golem</option><option value="queen">Tầm xa: Queen</option><option value="demon_king">Đa đòn: Demon King</option><option value="elder_dragon">Rồng: Elder Dragon</option><option value="zodiac_leo">Leo</option></select>
+          </div>
+          <div class="formField"><label for="bossColor">Màu đại diện</label><input type="color" id="bossColor" value="#fbbf24"></div>
+        </div>
+        <div class="actionrow">
+          <button type="button" class="primary" id="bossSave">Lưu Boss (Draft)</button>
+          <span class="hint">Publish từ danh sách sau khi kiểm tra.</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>2. Xem trước Sprite</h2>
+        <div class="preview"><canvas id="bossCanvas" width="270" height="270" aria-label="Preview sprite boss"></canvas></div>
+        <div class="toolbar" id="bossActions" role="group" aria-label="Trạng thái">
+          <button type="button" data-action="idle" aria-pressed="true">Idle · 6</button>
+          <button type="button" data-action="attack" aria-pressed="false">Attack · 6</button>
+          <button type="button" data-action="hit" aria-pressed="false">Hit · 4</button>
+          <button type="button" data-action="death" aria-pressed="false">Death · 6</button>
+        </div>
+        <p class="hint" id="spriteInfo">Chưa chọn file PNG.</p>
+        <hr class="rule">
+        <div class="bar"><h2 style="margin:0">Thư viện Boss</h2><button type="button" id="bossRefresh">Làm mới</button></div>
+        <div class="library" id="bossList"></div>
+      </div>
+    </div>
+  </section>
+  <section id="map" class="section" aria-label="Map Editor">
+    <div class="grid">
+      <div class="panel">
+        <h2>Tạo bản đồ với asset nền có sẵn</h2>
+        <div class="fields">
+          <div><label for="mapName">Tên map</label><input id="mapName" maxlength="80" placeholder="Ví dụ: Thánh Điện Băng Giá"></div>
+          <div><label for="mapBiome">Chủ đề đấu trường (biome)</label><select id="mapBiome"></select></div>
+        </div>
+        <div class="actionrow"><button type="button" id="mapPreviewBtn">Xem trước</button><button class="primary" type="button" id="mapSave">Lưu map (Draft)</button></div>
+        <p class="hint">Bản đầu dùng lại đúng nền, ánh sáng và vật cản được game vẽ theo biome. Các ô va chạm giữ nguyên theo cơ chế chiến dịch; chưa hỗ trợ kéo thả vật cản có collision.</p>
+        <hr class="rule">
+        <h2>Thư viện Map</h2><div class="library" id="mapList"></div>
+      </div>
+      <div class="panel">
+        <h2>Đấu trường Preview (renderer thật)</h2>
+        <canvas id="mapCanvas" width="780" height="420" aria-label="Preview nền map hiện tại"></canvas>
+        <p class="hint" id="mapInfo">Chọn biome để xem nền và hiệu ứng đồ họa của Artemis.</p>
+      </div>
+    </div>
+  </section>
+  <section id="placement" class="section" aria-label="Gắn boss và map">
+    <div class="grid">
+      <div class="panel">
+        <h2>Đặt Boss / Map vào chương chiến dịch</h2>
+        <div class="fields">
+          <div><label for="assignChapter">Chương</label><select id="assignChapter"></select></div>
+          <div><label for="assignRoom">Ải boss</label><select id="assignRoom"><option value="10">Ải 10</option><option value="20">Ải 20</option><option value="30">Ải 30</option><option value="40">Ải 40</option><option value="50">Ải 50 (Boss cuối)</option></select></div>
+          <div><label for="assignBoss">Boss (đổi ngoại hình)</label><select id="assignBoss"><option value="">Giữ boss mặc định</option></select></div>
+          <div><label for="assignMap">Map (đổi chủ đề đấu trường)</label><select id="assignMap"><option value="">Giữ biome mặc định</option></select></div>
+        </div>
+        <div class="actionrow">
+          <button type="button" id="assignSave">Lưu phân bổ nháp</button>
+          <button type="button" class="primary" id="assignPublish">Publish vào game</button>
+          <button type="button" class="danger" id="assignReset">Trả về mặc định</button>
+        </div>
+        <p class="hint">Chỉ thay ngoại hình boss và giao diện biome. AI, sát thương, hitbox, vật cản, vật phẩm và lưu tiến trình không đổi. Boss và map phải được Publish trước khi gắn.</p>
+      </div>
+      <div class="panel">
+        <h2>Boss theo chương / ải</h2>
+        <div class="library" id="assignmentList"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>Admin Content Studio MVP · Các bản nháp không hiển thị cho người chơi · Tài khoản phải có quyền Admin · Phiên bản Published chỉ được tải khi vào trận mới.</footer>
+<script src="/js/game/rendering/arena-renderer.js"></script>
+<script src="/admin-studio.js?v=studio-mvp-1"></script>
+</body>
+</html>
