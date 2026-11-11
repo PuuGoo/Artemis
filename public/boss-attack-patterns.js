@@ -158,6 +158,9 @@
     const next = arm(e, p);
     if (!next) return false;
     const charge = 1 - e.attackTimer / WARNING;
+    // Chapter 1 guardians receive elemental telegraphs on the REAL shot lanes;
+    // all other enemies continue using the standard pink warning rays.
+    if (root.ArtemisLeoSubBossVFX?.drawWarning(c,e,next,charge,now,quiet)) return true;
     c.save();
     try {
       const width = 1.8 + charge;
