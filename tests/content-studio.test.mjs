@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import {cleanBoss,cleanMap,cleanAssignment,BOSS_SLOTS,BIOMES,publicSummary,adminSummary} from '../lib/contentStudio.js';
 import {resetMemoryDb,createMemoryDb} from '../lib/mongoMemory.js';
-import {GET as publishedGET} from '../api/content-studio.js';
+import {GET as publishedGET} from '../lib/publishedStudioHandler.js';
 
 const source=fs.readFileSync(new URL('../public/content-studio-runtime.js',import.meta.url),'utf8');
 const renderer=fs.readFileSync(new URL('../public/js/game/rendering/arena-renderer.js',import.meta.url),'utf8');
