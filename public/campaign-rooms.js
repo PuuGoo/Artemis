@@ -89,9 +89,10 @@
     if (!plan.isBoss || plan.isFinalBoss) return null;
     var chapter = chapterNumber(chapterId), slot = plan.room / 10 - 1;
     var leo = chapter === 1 ? leoGuardians[slot] : null;
+    var studio = root.ArtemisContentRuntime?.bossFor(chapter,plan.room);
     return { id: 'chapter_' + chapter + '_subboss_' + (slot + 1), type: plan.bossType,
-      name: leo ? leo.name : titles[slot] + ' ' + themes[chapter - 1],
-      color: leo ? leo.color : colors[(chapter + slot - 1) % colors.length],
+      name: studio ? studio.name : leo ? leo.name : titles[slot] + ' ' + themes[chapter - 1],
+      color: studio ? studio.color : leo ? leo.color : colors[(chapter + slot - 1) % colors.length],
       skill: leo ? leo.skill : null, counter: leo ? leo.counter : 'Né cảnh báo rồi dừng lại phản công.',
       sizeMultiplier: leo ? 1.05 + slot * .05 : 1.02 + slot * .04,
       speedMultiplier: leo ? 1.03 + slot * .03 : 1.02 + slot * .035,
