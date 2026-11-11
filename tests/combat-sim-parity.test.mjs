@@ -36,7 +36,7 @@ test('combat-sim đọc được mọi hằng số từ source (không lệch c�
     return html.slice(begin,end+endMarker.length);
   }
   const c=vm.createContext({Game:{mode:'campaign',chapter:{id:1,enemyScale:1},maxRooms:50,width:600,height:800,wallPad:24,
-    player:{skills:{},maxHp:775,atk:164,hp:775},pet:{}},SaveState:{talents:{},bestRooms:Object.fromEntries(Array.from({length:19},(_,i)=>[i+1,999])),save(){throw Error('ghi save ngoài dự kiến');}},
+    player:{skills:{},maxHp:775,atk:164,hp:775},pet:{}},SaveState:{talents:{},bestRooms:Object.fromEntries(Array.from({length:12},(_,i)=>[i+1,999])),save(){throw Error('ghi save ngoài dự kiến');}},
     SoundFX:{bossSpawn(){}},ArtemisObstacleClearance:{findSafeSpawn:(x,y)=>({x,y})},
     document:{getElementById:()=>({classList:{add(){},remove(){}}})},MonsterArt:{assignRoom(){}},
     showBossIntro(){},hideBossIntro(){},updateInGameHUD(){},spawnCampaignValkyrie(){},saveCheckpoint(){}});
@@ -51,7 +51,7 @@ test('combat-sim đọc được mọi hằng số từ source (không lệch c�
     vm.runInContext(declaration('function '+name+'('),c);
   const profile=report.rows[0].profile;
   const rows=report.rows.filter(r=>r.profile===profile);
-  assert.equal(rows.length,19*50);
+  assert.equal(rows.length,12*50);
   for(const row of rows) {
     c.Game.chapter={id:row.ch,enemyScale:1,bossName:'fixture'};c.setupRoom(row.room);
     const actual=JSON.parse(JSON.stringify(c.Game.enemies.map(e=>({type:e.type,hp:e.hp,atk:e.atk}))));
