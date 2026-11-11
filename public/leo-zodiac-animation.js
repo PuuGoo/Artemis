@@ -1,4 +1,4 @@
-/* Artemis Leo (chapter 12): visual-only sprite overlay, with native Canvas fallback.
+/* Artemis Leo (chapter 1): visual-only sprite overlay, with native Canvas fallback.
    This script is loaded by zodiac-chibi-bosses.js; it does not mutate combat state. */
 (function (root) {
   'use strict';
