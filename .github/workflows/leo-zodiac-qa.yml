@@ -1,9 +1,6 @@
 name: Leo Zodiac animation QA
 
 on:
-  push:
-    branches:
-      - feat/leo-zodiac-animation-20261111
   pull_request:
     paths:
       - '.github/workflows/leo-zodiac-qa.yml'
@@ -36,5 +33,6 @@ jobs:
         run: node --test tests/leo-zodiac-animation.test.mjs
       - name: Complete repository unit tests
         run: npm test
-      - name: Campaign/biome validator
+      - name: Campaign/biome validator (run even if unrelated tests fail)
+        if: always()
         run: node tools/validate-biomes.mjs
