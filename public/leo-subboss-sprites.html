@@ -27,10 +27,10 @@ footer{max-width:1160px;margin:auto;padding:0 18px 20px;color:#bfae9f;font-size:
 <body>
 <header>
 <h1>🦁 Leo — Sprite Studio</h1>
-<p>Bốn thủ lĩnh tại Chương 1, phòng 10 · 20 · 30 · 40. Chọn từng trạng thái để xem chuyển động, rồi xuất PNG nền trong suốt theo đúng atlas một hàng.</p>
+<p>Bốn thủ lĩnh tại Chương 1, phòng 10 · 20 · 30 · 40. Ảnh nhân vật Ares, Boreas, Terra, Nyx được tải trực tiếp từ PNG trong game. Chọn trạng thái để xem animation và xuất từng hàng PNG nền trong suốt.</p>
 </header>
 <main><div class="grid" id="grid"></div></main>
-<footer>Idle: 6 khung · Attack: 8 khung · Hit: 4 khung · Death: 6 khung · 192 × 192 px/khung. Xuất PNG không thay đổi AI, hitbox hoặc HP.</footer>
+<footer>Idle: 6 khung · Attack: 6 khung · Hit: 4 khung · Death: 6 khung · 192 × 192 px/khung. Xuất PNG không thay đổi AI, hitbox hoặc HP.</footer>
 <script src="/js/game/rendering/arena-renderer.js"></script>
 <script src="/leo-subboss-animation.js"></script>
 <script>
@@ -46,7 +46,7 @@ Object.values(api.BOSSES).forEach(function(b){
   const section=document.createElement('section');section.className='card';
   const heading=document.createElement('h2');heading.textContent='Ải '+b.room+' · '+b.name;
   const sub=document.createElement('div');sub.className='sub';
-  sub.textContent='Thuộc hạ của Sư Vương Leo · '+b.type;
+  sub.textContent='Thuộc hạ của Sư Vương Leo · Sprite PNG thật · '+b.path;
   const stage=document.createElement('div');stage.className='stage';
   const canvas=document.createElement('canvas');canvas.width=240;canvas.height=240;stage.appendChild(canvas);
   const bar=document.createElement('div');bar.className='actions';
