@@ -2121,8 +2121,7 @@
     const leoSubBossDrawn = !customBossDrawn && !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss(ctx, e, nowMs, true);
     const normalSpriteDrawn = !customBossDrawn && !leoSpriteDrawn && !leoSubBossDrawn
       && globalThis.ArtemisMonsterSprites?.drawEnemy(ctx,e,nowMs,Game);
-    if (!customBossDrawn && !leoSpriteDrawn && !leoSubBossDrawn && !normalSpriteDrawn
-      && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
+    if (!customBossDrawn && !leoSpriteDrawn && !leoSubBossDrawn && !normalSpriteDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
       ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
       drawBody(ctx, e, nowMs, B, v); ctx.restore();
     }
