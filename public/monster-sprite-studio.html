@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Artemis — Monster & Skill Sprite Studio</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,sans-serif;color:#f4edff;background:#120e1e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,#432b65,#140e25 57%,#090c18)}
+header,main,footer{max-width:1100px;margin:auto;padding:18px}
+header{padding-top:32px}h1{font-size:clamp(23px,4vw,40px);color:#ffd879;margin:0 0 8px}
+p{color:#c9bbda;line-height:1.55}h2{font-size:21px;color:#ffe1a8;margin:10px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{border:1px solid #66517e;border-radius:15px;background:linear-gradient(125deg,#302141,#161123);padding:14px;min-width:0}
+.card h3{font-size:19px;margin:0 0 8px}.meta{font-size:12px;color:#cab5e0;margin-bottom:12px}
+.preview{height:240px;display:flex;justify-content:center;align-items:center;border:1px solid #59496f;border-radius:10px;
+background:repeating-conic-gradient(#25213a 0 25%,#302946 0 50%) 50%/24px 24px}
+.preview canvas{max-width:100%;image-rendering:auto}.buttons{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+button{cursor:pointer;padding:8px 11px;border-radius:8px;color:#f1ebff;background:#32224e;border:1px solid #70558f;font-weight:750}
+button[aria-pressed=true]{background:#ffe29b;color:#372144;border-color:#ffe5a6}
+.details{font-size:12px;color:#d1bfd9;margin:9px 0 0}
+.link{color:#97e6ff}footer{font-size:12px;color:#ac9fbc}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><h1>🎞️ Artemis — Monster &amp; Skill Sprite Studio</h1>
+<p>Hệ thống sprite sheet dùng thật trong trận: <strong>Idle · Attack · Hit · Death · Skill</strong>. Bản đầu tiên sử dụng các atlas Slime Lam, Dơi Tro Đỏ và 4 bộ đạn nguyên tố. Chỉ thay đổi hình ảnh, không thay đổi sát thương, AI, hitbox hoặc tiến trình.</p>
+<p><a class="link" href="/leo-subboss-sprites.html">Xem 4 boss phụ Chương 1 đã có sprite PNG</a></p></header>
+<main>
+<section><h2>Quái thường — 5 hàng animation</h2><div id="monsters" class="grid"></div></section>
+<section style="margin-top:28px"><h2>Kỹ năng — 6 frame / nguyên tố</h2><div id="skills" class="grid"></div></section>
+</main>
+<footer>Quái: 6 cột × 5 hàng, 160×160px mỗi frame · Kỹ năng: 6 cột × 4 hàng, 128×128px mỗi frame. Nếu asset chưa tải, Canvas của game vẫn dùng artwork cũ.</footer>
+<script src="/monster-sprite-animation.js?v=atlas-first-wave-20261111"></script>
+<script src="/skill-sprite-animation.js?v=atlas-elements-20261111"></script>
+<script>
+(function(){
+'use strict';
+const mons=window.ArtemisMonsterSprites,skill=window.ArtemisSkillSprites;
+const views=[];
+function e(tag,cls,text){const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;}
+function card(name,meta){
+ const box=e('article','card'),title=e('h3','',name),desc=e('div','meta',meta),stage=e('div','preview'),canvas=document.createElement('canvas'),bar=e('div','buttons'),detail=e('p','details','');
+ canvas.width=256;canvas.height=220;stage.append(canvas);box.append(title,desc,stage,bar,detail);
+ return {box,bar,canvas,ctx:canvas.getContext('2d'),detail};
+}
+if(!mons||!skill){document.getElementById('monsters').textContent='Thiếu sprite engine.';return;}
+Object.entries(mons.MANIFEST).forEach(([file,def])=>{
+ const c=card(def.name,'Tài nguyên: '+def.path),view={kind:'monster',file,action:'idle',ctx:c.ctx,started:performance.now()};
+ for(const action of Object.keys(mons.ACTIONS)){
+   const btn=e('button','',action.toUpperCase());btn.type='button';
+   btn.setAttribute('aria-pressed',String(action===view.action));
+   btn.addEventListener('click',()=>{
+     view.action=action;view.started=performance.now();
+     c.bar.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));
+   });
+   c.bar.append(btn);
+ }
+ c.detail.textContent='Idle / Attack / Hit / Death / Skill: 6 frame mỗi trạng thái';
+ document.getElementById('monsters').append(c.box);views.push(view);
+});
+const names={fire:'🔥 Lửa',ice:'❄️ Băng',poison:'☠️ Độc',bolt:'⚡ Sét'};
+Object.entries(skill.ELEMENTS).forEach(([kind,def])=>{
+ const c=card(names[kind],'Kỹ năng gốc: '+def.skill),view={kind:'skill',element:kind,ctx:c.ctx};
+ c.detail.textContent='6 frame, thay đúng đạn kỹ năng thực tế; combo nhiều nguyên tố vẫn dùng VFX gốc';
+ document.getElementById('skills').append(c.box);views.push(view);
+});
+function render(now){
+ for(const v of views){
+  const c=v.ctx;c.clearRect(0,0,256,220);
+  if(v.kind==='monster'){
+    const d=mons.ACTIONS[v.action],duration=d.count*d.frameMs;
+    const elapsed=d.loop?now-v.started:(now-v.started)%(duration+420);
+    const frame=mons.frameAt(v.action,elapsed);
+    c.save();c.translate(128,111);
+    mons.drawFrame(c,v.file,v.action,frame,62);
+    c.restore();
+  }else{
+    const def=skill.ELEMENTS[v.element],atlas=skill.image();
+    if(atlas){
+      const frame=Math.floor(now/90)%skill.FRAMES;
+      c.drawImage(atlas,frame*skill.CELL,def.row*skill.CELL,skill.CELL,skill.CELL,56,39,144,144);
+    }
+  }
+ }
+ requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+})();
+</script>
+</body></html>
