@@ -3,6 +3,7 @@ import { getCurrentPlayer, json, fail } from '../lib/http.js';
 import { VIP_CARD_IDS, VIP_CARD_PRICE, VIP_CARD_DURATION_MS, normalizeVipPasses } from '../lib/privilegeCards.js';
 import { GET as getShop, POST as purchaseShop } from '../lib/shop/handler.js';
 import { GET as getPatrol, POST as claimPatrol } from '../lib/patrol/handler.js';
+import { GET as getPublishedStudio } from '../lib/publishedStudioHandler.js';
 
 export const config = { runtime: 'nodejs' };
 
@@ -18,6 +19,8 @@ function isPatrolRequest(request) {
 }
 
 export async function GET(request) {
+  const url=new URL(request.url);
+  if(url.searchParams.get('__resource')==='studio') return getPublishedStudio(request);
   if (isPatrolRequest(request)) return getPatrol(request);
   return isShopRequest(request) ? getShop(request) : fail('Phương thức không được hỗ trợ.', 405);
 }
