@@ -27,12 +27,12 @@
   }
   function makeCanvas(width,height) {
     let canvas = null;
-    if (typeof root.OffscreenCanvas === 'function') {
-      try { canvas = new root.OffscreenCanvas(width,height); } catch (_) {}
-    }
-    if (!canvas && root.document && typeof root.document.createElement === 'function') {
+    if (root.document && typeof root.document.createElement === 'function') {
       canvas = root.document.createElement('canvas');
       canvas.width = width; canvas.height = height;
+    }
+    if (!canvas && typeof root.OffscreenCanvas === 'function') {
+      try { canvas = new root.OffscreenCanvas(width,height); } catch (_) {}
     }
     return canvas;
   }
