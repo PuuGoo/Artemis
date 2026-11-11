@@ -1,0 +1,38 @@
+name: Leo Zodiac animation QA
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/leo-zodiac-qa.yml'
+      - 'public/assets/zodiac/**'
+      - 'public/leo-zodiac-animation.js'
+      - 'public/zodiac-chibi-bosses.js'
+      - 'public/js/game/rendering/arena-renderer.js'
+      - 'tests/leo-zodiac-animation.test.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  leo-and-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout Artemis
+        uses: actions/checkout@v4
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Syntax validation
+        run: npm run check
+      - name: Leo sprite tests (PNG required)
+        run: node --test tests/leo-zodiac-animation.test.mjs
+      - name: Complete repository unit tests
+        run: npm test
+      - name: Campaign/biome validator (run even if unrelated tests fail)
+        if: always()
+        run: node tools/validate-biomes.mjs

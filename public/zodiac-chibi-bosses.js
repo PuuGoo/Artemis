@@ -208,6 +208,8 @@ function draw(ctx,type,radius,nowMs,hpRatio,charging){
  const i=names.indexOf(String(type).replace(/^zodiac_/,''));if(!sources[type]||i<0||!ctx||!(Number(radius)>0))return false;
  const r=Number(radius),t=Number.isFinite(nowMs)?nowMs:0,hp=Number.isFinite(hpRatio)?Math.max(0,Math.min(1,hpRatio)):1;
  const rage=hp<.35,charge=!!charging;let saved=false;
+ // Leo custom raster sprite; unchanged native Canvas path is the fallback.
+ if (type === 'zodiac_leo' && g.ArtemisLeoAnimation?.drawZodiac(ctx,r,t,charge)) return true;
  try{
   ctx.save();saved=true;
   ctx.translate(0,Math.sin(t*.0045+i)*r*.05);
@@ -231,4 +233,11 @@ function draw(ctx,type,radius,nowMs,hpRatio,charging){
 }
 function preload(type){return sources[type]?{ready:true,failed:false}:null;}
 g.ArtemisZodiacBosses=Object.freeze({draw,preload,renderMode:'canvas-paths',sources:Object.freeze(sources)});
+ // Load Leo art after the native Canvas art, in both game and admin pages.
+ if (typeof document !== 'undefined' && document.head && !document.querySelector('script[data-leo-animation]')) {
+  const element = document.createElement('script');
+  element.dataset.leoAnimation = '1';
+  element.setAttribute('src', '/leo-zodiac-animation.js');
+  document.head.appendChild(element);
+ }
 })(typeof window!=='undefined'?window:{});

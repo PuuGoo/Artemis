@@ -1029,6 +1029,10 @@
     drawPortal(ctx, nowMs, B);
     for (const ob of Game.obstacles) drawObstacle(ctx, ob, nowMs, B);
     drawAmbient(ctx, w, h, pad, nowMs, B);
+    if (typeof ArtemisLeoAnimation !== 'undefined') {
+      ArtemisLeoAnimation.rememberRoom(Game);
+      ArtemisLeoAnimation.drawDeathAfterRemoval(ctx, Game, nowMs);
+    }
   }
 
   // ======================================================================
@@ -1922,7 +1926,8 @@
     ctx.scale(sc * S, sc * S);
     const flash = e.hitFlashTimer > 0;
     if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
-    if (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e)) {
+    const leoSpriteDrawn = typeof ArtemisLeoAnimation !== 'undefined' && ArtemisLeoAnimation.drawEntity(ctx, e, nowMs);
+    if (!leoSpriteDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
       ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
       drawBody(ctx, e, nowMs, B, v); ctx.restore();
     }
