@@ -5,8 +5,22 @@
   "buildCommand": null,
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/api/shop", "destination": "/api/privileges?__resource=shop" },
-    { "source": "/api/patrol", "destination": "/api/privileges?__resource=patrol" }
+    {
+      "source": "/api/admin/studio",
+      "destination": "/api/admin/campaign?__studio=1"
+    },
+    {
+      "source": "/api/content-studio",
+      "destination": "/api/privileges?__resource=studio"
+    },
+    {
+      "source": "/api/shop",
+      "destination": "/api/privileges?__resource=shop"
+    },
+    {
+      "source": "/api/patrol",
+      "destination": "/api/privileges?__resource=patrol"
+    }
   ],
   "functions": {
     "api/**/*.js": {
@@ -17,13 +31,24 @@
   "headers": [
     {
       "source": "/cloud.js",
-      "headers": [{ "key": "cache-control", "value": "public, max-age=0, must-revalidate" }]
+      "headers": [
+        {
+          "key": "cache-control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     },
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "cache-control", "value": "no-store" },
-        { "key": "x-content-type-options", "value": "nosniff" }
+        {
+          "key": "cache-control",
+          "value": "no-store"
+        },
+        {
+          "key": "x-content-type-options",
+          "value": "nosniff"
+        }
       ]
     }
   ]
