@@ -26,6 +26,12 @@ test('world map discovers every real chapter without fabricating extra destinati
   assert.equal(api.getChapters()[0].themeName,'Sư Tử');
   assert.equal(api.getChapters().at(-1).unlock.chapterId,11);
 });
+test('final chapter can scroll into the center and keep the real launch CTA visible', () => {
+  const css = readFileSync(new URL('../public/campaign-world-map.css', import.meta.url), 'utf8');
+  assert.match(css, /padding-bottom:max\\(210px,calc\\(50dvh - 125px\\)\\)/);
+  assert.match(css, /padding-bottom:max\\(190px,calc\\(50dvh - 125px\\)\\)/);
+  assert.match(css, /world-map-exploring \\.battle-launch/);
+});
 test('unlock copy uses the real previous-chapter win, never invented hard mode', () => {
   const map = load();
   assert.deepEqual(Array.from(map.requirements(map.getChapters()[0])),[]);
@@ -80,6 +86,12 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
       const title=v.querySelector('[data-world-chapter="1"] .world-map-title').getBoundingClientRect(),bounds=v.getBoundingClientRect();
       return title.top>=bounds.top && title.bottom<=bounds.bottom;
     }),true,'initial chapter title is visible');
+    // Regression: chapter 1 is the final item in reverse order. Without enough
+    // bottom scroll padding the map cannot center it and hides the launch button.
+    assert.equal(await page.locator('#tabBattle').evaluate(e=>e.classList.contains('world-map-exploring')),false,'first chapter must not be treated as map exploration');
+    assert.equal(await page.locator('#btnStartGame').isVisible(),true,'Chương 1 Bắt Đầu stays visible on initial entry');
+    assert.equal(await page.locator('#btnStartGame').isEnabled(),true,'Chương 1 Bắt Đầu is enabled');
+    assert.equal(await page.locator('[data-world-map-return]').isVisible(),false,'return-current hint is hidden when chapter 1 is centered');
     const initial=await scroll.evaluate(e=>e.scrollTop);
     await scroll.hover(); await page.mouse.wheel(0,-650); await page.waitForTimeout(250);
     const wheeled=await scroll.evaluate(e=>e.scrollTop);
