@@ -30,7 +30,10 @@ test('admin draws boss images using the shared Canvas API',()=>{
   assert.match(ui,/canvas width="200" height="170" data-zodiac/);
   assert.match(ui,/canvas width="220" height="195" data-zodiac/);
   assert.match(ui,/cc-zodiac-sprite/);
-  assert.match(ui,/function drawZodiacInArena\(/);
+  // Boss arena must no longer bypass drawMonster: only that game renderer
+  // applies Leo's actual Idle/Attack/Hit/Death PNG atlases.
+  assert.doesNotMatch(ui,/function drawZodiacInArena\(/);
+  assert.match(ui,/activeEntities\.forEach\(function\(e\)\{api\.drawMonster\(ctx,e,now\);\}\)/);
   assert.match(ui,/zodiac-chibi-bosses\.js/);
   assert.match(ui,/api\.drawMonster\(ctx,e,now\)/);
   for(const cls of ['.cc-zodiac-grid','.cc-zodiac-card','.cc-zodiac-sprite','.cc-boss-feature'])

@@ -2027,6 +2027,15 @@
   // ---------- trạng thái hiển thị riêng từng quái (không ghi vào dữ liệu game) ----------
   const VIS = new WeakMap();
   function visOf(e, now) { let v = VIS.get(e); if (!v) { v = { t0: now, face: 1, landed: false }; VIS.set(e, v); } return v; }
+  // Admin-only preview helper: skip the 900ms entrance drop so the first
+  // Attack/Hit/Death sprite starts on-screen. No combat entity fields mutate.
+  function primePreviewEnemy(e, now) {
+    if (!e) return;
+    const t = Number.isFinite(now) ? now : 0;
+    const v = visOf(e,t);
+    v.t0=t-1600;
+    v.landed=true;
+  }
 
   function drawBody(ctx, e, t, B, v) {
     const r = e.r, ty = e.type;
@@ -2155,7 +2164,7 @@
     drawArena, drawMonster, drawEnemyBullet, drawTargetReticle, init(g) { Game = g; },
     biomeLabel() { return pickBiome().label; },
     tint() { const B = curBiome; return { accent: B.accent, glow: B.glow, mote: B.torch[1], ray: hex2(B.accent).join(', ') }; },
-    _debug: { BIOMES, SK, POOLS, pickBiome, buildStatic, drawBody, drawLeoSubBoss, setBiome(id) { curBiome = BIOMES[id]; return curBiome; } }
+    _debug: { BIOMES, SK, POOLS, pickBiome, buildStatic, drawBody, drawLeoSubBoss, primePreviewEnemy, setBiome(id) { curBiome = BIOMES[id]; return curBiome; } }
   };
   }
   root.ArtemisArenaRenderer = Object.freeze({ create: createArenaRenderer });
