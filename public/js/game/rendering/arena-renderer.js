@@ -2151,6 +2151,9 @@
 
   // ---------- Đạn quái: màu theo biome, lõi xoay, viền tối để luôn nổi bật trên mọi nền ----------
   function drawEnemyBullet(ctx, eb, now) {
+    // Decorative elemental bullets only in the original Leo guardian rooms.
+    // Uses the same projectile coordinates and hit radius as combat – visuals only.
+    if (globalThis.ArtemisLeoSubBossVFX?.drawBullet(ctx,eb,now,Game)) return;
     const [c0, c1, c2] = curBiome.bullet, r = eb.r;
     if (eb.trail && eb.trail.length > 1) for (let t = 0; t < eb.trail.length; t++) { const pt = eb.trail[t], q = (t + 1) / eb.trail.length; ctx.fillStyle = rgba(c2, q * 0.45); ctx.beginPath(); ctx.arc(pt.x, pt.y, r * q * 0.9, 0, TAU); ctx.fill(); }
     ctx.save(); ctx.translate(eb.x, eb.y);
