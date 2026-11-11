@@ -250,8 +250,8 @@
     if (Game.previewOnly === true && BIOMES[Game.previewBiome]) return BIOMES[Game.previewBiome];
     // Published Content Studio biome skins; obstacle/collision data remains
     // owned by the original room logic. Non-campaign modes never inherit it.
-    if ((!Game.mode || Game.mode === 'campaign') && root.ArtemisContentRuntime) {
-      const biomeId=root.ArtemisContentRuntime.biomeFor(Game.chapter?.id,room);
+    if ((!Game.mode || Game.mode === 'campaign') && globalThis.ArtemisContentRuntime) {
+      const biomeId=globalThis.ArtemisContentRuntime.biomeFor(Game.chapter?.id,room);
       if (biomeId && BIOMES[biomeId]) return BIOMES[biomeId];
     }
     if (isBossRoomForBiome(room)) {
@@ -1041,7 +1041,7 @@
     if (typeof ArtemisLeoSubBossSprites !== 'undefined') {
       ArtemisLeoSubBossSprites.drawDeathAfterRemoval(ctx, Game, nowMs, drawLeoSubBoss);
     }
-    root.ArtemisContentRuntime?.drawDeathAfterRemoval(ctx,Game,nowMs);
+    globalThis.ArtemisContentRuntime?.drawDeathAfterRemoval(ctx,Game,nowMs);
   }
 
   // ======================================================================
@@ -2114,7 +2114,7 @@
     const flash = e.hitFlashTimer > 0;
     if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
     const customBossDrawn = !!(e.isBoss && (!Game.mode || Game.mode === 'campaign') &&
-      root.ArtemisContentRuntime?.drawBoss(ctx,e,nowMs));
+      globalThis.ArtemisContentRuntime?.drawBoss(ctx,e,nowMs));
     const leoSpriteDrawn = !customBossDrawn && typeof ArtemisLeoAnimation !== 'undefined' && ArtemisLeoAnimation.drawEntity(ctx, e, nowMs);
     const leoSubBossDrawn = !customBossDrawn && !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss(ctx, e, nowMs, true);
     if (!customBossDrawn && !leoSpriteDrawn && !leoSubBossDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
