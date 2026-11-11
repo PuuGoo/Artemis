@@ -248,4 +248,12 @@ g.ArtemisZodiacBosses=Object.freeze({draw,preload,renderMode:'canvas-paths',sour
   spriteScript.setAttribute('src', '/leo-subboss-animation.js?v=leo-attack6-sync-20261111');
   document.head.appendChild(spriteScript);
  }
+ // Published Content Studio manifests overlay the existing game art only after
+ // loading successfully. Missing API, assets or drafts keep the default bosses.
+ if (typeof document !== 'undefined' && document.head && !document.querySelector('script[data-content-studio-runtime]')) {
+  const script=document.createElement('script');
+  script.dataset.contentStudioRuntime='1';
+  script.src='/content-studio-runtime.js?v=studio-mvp-1';
+  document.head.appendChild(script);
+ }
 })(typeof window!=='undefined'?window:{});
