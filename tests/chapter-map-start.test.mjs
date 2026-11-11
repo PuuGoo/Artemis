@@ -8,7 +8,7 @@ const css=fs.readFileSync(new URL('../public/battle-hub.css',import.meta.url),'u
 
 function mapFunction(){
  const a=html.indexOf('      function renderMapSelect() {');
- const b=html.indexOf('      /** Mở/đóng Sổ Tay Quái Vật. */',a);
+ const b=html.indexOf('      /** Mở/đóng Sổ tay quái vật. */',a);
  assert.ok(a>0 && b>a);
  return html.slice(a,b);
 }
