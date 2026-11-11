@@ -5,6 +5,7 @@
 import fs from "node:fs";
 
 const html = fs.readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+const arenaCss = fs.readFileSync(new URL("../public/arena-viewport.css", import.meta.url), "utf8");
 let pass = 0, fail = 0;
 function check(name, cond, extra = "") {
   if (cond) { pass++; console.log("  PASS  " + name); }
@@ -59,8 +60,10 @@ check("hien so HP co dinh dang vi-VN", /toLocaleString\('vi-VN'\)/.test(html.sli
 check("co CSS .hv2-vitals", /\.hv2-vitals \{/.test(html));
 check("co .hv2-vitals-fill.warn", /\.hv2-vitals-fill\.warn/.test(html));
 check("co .hv2-vitals-fill.crit", /\.hv2-vitals-fill\.crit/.test(html));
-check("thanh HP khong de len skills strip (bottom:52px)",
-  /bottom:52px;max-width:min\(52%,260px\)/.test(html));
+check("thanh HP o footer rieng, khong de len skills strip",
+  /<footer id="arenaHudFooter"[^>]*>[\s\S]{0,500}?class="arena-vitals"/.test(html) &&
+  /#arenaHudFooter\s*\{[^}]*display:flex;[^}]*justify-content:center/.test(arenaCss) &&
+  /#arenaHudFooter \.arena-vitals\s*\{[^}]*width:min\(280px,100%\)/.test(arenaCss));
 
 // ============================================================ 4. API debug
 console.log("\n=== 4. API DEBUG DE KIEM CHUNG ===");
@@ -74,7 +77,8 @@ console.log("\n=== 5. KHONG PHA VO LUONG CU ===");
 check("Continue van di thang vao checkpoint (khong qua briefing)",
   /btnContinueRun[\s\S]{0,160}?continueRun\(\)/.test(html));
 check("startNewRun van xoa checkpoint khi fresh", /startNewRun\('fresh'\)/.test(html));
-check("briefing dong truoc khi vao tran", /btnBriefingStart[\s\S]{0,120}?classList\.add\('hidden'\)[\s\S]{0,80}?startNewRun/.test(html));
+check("briefing dong truoc khi vao tran",
+  /btnBriefingStart'\)\.addEventListener\('click', \(\) => \{\s*modal\.classList\.add\('hidden'\);[\s\S]{0,300}?startNewRun\('fresh'\)/.test(html));
 
 console.log(`\n================ ${pass} PASS / ${fail} FAIL ================\n`);
 process.exit(fail > 0 ? 1 : 0);

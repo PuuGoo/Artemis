@@ -102,7 +102,7 @@ function runFixture(extra = {}) {
     getActiveResonanceHeroIds: () => [], computeTotalEquippedRunesStats: () => zero,
     computeAllArtifactsAndSetsBonuses: () => zero, getHeroMilestoneData: () => zero,
     getActiveHeroSkin: () => zero, getAllUnlockedSkinBonuses: () => zero, getSetBonuses: () => [],
-    stopGameLoop() {}, clearRunState() {}, syncContinueButton() {},
+    stopGameLoop() {}, clearRunState() {}, syncContinueButton() {}, setCombatImmersive() {},
     getActiveGameMode: () => ({ id: 'campaign', hasChapters: true }), isChapterLocked: () => false, isChapterWon: () => false,
     resizeCanvas() {}, DungeonSession: { begin() { f.S.save(); } }, bumpLifetimeStat() {},
     checkAchievements() { f.S.save(); }, isRuneEquipped: () => false, runeHasEffect: () => false,

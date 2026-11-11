@@ -43,7 +43,7 @@ const typeMult = evaluate('({' + match(/const typeMul = \(\{([^}]+)\}\)\[t\]/s, 
 const rooms = sandbox.ArtemisCampaignRooms;
 const combat = sandbox.CombatDamage;
 const chapterIds = chapters.map(c => Number(c.id));
-if (chapterIds.length !== 19 || chapterIds.some(id => !base[id])) throw new Error('Không đủ bảng thật 19 chương');
+if (chapterIds.length !== 12 || chapterIds.some(id => !base[id])) throw new Error('Không đủ bảng thật 12 chương');
 const dropCount = match(/const dropCount = e\.isBoss \? (\d+) : (\d+);/, 'dropCount').slice(1).map(Number);
 const dropXp = match(/val: Math\.round\(\(e\.isBoss \? (\d+) : (\d+)\) \* greedMult\)/, 'xp drop').slice(1).map(Number);
 const goldValues = match(/type: 'gold',[^}]*?val: Math\.round\(\(e\.isBoss \? (\d+) : (\d+)\) \* greedMult\)/, 'gold drop').slice(1).map(Number);
@@ -193,7 +193,7 @@ const report = {
   legacyAudit: [
     'combat-sim.mjs đọc count cũ 3+floor(room/2), boss mỗi 5 phòng, và DEPTH inline đã chuyển sang config.',
     'Bảng quái cũ chỉ regex chương một chữ số, fallback slime; thiếu pool zodiac và loại từng mob.',
-    'Hồ sơ thật có 7 fixture, base tuning có 19 chương; giữ nguồn đó, không bịa snapshot tài khoản.',
+    'Hồ sơ thật có 7 fixture, base tuning có 12 chương; giữ nguồn đó, không bịa snapshot tài khoản.',
     'TTK cũ là một quái đại diện, không phải thời gian cả phòng; script mới cộng HP mọi quái.'
   ],
   exp: { chapterProgressions, calibration, thresholds: Array.from({ length: 9 }, (_, i) => exp.threshold(i + 1)), firstLevel10Room,

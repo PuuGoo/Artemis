@@ -48,10 +48,10 @@ const chapterTotal = (html.slice(html.indexOf("const CHAPTERS = ["), html.indexO
   .match(/\n {10}id: \d+,/g) || []).length;
 check("moi chuong co mapAsset", (html.match(/mapAsset: '\/assets\//g) || []).length === chapterTotal,
   `${(html.match(/mapAsset: '\/assets\//g) || []).length}/${chapterTotal}`);
-check("ch1 tro dung asset", html.includes("mapAsset: '/assets/map-ch1-ancient-stone.svg'"));
-check("ch2 tro dung asset", html.includes("mapAsset: '/assets/map-ch2-lava-valley.svg'"));
-check("ch3 tro dung asset", html.includes("mapAsset: '/assets/map-ch3-void-sanctum.svg'"));
-check("ch4 tro dung asset", html.includes("mapAsset: '/assets/map-ch4-dragon-realm.svg'"));
+check("ch1 tro dung asset", html.includes("mapAsset: '/assets/map-ch12-zodiac-leo.svg'"));
+check("ch2 tro dung asset", html.includes("mapAsset: '/assets/map-ch8-zodiac-aries.svg'"));
+check("ch3 tro dung asset", html.includes("mapAsset: '/assets/map-ch9-zodiac-taurus.svg'"));
+check("ch4 tro dung asset", html.includes("mapAsset: '/assets/map-ch10-zodiac-gemini.svg'"));
 check("moi chuong co mapRegion", (html.match(/mapRegion:/g) || []).length === chapterTotal,
   `${(html.match(/mapRegion:/g) || []).length}/${chapterTotal}`);
 check("moi chuong co mapTagline", (html.match(/mapTagline:/g) || []).length === chapterTotal,

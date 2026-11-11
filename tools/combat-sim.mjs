@@ -56,7 +56,7 @@ const CAMPAIGN_TUNING = (() => {
       bossHp: Number(m[4]), bossAtk: Number(m[5]),
     };
   }
-  if (Object.keys(out).length !== 19) throw new Error('CAMPAIGN_TUNING phải có 19 chương, đọc được ' + Object.keys(out).length);
+  if (Object.keys(out).length !== 12) throw new Error('CAMPAIGN_TUNING phải có 12 chương, đọc được ' + Object.keys(out).length);
   return out;
 })();
 
@@ -99,7 +99,7 @@ const CHAPTERS = (() => {
   const ids = [...blk.matchAll(/\n {10}id: (\d+),/g)].map((m) => Number(m[1]));
   const rooms = [...blk.matchAll(/\n {10}rooms: (\d+),/g)].map((m) => Number(m[1]));
   const scale = [...blk.matchAll(/\n {10}enemyScale: ([\d.]+),/g)].map((m) => Number(m[1]));
-  if (ids.length !== 19 || rooms.length !== ids.length || scale.length !== ids.length) throw new Error('Không đọc đủ id/rooms/enemyScale của 19 chương');
+  if (ids.length !== 12 || rooms.length !== ids.length || scale.length !== ids.length) throw new Error('Không đọc đủ id/rooms/enemyScale của 12 chương hoàng đạo');
   return ids.map((id, k) => ({ id, rooms: CampaignConfig.ROOM_COUNT, legacyRooms: rooms[k], enemyScale: scale[k] }));
 })();
 

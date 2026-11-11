@@ -83,7 +83,7 @@ test('báo cáo phân tích dùng đủ chương/hồ sơ thật và 12 mốc, k
   const report = JSON.parse(result.stdout);
   const profiles = JSON.parse(fs.readFileSync(new URL('tools/combat-profiles.json', root))).profiles;
   assert.equal(report.profiles.length, profiles.length);
-  assert.equal(report.chapterIds.length, 19);
+  assert.equal(report.chapterIds.length, 12);
   assert.equal(report.milestones.length, 12);
   assert.equal(report.rows.length, profiles.length * report.chapterIds.length * report.milestones.length);
   assert.equal(report.evidence, 'analytical-only');

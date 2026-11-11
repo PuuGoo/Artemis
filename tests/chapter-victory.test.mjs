@@ -60,7 +60,8 @@ check("btnCvNext goi startNewRun('fresh')", /btnCvNext[\s\S]{0,520}?startNewRun\
 // ============================================================ 4. Nối vào finishRun
 console.log("\n=== 4. NOI VAO finishRun ===");
 const fr = fnBody("finishRun", 4200);
-check("finishRun goi openChapterVictory khi thang", /if \(isVictory\)[\s\S]{0,400}?openChapterVictory\(/.test(fr));
+check("finishRun goi openChapterVictory khi thang chien dich",
+  /if \(isVictory\) \{[\s\S]*?if \(winMode\.hasChapters\) \{[\s\S]*?openChapterVictory\(/.test(fr));
 check("tinh dung chuong tiep theo", /const nextCh = CHAPTERS\[curIdx \+ 1\] \|\| null/.test(fr));
 check("chi bao mo khoa khi chuong that su mo", /const unlockedNext = nextCh && !isChapterLocked\(nextCh\)/.test(fr));
 check("truyen du stats (rooms/kills/gold/gems)",
@@ -82,8 +83,8 @@ check("dong chapterVictoryModal", /chapterVictoryModal'\)[\s\S]{0,60}?classList\
 check("hien tabBattle + bottomNavBar", /tabBattle'\)\.classList\.remove\('hidden'\)/.test(rl) &&
   /bottomNavBar'\)\.classList\.remove\('hidden'\)/.test(rl));
 check("renderLobbyUI sau khi ve", /renderLobbyUI\(\)/.test(rl));
-check("btnReturnLobby dung returnToLobby (khong lap code)",
-  /btnReturnLobby'\)\.addEventListener\('click', \(\) => \{\s*returnToLobby\(\);/.test(html));
+check("btnReturnLobby dung returnToLobby sau xac nhan roi tran",
+  /btnReturnLobby'\)\.addEventListener\('click', \(\) => \{[\s\S]{0,320}?returnToLobby\(\);/.test(html));
 
 // ============================================================ 6. CSS
 console.log("\n=== 6. CSS ===");

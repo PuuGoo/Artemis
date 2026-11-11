@@ -80,7 +80,7 @@ const GOLD_PER_RUN=normalKills*dropCount.normal*gold.normal+bossKills*dropCount.
 console.log(`  PHÂN TÍCH ${plans.length} phòng: ${killsPerRun} quái, E[cuộn]=${scrollsPerRun.toFixed(2)}, vàng nền=${GOLD_PER_RUN}; không đo thời gian`);
 check('đủ 50 phòng từ shared config',plans.length===50);
 check('5 trùm ở 10/20/30/40/50',plans.filter(p=>p.isBoss).map(p=>p.room).join(',')==='10,20,30,40,50');
-check('mọi chương cùng nguồn cung cơ sở',Array.from({length:19},(_,ch)=>
+check('mọi chương cùng nguồn cung cơ sở',Array.from({length:12},(_,ch)=>
   Array.from({length:50},(_,i)=>config.roomPlan(ch+1,i+1).count).join(',')===plans.map(p=>p.count).join(',')).every(Boolean));
 check('drop vàng production giữ boss 8×28 / thường 2×12',dropCount.boss===8&&dropCount.normal===2&&gold.boss===28&&gold.normal===12);
 check('scroll production giữ boss 5 / thường 2',scrollAmount.boss===5&&scrollAmount.normal===2);

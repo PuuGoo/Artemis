@@ -5,7 +5,8 @@
 const names='aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces'.split(' ');
 const hues=['#fb7185','#eab65a','#67e8f9','#38bdf8','#fbbf24','#bef264','#f0abfc','#c084fc','#a5b4fc','#7dd3fc','#22d3ee','#5eead4'];
 const sources=Object.create(null);
-names.forEach((n,i)=>sources['zodiac_'+n]=Object.freeze({chapter:i+8,color:hues[i]}));
+const campaignOrder = ['leo', 'aries', 'taurus', 'gemini', 'cancer', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
+names.forEach((n,i)=>sources['zodiac_'+n]=Object.freeze({chapter:campaignOrder.indexOf(n)+1,color:hues[i]}));
 const TAU=Math.PI*2;
 function path(c,points,fill,stroke,width=3){
  c.beginPath();

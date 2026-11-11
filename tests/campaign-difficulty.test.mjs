@@ -31,11 +31,11 @@ function fnBody(marker) {
   throw new Error('không tìm thấy điểm kết của ' + marker);
 }
 
-test('có bảng độ khó tuyệt đối cho cả 19 chương', () => {
+test('có bảng độ khó tuyệt đối cho cả 12 chương', () => {
   assert.match(html, /const CAMPAIGN_TUNING = \{/);
   const blk = fnBody('const CAMPAIGN_TUNING =');
   const rows = [...blk.matchAll(/(\d+): \{ mobHp: (\d+), mobAtk: (\d+), bossHp: (\d+), bossAtk: (\d+) \}/g)];
-  assert.equal(rows.length, 19, 'phải có đủ 19 chương');
+  assert.equal(rows.length, 12, 'phải có đủ 12 chương');
   for (const m of rows) {
     for (let k = 2; k <= 5; k++) assert.ok(Number(m[k]) > 0, `giá trị không dương ở chương ${m[1]}`);
   }
@@ -85,7 +85,7 @@ test('chỉ chế độ có chương mới dùng độ khó tuyệt đối', () 
 function spawnHarness() {
   const c=vm.createContext({Game:{mode:'campaign',chapter:{id:1,enemyScale:1,bossName:'fixture'},
     maxRooms:50,width:600,height:800,wallPad:24,player:{skills:{},maxHp:775,atk:164,hp:775},pet:{}},
-    SaveState:{talents:{},bestRooms:Object.fromEntries(Array.from({length:19},(_,i)=>[i+1,999])),save(){throw Error('ghi save ngoài dự kiến')}},
+    SaveState:{talents:{},bestRooms:Object.fromEntries(Array.from({length:12},(_,i)=>[i+1,999])),save(){throw Error('ghi save ngoài dự kiến')}},
     SoundFX:{bossSpawn(){}},ArtemisObstacleClearance:{findSafeSpawn:(x,y)=>({x,y})},
     document:{getElementById:()=>({classList:{add(){},remove(){}},style:{setProperty(){}},dataset:{}})},resizeCanvas(){},
     MonsterArt:{assignRoom(){}},showBossIntro(){},hideBossIntro(){},updateInGameHUD(){},spawnCampaignValkyrie(){},saveCheckpoint(){}});
@@ -104,9 +104,9 @@ function enemies(c,ch,room,p) {
   c.setupRoom(room);
   return JSON.parse(JSON.stringify(c.Game.enemies.map(e=>({type:e.type,isBoss:e.isBoss,hp:e.maxHp,atk:e.atk}))));
 }
-test('catalog Admin khớp chỉ số từng entity từ setupRoom thật trên 19×50 phòng',()=>{
+test('catalog Admin khớp chỉ số từng entity từ setupRoom thật trên 12×50 phòng',()=>{
   const c=spawnHarness();
-  for(let ch=1;ch<=19;ch++) {
+  for(let ch=1;ch<=12;ch++) {
     const detail=getCampaignDetail(ch);
     for(const room of detail.roomsDetail) {
       enemies(c,ch,room.room,profiles[1]);
@@ -122,9 +122,9 @@ test('catalog Admin khớp chỉ số từng entity từ setupRoom thật trên 
   }
 });
 const profiles=JSON.parse(fs.readFileSync(resolve(root,'tools/combat-profiles.json'),'utf8')).profiles;
-test('setupRoom thật: cả 19×50 phòng độc lập hồ sơ, số quái/trùm theo shared config',()=>{
+test('setupRoom thật: cả 12×50 phòng độc lập hồ sơ, số quái/trùm theo shared config',()=>{
   const c=spawnHarness();
-  for(let ch=1;ch<=19;ch++) for(let room=1;room<=50;room++) {
+  for(let ch=1;ch<=12;ch++) for(let room=1;room<=50;room++) {
     const a=enemies(c,ch,room,profiles[1]), b=enemies(c,ch,room,profiles[5]);
     assert.deepEqual(a,b,`C${ch}-P${room}: không được neo theo người chơi`);
     const plan=c.ArtemisCampaignRooms.roomPlan(ch,room);
