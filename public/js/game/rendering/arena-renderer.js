@@ -217,7 +217,6 @@
     10: ['zodiac_capricorn'],
     11: ['zodiac_aquarius'],
     12: ['zodiac_pisces']
-  
   };
   const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift', 'nebula_gate', 'frozen_choir', 'throne_of_stars', 'luminous_grove', 'spore_marsh', 'hollow_hive', 'zodiac_aries', 'zodiac_taurus', 'zodiac_gemini', 'zodiac_cancer', 'zodiac_leo', 'zodiac_virgo', 'zodiac_libra', 'zodiac_scorpio', 'zodiac_sagittarius', 'zodiac_capricorn', 'zodiac_aquarius', 'zodiac_pisces'];
   const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne', astral_devourer: 'abyss_crown', mycelium_queen: 'mycelium_heart', zodiac_aries: 'zodiac_aries', zodiac_taurus: 'zodiac_taurus', zodiac_gemini: 'zodiac_gemini', zodiac_cancer: 'zodiac_cancer', zodiac_leo: 'zodiac_leo', zodiac_virgo: 'zodiac_virgo', zodiac_libra: 'zodiac_libra', zodiac_scorpio: 'zodiac_scorpio', zodiac_sagittarius: 'zodiac_sagittarius', zodiac_capricorn: 'zodiac_capricorn', zodiac_aquarius: 'zodiac_aquarius', zodiac_pisces: 'zodiac_pisces' };
