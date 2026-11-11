@@ -9,6 +9,11 @@ on:
       - 'public/zodiac-chibi-bosses.js'
       - 'public/js/game/rendering/arena-renderer.js'
       - 'tests/leo-zodiac-animation.test.mjs'
+      - 'tests/**'
+      - 'public/index.html'
+      - 'public/campaign-*.js'
+      - 'lib/campaignCatalog.js'
+      - 'lib/save/**'
 
 permissions:
   contents: read
