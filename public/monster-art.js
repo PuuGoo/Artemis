@@ -103,4 +103,12 @@
     return true;
   }
   root.MonsterArt = Object.freeze({ assets: Object.freeze(assets), themeFor, pool, beginRun, assignRoom, draw });
+  // Sprite-sheet renderer is optional and only replaces icons with authored atlases.
+  // Missing/invalid images continue to use this original MonsterArt.draw() implementation.
+  if(root.document?.head && !root.document.querySelector('script[data-monster-sprite-animation]')){
+    const script=root.document.createElement('script');
+    script.dataset.monsterSpriteAnimation='1';
+    script.src='/monster-sprite-animation.js?v=atlas-first-wave-20261111';
+    root.document.head.appendChild(script);
+  }
 })(globalThis);
