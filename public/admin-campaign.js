@@ -5,6 +5,11 @@
   var chapters = [], current = null, roomNo = 1, filter = "", requestSeq = 0;
   var rendererPromise = null, animationId = 0, lastFrame = 0, visible = false;
   var fakeGame = null, activeEntities = [], previewBroken = false;
+  // Admin-only animation fixture. It drives the same entity signals as gameplay
+  // but never calls damage, fire, drops or persistence.
+  var demoAction = 'idle', demoStartedAt = NaN;
+  var DEMO_CYCLES = Object.freeze({ attack: 1450, hit: 1050, death: 1600 });
+  var DEMO_LABELS = Object.freeze({ idle:'Idle • Đứng chờ', attack:'Attack • Tấn công', hit:'Hit • Trúng đòn', death:'Death • Gục ngã' });
   var cache = Object.create(null);
   var zodiacSlugs="leo aries taurus gemini cancer virgo libra scorpio sagittarius capricorn aquarius pisces".split(" ");
   function bossArt(id){id=Number(id);return Number.isInteger(id)&&id>=1&&id<=12?"zodiac_"+zodiacSlugs[id-1]:"";}
@@ -53,6 +58,9 @@
       if(rn) { selectRoom(Number(rn.getAttribute("data-room"))); return; }
       var b=e.target.closest("[data-viewroom]");
       if(b) { selectRoom(Number(b.getAttribute("data-viewroom"))); return; }
+      var action=e.target.closest("[data-demo-action]");
+      if(action) { selectBossDemo(action.getAttribute("data-demo-action")); return; }
+      if(e.target.closest("[data-demo-replay]")) { selectBossDemo(demoAction); return; }
     });
   }
   function loadSummaries() {
@@ -81,6 +89,7 @@
     stopAnimation();
     current = chapterById(id);
     roomNo = 1; activeEntities = []; fakeGame = null; previewBroken = false;
+    demoAction = 'idle'; demoStartedAt = NaN;
     el("ccDetail").innerHTML='<div class="cc-panel cc-loading">Đang nạp Chương ' + id + '…</div>';
     renderList();
     if(updateHash) location.hash="campaign-"+id;
@@ -132,7 +141,15 @@
       '<div id="ccRoomNav" class="cc-room-nav" role="group" aria-label="Chọn phòng"></div>' +
       '<div class="cc-stage"><canvas id="ccArena" width="780" height="420" aria-label="Dựng lại arena chiến dịch từ Canvas trong game"></canvas>' +
       '<div class="cc-stage-note"><span id="ccBiomeName">Arena chiến dịch</span><span id="ccCanvasStatus">Xem trước từ game</span></div></div>' +
-      '<p class="cc-help">Hình đấu trường và quái/boss được vẽ bằng cùng mã Canvas của game. Đây là mô phỏng hình ảnh, không khởi chạy chiến đấu.</p>' +
+      '<div id="ccBossDemo" class="cc-boss-demo" hidden><div class="cc-demo-heading"><b id="ccBossDemoTitle">Hoạt ảnh Boss</b><span class="cc-caption">Chạy trực tiếp trên bản đồ phía trên</span></div>' +
+      '<div class="cc-demo-actions" role="group" aria-label="Chọn trạng thái hoạt ảnh boss">' +
+      '<button type="button" data-demo-action="idle" aria-pressed="true">🔥 Idle <small>6 khung</small></button>' +
+      '<button type="button" data-demo-action="attack" aria-pressed="false">⚔️ Attack <small>6 khung</small></button>' +
+      '<button type="button" data-demo-action="hit" aria-pressed="false">🛡️ Hit <small>4 khung</small></button>' +
+      '<button type="button" data-demo-action="death" aria-pressed="false">💀 Death <small>6 khung</small></button>' +
+      '<button type="button" data-demo-replay="1" title="Phát lại từ khung đầu">↻ Phát lại</button></div>' +
+      '<p id="ccBossDemoStatus" class="cc-caption" aria-live="off"></p></div>' +
+      '<p class="cc-help">Mô phỏng trực tiếp trên bản đồ bằng cùng renderer, sprite và tín hiệu hoạt ảnh của game; không khởi chạy AI, sát thương hoặc ghi save.</p>' +
       '<div class="cc-stats" id="ccRoomStats"></div></div>' +
       '<div class="cc-panel"><div class="cc-section-head"><h3 id="ccEntitiesTitle">👾 Quái / Boss của phòng</h3><span class="cc-caption">HP, ATK, tốc độ và số lượng</span></div>' +
       '<div id="ccEntities" class="cc-entities"></div></div>' +
@@ -172,8 +189,9 @@
     }).join("");
   }
   function entityCard(e,isBoss,uid) {
-    var img=isBoss && /^zodiac_/.test(e.type||"")?bossArt(current.id):"";
-    var graphic=img?'<canvas class="cc-sprite cc-zodiac-sprite" width="200" height="136" data-zodiac="'+img+'" aria-label="Boss chibi Canvas '+esc(e.name)+'"></canvas>':'<canvas class="cc-sprite" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>';
+    // The entity card must use the same drawMonster as the room preview;
+    // the separate zodiac gallery above is only a static portrait.
+    var graphic='<canvas class="cc-sprite" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>';
     return '<article class="cc-entity'+(isBoss?' boss':'')+'">'+graphic +
       '<div class="cc-entity-title"><b>'+esc(e.name)+'</b><small>'+(isBoss?'BOSS':('x'+(e.quantity||1)))+'</small></div>' +
       '<div class="cc-kvs"><div class="cc-kv">HP<strong>'+num(e.hp)+'</strong></div><div class="cc-kv">ATK<strong>'+num(e.atk)+'</strong></div>' +
@@ -186,6 +204,7 @@
     if(!current || !current.roomsDetail) return;
     n=Math.max(1,Math.min(current.rooms,Math.floor(Number(n)||1)));
     roomNo=n;
+    demoAction='idle'; demoStartedAt=NaN;
     var r=current.roomsDetail[n-1];
     el("ccRoomLabel").textContent="Phòng "+n+" / "+current.rooms+(r.isFinalBoss?" • TRÙM CUỐI":r.isBoss?" • TRÙM PHỤ":" • Quái thường")+(r.valkyrie?" • Valkyrie sau khi dọn phòng":"");
     el("ccRoomStats").innerHTML=
@@ -200,11 +219,66 @@
     var units=r.isBoss?[r.boss]:r.mobs;
     el("ccEntities").innerHTML=units.map(function(e,i){return entityCard(e,r.isBoss,"room-"+i);}).join("");
     renderRoomNav();
+    syncBossDemoControls();
     var rows=el("ccRoomTable");if(rows)rows.querySelectorAll("tr[data-room]").forEach(function(row){
       row.setAttribute("aria-selected",Number(row.getAttribute("data-room"))===n);
     });
     if(window.AdminCampaignArenaV2) buildFakeGame();
     drawScene(performance.now());
+  }
+  function syncBossDemoControls() {
+    var box=el('ccBossDemo');
+    if (!box || !current || !current.roomsDetail) return;
+    var room=current.roomsDetail[roomNo-1];
+    box.hidden=!room.isBoss;
+    if (!room.isBoss) return;
+    el('ccBossDemoTitle').textContent='🎞️ Demo '+room.boss.name+' — Phòng '+roomNo;
+    root.querySelectorAll('[data-demo-action]').forEach(function(button){
+      button.setAttribute('aria-pressed',String(button.getAttribute('data-demo-action')===demoAction));
+    });
+    var hasAtlas=current.id===1 && [10,20,30,40,50].includes(roomNo);
+    el('ccBossDemoStatus').textContent=DEMO_LABELS[demoAction]+(hasAtlas
+      ? ' • Dùng đúng sprite PNG trong game, tự động phát lặp lại.'
+      : ' • Dùng hiệu ứng Canvas hiện có của boss trong game (không có atlas 4 trạng thái riêng).');
+  }
+  function selectBossDemo(action) {
+    if (!Object.prototype.hasOwnProperty.call(DEMO_LABELS,action) || !current || !current.roomsDetail) return;
+    if (!current.roomsDetail[roomNo-1].isBoss) return;
+    demoAction=action; demoStartedAt=NaN;
+    if (window.AdminCampaignArenaV2) buildFakeGame();
+    if (root) root.querySelectorAll('canvas[data-sprite]').forEach(function(canvas){canvas._ccPreviewEntity=null;});
+    syncBossDemoControls();
+    drawScene(performance.now());
+    startAnimation();
+  }
+  function applyBossDemo(now) {
+    if (!fakeGame || !activeEntities.length || !current) return;
+    var room=current.roomsDetail[roomNo-1];
+    if (!room || !room.isBoss) return;
+    if (!Number.isFinite(demoStartedAt)) demoStartedAt=now;
+    var elapsed=Math.max(0,now-demoStartedAt);
+    var cycle=DEMO_CYCLES[demoAction] || 0;
+    if (cycle && elapsed>=cycle) {
+      // A fresh entity restarts WeakMap-based Hit/Death tracks just as entering
+      // a new combat encounter would. Keep the map/renderer itself unchanged.
+      buildFakeGame();
+      root.querySelectorAll('canvas[data-sprite]').forEach(function(canvas){canvas._ccPreviewEntity=null;});
+      demoStartedAt=now; elapsed=0;
+    }
+    var enemy=activeEntities[0];
+    enemy.hp=enemy.maxHp;
+    enemy.attackTimer=1.5;
+    enemy.hitFlashTimer=0;
+    fakeGame.portalOpen=false;
+    if (demoAction==='attack') {
+      // Exactly the 750ms warning window used by BossAttackPatterns.
+      // The last sprite frame is held briefly after the simulated volley.
+      if (elapsed<750) enemy.attackTimer=Math.max(.001,.75-elapsed/1000);
+    } else if (demoAction==='hit') {
+      if (elapsed<380) enemy.hitFlashTimer=Math.max(.001,(380-elapsed)/1000);
+    } else if (demoAction==='death') {
+      enemy.hp=0;
+    }
   }
   function renderRoster() {
     el("ccRoster").innerHTML=current.enemyRoster.map(function(e,i) {
@@ -274,20 +348,12 @@
       } finally {ctx.restore();}
     });
   }
-  function drawZodiacInArena(ctx,e,now){
-    var art=window.ArtemisZodiacBosses;
-    if(!e.isBoss||!art||!art.sources[e.type])return false;
-    var st=art.preload(e.type);if(!st||!st.ready||st.failed)return false;
-    ctx.save();try{
-      ctx.translate(e.x,e.y);
-      return art.draw(ctx,e.type,e.r*1.15,now,e.hp/Math.max(1,e.maxHp),e.attackTimer>0&&e.attackTimer<.48);
-    }catch(error){return false;}finally{ctx.restore();}
-  }
   function drawScene(now) {
     if(!visible||!current ||!current.roomsDetail ||!fakeGame ||!window.AdminCampaignArenaV2 || previewBroken)return;
     var api=window.AdminCampaignArenaV2, canvas=el("ccArena");
     if(!canvas)return;
     try {
+      applyBossDemo(now);
       api.init(fakeGame);
       var ctx=canvas.getContext("2d");
       if(!ctx)throw Error("Canvas 2D không khả dụng");
@@ -295,7 +361,9 @@
       api.drawArena(ctx,780,420,36,now,current.id);
       var biome=api._debug.pickBiome();
       el("ccBiomeName").textContent=biome.label||"Đấu trường "+biome.id;
-      activeEntities.forEach(function(e){if(!drawZodiacInArena(ctx,e,now))api.drawMonster(ctx,e,now);});
+      // No alternate zodiac drawing path: identical renderer and sprite states
+      // to the actual battle, including Leo's and all four generals' atlases.
+      activeEntities.forEach(function(e){api.drawMonster(ctx,e,now);});
       var room=current.roomsDetail[roomNo-1];
       if(room.isBoss){
         ctx.fillStyle="rgba(5,10,22,.76)";ctx.fillRect(220,305,340,40);
@@ -331,8 +399,15 @@
         enemy={type:e.type,isBoss:!!(room.isBoss&&!roster),x:100,y:73,
           r:room.isBoss&&!roster?33:25,
           hp:e.hp||100,maxHp:e.hp||100,attackTimer:1.5,
-          hitFlashTimer:0,slowTimer:0,burnTimer:0,vx:0,vy:0};
+          hitFlashTimer:0,slowTimer:0,burnTimer:0,vx:0,vy:0,
+          campaignChapter:current.id,campaignRoom:roomNo};
         canvas._ccPreviewEntity=enemy;
+      }
+      if(room.isBoss&&!roster&&activeEntities[0]) {
+        // Preview card mirrors the same visual action as the selected boss.
+        enemy.attackTimer=activeEntities[0].attackTimer;
+        enemy.hitFlashTimer=activeEntities[0].hitFlashTimer;
+        enemy.hp=Math.min(enemy.maxHp,Math.max(0,activeEntities[0].hp));
       }
       api.drawMonster(ctx,enemy,now);
     });
@@ -340,7 +415,10 @@
   function tick(now) {
     animationId=0;
     if(!visible||!root||root.closest(".hidden")||document.hidden)return;
-    if(now-lastFrame>120) {lastFrame=now;drawScene(now);paintZodiacCards();}
+    // Boss sprite cells may be only 95–145ms long; 8 FPS skipped frames.
+    // Use ~30 FPS for selected boss demos, retain low-cost idle room previews.
+    var boss=!!(current && current.roomsDetail && current.roomsDetail[roomNo-1]?.isBoss);
+    if(now-lastFrame>(boss?32:120)) {lastFrame=now;drawScene(now);paintZodiacCards();}
     animationId=requestAnimationFrame(tick);
   }
   function startAnimation() {
