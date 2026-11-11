@@ -1,0 +1,51 @@
+name: Monster and Skill Sprite Atlas QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/monster-sprite-atlas-qa.yml'
+      - 'public/assets/monster-sprites/**'
+      - 'public/assets/skill-sprites/**'
+      - 'public/monster-sprite-animation.js'
+      - 'public/skill-sprite-animation.js'
+      - 'public/monster-art.js'
+      - 'public/skill-combat-vfx.js'
+      - 'public/js/game/rendering/arena-renderer.js'
+      - 'public/monster-sprite-studio.html'
+      - 'tests/monster-sprite-sheets.test.mjs'
+  pull_request:
+    paths:
+      - '.github/workflows/monster-sprite-atlas-qa.yml'
+      - 'public/assets/monster-sprites/**'
+      - 'public/assets/skill-sprites/**'
+      - 'public/monster-sprite-animation.js'
+      - 'public/skill-sprite-animation.js'
+      - 'public/monster-art.js'
+      - 'public/skill-combat-vfx.js'
+      - 'public/js/game/rendering/arena-renderer.js'
+      - 'tests/monster-sprite-sheets.test.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  sprite-atlases:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Artemis
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Source checks
+        run: npm run check
+      - name: Sprite atlas and gameplay integration tests
+        run: node --test tests/monster-sprite-sheets.test.mjs
+      - name: Full unit tests
+        run: npm test
