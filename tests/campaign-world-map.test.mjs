@@ -26,11 +26,11 @@ test('world map discovers every real chapter without fabricating extra destinati
   assert.equal(api.getChapters()[0].themeName,'Sư Tử');
   assert.equal(api.getChapters().at(-1).unlock.chapterId,11);
 });
-test('final chapter can scroll into the center and keep the real launch CTA visible', () => {
+test('final chapter has enough scroll room to keep the real launch CTA visible', () => {
   const css = readFileSync(new URL('../public/campaign-world-map.css', import.meta.url), 'utf8');
-  assert.match(css, /padding-bottom:max\\(210px,calc\\(50dvh - 125px\\)\\)/);
-  assert.match(css, /padding-bottom:max\\(190px,calc\\(50dvh - 125px\\)\\)/);
-  assert.match(css, /world-map-exploring \\.battle-launch/);
+  assert.ok(css.includes('padding-bottom:max(210px,calc(50dvh - 125px))'));
+  assert.ok(css.includes('padding-bottom:max(190px,calc(50dvh - 125px))'));
+  assert.ok(css.includes('world-map-exploring .battle-launch'));
 });
 test('unlock copy uses the real previous-chapter win, never invented hard mode', () => {
   const map = load();
