@@ -205,34 +205,28 @@
 
   // Chương nào dùng biome nào (xoay vòng theo phòng thường). Chương sự kiện (999) trộn tất cả.
   const POOLS = {
-    1: ['stone', 'forest', 'mine', 'swamp', 'crypt'],
-    2: ['lava', 'desert', 'ash', 'canyon'],
-    3: ['void', 'crystal', 'ice', 'astral', 'temple'],
-    4: ['dragon_realm', 'ice', 'crystal', 'astral'],
-    5: ['eclipse_reach', 'obsidian_garden', 'starfall_rift', 'eclipse_reach'],
-    6: ['nebula_gate', 'frozen_choir', 'throne_of_stars', 'nebula_gate'],
-    7: ['luminous_grove', 'spore_marsh', 'hollow_hive', 'luminous_grove'],
-    8: ['zodiac_aries'],
-    9: ['zodiac_taurus'],
-    10: ['zodiac_gemini'],
-    11: ['zodiac_cancer'],
-    12: ['zodiac_leo'],
-    13: ['zodiac_virgo'],
-    14: ['zodiac_libra'],
-    15: ['zodiac_scorpio'],
-    16: ['zodiac_sagittarius'],
-    17: ['zodiac_capricorn'],
-    18: ['zodiac_aquarius'],
-    19: ['zodiac_pisces']
+    1: ['zodiac_leo'],
+    2: ['zodiac_aries'],
+    3: ['zodiac_taurus'],
+    4: ['zodiac_gemini'],
+    5: ['zodiac_cancer'],
+    6: ['zodiac_virgo'],
+    7: ['zodiac_libra'],
+    8: ['zodiac_scorpio'],
+    9: ['zodiac_sagittarius'],
+    10: ['zodiac_capricorn'],
+    11: ['zodiac_aquarius'],
+    12: ['zodiac_pisces']
+  
   };
   const POOL_ALL = ['stone', 'forest', 'mine', 'swamp', 'crypt', 'lava', 'desert', 'ash', 'canyon', 'void', 'crystal', 'ice', 'astral', 'temple', 'eclipse_reach', 'obsidian_garden', 'starfall_rift', 'nebula_gate', 'frozen_choir', 'throne_of_stars', 'luminous_grove', 'spore_marsh', 'hollow_hive', 'zodiac_aries', 'zodiac_taurus', 'zodiac_gemini', 'zodiac_cancer', 'zodiac_leo', 'zodiac_virgo', 'zodiac_libra', 'zodiac_scorpio', 'zodiac_sagittarius', 'zodiac_capricorn', 'zodiac_aquarius', 'zodiac_pisces'];
   const BOSS_ARENA = { golem: 'forge', queen: 'webcave', demon_king: 'throne', elder_dragon: 'dragon_altar', eclipse_sovereign: 'eclipse_throne', astral_devourer: 'abyss_crown', mycelium_queen: 'mycelium_heart', zodiac_aries: 'zodiac_aries', zodiac_taurus: 'zodiac_taurus', zodiac_gemini: 'zodiac_gemini', zodiac_cancer: 'zodiac_cancer', zodiac_leo: 'zodiac_leo', zodiac_virgo: 'zodiac_virgo', zodiac_libra: 'zodiac_libra', zodiac_scorpio: 'zodiac_scorpio', zodiac_sagittarius: 'zodiac_sagittarius', zodiac_capricorn: 'zodiac_capricorn', zodiac_aquarius: 'zodiac_aquarius', zodiac_pisces: 'zodiac_pisces' };
 
   // Mỗi chương có một bản sắc trùm riêng; các chương đầu giữ nguyên bộ boss cũ.
-  const ZODIAC_IDS = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
+  const ZODIAC_IDS = ['leo', 'aries', 'taurus', 'gemini', 'cancer', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
   function bossTypeOfRoom(room) {
     if ((!Game.mode || Game.mode === 'campaign') && root.ArtemisCampaignConfig) return root.ArtemisCampaignConfig.bossType(Game.chapter && Game.chapter.id, room);
-    if (Game.chapter && Number(Game.chapter.id) >= 8 && Number(Game.chapter.id) <= 19) return 'zodiac_' + ZODIAC_IDS[Number(Game.chapter.id) - 8];
+    if (Game.chapter && Number(Game.chapter.id) >= 1 && Number(Game.chapter.id) <= 12) return 'zodiac_' + ZODIAC_IDS[Number(Game.chapter.id) - 1];
     if (Game.chapter && Number(Game.chapter.id) === 7) return 'mycelium_queen';
     if (Game.chapter && Number(Game.chapter.id) === 6) return 'astral_devourer';
     if (Game.chapter && Number(Game.chapter.id) === 5) return 'eclipse_sovereign';

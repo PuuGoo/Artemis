@@ -6,8 +6,8 @@
   var rendererPromise = null, animationId = 0, lastFrame = 0, visible = false;
   var fakeGame = null, activeEntities = [], previewBroken = false;
   var cache = Object.create(null);
-  var zodiacSlugs="aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces".split(" ");
-  function bossArt(id){id=Number(id);return Number.isInteger(id)&&id>=8&&id<=19?"zodiac_"+zodiacSlugs[id-8]:"";}
+  var zodiacSlugs="leo aries taurus gemini cancer virgo libra scorpio sagittarius capricorn aquarius pisces".split(" ");
+  function bossArt(id){id=Number(id);return Number.isInteger(id)&&id>=1&&id<=12?"zodiac_"+zodiacSlugs[id-1]:"";}
 
   function esc(s) { return helpers.esc(s); }
   function num(n) { return helpers.num(n); }
@@ -40,7 +40,7 @@
       '<div class="cc-heading"><div><h2>🗺️ Thư viện Chiến dịch</h2>' +
       '<p class="cc-caption">Xem dữ liệu thực tế đang dùng trong game • Chỉ đọc, không thay đổi quái, tài khoản hay save.</p></div>' +
       '<div id="ccSummary" class="cc-summary"></div></div>' +
-      '<section class="cc-panel"><div class="cc-section-head"><h3>👑 12 Boss Hoàng Đạo Chibi • Chương 8–19</h3><span class="cc-caption">Bấm boss để xem chương và thông số</span></div><div id="ccZodiacGallery" class="cc-zodiac-grid"></div></section>'+
+      '<section class="cc-panel"><div class="cc-section-head"><h3>👑 12 Boss Hoàng Đạo Chibi • Chương 1–12</h3><span class="cc-caption">Bấm boss để xem chương và thông số</span></div><div id="ccZodiacGallery" class="cc-zodiac-grid"></div></section>'+
       '<div class="cc-layout"><aside class="cc-sidebar"><label class="cc-caption" for="ccSearch"><b>TÌM CHƯƠNG / BOSS</b></label>' +
       '<input id="ccSearch" type="text" placeholder="Tên chương hoặc boss…" autocomplete="off" />' +
       '<div id="ccChapters" class="cc-chapters"><p class="cc-caption">Đang tải danh sách…</p></div></aside>' +
@@ -236,7 +236,7 @@
     var enemies=r.isBoss?[r.boss]:r.mobs;
     var shown=[];
     if(r.isBoss) {
-      shown=[{...r.boss,isBoss:true,x:390,y:172,r:55,zodiacIndex:c.id>=8?c.id-8:-1}];
+      shown=[{...r.boss,isBoss:true,x:390,y:172,r:55,zodiacIndex:c.id>=1&&c.id<=12?c.id-1:-1}];
     } else {
       var types=[];
       for(var i=0;i<r.count;i++)types.push(r.mobs[i%r.mobs.length]);

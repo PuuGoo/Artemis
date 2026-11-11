@@ -2,8 +2,7 @@
 (function (root) {
   'use strict';
   var ROOM_COUNT = 50;
-  var finals = ['golem', 'queen', 'demon_king', 'elder_dragon', 'eclipse_sovereign', 'astral_devourer', 'mycelium_queen'];
-  var zodiac = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
+  var zodiac = ['leo', 'aries', 'taurus', 'gemini', 'cancer', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
   var subBosses = ['golem', 'queen', 'demon_king', 'elder_dragon'];
   function roomNumber(room) {
     return Math.max(1, Math.min(ROOM_COUNT, Math.floor(Number(room) || 1)));
@@ -15,8 +14,8 @@
     room = roomNumber(room);
     if (room % 10 !== 0) return null;
     if (room < ROOM_COUNT) return subBosses[room / 10 - 1];
-    var chapter = Math.max(1, Math.min(19, Math.floor(Number(chapterId) || 1)));
-    return chapter <= 7 ? finals[chapter - 1] : 'zodiac_' + zodiac[chapter - 8];
+    var chapter = Math.floor(Number(chapterId) || 1);
+    return chapter >= 1 && chapter <= zodiac.length ? 'zodiac_' + zodiac[chapter - 1] : null;
   }
   function roomPlan(chapterId, room) {
     room = roomNumber(room);

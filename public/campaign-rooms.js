@@ -17,7 +17,7 @@
     hive_guardian: 8 / 3 };
   function chapterNumber(value) {
     var number = Number(value);
-    return Number.isFinite(number) ? Math.max(1, Math.min(19, Math.floor(number))) : 1;
+    return Number.isFinite(number) ? Math.max(1, Math.min(12, Math.floor(number))) : 1;
   }
   function isSafeRoom(room) { return Number.isInteger(room) && room >= 5 && room <= 45 && room % 10 === 5; }
   function basePlan(chapterId, room) {
@@ -35,7 +35,7 @@
       counter: 'Né cảnh báo rồi dừng lại phản công.' }];
     var chapter = chapterNumber(chapterId);
     // Không dùng frost_sentinel/nebula_herald/star_wraith: hiện chưa có nhánh bắn riêng.
-    var family = families[chapter <= 3 ? 0 : chapter <= 7 ? chapter - 3 : (chapter - 8) % families.length];
+    var family = families[(chapter - 1) % families.length];
     var sequences = [[0, 1, 0, 3], [1, 0, 3, 1], [3, 0, 1, 0], [2, 0, 1, 0], [2, 0, 1, 3, 0]];
     var sequence = plan.rhythm === 'rest' ? [0, 1, 0] : sequences[plan.segment];
     var target = plan.rhythm === 'rest' ? 3 : Math.min(8, plan.count + (plan.segment === 4 ? 1 : 0));
@@ -67,8 +67,7 @@
       speedMultiplier: variant ? variant.speedMultiplier : 1 + stage * .04,
       sizeMultiplier: variant ? variant.sizeMultiplier : 1 + stage * .04 };
   }
-  var themes = ['Đá Cổ', 'Dung Nham', 'Hư Không', 'Thiên Không', 'Nhật Thực', 'Tinh Hà', 'Sợi Nấm',
-    'Bạch Dương', 'Kim Ngưu', 'Song Tử', 'Cự Giải', 'Sư Tử', 'Xử Nữ', 'Thiên Bình', 'Bọ Cạp', 'Nhân Mã', 'Ma Kết', 'Bảo Bình', 'Song Ngư'];
+  var themes = ['Sư Tử', 'Bạch Dương', 'Kim Ngưu', 'Song Tử', 'Cự Giải', 'Xử Nữ', 'Thiên Bình', 'Bọ Cạp', 'Nhân Mã', 'Ma Kết', 'Bảo Bình', 'Song Ngư'];
   var titles = ['Vệ Binh', 'Kẻ Dệt Lưới', 'Chấp Pháp', 'Long Vệ'];
   var colors = ['#fb923c', '#c084fc', '#fb7185', '#67e8f9', '#a3e635', '#38bdf8', '#facc15'];
   function subBossVariant(chapterId, plan) {
