@@ -79,7 +79,15 @@ test("admin UI remains read-only and guarded by existing admin identity", () => 
   assert.match(adminJs, /\/api\/admin\/campaign/);
   assert.match(apiJs, /await requireAdmin\(request\)/);
   assert.match(apiJs, /export async function GET\(request\)/);
-  assert.doesNotMatch(apiJs, /export async function (PATCH|POST|PUT|DELETE)/);
+  // Existing campaign catalog stays read-only; the new Content Studio writer
+  // is routed through the same Hobby lambda only with __studio=1 and its
+  // own Admin authentication plus same-origin mutation guard.
+  assert.match(apiJs,/export async function POST\(request\)/);
+  assert.match(apiJs,/__studio/);
+  const authoring=fs.readFileSync(new URL('../lib/adminStudioHandler.js',import.meta.url),'utf8');
+  assert.match(authoring,/await requireAdmin\(request\)/);
+  assert.match(authoring,/originOk\(request\)/);
+  assert.doesNotMatch(apiJs, /export async function (PATCH|PUT|DELETE)/);
   new Script(adminJs);
   new Script(rendererCode);
 });
