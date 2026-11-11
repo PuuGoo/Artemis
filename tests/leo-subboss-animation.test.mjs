@@ -75,9 +75,13 @@ test('gameplay signals drive Idle, Attack, Hit, Death without mutating the entit
   assert.equal(api.drawEntity(c,e,420),true);
   assert.equal(c.draws.at(-1)[1],2*192);
   assert.equal(c.draws.at(-1)[2],192);
+  // Attack's final frame stays visible for 160ms after the combat cooldown
+  // resets; wait for the follow-through before testing the separate Hit state.
+  e.attackTimer=1.2;
+  api.drawEntity(c,e,430);
   e.hitFlashTimer=.12;
-  api.drawEntity(c,e,450);
-  api.drawEntity(c,e,550);
+  api.drawEntity(c,e,650);
+  api.drawEntity(c,e,750);
   assert.equal(c.draws.at(-1)[2],2*192);
   assert.equal(c.draws.at(-1)[1],192);
   e.hp=0;
@@ -86,7 +90,45 @@ test('gameplay signals drive Idle, Attack, Hit, Death without mutating the entit
   assert.equal(c.draws.at(-1)[2],3*192);
   assert.equal(c.draws.at(-1)[1],5*192);
   assert.equal(c.depth,0);
-  assert.deepEqual(JSON.parse(JSON.stringify(e)),{...original,attackTimer:.5,hitFlashTimer:.12,hp:0});
+  assert.deepEqual(JSON.parse(JSON.stringify(e)),{...original,attackTimer:1.2,hitFlashTimer:.12,hp:0});
+});
+
+
+test('all 6 attack PNG frames are shown in the real 750ms volley telegraph for all four bosses',()=>{
+  const {api}=fixture(),c=ctx();
+  const bosses=[[10,'golem'],[20,'queen'],[30,'demon_king'],[40,'elder_dragon']];
+  assert.equal(api.WARNING,.75);
+  assert.equal(api.ACTIONS.attack.count,6);
+  assert.ok(api.AFTER_FIRE_MS>=120);
+  for(const [room,type] of bosses){
+    const enemy=boss(room,type);
+    const start=c.draws.length;
+    for(let i=0;i<6;i++){
+      enemy.attackTimer=.75-i*.125; // 750, 625, 500, 375, 250, 125ms before firing
+      enemy.hitFlashTimer=i===3?.12:0; // Hit flash must not cancel Attack.
+      assert.equal(api.drawEntity(c,enemy,1000+i*125),true);
+      const frame=c.draws.at(-1);
+      assert.equal(frame[1],i*192, 'attack frame '+i+' of '+room);
+      assert.equal(frame[2],192, 'attack sheet row of '+room);
+      assert.deepEqual([frame[3],frame[4]],[192,192]);
+    }
+    assert.equal(c.draws.length-start,6);
+    enemy.attackTimer=1.8; // BossAttackPatterns.fire resets the cooldown.
+    assert.equal(api.drawEntity(c,enemy,1750),true);
+    assert.equal(c.draws.at(-1)[1],5*192,'impact held just after the projectile is fired');
+    assert.equal(c.draws.at(-1)[2],192);
+    assert.equal(api.drawEntity(c,enemy,1750+api.AFTER_FIRE_MS+1),true);
+    assert.equal(c.draws.at(-1)[2],0,'returns to Idle after follow-through');
+  }
+  assert.equal(c.depth,0);
+});
+
+test('frame mapping follows combat countdown rather than display timestamp',()=>{
+  const {api}=fixture();
+  for(let i=0;i<6;i++)assert.equal(api.attackFrameForTimer(.75-i*.125),i);
+  assert.equal(api.attackFrameForTimer(.02),5);
+  assert.equal(api.attackFrameForTimer(5),0);
+  assert.equal(api.attackFrameForTimer(-1),5);
 });
 
 test('sprite death afterimage remains in the defeated boss room only',()=>{

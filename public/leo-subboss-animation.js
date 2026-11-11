@@ -6,6 +6,9 @@
   'use strict';
   const CELL = 192;
   const WARNING = .75;
+  // The actual attack is fired when attackTimer reaches zero. Hold the impact
+  // frame briefly after the combat timer resets so the release stays visible.
+  const AFTER_FIRE_MS = 160;
   const ACTIONS = Object.freeze({
     idle: Object.freeze({ row:0, count:6, frameMs:170, loop:true }),
     attack: Object.freeze({ row:1, count:6, frameMs:110, loop:false }),
@@ -61,6 +64,16 @@
     const step = Math.max(0,Math.floor(Math.max(0,elapsedMs) / def.frameMs));
     return def.loop ? step % def.count : Math.min(def.count - 1,step);
   }
+  // Drive attack frames from the authoritative combat countdown, not render
+  // elapsed time: all 6 frames span the complete 750ms warning and the impact
+  // frame lands at the same moment the actual projectile volley is released.
+  function attackFrameForTimer(remainingSeconds) {
+    const remaining = Number(remainingSeconds);
+    if (!Number.isFinite(remaining)) return 0;
+    const progress = (WARNING - Math.max(0,Math.min(WARNING,remaining))) / WARNING;
+    return Math.min(ACTIONS.attack.count - 1,
+      Math.max(0,Math.floor(progress * ACTIONS.attack.count)));
+  }
   function drawFrame(ctx, room, action, index, radius) {
     const def = ACTIONS[action];
     if (!ctx || typeof ctx.drawImage !== 'function' || !def || !(radius > 0) || !isReady(room)) return false;
@@ -77,15 +90,25 @@
   function clock(enemy, nowMs) {
     let track = tracks.get(enemy);
     if (!track) {
-      track = { hitValue:0,hitStart:-Infinity,attacking:false,attackStart:-Infinity,deathStart:-Infinity };
+      track = { hitValue:0,hitStart:-Infinity,attacking:false,
+        previousAttackTimer:null,followThroughUntil:-Infinity,deathStart:-Infinity };
       tracks.set(enemy,track);
     }
     const hit = Math.max(0,Number(enemy.hitFlashTimer) || 0);
     if (hit > 0 && (track.hitValue <= 0 || hit > track.hitValue + .045)) track.hitStart = nowMs;
     track.hitValue = hit;
-    const attacking = Number(enemy.attackTimer) > 0 && Number(enemy.attackTimer) <= WARNING;
-    if (attacking && !track.attacking) track.attackStart = nowMs;
+    const timer = Number(enemy.attackTimer);
+    const attacking = timer > 0 && timer <= WARNING;
+    // BossAttackPatterns.fire() immediately resets the countdown to its
+    // cooldown. Detect that transition without mutating combat state.
+    const last = track.previousAttackTimer;
+    if (!attacking && Number.isFinite(last) && last > 0 && last <= WARNING
+      && timer > WARNING && Number(enemy.hp) > 0) {
+      track.followThroughUntil = nowMs + AFTER_FIRE_MS;
+    }
+    if (attacking) track.followThroughUntil = -Infinity;
     track.attacking = attacking;
+    track.previousAttackTimer = timer;
     if (Number(enemy.hp) <= 0 && track.deathStart === -Infinity) track.deathStart = nowMs;
     return track;
   }
@@ -93,16 +116,20 @@
     if (!eligible(enemy)) return false;
     const now = Number.isFinite(nowMs) ? nowMs : 0;
     const t = clock(enemy,now);
-    let action='idle',started=0;
+    let action='idle',frame=frameAt('idle',now);
     if (t.deathStart !== -Infinity) {
-      action='death'; started=t.deathStart;
+      action='death'; frame=frameAt('death',now-t.deathStart);
+    } else if (t.attacking) {
+      // Prioritize the entire attack telegraph over Hit; hitFlashTimer still
+      // produces the usual glow, but cannot hide intermediate Attack frames.
+      action='attack'; frame=attackFrameForTimer(enemy.attackTimer);
+    } else if (now < t.followThroughUntil) {
+      action='attack'; frame=ACTIONS.attack.count-1;
     } else if (now - t.hitStart < ACTIONS.hit.count * ACTIONS.hit.frameMs) {
-      action='hit'; started=t.hitStart;
-    } else if (now - t.attackStart < ACTIONS.attack.count * ACTIONS.attack.frameMs) {
-      action='attack'; started=t.attackStart;
+      action='hit'; frame=frameAt('hit',now-t.hitStart);
     }
     const room=Number(enemy.campaignRoom);
-    const drawn = drawFrame(ctx,room,action,frameAt(action,now-started),enemy.r)
+    const drawn = drawFrame(ctx,room,action,frame,enemy.r)
       || (action!=='idle' && drawFrame(ctx,room,'idle',frameAt('idle',now),enemy.r));
     if (drawn && Number(enemy.hp) > 0)
       lastSeen={ entity:enemy, chapter:1, room, x:enemy.x, y:enemy.y, r:enemy.r, seenAt:now };
@@ -149,7 +176,8 @@
     return true;
   }
   root.ArtemisLeoSubBossSprites=Object.freeze({
-    CELL,ACTIONS,BOSSES,eligible,preload,isReady,frameAt,buildAtlas,drawFrame,
+    CELL,ACTIONS,BOSSES,WARNING,AFTER_FIRE_MS,eligible,preload,isReady,
+    frameAt,attackFrameForTimer,buildAtlas,drawFrame,
     drawEntity,drawDeathAfterRemoval,pngDataUrl,downloadPng
   });
 })(typeof window !== 'undefined' ? window : globalThis);
