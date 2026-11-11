@@ -29,7 +29,12 @@ boss khi asset đã sẵn sàng.
 Engine: **public/leo-subboss-animation.js**. Khi asset nạp xong, renderer
 dùng drawImage với tọa độ từng frame; animation lấy signal từ attackTimer,
 hitFlashTimer, hp và chơi Death sau khi boss bị xóa khỏi enemies trong cùng
-phòng. Thứ tự ưu tiên Death > Hit > Attack > Idle.
+phòng. Thứ tự ưu tiên **Death > Attack > Hit > Idle** để nhận sát thương
+không làm mất frame Attack đang cảnh báo. Riêng Attack sử dụng trực tiếp
+`attackTimer` còn lại: 6 khung trải đều trong 750ms cảnh báo (125ms/khung),
+khung cuối trùng thời điểm bắn và được giữ thêm 160ms sau khi cooldown reset.
+`frameMs:110` vẫn dùng cho trình xem sprite độc lập; không dùng nó để tính
+frame Attack trong gameplay. Không thay đổi thời gian bắn, đạn hay damage.
 
 Renderer chỉ xử lý enemy có isBoss, campaignChapter=1, campaignRoom thuộc
 10/20/30/40 và loại golem/queen/demon_king/elder_dragon tương ứng.
