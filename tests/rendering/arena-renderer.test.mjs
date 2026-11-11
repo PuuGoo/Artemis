@@ -73,7 +73,7 @@ test('renderer mọi chương giữ nền biome, không tải ảnh map ở các
     getElementById() { return null; },
   } });
   vm.runInContext(read('public/arena-ground.js'), c);
-  for (let chapter = 1; chapter <= 19; chapter++) {
+  for (let chapter = 1; chapter <= 12; chapter++) {
     const g = game(chapter), arena = c.ArtemisArenaRenderer.create();
     arena.init(g);
     const before = JSON.stringify(g), requestsBefore = requested.length, cacheBefore = c.ArenaGround._cache.size;
@@ -84,7 +84,7 @@ test('renderer mọi chương giữ nền biome, không tải ảnh map ở các
     assert.equal(c.ArenaGround._cache.size, cacheBefore);
     assert.equal(JSON.stringify(g), before, 'không thay phòng hoặc dữ liệu gameplay');
     assert.equal(opening.depth(), 0);
-    if (chapter === 2) assert.equal(arena.biomeLabel(), 'Thung Lũng Dung Nham');
+    if (chapter === 2) assert.equal(arena.biomeLabel(), 'Hỏa Sơn Sừng Đỏ');
 
     g.room = 2;
     const laterBefore = JSON.stringify(g), later = canvas();

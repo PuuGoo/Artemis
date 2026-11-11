@@ -56,7 +56,7 @@ const CAMPAIGN_TUNING = (() => {
       bossHp: Number(m[4]), bossAtk: Number(m[5]),
     };
   }
-  if (Object.keys(out).length !== 19) throw new Error('CAMPAIGN_TUNING phải có 19 chương, đọc được ' + Object.keys(out).length);
+  if (Object.keys(out).length !== 12) throw new Error('CAMPAIGN_TUNING phải có 12 chương, đọc được ' + Object.keys(out).length);
   return out;
 })();
 
