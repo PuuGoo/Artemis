@@ -115,7 +115,7 @@ test('renderer draws four different chibi bodies before MonsterArt, without touc
   }
   assert.equal(fingerprints.size,4);
   const code=fs.readFileSync(new URL('../public/js/game/rendering/arena-renderer.js',import.meta.url),'utf8');
-  assert.match(code,/const leoSubBossDrawn = !leoSpriteDrawn && drawLeoSubBoss/);
+  assert.match(code,/const leoSubBossDrawn = !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss/);
   assert.match(code,/!leoSpriteDrawn && !leoSubBossDrawn && .*MonsterArt.draw/);
   const admin=fs.readFileSync(new URL('../public/admin-campaign.js',import.meta.url),'utf8');
   assert.match(admin,/campaignChapter:c.id,campaignRoom:roomNo/);
