@@ -88,6 +88,8 @@
 
   function drawEntity(ctx, enemy, nowMs) {
     if (!enemy || enemy.type !== 'zodiac_leo' || !enemy.isBoss || !(Number(enemy.r) > 0)) return false;
+    // Preload all states only when Leo appears; avoid waiting for hit/death assets.
+    if (!cache.idle) Object.keys(ACTIONS).forEach(preload);
     const t = Number.isFinite(nowMs) ? nowMs : 0;
     const track = getTrack(enemy, t);
     if (Number(enemy.hp) > 0) {
