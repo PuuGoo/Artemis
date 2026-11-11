@@ -246,6 +246,8 @@
 
   function pickBiome() {
     const room = Game.room || 1;
+    // Used exclusively by the Admin Studio map canvas, never by a live run.
+    if (Game.previewOnly === true && BIOMES[Game.previewBiome]) return BIOMES[Game.previewBiome];
     // Published Content Studio biome skins; obstacle/collision data remains
     // owned by the original room logic. Non-campaign modes never inherit it.
     if ((!Game.mode || Game.mode === 'campaign') && root.ArtemisContentRuntime) {
