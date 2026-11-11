@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Artemis Admin — Quản Trị Hệ Thống</title>
-<link rel="stylesheet" href="/admin-campaign.css">
+<link rel="stylesheet" href="/admin-campaign.css?v=boss-live-demo-20261111">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -506,7 +506,7 @@
     if (campaignUiLoader) return campaignUiLoader;
     campaignUiLoader = new Promise(function (resolve, reject) {
       var script = document.createElement("script");
-      script.src = "/admin-campaign.js";
+      script.src = "/admin-campaign.js?v=boss-live-demo-20261111";
       script.onload = function () {
         window.AdminCampaignUI ? resolve(window.AdminCampaignUI) : reject(new Error("Không khởi tạo được thư viện chiến dịch."));
       };
