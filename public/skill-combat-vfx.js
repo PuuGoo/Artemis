@@ -26,6 +26,9 @@
   function element(skills) { return ['fire','ice','venom','lightning'].filter(k=>skills[k+'_arrow']>0).map(k=>({venom:'poison',lightning:'bolt'}[k]||k)); }
   function projectile(c,b,now,game) {
     if(!Number.isFinite(b.x+b.y+b.vx+b.vy)) return false;
+    // Single-element skill arrows use their real six-frame sprite sheet.
+    // Existing vector renderer remains the fallback, including mixed elements.
+    if(root.ArtemisSkillSprites?.drawProjectile(c,b,now,game))return true;
     const skills=game.player?.skills || {};
     const elements = b.isSword && !skills.magic_strike ? [] : element(skills);
     if(!b.isSword && !b.spriteKind && !b.isLightwing && !elements.length && !skills.charged_arrow) return false;
@@ -102,4 +105,10 @@
     }
   }
   root.SkillCombatVfx={projectile,orb,meteor,companions,element,quiet,status};
+  if(root.document?.head && !root.document.querySelector('script[data-skill-sprite-animation]')){
+    const script=root.document.createElement('script');
+    script.dataset.skillSpriteAnimation='1';
+    script.src='/skill-sprite-animation.js?v=atlas-elements-20261111';
+    root.document.head.appendChild(script);
+  }
 })(globalThis);
