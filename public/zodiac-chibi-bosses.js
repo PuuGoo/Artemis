@@ -245,7 +245,7 @@ g.ArtemisZodiacBosses=Object.freeze({draw,preload,renderMode:'canvas-paths',sour
  if (typeof document !== 'undefined' && document.head && !document.querySelector('script[data-leo-subboss-animation]')) {
   const spriteScript = document.createElement('script');
   spriteScript.dataset.leoSubbossAnimation = '1';
-  spriteScript.setAttribute('src', '/leo-subboss-animation.js?v=leo-attack6-sync-20261111');
+  spriteScript.setAttribute('src', '/leo-subboss-animation.js?v=leo-guardian-vfx-20261111');
   document.head.appendChild(spriteScript);
  }
  // Cosmetic attack effects use the original four PNG sprite sheets in all renderers.
