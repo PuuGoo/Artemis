@@ -8794,7 +8794,7 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
         playerName: 'JohnBowman',
         artemisHeroVersion: 1,
         selectedChapterIdx: 0,
-        campaignOrderVersion: 0,
+        campaignOrderVersion: 2,
         // Chế độ chơi đang chọn (campaign / endless / tower / bossrush / practice)
         gameMode: 'campaign',
         // Kỷ lục theo từng chế độ: { endless: 37, tower: 12, ... }
@@ -9032,6 +9032,8 @@ function drawMonsterSprite(ctx, e, nowMs) { ArenaV2.drawMonster(ctx, e, nowMs); 
               if (parsed && typeof parsed === 'object') {
                 const hadExistingBagArray = Array.isArray(parsed.gearBag);
                 Object.assign(this, parsed);
+                // Pre-v2 accounts lack this field: distinguish them from fresh accounts.
+                if (!Object.prototype.hasOwnProperty.call(parsed, 'campaignOrderVersion')) this.campaignOrderVersion = 0;
                 if (!hadExistingBagArray) {
                   this.gearBag = createDefaultBag();
                 }
