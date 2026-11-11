@@ -1030,6 +1030,9 @@
       ArtemisLeoAnimation.rememberRoom(Game);
       ArtemisLeoAnimation.drawDeathAfterRemoval(ctx, Game, nowMs);
     }
+    if (typeof ArtemisLeoSubBossSprites !== 'undefined') {
+      ArtemisLeoSubBossSprites.drawDeathAfterRemoval(ctx, Game, nowMs, drawLeoSubBoss);
+    }
   }
 
   // ======================================================================
@@ -1987,9 +1990,13 @@
     else leoBossLine(c,[[-6,0],[6,0]],'#2b869b',2);
     if(rage){leoBossStar(c,-41,-48,5,'#fff0a6');leoBossStar(c,39,-43,5,'#fff0a6');}
   }
-  function drawLeoSubBoss(c, e, t) {
+  function drawLeoSubBoss(c, e, t, useSprites) {
     if (!e || e.isBoss !== true || Number(e.campaignChapter) !== 1
       || LEO_GUARDIAN_TYPES[e.campaignRoom] !== e.type || !(e.r > 0)) return false;
+    // The sprite cache calls this same painter with no useSprites flag to build
+    // transparent atlases, avoiding recursion. Canvas remains the safe fallback.
+    if (useSprites && typeof ArtemisLeoSubBossSprites !== 'undefined'
+      && ArtemisLeoSubBossSprites.drawEntity(c, e, t, drawLeoSubBoss)) return true;
     const ratio = e.hp / Math.max(1,e.maxHp), rage = ratio < .35;
     const charge = e.attackTimer > 0 && e.attackTimer <= .75;
     c.save();
@@ -2089,7 +2096,7 @@
     const flash = e.hitFlashTimer > 0;
     if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
     const leoSpriteDrawn = typeof ArtemisLeoAnimation !== 'undefined' && ArtemisLeoAnimation.drawEntity(ctx, e, nowMs);
-    const leoSubBossDrawn = !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss(ctx, e, nowMs);
+    const leoSubBossDrawn = !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss(ctx, e, nowMs, true);
     if (!leoSpriteDrawn && !leoSubBossDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
       ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
       drawBody(ctx, e, nowMs, B, v); ctx.restore();

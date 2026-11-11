@@ -241,4 +241,11 @@ g.ArtemisZodiacBosses=Object.freeze({draw,preload,renderMode:'canvas-paths',sour
   element.setAttribute('src', '/leo-zodiac-animation.js');
   document.head.appendChild(element);
  }
+ // Four named Leo guardians use the same independent sprite state pipeline.
+ if (typeof document !== 'undefined' && document.head && !document.querySelector('script[data-leo-subboss-animation]')) {
+  const spriteScript = document.createElement('script');
+  spriteScript.dataset.leoSubbossAnimation = '1';
+  spriteScript.setAttribute('src', '/leo-subboss-animation.js');
+  document.head.appendChild(spriteScript);
+ }
 })(typeof window!=='undefined'?window:{});

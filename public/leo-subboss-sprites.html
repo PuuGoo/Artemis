@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Artemis — Leo: 4 Đại Tướng Sprite Studio</title>
+<style>
+:root {color-scheme:dark;font-family:Inter,system-ui,Arial,sans-serif;background:#100b17;color:#fff2dc}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0,#48301c,#140e1e 48%,#090810)}
+header{max-width:1160px;margin:auto;padding:34px 18px 16px}h1{font-size:clamp(25px,4vw,42px);margin:0 0 12px;color:#fbd17d}
+p{line-height:1.55;color:#ddc9b8;margin:0 0 14px}
+main{max-width:1160px;margin:auto;padding:10px 18px 50px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.card{border:1px solid #856338;border-radius:16px;background:linear-gradient(145deg,#282034,#100c17);padding:16px;box-shadow:0 10px 35px #0006}
+.card h2{margin:0 0 4px;font-size:20px}.sub{color:#ffe0a1;font-size:13px;margin-bottom:12px}
+.stage{display:flex;justify-content:center;align-items:center;min-height:255px;border-radius:12px;
+background-color:#1a1b2d;background-image:linear-gradient(45deg,#242139 25%,transparent 25%),linear-gradient(-45deg,#242139 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#242139 75%),linear-gradient(-45deg,transparent 75%,#242139 75%);
+background-size:28px 28px;background-position:0 0,0 14px,14px -14px,-14px 0}
+canvas{display:block;max-width:100%}.actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+button{appearance:none;background:#2b2234;color:#ffe8bf;border:1px solid #765239;border-radius:8px;padding:9px 12px;cursor:pointer;font-weight:650}
+button:hover,button[aria-pressed="true"]{background:#a1642a;color:#fff}
+button.export{margin-left:auto;background:#644019}
+footer{max-width:1160px;margin:auto;padding:0 18px 20px;color:#bfae9f;font-size:12px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.card{padding:12px}}
+</style>
+</head>
+<body>
+<header>
+<h1>🦁 Leo — Sprite Studio</h1>
+<p>Bốn thủ lĩnh tại Chương 1, phòng 10 · 20 · 30 · 40. Chọn từng trạng thái để xem chuyển động, rồi xuất PNG nền trong suốt theo đúng atlas một hàng.</p>
+</header>
+<main><div class="grid" id="grid"></div></main>
+<footer>Idle: 6 khung · Attack: 8 khung · Hit: 4 khung · Death: 6 khung · 192 × 192 px/khung. Xuất PNG không thay đổi AI, hitbox hoặc HP.</footer>
+<script src="/js/game/rendering/arena-renderer.js"></script>
+<script src="/leo-subboss-animation.js"></script>
+<script>
+(function(){
+'use strict';
+const api=window.ArtemisLeoSubBossSprites;
+const factory=window.ArtemisArenaRenderer;
+const mount=document.getElementById('grid');
+if(!api || !factory){mount.textContent='Không tải được renderer hoặc sprite engine.';return;}
+const painter=factory.create()._debug.drawLeoSubBoss;
+const views=[];
+Object.values(api.BOSSES).forEach(function(b){
+  const section=document.createElement('section');section.className='card';
+  const heading=document.createElement('h2');heading.textContent='Ải '+b.room+' · '+b.name;
+  const sub=document.createElement('div');sub.className='sub';
+  sub.textContent='Thuộc hạ của Sư Vương Leo · '+b.type;
+  const stage=document.createElement('div');stage.className='stage';
+  const canvas=document.createElement('canvas');canvas.width=240;canvas.height=240;stage.appendChild(canvas);
+  const bar=document.createElement('div');bar.className='actions';
+  const view={room:b.room,action:'idle',ctx:canvas.getContext('2d')};
+  for(const action of Object.keys(api.ACTIONS)){
+    const button=document.createElement('button');button.type='button';button.textContent=action.toUpperCase();button.setAttribute('aria-pressed',action==='idle'?'true':'false');
+    button.onclick=function(){view.action=action;view.started=performance.now();
+      bar.querySelectorAll('button:not(.export)').forEach(function(x){x.setAttribute('aria-pressed',String(x===button));});};
+    bar.appendChild(button);
+  }
+  const save=document.createElement('button');save.className='export';save.type='button';save.textContent='↓ PNG trong suốt';
+  save.onclick=function(){if(!api.downloadPng(b.room,view.action,painter)) alert('Trình duyệt không hỗ trợ xuất PNG.');};
+  bar.appendChild(save);
+  section.append(heading,sub,stage,bar);mount.appendChild(section);
+  view.started=performance.now();views.push(view);
+});
+function tick(now){
+  views.forEach(function(v){
+    const ctx=v.ctx;
+    ctx.clearRect(0,0,240,240);
+    ctx.save();ctx.translate(120,120);
+    const def=api.ACTIONS[v.action],total=def.count*def.frameMs;
+    const elapsed=def.loop?now-v.started:(now-v.started)%(total+450);
+    api.drawFrame(ctx,v.room,v.action,api.frameAt(v.action,elapsed),54,painter);
+    ctx.restore();
+  });
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
