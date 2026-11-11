@@ -17,7 +17,7 @@ const plain = value => JSON.parse(JSON.stringify(value));
 test('rosters use implemented AI, diverse roles, pressure caps and a quiet room 49', () => {
   const { ArtemisCampaignRooms: rooms } = load();
   const supported = new Set(['slime', 'bat', 'goblin', 'skeleton_mage', 'plant_turret', 'dragon_whelp', 'cloud_wisp', 'sky_sentinel', 'rift_stalker', 'eclipse_oracle', 'obsidian_brute', 'spore_runner', 'mire_shaman', 'hive_guardian']);
-  for (let chapter = 1; chapter <= 19; chapter++) {
+  for (let chapter = 1; chapter <= 12; chapter++) {
     for (let room = 1; room <= 50; room++) {
       const plan = rooms.roomPlan(chapter, room);
       const roster = rooms.getRoster(chapter, room);
@@ -41,7 +41,7 @@ test('rosters use implemented AI, diverse roles, pressure caps and a quiet room 
 
 test('elite stages are bounded, absolute-stat multipliers ignore player power and outputs are isolated', () => {
   const { ArtemisCampaignRooms: rooms } = load();
-  for (let chapter = 1; chapter <= 19; chapter++) {
+  for (let chapter = 1; chapter <= 12; chapter++) {
     for (let room = 1; room <= 50; room++) {
       const roster = rooms.getRoster(chapter, room);
       const eliteCount = roster.filter(e => e.isElite).length;
@@ -61,13 +61,13 @@ test('elite stages are bounded, absolute-stat multipliers ignore player power an
   copy[0].type = 'unsupported';
   assert.notEqual(rooms.getRoster(1, 24)[0].type, 'unsupported');
   assert.deepEqual(plain(rooms.roomPlan(1, NaN)), plain(rooms.roomPlan(1, 1)));
-  assert.deepEqual(plain(rooms.roomPlan(100, 100)), plain(rooms.roomPlan(19, 50)));
+  assert.deepEqual(plain(rooms.roomPlan(100, 100)), plain(rooms.roomPlan(12, 50)));
 });
 
 test('four chapter-owned subboss identities modify real shared patterns without adding bullets', () => {
   const { ArtemisCampaignRooms: rooms, BossAttackPatterns: patterns } = load();
   const identities = new Set();
-  for (let chapter = 1; chapter <= 19; chapter++) {
+  for (let chapter = 1; chapter <= 12; chapter++) {
     const signatures = new Set();
     for (const room of [10, 20, 30, 40]) {
       const mods = rooms.getModifiers(chapter, room, 0);
@@ -91,15 +91,15 @@ test('four chapter-owned subboss identities modify real shared patterns without 
     assert.equal(signatures.size, 4);
     assert.equal(rooms.getModifiers(chapter, 50).bossVariant, null);
   }
-  assert.equal(identities.size, 76);
+  assert.equal(identities.size, 48);
   const untouched = { shots: [], cooldown: 2 };
   assert.equal(rooms.applyBossPattern(untouched, { isBoss: true }, {}), untouched);
 });
 
-test('all 19 chapters have five ten-room archetype segments and unchanged boss/event anchors', () => {
+test('all 12 chapters have five ten-room archetype segments and unchanged boss/event anchors', () => {
   const { ArtemisCampaignRooms: rooms, ArtemisCampaignConfig: config } = load();
   assert.equal(rooms.ROOM_COUNT, 50);
-  for (let chapter = 1; chapter <= 19; chapter++) {
+  for (let chapter = 1; chapter <= 12; chapter++) {
     for (let room = 1; room <= 50; room++) {
       const plan = rooms.roomPlan(chapter, room);
       const base = config.roomPlan(chapter, room);

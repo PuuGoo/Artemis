@@ -9,11 +9,11 @@ function config() {
   runInNewContext(fs.readFileSync(url, 'utf8'), context);
   return context.ArtemisCampaignConfig;
 }
-test('classic shared config plans 50 rooms for all 19 chapters', () => {
+test('classic shared config plans 50 rooms for all 12 chapters', () => {
   const c = config();
   assert.equal(c.ROOM_COUNT, 50);
-  const finals = ['golem','queen','demon_king','elder_dragon','eclipse_sovereign','astral_devourer','mycelium_queen', ...['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'].map(x=>'zodiac_'+x)];
-  for (let ch=1;ch<=19;ch++) {
+  const finals = ['leo','aries','taurus','gemini','cancer','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'].map(x=>'zodiac_'+x);
+  for (let ch=1;ch<=12;ch++) {
     const plans = Array.from({length:50},(_,i)=>c.roomPlan(ch,i+1));
     assert.deepEqual(plans.filter(x=>x.isBoss).map(x=>x.room), [10,20,30,40,50]);
     assert.deepEqual(plans.filter(x=>x.valkyrie).map(x=>x.room), [5,10,15,20,25,30,35,40,45]);
@@ -43,7 +43,7 @@ test('absolute tuning retains original endpoint curves without mutating chapter 
   assert.equal(c.mobCount(49),7);
   assert.equal(c.mobCount(Infinity),7);
   assert.equal(c.roomPlan(1,-1).room,1);
-  assert.equal(c.roomPlan(19,90).room,50);
+  assert.equal(c.roomPlan(12,90).room,50);
   assert.equal(c.bossType(1,5),null);
   assert.deepEqual(Array.from(c.SKILL_RARITIES),['common','rare','epic','legend']);
 });

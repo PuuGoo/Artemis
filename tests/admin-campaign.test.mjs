@@ -86,8 +86,8 @@ test("admin UI remains read-only and guarded by existing admin identity", () => 
 
 test("all chapters, every room and all map assets have valid details", () => {
   const list=getCampaignSummaries();
-  assert.equal(list.length, 19);
-  assert.deepEqual(list.map(x=>x.id),Array.from({length:19},(_,i)=>i+1));
+  assert.equal(list.length, 12);
+  assert.deepEqual(list.map(x=>x.id),Array.from({length:12},(_,i)=>i+1));
   for(const ch of list) {
     assert.match(ch.mapAsset, /^\/assets\/map-ch\d+[-a-z0-9]*\.svg$/);
     assert.ok(fs.existsSync(new URL("../public" + ch.mapAsset, import.meta.url)), ch.mapAsset);
@@ -127,8 +127,8 @@ test("all chapters, every room and all map assets have valid details", () => {
   }
   assert.equal(getCampaignDetail(8).roomsDetail[49].boss.hp,102600);
   assert.equal(getCampaignDetail(8).roomsDetail[49].boss.atk,1508);
-  assert.equal(getCampaignDetail(19).roomsDetail[49].boss.hp,577021);
-  assert.equal(getCampaignDetail(20),null);
+  assert.equal(getCampaignDetail(12).roomsDetail[49].boss.hp,campaign.tuning(getCampaignDetail(12).base,50).bossHp);
+  assert.equal(getCampaignDetail(13),null);
 });
 
 test('shared skill rarity identifiers match the actual skill registry', () => {
@@ -170,11 +170,11 @@ test('admin GET uses the shared catalog while preserving authorization and read-
   runInNewContext(apiJs.replace(/^import .*;\r?\n/gm,'').replace(/export /g,'' )+'\nthis.routeGET=GET;',sandbox);
   assert.equal((await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=1'})).status,403);
   allowed=true;
-  const result=await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=19'});
+  const result=await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=12'});
   assert.equal(result.data.chapter.roomsDetail.length,50);
   assert.equal(result.data.readOnly,true);
   assert.equal((await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=01'})).status,400);
-  assert.equal((await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=20'})).status,404);
+  assert.equal((await sandbox.routeGET({url:'http://local/api/admin/campaign?chapter=13'})).status,404);
 });
 
 test("real Canvas renderer can draw every campaign room and creature without throwing", () => {

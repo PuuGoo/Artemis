@@ -7,11 +7,11 @@ import { getCampaignDetail } from '../lib/campaignCatalog.js';
 const ui=fs.readFileSync(new URL('../public/admin-campaign.js',import.meta.url),'utf8');
 const css=fs.readFileSync(new URL('../public/admin-campaign.css',import.meta.url),'utf8');
 const code=fs.readFileSync(new URL('../public/zodiac-chibi-bosses.js',import.meta.url),'utf8');
-const signs='aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces'.split(' ');
+const signs='leo aries taurus gemini cancer virgo libra scorpio sagittarius capricorn aquarius pisces'.split(' ');
 
 test('admin maps all 12 chapters to their actual native-Canvas zodiac bosses',()=>{
   for(let i=0;i<signs.length;i++){
-    const ch=i+8,type='zodiac_'+signs[i];
+    const ch=i+1,type='zodiac_'+signs[i];
     const d=getCampaignDetail(ch);
     assert.ok(d && d.bosses.length>0);
     assert.equal(d.bosses.find(b=>b.room===50)?.type,type,'Chapter '+ch+' final boss');
@@ -19,7 +19,7 @@ test('admin maps all 12 chapters to their actual native-Canvas zodiac bosses',()
   }
   assert.match(code,/renderMode:'canvas-paths'/);
   assert.match(ui,/function bossArt\(id\)/);
-  assert.match(ui,/zodiacSlugs\[id-8\]/);
+  assert.match(ui,/zodiacSlugs\[id-1\]/);
 });
 
 test('admin draws boss images using the shared Canvas API',()=>{
