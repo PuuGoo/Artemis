@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const result = spawnSync(process.execPath, ['--max-old-space-size=192', 'tools/campaign-balance-sim.mjs', '--json'], {cwd:new URL('../', import.meta.url), encoding:'utf8', timeout:40000,maxBuffer:32*1024*1024});
 assert.equal(result.status,0,result.stderr);
 const report=JSON.parse(result.stdout);
-test('ma trận build thật giữ nguồn 7 hồ sơ, 19 chương và 12 mốc; có Common/Rare và Legend',()=>{
+test('ma trận build thật giữ nguồn 7 hồ sơ, 12 chương và 12 mốc; có Common/Rare và Legend',()=>{
  assert.ok(Array.isArray(report.builds), 'Thiếu build production');
  assert.equal(report.profiles.length,7);
  assert.deepEqual(report.milestones,[1,5,10,15,20,25,30,35,40,45,49,50]);
@@ -45,7 +45,7 @@ test('upgrade ATK/HP có lợi, DEF có thể không đổi do làm tròn; khôn
   assert.ok(r.ttkBenefit>1.98);assert.ok(r.hpHitsBenefit>=1);assert.ok(r.defHitsBenefit>=1);
  }
  for(const r of report.buildRows.filter(r=>[5,15,25,35,45].includes(r.room))){assert.equal(r.kind,'safe');assert.equal(r.roomTtkSeconds,0);assert.equal(r.damagePerHit,0);assert.equal(r.hitsToDie,null);}
- assert.equal(report.chapterProfileAssignments.filter(a=>a.profile===null).length,18);
+ assert.equal(report.chapterProfileAssignments.filter(a=>a.profile===null).length,11);
  assert.ok(report.bossTargets.some(t=>t.appropriateProfile&&t.status==='TOO_FAST'));
  for(const r of report.rows){const b=report.buildRows.find(b=>b.profile===r.profile&&b.chapter===r.chapter&&b.room===r.room&&b.build==='none');assert.equal(b.roomTtkSeconds,r.roomTtkSeconds);assert.equal(b.damagePerHit,r.damagePerHit);}
 });

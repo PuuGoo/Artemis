@@ -22,9 +22,9 @@ test('world map discovers every real chapter without fabricating extra destinati
   const end = html.indexOf('const CampaignConfig', start);
   const expected = [...html.slice(start,end).matchAll(/^          id: (\d+),/gm)].map(m=>Number(m[1]));
   assert.deepEqual(Array.from(api.getChapters(), ch=>ch.id), expected);
-  assert.equal(expected.length,19);
-  assert.equal(api.getChapters()[0].themeName,'Đá Cổ');
-  assert.equal(api.getChapters().at(-1).unlock.chapterId,18);
+  assert.equal(expected.length,12);
+  assert.equal(api.getChapters()[0].themeName,'Sư Tử');
+  assert.equal(api.getChapters().at(-1).unlock.chapterId,11);
 });
 test('unlock copy uses the real previous-chapter win, never invented hard mode', () => {
   const map = load();
@@ -71,8 +71,8 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     await page.locator('#bottomNavBar .grid [data-tab="tabBattle"]').click();
     await page.waitForSelector('[data-world-chapter="1"]');
     await page.waitForTimeout(300);
-    assert.equal(await page.locator('[data-world-chapter]').count(),19);
-    assert.deepEqual(await page.locator('[data-world-chapter]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.worldChapter))),Array.from({length:19},(_,i)=>19-i));
+    assert.equal(await page.locator('[data-world-chapter]').count(),12);
+    assert.deepEqual(await page.locator('[data-world-chapter]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.worldChapter))),Array.from({length:12},(_,i)=>12-i));
     const scroll=page.locator('[data-world-map-scroll]');
     assert.ok(await scroll.evaluate(e=>e.scrollHeight>e.clientHeight*4));
     assert.ok(await scroll.evaluate(e=>e.scrollTop>3000),'initial scroll reaches current chapter');
@@ -94,7 +94,7 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x,y+120,{steps:10});await page.mouse.up();
     assert.ok(await scroll.evaluate(e=>e.scrollTop)<beforeDrag-50,'left mouse dragging scrolls');
     assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedChapterIdx),0,'drag never selects a chapter');
-    await page.locator('[data-world-chapter="19"]').dispatchEvent('click',{detail:1});
+    await page.locator('[data-world-chapter="12"]').dispatchEvent('click',{detail:1});
     assert.equal(await page.locator('#btnStartGame').isDisabled(),false,'pending drag release click never opens locked preview');
     const cdp=await page.context().newCDPSession(page);
     await cdp.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
@@ -112,12 +112,12 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     await page.evaluate(()=>{const v=document.querySelector('[data-world-map-scroll]');v.scrollTop=0;});
     await page.waitForTimeout(100);
     assert.ok(await page.locator('.campaign-world-map').evaluate(e=>e.classList.contains('is-locked-region')),'locked region becomes purple');
-    await page.locator('[data-world-chapter="19"]').dispatchEvent('click');
+    await page.locator('[data-world-chapter="12"]').dispatchEvent('click');
     await page.waitForTimeout(100);
     assert.equal(await page.evaluate(()=>window.Archero2FusionAPI.SaveState.selectedChapterIdx),0);
     assert.equal(await page.locator('#btnStartGame').isDisabled(),true);
     assert.equal(await page.locator('#btnStartGame').isVisible(),false,'locked preview never exposes launch');
-    assert.equal(await page.locator('[data-world-chapter="19"] .world-map-requirements > span').count(),2);
+    assert.equal(await page.locator('[data-world-chapter="12"] .world-map-requirements > span').count(),2);
     await page.locator('[data-world-map-return]').click();
     assert.equal(await page.locator('#btnStartGame').isDisabled(),false);
     assert.ok(await scroll.evaluate(e=>e.scrollTop>3000));
@@ -172,8 +172,8 @@ test('real Chrome fixture: complete map, live handlers, scrolling and rerender p
     assert.equal(await page.locator('.battle-mode-stage').isVisible(),true);
     await page.evaluate(()=>{const a=window.Archero2FusionAPI;a.SaveState.gameMode='campaign';a.renderMapSelect();});
     await page.waitForTimeout(100);
-    assert.equal(await page.locator('[data-world-chapter]').count(),19);
+    assert.equal(await page.locator('[data-world-chapter]').count(),12);
     assert.deepEqual(errors,[]);
-    console.log('Real Chrome fixture PASS: 19 chapters, wheel, drag suppression, touch, locked preview, return, completed replay CTA/cost/briefing, keyboard, mode switching, render preservation.');
+    console.log('Real Chrome fixture PASS: 12 chapters, wheel, drag suppression, touch, locked preview, return, completed replay CTA/cost/briefing, keyboard, mode switching, render preservation.');
   } finally {await browser?.close();await new Promise(r=>server.close(r));}
 });

@@ -20,7 +20,7 @@ const chBlock = html.slice(chStart, html.indexOf("\n      ];", chStart) + 8);
 const chapterCount = (chBlock.match(/^\s+id: \d+,/gm) || []).length;
 // Campaign đã mở rộng lên 6 chương: khoá bất biến "mọi chương có đủ metadata"
 // theo số chương thật, không hardcode 4.
-check("co it nhat 4 chuong", chapterCount >= 4, String(chapterCount));
+check("co du 12 chuong hoang dao", chapterCount === 12, String(chapterCount));
 for (const field of ["icon", "accent", "gradFrom", "difficulty", "difficultyLabel", "themeName", "bossIcon", "bossName", "unlock"]) {
   const n = (chBlock.match(new RegExp(field + ":", "g")) || []).length;
   check(`ca ${chapterCount} chuong deu co '${field}'`, n === chapterCount, `${n}/${chapterCount}`);
@@ -29,7 +29,7 @@ check("chuong 1 khong co dieu kien mo khoa", /id: 1[\s\S]{0,900}?unlock: null/.t
 check("chuong 2 doi thang chuong 1", /id: 2[\s\S]{0,900}?chapterId: 1/.test(chBlock));
 check("chuong 3 doi thang chuong 2", /id: 3[\s\S]{0,900}?chapterId: 2/.test(chBlock));
 check("chuong 4 doi thang chuong 3", /id: 4[\s\S]{0,900}?chapterId: 3/.test(chBlock));
-check("chuong 4 co boss va map rieng", /id: 4[\s\S]{0,900}?bossName: 'Cổ Long Thiên Không'[\s\S]{0,500}?map-ch4-dragon-realm\.svg/.test(chBlock));
+check("chuong 4 co boss va map rieng", /id: 4[\s\S]{0,900}?bossName: 'Song Tử Huyễn Vương'[\s\S]{0,500}?map-ch10-zodiac-gemini\.svg/.test(chBlock));
 
 // ============================================================ 2. Luật khoá chương
 console.log("\n=== 2. LUAT KHOÁ CHUONG ===");

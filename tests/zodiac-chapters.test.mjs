@@ -7,18 +7,20 @@ import { resolve, dirname } from 'node:path';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(resolve(root, 'public/index.html'), 'utf8');
 const renderer = readFileSync(resolve(root, 'public/js/game/rendering/arena-renderer.js'), 'utf8');
-const signs = ['aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
+const signs = ['leo', 'aries', 'taurus', 'gemini', 'cancer', 'virgo', 'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'];
+const legacyMapIds = [12, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19];
 const chapters = html.slice(html.indexOf('const CHAPTERS = ['), html.indexOf('\n      ];', html.indexOf('const CHAPTERS = [')));
 
 for (const [index, sign] of signs.entries()) {
-  const number = index + 8;
+  const number = index + 1;
+  const legacyMapId = legacyMapIds[index];
   test(`Chương ${number} (${sign}) có map, đấu trường và boss`, () => {
     const chapter = chapters.match(new RegExp(`\\n\\s+id: ${number},([\\s\\S]*?)(?=\\n\\s+id: ${number + 1},|$)`))?.[1];
     assert.ok(chapter, 'thiếu metadata chương');
-    assert.match(chapter, new RegExp(`chapterId: ${number - 1}\\b`));
+    assert.match(chapter, number===1 ? /unlock: null/ : new RegExp(`chapterId: ${number - 1}\\b`));
     assert.match(chapter, /rooms: 15,/);
-    assert.match(chapter, new RegExp(`map-ch${number}-zodiac-${sign}\\.svg`));
-    const file = resolve(root, `public/assets/map-ch${number}-zodiac-${sign}.svg`);
+    assert.match(chapter, new RegExp(`map-ch${legacyMapId}-zodiac-${sign}\\.svg`));
+    const file = resolve(root, `public/assets/map-ch${legacyMapId}-zodiac-${sign}.svg`);
     assert.ok(existsSync(file), 'thiếu ảnh bản đồ');
     const svg = readFileSync(file, 'utf8');
     assert.match(svg, /viewBox="0 0 1200 600"/);
