@@ -31,8 +31,11 @@
   function getRoster(chapterId, room) {
     var plan = basePlan(chapterId, room);
     if (plan.isSafeRoom) return [];
-    if (plan.isBoss) return [{ type: plan.bossType, role: 'boss', isElite: false, pressure: 0,
-      counter: 'Né cảnh báo rồi dừng lại phản công.' }];
+    if (plan.isBoss) {
+      var bossVariant = subBossVariant(chapterId, plan);
+      return [{ type: plan.bossType, role: 'boss', isElite: false, pressure: 0,
+        counter: bossVariant ? bossVariant.counter : 'Né cảnh báo rồi dừng lại phản công.' }];
+    }
     var chapter = chapterNumber(chapterId);
     // Không dùng frost_sentinel/nebula_herald/star_wraith: hiện chưa có nhánh bắn riêng.
     var family = families[(chapter - 1) % families.length];
@@ -70,23 +73,74 @@
   var themes = ['Sư Tử', 'Bạch Dương', 'Kim Ngưu', 'Song Tử', 'Cự Giải', 'Xử Nữ', 'Thiên Bình', 'Bọ Cạp', 'Nhân Mã', 'Ma Kết', 'Bảo Bình', 'Song Ngư'];
   var titles = ['Vệ Binh', 'Kẻ Dệt Lưới', 'Chấp Pháp', 'Long Vệ'];
   var colors = ['#fb923c', '#c084fc', '#fb7185', '#67e8f9', '#a3e635', '#38bdf8', '#facc15'];
+  // Riêng Leo (chương 1) có bốn thủ lĩnh chibi của Thánh Điện Nhật Luân.
+  // Giữ type gốc để tái sử dụng AI, hitbox, save và hợp đồng boss hiện hành.
+  var leoGuardians = Object.freeze([
+    { name: 'Kim Giáp Sư Vệ', color: '#fbbf24', skill: 'Khiên Nhật Luân',
+      counter: 'Lùi khỏi quạt phi đao trước mặt, vòng ra sau khi khiên mở.' },
+    { name: 'Nhật Ấn Tế Sư', color: '#f0abfc', skill: 'Song Ấn Quang Tiễn',
+      counter: 'Né giữa hai luồng phép tách hai bên; phản công sau loạt bắn.' },
+    { name: 'Xích Diệm Đao Vương', color: '#fb7185', skill: 'Xích Diệm Liên Trảm',
+      counter: 'Giữ khoảng cách, luồn vào khoảng trống giữa các nhát lửa.' },
+    { name: 'Thiên Dực Nhật Long', color: '#67e8f9', skill: 'Thiên Dực Nhật Triều',
+      counter: 'Đọc hai cánh đạn giao nhau, né về phía sau khi luồng cuối kết thúc.' }
+  ]);
   function subBossVariant(chapterId, plan) {
     if (!plan.isBoss || plan.isFinalBoss) return null;
     var chapter = chapterNumber(chapterId), slot = plan.room / 10 - 1;
+    var leo = chapter === 1 ? leoGuardians[slot] : null;
     return { id: 'chapter_' + chapter + '_subboss_' + (slot + 1), type: plan.bossType,
-      name: titles[slot] + ' ' + themes[chapter - 1], color: colors[(chapter + slot - 1) % colors.length],
-      sizeMultiplier: 1.02 + slot * .04, speedMultiplier: 1.02 + slot * .035,
+      name: leo ? leo.name : titles[slot] + ' ' + themes[chapter - 1],
+      color: leo ? leo.color : colors[(chapter + slot - 1) % colors.length],
+      skill: leo ? leo.skill : null, counter: leo ? leo.counter : 'Né cảnh báo rồi dừng lại phản công.',
+      sizeMultiplier: leo ? 1.05 + slot * .05 : 1.02 + slot * .04,
+      speedMultiplier: leo ? 1.03 + slot * .03 : 1.02 + slot * .035,
       pattern: { spreadMultiplier: .82 + slot * .09 + (chapter % 3) * .015,
         bulletSpeedMultiplier: .9 + slot * .04, cooldownMultiplier: 1.12 - slot * .025 } };
   }
-  // Gọi từ BossAttackPatterns.plan cho CẢ fire/draw; không bọc riêng fire làm sai cảnh báo.
-  // Entity phải được setupRoom gắn campaignChapter/campaignRoom, mode khác không bị đổi.
+  // Một kế hoạch đạn duy nhất được BossAttackPatterns.plan / arm / fire / draw
+  // dùng chung: preview luôn khớp đúng loạt đạn thực tế.
+  function applyLeoPattern(pattern, enemy, player, slot) {
+    var angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+    var rage = enemy.hp / Math.max(1, enemy.maxHp || enemy.hp) < .35;
+    var n = pattern.shots.length, half = (n - 1) / 2;
+    var timeScale = [1.22, 1.12, 1, .87][slot] * (rage ? .92 : 1);
+    return Object.assign({}, pattern, {
+      cooldown: Math.max(1.2, pattern.cooldown * timeScale),
+      shots: pattern.shots.map(function(shot, i) {
+        var lane = half > 0 ? (i - half) / half : 0;
+        var side = i < n / 2 ? -1 : 1;
+        var offset, lateral = 0, forward = 0;
+        if (slot === 0) { // Quạt khiên: chừa góc phía sau và một khe chính giữa.
+          offset = lane * .94 + Math.sign(lane) * .12;
+        } else if (slot === 1) { // Hai ấn trái/phải bắn từ hai gốc lệch nhau.
+          offset = lane * .66 + side * .22;
+          lateral = side * Math.min(12, Math.max(0, enemy.r || 34) * .32);
+        } else if (slot === 2) { // Nhịp chém so le, các đường đạn lệch bậc.
+          offset = lane * .88 + (i % 2 ? .13 : -.13);
+          forward = (i % 3 - 1) * 4;
+        } else { // Hai cánh rồng tạo hai luồng đan, vẫn để khoảng né sau lưng.
+          offset = lane * 1.08 + side * .11 + (i % 2 ? -.06 : .06);
+          lateral = side * Math.min(15, Math.max(0, enemy.r || 34) * .36);
+        }
+        if (rage) offset *= 1.07;
+        return Object.assign({}, shot, {
+          x: shot.x + Math.cos(angle) * forward - Math.sin(angle) * lateral,
+          y: shot.y + Math.sin(angle) * forward + Math.cos(angle) * lateral,
+          angle: angle + offset,
+          speed: Math.min(320, shot.speed * (.84 + slot * .04) * (rage ? 1.05 : 1))
+        });
+      })
+    });
+  }
   function applyBossPattern(pattern, enemy, player) {
     if (!pattern || !enemy || !enemy.isBoss || !Number.isFinite(enemy.campaignChapter)
       || !Number.isFinite(enemy.campaignRoom) || !player
       || ![enemy.x, enemy.y, player.x, player.y].every(Number.isFinite)) return pattern;
     var variant = subBossVariant(enemy.campaignChapter, basePlan(enemy.campaignChapter, enemy.campaignRoom));
     if (!variant) return pattern;
+    if (chapterNumber(enemy.campaignChapter) === 1)
+      return applyLeoPattern(pattern, enemy, player, enemy.campaignRoom / 10 - 1);
     var angle = Math.atan2(player.y - enemy.y, player.x - enemy.x), mods = variant.pattern;
     return Object.assign({}, pattern, { cooldown: Math.max(1, pattern.cooldown * mods.cooldownMultiplier),
       shots: pattern.shots.map(function (shot) {

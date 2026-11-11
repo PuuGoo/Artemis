@@ -236,7 +236,8 @@
     var enemies=r.isBoss?[r.boss]:r.mobs;
     var shown=[];
     if(r.isBoss) {
-      shown=[{...r.boss,isBoss:true,x:390,y:172,r:55,zodiacIndex:c.id>=1&&c.id<=12?c.id-1:-1}];
+      shown=[{...r.boss,isBoss:true,x:390,y:172,r:55,zodiacIndex:c.id>=1&&c.id<=12?c.id-1:-1,
+         campaignChapter:c.id,campaignRoom:roomNo,attackTimer:1.5}];
     } else {
       var types=[];
       for(var i=0;i<r.count;i++)types.push(r.mobs[i%r.mobs.length]);

@@ -25939,7 +25939,7 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           });
           document.getElementById('bossHudContainer').classList.remove('hidden');
           if (bossVariant) Game.enemies[0].color = bossVariant.color;
-          showBossIntro(bossType, bossNames[bossType] || Game.chapter.bossName);
+          showBossIntro(bossType, bossVariant ? '🌞 TRÙM: ' + bossVariant.name : (bossNames[bossType] || Game.chapter.bossName));
           document.getElementById('hudHintBanner').textContent = '⚠️ CẢNH BÁO TRÙM XUẤT HIỆN! Di chuyển né vòng đạn và dừng lại để phản công!';
         } else {
           document.getElementById('bossHudContainer').classList.add('hidden');

@@ -246,7 +246,11 @@
 
   function pickBiome() {
     const room = Game.room || 1;
-    if (isBossRoomForBiome(room)) return BIOMES[BOSS_ARENA[bossTypeOfRoom(room)]];
+    if (isBossRoomForBiome(room)) {
+      if ((!Game.mode || Game.mode === 'campaign') && Number(Game.chapter?.id) === 1
+        && room < 50 && room % 10 === 0) return BIOMES.zodiac_leo;
+      return BIOMES[BOSS_ARENA[bossTypeOfRoom(room)]];
+    }
     const ch = Game.chapter ? Game.chapter.id : 1;
     const k = room - Math.floor(room / 5) - 1;           // chỉ đếm phòng thường → 4 phòng đầu luôn khác nhau
     const pool = POOLS[ch];
@@ -1841,6 +1845,171 @@
     ctx.restore();
   }
 
+
+  // Leo chapter-only mini-bosses. Drawn in canvas space at the entity origin;
+  // e.r remains the physical hitbox, and this illustration never mutates e.
+  const LEO_GUARDIAN_TYPES = Object.freeze({ 10: 'golem', 20: 'queen', 30: 'demon_king', 40: 'elder_dragon' });
+  function leoBossPoly(c, points, color, edge = '#43251d', width = 2.8) {
+    c.beginPath(); c.moveTo(points[0][0], points[0][1]);
+    for (let i = 1; i < points.length; i++) c.lineTo(points[i][0], points[i][1]);
+    c.closePath(); c.fillStyle = color; c.fill();
+    if (edge) { c.strokeStyle = edge; c.lineWidth = width; c.stroke(); }
+  }
+  function leoBossOval(c, x, y, rx, ry, color, edge = '#43251d', width = 2.8) {
+    c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, TAU);
+    c.fillStyle = color; c.fill();
+    if (edge) { c.lineWidth = width; c.strokeStyle = edge; c.stroke(); }
+  }
+  function leoBossLine(c, points, color, width) {
+    c.beginPath(); c.moveTo(points[0][0], points[0][1]);
+    for (let i = 1; i < points.length; i++) c.lineTo(points[i][0], points[i][1]);
+    c.strokeStyle = color; c.lineWidth = width; c.lineCap = 'round'; c.lineJoin = 'round'; c.stroke();
+  }
+  function leoBossStar(c, x, y, size, color, points = 8) {
+    const vertices = [];
+    for (let i = 0; i < points * 2; i++) {
+      const a = -Math.PI / 2 + i * Math.PI / points, v = i % 2 ? size * .38 : size;
+      vertices.push([x + Math.cos(a) * v, y + Math.sin(a) * v]);
+    }
+    leoBossPoly(c, vertices, color, '#a85b2a', 1.2);
+  }
+  function leoBossEyes(c, x, y, gap = 10, color = '#31251f') {
+    for (const d of [-1, 1]) {
+      leoBossOval(c, x + d * gap, y, 3.6, 5.2, color, null);
+      leoBossOval(c, x + d * gap - 1, y - 2, 1.2, 1.5, '#ffffff', null);
+    }
+  }
+  function drawLeoGuardian(c, t, rage, charge) {
+    const pulse = Math.sin(t * .004) * 2;
+    // Golem sư tử: bờm 14 tia, giáp vảy đồng và khiên hình mặt trời.
+    leoBossPoly(c, [[-28,5],[-40,33],[-29,43],[28,43],[42,31],[30,5]], '#8a4527', '#442113', 4);
+    for (let i = 0; i < 14; i++) {
+      const a = i * TAU / 14, x = Math.cos(a) * 29, y = -17 + Math.sin(a) * 27;
+      leoBossPoly(c, [[x - 7,y],[x + Math.cos(a)*12,y + Math.sin(a)*13],[x + 7,y + 3]],
+        i % 2 ? '#db792b' : '#fbbf24', '#9a4b1b', 1.6);
+    }
+    leoBossOval(c,-19,32,12,12,'#a65a27');
+    leoBossOval(c,19,32,12,12,'#a65a27');
+    leoBossOval(c,0,8,28,28,'#d9a441','#6c371c',4);
+    leoBossPoly(c,[[-19,-1],[0,-12],[19,-1],[16,26],[0,34],[-16,26]],'#f9c65c','#9a4b1b',3);
+    leoBossOval(c,0,4,10,12,'#fff3c4','#bb6b24');
+    leoBossStar(c,0,3,10,'#fff0a6');
+    leoBossOval(c,0,-21,23,24,'#f7c675','#9c5c2a',4);
+    leoBossOval(c,-22,-28,9,10,'#f8bc5b');
+    leoBossOval(c,22,-28,9,10,'#f8bc5b');
+    leoBossEyes(c,0,-22,10);
+    leoBossOval(c,0,-7,13,9,'#fff4d1','#d39c60',1.5);
+    leoBossPoly(c,[[-5,-11],[5,-11],[0,-4]],'#864730',null);
+    leoBossLine(c,[[0,-4],[0,0],[-5,3]],'#864730',1.7);
+    leoBossPoly(c,[[-18,-43],[-12,-55],[-1,-43],[8,-56],[20,-43],[17,-34],[-17,-34]],'#ffdf78','#a85b2a',2);
+    leoBossStar(c,0,-41,5,'#ffffff');
+    c.save(); c.translate(28,15 + pulse*.3); c.rotate(-.13);
+    leoBossOval(c,0,0,22,29,'#894520','#5a2a19',4);
+    leoBossOval(c,0,0,18,25,'#f7bd55','#ffe19b',3);
+    leoBossStar(c,0,-2,15,charge?'#ffffff':'#fff0ab');
+    leoBossOval(c,0,-2,5,5,'#f97316','#9a451a',1);
+    c.restore();
+    if (rage) leoBossStar(c,-29,-44,7,'#fb7185');
+  }
+  function drawLeoPriest(c, t, rage, charge) {
+    const float = Math.sin(t * .003) * 3;
+    // Tế sư bay: áo nghi lễ tím/hồng, hai ấn năng lượng và trượng thái dương.
+    c.save(); c.translate(0,float);
+    for(const d of [-1,1]){
+      leoBossPoly(c,[[d*12,5],[d*42,-8],[d*36,26],[d*22,21]], d<0?'#b981ed':'#f9a8d4','#673a7a',2.5);
+      leoBossOval(c,d*40,-12,9,9,charge?'#fff8bd':'#f5d0fe','#a855f7',2);
+      leoBossStar(c,d*40,-12,5,'#fff8e0');
+    }
+    leoBossPoly(c,[[-21,5],[-36,39],[-13,48],[0,37],[13,48],[36,39],[21,5]],'#9356bd','#5a317b',3);
+    leoBossPoly(c,[[-12,17],[-15,40],[0,34],[15,40],[12,17]],'#fbcfe8','#a855f7',2);
+    for(let i=-1;i<=1;i++)leoBossStar(c,i*12,35,4,'#ffe08a');
+    leoBossOval(c,0,-18,22,24,'#ffe6cb','#9a637d',3);
+    leoBossPoly(c,[[-26,-26],[-19,-48],[-3,-42],[8,-55],[25,-33],[22,-20],[8,-31],[-12,-29]],'#7c3aa2','#4a2468',3);
+    leoBossEyes(c,0,-18,9,'#6b2b72');
+    leoBossLine(c,[[-4,-6],[0,-4],[4,-6]],'#a54e7e',2);
+    leoBossPoly(c,[[-18,-41],[-8,-49],[0,-61],[8,-49],[18,-41]],'#f9d06b','#a96927',2);
+    leoBossStar(c,0,-51,7,'#fff7c2');
+    leoBossLine(c,[[31,43],[31,-55]],'#f9cf66',5);
+    leoBossOval(c,31,-55,13,13,charge?'#fff6a2':'#ffc579','#e68b34',2);
+    leoBossStar(c,31,-55,10,'#fffbea');
+    c.restore();
+    if(rage){leoBossStar(c,-48,-34,6,'#fda4af');leoBossStar(c,45,21,5,'#fda4af');}
+  }
+  function drawLeoExecutioner(c, t, rage, charge) {
+    const flicker = Math.sin(t * .01) * 3;
+    // Hiệp sĩ hỏa hình góc cạnh; kiếm dài và mũ sừng, khác hoàn toàn sư vệ.
+    leoBossPoly(c,[[-22,-9],[-45,12],[-36,44],[-13,34],[0,48],[18,34],[39,44],[46,9],[19,-9]],'#761a29','#3d0b16',4);
+    for(const d of [-1,1]){
+      leoBossPoly(c,[[d*13,9],[d*31,8],[d*35,26],[d*18,30]],'#b12b35','#5d1520',2.5);
+      leoBossOval(c,d*17,37,12,10,'#52202a','#f87d4e',2);
+    }
+    leoBossPoly(c,[[-21,-16],[0,-28],[21,-16],[23,20],[0,33],[-23,20]],'#d94a30','#65231f',3);
+    leoBossPoly(c,[[-9,-16],[9,-16],[6,16],[0,27],[-6,16]],'#ffb750','#81331e',2);
+    leoBossStar(c,0,1,9,'#fff0ae');
+    leoBossOval(c,0,-29,20,21,'#65303b','#f87148',3);
+    leoBossPoly(c,[[-19,-44],[-25,-62],[-5,-51],[0,-59],[6,-51],[25,-62],[18,-44],[15,-22],[-15,-22]],'#a52e32','#571927',3);
+    leoBossPoly(c,[[-14,-30],[-8,-40],[8,-40],[14,-30],[8,-20],[-8,-20]],'#2d1b2b','#fca85b',2);
+    leoBossEyes(c,0,-29,8,charge?'#fffbad':'#ffd18a');
+    leoBossLine(c,[[-7,-16],[7,-16]],'#f97316',2);
+    c.save();c.translate(-32,15);c.rotate(-.37 + Math.sin(t*.003)*.05);
+    leoBossLine(c,[[0,38],[0,-49]],'#f9cb6d',6);
+    leoBossPoly(c,[[-9,-10],[0,-64 + flicker],[10,-10],[0,4]],'#ffcf70','#d94823',3);
+    leoBossPoly(c,[[-4,-10],[0,-52 + flicker*.7],[4,-10],[0,-2]],'#fff7c4',null);
+    leoBossLine(c,[[-15,3],[15,3]],'#7f1d1d',6);
+    leoBossOval(c,0,28,5,6,'#fbbf24','#7f1d1d',2);
+    c.restore();
+    if(rage)for(let i=0;i<3;i++)leoBossStar(c,26+i*6,-54+i*11,4+i,'#fb923c');
+  }
+  function drawLeoDragon(c, t, rage, charge) {
+    const flap = Math.sin(t*.004)*5;
+    // Nhật long: hai cánh ngọc, sừng mặt trời và thân rồng bốn chân.
+    leoBossLine(c,[[23,21],[46,28],[54,9],[44,-2]],'#d19a45',11);
+    leoBossStar(c,46,-2,7,'#fde68a');
+    for(const d of [-1,1]){
+      leoBossPoly(c,[[d*11,-16],[d*34,-48-flap],[d*69,-37-flap],[d*55,-5],[d*69,15],[d*32,5]],
+        d<0?'#44bcc4':'#72dfe0','#25586c',3);
+      leoBossLine(c,[[d*13,-14],[d*33,-32-flap],[d*58,-30-flap]],'#c7fff5',3);
+      leoBossPoly(c,[[d*20,26],[d*33,43],[d*17,46],[d*10,34]],'#3a8b98','#1e5268',2.5);
+    }
+    leoBossOval(c,0,13,28,32,'#2b869b','#1a526b',4);
+    leoBossOval(c,0,23,18,21,'#ffdfa2','#bd8653',2);
+    for(let i=-1;i<=1;i++)leoBossLine(c,[[-10,19+i*9],[10,19+i*9]],'#c89562',2);
+    leoBossOval(c,0,-24,26,26,'#5bd0d8','#1b627c',4);
+    for(const d of [-1,1]){
+      leoBossPoly(c,[[d*13,-42],[d*20,-66],[d*27,-48]],'#fcd26b','#99612c',2);
+      leoBossPoly(c,[[d*20,-14],[d*35,-20],[d*27,-5]],'#40aab8','#205c73',2);
+    }
+    leoBossPoly(c,[[-9,-46],[0,-58],[9,-46]],'#fbbf24','#99612c',2);
+    leoBossEyes(c,0,-26,12,'#17425a');
+    leoBossOval(c,0,-8,16,10,'#dbfbeb','#2b869b',2);
+    leoBossOval(c,0,-13,4,3,'#286479',null);
+    if(charge)leoBossStar(c,0,-7,11,'#fff8b7');
+    else leoBossLine(c,[[-6,0],[6,0]],'#2b869b',2);
+    if(rage){leoBossStar(c,-41,-48,5,'#fff0a6');leoBossStar(c,39,-43,5,'#fff0a6');}
+  }
+  function drawLeoSubBoss(c, e, t) {
+    if (!e || e.isBoss !== true || Number(e.campaignChapter) !== 1
+      || LEO_GUARDIAN_TYPES[e.campaignRoom] !== e.type || !(e.r > 0)) return false;
+    const ratio = e.hp / Math.max(1,e.maxHp), rage = ratio < .35;
+    const charge = e.attackTimer > 0 && e.attackTimer <= .75;
+    c.save();
+    try {
+      c.scale(e.r / 48, e.r / 48);
+      c.lineJoin = 'round'; c.lineCap = 'round';
+      // Subtle glow during the same warning period as the actual bullets.
+      if (charge) {
+        c.globalAlpha = .32;
+        leoBossOval(c,0,0,45,45,e.color || '#fde68a',null);
+        c.globalAlpha = 1;
+      }
+      if (e.campaignRoom === 10) drawLeoGuardian(c,t,rage,charge);
+      else if (e.campaignRoom === 20) drawLeoPriest(c,t,rage,charge);
+      else if (e.campaignRoom === 30) drawLeoExecutioner(c,t,rage,charge);
+      else drawLeoDragon(c,t,rage,charge);
+    } finally { c.restore(); }
+    return true;
+  }
+
   const BOSSFN = {
     golem: drawGolem, queen: drawQueen, demon_king: drawDemon,
     elder_dragon: drawElderDragon, eclipse_sovereign: drawEclipseSovereign,
@@ -1886,7 +2055,7 @@
     const r = e.r, S = big ? 1.15 : 1;
     if (Math.abs(e.vx || 0) > 8) v.face = e.vx < 0 ? -1 : 1;
     const dur = big ? 0.9 : 0.42, age = (nowMs - v.t0) / 1000, k = clamp(age / dur, 0, 1);
-    const aura = e.isBoss ? AURA_T[e.type] : (skinOf(B, e.type) ? skinOf(B, e.type)[0] : '#94a3b8');
+    const aura = e.isBoss ? (e.campaignChapter === 1 && e.campaignRoom < 50 ? e.color || AURA_T[e.type] : AURA_T[e.type]) : (skinOf(B, e.type) ? skinOf(B, e.type)[0] : '#94a3b8');
     const drop = big ? -Math.pow(1 - k, 2) * 190 : 0;
     const sc = big ? 1 : 0.55 + 0.45 * (1 - Math.pow(1 - k, 3));
     ctx.save(); ctx.translate(e.x, e.y);
@@ -1920,7 +2089,8 @@
     const flash = e.hitFlashTimer > 0;
     if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
     const leoSpriteDrawn = typeof ArtemisLeoAnimation !== 'undefined' && ArtemisLeoAnimation.drawEntity(ctx, e, nowMs);
-    if (!leoSpriteDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
+    const leoSubBossDrawn = !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss(ctx, e, nowMs);
+    if (!leoSpriteDrawn && !leoSubBossDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
       ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
       drawBody(ctx, e, nowMs, B, v); ctx.restore();
     }
@@ -1978,7 +2148,7 @@
     drawArena, drawMonster, drawEnemyBullet, drawTargetReticle, init(g) { Game = g; },
     biomeLabel() { return pickBiome().label; },
     tint() { const B = curBiome; return { accent: B.accent, glow: B.glow, mote: B.torch[1], ray: hex2(B.accent).join(', ') }; },
-    _debug: { BIOMES, SK, POOLS, pickBiome, buildStatic, drawBody, setBiome(id) { curBiome = BIOMES[id]; return curBiome; } }
+    _debug: { BIOMES, SK, POOLS, pickBiome, buildStatic, drawBody, drawLeoSubBoss, setBiome(id) { curBiome = BIOMES[id]; return curBiome; } }
   };
   }
   root.ArtemisArenaRenderer = Object.freeze({ create: createArenaRenderer });
