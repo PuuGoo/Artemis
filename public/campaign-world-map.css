@@ -8,7 +8,9 @@
 #tabBattle .campaign-world-map { position:absolute;inset:0;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 23% 40%,#80cfe575,transparent 50%),linear-gradient(125deg,#267ec0,#288fce 53%,#205fa7); }
 #tabBattle .campaign-world-map::before { content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 60% 40%,#aa83df77,transparent 60%),linear-gradient(135deg,#7264bc,#55458f 60%,#34438d);opacity:0;transition:opacity .35s; }
 #tabBattle .campaign-world-map.is-locked-region::before {opacity:1}
-#tabBattle .world-map-scroll {position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;touch-action:pan-y;scrollbar-width:none;padding:155px 0 210px;box-sizing:border-box;cursor:grab;user-select:none;-webkit-user-select:none;overflow-anchor:none;outline-offset:-4px;}
+/* The final chapter is the last scroll item. Leave at least half a viewport beneath
+   its 250px card so it can be centered; otherwise world-map-exploring hides Start. */
+#tabBattle .world-map-scroll {position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;touch-action:pan-y;scrollbar-width:none;padding:155px 0 210px;padding-bottom:max(210px,calc(50dvh - 125px));box-sizing:border-box;cursor:grab;user-select:none;-webkit-user-select:none;overflow-anchor:none;outline-offset:-4px;}
 #tabBattle .world-map-scroll::-webkit-scrollbar {display:none}
 #tabBattle .world-map-scroll.is-dragging {cursor:grabbing}
 #tabBattle .world-map-chapter {position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;isolation:isolate;box-sizing:border-box;width:70%;max-width:365px;height:250px;min-height:250px;padding:0;margin:0 auto;border:0;border-radius:40%;background:none;color:#fff;text-align:center;cursor:inherit;font:inherit;box-shadow:none;transform:translateX(3%);-webkit-tap-highlight-color:transparent;}
@@ -43,5 +45,5 @@
 #tabBattle.has-world-map.world-map-exploring .world-map-return {bottom:8%}
 #appRoot:has(#tabBattle.has-world-map.world-map-exploring) #cloudSaveIndicator {display:none!important}
 #tabBattle .world-map-return:focus-visible {outline:3px solid #ffdf75;border-radius:8px;}
-@media(max-width:380px){#tabBattle .world-map-chapter{width:73%}#tabBattle .world-map-name{font-size:18px}#tabBattle .world-map-requirements{font-size:12px}#tabBattle .world-map-scroll{padding-bottom:190px}}
+@media(max-width:380px){#tabBattle .world-map-chapter{width:73%}#tabBattle .world-map-name{font-size:18px}#tabBattle .world-map-requirements{font-size:12px}#tabBattle .world-map-scroll{padding-bottom:max(190px,calc(50dvh - 125px))}}
 @media(prefers-reduced-motion:reduce){#tabBattle .campaign-world-map::before{transition:none}}
