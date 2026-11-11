@@ -191,7 +191,7 @@
   function entityCard(e,isBoss,uid) {
     // The entity card must use the same drawMonster as the room preview;
     // the separate zodiac gallery above is only a static portrait.
-    var graphic='<canvas class="cc-sprite" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>';
+    var graphic='<canvas class="cc-sprite'+(isBoss && /^zodiac_/.test(e.type||'')?' cc-zodiac-sprite':'')+'" width="200" height="136" data-sprite="'+esc(uid)+'" aria-label="Hình '+esc(e.name)+' trong game"></canvas>';
     return '<article class="cc-entity'+(isBoss?' boss':'')+'">'+graphic +
       '<div class="cc-entity-title"><b>'+esc(e.name)+'</b><small>'+(isBoss?'BOSS':('x'+(e.quantity||1)))+'</small></div>' +
       '<div class="cc-kvs"><div class="cc-kv">HP<strong>'+num(e.hp)+'</strong></div><div class="cc-kv">ATK<strong>'+num(e.atk)+'</strong></div>' +
