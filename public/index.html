@@ -1627,7 +1627,7 @@
   #charHeroStatsStarSkinPanel{margin:10px 0}#tabHeroes button:focus-visible{outline:3px solid #fff;outline-offset:2px}
   @media(min-width:700px){.hero-reference-model{min-height:360px}.hero-reference-model>img{height:280px}.hero-reference-skills article{font-size:12px;padding:10px}.hero-reference-card>button img{height:130px}.hero-reference-card>button b,.hero-shards,.hero-card-actions button{font-size:12px}.hero-reference-grid{gap:12px}}
 </style>
-  <link rel="stylesheet" href="/battle-hub.css">
+  <link rel="stylesheet" href="/battle-hub.css?v=chapter-start-visible-20261111">
   <link rel="stylesheet" href="/arena-viewport.css">
   <link rel="stylesheet" href="/native-campaign.css">
   <link rel="stylesheet" href="/native-navigation.css">
@@ -15878,7 +15878,11 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
             </div>
 
             <!-- THÔNG TIN: 1 dòng tiến độ + dải mốc + 1 dòng trùm -->
-            <div class="ms-info">
+            ${!locked ? `<div class="ms-chapter-launch">
+             <button type="button" id="btnMapStartChapter" class="ms-chapter-start" aria-label="Bắt đầu chiến đấu Chương ${ch.id}">⚔️ BẮT ĐẦU CHƯƠNG ${ch.id}</button>
+             <span class="ms-chapter-launch-note">Vào trận từ phòng 1 · Có xác nhận trước khi xuất chiến</span>
+           </div>` : ''}
+           <div class="ms-info">
               <div class="ms-progline">
                 <span class="ms-prog-main"><b>${reach}/${ch.rooms}</b> phòng đã qua</span>
                 <span class="ms-prog-atk">Sức mạnh <b>${Math.round(curAtk).toLocaleString('vi-VN')}</b></span>
@@ -15901,6 +15905,12 @@ document.getElementById('btnSeasonBossClose')?.addEventListener('click', closeSe
           ${locked ? '<div class="battle-preview-note">Đang xem trước, chưa đổi chương xuất chiến. <button type="button" class="battle-preview-return" id="btnBattleReturnChapter">← Về chương đang chơi</button></div>' : ''}
         `;
 
+        // The prominent chapter CTA uses exactly the existing guarded start flow.
+        // It never bypasses chapter unlock, replay energy or briefing.
+        document.getElementById('btnMapStartChapter')?.addEventListener('click', () => {
+          const start = document.getElementById('btnStartGame');
+          if (start && !start.disabled) start.click();
+        });
         // ---- Sự kiện ----
         el.querySelectorAll('[data-map-tab]').forEach(btn => {
           btn.addEventListener('click', () => {
