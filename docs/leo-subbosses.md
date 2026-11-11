@@ -1,52 +1,54 @@
-# Chương 1 – Thánh Điện Nhật Luân: bốn boss phụ
+# Leo Chương 1 — Bốn Đại Tướng sử dụng PNG thật
 
-Bốn thủ lĩnh là boss phụ của Chương 1 (Sư Tử) ở các phòng 10, 20, 30, 40.
-Phòng 50 vẫn là Sư Vương Thái Dương (Leo). Không đổi boss của Chương 2–12.
+Bốn boss dưới quyền Sư Vương Thái Dương Leo (ải 50). Áp dụng duy nhất
+cho Chương 1 tại ải 10 / 20 / 30 / 40, giữ nguyên type chiến đấu gốc.
 
-| Phòng | Boss phụ | Nhận diện chibi Canvas | Đòn đặc trưng | Cách né |
-|---|---|---|---|---|
-| 10 | **Kim Giáp Sư Vệ** | Sư tử giáp vàng, bờm tia nắng, khiên mặt trời | **Khiên Nhật Luân** – quạt phi đao có khe né và khoảng trống sau lưng | Đi vòng qua cạnh khiên, phản công lúc hồi chiêu |
-| 20 | **Nhật Ấn Tế Sư** | Tế sư tóc tím, áo hồng, trượng nhật ấn, đôi pháp cầu | **Song Ấn Quang Tiễn** – hai gốc bắn lệch tâm | Né giữa hai luồng và lợi dụng vật cản |
-| 30 | **Xích Diệm Đao Vương** | Kỵ sĩ đỏ sẫm, mũ sừng, đại kiếm rực lửa, áo choàng | **Xích Diệm Liên Trảm** – nhiều đường chém so le | Đọc nhịp cảnh báo, di chuyển vào khe trống |
-| 40 | **Thiên Dực Nhật Long** | Rồng ngọc xanh, sừng vàng, cánh lớn, bụng kem | **Thiên Dực Nhật Triều** – hai cánh đạn đan, đòn bắn dày hơn | Di chuyển về phía sau boss sau lượt phát xạ |
+| Ải | Boss | Type chiến đấu | Kỹ năng |
+|---|---|---|---|
+| 10 | Ares – Tướng Quân Hỏa Ngục | golem | Hỏa Ngục Toái Trảm |
+| 20 | Boreas – Tướng Quân Phong Băng | queen | Băng Phong Song Nhận |
+| 30 | Terra – Tướng Quân Đại Địa | demon_king | Địa Chấn Liên Hoàn |
+| 40 | Nyx – Tướng Quân Hư Ảnh | elder_dragon | Hư Ảnh Giao Thoa |
+| 50 | Sư Vương Thái Dương Leo | zodiac_leo | Boss cuối |
 
-## Quy tắc triển khai
+## Assets được nạp trực tiếp vào Canvas
 
-- Bộ tạo hình được dựng bằng Canvas 2D trong renderer hiện tại; không dùng sprite quái ngẫu nhiên cho bốn boss này. Các sprite của quái thường và boss ở chương khác không đổi.
-- campaignChapter=1, campaignRoom=10/20/30/40 và loại boss gốc phải khớp mới kích hoạt tạo hình. Điều này tránh lẫn sang Boss Rush, tháp và chương khác.
-- Không đổi type gốc (golem/queen/demon_king/elder_dragon), hitbox, luật di chuyển, hệ thống vật cản, rơi vật phẩm hay lưu tiến trình.
-- Đạn vẫn dùng một kế hoạch chung cho bắn thực và cảnh báo trong BossAttackPatterns; mỗi boss có bộ góc bắn, tốc độ, vị trí bắn và thời gian hồi chiêu riêng.
-- Sát thương mỗi viên vẫn dựa trên ATK có sẵn; tốc độ đạn tối đa 320 và cooldown tối thiểu 1,2 giây. Dưới 35% HP boss bắn nhanh hơn nhưng vẫn giữ giới hạn trên.
-- Trang Admin sử dụng cùng renderer và thông số catalog với gameplay, hiển thị boss phụ trong biome Thánh Điện Nhật Luân.
-- Cần playtest trực tiếp trên máy và điện thoại để điều chỉnh lượng đạn, độ rõ cảnh báo và độ khó tân thủ. Kiểm thử tự động chỉ xác nhận cấu trúc, số liệu, sự khớp giữa cảnh báo và đạn bắn.
+Bốn file trong **public/assets/leo-guardians/**: ares.png, boreas.png,
+terra.png, nyx.png. Mỗi file PNG có nền trong suốt, kích thước **1152×768**,
+chia thành **6 cột × 4 hàng**, mỗi cell **192×192**. Các khung được xử lý từ
+bộ sprite đã duyệt và đưa thực sự vào repo. Không dùng Canvas vẽ lại hình
+boss khi asset đã sẵn sàng.
 
-## Sprite atlas 4 trạng thái (tích hợp vào Canvas)
+| Action | Row 0-based | Frames | ms/frame |
+|---|---:|---:|---:|
+| Idle | 0 | 6 | 170 |
+| Attack | 1 | 6 | 110 |
+| Hit | 2 | 4 | 95 |
+| Death | 3 | 6 | 145 |
 
-Đường dẫn: `public/leo-subboss-animation.js`. Game và Admin cùng nạp module này qua
-`public/zodiac-chibi-bosses.js`, nhưng việc nạp bất đồng bộ không khóa quá trình vẽ:
-`arena-renderer` tự quay về bộ vẽ Canvas chibi cũ nếu atlas chưa thể tạo.
+Engine: **public/leo-subboss-animation.js**. Khi asset nạp xong, renderer
+dùng drawImage với tọa độ từng frame; animation lấy signal từ attackTimer,
+hitFlashTimer, hp và chơi Death sau khi boss bị xóa khỏi enemies trong cùng
+phòng. Thứ tự ưu tiên Death > Hit > Attack > Idle.
 
-| Trạng thái | Khung | Tốc độ | Lặp | Tín hiệu |
-|---|---:|---:|---|---|
-| Idle | 6 | 170ms | Có | Không có sự kiện cao ưu tiên |
-| Attack | 8 | 88ms | Không | `attackTimer` đi vào cửa sổ cảnh báo ≤0,75s |
-| Hit | 4 | 95ms | Không | `hitFlashTimer` xuất hiện/tái kích hoạt |
-| Death | 6 | 145ms | Không | HP hết hoặc đối tượng bị loại khỏi phòng đã mở portal |
+Renderer chỉ xử lý enemy có isBoss, campaignChapter=1, campaignRoom thuộc
+10/20/30/40 và loại golem/queen/demon_king/elder_dragon tương ứng.
+Game và Admin dùng chung renderer. Nếu ảnh chưa tải được, body chibi Canvas
+cũ được vẽ tạm làm fallback, tránh màn hình đen.
 
-Khung là atlas **RGBA trong suốt 192×192 mỗi ô**, xây dựng một lần theo từng
-boss/trạng thái từ renderer chibi đã được duyệt. Không vẽ nền vào texture;
-vòng hiệu ứng/chém/hit được raster hóa vào từng frame. Cơ chế `drawImage` chỉ đổi
-khung hình; không chỉnh sửa enemy, r, HP, ATK, tốc độ, AI, va chạm hay trạng thái save.
+Trang xem và xuất PNG: **/leo-subboss-sprites.html**.
 
-Bốn boss được kiểm tra bằng `campaignChapter===1`, `campaignRoom===10/20/30/40`,
-`isBoss===true` và **type gốc khớp tuyệt đối**. Không áp dụng cho Leo phòng 50,
-chương khác, tháp, Boss Rush, hay quái thường.
+## Giới hạn thay đổi và kiểm thử
 
-`public/leo-subboss-sprites.html` là studio để xem từng animation và xuất sprite
-sheet PNG nền trong suốt cho từng trạng thái. Vào Admin → Chiến dịch & Quái/Boss
-→ **Leo Sprite Studio**. Các atlas được dựng/cached trong trình duyệt; repository
-lưu thuật toán tạo hình/chuyển động chứ không lưu 16 file PNG đã xuất.
+Không thay đổi hitbox, AI, HP, ATK, cooldown, damage, cảnh báo, vật cản,
+rơi vật phẩm, lưu tiến trình hoặc boss chương khác. Thay đổi tên và mô tả
+kỹ năng của đúng bốn boss trên.
 
-Kiểm thử: `node --test tests/leo-subboss-animation.test.mjs`,
-`node --test tests/leo-subbosses.test.mjs`, `npm run check`, `npm test`.
-Cần đánh giá trực tiếp FPS/độ đọc animation và hình ảnh trên mobile trước khi phát hành.
+- node --test tests/leo-subboss-animation.test.mjs
+- node --test tests/leo-subbosses.test.mjs
+- npm run check
+- npm test
+- node tools/validate-biomes.mjs
+
+Cần tiếp tục playtest ở ải 10–20–30–40 trên thiết bị thực để kiểm tra FPS
+và tính nhất quán giữa hiệu ứng sprite và đường đạn đang dùng.
