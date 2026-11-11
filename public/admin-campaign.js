@@ -329,6 +329,9 @@
       shakeTime:0,shakeMag:0
     };
     window.AdminCampaignArenaV2.init(fakeGame);
+    shown.forEach(function(enemy){
+      window.AdminCampaignArenaV2._debug.primePreviewEnemy(enemy,performance.now());
+    });
   }
   function paintZodiacCards() {
     var art=window.ArtemisZodiacBosses;
@@ -402,6 +405,7 @@
           hitFlashTimer:0,slowTimer:0,burnTimer:0,vx:0,vy:0,
           campaignChapter:current.id,campaignRoom:roomNo};
         canvas._ccPreviewEntity=enemy;
+        api._debug.primePreviewEnemy(enemy,now);
       }
       if(room.isBoss&&!roster&&activeEntities[0]) {
         // Preview card mirrors the same visual action as the selected boss.
