@@ -2,7 +2,7 @@ import { requireAdmin } from '../../lib/adminAuth.js';
 import { getMongoDb } from '../../lib/mongo.js';
 import { json, fail, readJsonBody } from '../../lib/http.js';
 import {
-  STUDIO_COLLECTION,cleanBoss,cleanMap,cleanAssignment,studioId,isValidId,adminSummary
+  STUDIO_COLLECTION,BIOMES,cleanBoss,cleanMap,cleanAssignment,studioId,isValidId,adminSummary
 } from '../../lib/contentStudio.js';
 
 export const config={runtime:'nodejs'};
@@ -36,7 +36,7 @@ export async function GET(request) {
     return pngResponse(doc.draft.pngBase64);
   }
   const docs=await c.find({}).limit(500).toArray();
-  return json({ok:true,items:docs.map(adminSummary),limit:500});
+  return json({ok:true,items:docs.map(adminSummary),biomes:BIOMES,limit:500});
 }
 export async function POST(request) {
   const guard=await requireAdmin(request);
