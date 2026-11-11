@@ -2089,7 +2089,7 @@
     const flash = e.hitFlashTimer > 0;
     if (flash) ctx.filter = 'brightness(2.6) saturate(0.55)';
     const leoSpriteDrawn = typeof ArtemisLeoAnimation !== 'undefined' && ArtemisLeoAnimation.drawEntity(ctx, e, nowMs);
-    const leoSubBossDrawn = !leoSpriteDrawn && drawLeoSubBoss(ctx, e, nowMs);
+    const leoSubBossDrawn = !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss(ctx, e, nowMs);
     if (!leoSpriteDrawn && !leoSubBossDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
       ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
       drawBody(ctx, e, nowMs, B, v); ctx.restore();
