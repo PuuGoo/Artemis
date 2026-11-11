@@ -15,10 +15,10 @@ function load() {
   return context;
 }
 const descriptors = [
-  { room: 10, type: 'golem', name: 'Kim Giáp Sư Vệ', skill: 'Khiên Nhật Luân' },
-  { room: 20, type: 'queen', name: 'Nhật Ấn Tế Sư', skill: 'Song Ấn Quang Tiễn' },
-  { room: 30, type: 'demon_king', name: 'Xích Diệm Đao Vương', skill: 'Xích Diệm Liên Trảm' },
-  { room: 40, type: 'elder_dragon', name: 'Thiên Dực Nhật Long', skill: 'Thiên Dực Nhật Triều' }
+  { room: 10, type: 'golem', name: 'Ares – Tướng Quân Hỏa Ngục', skill: 'Hỏa Ngục Toái Trảm' },
+  { room: 20, type: 'queen', name: 'Boreas – Tướng Quân Phong Băng', skill: 'Băng Phong Song Nhận' },
+  { room: 30, type: 'demon_king', name: 'Terra – Tướng Quân Đại Địa', skill: 'Địa Chấn Liên Hoàn' },
+  { room: 40, type: 'elder_dragon', name: 'Nyx – Tướng Quân Hư Ảnh', skill: 'Hư Ảnh Giao Thoa' }
 ];
 const clean = value => JSON.parse(JSON.stringify(value));
 function canvas() {
