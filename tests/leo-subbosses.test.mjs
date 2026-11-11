@@ -120,3 +120,10 @@ test('renderer draws four different chibi bodies before MonsterArt, without touc
   const admin=fs.readFileSync(new URL('../public/admin-campaign.js',import.meta.url),'utf8');
   assert.match(admin,/campaignChapter:c.id,campaignRoom:roomNo/);
 });
+
+test('entrance banner announces each named Leo guardian, not the generic reused boss type',()=>{
+  const html=fs.readFileSync(new URL('../public/index.html',import.meta.url),'utf8');
+  assert.match(html,/showBossIntro\(bossType, bossVariant \? '🌞 TRÙM: ' \+ bossVariant\.name/);
+  const gameCall=html.indexOf("showBossIntro(bossType, bossVariant ?");
+  assert.ok(gameCall > 0);
+});
