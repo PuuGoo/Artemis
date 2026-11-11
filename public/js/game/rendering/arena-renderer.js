@@ -1041,6 +1041,8 @@
     if (typeof ArtemisLeoSubBossSprites !== 'undefined') {
       ArtemisLeoSubBossSprites.drawDeathAfterRemoval(ctx, Game, nowMs, drawLeoSubBoss);
     }
+    // Completed regular enemies keep their final Death sprite briefly after removal.
+    globalThis.ArtemisMonsterSprites?.drawDeaths(ctx,Game,nowMs);
     globalThis.ArtemisContentRuntime?.drawDeathAfterRemoval(ctx,Game,nowMs);
   }
 
@@ -2117,7 +2119,10 @@
       globalThis.ArtemisContentRuntime?.drawBoss(ctx,e,nowMs));
     const leoSpriteDrawn = !customBossDrawn && typeof ArtemisLeoAnimation !== 'undefined' && ArtemisLeoAnimation.drawEntity(ctx, e, nowMs);
     const leoSubBossDrawn = !customBossDrawn && !leoSpriteDrawn && typeof drawLeoSubBoss === 'function' && drawLeoSubBoss(ctx, e, nowMs, true);
-    if (!customBossDrawn && !leoSpriteDrawn && !leoSubBossDrawn && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
+    const normalSpriteDrawn = !customBossDrawn && !leoSpriteDrawn && !leoSubBossDrawn
+      && globalThis.ArtemisMonsterSprites?.drawEnemy(ctx,e,nowMs,Game);
+    if (!customBossDrawn && !leoSpriteDrawn && !leoSubBossDrawn && !normalSpriteDrawn
+      && (typeof MonsterArt === 'undefined' || !MonsterArt.draw(ctx, e))) {
       ctx.save(); ctx.scale(1 + bounce * (big ? 0.025 : 0.05), 1 - bounce * (big ? 0.025 : 0.05));
       drawBody(ctx, e, nowMs, B, v); ctx.restore();
     }
