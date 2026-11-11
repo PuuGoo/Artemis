@@ -76,14 +76,14 @@
   // Riêng Leo (chương 1) có bốn thủ lĩnh chibi của Thánh Điện Nhật Luân.
   // Giữ type gốc để tái sử dụng AI, hitbox, save và hợp đồng boss hiện hành.
   var leoGuardians = Object.freeze([
-    { name: 'Kim Giáp Sư Vệ', color: '#fbbf24', skill: 'Khiên Nhật Luân',
-      counter: 'Lùi khỏi quạt phi đao trước mặt, vòng ra sau khi khiên mở.' },
-    { name: 'Nhật Ấn Tế Sư', color: '#f0abfc', skill: 'Song Ấn Quang Tiễn',
-      counter: 'Né giữa hai luồng phép tách hai bên; phản công sau loạt bắn.' },
-    { name: 'Xích Diệm Đao Vương', color: '#fb7185', skill: 'Xích Diệm Liên Trảm',
-      counter: 'Giữ khoảng cách, luồn vào khoảng trống giữa các nhát lửa.' },
-    { name: 'Thiên Dực Nhật Long', color: '#67e8f9', skill: 'Thiên Dực Nhật Triều',
-      counter: 'Đọc hai cánh đạn giao nhau, né về phía sau khi luồng cuối kết thúc.' }
+    { name: 'Ares – Tướng Quân Hỏa Ngục', color: '#fb923c', skill: 'Hỏa Ngục Toái Trảm',
+      counter: 'Tránh quạt lửa trước mặt Ares, vòng ra cạnh sau khi lưỡi rìu phát xạ.' },
+    { name: 'Boreas – Tướng Quân Phong Băng', color: '#38bdf8', skill: 'Băng Phong Song Nhận',
+      counter: 'Né giữa hai luồng phong băng lệch tâm, phản công khi Boreas hồi sức.' },
+    { name: 'Terra – Tướng Quân Đại Địa', color: '#a3e635', skill: 'Địa Chấn Liên Hoàn',
+      counter: 'Đọc các đường địa chấn so le, luồn vào khoảng trống rồi phản công.' },
+    { name: 'Nyx – Tướng Quân Hư Ảnh', color: '#c084fc', skill: 'Hư Ảnh Giao Thoa',
+      counter: 'Tránh hai luồng ma thuật đan nhau, giữ khoảng cách khi Nyx phát xạ.' }
   ]);
   function subBossVariant(chapterId, plan) {
     if (!plan.isBoss || plan.isFinalBoss) return null;
